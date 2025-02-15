@@ -7,6 +7,8 @@ import Draggable from "./components/atoms/Draggable";
 import DraggablePoint from "./components/atoms/DraggablePoint";
 import Line from "./components/atoms/Line";
 import DraggableLine from "./components/atoms/DraggableLine";
+import Rectangle from "./components/atoms/Rectangle";
+import DraggableRectangle from "./components/atoms/DraggableRectangle";
 
 function App() {
 	const [inputValue, setInputValue] = useState("");
@@ -29,14 +31,12 @@ function App() {
 					height: "100vh",
 				}}
 			>
-				<Line start={{ x: 50, y: 50 }} end={{ x: 100, y: 100 }} />
-				<Draggable initialPoint={{ x: 0, y: 0 }}>あああ</Draggable>
-				<Draggable initialPoint={{ x: 0, y: 0 }}>いいい</Draggable>
-				<DraggablePoint initialPoint={{ x: 0, y: 0 }} diameter={40} />
-				<DraggableLine
-					initialStartPoint={{ x: 100, y: 100 }}
-					initialEndPoint={{ x: 150, y: 150 }}
-				/>
+				<DraggableRectangle
+					initialStartPoint={{ x: 200, y: 200 }}
+					initialEndPoint={{ x: 250, y: 250 }}
+				>
+					AAAAAA
+				</DraggableRectangle>
 			</div>
 		</>
 	);

@@ -1,14 +1,11 @@
 import type React from "react";
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "@emotion/styled";
 import type Point from "../../types/Point";
 import type DraggableProps from "../../types/DraggableProps";
 
 const DraggableDiv = styled.div`
     position: absolute;
-    &:hover {
-        cursor: move;
-    }
 `;
 
 type Props = DraggableProps & {
@@ -31,6 +28,11 @@ const Draggable: React.FC<Props> = ({
 
 	const grabX = useRef(0);
 	const grabY = useRef(0);
+
+	useEffect(() => {
+		setX(initialPoint.x);
+		setY(initialPoint.y);
+	}, [initialPoint]);
 
 	const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
 		grabX.current = e.clientX - x;

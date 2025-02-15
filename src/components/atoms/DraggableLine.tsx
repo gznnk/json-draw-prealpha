@@ -4,6 +4,11 @@ import type Point from "../../types/Point";
 import DraggablePoint from "./DraggablePoint";
 import Line from "./Line";
 
+const CIRCLE_DEFAULT_PROPS = {
+	color: "rgba(0, 0, 0, 0)",
+	hoverColor: "rgba(157, 204, 224, 0.7)",
+};
+
 type DraggableLineProps = {
 	initialStartPoint: Point;
 	initialEndPoint: Point;
@@ -53,13 +58,13 @@ const DraggableLine: React.FC<DraggableLineProps> = ({
 	return (
 		<>
 			<DraggablePoint
-				color="red"
+				{...CIRCLE_DEFAULT_PROPS}
 				initialPoint={pointStart}
 				onDrag={onStartPointDrag}
 				onDragEnd={onStartPointDrag}
 			/>
 			<DraggablePoint
-				color="red"
+				{...CIRCLE_DEFAULT_PROPS}
 				initialPoint={pointEnd}
 				onDrag={onEndPointDrag}
 				onDragEnd={onEndPointDrag}

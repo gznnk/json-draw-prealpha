@@ -4,25 +4,31 @@ import type DraggableProps from "../../types/DraggableProps";
 import styled from "@emotion/styled";
 
 type CircleProps = {
-	color?: string;
-	diameter?: number;
+	color: string;
+	hoverColor: string;
+	diameter: number;
 };
 
 const Circle = styled.div<CircleProps>`
-    background-color: ${({ color }) => color || "black"};
-    width: ${({ diameter }) => diameter || 5}px;
-    height: ${({ diameter }) => diameter || 5}px;
+    background-color: ${({ color }) => color};
+    width: ${({ diameter }) => diameter}px;
+    height: ${({ diameter }) => diameter}px;
     border-radius: 50%;
+    &:hover {
+        background-color: ${({ hoverColor }) => hoverColor};
+    }
 `;
 
 type DraggablePointProps = DraggableProps & {
 	color?: string;
+	hoverColor?: string;
 	diameter?: number;
 };
 
 const DraggablePoint: React.FC<DraggablePointProps> = ({
-	color,
-	diameter = 5,
+	color = "black",
+	hoverColor = "none",
+	diameter = 9,
 	initialPoint,
 	onDragStart,
 	onDrag,
@@ -55,7 +61,7 @@ const DraggablePoint: React.FC<DraggablePointProps> = ({
 			onDrag={handleDrag}
 			onDragEnd={handleDragEnd}
 		>
-			<Circle color={color} diameter={diameter} />
+			<Circle color={color} hoverColor={hoverColor} diameter={diameter} />
 		</Draggable>
 	);
 };
