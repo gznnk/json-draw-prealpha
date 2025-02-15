@@ -2,21 +2,20 @@ import type React from "react";
 import { useEffect, useState, useRef } from "react";
 import styled from "@emotion/styled";
 import type Point from "../../types/Point";
-import type DraggableProps from "../../types/DraggableProps";
 
 const DraggableDiv = styled.div`
     position: absolute;
 `;
 
-type Props = DraggableProps & {
+export type DraggableProps = {
 	initialPoint: Point;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	onDragStart?: (x: number, y: number) => void;
 	onDrag?: (x: number, y: number) => void;
 	onDragEnd?: (x: number, y: number) => void;
 };
 
-const Draggable: React.FC<Props> = ({
+const Draggable: React.FC<DraggableProps> = ({
 	initialPoint,
 	children,
 	onDragStart,
@@ -26,8 +25,8 @@ const Draggable: React.FC<Props> = ({
 	const [x, setX] = useState(initialPoint.x);
 	const [y, setY] = useState(initialPoint.y);
 
-	const grabX = useRef(0);
-	const grabY = useRef(0);
+	const startX = useRef(0);
+	const startY = useRef(0);
 
 	useEffect(() => {
 		setX(initialPoint.x);
@@ -35,8 +34,8 @@ const Draggable: React.FC<Props> = ({
 	}, [initialPoint]);
 
 	const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-		grabX.current = e.clientX - x;
-		grabY.current = e.clientY - y;
+		startX.current = e.clientX - x;
+		startY.current = e.clientY - y;
 
 		// ゴーストを非表示にする
 		e.dataTransfer.setData("text/plain", "");
@@ -48,8 +47,8 @@ const Draggable: React.FC<Props> = ({
 	};
 
 	const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
-		const newX = e.clientX - grabX.current;
-		const newY = e.clientY - grabY.current;
+		const newX = e.clientX - startX.current;
+		const newY = e.clientY - startY.current;
 
 		setX(newX);
 		setY(newY);
@@ -60,8 +59,8 @@ const Draggable: React.FC<Props> = ({
 	};
 
 	const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-		const newX = e.clientX - grabX.current;
-		const newY = e.clientY - grabY.current;
+		const newX = e.clientX - startX.current;
+		const newY = e.clientY - startY.current;
 
 		setX(newX);
 		setY(newY);

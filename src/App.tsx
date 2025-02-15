@@ -24,19 +24,21 @@ function App() {
 			/>
 			<div
 				style={{
-					position: "fixed",
+					position: "absolute",
 					left: 10,
 					top: 10,
-					width: "100vw",
-					height: "100vh",
+					width: "90%",
+					height: "200vh",
+					backgroundColor: "lightgray",
 				}}
 			>
 				<DraggableRectangle
-					initialStartPoint={{ x: 200, y: 200 }}
+					initialStartPoint={{ x: 0, y: 0 }}
 					initialEndPoint={{ x: 250, y: 250 }}
 				>
 					AAAAAA
 				</DraggableRectangle>
+				<DraggablePoint initialPoint={{ x: 0, y: 0 }} />
 			</div>
 		</>
 	);

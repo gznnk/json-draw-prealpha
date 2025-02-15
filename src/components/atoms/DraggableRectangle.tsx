@@ -34,93 +34,103 @@ const DraggableRectangle: React.FC<DraggableRectangleProps> = ({
 	initialEndPoint,
 	children,
 }) => {
-	const [pointStart, setPointStart] = useState<Point>(initialStartPoint);
-	const [pointEnd, setPointEnd] = useState<Point>(initialEndPoint);
-
-	const [pointStartPair, setPointStartPair] = useState<Point>({
-		x: initialStartPoint.x,
-		y: initialEndPoint.y,
+	const [state, setState] = useState({
+		pointStart: initialStartPoint,
+		pointEnd: initialEndPoint,
+		pointStartPair: { x: initialStartPoint.x, y: initialEndPoint.y },
+		pointEndPair: { x: initialEndPoint.x, y: initialStartPoint.y },
+		rectStart: getRectStart(initialStartPoint, initialEndPoint),
+		rectEnd: getRectEnd(initialStartPoint, initialEndPoint),
 	});
-	const [pointEndPair, setPointEndPair] = useState<Point>({
-		x: initialEndPoint.x,
-		y: initialStartPoint.y,
-	});
-
-	const [rectStart, setRectStart] = useState<Point>(
-		getRectStart(initialStartPoint, initialEndPoint),
-	);
-	const [rectEnd, setRectEnd] = useState<Point>(
-		getRectEnd(initialStartPoint, initialEndPoint),
-	);
 
 	const onStartPointDrag = (x: number, y: number) => {
-		setPointStart({ x, y });
-		setPointStartPair({ x, y: pointStartPair.y });
-		setPointEndPair({ x: pointEndPair.x, y });
-		setRectStart(getRectStart({ x, y }, pointEnd));
-		setRectEnd(getRectEnd({ x, y }, pointEnd));
+		const point = { x, y };
+
+		setState((prevState) => ({
+			...prevState,
+			pointStart: point,
+			pointStartPair: { x: point.x, y: prevState.pointStartPair.y },
+			pointEndPair: { x: prevState.pointEndPair.x, y: point.y },
+			rectStart: getRectStart(point, prevState.pointEnd),
+			rectEnd: getRectEnd(point, prevState.pointEnd),
+		}));
 	};
 
 	const onEndPointDrag = (x: number, y: number) => {
-		setPointEnd({ x, y });
-		setPointEndPair({ x, y: pointEndPair.y });
-		setPointStartPair({ x: pointStartPair.x, y });
-		setRectStart(getRectStart(pointStart, { x, y }));
-		setRectEnd(getRectEnd(pointStart, { x, y }));
+		const point = { x, y };
+
+		setState((prevState) => ({
+			...prevState,
+			pointEnd: point,
+			pointEndPair: { x: point.x, y: prevState.pointEndPair.y },
+			pointStartPair: { x: prevState.pointStartPair.x, y: point.y },
+			rectStart: getRectStart(prevState.pointStart, point),
+			rectEnd: getRectEnd(prevState.pointStart, point),
+		}));
 	};
 
 	const onStartPointPairDrag = (x: number, y: number) => {
-		setPointStartPair({ x, y });
+		const point = { x, y };
 
-		const newPointStart = { x, y: pointStart.y };
-		const newPointEnd = { x: pointEnd.x, y };
+		setState((prevState) => {
+			const newPointStart = { x: point.x, y: prevState.pointStart.y };
+			const newPointEnd = { x: prevState.pointEnd.x, y: point.y };
 
-		setPointStart(newPointStart);
-		setPointEnd(newPointEnd);
-
-		setRectStart(getRectStart(newPointStart, newPointEnd));
-		setRectEnd(getRectEnd(newPointStart, newPointEnd));
+			return {
+				...prevState,
+				pointStartPair: point,
+				pointStart: newPointStart,
+				pointEnd: newPointEnd,
+				rectStart: getRectStart(newPointStart, newPointEnd),
+				rectEnd: getRectEnd(newPointStart, newPointEnd),
+			};
+		});
 	};
 
 	const onEndPointPairDrag = (x: number, y: number) => {
-		setPointEndPair({ x, y });
+		const point = { x, y };
 
-		const newPointStart = { x: pointStart.x, y };
-		const newPointEnd = { x, y: pointEnd.y };
+		setState((prevState) => {
+			const newPointStart = { x: prevState.pointStart.x, y: point.y };
+			const newPointEnd = { x: point.x, y: prevState.pointEnd.y };
 
-		setPointStart(newPointStart);
-		setPointEnd(newPointEnd);
-
-		setRectStart(getRectStart(newPointStart, newPointEnd));
-		setRectEnd(getRectEnd(newPointStart, newPointEnd));
+			return {
+				...prevState,
+				pointEndPair: point,
+				pointStart: newPointStart,
+				pointEnd: newPointEnd,
+				rectStart: getRectStart(newPointStart, newPointEnd),
+				rectEnd: getRectEnd(newPointStart, newPointEnd),
+			};
+		});
 	};
 
 	return (
 		<>
-			<Rectangle start={rectStart} end={rectEnd}>
+			<Rectangle start={state.rectStart} end={state.rectEnd}>
 				{children}
 			</Rectangle>
 			<DraggablePoint
 				{...CIRCLE_DEFAULT_PROPS}
-				initialPoint={pointStart}
+				initialPoint={state.pointStart}
 				onDrag={onStartPointDrag}
 				onDragEnd={onStartPointDrag}
 			/>
 			<DraggablePoint
 				{...CIRCLE_DEFAULT_PROPS}
-				initialPoint={pointEnd}
+				initialPoint={state.pointEnd}
 				onDrag={onEndPointDrag}
 				onDragEnd={onEndPointDrag}
 			/>
 			<DraggablePoint
 				{...CIRCLE_DEFAULT_PROPS}
-				initialPoint={pointStartPair}
+				initialPoint={state.pointStartPair}
 				onDrag={onStartPointPairDrag}
 				onDragEnd={onStartPointPairDrag}
 			/>
 			<DraggablePoint
 				{...CIRCLE_DEFAULT_PROPS}
-				initialPoint={pointEndPair}
+				initialPoint={state.pointEndPair}
 				onDrag={onEndPointPairDrag}
 				onDragEnd={onEndPointPairDrag}
 			/>

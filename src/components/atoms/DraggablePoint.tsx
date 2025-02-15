@@ -1,6 +1,6 @@
 import type React from "react";
 import Draggable from "./Draggable";
-import type DraggableProps from "../../types/DraggableProps";
+import type { DraggableProps } from "./Draggable";
 import styled from "@emotion/styled";
 
 type CircleProps = {
