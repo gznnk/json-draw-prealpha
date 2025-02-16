@@ -12,7 +12,9 @@ function App() {
 					initialPoint={{ x: 10, y: 10 }}
 					initialWidth={100}
 					initialHeight={100}
-				/>
+				>
+					<circle cx={0} cy={0} r="10" />
+				</Rectangle>
 				<Rectangle
 					initialPoint={{ x: 110, y: 110 }}
 					initialWidth={100}

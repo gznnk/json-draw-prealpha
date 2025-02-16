@@ -4,6 +4,7 @@ import type Point from "../../../types/Point";
 import DragPoint from "./DragPoint";
 import Draggable, { DragDirection } from "./Draggable";
 import type { DragEvent } from "./Draggable";
+import styled from "@emotion/styled";
 
 const updatedPoints = (point: Point, diagonalPoint: Point) => {
 	const top = Math.min(point.y, diagonalPoint.y);
@@ -69,6 +70,10 @@ const updatedPoints = (point: Point, diagonalPoint: Point) => {
 	};
 };
 
+const ContainerG = styled.g`
+    outline: none;
+`;
+
 type RectangleProps = {
 	initialPoint: Point;
 	initialWidth: number;
@@ -76,6 +81,7 @@ type RectangleProps = {
 	fill?: string;
 	stroke?: string;
 	strokeWidth?: number;
+	tabIndex?: number;
 	children?: React.ReactNode;
 };
 
@@ -86,6 +92,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	fill = "transparent",
 	stroke = "black",
 	strokeWidth = 1,
+	tabIndex = 0,
 	children,
 }) => {
 	const [state, setState] = useState({
@@ -121,6 +128,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 			x: initialPoint.x + initialWidth / 2,
 			y: initialPoint.y + initialHeight,
 		},
+		isFocused: false,
 		isDragging: false,
 		isLeftTopDragging: false,
 		isLeftBottomDragging: false,
@@ -134,6 +142,22 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	const draggableRef = useRef<SVGGElement | null>(null);
 	const rectRef = useRef<SVGRectElement | null>(null);
+
+	const onFocus = useCallback(() => {
+		setState((prevState) => ({
+			...prevState,
+			isFocused: true,
+		}));
+	}, []);
+
+	const onBlur = useCallback(() => {
+		setState((prevState) => ({
+			...prevState,
+			isFocused: false,
+		}));
+	}, []);
+
+	// -- 以下共通関数 --
 
 	const updateDomPoints = useCallback(
 		(leftTopPoint: Point, width: number, height: number) => {
@@ -521,8 +545,84 @@ const Rectangle: React.FC<RectangleProps> = ({
 		[state.leftTopPoint, state.rightTopPoint.x],
 	);
 
+	/**
+	 * キーボードイベントに基づいて矩形の位置を更新するハンドラ。
+	 *
+	 * @param {React.KeyboardEvent<SVGGElement>} e - キーボードイベント。
+	 *
+	 * @returns {void}
+	 *
+	 * @remarks
+	 * 矩形の左上および右下のポイントを矢印キーに応じて1ピクセルずつ移動します。
+	 * - "ArrowRight": 右に1ピクセル移動
+	 * - "ArrowLeft": 左に1ピクセル移動
+	 * - "ArrowUp": 上に1ピクセル移動
+	 * - "ArrowDown": 下に1ピクセル移動
+	 *
+	 * ポイントが更新された場合、新しいポイントで状態を更新します。
+	 */
+	const handleKeyDown = useCallback(
+		(e: React.KeyboardEvent<SVGGElement>) => {
+			let leftTopPoint: Point | undefined;
+			let rightBottomPoint: Point | undefined;
+			if (e.key === "ArrowRight") {
+				leftTopPoint = {
+					x: state.leftTopPoint.x + 1,
+					y: state.leftTopPoint.y,
+				};
+				rightBottomPoint = {
+					x: state.rightBottomPoint.x + 1,
+					y: state.rightBottomPoint.y,
+				};
+			}
+			if (e.key === "ArrowLeft") {
+				leftTopPoint = {
+					x: state.leftTopPoint.x - 1,
+					y: state.leftTopPoint.y,
+				};
+				rightBottomPoint = {
+					x: state.rightBottomPoint.x - 1,
+					y: state.rightBottomPoint.y,
+				};
+			}
+			if (e.key === "ArrowUp") {
+				leftTopPoint = {
+					x: state.leftTopPoint.x,
+					y: state.leftTopPoint.y - 1,
+				};
+				rightBottomPoint = {
+					x: state.rightBottomPoint.x,
+					y: state.rightBottomPoint.y - 1,
+				};
+			}
+			if (e.key === "ArrowDown") {
+				leftTopPoint = {
+					x: state.leftTopPoint.x,
+					y: state.leftTopPoint.y + 1,
+				};
+				rightBottomPoint = {
+					x: state.rightBottomPoint.x,
+					y: state.rightBottomPoint.y + 1,
+				};
+			}
+			if (leftTopPoint && rightBottomPoint) {
+				const points = updatedPoints(leftTopPoint, rightBottomPoint);
+				setState((prevState) => ({
+					...prevState,
+					...points,
+				}));
+			}
+		},
+		[state.leftTopPoint, state.rightBottomPoint],
+	);
+
 	return (
-		<>
+		<ContainerG
+			onFocus={onFocus}
+			onBlur={onBlur}
+			onKeyDown={handleKeyDown}
+			tabIndex={tabIndex}
+		>
 			<Draggable
 				initialPoint={state.point}
 				onDragStart={onDragStart}
@@ -538,87 +638,90 @@ const Rectangle: React.FC<RectangleProps> = ({
 					stroke={stroke}
 					strokeWidth={strokeWidth}
 					ref={rectRef}
-				>
-					{children}
-				</rect>
+				/>
+				{children}
 			</Draggable>
-			{/* 左上 */}
-			<DragPoint
-				initialPoint={state.leftTopPoint}
-				onDragStart={onLeftTopDragStart}
-				onDrag={onLeftTopDrag}
-				onDragEnd={onLeftTopDragEnd}
-				cursor="nw-resize"
-				hidden={state.isDragging && !state.isLeftTopDragging}
-			/>
-			{/* 左下 */}
-			<DragPoint
-				initialPoint={state.leftBottomPoint}
-				onDragStart={onLeftBottomDragStart}
-				onDrag={onLeftBottomDrag}
-				onDragEnd={onLeftBottomDragEnd}
-				cursor="sw-resize"
-				hidden={state.isDragging && !state.isLeftBottomDragging}
-			/>
-			{/* 右上 */}
-			<DragPoint
-				initialPoint={state.rightTopPoint}
-				onDragStart={onRightTopDragStart}
-				onDrag={onRightTopDrag}
-				onDragEnd={onRightTopDragEnd}
-				cursor="ne-resize"
-				hidden={state.isDragging && !state.isRightTopDragging}
-			/>
-			{/* 右下 */}
-			<DragPoint
-				initialPoint={state.rightBottomPoint}
-				onDragStart={onRightBottomDragStart}
-				onDrag={onRightBottomDrag}
-				onDragEnd={onRightBottomDragEnd}
-				cursor="se-resize"
-				hidden={state.isDragging && !state.isRightBottomDragging}
-			/>
-			{/* 上中央 */}
-			<DragPoint
-				initialPoint={state.topCenterPoint}
-				direction={DragDirection.Vertical}
-				onDragStart={onTopCenterDragStart}
-				onDrag={onTopCenterDrag}
-				onDragEnd={onTopCenterDragEnd}
-				cursor="n-resize"
-				hidden={state.isDragging && !state.isTopCenterDragging}
-			/>
-			{/* 左中央 */}
-			<DragPoint
-				initialPoint={state.leftCenterPoint}
-				direction={DragDirection.Horizontal}
-				onDragStart={onLeftCenterDragStart}
-				onDrag={onLeftCenterDrag}
-				onDragEnd={onLeftCenterDragEnd}
-				cursor="w-resize"
-				hidden={state.isDragging && !state.isLeftCenterDragging}
-			/>
-			{/* 右中央 */}
-			<DragPoint
-				initialPoint={state.rightCenterPoint}
-				direction={DragDirection.Horizontal}
-				onDragStart={onRightCenterDragStart}
-				onDrag={onRightCenterDrag}
-				onDragEnd={onRightCenterDragEnd}
-				cursor="e-resize"
-				hidden={state.isDragging && !state.isRightCenterDragging}
-			/>
-			{/* 下中央 */}
-			<DragPoint
-				initialPoint={state.bottomCenterPoint}
-				direction={DragDirection.Vertical}
-				onDragStart={onBottomCenterDragStart}
-				onDrag={onBottomCenterDrag}
-				onDragEnd={onBottomCenterDragEnd}
-				cursor="s-resize"
-				hidden={state.isDragging && !state.isBottomCenterDragging}
-			/>
-		</>
+			{state.isFocused && (
+				<>
+					{/* 左上 */}
+					<DragPoint
+						initialPoint={state.leftTopPoint}
+						onDragStart={onLeftTopDragStart}
+						onDrag={onLeftTopDrag}
+						onDragEnd={onLeftTopDragEnd}
+						cursor="nw-resize"
+						hidden={state.isDragging && !state.isLeftTopDragging}
+					/>
+					{/* 左下 */}
+					<DragPoint
+						initialPoint={state.leftBottomPoint}
+						onDragStart={onLeftBottomDragStart}
+						onDrag={onLeftBottomDrag}
+						onDragEnd={onLeftBottomDragEnd}
+						cursor="sw-resize"
+						hidden={state.isDragging && !state.isLeftBottomDragging}
+					/>
+					{/* 右上 */}
+					<DragPoint
+						initialPoint={state.rightTopPoint}
+						onDragStart={onRightTopDragStart}
+						onDrag={onRightTopDrag}
+						onDragEnd={onRightTopDragEnd}
+						cursor="ne-resize"
+						hidden={state.isDragging && !state.isRightTopDragging}
+					/>
+					{/* 右下 */}
+					<DragPoint
+						initialPoint={state.rightBottomPoint}
+						onDragStart={onRightBottomDragStart}
+						onDrag={onRightBottomDrag}
+						onDragEnd={onRightBottomDragEnd}
+						cursor="se-resize"
+						hidden={state.isDragging && !state.isRightBottomDragging}
+					/>
+					{/* 上中央 */}
+					<DragPoint
+						initialPoint={state.topCenterPoint}
+						direction={DragDirection.Vertical}
+						onDragStart={onTopCenterDragStart}
+						onDrag={onTopCenterDrag}
+						onDragEnd={onTopCenterDragEnd}
+						cursor="n-resize"
+						hidden={state.isDragging && !state.isTopCenterDragging}
+					/>
+					{/* 左中央 */}
+					<DragPoint
+						initialPoint={state.leftCenterPoint}
+						direction={DragDirection.Horizontal}
+						onDragStart={onLeftCenterDragStart}
+						onDrag={onLeftCenterDrag}
+						onDragEnd={onLeftCenterDragEnd}
+						cursor="w-resize"
+						hidden={state.isDragging && !state.isLeftCenterDragging}
+					/>
+					{/* 右中央 */}
+					<DragPoint
+						initialPoint={state.rightCenterPoint}
+						direction={DragDirection.Horizontal}
+						onDragStart={onRightCenterDragStart}
+						onDrag={onRightCenterDrag}
+						onDragEnd={onRightCenterDragEnd}
+						cursor="e-resize"
+						hidden={state.isDragging && !state.isRightCenterDragging}
+					/>
+					{/* 下中央 */}
+					<DragPoint
+						initialPoint={state.bottomCenterPoint}
+						direction={DragDirection.Vertical}
+						onDragStart={onBottomCenterDragStart}
+						onDrag={onBottomCenterDrag}
+						onDragEnd={onBottomCenterDragEnd}
+						cursor="s-resize"
+						hidden={state.isDragging && !state.isBottomCenterDragging}
+					/>
+				</>
+			)}
+		</ContainerG>
 	);
 };
 
