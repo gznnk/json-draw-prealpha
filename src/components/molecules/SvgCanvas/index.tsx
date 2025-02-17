@@ -3,10 +3,12 @@ import type React from "react";
 import type Point from "../../../types/Point";
 import type { ChangeEvent, ItemSelectEvent } from "./types";
 import Rectangle from "./components/molecules/Rectangle";
+import Ellipse from "./components/molecules/Ellipse";
 import { useCallback, memo } from "react";
 
 export type Item = {
 	id: string;
+	type: string;
 	point: Point;
 	width: number;
 	height: number;
@@ -33,18 +35,36 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 	({ title, items, onChangeEnd, onItemSelect }) => {
 		// console.log("SvgCanvas render");
 
-		const renderedItems = items.map((item) => (
-			<Rectangle
-				key={item.id}
-				id={item.id}
-				initialPoint={item.point}
-				initialWidth={item.width}
-				initialHeight={item.height}
-				isSelected={item.isSelected}
-				onChangeEnd={onChangeEnd}
-				onPointerDown={onItemSelect}
-			/>
-		));
+		const renderedItems = items.map((item) => {
+			switch (item.type) {
+				case "rect":
+					return (
+						<Rectangle
+							key={item.id}
+							id={item.id}
+							initialPoint={item.point}
+							initialWidth={item.width}
+							initialHeight={item.height}
+							isSelected={item.isSelected}
+							onChangeEnd={onChangeEnd}
+							onPointerDown={onItemSelect}
+						/>
+					);
+				case "ellipse":
+					return (
+						<Ellipse
+							key={item.id}
+							id={item.id}
+							initialPoint={item.point}
+							initialWidth={item.width}
+							initialHeight={item.height}
+							isSelected={item.isSelected}
+							onChangeEnd={onChangeEnd}
+							onPointerDown={onItemSelect}
+						/>
+					);
+			}
+		});
 
 		const handlePointerDown = useCallback(
 			(e: React.PointerEvent<SVGSVGElement>) => {

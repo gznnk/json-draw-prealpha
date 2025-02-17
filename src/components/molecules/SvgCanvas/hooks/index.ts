@@ -4,8 +4,20 @@ import type { ItemSelectEvent, ChangeEvent } from "../types";
 export const useSvgCanvas = () => {
 	const [canvasState, setCanvasState] = useState({
 		items: [
-			{ id: "1", point: { x: 10, y: 10 }, width: 100, height: 100 },
-			{ id: "2", point: { x: 110, y: 110 }, width: 100, height: 100 },
+			{
+				id: "1",
+				type: "rect",
+				point: { x: 10, y: 10 },
+				width: 100,
+				height: 100,
+			},
+			{
+				id: "2",
+				type: "ellipse",
+				point: { x: 110, y: 110 },
+				width: 100,
+				height: 100,
+			},
 		],
 		selectedItemId: "",
 	});
@@ -51,6 +63,7 @@ export const useSvgCanvas = () => {
 					...prevState.items.map((item) => ({ ...item, isSelected: false })),
 					{
 						id: String(prevState.items.length + 1),
+						type: "rect",
 						point: { x: 10, y: 10 },
 						width: 100,
 						height: 100,

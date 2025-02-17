@@ -13,16 +13,16 @@ import styled from "@emotion/styled";
 type DraggableGProps = {
 	cursor: string;
 	visibility: string;
-	focusOutline: string;
-	focusOutlineOffset?: string;
+	outline?: string;
+	outlineOffset?: string;
 };
 
 const DraggableG = styled.g<DraggableGProps>`
     cursor: ${({ cursor }) => cursor};
     visibility: ${({ visibility }) => visibility};
     &:focus {
-        outline: ${({ focusOutline }) => focusOutline};
-        outline-offset: ${({ focusOutlineOffset }) => focusOutlineOffset};
+        outline: ${({ outline }) => outline};
+        outline-offset: ${({ outlineOffset }) => outlineOffset};
     }
 `;
 
@@ -34,8 +34,8 @@ export type DraggableProps = {
 	cursor?: string;
 	visible?: boolean;
 	tabIndex?: number;
-	focusOutline?: string;
-	focusOutlineOffset?: string;
+	outline?: string;
+	outlineOffset?: string;
 	ref?: SVGGElement | null;
 	onPointerDown?: (e: PointerDownEvent) => void;
 	onDragStart?: (e: DragEvent) => void;
@@ -54,8 +54,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			cursor = "move",
 			visible = true,
 			tabIndex = 0,
-			focusOutline = "1px dashed blue",
-			focusOutlineOffset = "0px",
+			outline = "none",
+			outlineOffset = "0px",
 			onPointerDown,
 			onDragStart,
 			onDrag,
@@ -89,8 +89,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 					: e.clientY - startY.current;
 
 			return {
-				x,
-				y,
+				x: Math.floor(x),
+				y: Math.floor(y),
 			};
 		};
 
@@ -240,8 +240,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				cursor={cursor}
 				ref={domRef}
 				visibility={visible ? "visible" : "hidden"}
-				focusOutline={focusOutline}
-				focusOutlineOffset={focusOutlineOffset}
+				outline={outline}
+				outlineOffset={outlineOffset}
 			>
 				{children}
 			</DraggableG>

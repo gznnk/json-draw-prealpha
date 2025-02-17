@@ -1,5 +1,6 @@
 import SvgCanvas from "./components/molecules/SvgCanvas";
 import { useSvgCanvas } from "./components/molecules/SvgCanvas/hooks";
+import Button from "./components/atoms/Button";
 
 function App() {
 	// console.log("App render");
@@ -36,9 +37,7 @@ function App() {
 					backgroundColor: "lightgray",
 				}}
 			>
-				<button type="button" onClick={canvasFunctions.addRectangle}>
-					Add Rectangle
-				</button>
+				<Button onClick={canvasFunctions.addRectangle}>Add Rectangle</Button>
 				{canvasState.selectedItemId}
 			</div>
 			<div

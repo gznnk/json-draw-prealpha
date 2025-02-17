@@ -13,7 +13,7 @@ const Button: React.FC<ButtonProps> = ({
 	onClick,
 	children,
 	disabled = false,
-	visible = false,
+	visible = true,
 	className = "",
 }) => {
 	if (!visible) {
