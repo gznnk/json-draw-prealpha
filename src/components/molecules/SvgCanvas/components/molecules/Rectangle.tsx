@@ -1,9 +1,15 @@
 import type React from "react";
-import { useState, useRef, useCallback, useEffect } from "react";
-import type { Point, ChangeEvent } from "../../types";
+import { useState, useRef, useCallback, useEffect, memo } from "react";
+import type {
+	Point,
+	PointerDownEvent,
+	DragEvent,
+	ChangeEvent,
+	FocusEvent,
+} from "../../types";
+import { DragDirection } from "../../types";
 import DragPoint from "./DragPoint";
-import Draggable, { DragDirection } from "../atoms/Draggable";
-import type { DragEvent } from "../atoms/Draggable";
+import Draggable from "../atoms/Draggable";
 
 const updatedPoints = (point: Point, diagonalPoint: Point) => {
 	const top = Math.min(point.y, diagonalPoint.y);
@@ -78,568 +84,593 @@ type RectangleProps = {
 	stroke?: string;
 	strokeWidth?: number;
 	tabIndex?: number;
+	isSelected?: boolean;
+	onPointerDown?: (e: PointerDownEvent) => void;
 	onChangeEnd?: (e: ChangeEvent) => void;
 	children?: React.ReactNode;
 };
 
-const Rectangle: React.FC<RectangleProps> = ({
-	id,
-	initialPoint,
-	initialWidth,
-	initialHeight,
-	fill = "transparent",
-	stroke = "black",
-	strokeWidth = 1,
-	tabIndex = 0,
-	onChangeEnd,
-	children,
-}) => {
-	const [state, setState] = useState({
-		id: id,
-		point: initialPoint,
-		width: initialWidth,
-		height: initialHeight,
-		leftTopPoint: initialPoint,
-		leftBottomPoint: {
-			x: initialPoint.x,
-			y: initialPoint.y + initialHeight,
-		},
-		rightTopPoint: {
-			x: initialPoint.x + initialWidth,
-			y: initialPoint.y,
-		},
-		rightBottomPoint: {
-			x: initialPoint.x + initialWidth,
-			y: initialPoint.y + initialHeight,
-		},
-		topCenterPoint: {
-			x: initialPoint.x + initialWidth / 2,
-			y: initialPoint.y,
-		},
-		leftCenterPoint: {
-			x: initialPoint.x,
-			y: initialPoint.y + initialHeight / 2,
-		},
-		rightCenterPoint: {
-			x: initialPoint.x + initialWidth,
-			y: initialPoint.y + initialHeight / 2,
-		},
-		bottomCenterPoint: {
-			x: initialPoint.x + initialWidth / 2,
-			y: initialPoint.y + initialHeight,
-		},
-		isDragging: false,
-		isLeftTopDragging: false,
-		isLeftBottomDragging: false,
-		isRightTopDragging: false,
-		isRightBottomDragging: false,
-		isTopCenterDragging: false,
-		isLeftCenterDragging: false,
-		isRightCenterDragging: false,
-		isBottomCenterDragging: false,
-	});
+const Rectangle: React.FC<RectangleProps> = memo(
+	({
+		id,
+		initialPoint,
+		initialWidth,
+		initialHeight,
+		fill = "transparent",
+		stroke = "black",
+		strokeWidth = 1,
+		tabIndex = 0,
+		isSelected = false,
+		onPointerDown,
+		onChangeEnd,
+		children,
+	}) => {
+		// console.log(`${id}:${isSelected}`);
 
-	const draggableRef = useRef<SVGGElement | null>(null);
-	const rectRef = useRef<SVGRectElement | null>(null);
-
-	useEffect(() => {
-		onChangeEnd?.({
-			id: state.id,
-			point: state.leftTopPoint,
-			width: state.width,
-			height: state.height,
+		const [state, setState] = useState({
+			id: id,
+			point: initialPoint,
+			width: initialWidth,
+			height: initialHeight,
+			leftTopPoint: initialPoint,
+			leftBottomPoint: {
+				x: initialPoint.x,
+				y: initialPoint.y + initialHeight,
+			},
+			rightTopPoint: {
+				x: initialPoint.x + initialWidth,
+				y: initialPoint.y,
+			},
+			rightBottomPoint: {
+				x: initialPoint.x + initialWidth,
+				y: initialPoint.y + initialHeight,
+			},
+			topCenterPoint: {
+				x: initialPoint.x + initialWidth / 2,
+				y: initialPoint.y,
+			},
+			leftCenterPoint: {
+				x: initialPoint.x,
+				y: initialPoint.y + initialHeight / 2,
+			},
+			rightCenterPoint: {
+				x: initialPoint.x + initialWidth,
+				y: initialPoint.y + initialHeight / 2,
+			},
+			bottomCenterPoint: {
+				x: initialPoint.x + initialWidth / 2,
+				y: initialPoint.y + initialHeight,
+			},
+			isDragging: false,
+			isLeftTopDragging: false,
+			isLeftBottomDragging: false,
+			isRightTopDragging: false,
+			isRightBottomDragging: false,
+			isTopCenterDragging: false,
+			isLeftCenterDragging: false,
+			isRightCenterDragging: false,
+			isBottomCenterDragging: false,
 		});
-	}, [state.id, state.leftTopPoint, state.width, state.height, onChangeEnd]);
 
-	// -- 以下共通関数 --
+		const draggableRef = useRef<SVGGElement | null>(null);
+		const rectRef = useRef<SVGRectElement | null>(null);
 
-	const updateDomPoints = useCallback(
-		(leftTopPoint: Point, width: number, height: number) => {
-			draggableRef.current?.setAttribute(
-				"transform",
-				`translate(${leftTopPoint.x}, ${leftTopPoint.y})`,
-			);
-			rectRef.current?.setAttribute("width", `${width}`);
-			rectRef.current?.setAttribute("height", `${height}`);
-		},
-		[],
-	);
+		useEffect(() => {
+			onChangeEnd?.({
+				id: state.id,
+				point: state.leftTopPoint,
+				width: state.width,
+				height: state.height,
+			});
+		}, [state.id, state.leftTopPoint, state.width, state.height, onChangeEnd]);
 
-	// --- 以下四角形全体のドラッグ ---
+		// -- 以下共通関数 --
 
-	const onDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-		}));
-	}, []);
+		const updateDomPoints = useCallback(
+			(leftTopPoint: Point, width: number, height: number) => {
+				draggableRef.current?.setAttribute(
+					"transform",
+					`translate(${leftTopPoint.x}, ${leftTopPoint.y})`,
+				);
+				rectRef.current?.setAttribute("width", `${width}`);
+				rectRef.current?.setAttribute("height", `${height}`);
+			},
+			[],
+		);
 
-	const onDragEnd = useCallback(
-		(e: DragEvent) => {
+		// --- 以下四角形全体のドラッグ ---
+
+		const onDragStart = useCallback((_e: DragEvent) => {
 			setState((prevState) => ({
 				...prevState,
-				point: e.point,
-				leftTopPoint: e.point,
-				leftBottomPoint: {
-					x: e.point.x,
-					y: e.point.y + state.height,
-				},
-				rightTopPoint: {
-					x: e.point.x + state.width,
+				isDragging: true,
+			}));
+		}, []);
+
+		const onDragEnd = useCallback(
+			(e: DragEvent) => {
+				setState((prevState) => ({
+					...prevState,
+					point: e.point,
+					leftTopPoint: e.point,
+					leftBottomPoint: {
+						x: e.point.x,
+						y: e.point.y + state.height,
+					},
+					rightTopPoint: {
+						x: e.point.x + state.width,
+						y: e.point.y,
+					},
+					rightBottomPoint: {
+						x: e.point.x + state.width,
+						y: e.point.y + state.height,
+					},
+					topCenterPoint: {
+						x: e.point.x + state.width / 2,
+						y: e.point.y,
+					},
+					leftCenterPoint: {
+						x: e.point.x,
+						y: e.point.y + state.height / 2,
+					},
+					rightCenterPoint: {
+						x: e.point.x + state.width,
+						y: e.point.y + state.height / 2,
+					},
+					bottomCenterPoint: {
+						x: e.point.x + state.width / 2,
+						y: e.point.y + state.height,
+					},
+					isDragging: false,
+				}));
+			},
+			[state.width, state.height],
+		);
+
+		// --- 以下左上の点のドラッグ ---
+
+		const onLeftTopDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isLeftTopDragging: true,
+			}));
+		}, []);
+
+		const onLeftTopDrag = useCallback(
+			(e: DragEvent) => {
+				const { leftTopPoint, width, height } = updatedPoints(
+					e.point,
+					state.rightBottomPoint,
+				);
+
+				updateDomPoints(leftTopPoint, width, height);
+			},
+			[updateDomPoints, state.rightBottomPoint],
+		);
+
+		const onLeftTopDragEnd = useCallback(
+			(e: DragEvent) => {
+				const points = updatedPoints(e.point, state.rightBottomPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isLeftTopDragging: false,
+				}));
+			},
+			[state.rightBottomPoint],
+		);
+
+		// --- 以下左下の点のドラッグ ---
+
+		const onLeftBottomDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isLeftBottomDragging: true,
+			}));
+		}, []);
+
+		const onLeftBottomDrag = useCallback(
+			(e: DragEvent) => {
+				const { leftTopPoint, width, height } = updatedPoints(
+					e.point,
+					state.rightTopPoint,
+				);
+
+				updateDomPoints(leftTopPoint, width, height);
+			},
+			[updateDomPoints, state.rightTopPoint],
+		);
+
+		const onLeftBottomDragEnd = useCallback(
+			(e: DragEvent) => {
+				const points = updatedPoints(e.point, state.rightTopPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isLeftBottomDragging: false,
+				}));
+			},
+			[state.rightTopPoint],
+		);
+
+		// --- 以下右上の点のドラッグ ---
+
+		const onRightTopDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isRightTopDragging: true,
+			}));
+		}, []);
+
+		const onRightTopDrag = useCallback(
+			(e: DragEvent) => {
+				const { leftTopPoint, width, height } = updatedPoints(
+					e.point,
+					state.leftBottomPoint,
+				);
+
+				updateDomPoints(leftTopPoint, width, height);
+			},
+			[updateDomPoints, state.leftBottomPoint],
+		);
+
+		const onRightTopDragEnd = useCallback(
+			(e: DragEvent) => {
+				const points = updatedPoints(e.point, state.leftBottomPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isRightTopDragging: false,
+				}));
+			},
+			[state.leftBottomPoint],
+		);
+
+		// --- 以下右下の点のドラッグ ---
+
+		const onRightBottomDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isRightBottomDragging: true,
+			}));
+		}, []);
+
+		const onRightBottomDrag = useCallback(
+			(e: DragEvent) => {
+				const { leftTopPoint, width, height } = updatedPoints(
+					e.point,
+					state.leftTopPoint,
+				);
+
+				updateDomPoints(leftTopPoint, width, height);
+			},
+			[updateDomPoints, state.leftTopPoint],
+		);
+
+		const onRightBottomDragEnd = useCallback(
+			(e: DragEvent) => {
+				const points = updatedPoints(e.point, state.leftTopPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isRightBottomDragging: false,
+				}));
+			},
+			[state.leftTopPoint],
+		);
+
+		// --- 以下上中央の点のドラッグ ---
+
+		const onTopCenterDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isTopCenterDragging: true,
+			}));
+		}, []);
+
+		const onTopCenterDrag = useCallback(
+			(e: DragEvent) => {
+				const height = Math.abs(state.leftBottomPoint.y - e.point.y);
+
+				const leftTopPoint = {
+					x: state.leftBottomPoint.x,
+					y: Math.min(e.point.y, state.leftBottomPoint.y),
+				};
+
+				updateDomPoints(leftTopPoint, state.width, height);
+			},
+			[updateDomPoints, state.leftBottomPoint, state.width],
+		);
+
+		const onTopCenterDragEnd = useCallback(
+			(e: DragEvent) => {
+				const leftTopPoint = {
+					x: state.leftTopPoint.x,
 					y: e.point.y,
-				},
-				rightBottomPoint: {
-					x: e.point.x + state.width,
-					y: e.point.y + state.height,
-				},
-				topCenterPoint: {
-					x: e.point.x + state.width / 2,
+				};
+				const points = updatedPoints(leftTopPoint, state.rightBottomPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isTopCenterDragging: false,
+				}));
+			},
+			[state.rightBottomPoint, state.leftTopPoint.x],
+		);
+
+		// --- 以下左中央の点のドラッグ ---
+
+		const onLeftCenterDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isLeftCenterDragging: true,
+			}));
+		}, []);
+
+		const onLeftCenterDrag = useCallback(
+			(e: DragEvent) => {
+				const width = Math.abs(state.rightBottomPoint.x - e.point.x);
+
+				const leftTopPoint = {
+					x: Math.min(e.point.x, state.rightBottomPoint.x),
+					y: state.rightTopPoint.y,
+				};
+
+				updateDomPoints(leftTopPoint, width, state.height);
+			},
+			[
+				updateDomPoints,
+				state.rightBottomPoint.x,
+				state.rightTopPoint.y,
+				state.height,
+			],
+		);
+
+		const onLeftCenterDragEnd = useCallback(
+			(e: DragEvent) => {
+				const leftTopPoint = {
+					x: Math.min(e.point.x, state.rightBottomPoint.x),
+					y: state.rightTopPoint.y,
+				};
+				const rightBottomPoint = {
+					x: Math.max(e.point.x, state.rightBottomPoint.x),
+					y: state.rightBottomPoint.y,
+				};
+				const points = updatedPoints(leftTopPoint, rightBottomPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isLeftCenterDragging: false,
+				}));
+			},
+			[state.rightTopPoint.y, state.rightBottomPoint],
+		);
+
+		// --- 以下右中央の点のドラッグ ---
+
+		const onRightCenterDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isRightCenterDragging: true,
+			}));
+		}, []);
+
+		const onRightCenterDrag = useCallback(
+			(e: DragEvent) => {
+				const width = Math.abs(state.leftTopPoint.x - e.point.x);
+
+				const leftTopPoint = {
+					x: Math.min(e.point.x, state.leftTopPoint.x),
+					y: state.leftTopPoint.y,
+				};
+
+				updateDomPoints(leftTopPoint, width, state.height);
+			},
+			[updateDomPoints, state.leftTopPoint, state.height],
+		);
+
+		const onRightCenterDragEnd = useCallback(
+			(e: DragEvent) => {
+				const leftTopPoint = {
+					x: Math.min(e.point.x, state.leftTopPoint.x),
+					y: state.leftTopPoint.y,
+				};
+				const rightBottomPoint = {
+					x: Math.max(e.point.x, state.leftTopPoint.x),
+					y: state.rightBottomPoint.y,
+				};
+				const points = updatedPoints(leftTopPoint, rightBottomPoint);
+
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isRightCenterDragging: false,
+				}));
+			},
+			[state.leftTopPoint, state.rightBottomPoint],
+		);
+
+		// --- 以下下中央の点のドラッグ ---
+
+		const onBottomCenterDragStart = useCallback((_e: DragEvent) => {
+			setState((prevState) => ({
+				...prevState,
+				isDragging: true,
+				isBottomCenterDragging: true,
+			}));
+		}, []);
+
+		const onBottomCenterDrag = useCallback(
+			(e: DragEvent) => {
+				const height = Math.abs(state.leftTopPoint.y - e.point.y);
+
+				const leftTopPoint = {
+					x: state.leftTopPoint.x,
+					y: Math.min(e.point.y, state.leftTopPoint.y),
+				};
+
+				updateDomPoints(leftTopPoint, state.width, height);
+			},
+			[updateDomPoints, state.leftTopPoint, state.width],
+		);
+
+		const onBottomCenterDragEnd = useCallback(
+			(e: DragEvent) => {
+				const rightBottomPoint = {
+					x: state.rightTopPoint.x,
 					y: e.point.y,
-				},
-				leftCenterPoint: {
-					x: e.point.x,
-					y: e.point.y + state.height / 2,
-				},
-				rightCenterPoint: {
-					x: e.point.x + state.width,
-					y: e.point.y + state.height / 2,
-				},
-				bottomCenterPoint: {
-					x: e.point.x + state.width / 2,
-					y: e.point.y + state.height,
-				},
-				isDragging: false,
-			}));
-		},
-		[state.width, state.height],
-	);
+				};
+				const points = updatedPoints(rightBottomPoint, state.leftTopPoint);
 
-	// --- 以下左上の点のドラッグ ---
+				setState((prevState) => ({
+					...prevState,
+					...points,
+					isDragging: false,
+					isBottomCenterDragging: false,
+				}));
+			},
+			[state.leftTopPoint, state.rightTopPoint.x],
+		);
 
-	const onLeftTopDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isLeftTopDragging: true,
-		}));
-	}, []);
+		// フォーカスイベント
+		const handlePointerDown = useCallback(
+			(e: PointerDownEvent) => {
+				onPointerDown?.({
+					id: id,
+					point: e.point,
+					reactEvent: e.reactEvent,
+				});
+			},
+			[id, onPointerDown],
+		);
 
-	const onLeftTopDrag = useCallback(
-		(e: DragEvent) => {
-			const { leftTopPoint, width, height } = updatedPoints(
-				e.point,
-				state.rightBottomPoint,
-			);
-
-			updateDomPoints(leftTopPoint, width, height);
-		},
-		[updateDomPoints, state.rightBottomPoint],
-	);
-
-	const onLeftTopDragEnd = useCallback(
-		(e: DragEvent) => {
-			const points = updatedPoints(e.point, state.rightBottomPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isLeftTopDragging: false,
-			}));
-		},
-		[state.rightBottomPoint],
-	);
-
-	// --- 以下左下の点のドラッグ ---
-
-	const onLeftBottomDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isLeftBottomDragging: true,
-		}));
-	}, []);
-
-	const onLeftBottomDrag = useCallback(
-		(e: DragEvent) => {
-			const { leftTopPoint, width, height } = updatedPoints(
-				e.point,
-				state.rightTopPoint,
-			);
-
-			updateDomPoints(leftTopPoint, width, height);
-		},
-		[updateDomPoints, state.rightTopPoint],
-	);
-
-	const onLeftBottomDragEnd = useCallback(
-		(e: DragEvent) => {
-			const points = updatedPoints(e.point, state.rightTopPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isLeftBottomDragging: false,
-			}));
-		},
-		[state.rightTopPoint],
-	);
-
-	// --- 以下右上の点のドラッグ ---
-
-	const onRightTopDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isRightTopDragging: true,
-		}));
-	}, []);
-
-	const onRightTopDrag = useCallback(
-		(e: DragEvent) => {
-			const { leftTopPoint, width, height } = updatedPoints(
-				e.point,
-				state.leftBottomPoint,
-			);
-
-			updateDomPoints(leftTopPoint, width, height);
-		},
-		[updateDomPoints, state.leftBottomPoint],
-	);
-
-	const onRightTopDragEnd = useCallback(
-		(e: DragEvent) => {
-			const points = updatedPoints(e.point, state.leftBottomPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isRightTopDragging: false,
-			}));
-		},
-		[state.leftBottomPoint],
-	);
-
-	// --- 以下右下の点のドラッグ ---
-
-	const onRightBottomDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isRightBottomDragging: true,
-		}));
-	}, []);
-
-	const onRightBottomDrag = useCallback(
-		(e: DragEvent) => {
-			const { leftTopPoint, width, height } = updatedPoints(
-				e.point,
-				state.leftTopPoint,
-			);
-
-			updateDomPoints(leftTopPoint, width, height);
-		},
-		[updateDomPoints, state.leftTopPoint],
-	);
-
-	const onRightBottomDragEnd = useCallback(
-		(e: DragEvent) => {
-			const points = updatedPoints(e.point, state.leftTopPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isRightBottomDragging: false,
-			}));
-		},
-		[state.leftTopPoint],
-	);
-
-	// --- 以下上中央の点のドラッグ ---
-
-	const onTopCenterDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isTopCenterDragging: true,
-		}));
-	}, []);
-
-	const onTopCenterDrag = useCallback(
-		(e: DragEvent) => {
-			const height = Math.abs(state.leftBottomPoint.y - e.point.y);
-
-			const leftTopPoint = {
-				x: state.leftBottomPoint.x,
-				y: Math.min(e.point.y, state.leftBottomPoint.y),
-			};
-
-			updateDomPoints(leftTopPoint, state.width, height);
-		},
-		[updateDomPoints, state.leftBottomPoint, state.width],
-	);
-
-	const onTopCenterDragEnd = useCallback(
-		(e: DragEvent) => {
-			const leftTopPoint = {
-				x: state.leftTopPoint.x,
-				y: e.point.y,
-			};
-			const points = updatedPoints(leftTopPoint, state.rightBottomPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isTopCenterDragging: false,
-			}));
-		},
-		[state.rightBottomPoint, state.leftTopPoint.x],
-	);
-
-	// --- 以下左中央の点のドラッグ ---
-
-	const onLeftCenterDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isLeftCenterDragging: true,
-		}));
-	}, []);
-
-	const onLeftCenterDrag = useCallback(
-		(e: DragEvent) => {
-			const width = Math.abs(state.rightBottomPoint.x - e.point.x);
-
-			const leftTopPoint = {
-				x: Math.min(e.point.x, state.rightBottomPoint.x),
-				y: state.rightTopPoint.y,
-			};
-
-			updateDomPoints(leftTopPoint, width, state.height);
-		},
-		[
-			updateDomPoints,
-			state.rightBottomPoint.x,
-			state.rightTopPoint.y,
-			state.height,
-		],
-	);
-
-	const onLeftCenterDragEnd = useCallback(
-		(e: DragEvent) => {
-			const leftTopPoint = {
-				x: Math.min(e.point.x, state.rightBottomPoint.x),
-				y: state.rightTopPoint.y,
-			};
-			const rightBottomPoint = {
-				x: Math.max(e.point.x, state.rightBottomPoint.x),
-				y: state.rightBottomPoint.y,
-			};
-			const points = updatedPoints(leftTopPoint, rightBottomPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isLeftCenterDragging: false,
-			}));
-		},
-		[state.rightTopPoint.y, state.rightBottomPoint],
-	);
-
-	// --- 以下右中央の点のドラッグ ---
-
-	const onRightCenterDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isRightCenterDragging: true,
-		}));
-	}, []);
-
-	const onRightCenterDrag = useCallback(
-		(e: DragEvent) => {
-			const width = Math.abs(state.leftTopPoint.x - e.point.x);
-
-			const leftTopPoint = {
-				x: Math.min(e.point.x, state.leftTopPoint.x),
-				y: state.leftTopPoint.y,
-			};
-
-			updateDomPoints(leftTopPoint, width, state.height);
-		},
-		[updateDomPoints, state.leftTopPoint, state.height],
-	);
-
-	const onRightCenterDragEnd = useCallback(
-		(e: DragEvent) => {
-			const leftTopPoint = {
-				x: Math.min(e.point.x, state.leftTopPoint.x),
-				y: state.leftTopPoint.y,
-			};
-			const rightBottomPoint = {
-				x: Math.max(e.point.x, state.leftTopPoint.x),
-				y: state.rightBottomPoint.y,
-			};
-			const points = updatedPoints(leftTopPoint, rightBottomPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isRightCenterDragging: false,
-			}));
-		},
-		[state.leftTopPoint, state.rightBottomPoint],
-	);
-
-	// --- 以下下中央の点のドラッグ ---
-
-	const onBottomCenterDragStart = useCallback((_e: DragEvent) => {
-		setState((prevState) => ({
-			...prevState,
-			isDragging: true,
-			isBottomCenterDragging: true,
-		}));
-	}, []);
-
-	const onBottomCenterDrag = useCallback(
-		(e: DragEvent) => {
-			const height = Math.abs(state.leftTopPoint.y - e.point.y);
-
-			const leftTopPoint = {
-				x: state.leftTopPoint.x,
-				y: Math.min(e.point.y, state.leftTopPoint.y),
-			};
-
-			updateDomPoints(leftTopPoint, state.width, height);
-		},
-		[updateDomPoints, state.leftTopPoint, state.width],
-	);
-
-	const onBottomCenterDragEnd = useCallback(
-		(e: DragEvent) => {
-			const rightBottomPoint = {
-				x: state.rightTopPoint.x,
-				y: e.point.y,
-			};
-			const points = updatedPoints(rightBottomPoint, state.leftTopPoint);
-
-			setState((prevState) => ({
-				...prevState,
-				...points,
-				isDragging: false,
-				isBottomCenterDragging: false,
-			}));
-		},
-		[state.leftTopPoint, state.rightTopPoint.x],
-	);
-
-	return (
-		<>
-			<Draggable
-				id={id}
-				initialPoint={state.point}
-				onDragStart={onDragStart}
-				onDragEnd={onDragEnd}
-				tabIndex={tabIndex}
-				focusOutline="none"
-				ref={draggableRef}
-			>
-				<rect
-					x={0}
-					y={0}
-					width={state.width}
-					height={state.height}
-					fill={fill}
-					stroke={stroke}
-					strokeWidth={strokeWidth}
-					ref={rectRef}
-				/>
-				{children}
-			</Draggable>
-			{/* 左上 */}
-			<DragPoint
-				initialPoint={state.leftTopPoint}
-				onDragStart={onLeftTopDragStart}
-				onDrag={onLeftTopDrag}
-				onDragEnd={onLeftTopDragEnd}
-				cursor="nw-resize"
-				hidden={state.isDragging && !state.isLeftTopDragging}
-			/>
-			{/* 左下 */}
-			<DragPoint
-				initialPoint={state.leftBottomPoint}
-				onDragStart={onLeftBottomDragStart}
-				onDrag={onLeftBottomDrag}
-				onDragEnd={onLeftBottomDragEnd}
-				cursor="sw-resize"
-				hidden={state.isDragging && !state.isLeftBottomDragging}
-			/>
-			{/* 右上 */}
-			<DragPoint
-				initialPoint={state.rightTopPoint}
-				onDragStart={onRightTopDragStart}
-				onDrag={onRightTopDrag}
-				onDragEnd={onRightTopDragEnd}
-				cursor="ne-resize"
-				hidden={state.isDragging && !state.isRightTopDragging}
-			/>
-			{/* 右下 */}
-			<DragPoint
-				initialPoint={state.rightBottomPoint}
-				onDragStart={onRightBottomDragStart}
-				onDrag={onRightBottomDrag}
-				onDragEnd={onRightBottomDragEnd}
-				cursor="se-resize"
-				hidden={state.isDragging && !state.isRightBottomDragging}
-			/>
-			{/* 上中央 */}
-			<DragPoint
-				initialPoint={state.topCenterPoint}
-				direction={DragDirection.Vertical}
-				onDragStart={onTopCenterDragStart}
-				onDrag={onTopCenterDrag}
-				onDragEnd={onTopCenterDragEnd}
-				cursor="n-resize"
-				hidden={state.isDragging && !state.isTopCenterDragging}
-			/>
-			{/* 左中央 */}
-			<DragPoint
-				initialPoint={state.leftCenterPoint}
-				direction={DragDirection.Horizontal}
-				onDragStart={onLeftCenterDragStart}
-				onDrag={onLeftCenterDrag}
-				onDragEnd={onLeftCenterDragEnd}
-				cursor="w-resize"
-				hidden={state.isDragging && !state.isLeftCenterDragging}
-			/>
-			{/* 右中央 */}
-			<DragPoint
-				initialPoint={state.rightCenterPoint}
-				direction={DragDirection.Horizontal}
-				onDragStart={onRightCenterDragStart}
-				onDrag={onRightCenterDrag}
-				onDragEnd={onRightCenterDragEnd}
-				cursor="e-resize"
-				hidden={state.isDragging && !state.isRightCenterDragging}
-			/>
-			{/* 下中央 */}
-			<DragPoint
-				initialPoint={state.bottomCenterPoint}
-				direction={DragDirection.Vertical}
-				onDragStart={onBottomCenterDragStart}
-				onDrag={onBottomCenterDrag}
-				onDragEnd={onBottomCenterDragEnd}
-				cursor="s-resize"
-				hidden={state.isDragging && !state.isBottomCenterDragging}
-			/>
-		</>
-	);
-};
+		return (
+			<>
+				<Draggable
+					id={id}
+					initialPoint={state.point}
+					tabIndex={tabIndex}
+					focusOutline="none"
+					onPointerDown={handlePointerDown}
+					onDragStart={onDragStart}
+					onDragEnd={onDragEnd}
+					ref={draggableRef}
+				>
+					<rect
+						x={0}
+						y={0}
+						width={state.width}
+						height={state.height}
+						fill={fill}
+						stroke={stroke}
+						strokeWidth={strokeWidth}
+						ref={rectRef}
+					/>
+					{children}
+				</Draggable>
+				{isSelected && (
+					<>
+						,{/* 左上 */}
+						<DragPoint
+							initialPoint={state.leftTopPoint}
+							onDragStart={onLeftTopDragStart}
+							onDrag={onLeftTopDrag}
+							onDragEnd={onLeftTopDragEnd}
+							cursor="nw-resize"
+							hidden={state.isDragging && !state.isLeftTopDragging}
+						/>
+						{/* 左下 */}
+						<DragPoint
+							initialPoint={state.leftBottomPoint}
+							onDragStart={onLeftBottomDragStart}
+							onDrag={onLeftBottomDrag}
+							onDragEnd={onLeftBottomDragEnd}
+							cursor="sw-resize"
+							hidden={state.isDragging && !state.isLeftBottomDragging}
+						/>
+						{/* 右上 */}
+						<DragPoint
+							initialPoint={state.rightTopPoint}
+							onDragStart={onRightTopDragStart}
+							onDrag={onRightTopDrag}
+							onDragEnd={onRightTopDragEnd}
+							cursor="ne-resize"
+							hidden={state.isDragging && !state.isRightTopDragging}
+						/>
+						{/* 右下 */}
+						<DragPoint
+							initialPoint={state.rightBottomPoint}
+							onDragStart={onRightBottomDragStart}
+							onDrag={onRightBottomDrag}
+							onDragEnd={onRightBottomDragEnd}
+							cursor="se-resize"
+							hidden={state.isDragging && !state.isRightBottomDragging}
+						/>
+						{/* 上中央 */}
+						<DragPoint
+							initialPoint={state.topCenterPoint}
+							direction={DragDirection.Vertical}
+							onDragStart={onTopCenterDragStart}
+							onDrag={onTopCenterDrag}
+							onDragEnd={onTopCenterDragEnd}
+							cursor="n-resize"
+							hidden={state.isDragging && !state.isTopCenterDragging}
+						/>
+						{/* 左中央 */}
+						<DragPoint
+							initialPoint={state.leftCenterPoint}
+							direction={DragDirection.Horizontal}
+							onDragStart={onLeftCenterDragStart}
+							onDrag={onLeftCenterDrag}
+							onDragEnd={onLeftCenterDragEnd}
+							cursor="w-resize"
+							hidden={state.isDragging && !state.isLeftCenterDragging}
+						/>
+						{/* 右中央 */}
+						<DragPoint
+							initialPoint={state.rightCenterPoint}
+							direction={DragDirection.Horizontal}
+							onDragStart={onRightCenterDragStart}
+							onDrag={onRightCenterDrag}
+							onDragEnd={onRightCenterDragEnd}
+							cursor="e-resize"
+							hidden={state.isDragging && !state.isRightCenterDragging}
+						/>
+						{/* 下中央 */}
+						<DragPoint
+							initialPoint={state.bottomCenterPoint}
+							direction={DragDirection.Vertical}
+							onDragStart={onBottomCenterDragStart}
+							onDrag={onBottomCenterDrag}
+							onDragEnd={onBottomCenterDragEnd}
+							cursor="s-resize"
+							hidden={state.isDragging && !state.isBottomCenterDragging}
+						/>
+					</>
+				)}
+			</>
+		);
+	},
+);
 
 export default Rectangle;

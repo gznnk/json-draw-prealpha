@@ -6,7 +6,8 @@ import {
 	forwardRef,
 	useImperativeHandle,
 } from "react";
-import type { Point } from "../../types";
+import type { Point, PointerDownEvent, DragEvent } from "../../types";
+import { DragDirection } from "../../types";
 import styled from "@emotion/styled";
 
 type DraggableGProps = {
@@ -24,19 +25,8 @@ const DraggableG = styled.g<DraggableGProps>`
     }
 `;
 
-export enum DragDirection {
-	All = 0,
-	Horizontal = 1,
-	Vertical = 2,
-}
-
-export type DragEvent = {
-	id?: string;
-	point: Point;
-	reactEvent?: React.PointerEvent<SVGElement>;
-};
-
 export type DraggableProps = {
+	key?: string;
 	id?: string;
 	initialPoint: Point;
 	direction?: DragDirection;
@@ -45,17 +35,17 @@ export type DraggableProps = {
 	tabIndex?: number;
 	focusOutline?: string;
 	ref?: SVGGElement | null;
+	onPointerDown?: (e: PointerDownEvent) => void;
 	onDragStart?: (e: DragEvent) => void;
 	onDrag?: (e: DragEvent) => void;
 	onDragEnd?: (e: DragEvent) => void;
-	onFocus?: (e: React.FocusEvent<SVGGElement>) => void;
-	onBulr?: (e: React.FocusEvent<SVGGElement>) => void;
 	children?: React.ReactNode;
 };
 
 const Draggable = forwardRef<SVGGElement, DraggableProps>(
 	(
 		{
+			key,
 			id,
 			initialPoint,
 			direction = DragDirection.All,
@@ -63,11 +53,10 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			visible = true,
 			tabIndex = 0,
 			focusOutline = "1px dashed blue",
+			onPointerDown,
 			onDragStart,
 			onDrag,
 			onDragEnd,
-			onFocus,
-			onBulr,
 			children,
 		},
 		ref,
@@ -78,9 +67,9 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		const startX = useRef(0);
 		const startY = useRef(0);
 
-		const domRef = useRef<SVGGElement | null>(null);
+		const domRef = useRef<SVGGElement>({} as SVGGElement);
 
-		useImperativeHandle(ref, () => domRef.current as SVGGElement);
+		useImperativeHandle(ref, () => domRef.current);
 
 		useEffect(() => {
 			setPoint(initialPoint);
@@ -110,10 +99,13 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 			e.currentTarget.setPointerCapture(e.pointerId);
 
-			onDragStart?.({
+			const event = {
 				point: getPoint(e),
 				reactEvent: e,
-			});
+			};
+
+			onPointerDown?.(event);
+			onDragStart?.(event);
 		};
 
 		const handlePointerMove = (e: React.PointerEvent<SVGElement>) => {
@@ -149,14 +141,6 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				point: point,
 				reactEvent: e,
 			});
-		};
-
-		const handleFocus = (e: React.FocusEvent<SVGGElement>) => {
-			onFocus?.(e);
-		};
-
-		const handleBulr = (e: React.FocusEvent<SVGGElement>) => {
-			onBulr?.(e);
 		};
 
 		const handleKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
@@ -261,13 +245,12 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 		return (
 			<DraggableG
+				key={key}
 				id={id}
 				transform={`translate(${point.x}, ${point.y})`}
 				onPointerDown={handlePointerDown}
 				onPointerMove={handlePointerMove}
 				onPointerUp={handlePointerUp}
-				onFocus={handleFocus}
-				onBlur={handleBulr}
 				onKeyDown={handleKeyDown}
 				onKeyUp={handleKeyUp}
 				tabIndex={tabIndex}

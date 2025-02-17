@@ -13,11 +13,10 @@ const DragPoint: React.FC<DragPointProps> = ({
 	direction,
 	cursor,
 	visible,
+	onPointerDown,
 	onDragStart,
 	onDrag,
 	onDragEnd,
-	onFocus,
-	onBulr,
 	color = "rgba(61, 90, 128, 0.8)",
 	hidden = false,
 }) => {
@@ -31,11 +30,10 @@ const DragPoint: React.FC<DragPointProps> = ({
 			direction={direction}
 			cursor={cursor}
 			visible={visible}
+			onPointerDown={onPointerDown}
 			onDragStart={onDragStart}
 			onDrag={onDrag}
 			onDragEnd={onDragEnd}
-			onFocus={onFocus}
-			onBulr={onBulr}
 		>
 			<circle cx={0} cy={0} r="5" fill={color} />
 		</Draggable>
