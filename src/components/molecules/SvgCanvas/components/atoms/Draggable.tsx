@@ -6,7 +6,7 @@ import {
 	forwardRef,
 	useImperativeHandle,
 } from "react";
-import type Point from "../../../types/Point";
+import type { Point } from "../../types";
 import styled from "@emotion/styled";
 
 type DraggableGProps = {

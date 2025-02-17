@@ -1,9 +1,9 @@
 import type React from "react";
-import { useState, useRef, useCallback } from "react";
-import type Point from "../../../types/Point";
+import { useState, useRef, useCallback, useEffect } from "react";
+import type { Point, ChangeEvent } from "../../types";
 import DragPoint from "./DragPoint";
-import Draggable, { DragDirection } from "./Draggable";
-import type { DragEvent } from "./Draggable";
+import Draggable, { DragDirection } from "../atoms/Draggable";
+import type { DragEvent } from "../atoms/Draggable";
 
 const updatedPoints = (point: Point, diagonalPoint: Point) => {
 	const top = Math.min(point.y, diagonalPoint.y);
@@ -70,6 +70,7 @@ const updatedPoints = (point: Point, diagonalPoint: Point) => {
 };
 
 type RectangleProps = {
+	id?: string;
 	initialPoint: Point;
 	initialWidth: number;
 	initialHeight: number;
@@ -77,10 +78,12 @@ type RectangleProps = {
 	stroke?: string;
 	strokeWidth?: number;
 	tabIndex?: number;
+	onChangeEnd?: (e: ChangeEvent) => void;
 	children?: React.ReactNode;
 };
 
 const Rectangle: React.FC<RectangleProps> = ({
+	id,
 	initialPoint,
 	initialWidth,
 	initialHeight,
@@ -88,9 +91,11 @@ const Rectangle: React.FC<RectangleProps> = ({
 	stroke = "black",
 	strokeWidth = 1,
 	tabIndex = 0,
+	onChangeEnd,
 	children,
 }) => {
 	const [state, setState] = useState({
+		id: id,
 		point: initialPoint,
 		width: initialWidth,
 		height: initialHeight,
@@ -136,6 +141,15 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	const draggableRef = useRef<SVGGElement | null>(null);
 	const rectRef = useRef<SVGRectElement | null>(null);
+
+	useEffect(() => {
+		onChangeEnd?.({
+			id: state.id,
+			point: state.leftTopPoint,
+			width: state.width,
+			height: state.height,
+		});
+	}, [state.id, state.leftTopPoint, state.width, state.height, onChangeEnd]);
 
 	// -- 以下共通関数 --
 
@@ -528,6 +542,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	return (
 		<>
 			<Draggable
+				id={id}
 				initialPoint={state.point}
 				onDragStart={onDragStart}
 				onDragEnd={onDragEnd}

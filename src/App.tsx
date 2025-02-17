@@ -1,27 +1,55 @@
-import "./App.css";
-import SvgCanvas from "./components/molecules/SvgCanvas/SvgCanvas";
-import DragPoint from "./components/molecules/SvgCanvas/DragPoint";
-import Rectangle from "./components/molecules/SvgCanvas/Rectangle";
+import SvgCanvas from "./components/molecules/SvgCanvas";
+import { useSvgCanvas } from "./components/molecules/SvgCanvas/hooks";
 
 function App() {
+	const {
+		state: [canvasState, setCanvasState],
+		canvasProps,
+		canvasFunctions,
+	} = useSvgCanvas();
+
 	return (
-		<>
-			<SvgCanvas width="100%" height="100%">
-				<DragPoint initialPoint={{ x: 0, y: 0 }} />
-				<Rectangle
-					initialPoint={{ x: 10, y: 10 }}
-					initialWidth={100}
-					initialHeight={100}
-				>
-					<circle cx={0} cy={0} r="10" />
-				</Rectangle>
-				<Rectangle
-					initialPoint={{ x: 110, y: 110 }}
-					initialWidth={100}
-					initialHeight={100}
-				/>
-			</SvgCanvas>
-		</>
+		<div className="App">
+			<header
+				className="App-header"
+				style={{
+					position: "absolute",
+					top: 0,
+					left: 0,
+					right: 0,
+					height: "50px",
+					backgroundColor: "black",
+					color: "white",
+				}}
+			>
+				<h1 style={{ margin: 0 }}>SVG Canvas</h1>
+			</header>
+			<div
+				style={{
+					position: "absolute",
+					top: 0,
+					right: 0,
+					bottom: 0,
+					width: "100px",
+					backgroundColor: "lightgray",
+				}}
+			>
+				<button type="button" onClick={canvasFunctions.addRectangle}>
+					Add Rectangle
+				</button>
+			</div>
+			<div
+				style={{
+					position: "absolute",
+					top: "50px",
+					left: 0,
+					right: "100px",
+					bottom: 0,
+				}}
+			>
+				<SvgCanvas {...canvasProps} />
+			</div>
+		</div>
 	);
 }
 
