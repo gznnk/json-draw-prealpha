@@ -3,6 +3,7 @@ import {
 	useEffect,
 	useState,
 	useRef,
+	useCallback,
 	forwardRef,
 	useImperativeHandle,
 } from "react";
@@ -31,6 +32,8 @@ export type DraggableProps = {
 	id?: string;
 	point: Point;
 	direction?: DragDirection;
+	allowXDecimal?: boolean;
+	allowYDecimal?: boolean;
 	cursor?: string;
 	visible?: boolean;
 	tabIndex?: number;
@@ -52,6 +55,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			id,
 			point,
 			direction = DragDirection.All,
+			allowXDecimal = false,
+			allowYDecimal = false,
 			cursor = "move",
 			visible = true,
 			tabIndex = 0,
@@ -80,12 +85,36 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			setState({ point });
 		}, [point]);
 
+		const adjustCoordinates = useCallback(
+			(p: Point) => {
+				let x = p.x;
+				let y = p.y;
+
+				if (!allowXDecimal) {
+					x = Math.round(x);
+				}
+
+				if (!allowYDecimal) {
+					y = Math.round(y);
+				}
+
+				return {
+					x,
+					y,
+				};
+			},
+			[allowXDecimal, allowYDecimal],
+		);
+
 		const getPoint = (e: React.PointerEvent<SVGElement>) => {
 			let x = e.clientX - startX.current;
 			let y = e.clientY - startY.current;
 
 			if (dragPositioningFunction) {
-				const p = dragPositioningFunction({ x, y });
+				const p = dragPositioningFunction({
+					x,
+					y,
+				});
 				x = p.x;
 				y = p.y;
 			} else if (direction === DragDirection.Horizontal) {
@@ -94,10 +123,10 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				x = state.point.x;
 			}
 
-			return {
-				x: Math.floor(x),
-				y: Math.floor(y),
-			};
+			return adjustCoordinates({
+				x,
+				y,
+			});
 		};
 
 		const handlePointerDown = (e: React.PointerEvent<SVGElement>) => {
@@ -155,19 +184,17 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		};
 
 		const handleKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
-			if (e.key === "ArrowRight") {
-				if (direction === DragDirection.Vertical) {
-					return;
-				}
-
+			const movePoint = (dx: number, dy: number) => {
 				let newPoint = {
-					x: state.point.x + 1,
-					y: state.point.y,
+					x: state.point.x + dx,
+					y: state.point.y + dy,
 				};
 
 				if (dragPositioningFunction) {
 					newPoint = dragPositioningFunction({ ...newPoint });
 				}
+
+				newPoint = adjustCoordinates(newPoint);
 
 				onDragStart?.({ point: state.point });
 				onDrag?.({
@@ -176,72 +203,31 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				setState({
 					point: newPoint,
 				});
-			}
-			if (e.key === "ArrowLeft") {
-				if (direction === DragDirection.Vertical) {
-					return;
-				}
+			};
 
-				let newPoint = {
-					x: state.point.x - 1,
-					y: state.point.y,
-				};
-
-				if (dragPositioningFunction) {
-					newPoint = dragPositioningFunction({ ...newPoint });
-				}
-
-				onDragStart?.({ point: state.point });
-				onDrag?.({
-					point: newPoint,
-				});
-				setState({
-					point: newPoint,
-				});
-			}
-			if (e.key === "ArrowUp") {
-				if (direction === DragDirection.Horizontal) {
-					return;
-				}
-
-				let newPoint = {
-					x: state.point.x,
-					y: state.point.y - 1,
-				};
-
-				if (dragPositioningFunction) {
-					newPoint = dragPositioningFunction({ ...newPoint });
-				}
-
-				onDragStart?.({ point: state.point });
-				onDrag?.({
-					point: newPoint,
-				});
-				setState({
-					point: newPoint,
-				});
-			}
-			if (e.key === "ArrowDown") {
-				if (direction === DragDirection.Horizontal) {
-					return;
-				}
-
-				let newPoint = {
-					x: state.point.x,
-					y: state.point.y + 1,
-				};
-
-				if (dragPositioningFunction) {
-					newPoint = dragPositioningFunction({ ...newPoint });
-				}
-
-				onDragStart?.({ point: state.point });
-				onDrag?.({
-					point: newPoint,
-				});
-				setState({
-					point: newPoint,
-				});
+			switch (e.key) {
+				case "ArrowRight":
+					if (direction !== DragDirection.Vertical) {
+						movePoint(1, 0);
+					}
+					break;
+				case "ArrowLeft":
+					if (direction !== DragDirection.Vertical) {
+						movePoint(-1, 0);
+					}
+					break;
+				case "ArrowUp":
+					if (direction !== DragDirection.Horizontal) {
+						movePoint(0, -1);
+					}
+					break;
+				case "ArrowDown":
+					if (direction !== DragDirection.Horizontal) {
+						movePoint(0, 1);
+					}
+					break;
+				default:
+					break;
 			}
 		};
 
