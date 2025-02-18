@@ -7,7 +7,7 @@ import type {
 	ChangeEvent,
 } from "../../types";
 import { DragDirection } from "../../types";
-import DragPoint from "../diagram/DragPoint";
+import DragPoint from "./DragPoint";
 import Draggable from "./Draggable";
 
 const createLinerDragY2xFunction = (p1: Point, p2: Point) => {
@@ -15,7 +15,6 @@ const createLinerDragY2xFunction = (p1: Point, p2: Point) => {
 	const b = p1.y - a * p1.x;
 
 	return (p: Point) => {
-		console.log(`p: ${JSON.stringify(p)}`);
 		return {
 			x: (p.y - b) / a,
 			y: p.y,
@@ -471,7 +470,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 				}
 
 				const rightTopPoint = {
-					x: state.topCenterPoint.x,
+					x: state.rightTopPoint.x,
 					y: e.point.y,
 				};
 
@@ -482,7 +481,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 				keepProportion,
 				state.leftBottomPoint,
 				state.leftTopPoint,
-				state.topCenterPoint.x,
+				state.rightTopPoint.x,
 				state.aspectRatio,
 			],
 		);
@@ -549,7 +548,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 
 				const leftTopPoint = {
 					x: e.point.x,
-					y: state.leftCenterPoint.y,
+					y: state.leftTopPoint.y,
 				};
 
 				return updatedPoints(leftTopPoint, state.rightBottomPoint);
@@ -558,7 +557,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 				updatedPoints,
 				keepProportion,
 				state.rightBottomPoint,
-				state.leftCenterPoint.y,
+				state.leftTopPoint.y,
 				state.aspectRatio,
 			],
 		);

@@ -115,6 +115,20 @@ function App() {
 						});
 					}}
 				/>
+				<div>
+					keepProportion:
+					<input
+						type="checkbox"
+						checked={canvasFunctions.getSelectedItem()?.keepProportion || false}
+						onChange={(e) => {
+							if (!canvasState.selectedItemId) return;
+							canvasFunctions.updateItem({
+								id: canvasState.selectedItemId,
+								keepProportion: e.target.checked,
+							});
+						}}
+					/>
+				</div>
 			</div>
 			<div
 				style={{
