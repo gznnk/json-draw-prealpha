@@ -54,11 +54,7 @@ const DragPointRightCenter = forwardRef<
 						y: leftTopPoint.y + newHeight,
 					};
 
-					return calcArrangement(
-						leftTopPoint,
-						newRightBottomPoint,
-						keepProportion,
-					);
+					return calcArrangement(leftTopPoint, newRightBottomPoint);
 				}
 
 				const newRightBottomPoint = {
@@ -66,11 +62,7 @@ const DragPointRightCenter = forwardRef<
 					y: rightBottomPoint.y,
 				};
 
-				return calcArrangement(
-					leftTopPoint,
-					newRightBottomPoint,
-					keepProportion,
-				);
+				return calcArrangement(leftTopPoint, newRightBottomPoint);
 			},
 			[leftTopPoint, rightBottomPoint.y, keepProportion, aspectRatio],
 		);

@@ -42,28 +42,20 @@ const DragPointRightBottom = forwardRef<
 
 		const onDrag = useCallback(
 			(e: DragEvent) => {
-				const newArrangment = calcArrangement(
-					e.point,
-					leftTopPoint,
-					keepProportion,
-				);
+				const newArrangment = calcArrangement(e.point, leftTopPoint);
 
 				onArrangementChange(newArrangment);
 			},
-			[onArrangementChange, leftTopPoint, keepProportion],
+			[onArrangementChange, leftTopPoint],
 		);
 
 		const onDragEnd = useCallback(
 			(e: DragEvent) => {
-				const newArrangment = calcArrangement(
-					e.point,
-					leftTopPoint,
-					keepProportion,
-				);
+				const newArrangment = calcArrangement(e.point, leftTopPoint);
 
 				onArrangementChangeEnd(newArrangment);
 			},
-			[onArrangementChangeEnd, leftTopPoint, keepProportion],
+			[onArrangementChangeEnd, leftTopPoint],
 		);
 
 		const linerDragFunction = useCallback(

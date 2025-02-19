@@ -110,17 +110,17 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			let x = e.clientX - startX.current;
 			let y = e.clientY - startY.current;
 
-			if (dragPositioningFunction) {
+			if (direction === DragDirection.Horizontal) {
+				y = state.point.y;
+			} else if (direction === DragDirection.Vertical) {
+				x = state.point.x;
+			} else if (dragPositioningFunction) {
 				const p = dragPositioningFunction({
 					x,
 					y,
 				});
 				x = p.x;
 				y = p.y;
-			} else if (direction === DragDirection.Horizontal) {
-				y = state.point.y;
-			} else if (direction === DragDirection.Vertical) {
-				x = state.point.x;
 			}
 
 			return adjustCoordinates({
@@ -190,7 +190,11 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 					y: state.point.y + dy,
 				};
 
-				if (dragPositioningFunction) {
+				if (direction === DragDirection.Horizontal) {
+					newPoint.y = state.point.y;
+				} else if (direction === DragDirection.Vertical) {
+					newPoint.x = state.point.x;
+				} else if (dragPositioningFunction) {
 					newPoint = dragPositioningFunction({ ...newPoint });
 				}
 
@@ -207,24 +211,16 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 			switch (e.key) {
 				case "ArrowRight":
-					if (direction !== DragDirection.Vertical) {
-						movePoint(1, 0);
-					}
+					movePoint(1, 0);
 					break;
 				case "ArrowLeft":
-					if (direction !== DragDirection.Vertical) {
-						movePoint(-1, 0);
-					}
+					movePoint(-1, 0);
 					break;
 				case "ArrowUp":
-					if (direction !== DragDirection.Horizontal) {
-						movePoint(0, -1);
-					}
+					movePoint(0, -1);
 					break;
 				case "ArrowDown":
-					if (direction !== DragDirection.Horizontal) {
-						movePoint(0, 1);
-					}
+					movePoint(0, 1);
 					break;
 				default:
 					break;
@@ -239,10 +235,7 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				e.key === "ArrowDown"
 			) {
 				onDragEnd?.({
-					point: {
-						x: Math.floor(state.point.x),
-						y: Math.floor(state.point.y),
-					},
+					point: state.point,
 				});
 			}
 		};
@@ -252,17 +245,17 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				key={key}
 				id={id}
 				transform={`translate(${state.point.x}, ${state.point.y})`}
+				tabIndex={tabIndex}
+				cursor={cursor}
+				visibility={visible ? "visible" : "hidden"}
+				outline={outline}
+				outlineOffset={outlineOffset}
 				onPointerDown={handlePointerDown}
 				onPointerMove={handlePointerMove}
 				onPointerUp={handlePointerUp}
 				onKeyDown={handleKeyDown}
 				onKeyUp={handleKeyUp}
-				tabIndex={tabIndex}
-				cursor={cursor}
 				ref={domRef}
-				visibility={visible ? "visible" : "hidden"}
-				outline={outline}
-				outlineOffset={outlineOffset}
 			>
 				{children}
 			</DraggableG>

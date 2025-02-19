@@ -51,11 +51,7 @@ const DragPointTopCenter = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 						y: e.point.y,
 					};
 
-					return calcArrangement(
-						leftBottomPoint,
-						newRightTopPoint,
-						keepProportion,
-					);
+					return calcArrangement(leftBottomPoint, newRightTopPoint);
 				}
 
 				const newRightTopPoint = {
@@ -63,11 +59,7 @@ const DragPointTopCenter = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 					y: e.point.y,
 				};
 
-				return calcArrangement(
-					leftBottomPoint,
-					newRightTopPoint,
-					keepProportion,
-				);
+				return calcArrangement(leftBottomPoint, newRightTopPoint);
 			},
 			[leftBottomPoint, rightTopPoint.x, keepProportion, aspectRatio],
 		);

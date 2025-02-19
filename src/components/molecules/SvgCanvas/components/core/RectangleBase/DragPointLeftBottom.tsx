@@ -39,28 +39,20 @@ const DragPointLeftTop = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 
 		const onDrag = useCallback(
 			(e: DragEvent) => {
-				const newArrangment = calcArrangement(
-					e.point,
-					rightTopPoint,
-					keepProportion,
-				);
+				const newArrangment = calcArrangement(e.point, rightTopPoint);
 
 				onArrangementChange(newArrangment);
 			},
-			[onArrangementChange, rightTopPoint, keepProportion],
+			[onArrangementChange, rightTopPoint],
 		);
 
 		const onDragEnd = useCallback(
 			(e: DragEvent) => {
-				const newArrangment = calcArrangement(
-					e.point,
-					rightTopPoint,
-					keepProportion,
-				);
+				const newArrangment = calcArrangement(e.point, rightTopPoint);
 
 				onArrangementChangeEnd(newArrangment);
 			},
-			[onArrangementChangeEnd, rightTopPoint, keepProportion],
+			[onArrangementChangeEnd, rightTopPoint],
 		);
 
 		const linerDragFunction = useCallback(

@@ -12,6 +12,8 @@ const DragPoint = forwardRef<SVGGElement, DragPointProps>(
 		{
 			point,
 			direction,
+			allowXDecimal = false,
+			allowYDecimal = false,
 			cursor,
 			visible,
 			onPointerDown,
@@ -35,6 +37,8 @@ const DragPoint = forwardRef<SVGGElement, DragPointProps>(
 			<Draggable
 				point={point}
 				direction={direction}
+				allowXDecimal={allowXDecimal}
+				allowYDecimal={allowYDecimal}
 				cursor={cursor}
 				visible={visible}
 				outline="1px dashed blue"

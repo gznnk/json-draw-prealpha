@@ -1,20 +1,24 @@
+// Reactのインポート
 import type React from "react";
 import { useState, useRef, useCallback, useEffect, memo } from "react";
+
+// SvgCanvas関連型定義をインポート
 import type {
 	Point,
 	PointerDownEvent,
 	DragEvent,
 	ChangeEvent,
 } from "../../../types";
-import { DragDirection } from "../../../types";
-import DragPoint from "../DragPoint";
+// SvgCanvasコンポーネントをインポート
 import Draggable from "../Draggable";
+
+// RectangleBase関連型定義をインポート
 import type {
-	UpdatedPoints,
 	RectangleBaseState,
 	RectangleBaseArrangement,
 } from "./RectangleBaseTypes";
 import type { DragPointType } from "./RectangleBaseTypes";
+// RectangleBase関連型コンポーネントをインポート
 import DragPointLeftTop from "./DragPointLeftTop";
 import DragPointLeftBottom from "./DragPointLeftBottom";
 import DragPointRightTop from "./DragPointRightTop";
@@ -23,6 +27,8 @@ import DragPointTopCenter from "./DragPointTopCenter";
 import DragPointLeftCenter from "./DragPointLeftCenter";
 import DragPointRightCenter from "./DragPointRightCenter";
 import DragPointBottomCenter from "./DragPointBottomCenter";
+// RectangleBase関連関数をインポート
+import { calcArrangement } from "./RectangleBaseFunctions";
 
 export type RectangleBaseProps = {
 	id?: string;
@@ -54,39 +60,8 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 	}) => {
 		const [state, setState] = useState<RectangleBaseState>({
 			id: id,
-			point: point,
-			width: width,
-			height: height,
+			...calcArrangement(point, { x: point.x + width, y: point.y + height }),
 			aspectRatio: width / height,
-			leftTopPoint: point,
-			leftBottomPoint: {
-				x: point.x,
-				y: point.y + height,
-			},
-			rightTopPoint: {
-				x: point.x + width,
-				y: point.y,
-			},
-			rightBottomPoint: {
-				x: point.x + width,
-				y: point.y + height,
-			},
-			topCenterPoint: {
-				x: point.x + width / 2,
-				y: point.y,
-			},
-			leftCenterPoint: {
-				x: point.x,
-				y: point.y + height / 2,
-			},
-			rightCenterPoint: {
-				x: point.x + width,
-				y: point.y + height / 2,
-			},
-			bottomCenterPoint: {
-				x: point.x + width / 2,
-				y: point.y + height,
-			},
 			isDragging: false,
 			draggingPoint: undefined,
 		});
@@ -114,113 +89,36 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 
 		// -- 以下共通関数 --
 
-		const updatedPoints = useCallback(
-			(point: Point, diagonalPoint: Point): UpdatedPoints => {
-				const top = Math.round(Math.min(point.y, diagonalPoint.y));
-				const bottom = Math.round(Math.max(point.y, diagonalPoint.y));
-				const left = Math.round(Math.min(point.x, diagonalPoint.x));
-				const right = Math.round(Math.max(point.x, diagonalPoint.x));
-
-				const leftTopPoint = {
-					x: left,
-					y: top,
-				};
-
-				const newWidth = right - left;
-				const newHeight = bottom - top;
-
-				const result: UpdatedPoints = {
-					point: leftTopPoint,
-					width: newWidth,
-					height: newHeight,
-					leftTopPoint,
-					leftBottomPoint: {
-						x: left,
-						y: bottom,
-					},
-					rightTopPoint: {
-						x: right,
-						y: top,
-					},
-					rightBottomPoint: {
-						x: right,
-						y: bottom,
-					},
-					topCenterPoint: {
-						x: left + newWidth / 2,
-						y: top,
-					},
-					leftCenterPoint: {
-						x: left,
-						y: top + newHeight / 2,
-					},
-					rightCenterPoint: {
-						x: right,
-						y: top + newHeight / 2,
-					},
-					bottomCenterPoint: {
-						x: left + newWidth / 2,
-						y: bottom,
-					},
-				};
-
-				if (!keepProportion) {
-					result.aspectRatio = newWidth / newHeight;
-				}
-
-				return result;
-			},
-			[keepProportion],
-		);
-
-		const updateDomPoints = useCallback(
-			(newLeftTopPoint: Point, newWidth: number, newHeight: number) => {
-				draggableRef.current?.setAttribute(
-					"transform",
-					`translate(${newLeftTopPoint.x}, ${newLeftTopPoint.y})`,
-				);
-				outlineRef.current?.setAttribute("width", `${newWidth}`);
-				outlineRef.current?.setAttribute("height", `${newHeight}`);
-				onChange?.({
-					id: state.id,
-					point: newLeftTopPoint,
-					width: newWidth,
-					height: newHeight,
-				});
-			},
-			[onChange, state.id],
-		);
-
-		const updateDragPointFocus = useCallback(
-			(dragEndPoint: Point, newPoints: UpdatedPoints) => {
-				// const focusElement = document.activeElement as HTMLElement;
-				// if (focusElement) {
-				// 	focusElement.blur();
-				// }
-				// const isPointEquals = (p1: Point, p2: Point) =>
-				// 	Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
-				// setTimeout(() => {
-				// 	if (isPointEquals(dragEndPoint, newPoints.leftTopPoint)) {
-				// 		leftTopPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.leftBottomPoint)) {
-				// 		leftBottomPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.rightTopPoint)) {
-				// 		rightTopPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.rightBottomPoint)) {
-				// 		rightBottomPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.topCenterPoint)) {
-				// 		topCenterPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.leftCenterPoint)) {
-				// 		leftCenterPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.rightCenterPoint)) {
-				// 		rightCenterPointRef.current?.focus();
-				// 	} else if (isPointEquals(dragEndPoint, newPoints.bottomCenterPoint)) {
-				// 		bottomCenterPointRef.current?.focus();
-				// 	}
-				// }, 10); // TODO 次のレンダリングでフォーカスが移動するように修正したい
-			},
-			[],
-		);
+		//const updateDragPointFocus = useCallback(
+		//(dragEndPoint: Point, newPoints: UpdatedPoints) => {
+		// const focusElement = document.activeElement as HTMLElement;
+		// if (focusElement) {
+		// 	focusElement.blur();
+		// }
+		// const isPointEquals = (p1: Point, p2: Point) =>
+		// 	Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
+		// setTimeout(() => {
+		// 	if (isPointEquals(dragEndPoint, newPoints.leftTopPoint)) {
+		// 		leftTopPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.leftBottomPoint)) {
+		// 		leftBottomPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.rightTopPoint)) {
+		// 		rightTopPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.rightBottomPoint)) {
+		// 		rightBottomPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.topCenterPoint)) {
+		// 		topCenterPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.leftCenterPoint)) {
+		// 		leftCenterPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.rightCenterPoint)) {
+		// 		rightCenterPointRef.current?.focus();
+		// 	} else if (isPointEquals(dragEndPoint, newPoints.bottomCenterPoint)) {
+		// 		bottomCenterPointRef.current?.focus();
+		// 	}
+		// }, 10); // TODO 次のレンダリングでフォーカスが移動するように修正したい
+		//},
+		//[],
+		//);
 
 		// --- 以下四角形全体のドラッグ ---
 
@@ -235,36 +133,10 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			(e: DragEvent) => {
 				setState((prevState) => ({
 					...prevState,
-					point: e.point,
-					leftTopPoint: e.point,
-					leftBottomPoint: {
-						x: e.point.x,
-						y: e.point.y + state.height,
-					},
-					rightTopPoint: {
-						x: e.point.x + state.width,
-						y: e.point.y,
-					},
-					rightBottomPoint: {
+					...calcArrangement(e.point, {
 						x: e.point.x + state.width,
 						y: e.point.y + state.height,
-					},
-					topCenterPoint: {
-						x: e.point.x + state.width / 2,
-						y: e.point.y,
-					},
-					leftCenterPoint: {
-						x: e.point.x,
-						y: e.point.y + state.height / 2,
-					},
-					rightCenterPoint: {
-						x: e.point.x + state.width,
-						y: e.point.y + state.height / 2,
-					},
-					bottomCenterPoint: {
-						x: e.point.x + state.width / 2,
-						y: e.point.y + state.height,
-					},
+					}),
 					isDragging: false,
 				}));
 			},
@@ -312,12 +184,15 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 				setState((prevState) => ({
 					...prevState,
 					...newArrangment,
+					aspectRatio: keepProportion
+						? prevState.aspectRatio
+						: newArrangment.width / newArrangment.height,
 					draggingPoint: undefined,
 				}));
 
 				// TODO changeEndの伝番
 			},
-			[],
+			[keepProportion],
 		);
 
 		// ポインターダウン時の処理
@@ -331,8 +206,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			},
 			[id, onPointerDown],
 		);
-
-		// 各ドラッグポイントの移動関数を生成
 
 		return (
 			<>

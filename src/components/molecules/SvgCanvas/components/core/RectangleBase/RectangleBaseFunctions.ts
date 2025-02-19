@@ -6,7 +6,6 @@ import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
 export const calcArrangement = (
 	point: Point,
 	diagonalPoint: Point,
-	keepProportion: boolean,
 ): RectangleBaseArrangement => {
 	const top = Math.round(Math.min(point.y, diagonalPoint.y));
 	const bottom = Math.round(Math.max(point.y, diagonalPoint.y));
@@ -55,10 +54,6 @@ export const calcArrangement = (
 			y: bottom,
 		},
 	};
-
-	if (!keepProportion) {
-		result.aspectRatio = newWidth / newHeight;
-	}
 
 	return result;
 };

@@ -6,7 +6,6 @@ export type RectangleBaseArrangement = {
 	point: Point;
 	width: number;
 	height: number;
-	aspectRatio?: number;
 	leftTopPoint: Point;
 	leftBottomPoint: Point;
 	rightTopPoint: Point;
@@ -19,6 +18,7 @@ export type RectangleBaseArrangement = {
 
 export type RectangleBaseState = RectangleBaseArrangement & {
 	id?: string;
+	aspectRatio: number;
 	isDragging: boolean;
 	draggingPoint?: DragPointType;
 };
@@ -42,20 +42,4 @@ export type RectangleBaseDragPointProps = RectangleBaseArrangement & {
 	onArrangementChangeStart: (dragPointType: DragPointType) => void;
 	onArrangementChange: (arrangement: RectangleBaseArrangement) => void;
 	onArrangementChangeEnd: (arrangement: RectangleBaseArrangement) => void;
-};
-
-// TODO 削除
-export type UpdatedPoints = {
-	point: Point;
-	width: number;
-	height: number;
-	aspectRatio?: number;
-	leftTopPoint: Point;
-	leftBottomPoint: Point;
-	rightTopPoint: Point;
-	rightBottomPoint: Point;
-	topCenterPoint: Point;
-	leftCenterPoint: Point;
-	rightCenterPoint: Point;
-	bottomCenterPoint: Point;
 };
