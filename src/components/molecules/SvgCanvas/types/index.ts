@@ -17,9 +17,14 @@ export type Item = {
 };
 
 export enum DragDirection {
-	All = 0,
-	Horizontal = 1,
-	Vertical = 2,
+	All = "all",
+	Horizontal = "horizontal",
+	Vertical = "vertical",
+}
+
+export enum DragFunctionType {
+	LinerY2x = "linerY2x",
+	LinerX2y = "linerX2y",
 }
 
 export type PointerDownEvent = {
