@@ -1,6 +1,12 @@
 import styled from "@emotion/styled";
-import type React from "react";
-import type { Item, ChangeEvent, ItemSelectEvent } from "./../types";
+import React from "react";
+import type {
+	Diagram,
+	DiagramType,
+	ChangeEvent,
+	ItemSelectEvent,
+} from "./../types";
+import Group from "./diagram/Group";
 import Rectangle from "./diagram/Rectangle";
 import Ellipse from "./diagram/Ellipse";
 import { useCallback, memo } from "react";
@@ -16,36 +22,43 @@ const ContainerDiv = styled.div`
 
 type SvgCanvasProps = {
 	title?: string;
-	items: Array<Item>;
+	items: Array<Diagram>;
 	onChangeEnd?: (e: ChangeEvent) => void;
 	onItemSelect?: (e: ItemSelectEvent) => void;
+};
+
+type DiagramProps = Diagram & {
+	onChangeEnd?: (e: ChangeEvent) => void;
+	onPointerDown?: (e: ItemSelectEvent) => void;
+};
+
+// TODO: 場所
+export const ITEM_TYPE_COMPONENT_MAP: {
+	[key in DiagramType]: React.FC<DiagramProps>;
+} = {
+	group: Group,
+	rectangle: Rectangle,
+	ellipse: Ellipse,
 };
 
 const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 	({ title, items, onChangeEnd, onItemSelect }) => {
 		// console.log("SvgCanvas render");
 
+		const createDiagram = (item: Diagram): React.ReactNode => {
+			const itemType = ITEM_TYPE_COMPONENT_MAP[item.type];
+			const props = {
+				...item,
+				key: item.id,
+				onChangeEnd,
+				onPointerDown: onItemSelect,
+			};
+
+			return React.createElement(itemType, props);
+		};
+
 		const renderedItems = items.map((item) => {
-			switch (item.type) {
-				case "rectangle":
-					return (
-						<Rectangle
-							{...item}
-							key={item.id}
-							onChangeEnd={onChangeEnd}
-							onPointerDown={onItemSelect}
-						/>
-					);
-				case "ellipse":
-					return (
-						<Ellipse
-							{...item}
-							key={item.id}
-							onChangeEnd={onChangeEnd}
-							onPointerDown={onItemSelect}
-						/>
-					);
-			}
+			return createDiagram(item);
 		});
 
 		const handlePointerDown = useCallback(

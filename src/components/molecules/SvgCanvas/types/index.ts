@@ -3,9 +3,12 @@ export type Point = {
 	y: number;
 };
 
-export type Item = {
+export type DiagramType = "group" | "rectangle" | "ellipse";
+
+// TODO: 精査
+export type Diagram = {
 	id: string;
-	type: string;
+	type: DiagramType;
 	point: Point;
 	width: number;
 	height: number;
@@ -14,6 +17,7 @@ export type Item = {
 	strokeWidth: string;
 	keepProportion: boolean;
 	isSelected: boolean;
+	items?: Diagram[];
 };
 
 export enum DragDirection {
@@ -37,8 +41,8 @@ export type DragEvent = {
 export type ChangeEvent = {
 	id?: string;
 	point: Point;
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 };
 
 export type FocusEvent = {

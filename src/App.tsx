@@ -2,6 +2,75 @@ import SvgCanvas from "./components/molecules/SvgCanvas";
 import { useSvgCanvas } from "./components/molecules/SvgCanvas/hooks";
 import Button from "./components/atoms/Button";
 import Input from "./components/atoms/Input";
+import type { Diagram } from "./components/molecules/SvgCanvas/types";
+
+const testItems = [
+	{
+		id: "1",
+		type: "rectangle",
+		point: { x: 0, y: 0 },
+		width: 100,
+		height: 100,
+		fill: "transparent",
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+	},
+	{
+		id: "2",
+		type: "ellipse",
+		point: { x: 100, y: 100 },
+		width: 100,
+		height: 100,
+		fill: "transparent",
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+	},
+] as Diagram[];
+
+const testItems2 = [
+	{
+		id: "0",
+		type: "group",
+		point: { x: 10, y: 10 },
+		width: 200,
+		height: 200,
+		fill: "transparent",
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+		items: [
+			{
+				id: "1",
+				type: "rectangle",
+				point: { x: 0, y: 0 },
+				width: 100,
+				height: 100,
+				fill: "transparent",
+				stroke: "black",
+				strokeWidth: "1px",
+				keepProportion: false,
+				isSelected: false,
+			},
+			{
+				id: "2",
+				type: "ellipse",
+				point: { x: 100, y: 100 },
+				width: 100,
+				height: 100,
+				fill: "transparent",
+				stroke: "black",
+				strokeWidth: "1px",
+				keepProportion: false,
+				isSelected: false,
+			},
+		],
+	},
+] as Diagram[];
 
 function App() {
 	// console.log("App render");
@@ -10,32 +79,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas([
-		{
-			id: "1",
-			type: "rectangle",
-			point: { x: 10, y: 10 },
-			width: 200,
-			height: 100,
-			fill: "transparent",
-			stroke: "black",
-			strokeWidth: "1px",
-			keepProportion: false,
-			isSelected: false,
-		},
-		{
-			id: "2",
-			type: "ellipse",
-			point: { x: 110, y: 110 },
-			width: 200,
-			height: 100,
-			fill: "transparent",
-			stroke: "black",
-			strokeWidth: "1px",
-			keepProportion: false,
-			isSelected: false,
-		},
-	]);
+	} = useSvgCanvas(testItems);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem({
@@ -112,6 +156,16 @@ function App() {
 						canvasFunctions.updateItem({
 							id: canvasState.selectedItemId,
 							fill: e.target.value,
+						});
+					}}
+				/>
+				<Input
+					value={canvasFunctions.getSelectedItem()?.width.toString() || ""}
+					onChange={(e) => {
+						if (!canvasState.selectedItemId) return;
+						canvasFunctions.updateItem({
+							id: canvasState.selectedItemId,
+							width: Number(e.target.value),
 						});
 					}}
 				/>

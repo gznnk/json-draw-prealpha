@@ -4,7 +4,7 @@ import type { ChangeEvent } from "../../types";
 import RectangleBase from "../core/RectangleBase";
 import type { RectangleBaseProps } from "../core/RectangleBase";
 
-type RectangleProps = RectangleBaseProps & {
+export type RectangleProps = RectangleBaseProps & {
 	fill?: string;
 	stroke?: string;
 	strokeWidth?: string;
@@ -24,6 +24,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 		isSelected = false,
 		onPointerDown,
 		onChangeEnd,
+		children,
 	}) => {
 		const ref = useRef<SVGRectElement>({} as SVGRectElement);
 
@@ -55,6 +56,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					stroke={stroke}
 					strokeWidth={strokeWidth}
 				/>
+				{children}
 			</RectangleBase>
 		);
 	},

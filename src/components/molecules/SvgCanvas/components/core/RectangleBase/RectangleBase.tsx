@@ -70,13 +70,16 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 		const outlineRef = useRef<SVGRectElement>({} as SVGRectElement);
 
 		useEffect(() => {
-			onChangeEnd?.({
-				id: state.id,
-				point: state.leftTopPoint,
-				width: state.width,
-				height: state.height,
-			});
-		}, [state.id, state.leftTopPoint, state.width, state.height, onChangeEnd]);
+			setState((prevState) => ({
+				...prevState,
+				id: id,
+				...calcArrangment(point, {
+					x: point.x + width,
+					y: point.y + height,
+				}),
+				aspectRatio: width / height,
+			}));
+		}, [id, point, width, height]);
 
 		// --- 以下全体のドラッグ ---
 
@@ -93,13 +96,18 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 				setState((prevState) => ({
 					...prevState,
 					...calcArrangment(e.point, {
-						x: e.point.x + state.width,
-						y: e.point.y + state.height,
+						x: e.point.x + prevState.width,
+						y: e.point.y + prevState.height,
 					}),
 					isDragging: false,
 				}));
+
+				onChangeEnd?.({
+					id,
+					point: e.point,
+				});
 			},
-			[state.width, state.height],
+			[onChangeEnd, id],
 		);
 
 		// --- 以下点のドラッグ ---
@@ -149,8 +157,15 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 					draggingPointType: undefined,
 					dragEndPointType: e.dragPointType,
 				}));
+
+				onChangeEnd?.({
+					id,
+					point: e.arrangment.leftTopPoint,
+					width: e.arrangment.width,
+					height: e.arrangment.height,
+				});
 			},
-			[keepProportion],
+			[onChangeEnd, id, keepProportion],
 		);
 
 		// ポインターダウン時の処理

@@ -1,14 +1,14 @@
 import { useState, useCallback } from "react";
-import type { Item, ItemSelectEvent, ChangeEvent } from "../types";
+import type { Diagram, ItemSelectEvent, ChangeEvent } from "../types";
 import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
 
 type SvgCanvasState = {
-	items: Item[];
+	items: Diagram[];
 	selectedItemId?: string;
 };
 
-type AddItem = Omit<PartiallyRequired<Item, "type">, "id" | "isSelected">;
-type UpdateItem = Omit<PartiallyRequired<Item, "id">, "type" | "isSelected">;
+type AddItem = Omit<PartiallyRequired<Diagram, "type">, "id" | "isSelected">;
+type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
 
 const DEFAULT_ITEM_VALUE = {
 	point: { x: 10, y: 10 },
@@ -19,9 +19,10 @@ const DEFAULT_ITEM_VALUE = {
 	strokeWidth: "1px",
 	keepProportion: false,
 	isSelected: false,
+	childItems: [],
 };
 
-export const useSvgCanvas = (initialItems: Item[]) => {
+export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
 		items: initialItems,
 	});
@@ -37,13 +38,13 @@ export const useSvgCanvas = (initialItems: Item[]) => {
 
 	const onItemSelect = useCallback((e: ItemSelectEvent) => {
 		setCanvasState((prevState) => {
+			console.log(e);
+
 			const items = prevState.items.map((item) =>
 				item.id === e.id
 					? { ...item, isSelected: true }
 					: { ...item, isSelected: false },
 			);
-
-			// console.log(items);
 
 			return {
 				...prevState,
