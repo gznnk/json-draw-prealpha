@@ -22,6 +22,16 @@ const DEFAULT_ITEM_VALUE = {
 	childItems: [],
 };
 
+const assignItem = (e: ChangeEvent, items: Diagram[]) => {
+	return items.map((item) => {
+		const newItem = item;
+		if (item.type === "group") {
+			newItem.items = assignItem(e, item.items ?? []);
+		}
+		return newItem.id === e.id ? { ...newItem, ...e } : newItem;
+	});
+};
+
 export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
 		items: initialItems,
@@ -30,9 +40,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const onChangeEnd = useCallback((e: ChangeEvent) => {
 		setCanvasState((prevState) => ({
 			...prevState,
-			items: prevState.items.map((item) =>
-				item.id === e.id ? { ...item, ...e } : item,
-			),
+			items: assignItem(e, prevState.items),
 		}));
 	}, []);
 

@@ -47,6 +47,17 @@ const Ellipse: React.FC<EllipseProps> = memo(
 					svgRef.current?.setAttribute("rx", `${(width * e.scaleX) / 2}`);
 					svgRef.current?.setAttribute("ry", `${(height * e.scaleY) / 2}`);
 				},
+				onParentResizeEnd: (e: ParentResizeEvent) => {
+					onChangeEnd?.({
+						id,
+						point: {
+							x: point.x * e.scaleX,
+							y: point.y * e.scaleY,
+						},
+						width: width * e.scaleX,
+						height: height * e.scaleY,
+					});
+				},
 			}));
 
 			const onChange = useCallback((e: ChangeEvent) => {

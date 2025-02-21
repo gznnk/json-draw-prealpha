@@ -47,6 +47,17 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					svgRef?.current?.setAttribute("width", `${width * e.scaleX}`);
 					svgRef?.current?.setAttribute("height", `${height * e.scaleY}`);
 				},
+				onParentResizeEnd: (e: ParentResizeEvent) => {
+					onChangeEnd?.({
+						id,
+						point: {
+							x: point.x * e.scaleX,
+							y: point.y * e.scaleY,
+						},
+						width: width * e.scaleX,
+						height: height * e.scaleY,
+					});
+				},
 			}));
 
 			const handleChange = useCallback(
@@ -72,7 +83,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					onPointerDown={onPointerDown}
 					onChange={handleChange}
 					onChangeEnd={onChangeEnd}
-					diagramRef={diagramRef}
+					ref={diagramRef}
 				>
 					<rect
 						x={0}

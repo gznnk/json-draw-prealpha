@@ -9,6 +9,7 @@ export type DiagramRef = {
 	svgRef?: React.RefObject<SVGGElement>;
 	draggableRef?: React.RefObject<SVGGElement>;
 	onParentResize?: (e: ParentResizeEvent) => void;
+	onParentResizeEnd?: (e: ParentResizeEvent) => void;
 };
 
 // TODO: 精査

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRef, memo } from "react";
+import { useCallback, useRef, memo } from "react";
 import RectangleBase from "../core/RectangleBase";
 import type { ChangeEvent, Diagram, DiagramRef } from "../../types";
 import type { RectangleProps } from "./Rectangle";
@@ -20,11 +20,11 @@ const Group: React.FC<GroupProps> = memo(
 		keepProportion = false,
 		tabIndex = 0,
 		isSelected = false,
-		onPointerDown,
+		onPointerDown, // TODO: わかりづらい
 		onChangeEnd,
 		items = [],
 	}) => {
-		const ref = useRef<{
+		const itemsRef = useRef<{
 			[key: string]: DiagramRef | undefined;
 		}>({});
 
@@ -33,8 +33,9 @@ const Group: React.FC<GroupProps> = memo(
 			const props = {
 				...item,
 				key: item.id,
+				onChangeEnd: onChangeEnd,
 				ref: (r: DiagramRef) => {
-					ref.current[item.id] = r;
+					itemsRef.current[item.id] = r;
 				},
 			};
 
@@ -44,6 +45,39 @@ const Group: React.FC<GroupProps> = memo(
 		const children = items.map((item) => {
 			return createDiagram(item);
 		});
+
+		const handleChange = useCallback(
+			(e: ChangeEvent) => {
+				if (e.width && e.height) {
+					const scaleX = e.width / width;
+					const scaleY = e.height / height;
+					for (const item of items) {
+						itemsRef.current[item.id]?.onParentResize?.({
+							scaleX,
+							scaleY,
+						});
+					}
+				}
+			},
+			[items, width, height],
+		);
+
+		const handleChangeEnd = useCallback(
+			(e: ChangeEvent) => {
+				onChangeEnd?.(e);
+				if (e.width && e.height) {
+					const scaleX = e.width / width;
+					const scaleY = e.height / height;
+					for (const item of items) {
+						itemsRef.current[item.id]?.onParentResizeEnd?.({
+							scaleX,
+							scaleY,
+						});
+					}
+				}
+			},
+			[onChangeEnd, items, width, height],
+		);
 
 		return (
 			<Rectangle
@@ -56,19 +90,8 @@ const Group: React.FC<GroupProps> = memo(
 				keepProportion={keepProportion}
 				isSelected={isSelected}
 				onPointerDown={onPointerDown}
-				onChange={(e: ChangeEvent) => {
-					if (e.width && e.height) {
-						const scaleX = e.width / width;
-						const scaleY = e.height / height;
-						for (const item of items) {
-							ref.current[item.id]?.onParentResize?.({
-								scaleX,
-								scaleY,
-							});
-						}
-					}
-				}}
-				onChangeEnd={onChangeEnd}
+				onChange={handleChange}
+				onChangeEnd={handleChangeEnd}
 			>
 				{children}
 			</Rectangle>
