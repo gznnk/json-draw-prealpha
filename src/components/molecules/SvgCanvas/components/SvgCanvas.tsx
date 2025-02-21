@@ -30,6 +30,10 @@ type SvgCanvasProps = {
 type DiagramProps = Diagram & {
 	onChangeEnd?: (e: ChangeEvent) => void;
 	onPointerDown?: (e: ItemSelectEvent) => void;
+	ref?: React.Ref<{
+		draggableRef: React.RefObject<SVGElement>;
+		onParentChange: (e: ChangeEvent) => void;
+	}>;
 };
 
 // TODO: 場所

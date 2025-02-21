@@ -32,7 +32,7 @@ import DragPointBottomCenter from "./DragPointBottomCenter";
 import { calcArrangment } from "./RectangleBaseFunctions";
 
 export type RectangleBaseProps = {
-	id?: string;
+	id: string;
 	point: Point;
 	width: number;
 	height: number;

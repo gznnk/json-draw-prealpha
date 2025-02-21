@@ -3,6 +3,7 @@ import { useRef, useCallback, memo } from "react";
 import type { ChangeEvent } from "../../types";
 import RectangleBase from "../core/RectangleBase";
 import type { RectangleBaseProps } from "../core/RectangleBase";
+import { forwardRef, useImperativeHandle } from "react";
 
 type EllipseProps = RectangleBaseProps & {
 	fill?: string;
@@ -11,55 +12,75 @@ type EllipseProps = RectangleBaseProps & {
 };
 
 const Ellipse: React.FC<EllipseProps> = memo(
-	({
-		id,
-		point,
-		width,
-		height,
-		fill = "transparent",
-		stroke = "black",
-		strokeWidth = "1px",
-		keepProportion = false,
-		tabIndex = 0,
-		isSelected = false,
-		onPointerDown,
-		onChangeEnd,
-	}) => {
-		const ref = useRef<SVGEllipseElement>({} as SVGEllipseElement);
+	forwardRef<
+		{
+			draggableRef: React.RefObject<SVGGElement>;
+			onParentChange: (e: ChangeEvent) => void;
+		},
+		EllipseProps
+	>(
+		(
+			{
+				id,
+				point,
+				width,
+				height,
+				fill = "transparent",
+				stroke = "black",
+				strokeWidth = "1px",
+				keepProportion = false,
+				tabIndex = 0,
+				isSelected = false,
+				onPointerDown,
+				onChangeEnd,
+			},
+			ref,
+		) => {
+			const domRef = useRef<SVGEllipseElement>({} as SVGEllipseElement);
 
-		const onChange = useCallback((e: ChangeEvent) => {
-			ref.current?.setAttribute("cx", `${e.width / 2}`);
-			ref.current?.setAttribute("cy", `${e.height / 2}`);
-			ref.current?.setAttribute("rx", `${e.width / 2}`);
-			ref.current?.setAttribute("ry", `${e.height / 2}`);
-		}, []);
+			useImperativeHandle(ref, () => ({
+				draggableRef: domRef,
+				onParentChange: () => {
+					console.log("onParentChange");
+				},
+			}));
 
-		return (
-			<RectangleBase
-				id={id}
-				point={point}
-				width={width}
-				height={height}
-				keepProportion={keepProportion}
-				tabIndex={tabIndex}
-				isSelected={isSelected}
-				onPointerDown={onPointerDown}
-				onChange={onChange}
-				onChangeEnd={onChangeEnd}
-			>
-				<ellipse
-					cx={width / 2}
-					cy={height / 2}
-					rx={width / 2}
-					ry={height / 2}
-					ref={ref}
-					fill={fill}
-					stroke={stroke}
-					strokeWidth={strokeWidth}
-				/>
-			</RectangleBase>
-		);
-	},
+			const onChange = useCallback((e: ChangeEvent) => {
+				if (e.width && e.height) {
+					domRef.current?.setAttribute("cx", `${e.width / 2}`);
+					domRef.current?.setAttribute("cy", `${e.height / 2}`);
+					domRef.current?.setAttribute("rx", `${e.width / 2}`);
+					domRef.current?.setAttribute("ry", `${e.height / 2}`);
+				}
+			}, []);
+
+			return (
+				<RectangleBase
+					id={id}
+					point={point}
+					width={width}
+					height={height}
+					keepProportion={keepProportion}
+					tabIndex={tabIndex}
+					isSelected={isSelected}
+					onPointerDown={onPointerDown}
+					onChange={onChange}
+					onChangeEnd={onChangeEnd}
+				>
+					<ellipse
+						cx={width / 2}
+						cy={height / 2}
+						rx={width / 2}
+						ry={height / 2}
+						ref={domRef}
+						fill={fill}
+						stroke={stroke}
+						strokeWidth={strokeWidth}
+					/>
+				</RectangleBase>
+			);
+		},
+	),
 );
 
 export default Ellipse;
