@@ -33,7 +33,24 @@ export enum DragPointType {
 	LeftCenter = "leftCenter",
 	RightCenter = "rightCenter",
 	BottomCenter = "bottomCenter",
+	LeftSide = "leftSide",
+	RightSide = "rightSide",
+	TopSide = "topSide",
+	BottomSide = "bottomSide",
 }
+
+export type ArrangmentChangeStartEvent = {
+	dragPointType: DragPointType;
+};
+
+export type ArrangmentChangeEvent = {
+	arrangment: RectangleBaseArrangement;
+};
+
+export type ArrangmentChangeEndEvent = {
+	dragPointType?: DragPointType;
+	arrangment: RectangleBaseArrangement;
+};
 
 export type RectangleBaseDragPointProps = RectangleBaseArrangement & {
 	draggingPointType?: DragPointType;
@@ -41,10 +58,7 @@ export type RectangleBaseDragPointProps = RectangleBaseArrangement & {
 	keepProportion: boolean;
 	aspectRatio?: number;
 	hidden?: boolean;
-	onArrangmentChangeStart: (e: { dragPointType: DragPointType }) => void;
-	onArrangmentChange: (e: { arrangment: RectangleBaseArrangement }) => void;
-	onArrangmentChangeEnd: (e: {
-		dragPointType: DragPointType;
-		arrangment: RectangleBaseArrangement;
-	}) => void;
+	onArrangmentChangeStart: (e: ArrangmentChangeStartEvent) => void;
+	onArrangmentChange: (e: ArrangmentChangeEvent) => void;
+	onArrangmentChangeEnd: (e: ArrangmentChangeEndEvent) => void;
 };

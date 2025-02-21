@@ -11,14 +11,17 @@ import type {
 	RectangleBaseArrangement,
 } from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
-// RectangleBase関連型コンポーネントをインポート
+// RectangleBase関連コンポーネントをインポート
 import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
+import DragLine from "./DragLine";
 
 // RectangleBase関連関数をインポート
 import {
 	calcArrangment,
 	createLinerDragX2yFunction,
 } from "./RectangleBaseFunctions";
+// RectangleBase関連定数をインポート
+import { DRAG_LINE_SPACE } from "./RectangleBaseConstants";
 
 const DragPointLeftCenter = forwardRef<
 	SVGGElement,
@@ -85,25 +88,46 @@ const DragPointLeftCenter = forwardRef<
 		);
 
 		return (
-			<RectangleBaseDragPointBase
-				point={leftCenterPoint}
-				dragPointType={DragPointType.LeftCenter}
-				direction={
-					keepProportion ? DragDirection.All : DragDirection.Horizontal
-				}
-				allowYDecimal
-				cursor="w-resize"
-				draggingPointType={draggingPointType}
-				dragEndPointType={dragEndPointType}
-				hidden={hidden}
-				onArrangmentChangeStart={onArrangmentChangeStart}
-				onArrangmentChange={onArrangmentChange}
-				onArrangmentChangeEnd={onArrangmentChangeEnd}
-				dragPositioningFunction={keepProportion ? linerDragFunction : undefined}
-				calcArrangmentFunction={calcArrangmentFunction}
-				judgeNewDragPointType={judgeNewDragPointType}
-				ref={domRef}
-			/>
+			<>
+				<DragLine
+					startPoint={{
+						x: leftCenterPoint.x,
+						y: rightTopPoint.y + DRAG_LINE_SPACE,
+					}}
+					endPoint={{
+						x: leftCenterPoint.x,
+						y: leftBottomPoint.y - DRAG_LINE_SPACE,
+					}}
+					dragPointType={DragPointType.LeftSide}
+					direction={DragDirection.Horizontal}
+					cursor="w-resize"
+					onArrangmentChangeStart={onArrangmentChangeStart}
+					onArrangmentChange={onArrangmentChange}
+					onArrangmentChangeEnd={onArrangmentChangeEnd}
+					calcArrangmentFunction={calcArrangmentFunction}
+				/>
+				<RectangleBaseDragPointBase
+					point={leftCenterPoint}
+					dragPointType={DragPointType.LeftCenter}
+					direction={
+						keepProportion ? DragDirection.All : DragDirection.Horizontal
+					}
+					allowYDecimal
+					cursor="w-resize"
+					draggingPointType={draggingPointType}
+					dragEndPointType={dragEndPointType}
+					hidden={hidden}
+					onArrangmentChangeStart={onArrangmentChangeStart}
+					onArrangmentChange={onArrangmentChange}
+					onArrangmentChangeEnd={onArrangmentChangeEnd}
+					dragPositioningFunction={
+						keepProportion ? linerDragFunction : undefined
+					}
+					calcArrangmentFunction={calcArrangmentFunction}
+					judgeNewDragPointType={judgeNewDragPointType}
+					ref={domRef}
+				/>
+			</>
 		);
 	},
 );

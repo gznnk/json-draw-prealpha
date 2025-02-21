@@ -9,16 +9,17 @@ import type {
 	DragEvent,
 	ChangeEvent,
 } from "../../../types";
-// SvgCanvasコンポーネントをインポート
+// SvgCanvas関連コンポーネントをインポート
 import Draggable from "../Draggable";
 
 // RectangleBase関連型定義をインポート
 import type {
 	RectangleBaseState,
-	RectangleBaseArrangement,
+	ArrangmentChangeStartEvent,
+	ArrangmentChangeEvent,
+	ArrangmentChangeEndEvent,
 } from "./RectangleBaseTypes";
-import type { DragPointType } from "./RectangleBaseTypes";
-// RectangleBase関連型コンポーネントをインポート
+// RectangleBase関連コンポーネントをインポート
 import DragPointLeftTop from "./DragPointLeftTop";
 import DragPointLeftBottom from "./DragPointLeftBottom";
 import DragPointRightTop from "./DragPointRightTop";
@@ -68,15 +69,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 		const draggableRef = useRef<SVGGElement>({} as SVGGElement);
 		const outlineRef = useRef<SVGRectElement>({} as SVGRectElement);
 
-		const leftTopPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const rightTopPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const leftBottomPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const rightBottomPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const topCenterPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const leftCenterPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const rightCenterPointRef = useRef<SVGGElement>({} as SVGGElement);
-		const bottomCenterPointRef = useRef<SVGGElement>({} as SVGGElement);
-
 		useEffect(() => {
 			onChangeEnd?.({
 				id: state.id,
@@ -86,72 +78,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			});
 		}, [state.id, state.leftTopPoint, state.width, state.height, onChangeEnd]);
 
-		// -- 以下共通関数 --
-
-		// useEffect(() => {
-		// 	const focusElement = document.activeElement as HTMLElement;
-		// 	if (focusElement && !state.lastDragPoint) {
-		// 		focusElement.blur();
-		// 	}
-
-		// 	const isPointEquals = (p1: Point, p2: Point) =>
-		// 		Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
-
-		// 	if (state.lastDragPoint) {
-		// 		if (isPointEquals(state.lastDragPoint, state.leftTopPoint)) {
-		// 			leftTopPointRef.current?.focus();
-		// 		} else if (isPointEquals(state.lastDragPoint, state.leftBottomPoint)) {
-		// 			leftBottomPointRef.current?.focus();
-		// 		} else if (isPointEquals(state.lastDragPoint, state.rightTopPoint)) {
-		// 			rightTopPointRef.current?.focus();
-		// 		} else if (isPointEquals(state.lastDragPoint, state.rightBottomPoint)) {
-		// 			rightBottomPointRef.current?.focus();
-		// 		} else if (isPointEquals(state.lastDragPoint, state.topCenterPoint)) {
-		// 			topCenterPointRef.current?.focus();
-		// 		} else if (isPointEquals(state.lastDragPoint, state.leftCenterPoint)) {
-		// 			leftCenterPointRef.current?.focus();
-		// 		} else if (isPointEquals(state.lastDragPoint, state.rightCenterPoint)) {
-		// 			rightCenterPointRef.current?.focus();
-		// 		} else if (
-		// 			isPointEquals(state.lastDragPoint, state.bottomCenterPoint)
-		// 		) {
-		// 			bottomCenterPointRef.current?.focus();
-		// 		}
-		// 	}
-		// }, [state.lastDragPoint]);
-
-		// const updateDragPointFocus = useCallback(
-		// 	(dragEndPoint: Point, newPoints: UpdatedPoints) => {
-		// 		const focusElement = document.activeElement as HTMLElement;
-		// 		if (focusElement) {
-		// 			focusElement.blur();
-		// 		}
-		// 		const isPointEquals = (p1: Point, p2: Point) =>
-		// 			Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
-		// 		setTimeout(() => {
-		// 			if (isPointEquals(dragEndPoint, newPoints.leftTopPoint)) {
-		// 				leftTopPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.leftBottomPoint)) {
-		// 				leftBottomPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.rightTopPoint)) {
-		// 				rightTopPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.rightBottomPoint)) {
-		// 				rightBottomPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.topCenterPoint)) {
-		// 				topCenterPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.leftCenterPoint)) {
-		// 				leftCenterPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.rightCenterPoint)) {
-		// 				rightCenterPointRef.current?.focus();
-		// 			} else if (isPointEquals(dragEndPoint, newPoints.bottomCenterPoint)) {
-		// 				bottomCenterPointRef.current?.focus();
-		// 			}
-		// 		}, 10); // TODO 次のレンダリングでフォーカスが移動するように修正したい
-		// 	},
-		// 	[prevState.draggingPoint],
-		// );
-
-		// --- 以下四角形全体のドラッグ ---
+		// --- 以下全体のドラッグ ---
 
 		const onDragStart = useCallback((_e: DragEvent) => {
 			setState((prevState) => ({
@@ -178,7 +105,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 		// --- 以下点のドラッグ ---
 
 		const onArrangmentChangeStart = useCallback(
-			(e: { dragPointType: DragPointType }) => {
+			(e: ArrangmentChangeStartEvent) => {
 				setState((prevState) => ({
 					...prevState,
 					draggingPointType: e.dragPointType,
@@ -187,7 +114,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			[],
 		);
 		const onArrangmentChange = useCallback(
-			(e: { arrangment: RectangleBaseArrangement }) => {
+			(e: ArrangmentChangeEvent) => {
 				const {
 					point: newLeftTopPoint,
 					width: newWidth,
@@ -212,10 +139,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 		);
 
 		const onArrangmentChangeEnd = useCallback(
-			(e: {
-				dragPointType: DragPointType;
-				arrangment: RectangleBaseArrangement;
-			}) => {
+			(e: ArrangmentChangeEndEvent) => {
 				setState((prevState) => ({
 					...prevState,
 					...e.arrangment,
@@ -276,7 +200,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={leftTopPointRef}
 						/>
 						{/* 左下 */}
 						<DragPointLeftBottom
@@ -285,7 +208,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={leftBottomPointRef}
 						/>
 						{/* 右上 */}
 						<DragPointRightTop
@@ -294,7 +216,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={rightTopPointRef}
 						/>
 						{/* 右下 */}
 						<DragPointRightBottom
@@ -303,7 +224,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={rightBottomPointRef}
 						/>
 						{/* 上中央 */}
 						<DragPointTopCenter
@@ -312,7 +232,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={topCenterPointRef}
 						/>
 						{/* 左中央 */}
 						<DragPointLeftCenter
@@ -321,7 +240,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={leftCenterPointRef}
 						/>
 						{/* 右中央 */}
 						<DragPointRightCenter
@@ -330,7 +248,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={rightCenterPointRef}
 						/>
 						{/* 下中央 */}
 						<DragPointBottomCenter
@@ -339,7 +256,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 							onArrangmentChangeStart={onArrangmentChangeStart}
 							onArrangmentChange={onArrangmentChange}
 							onArrangmentChangeEnd={onArrangmentChangeEnd}
-							ref={bottomCenterPointRef}
 						/>
 					</>
 				)}

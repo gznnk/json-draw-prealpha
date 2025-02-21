@@ -10,7 +10,7 @@ import type {
 	RectangleBaseArrangement,
 } from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
-// RectangleBase関連型コンポーネントをインポート
+// RectangleBase関連コンポーネントをインポート
 import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
 
 // RectangleBase関連関数をインポート

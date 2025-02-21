@@ -4,12 +4,13 @@ import { useRef, forwardRef, useImperativeHandle, useCallback } from "react";
 // SvgCanvas関連型定義をインポート
 import type { Point, DragEvent } from "../../../types";
 
+// RectangleBase関連型定義をインポート
 import type {
 	RectangleBaseDragPointProps,
 	RectangleBaseArrangement,
 } from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
-// RectangleBase関連型コンポーネントをインポート
+// RectangleBase関連コンポーネントをインポート
 import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
 
 // RectangleBase関連関数をインポート

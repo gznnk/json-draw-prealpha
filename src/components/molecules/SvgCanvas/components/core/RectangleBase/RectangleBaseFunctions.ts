@@ -2,7 +2,6 @@
 
 import type { Point } from "../../../types";
 import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
-import { DragPointType } from "./RectangleBaseTypes";
 
 export const calcArrangment = (
 	point: Point,
