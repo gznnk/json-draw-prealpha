@@ -2,8 +2,9 @@
 
 import type { Point } from "../../../types";
 import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
+import { DragPointType } from "./RectangleBaseTypes";
 
-export const calcArrangement = (
+export const calcArrangment = (
 	point: Point,
 	diagonalPoint: Point,
 ): RectangleBaseArrangement => {
@@ -56,6 +57,31 @@ export const calcArrangement = (
 	};
 
 	return result;
+};
+
+// TODO
+export const getPosittionByDragPointType = (
+	dragPointType: DragPointType,
+	arrangement: RectangleBaseArrangement,
+) => {
+	switch (dragPointType) {
+		case DragPointType.LeftTop:
+			return arrangement.leftTopPoint;
+		case DragPointType.LeftBottom:
+			return arrangement.leftBottomPoint;
+		case DragPointType.RightTop:
+			return arrangement.rightTopPoint;
+		case DragPointType.RightBottom:
+			return arrangement.rightBottomPoint;
+		case DragPointType.TopCenter:
+			return arrangement.topCenterPoint;
+		case DragPointType.LeftCenter:
+			return arrangement.leftCenterPoint;
+		case DragPointType.RightCenter:
+			return arrangement.rightCenterPoint;
+		case DragPointType.BottomCenter:
+			return arrangement.bottomCenterPoint;
+	}
 };
 
 export const createLinerDragY2xFunction = (p1: Point, p2: Point) => {

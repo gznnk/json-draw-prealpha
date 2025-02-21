@@ -28,7 +28,7 @@ import DragPointLeftCenter from "./DragPointLeftCenter";
 import DragPointRightCenter from "./DragPointRightCenter";
 import DragPointBottomCenter from "./DragPointBottomCenter";
 // RectangleBase関連関数をインポート
-import { calcArrangement } from "./RectangleBaseFunctions";
+import { calcArrangment } from "./RectangleBaseFunctions";
 
 export type RectangleBaseProps = {
 	id?: string;
@@ -60,10 +60,11 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 	}) => {
 		const [state, setState] = useState<RectangleBaseState>({
 			id: id,
-			...calcArrangement(point, { x: point.x + width, y: point.y + height }),
+			...calcArrangment(point, { x: point.x + width, y: point.y + height }),
 			aspectRatio: width / height,
 			isDragging: false,
-			draggingPoint: undefined,
+			draggingPointType: undefined,
+			lastDragPoint: undefined,
 		});
 
 		const draggableRef = useRef<SVGGElement>({} as SVGGElement);
@@ -89,36 +90,68 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 
 		// -- 以下共通関数 --
 
-		//const updateDragPointFocus = useCallback(
-		//(dragEndPoint: Point, newPoints: UpdatedPoints) => {
-		// const focusElement = document.activeElement as HTMLElement;
-		// if (focusElement) {
-		// 	focusElement.blur();
-		// }
-		// const isPointEquals = (p1: Point, p2: Point) =>
-		// 	Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
-		// setTimeout(() => {
-		// 	if (isPointEquals(dragEndPoint, newPoints.leftTopPoint)) {
-		// 		leftTopPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.leftBottomPoint)) {
-		// 		leftBottomPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.rightTopPoint)) {
-		// 		rightTopPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.rightBottomPoint)) {
-		// 		rightBottomPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.topCenterPoint)) {
-		// 		topCenterPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.leftCenterPoint)) {
-		// 		leftCenterPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.rightCenterPoint)) {
-		// 		rightCenterPointRef.current?.focus();
-		// 	} else if (isPointEquals(dragEndPoint, newPoints.bottomCenterPoint)) {
-		// 		bottomCenterPointRef.current?.focus();
+		// useEffect(() => {
+		// 	const focusElement = document.activeElement as HTMLElement;
+		// 	if (focusElement && !state.lastDragPoint) {
+		// 		focusElement.blur();
 		// 	}
-		// }, 10); // TODO 次のレンダリングでフォーカスが移動するように修正したい
-		//},
-		//[],
-		//);
+
+		// 	const isPointEquals = (p1: Point, p2: Point) =>
+		// 		Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
+
+		// 	if (state.lastDragPoint) {
+		// 		if (isPointEquals(state.lastDragPoint, state.leftTopPoint)) {
+		// 			leftTopPointRef.current?.focus();
+		// 		} else if (isPointEquals(state.lastDragPoint, state.leftBottomPoint)) {
+		// 			leftBottomPointRef.current?.focus();
+		// 		} else if (isPointEquals(state.lastDragPoint, state.rightTopPoint)) {
+		// 			rightTopPointRef.current?.focus();
+		// 		} else if (isPointEquals(state.lastDragPoint, state.rightBottomPoint)) {
+		// 			rightBottomPointRef.current?.focus();
+		// 		} else if (isPointEquals(state.lastDragPoint, state.topCenterPoint)) {
+		// 			topCenterPointRef.current?.focus();
+		// 		} else if (isPointEquals(state.lastDragPoint, state.leftCenterPoint)) {
+		// 			leftCenterPointRef.current?.focus();
+		// 		} else if (isPointEquals(state.lastDragPoint, state.rightCenterPoint)) {
+		// 			rightCenterPointRef.current?.focus();
+		// 		} else if (
+		// 			isPointEquals(state.lastDragPoint, state.bottomCenterPoint)
+		// 		) {
+		// 			bottomCenterPointRef.current?.focus();
+		// 		}
+		// 	}
+		// }, [state.lastDragPoint]);
+
+		// const updateDragPointFocus = useCallback(
+		// 	(dragEndPoint: Point, newPoints: UpdatedPoints) => {
+		// 		const focusElement = document.activeElement as HTMLElement;
+		// 		if (focusElement) {
+		// 			focusElement.blur();
+		// 		}
+		// 		const isPointEquals = (p1: Point, p2: Point) =>
+		// 			Math.abs(p1.x - p2.x) < 1 && Math.abs(p1.y - p2.y) < 1;
+		// 		setTimeout(() => {
+		// 			if (isPointEquals(dragEndPoint, newPoints.leftTopPoint)) {
+		// 				leftTopPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.leftBottomPoint)) {
+		// 				leftBottomPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.rightTopPoint)) {
+		// 				rightTopPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.rightBottomPoint)) {
+		// 				rightBottomPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.topCenterPoint)) {
+		// 				topCenterPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.leftCenterPoint)) {
+		// 				leftCenterPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.rightCenterPoint)) {
+		// 				rightCenterPointRef.current?.focus();
+		// 			} else if (isPointEquals(dragEndPoint, newPoints.bottomCenterPoint)) {
+		// 				bottomCenterPointRef.current?.focus();
+		// 			}
+		// 		}, 10); // TODO 次のレンダリングでフォーカスが移動するように修正したい
+		// 	},
+		// 	[prevState.draggingPoint],
+		// );
 
 		// --- 以下四角形全体のドラッグ ---
 
@@ -133,7 +166,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			(e: DragEvent) => {
 				setState((prevState) => ({
 					...prevState,
-					...calcArrangement(e.point, {
+					...calcArrangment(e.point, {
 						x: e.point.x + state.width,
 						y: e.point.y + state.height,
 					}),
@@ -145,22 +178,22 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 
 		// --- 以下点のドラッグ ---
 
-		const onArrangementChangeStart = useCallback(
-			(dragPointType: DragPointType) => {
+		const onArrangmentChangeStart = useCallback(
+			(e: { dragPointType: DragPointType }) => {
 				setState((prevState) => ({
 					...prevState,
-					draggingPoint: dragPointType,
+					draggingPointType: e.dragPointType,
 				}));
 			},
 			[],
 		);
-		const onArrangementChange = useCallback(
-			(newArrangment: RectangleBaseArrangement) => {
+		const onArrangmentChange = useCallback(
+			(e: { arrangment: RectangleBaseArrangement }) => {
 				const {
 					point: newLeftTopPoint,
 					width: newWidth,
 					height: newHeight,
-				} = newArrangment;
+				} = e.arrangment;
 
 				draggableRef.current?.setAttribute(
 					"transform",
@@ -179,18 +212,19 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			[onChange, state.id],
 		);
 
-		const onArrangementChangeEnd = useCallback(
-			(newArrangment: RectangleBaseArrangement) => {
+		const onArrangmentChangeEnd = useCallback(
+			(e: {
+				dragPointType: DragPointType;
+				arrangment: RectangleBaseArrangement;
+			}) => {
 				setState((prevState) => ({
 					...prevState,
-					...newArrangment,
+					...e.arrangment,
 					aspectRatio: keepProportion
 						? prevState.aspectRatio
-						: newArrangment.width / newArrangment.height,
-					draggingPoint: undefined,
+						: e.arrangment.width / e.arrangment.height,
+					draggingPointType: undefined,
 				}));
-
-				// TODO changeEndの伝番
 			},
 			[keepProportion],
 		);
@@ -239,72 +273,72 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 						<DragPointLeftTop
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={leftTopPointRef}
 						/>
 						{/* 左下 */}
 						<DragPointLeftBottom
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={leftBottomPointRef}
 						/>
 						{/* 右上 */}
 						<DragPointRightTop
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={rightTopPointRef}
 						/>
 						{/* 右下 */}
 						<DragPointRightBottom
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={rightBottomPointRef}
 						/>
 						{/* 上中央 */}
 						<DragPointTopCenter
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={topCenterPointRef}
 						/>
 						{/* 左中央 */}
 						<DragPointLeftCenter
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={leftCenterPointRef}
 						/>
 						{/* 右中央 */}
 						<DragPointRightCenter
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={rightCenterPointRef}
 						/>
 						{/* 下中央 */}
 						<DragPointBottomCenter
 							{...state}
 							keepProportion={keepProportion}
-							onArrangementChangeStart={onArrangementChangeStart}
-							onArrangementChange={onArrangementChange}
-							onArrangementChangeEnd={onArrangementChangeEnd}
+							onArrangmentChangeStart={onArrangmentChangeStart}
+							onArrangmentChange={onArrangmentChange}
+							onArrangmentChangeEnd={onArrangmentChangeEnd}
 							ref={bottomCenterPointRef}
 						/>
 					</>

@@ -3,16 +3,16 @@ import { useRef, forwardRef, useImperativeHandle, useCallback } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { Point, DragEvent } from "../../../types";
-// SvgCanvasコンポーネントをインポート
-import DragPoint from "../DragPoint";
 
 // RectangleBase関連型定義をインポート
 import type { RectangleBaseDragPointProps } from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
+// RectangleBase関連型コンポーネントをインポート
+import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
 
 // RectangleBase関連関数をインポート
 import {
-	calcArrangement,
+	calcArrangment,
 	createLinerDragY2xFunction,
 } from "./RectangleBaseFunctions";
 
@@ -21,38 +21,22 @@ const DragPointLeftTop = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 		{
 			rightTopPoint,
 			leftBottomPoint,
-			draggingPoint,
-			keepProportion = false,
-			hidden = false,
-			onArrangementChangeStart,
-			onArrangementChange,
-			onArrangementChangeEnd,
+			draggingPointType,
+			dragEndPointType,
+			keepProportion,
+			hidden,
+			onArrangmentChangeStart,
+			onArrangmentChange,
+			onArrangmentChangeEnd,
 		},
 		ref,
 	) => {
 		const domRef = useRef<SVGGElement>({} as SVGGElement);
 		useImperativeHandle(ref, () => domRef.current);
 
-		const onDragStart = useCallback(() => {
-			onArrangementChangeStart(DragPointType.LeftBottom);
-		}, [onArrangementChangeStart]);
-
-		const onDrag = useCallback(
-			(e: DragEvent) => {
-				const newArrangment = calcArrangement(e.point, rightTopPoint);
-
-				onArrangementChange(newArrangment);
-			},
-			[onArrangementChange, rightTopPoint],
-		);
-
-		const onDragEnd = useCallback(
-			(e: DragEvent) => {
-				const newArrangment = calcArrangement(e.point, rightTopPoint);
-
-				onArrangementChangeEnd(newArrangment);
-			},
-			[onArrangementChangeEnd, rightTopPoint],
+		const calcArrangmentFunction = useCallback(
+			(e: DragEvent) => calcArrangment(e.point, rightTopPoint),
+			[rightTopPoint],
 		);
 
 		const linerDragFunction = useCallback(
@@ -61,19 +45,19 @@ const DragPointLeftTop = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 			[rightTopPoint, leftBottomPoint],
 		);
 
-		if (draggingPoint && draggingPoint !== DragPointType.LeftBottom) {
-			return;
-		}
-
 		return (
-			<DragPoint
+			<RectangleBaseDragPointBase
 				point={leftBottomPoint}
-				onDragStart={onDragStart}
-				onDrag={onDrag}
-				onDragEnd={onDragEnd}
-				dragPositioningFunction={keepProportion ? linerDragFunction : undefined}
+				dragPointType={DragPointType.LeftBottom}
 				cursor="sw-resize"
+				draggingPointType={draggingPointType}
+				dragEndPointType={dragEndPointType}
 				hidden={hidden}
+				onArrangmentChangeStart={onArrangmentChangeStart}
+				onArrangmentChange={onArrangmentChange}
+				onArrangmentChangeEnd={onArrangmentChangeEnd}
+				dragPositioningFunction={keepProportion ? linerDragFunction : undefined}
+				calcArrangmentFunction={calcArrangmentFunction}
 				ref={domRef}
 			/>
 		);

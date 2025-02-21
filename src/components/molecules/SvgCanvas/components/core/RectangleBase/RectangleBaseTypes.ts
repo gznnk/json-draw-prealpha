@@ -20,7 +20,8 @@ export type RectangleBaseState = RectangleBaseArrangement & {
 	id?: string;
 	aspectRatio: number;
 	isDragging: boolean;
-	draggingPoint?: DragPointType;
+	draggingPointType?: DragPointType;
+	lastDragPoint?: Point;
 };
 
 export enum DragPointType {
@@ -34,12 +35,17 @@ export enum DragPointType {
 	BottomCenter = "bottomCenter",
 }
 
+// TODO
 export type RectangleBaseDragPointProps = RectangleBaseArrangement & {
-	draggingPoint?: DragPointType;
+	draggingPointType?: DragPointType;
+	dragEndPointType?: DragPointType;
 	keepProportion: boolean;
 	aspectRatio?: number;
 	hidden?: boolean;
-	onArrangementChangeStart: (dragPointType: DragPointType) => void;
-	onArrangementChange: (arrangement: RectangleBaseArrangement) => void;
-	onArrangementChangeEnd: (arrangement: RectangleBaseArrangement) => void;
+	onArrangmentChangeStart: (e: { dragPointType: DragPointType }) => void;
+	onArrangmentChange: (e: { arrangment: RectangleBaseArrangement }) => void;
+	onArrangmentChangeEnd: (e: {
+		dragPointType: DragPointType;
+		arrangment: RectangleBaseArrangement;
+	}) => void;
 };
