@@ -6,7 +6,10 @@ import type { Point, DragEvent } from "../../../types";
 import { DragDirection } from "../../../types";
 
 // RectangleBase関連型定義をインポート
-import type { RectangleBaseDragPointProps } from "./RectangleBaseTypes";
+import type {
+	RectangleBaseDragPointProps,
+	RectangleBaseArrangement,
+} from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
 // RectangleBase関連型コンポーネントをインポート
 import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
@@ -64,6 +67,17 @@ const DragPointBottomCenter = forwardRef<
 			[leftTopPoint, rightBottomPoint.x, keepProportion, aspectRatio],
 		);
 
+		const judgeNewDragPointType = useCallback(
+			(newArrangement: RectangleBaseArrangement) => {
+				const newBottomCenterPoint = newArrangement.bottomCenterPoint;
+				if (leftTopPoint.y < newBottomCenterPoint.y) {
+					return DragPointType.BottomCenter;
+				}
+				return DragPointType.TopCenter;
+			},
+			[leftTopPoint],
+		);
+
 		const linerDragFunction = useCallback(
 			(p: Point) =>
 				createLinerDragY2xFunction(leftTopPoint, bottomCenterPoint)(p),
@@ -85,6 +99,7 @@ const DragPointBottomCenter = forwardRef<
 				onArrangmentChangeEnd={onArrangmentChangeEnd}
 				dragPositioningFunction={keepProportion ? linerDragFunction : undefined}
 				calcArrangmentFunction={calcArrangmentFunction}
+				judgeNewDragPointType={judgeNewDragPointType}
 				ref={domRef}
 			/>
 		);

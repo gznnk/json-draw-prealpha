@@ -4,8 +4,10 @@ import { useRef, forwardRef, useImperativeHandle, useCallback } from "react";
 // SvgCanvas関連型定義をインポート
 import type { Point, DragEvent } from "../../../types";
 
-// RectangleBase関連型定義をインポート
-import type { RectangleBaseDragPointProps } from "./RectangleBaseTypes";
+import type {
+	RectangleBaseDragPointProps,
+	RectangleBaseArrangement,
+} from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
 // RectangleBase関連型コンポーネントをインポート
 import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
@@ -39,6 +41,23 @@ const DragPointRightTop = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 			[leftBottomPoint],
 		);
 
+		const judgeNewDragPointType = useCallback(
+			(newArrangement: RectangleBaseArrangement) => {
+				const newRightTopPoint = newArrangement.rightTopPoint;
+				if (leftBottomPoint.x < newRightTopPoint.x) {
+					if (newRightTopPoint.y < leftBottomPoint.y) {
+						return DragPointType.RightTop;
+					}
+					return DragPointType.RightBottom;
+				}
+				if (newRightTopPoint.y < leftBottomPoint.y) {
+					return DragPointType.LeftTop;
+				}
+				return DragPointType.LeftBottom;
+			},
+			[leftBottomPoint],
+		);
+
 		const linerDragFunction = useCallback(
 			(p: Point) =>
 				createLinerDragY2xFunction(rightTopPoint, leftBottomPoint)(p),
@@ -58,6 +77,7 @@ const DragPointRightTop = forwardRef<SVGGElement, RectangleBaseDragPointProps>(
 				onArrangmentChangeEnd={onArrangmentChangeEnd}
 				dragPositioningFunction={keepProportion ? linerDragFunction : undefined}
 				calcArrangmentFunction={calcArrangmentFunction}
+				judgeNewDragPointType={judgeNewDragPointType}
 				ref={domRef}
 			/>
 		);

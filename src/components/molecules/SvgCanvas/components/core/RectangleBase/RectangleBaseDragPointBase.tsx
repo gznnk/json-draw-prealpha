@@ -34,7 +34,10 @@ export type RectangleBaseDragPointBaseProps = {
 		arrangment: RectangleBaseArrangement;
 	}) => void;
 	dragPositioningFunction?: (point: Point) => Point;
-	calcArrangmentFunction(e: DragEvent): RectangleBaseArrangement;
+	calcArrangmentFunction: (e: DragEvent) => RectangleBaseArrangement;
+	judgeNewDragPointType: (
+		newArrangement: RectangleBaseArrangement,
+	) => DragPointType;
 };
 
 const RectangleBaseDragPointBase = forwardRef<
@@ -57,17 +60,19 @@ const RectangleBaseDragPointBase = forwardRef<
 			onArrangmentChangeEnd,
 			dragPositioningFunction,
 			calcArrangmentFunction,
+			judgeNewDragPointType,
 		},
 		ref,
 	) => {
 		const domRef = useRef<SVGGElement>({} as SVGGElement);
 		useImperativeHandle(ref, () => domRef.current);
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: 座標が変わった場合もフォーカス処理を行うため、pointも依存に含める
 		useEffect(() => {
 			if (dragEndPointType === dragPointType) {
 				domRef.current?.focus();
 			}
-		}, [dragEndPointType, dragPointType]);
+		}, [point, dragEndPointType, dragPointType]);
 
 		const onDragStart = useCallback(() => {
 			onArrangmentChangeStart({
@@ -86,12 +91,15 @@ const RectangleBaseDragPointBase = forwardRef<
 
 		const onDragEnd = useCallback(
 			(e: DragEvent) => {
+				const newArrangment = calcArrangmentFunction(e);
+				const newDataPoint = judgeNewDragPointType(newArrangment);
+
 				onArrangmentChangeEnd({
-					dragPointType,
-					arrangment: calcArrangmentFunction(e),
+					dragPointType: newDataPoint,
+					arrangment: newArrangment,
 				});
 			},
-			[calcArrangmentFunction, onArrangmentChangeEnd, dragPointType],
+			[calcArrangmentFunction, judgeNewDragPointType, onArrangmentChangeEnd],
 		);
 
 		if (draggingPointType && draggingPointType !== dragPointType) {

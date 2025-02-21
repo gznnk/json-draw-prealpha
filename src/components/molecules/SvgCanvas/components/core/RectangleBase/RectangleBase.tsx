@@ -63,8 +63,6 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			...calcArrangment(point, { x: point.x + width, y: point.y + height }),
 			aspectRatio: width / height,
 			isDragging: false,
-			draggingPointType: undefined,
-			lastDragPoint: undefined,
 		});
 
 		const draggableRef = useRef<SVGGElement>({} as SVGGElement);
@@ -159,6 +157,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			setState((prevState) => ({
 				...prevState,
 				isDragging: true,
+				dragEndPointType: undefined,
 			}));
 		}, []);
 
@@ -224,6 +223,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 						? prevState.aspectRatio
 						: e.arrangment.width / e.arrangment.height,
 					draggingPointType: undefined,
+					dragEndPointType: e.dragPointType,
 				}));
 			},
 			[keepProportion],

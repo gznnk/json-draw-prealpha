@@ -59,31 +59,6 @@ export const calcArrangment = (
 	return result;
 };
 
-// TODO
-export const getPosittionByDragPointType = (
-	dragPointType: DragPointType,
-	arrangement: RectangleBaseArrangement,
-) => {
-	switch (dragPointType) {
-		case DragPointType.LeftTop:
-			return arrangement.leftTopPoint;
-		case DragPointType.LeftBottom:
-			return arrangement.leftBottomPoint;
-		case DragPointType.RightTop:
-			return arrangement.rightTopPoint;
-		case DragPointType.RightBottom:
-			return arrangement.rightBottomPoint;
-		case DragPointType.TopCenter:
-			return arrangement.topCenterPoint;
-		case DragPointType.LeftCenter:
-			return arrangement.leftCenterPoint;
-		case DragPointType.RightCenter:
-			return arrangement.rightCenterPoint;
-		case DragPointType.BottomCenter:
-			return arrangement.bottomCenterPoint;
-	}
-};
-
 export const createLinerDragY2xFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);
 	const b = p1.y - a * p1.x;
