@@ -3,14 +3,17 @@ import type React from "react";
 import { useCallback } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point, DragEvent } from "../../../types";
+import type { DragDirection, Point } from "../../../types/CoordinateTypes";
+import type { DiagramDragEvent } from "../../../types/EventTypes";
+
 // SvgCanvas関連コンポーネントをインポート
 import Draggable from "../Draggable";
 
 // RectangleBase関連型定義をインポート
-import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
-import type { DragPointType } from "./RectangleBaseTypes";
-import type { DragDirection } from "../../../types";
+import type {
+	DragPointType,
+	RectangleBaseArrangement,
+} from "./RectangleBaseTypes";
 
 type DragLineProps = {
 	startPoint: Point;
@@ -29,7 +32,7 @@ type DragLineProps = {
 		dragPointType?: DragPointType;
 		arrangment: RectangleBaseArrangement;
 	}) => void;
-	calcArrangmentFunction: (e: DragEvent) => RectangleBaseArrangement;
+	calcArrangmentFunction: (e: DiagramDragEvent) => RectangleBaseArrangement;
 };
 
 const DragLine: React.FC<DragLineProps> = ({
@@ -50,7 +53,7 @@ const DragLine: React.FC<DragLineProps> = ({
 	}, [onArrangmentChangeStart, dragPointType]);
 
 	const onDrag = useCallback(
-		(e: DragEvent) => {
+		(e: DiagramDragEvent) => {
 			onArrangmentChange({
 				arrangment: calcArrangmentFunction(e),
 			});
@@ -59,7 +62,7 @@ const DragLine: React.FC<DragLineProps> = ({
 	);
 
 	const onDragEnd = useCallback(
-		(e: DragEvent) => {
+		(e: DiagramDragEvent) => {
 			onArrangmentChangeEnd({
 				dragPointType: undefined,
 				arrangment: calcArrangmentFunction(e),

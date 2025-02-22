@@ -1,42 +1,45 @@
 // Reactのインポート
 import type React from "react";
 import {
-	useState,
-	useRef,
+	forwardRef,
+	memo,
 	useCallback,
 	useEffect,
-	forwardRef,
 	useImperativeHandle,
-	memo,
+	useRef,
+	useState,
 } from "react";
 
 // SvgCanvas関連型定義をインポート
+import type { Point } from "../../../types/CoordinateTypes";
+import type { DiagramRef } from "../../../types/DiagramTypes";
 import type {
-	Point,
+	DiagramChangeEvent,
+	DiagramDragEvent,
 	PointerDownEvent,
-	DragEvent,
-	ChangeEvent,
-	DiagramRef,
-} from "../../../types";
+} from "../../../types/EventTypes";
+
 // SvgCanvas関連コンポーネントをインポート
 import Draggable from "../Draggable";
 
 // RectangleBase関連型定義をインポート
 import type {
-	RectangleBaseState,
-	ArrangmentChangeStartEvent,
-	ArrangmentChangeEvent,
 	ArrangmentChangeEndEvent,
+	ArrangmentChangeEvent,
+	ArrangmentChangeStartEvent,
+	RectangleBaseState,
 } from "./RectangleBaseTypes";
+
 // RectangleBase関連コンポーネントをインポート
-import DragPointLeftTop from "./DragPointLeftTop";
-import DragPointLeftBottom from "./DragPointLeftBottom";
-import DragPointRightTop from "./DragPointRightTop";
-import DragPointRightBottom from "./DragPointRightBottom";
-import DragPointTopCenter from "./DragPointTopCenter";
-import DragPointLeftCenter from "./DragPointLeftCenter";
-import DragPointRightCenter from "./DragPointRightCenter";
 import DragPointBottomCenter from "./DragPointBottomCenter";
+import DragPointLeftBottom from "./DragPointLeftBottom";
+import DragPointLeftCenter from "./DragPointLeftCenter";
+import DragPointLeftTop from "./DragPointLeftTop";
+import DragPointRightBottom from "./DragPointRightBottom";
+import DragPointRightCenter from "./DragPointRightCenter";
+import DragPointRightTop from "./DragPointRightTop";
+import DragPointTopCenter from "./DragPointTopCenter";
+
 // RectangleBase関連関数をインポート
 import { calcArrangment } from "./RectangleBaseFunctions";
 
@@ -50,8 +53,8 @@ export type RectangleBaseProps = {
 	isSelected?: boolean;
 	ref?: React.Ref<DiagramRef>;
 	onPointerDown?: (e: PointerDownEvent) => void;
-	onChange?: (e: ChangeEvent) => void;
-	onChangeEnd?: (e: ChangeEvent) => void;
+	onDiagramChange?: (e: DiagramChangeEvent) => void;
+	onDiagramChangeEnd?: (e: DiagramChangeEvent) => void;
 	children?: React.ReactNode;
 };
 
@@ -67,8 +70,8 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 				tabIndex = 0,
 				isSelected = false,
 				onPointerDown,
-				onChange,
-				onChangeEnd,
+				onDiagramChange,
+				onDiagramChangeEnd,
 				children,
 			},
 			ref,
@@ -101,7 +104,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 
 			// --- 以下全体のドラッグ ---
 
-			const onDragStart = useCallback((_e: DragEvent) => {
+			const onDragStart = useCallback((_e: DiagramDragEvent) => {
 				setState((prevState) => ({
 					...prevState,
 					isDragging: true,
@@ -110,7 +113,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			}, []);
 
 			const onDragEnd = useCallback(
-				(e: DragEvent) => {
+				(e: DiagramDragEvent) => {
 					setState((prevState) => ({
 						...prevState,
 						...calcArrangment(e.point, {
@@ -120,12 +123,12 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 						isDragging: false,
 					}));
 
-					onChangeEnd?.({
+					onDiagramChangeEnd?.({
 						id,
 						point: e.point,
 					});
 				},
-				[onChangeEnd, id],
+				[onDiagramChangeEnd, id],
 			);
 
 			// --- 以下点のドラッグ ---
@@ -154,14 +157,14 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 					outlineRef.current?.setAttribute("width", `${newWidth}`);
 					outlineRef.current?.setAttribute("height", `${newHeight}`);
 
-					onChange?.({
+					onDiagramChange?.({
 						id: state.id,
 						point: newLeftTopPoint,
 						width: newWidth,
 						height: newHeight,
 					});
 				},
-				[onChange, state.id],
+				[onDiagramChange, state.id],
 			);
 
 			const onArrangmentChangeEnd = useCallback(
@@ -176,14 +179,14 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 						dragEndPointType: e.dragPointType,
 					}));
 
-					onChangeEnd?.({
+					onDiagramChangeEnd?.({
 						id,
 						point: e.arrangment.leftTopPoint,
 						width: e.arrangment.width,
 						height: e.arrangment.height,
 					});
 				},
-				[onChangeEnd, id, keepProportion],
+				[onDiagramChangeEnd, id, keepProportion],
 			);
 
 			// ポインターダウン時の処理

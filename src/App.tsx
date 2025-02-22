@@ -2,7 +2,7 @@ import SvgCanvas from "./components/molecules/SvgCanvas";
 import { useSvgCanvas } from "./components/molecules/SvgCanvas/hooks";
 import Button from "./components/atoms/Button";
 import Input from "./components/atoms/Input";
-import type { Diagram } from "./components/molecules/SvgCanvas/types";
+import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramTypes";
 
 const testItems = [
 	{

@@ -1,6 +1,9 @@
-import { useRef, forwardRef, useImperativeHandle } from "react";
-import Draggable from "../core/Draggable";
+// Reactのインポート
+import { forwardRef, useImperativeHandle, useRef } from "react";
+
+// SvgCanvas関連コンポーネントをインポート
 import type { DraggableProps } from "../core/Draggable";
+import Draggable from "../core/Draggable";
 
 export type DragPointProps = DraggableProps & {
 	color?: string;

@@ -1,9 +1,23 @@
+// Reactのインポート
 import type React from "react";
-import { useRef, useCallback, memo } from "react";
-import type { ChangeEvent, DiagramRef, ParentResizeEvent } from "../../types";
-import RectangleBase from "../core/RectangleBase";
+import {
+	forwardRef,
+	memo,
+	useCallback,
+	useImperativeHandle,
+	useRef,
+} from "react";
+
+// SvgCanvas関連型定義をインポート
+import type { DiagramRef } from "../../types/DiagramTypes";
+import type {
+	DiagramChangeEvent,
+	ParentDiagramResizeEvent,
+} from "../../types/EventTypes";
+
+// RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
-import { forwardRef, useImperativeHandle } from "react";
+import RectangleBase from "../core/RectangleBase";
 
 type EllipseProps = RectangleBaseProps & {
 	fill?: string;
@@ -27,7 +41,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 				tabIndex = 0,
 				isSelected = false,
 				onPointerDown,
-				onChangeEnd,
+				onDiagramChangeEnd,
 			},
 			ref,
 		) => {
@@ -37,7 +51,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 			useImperativeHandle(ref, () => ({
 				svgRef,
 				draggableRef: diagramRef.current.draggableRef,
-				onParentResize: (e: ParentResizeEvent) => {
+				onParentDiagramResize: (e: ParentDiagramResizeEvent) => {
 					diagramRef.current.draggableRef?.current?.setAttribute(
 						"transform",
 						`translate(${point.x * e.scaleX}, ${point.y * e.scaleY})`,
@@ -47,8 +61,8 @@ const Ellipse: React.FC<EllipseProps> = memo(
 					svgRef.current?.setAttribute("rx", `${(width * e.scaleX) / 2}`);
 					svgRef.current?.setAttribute("ry", `${(height * e.scaleY) / 2}`);
 				},
-				onParentResizeEnd: (e: ParentResizeEvent) => {
-					onChangeEnd?.({
+				onParentDiagramResizeEnd: (e: ParentDiagramResizeEvent) => {
+					onDiagramChangeEnd?.({
 						id,
 						point: {
 							x: point.x * e.scaleX,
@@ -60,7 +74,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 				},
 			}));
 
-			const onChange = useCallback((e: ChangeEvent) => {
+			const onDiagramChange = useCallback((e: DiagramChangeEvent) => {
 				if (e.width && e.height) {
 					svgRef.current?.setAttribute("cx", `${e.width / 2}`);
 					svgRef.current?.setAttribute("cy", `${e.height / 2}`);
@@ -79,8 +93,8 @@ const Ellipse: React.FC<EllipseProps> = memo(
 					tabIndex={tabIndex}
 					isSelected={isSelected}
 					onPointerDown={onPointerDown}
-					onChange={onChange}
-					onChangeEnd={onChangeEnd}
+					onDiagramChange={onDiagramChange}
+					onDiagramChangeEnd={onDiagramChangeEnd}
 					ref={diagramRef}
 				>
 					<ellipse

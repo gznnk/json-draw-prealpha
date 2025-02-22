@@ -1,15 +1,24 @@
+// Reactのインポート
 import type React from "react";
 import {
-	useEffect,
-	useState,
-	useRef,
-	useCallback,
 	forwardRef,
+	useCallback,
+	useEffect,
 	useImperativeHandle,
+	useRef,
+	useState,
 } from "react";
-import type { Point, PointerDownEvent, DragEvent } from "../../types";
-import { DragDirection } from "../../types";
+
+// ライブラリのインポート
 import styled from "@emotion/styled";
+
+// SvgCanvas関連型定義をインポート
+import type { Point } from "../../types/CoordinateTypes";
+import { DragDirection } from "../../types/CoordinateTypes";
+import type {
+	DiagramDragEvent,
+	PointerDownEvent,
+} from "../../types/EventTypes";
 
 type DraggableGProps = {
 	cursor: string;
@@ -41,9 +50,9 @@ export type DraggableProps = {
 	outlineOffset?: string;
 	ref?: SVGGElement;
 	onPointerDown?: (e: PointerDownEvent) => void;
-	onDragStart?: (e: DragEvent) => void;
-	onDrag?: (e: DragEvent) => void;
-	onDragEnd?: (e: DragEvent) => void;
+	onDragStart?: (e: DiagramDragEvent) => void;
+	onDrag?: (e: DiagramDragEvent) => void;
+	onDragEnd?: (e: DiagramDragEvent) => void;
 	dragPositioningFunction?: (point: Point) => Point;
 	children?: React.ReactNode;
 };

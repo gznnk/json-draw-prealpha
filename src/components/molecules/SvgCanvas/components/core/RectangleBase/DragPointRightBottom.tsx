@@ -1,15 +1,17 @@
 // Reactのインポート
-import { useRef, forwardRef, useImperativeHandle, useCallback } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point, DragEvent } from "../../../types";
+import type { Point } from "../../../types/CoordinateTypes";
+import type { DiagramDragEvent } from "../../../types/EventTypes";
 
 // RectangleBase関連型定義をインポート
 import type {
-	RectangleBaseDragPointProps,
 	RectangleBaseArrangement,
+	RectangleBaseDragPointProps,
 } from "./RectangleBaseTypes";
 import { DragPointType } from "./RectangleBaseTypes";
+
 // RectangleBase関連コンポーネントをインポート
 import RectangleBaseDragPointBase from "./RectangleBaseDragPointBase";
 
@@ -41,7 +43,7 @@ const DragPointRightBottom = forwardRef<
 		useImperativeHandle(ref, () => domRef.current);
 
 		const calcArrangmentFunction = useCallback(
-			(e: DragEvent) => calcArrangment(e.point, leftTopPoint),
+			(e: DiagramDragEvent) => calcArrangment(e.point, leftTopPoint),
 			[leftTopPoint],
 		);
 

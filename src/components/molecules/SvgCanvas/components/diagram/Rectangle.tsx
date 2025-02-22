@@ -1,9 +1,23 @@
+// Reactのインポート
 import type React from "react";
-import { useRef, useCallback, useImperativeHandle, memo } from "react";
-import type { ChangeEvent, DiagramRef, ParentResizeEvent } from "../../types";
-import RectangleBase from "../core/RectangleBase";
+import {
+	forwardRef,
+	memo,
+	useCallback,
+	useImperativeHandle,
+	useRef,
+} from "react";
+
+// SvgCanvas関連型定義をインポート
+import type { DiagramRef } from "../../types/DiagramTypes";
+import type {
+	DiagramChangeEvent,
+	ParentDiagramResizeEvent,
+} from "../../types/EventTypes";
+
+// RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
-import { forwardRef } from "react";
+import RectangleBase from "../core/RectangleBase";
 
 export type RectangleProps = RectangleBaseProps & {
 	fill?: string;
@@ -27,8 +41,8 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				tabIndex = 0,
 				isSelected = false,
 				onPointerDown,
-				onChange,
-				onChangeEnd,
+				onDiagramChange,
+				onDiagramChangeEnd,
 				children,
 			},
 			ref,
@@ -39,7 +53,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			useImperativeHandle(ref, () => ({
 				svgRef,
 				draggableRef: diagramRef.current.draggableRef,
-				onParentResize: (e: ParentResizeEvent) => {
+				onParentDiagramResize: (e: ParentDiagramResizeEvent) => {
 					diagramRef.current.draggableRef?.current?.setAttribute(
 						"transform",
 						`translate(${point.x * e.scaleX}, ${point.y * e.scaleY})`,
@@ -47,8 +61,8 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					svgRef?.current?.setAttribute("width", `${width * e.scaleX}`);
 					svgRef?.current?.setAttribute("height", `${height * e.scaleY}`);
 				},
-				onParentResizeEnd: (e: ParentResizeEvent) => {
-					onChangeEnd?.({
+				onParentDiagramResizeEnd: (e: ParentDiagramResizeEvent) => {
+					onDiagramChangeEnd?.({
 						id,
 						point: {
 							x: point.x * e.scaleX,
@@ -61,14 +75,14 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			}));
 
 			const handleChange = useCallback(
-				(e: ChangeEvent) => {
+				(e: DiagramChangeEvent) => {
 					if (e.width && e.height) {
 						svgRef.current?.setAttribute("width", `${e.width}`);
 						svgRef.current?.setAttribute("height", `${e.height}`);
 					}
-					onChange?.(e);
+					onDiagramChange?.(e);
 				},
-				[onChange],
+				[onDiagramChange],
 			);
 
 			return (
@@ -81,8 +95,8 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					onPointerDown={onPointerDown}
-					onChange={handleChange}
-					onChangeEnd={onChangeEnd}
+					onDiagramChange={handleChange}
+					onDiagramChangeEnd={onDiagramChangeEnd}
 					ref={diagramRef}
 				>
 					<rect

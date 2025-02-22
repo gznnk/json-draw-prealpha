@@ -1,6 +1,12 @@
+// Reactのインポート
 import { useState, useCallback } from "react";
-import type { Diagram, ItemSelectEvent, ChangeEvent } from "../types";
+
+// 型定義をインポート
 import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
+
+// SvgCanvas関連型定義をインポート
+import type { Diagram } from "../types/DiagramTypes";
+import type { ItemSelectEvent, DiagramChangeEvent } from "../types/EventTypes";
 
 type SvgCanvasState = {
 	items: Diagram[];
@@ -22,7 +28,7 @@ const DEFAULT_ITEM_VALUE = {
 	childItems: [],
 };
 
-const assignItem = (e: ChangeEvent, items: Diagram[]) => {
+const assignItem = (e: DiagramChangeEvent, items: Diagram[]) => {
 	return items.map((item) => {
 		const newItem = item;
 		if (item.type === "group") {
@@ -37,7 +43,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		items: initialItems,
 	});
 
-	const onChangeEnd = useCallback((e: ChangeEvent) => {
+	const onDiagramChangeEnd = useCallback((e: DiagramChangeEvent) => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: assignItem(e, prevState.items),
@@ -64,7 +70,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 	const canvasProps = {
 		...canvasState,
-		onChangeEnd,
+		onDiagramChangeEnd,
 		onItemSelect,
 	};
 

@@ -1,7 +1,10 @@
 // RectangleBase関連型定義ファイル
 
-import type { Point } from "../../../types";
+import type { Point } from "../../../types/CoordinateTypes";
 
+/**
+ * 矩形の配置情報
+ */
 export type RectangleBaseArrangement = {
 	point: Point;
 	width: number;
@@ -16,14 +19,9 @@ export type RectangleBaseArrangement = {
 	bottomCenterPoint: Point;
 };
 
-export type RectangleBaseState = RectangleBaseArrangement & {
-	id?: string;
-	aspectRatio: number;
-	isDragging: boolean;
-	draggingPointType?: DragPointType;
-	dragEndPointType?: DragPointType;
-};
-
+/**
+ * 矩形の基底コンポーネントのドラッグポイントの種類
+ */
 export enum DragPointType {
 	LeftTop = "leftTop",
 	LeftBottom = "leftBottom",
@@ -39,19 +37,49 @@ export enum DragPointType {
 	BottomSide = "bottomSide",
 }
 
+/**
+ * 矩形の基底コンポーネントのState型定義
+ */
+export type RectangleBaseState = RectangleBaseArrangement & {
+	id?: string;
+	aspectRatio: number;
+	isDragging: boolean;
+	draggingPointType?: DragPointType;
+	dragEndPointType?: DragPointType;
+};
+
+/**
+ * 矩形の配置情報更新開始イベント型定義
+ *
+ * @property {DragPointType} dragPointType - ドラッグ開始時のドラッグポイントの種類
+ */
 export type ArrangmentChangeStartEvent = {
 	dragPointType: DragPointType;
 };
 
+/**
+ * 矩形の配置情報更新中イベント型定義
+ *
+ * @property {RectangleBaseArrangement} arrangment - 更新中の矩形の配置情報
+ */
 export type ArrangmentChangeEvent = {
 	arrangment: RectangleBaseArrangement;
 };
 
+/**
+ * 矩形の配置情報更新終了イベント型定義
+ *
+ * @property {DragPointType} dragPointType - ドラッグ終了時のドラッグポイントの種類
+ * @property {RectangleBaseArrangement} arrangment - 更新後の矩形の配置情報
+ */
 export type ArrangmentChangeEndEvent = {
 	dragPointType?: DragPointType;
 	arrangment: RectangleBaseArrangement;
 };
 
+/**
+ * 矩形の基底コンポーネントのドラッグポイントのProps型定義
+ */
 export type RectangleBaseDragPointProps = RectangleBaseArrangement & {
 	draggingPointType?: DragPointType;
 	dragEndPointType?: DragPointType;

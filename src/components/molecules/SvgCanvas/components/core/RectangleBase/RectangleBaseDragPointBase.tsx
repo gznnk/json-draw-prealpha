@@ -1,21 +1,24 @@
 // Reactのインポート
 import {
-	useRef,
 	forwardRef,
-	useImperativeHandle,
 	useCallback,
 	useEffect,
+	useImperativeHandle,
+	useRef,
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point, DragEvent } from "../../../types";
-import type { DragDirection } from "../../../types";
+import type { DragDirection, Point } from "../../../types/CoordinateTypes";
+import type { DiagramDragEvent } from "../../../types/EventTypes";
+
 // SvgCanvasコンポーネントをインポート
 import DragPoint from "../DragPoint";
 
 // RectangleBase関連型定義をインポート
-import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
-import type { DragPointType } from "./RectangleBaseTypes";
+import type {
+	DragPointType,
+	RectangleBaseArrangement,
+} from "./RectangleBaseTypes";
 
 export type RectangleBaseDragPointBaseProps = {
 	point: Point;
@@ -34,7 +37,7 @@ export type RectangleBaseDragPointBaseProps = {
 		arrangment: RectangleBaseArrangement;
 	}) => void;
 	dragPositioningFunction?: (point: Point) => Point;
-	calcArrangmentFunction: (e: DragEvent) => RectangleBaseArrangement;
+	calcArrangmentFunction: (e: DiagramDragEvent) => RectangleBaseArrangement;
 	judgeNewDragPointType: (
 		newArrangement: RectangleBaseArrangement,
 	) => DragPointType;
@@ -81,7 +84,7 @@ const RectangleBaseDragPointBase = forwardRef<
 		}, [onArrangmentChangeStart, dragPointType]);
 
 		const onDrag = useCallback(
-			(e: DragEvent) => {
+			(e: DiagramDragEvent) => {
 				onArrangmentChange({
 					arrangment: calcArrangmentFunction(e),
 				});
@@ -90,7 +93,7 @@ const RectangleBaseDragPointBase = forwardRef<
 		);
 
 		const onDragEnd = useCallback(
-			(e: DragEvent) => {
+			(e: DiagramDragEvent) => {
 				const newArrangment = calcArrangmentFunction(e);
 				const newDataPoint = judgeNewDragPointType(newArrangment);
 

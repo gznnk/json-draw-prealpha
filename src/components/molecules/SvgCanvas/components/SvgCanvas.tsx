@@ -1,37 +1,22 @@
-import styled from "@emotion/styled";
+// Reactのインポート
 import React from "react";
-import type {
-	Diagram,
-	DiagramType,
-	DiagramRef,
-	ChangeEvent,
-	ItemSelectEvent,
-} from "./../types";
+import { useCallback, memo } from "react";
+
+// ライブラリのインポート
+import styled from "@emotion/styled";
+
+// SvgCanvas関連型定義をインポート
+import type { Diagram, DiagramType, DiagramRef } from "../types/DiagramTypes";
+import type { DiagramChangeEvent, ItemSelectEvent } from "../types/EventTypes";
+
+// SvgCanvas関連コンポーネントをインポート
 import Group from "./diagram/Group";
 import Rectangle from "./diagram/Rectangle";
 import Ellipse from "./diagram/Ellipse";
-import { useCallback, memo } from "react";
-
-const ContainerDiv = styled.div`
-	position: absolute;
-    top: 0;
-    left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: auto;
-`;
-
-// TODO: 場所
-type SvgCanvasProps = {
-	title?: string;
-	items: Array<Diagram>;
-	onChangeEnd?: (e: ChangeEvent) => void;
-	onItemSelect?: (e: ItemSelectEvent) => void;
-};
 
 // TODO: 場所
 type DiagramProps = Diagram & {
-	onChangeEnd?: (e: ChangeEvent) => void;
+	onDiagramChangeEnd?: (e: DiagramChangeEvent) => void;
 	onPointerDown?: (e: ItemSelectEvent) => void;
 	ref?: React.Ref<DiagramRef>;
 };
@@ -45,8 +30,24 @@ export const ITEM_TYPE_COMPONENT_MAP: {
 	ellipse: Ellipse,
 };
 
+const ContainerDiv = styled.div`
+	position: absolute;
+    top: 0;
+    left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+`;
+
+type SvgCanvasProps = {
+	title?: string;
+	items: Array<Diagram>;
+	onDiagramChangeEnd?: (e: DiagramChangeEvent) => void;
+	onItemSelect?: (e: ItemSelectEvent) => void;
+};
+
 const SvgCanvas: React.FC<SvgCanvasProps> = memo(
-	({ title, items, onChangeEnd, onItemSelect }) => {
+	({ title, items, onDiagramChangeEnd, onItemSelect }) => {
 		// console.log("SvgCanvas render");
 
 		const createDiagram = (item: Diagram): React.ReactNode => {
@@ -54,7 +55,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 			const props = {
 				...item,
 				key: item.id,
-				onChangeEnd,
+				onDiagramChangeEnd,
 				onPointerDown: onItemSelect,
 			};
 

@@ -1,10 +1,15 @@
-import React from "react";
-import { useCallback, useRef, memo } from "react";
-import RectangleBase from "../core/RectangleBase";
-import type { ChangeEvent, Diagram, DiagramRef } from "../../types";
+// Reactのインポート
+import React, { memo, useCallback, useRef } from "react";
+
+// SvgCanvas関連型定義をインポート
+import type { Diagram, DiagramRef } from "../../types/DiagramTypes";
+import type { DiagramChangeEvent } from "../../types/EventTypes";
+
+// SvgCanvas関連コンポーネントをインポート
 import type { RectangleProps } from "./Rectangle";
 import Rectangle from "./Rectangle";
 
+// TODO
 import { ITEM_TYPE_COMPONENT_MAP } from "../SvgCanvas";
 
 type GroupProps = RectangleProps & {
@@ -21,7 +26,7 @@ const Group: React.FC<GroupProps> = memo(
 		tabIndex = 0,
 		isSelected = false,
 		onPointerDown, // TODO: わかりづらい
-		onChangeEnd,
+		onDiagramChangeEnd,
 		items = [],
 	}) => {
 		const itemsRef = useRef<{
@@ -33,7 +38,7 @@ const Group: React.FC<GroupProps> = memo(
 			const props = {
 				...item,
 				key: item.id,
-				onChangeEnd: onChangeEnd,
+				onDiagramChangeEnd: onDiagramChangeEnd,
 				ref: (r: DiagramRef) => {
 					itemsRef.current[item.id] = r;
 				},
@@ -47,12 +52,12 @@ const Group: React.FC<GroupProps> = memo(
 		});
 
 		const handleChange = useCallback(
-			(e: ChangeEvent) => {
+			(e: DiagramChangeEvent) => {
 				if (e.width && e.height) {
 					const scaleX = e.width / width;
 					const scaleY = e.height / height;
 					for (const item of items) {
-						itemsRef.current[item.id]?.onParentResize?.({
+						itemsRef.current[item.id]?.onParentDiagramResize?.({
 							scaleX,
 							scaleY,
 						});
@@ -63,20 +68,20 @@ const Group: React.FC<GroupProps> = memo(
 		);
 
 		const handleChangeEnd = useCallback(
-			(e: ChangeEvent) => {
-				onChangeEnd?.(e);
+			(e: DiagramChangeEvent) => {
+				onDiagramChangeEnd?.(e);
 				if (e.width && e.height) {
 					const scaleX = e.width / width;
 					const scaleY = e.height / height;
 					for (const item of items) {
-						itemsRef.current[item.id]?.onParentResizeEnd?.({
+						itemsRef.current[item.id]?.onParentDiagramResizeEnd?.({
 							scaleX,
 							scaleY,
 						});
 					}
 				}
 			},
-			[onChangeEnd, items, width, height],
+			[onDiagramChangeEnd, items, width, height],
 		);
 
 		return (
@@ -90,8 +95,8 @@ const Group: React.FC<GroupProps> = memo(
 				keepProportion={keepProportion}
 				isSelected={isSelected}
 				onPointerDown={onPointerDown}
-				onChange={handleChange}
-				onChangeEnd={handleChangeEnd}
+				onDiagramChange={handleChange}
+				onDiagramChangeEnd={handleChangeEnd}
 			>
 				{children}
 			</Rectangle>

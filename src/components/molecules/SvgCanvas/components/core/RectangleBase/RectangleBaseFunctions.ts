@@ -1,8 +1,15 @@
 // RectangleBase関連関数定義ファイル
 
-import type { Point } from "../../../types";
+import type { Point } from "../../../types/CoordinateTypes";
 import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
 
+/**
+ * 与えられた2つの点（pointとdiagonalPoint）から矩形の配置情報を計算します。
+ *
+ * @param point - 矩形の一つの頂点を表す点
+ * @param diagonalPoint - 矩形の対角線上のもう一つの頂点を表す点
+ * @returns 矩形の配置情報を含むオブジェクト
+ */
 export const calcArrangment = (
 	point: Point,
 	diagonalPoint: Point,
@@ -58,6 +65,13 @@ export const calcArrangment = (
 	return result;
 };
 
+/**
+ * 2点間の直線の方程式を基に、Y座標からX座標を計算する関数を生成します。
+ *
+ * @param p1 - 直線上の最初の点
+ * @param p2 - 直線上の2番目の点
+ * @returns Y座標を入力としてX座標を計算する関数
+ */
 export const createLinerDragY2xFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);
 	const b = p1.y - a * p1.x;
@@ -70,6 +84,13 @@ export const createLinerDragY2xFunction = (p1: Point, p2: Point) => {
 	};
 };
 
+/**
+ * 2点間の直線の方程式を基に、X座標からY座標を計算する関数を生成します。
+ *
+ * @param p1 - 直線上の最初の点
+ * @param p2 - 直線上の2番目の点
+ * @returns X座標を入力としてY座標を計算する関数
+ */
 export const createLinerDragX2yFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);
 	const b = p1.y - a * p1.x;
