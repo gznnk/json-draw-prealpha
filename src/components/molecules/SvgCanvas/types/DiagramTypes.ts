@@ -21,13 +21,10 @@ import Rectangle from "../components/diagram/Rectangle";
  */
 export type DiagramType = "group" | "rectangle" | "ellipse";
 
-// TODO: グループのは別にする？
 /**
- * 子コンポーネントの図形への参照
+ * グループ内の図形への参照
  */
 export type DiagramRef = {
-	svgRef?: React.RefObject<SVGGElement>; // TODO: いらないかも
-	draggableRef?: React.RefObject<SVGGElement>;
 	onGroupDrag?: (e: GroupDragEvent) => void;
 	onGroupDragEnd?: (e: GroupDragEvent) => void;
 	onGroupResize?: (e: GroupResizeEvent) => void;
@@ -58,7 +55,7 @@ export type DiagramProps = Diagram & {
 	onDiagramResizing?: (e: DiagramResizeEvent) => void;
 	onDiagramResizeEnd?: (e: DiagramResizeEvent) => void;
 	onDiagramSelect?: (e: DiagramSelectEvent) => void;
-	ref?: React.Ref<DiagramRef>;
+	// ref?: React.Ref<DiagramRef>;
 };
 
 /**

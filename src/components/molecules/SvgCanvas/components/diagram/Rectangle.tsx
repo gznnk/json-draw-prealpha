@@ -61,12 +61,12 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			ref,
 		) => {
 			const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
-			const diagramRef = useRef<DiagramRef>({} as DiagramRef);
+			const rectangleBaseRef = useRef<SVGGElement>({} as SVGGElement);
 
 			// 親から参照するためのRefを作成
 			useImperativeHandle(ref, () => ({
 				// svgRef,
-				// draggableRef: diagramRef.current.draggableRef,
+				// draggableRef: rectangleBaseRef.current.draggableRef,
 				onGroupDrag: handleGroupDrag,
 				onGroupDragEnd: handleGroupDragEnd,
 				onGroupResize: onGroupResize,
@@ -86,7 +86,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 
 					// 描画処理負荷軽減のため、DOMを直接操作
 					// 短径領域の移動をDOMの直接操作で実施
-					diagramRef.current.draggableRef?.current?.setAttribute(
+					rectangleBaseRef.current?.setAttribute(
 						"transform",
 						`translate(${newPoint.x}, ${newPoint.y})`,
 					);
@@ -128,7 +128,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 
 					// 描画処理負荷軽減のため、DOMを直接操作
 					// 短径領域の移動をDOMの直接操作で実施
-					diagramRef.current.draggableRef?.current?.setAttribute(
+					rectangleBaseRef.current?.setAttribute(
 						"transform",
 						`translate(${newArrangment.point.x}, ${newArrangment.point.y})`,
 					);
@@ -192,7 +192,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					onDiagramResizing={handleDiagramResizing}
 					onDiagramResizeEnd={onDiagramResizeEnd} // 短形領域の変更完了イベントはそのまま親に伝番させて、Propsの更新を親側にしてもらう
 					onDiagramSelect={onDiagramSelect}
-					ref={diagramRef}
+					ref={rectangleBaseRef}
 				>
 					<rect
 						id={id}

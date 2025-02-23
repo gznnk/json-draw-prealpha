@@ -53,7 +53,7 @@ export type RectangleBaseProps = {
 	keepProportion?: boolean;
 	tabIndex?: number;
 	isSelected?: boolean;
-	ref?: React.Ref<DiagramRef>;
+	ref?: React.Ref<SVGGElement>;
 	onDiagramClick?: (e: DiagramClickEvent) => void;
 	onDiagramDragStart?: (e: DiagramDragEvent) => void;
 	onDiagramDrag?: (e: DiagramDragEvent) => void;
@@ -67,7 +67,7 @@ export type RectangleBaseProps = {
 };
 
 const RectangleBase: React.FC<RectangleBaseProps> = memo(
-	forwardRef<DiagramRef, RectangleBaseProps>(
+	forwardRef<SVGGElement, RectangleBaseProps>(
 		(
 			{
 				id,
@@ -98,9 +98,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			const draggableRef = useRef<SVGGElement>({} as SVGGElement);
 			const outlineRef = useRef<SVGRectElement>({} as SVGRectElement);
 
-			useImperativeHandle(ref, () => ({
-				draggableRef,
-			}));
+			useImperativeHandle(ref, () => draggableRef.current);
 
 			/**
 			 * Propsの変更を検知して状態を更新
