@@ -26,6 +26,7 @@ import type { RectangleProps } from "./Rectangle";
 // RectangleBase関連関数をインポート
 import { calcArrangmentOnGroupResize } from "../core/RectangleBase/RectangleBaseFunctions";
 
+// TODO: 削除
 /**
  * 子図形の選択状態を再帰的に判定する
  *
@@ -34,6 +35,24 @@ import { calcArrangmentOnGroupResize } from "../core/RectangleBase/RectangleBase
  */
 const isChildDiagramSelected = (diagrams: Diagram[]): boolean =>
 	diagrams.some((d) => d.isSelected || isChildDiagramSelected(d.items || []));
+
+/**
+ * 選択された子図形のIDを再帰的に取得する
+ *
+ * @param {Diagram[]} diagrams 図形リスト
+ * @returns {string | null} 選択された子図形のID
+ */
+const getSelectedChildDiagramId = (diagrams: Diagram[]): string | undefined => {
+	for (const diagram of diagrams) {
+		if (diagram.isSelected) {
+			return diagram.id;
+		}
+		const id = getSelectedChildDiagramId(diagram.items || []);
+		if (id) {
+			return id;
+		}
+	}
+};
 
 type GroupProps = RectangleProps & {
 	items?: Diagram[];
@@ -75,16 +94,20 @@ const Group: React.FC<GroupProps> = memo(
 			/**
 			 * 子図形の選択イベントハンドラ
 			 *
-			 * @param {DiagramSelectEvent} _e 図形選択イベント
+			 * @param {DiagramSelectEvent} e 図形選択イベント
 			 * @returns {void}
 			 */
 			const handleChildDiagramSelect = useCallback(
-				(_e: DiagramSelectEvent) => {
+				(e: DiagramSelectEvent) => {
+					const selectedChildId = getSelectedChildDiagramId(items);
 					// 子図形が選択されていない場合、このグループを選択状態にする
-					if (!isChildDiagramSelected(items)) {
+					if (!selectedChildId) {
 						onDiagramSelect?.({
 							id,
 						});
+					} else if (selectedChildId !== e.id) {
+						// 子図形が選択されていて、かつそれと違う子図形が選択された場合、その子図形を選択状態にする
+						onDiagramSelect?.(e);
 					}
 
 					if (isSelected) {
