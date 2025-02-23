@@ -13,10 +13,11 @@ import React, {
 import type { Diagram, DiagramRef } from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
+	DiagramDragEvent,
 	DiagramResizeEvent,
 	DiagramSelectEvent,
+	GroupDragEvent,
 	GroupResizeEvent,
-	DiagramDragEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -24,7 +25,10 @@ import RectangleBase from "../core/RectangleBase";
 import type { RectangleProps } from "./Rectangle";
 
 // RectangleBase関連関数をインポート
-import { calcArrangmentOnGroupResize } from "../core/RectangleBase/RectangleBaseFunctions";
+import {
+	calcArrangmentOnGroupResize,
+	calcPointOnGroupDrag,
+} from "../core/RectangleBase/RectangleBaseFunctions";
 
 /**
  * 選択されたグループ内の図形のIDを再帰的に取得する
@@ -73,6 +77,8 @@ const Group: React.FC<GroupProps> = memo(
 
 			// 親から参照するためのRefを作成
 			useImperativeHandle(ref, () => ({
+				onGroupDrag: handleParentGroupDrag,
+				onGroupDragEnd: handleParentGroupDragEnd,
 				onGroupResize: onParentGroupResize,
 				onGroupResizeEnd: onParentGroupResizeEnd,
 			}));
@@ -104,7 +110,6 @@ const Group: React.FC<GroupProps> = memo(
 					if (isSelected) {
 						// 再選択時後のクリック（ポインターアップ）時にグループ内の図形を選択したいので、再選択フラグを立てる
 						setIsReselect(true);
-						console.log("reselect", e.id);
 					}
 				},
 				[onDiagramSelect, id, isSelected, items],
@@ -140,6 +145,138 @@ const Group: React.FC<GroupProps> = memo(
 					setIsReselect(false);
 				}
 			}, [isSelected]);
+
+			/**
+			 * 親グループのドラッグ中イベントハンドラ
+			 *
+			 * @param {GroupDragEvent} e グループのドラッグ中イベント
+			 * @returns {void}
+			 */
+			const handleParentGroupDrag = useCallback(
+				(e: GroupDragEvent) => {
+					// グループのドラッグに伴うこの図形の座標を計算
+					const newPoint = calcPointOnGroupDrag(e, point);
+
+					// グループ内の図形にドラッグ中イベントを通知
+					for (const item of items) {
+						itemsRef.current[item.id]?.onGroupDrag?.({
+							id,
+							oldPoint: point,
+							newPoint,
+						});
+					}
+				},
+				[point, id, items],
+			);
+
+			/**
+			 * 親グループのドラッグ完了イベントハンドラ
+			 *
+			 * @param {GroupDragEvent} e グループのドラッグ完了イベント
+			 * @returns {void}
+			 */
+			const handleParentGroupDragEnd = useCallback(
+				(e: GroupDragEvent) => {
+					// グループのドラッグに伴うこの図形の座標を計算
+					const newPoint = calcPointOnGroupDrag(e, point);
+
+					// グループ内の図形にドラッグ完了イベントを通知
+					for (const item of items) {
+						itemsRef.current[item.id]?.onGroupDragEnd?.({
+							id,
+							oldPoint: point,
+							newPoint,
+						});
+					}
+
+					// グループの位置も更新
+					onDiagramDragEndByGroup?.({
+						id,
+						point: newPoint,
+					});
+				},
+				[onDiagramDragEndByGroup, point, id, items],
+			);
+
+			/**
+			 * 親グループのリサイズ中イベントハンドラ
+			 *
+			 * @param {GroupResizeEvent} e 親図形のリサイズ中イベント
+			 */
+			const onParentGroupResize = useCallback(
+				(e: GroupResizeEvent) => {
+					// グループのリサイズ完了に伴うこの図形の変更を計算
+					const newArrangment = calcArrangmentOnGroupResize(
+						e,
+						point,
+						width,
+						height,
+					);
+
+					// リサイズ中イベント作成
+					const event = {
+						id,
+						oldPoint: point,
+						oldWidth: width,
+						oldHeight: height,
+						newPoint: newArrangment.point,
+						newWidth: newArrangment.width,
+						newHeight: newArrangment.height,
+						scaleX: e.scaleX,
+						scaleY: e.scaleY,
+					};
+
+					// グループ内の図形にリサイズ中イベントを通知
+					for (const item of items) {
+						itemsRef.current[item.id]?.onGroupResize?.(event);
+					}
+
+					// グループのリサイズが契機で、かつDOMを直接更新しての変更なので、グループ側への変更通知はしない
+				},
+				[id, point, width, height, items],
+			);
+
+			/**
+			 * 親グループのリサイズ完了イベントハンドラ
+			 *
+			 * @param {GroupResizeEvent} e グループのリサイズ完了イベント
+			 */
+			const onParentGroupResizeEnd = useCallback(
+				(e: GroupResizeEvent) => {
+					// グループのリサイズ完了に伴うこの図形の変更を計算
+					const newArrangment = calcArrangmentOnGroupResize(
+						e,
+						point,
+						width,
+						height,
+					);
+
+					// リサイズ完了イベント作成
+					const event = {
+						id,
+						oldPoint: point,
+						oldWidth: width,
+						oldHeight: height,
+						newPoint: newArrangment.point,
+						newWidth: newArrangment.width,
+						newHeight: newArrangment.height,
+						scaleX: e.scaleX,
+						scaleY: e.scaleY,
+					};
+
+					// グループ内の図形にリサイズ完了イベントを通知
+					for (const item of items) {
+						itemsRef.current[item.id]?.onGroupResizeEnd?.(event);
+					}
+
+					// グループのリサイズ完了に伴うこのグループのサイズ変更を親に通知し、SvgCanvasまで変更を伝番してもらう
+					onDiagramResizeEnd?.({
+						id,
+						...newArrangment,
+					});
+				},
+				[onDiagramResizeEnd, id, point, width, height, items],
+			);
 
 			/**
 			 * グループ内の図形のドラッグ開始イベントハンドラ
@@ -301,86 +438,6 @@ const Group: React.FC<GroupProps> = memo(
 			const children = items.map((item) => {
 				return createDiagram(item);
 			});
-
-			/**
-			 * 親グループのリサイズ中イベントハンドラ
-			 *
-			 * @param {GroupResizeEvent} e 親図形のリサイズ中イベント
-			 */
-			const onParentGroupResize = useCallback(
-				(e: GroupResizeEvent) => {
-					// グループのリサイズ完了に伴うこの図形の変更を計算
-					const newArrangment = calcArrangmentOnGroupResize(
-						e,
-						point,
-						width,
-						height,
-					);
-
-					// リサイズ中イベント作成
-					const event = {
-						id,
-						oldPoint: point,
-						oldWidth: width,
-						oldHeight: height,
-						newPoint: newArrangment.point,
-						newWidth: newArrangment.width,
-						newHeight: newArrangment.height,
-						scaleX: e.scaleX,
-						scaleY: e.scaleY,
-					};
-
-					// グループ内の図形にリサイズ中イベントを通知
-					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupResize?.(event);
-					}
-
-					// グループのリサイズが契機で、かつDOMを直接更新しての変更なので、グループ側への変更通知はしない
-				},
-				[id, point, width, height, items],
-			);
-
-			/**
-			 * 親グループのリサイズ完了イベントハンドラ
-			 *
-			 * @param {GroupResizeEvent} e グループのリサイズ完了イベント
-			 */
-			const onParentGroupResizeEnd = useCallback(
-				(e: GroupResizeEvent) => {
-					// グループのリサイズ完了に伴うこの図形の変更を計算
-					const newArrangment = calcArrangmentOnGroupResize(
-						e,
-						point,
-						width,
-						height,
-					);
-
-					// リサイズ完了イベント作成
-					const event = {
-						id,
-						oldPoint: point,
-						oldWidth: width,
-						oldHeight: height,
-						newPoint: newArrangment.point,
-						newWidth: newArrangment.width,
-						newHeight: newArrangment.height,
-						scaleX: e.scaleX,
-						scaleY: e.scaleY,
-					};
-
-					// グループ内の図形にリサイズ完了イベントを通知
-					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupResizeEnd?.(event);
-					}
-
-					// グループのリサイズ完了に伴うこのグループのサイズ変更を親に通知し、SvgCanvasまで変更を伝番してもらう
-					onDiagramResizeEnd?.({
-						id,
-						...newArrangment,
-					});
-				},
-				[onDiagramResizeEnd, id, point, width, height, items],
-			);
 
 			/**
 			 * このグループのリサイズ中イベントハンドラ

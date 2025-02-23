@@ -64,8 +64,6 @@ const Ellipse: React.FC<EllipseProps> = memo(
 
 			// 親から参照するためのRefを作成
 			useImperativeHandle(ref, () => ({
-				// svgRef,
-				// draggableRef: rectangleBaseRef.current.draggableRef,
 				onGroupDrag: handleGroupDrag,
 				onGroupDragEnd: handleGroupDragEnd,
 				onGroupResize: onGroupResize,
