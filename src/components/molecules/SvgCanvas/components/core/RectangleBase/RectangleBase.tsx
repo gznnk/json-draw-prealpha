@@ -12,7 +12,6 @@ import {
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../../types/CoordinateTypes";
-import type { DiagramRef } from "../../../types/DiagramTypes";
 import type {
 	DiagramClickEvent,
 	DiagramDragEvent,

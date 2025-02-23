@@ -26,21 +26,11 @@ import type { RectangleProps } from "./Rectangle";
 // RectangleBase関連関数をインポート
 import { calcArrangmentOnGroupResize } from "../core/RectangleBase/RectangleBaseFunctions";
 
-// TODO: 削除
 /**
- * 子図形の選択状態を再帰的に判定する
+ * 選択されたグループ内の図形のIDを再帰的に取得する
  *
  * @param {Diagram[]} diagrams 図形リスト
- * @returns {boolean} 子図形が選択されているかどうか
- */
-const isChildDiagramSelected = (diagrams: Diagram[]): boolean =>
-	diagrams.some((d) => d.isSelected || isChildDiagramSelected(d.items || []));
-
-/**
- * 選択された子図形のIDを再帰的に取得する
- *
- * @param {Diagram[]} diagrams 図形リスト
- * @returns {string | null} 選択された子図形のID
+ * @returns {string | null} 選択されたグループ内の図形のID
  */
 const getSelectedChildDiagramId = (diagrams: Diagram[]): string | undefined => {
 	for (const diagram of diagrams) {
@@ -69,6 +59,7 @@ const Group: React.FC<GroupProps> = memo(
 				keepProportion = false,
 				tabIndex = 0,
 				isSelected = false,
+				onDiagramClick,
 				onDiagramResizeEnd,
 				onDiagramDragEnd,
 				onDiagramDragEndByGroup,
@@ -86,13 +77,13 @@ const Group: React.FC<GroupProps> = memo(
 				onGroupResizeEnd: onParentGroupResizeEnd,
 			}));
 
-			// 子の図形への参照を保持するRef作成
+			// グループ内の図形への参照を保持するRef作成
 			const itemsRef = useRef<{
 				[key: string]: DiagramRef | undefined;
 			}>({});
 
 			/**
-			 * 子図形の選択イベントハンドラ
+			 * グループ内の図形の選択イベントハンドラ
 			 *
 			 * @param {DiagramSelectEvent} e 図形選択イベント
 			 * @returns {void}
@@ -100,39 +91,47 @@ const Group: React.FC<GroupProps> = memo(
 			const handleChildDiagramSelect = useCallback(
 				(e: DiagramSelectEvent) => {
 					const selectedChildId = getSelectedChildDiagramId(items);
-					// 子図形が選択されていない場合、このグループを選択状態にする
+					// グループ内の図形が選択されていない場合、このグループを選択状態にする
 					if (!selectedChildId) {
 						onDiagramSelect?.({
 							id,
 						});
 					} else if (selectedChildId !== e.id) {
-						// 子図形が選択されていて、かつそれと違う子図形が選択された場合、その子図形を選択状態にする
+						// グループ内の図形が選択されていて、かつそれと違うグループ内の図形が選択された場合、そのグループ内の図形を選択状態にする
 						onDiagramSelect?.(e);
 					}
 
 					if (isSelected) {
-						// 再選択時後のクリック（ポインターアップ）時に子図形を選択したいので、再選択フラグを立てる
+						// 再選択時後のクリック（ポインターアップ）時にグループ内の図形を選択したいので、再選択フラグを立てる
 						setIsReselect(true);
+						console.log("reselect", e.id);
 					}
 				},
 				[onDiagramSelect, id, isSelected, items],
 			);
 
 			/**
-			 * 子図形のクリックイベントハンドラ
+			 * グループ内の図形のクリックイベントハンドラ
 			 *
 			 * @param {DiagramSelectEvent} e 図形選択イベント
 			 * @returns {void}
 			 */
 			const handleChildDiagramClick = useCallback(
 				(e: DiagramSelectEvent) => {
-					// 再選択時のクリック（ポインターアップ）時であれば、その子図形を選択状態にする
 					if (isReselect) {
+						// 再選択時のクリック（ポインターアップ）時であれば、そのグループ内の図形を選択状態にする
 						onDiagramSelect?.(e);
 						setIsReselect(false);
+					} else {
+						// 再選択でない場合は、グループ内の図形のクリックイベントを
+						// このグループのクリックイベントに差し替えて、このグループが選択されるようにする
+						onDiagramClick?.({
+							id,
+							point: point,
+						});
 					}
 				},
-				[onDiagramSelect, isReselect],
+				[onDiagramSelect, onDiagramClick, isReselect, point, id],
 			);
 
 			useEffect(() => {
@@ -143,7 +142,7 @@ const Group: React.FC<GroupProps> = memo(
 			}, [isSelected]);
 
 			/**
-			 * 子図形のドラッグ開始イベントハンドラ
+			 * グループ内の図形のドラッグ開始イベントハンドラ
 			 *
 			 * @param {DiagramDragEvent} _e 図形ドラッグ開始イベント
 			 */
@@ -157,7 +156,7 @@ const Group: React.FC<GroupProps> = memo(
 			);
 
 			/**
-			 * 子図形のドラッグ中イベントハンドラ
+			 * グループ内の図形のドラッグ中イベントハンドラ
 			 *
 			 * @param {DiagramDragEvent} e 図形ドラッグ中イベント
 			 */
@@ -192,13 +191,13 @@ const Group: React.FC<GroupProps> = memo(
 			);
 
 			/**
-			 * 子図形のドラッグ終了イベントハンドラ
+			 * グループ内の図形のドラッグ終了イベントハンドラ
 			 *
 			 * @param {DiagramDragEvent} e 図形ドラッグ終了イベント
 			 */
 			const handleChildDiagramDragEnd = useCallback(
 				(e: DiagramDragEvent) => {
-					// ドラッグされた子図形のドラッグ終了イベントを伝番
+					// グループ内の図形のドラッグ終了イベントを伝番
 					onDiagramDragEnd?.(e);
 
 					const dragDiagram = items.find((item) => item.id === e.id);
@@ -298,7 +297,7 @@ const Group: React.FC<GroupProps> = memo(
 				return React.createElement(itemType, props);
 			};
 
-			// 子図形の作成
+			// グループ内の図形の作成
 			const children = items.map((item) => {
 				return createDiagram(item);
 			});
