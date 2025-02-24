@@ -177,8 +177,10 @@ const Ellipse: React.FC<EllipseProps> = memo(
 			const handleDiagramResizing = useCallback(
 				(e: DiagramResizeEvent) => {
 					// 描画処理負荷軽減のため、DOMを直接操作
-					svgRef.current?.setAttribute("width", `${e.width}`);
-					svgRef.current?.setAttribute("height", `${e.height}`);
+					svgRef.current?.setAttribute("cx", `${e.width / 2}`);
+					svgRef.current?.setAttribute("cy", `${e.height / 2}`);
+					svgRef.current?.setAttribute("rx", `${e.width / 2}`);
+					svgRef.current?.setAttribute("ry", `${e.height / 2}`);
 
 					// グループ側に変更中イベントを通知
 					onDiagramResizing?.(e);
