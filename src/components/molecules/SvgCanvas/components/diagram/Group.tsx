@@ -10,6 +10,7 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
+import type { Point } from "../../types/CoordinateTypes";
 import type { Diagram, DiagramRef } from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
@@ -342,6 +343,57 @@ const Group: React.FC<GroupProps> = memo(
 			);
 
 			/**
+			 * グループ内の図形の変更イベントに伴うグループの変更後の配置の計算する
+			 *
+			 * @param {Diagram[]} list グループ内の図形リスト
+			 * @param {DiagramResizeEvent} e 図形リサイズイベント
+			 * @returns {Object} グループの変更後の配置
+			 */
+			const calcGroupArrangmentOnChildDiagramEvent = useCallback(
+				(
+					list: Diagram[],
+					e: {
+						id: string;
+						point: Point;
+						width: number;
+						height: number;
+					},
+				) => {
+					let top = point.y + height;
+					let bottom = point.y;
+					let left = point.x + width;
+					let right = point.x;
+					for (const item of list) {
+						if (e.id !== item.id) {
+							if (item.type === "group") {
+								const groupArrangment = calcGroupArrangmentOnChildDiagramEvent(
+									item.items ?? [],
+									e,
+								);
+								top = Math.min(top, groupArrangment.top);
+								bottom = Math.max(bottom, groupArrangment.bottom);
+								left = Math.min(left, groupArrangment.left);
+								right = Math.max(right, groupArrangment.right);
+							} else {
+								top = Math.min(top, item.point.y);
+								bottom = Math.max(bottom, item.point.y + item.height);
+								left = Math.min(left, item.point.x);
+								right = Math.max(right, item.point.x + item.width);
+							}
+						}
+					}
+
+					return {
+						top: Math.min(top, e.point.y),
+						bottom: Math.max(bottom, e.point.y + e.height),
+						left: Math.min(left, e.point.x),
+						right: Math.max(right, e.point.x + e.width),
+					};
+				},
+				[height, point, width],
+			);
+
+			/**
 			 * グループ内の図形のドラッグ終了イベントハンドラ
 			 *
 			 * @param {DiagramDragEvent} e 図形ドラッグ終了イベント
@@ -353,39 +405,11 @@ const Group: React.FC<GroupProps> = memo(
 
 					// グループ全体のドラッグでない、かつグループ内の選択された図形のドラッグの場合、その図形の位置変更によるグループの配置を更新する
 					if (!isDragging && getSelectedChildDiagramId(items)) {
-						const calcGroupArrangment = (list: Diagram[]) => {
-							let top = point.y + height;
-							let bottom = point.y;
-							let left = point.x + width;
-							let right = point.x;
-							for (const item of list) {
-								if (e.id !== item.id) {
-									if (item.type === "group") {
-										const groupArrangment = calcGroupArrangment(
-											item.items ?? [],
-										);
-										top = Math.min(top, groupArrangment.top);
-										bottom = Math.max(bottom, groupArrangment.bottom);
-										left = Math.min(left, groupArrangment.left);
-										right = Math.max(right, groupArrangment.right);
-									} else {
-										top = Math.min(top, item.point.y);
-										bottom = Math.max(bottom, item.point.y + item.height);
-										left = Math.min(left, item.point.x);
-										right = Math.max(right, item.point.x + item.width);
-									}
-								}
-							}
-
-							return {
-								top: Math.min(top, e.new.point.y),
-								bottom: Math.max(bottom, e.new.point.y + e.new.height),
-								left: Math.min(left, e.new.point.x),
-								right: Math.max(right, e.new.point.x + e.new.width),
-							};
-						};
-
-						const { top, bottom, left, right } = calcGroupArrangment(items);
+						const { top, bottom, left, right } =
+							calcGroupArrangmentOnChildDiagramEvent(items, {
+								id: e.id,
+								...e.new,
+							});
 
 						onDiagramResizeEnd?.({
 							id,
@@ -441,6 +465,7 @@ const Group: React.FC<GroupProps> = memo(
 				[
 					onDiagramDragEnd,
 					onDiagramResizeEnd,
+					calcGroupArrangmentOnChildDiagramEvent,
 					isDragging,
 					id,
 					point,
@@ -448,6 +473,32 @@ const Group: React.FC<GroupProps> = memo(
 					height,
 					items,
 				],
+			);
+
+			/**
+			 * グループ内の図形のリサイズ終了イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 図形リサイズ終了イベント
+			 */
+			const handleChildDiagramResizeEnd = useCallback(
+				(e: DiagramResizeEvent) => {
+					// グループ内の図形のリサイズ終了イベントを伝番し、リサイズされた図形の位置を更新
+					onDiagramResizeEnd?.(e);
+
+					const { top, bottom, left, right } =
+						calcGroupArrangmentOnChildDiagramEvent(items, e);
+
+					onDiagramResizeEnd?.({
+						id,
+						point: {
+							x: left,
+							y: top,
+						},
+						width: right - left,
+						height: bottom - top,
+					});
+				},
+				[onDiagramResizeEnd, calcGroupArrangmentOnChildDiagramEvent, id, items],
 			);
 
 			// TODO: 共通化
@@ -463,7 +514,7 @@ const Group: React.FC<GroupProps> = memo(
 					onDiagramDragEndByGroup: onDiagramDragEndByGroup,
 					onDiagramResizeStart: onDiagramResizeStart,
 					onDiagramResizing: onDiagramResizing,
-					onDiagramResizeEnd: onDiagramResizeEnd,
+					onDiagramResizeEnd: handleChildDiagramResizeEnd,
 					onDiagramSelect: handleChildDiagramSelect,
 					ref: (r: DiagramRef) => {
 						itemsRef.current[item.id] = r;
