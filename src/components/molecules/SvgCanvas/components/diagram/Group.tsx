@@ -32,7 +32,7 @@ import {
 } from "../core/RectangleBase/RectangleBaseFunctions";
 
 /**
- * 選択されたグループ内の図形のIDを再帰的に取得する
+ * 選択されたグループ内の図形のIDを、配下のグループも含めて再帰的に取得する
  *
  * @param {Diagram[]} diagrams 図形リスト
  * @returns {string | undefined} 選択されたグループ内の図形のID
@@ -77,21 +77,12 @@ const Group: React.FC<GroupProps> = memo(
 			},
 			ref,
 		) => {
+			// グループ全体のドラッグ中かどうかのフラグ（このグループが選択中でかつドラッグ中の場合のみtrueにする）
 			const [isDragging, setIsDragging] = useState(false);
-			const [isReselect, setIsReselect] = useState(false);
+			// グループ連続選択フラグ（このグループが選択中でかつ再度ポインター押下された場合のみtrueにする）
+			const [isSequentialSelection, setIsSequentialSelection] = useState(false);
 
-			// 親から参照するためのRefを作成
-			useImperativeHandle(ref, () => ({
-				onGroupDrag: handleParentGroupDrag,
-				onGroupDragEnd: handleParentGroupDragEnd,
-				onGroupResize: onParentGroupResize,
-				onGroupResizeEnd: onParentGroupResizeEnd,
-			}));
-
-			// グループ内の図形への参照を保持するRef作成
-			const itemsRef = useRef<{
-				[key: string]: DiagramRef | undefined;
-			}>({});
+			// --- 以下、図形選択関連処理 ---
 
 			/**
 			 * グループ内の図形の選択イベントハンドラ
@@ -102,8 +93,10 @@ const Group: React.FC<GroupProps> = memo(
 			const handleChildDiagramSelect = useCallback(
 				(e: DiagramSelectEvent) => {
 					const selectedChildId = getSelectedChildDiagramId(items);
-					// グループ内の図形が選択されていない場合、このグループを選択状態にする
 					if (!selectedChildId) {
+						// グループ内の図形が選択されていない場合は、このグループの選択イベントを発火させる。
+						// これにより、グループ内の図形が選択されていないグループのうち、最も上位のグループのイベントが
+						// SvgCanvasまで伝番され、そのグループが選択状態になる。
 						onDiagramSelect?.({
 							id,
 						});
@@ -113,8 +106,9 @@ const Group: React.FC<GroupProps> = memo(
 					}
 
 					if (isSelected) {
-						// 再選択時後のクリック（ポインターアップ）時にグループ内の図形を選択したいので、再選択フラグを立てる
-						setIsReselect(true);
+						// グループ連続選択時のクリック（ポインターアップ）時に、グループ内でクリックされた図形を選択状態にしたいので、
+						// フラグを立てておき、クリックイベント側で参照する。
+						setIsSequentialSelection(true);
 					}
 				},
 				[onDiagramSelect, id, isSelected, items],
@@ -128,27 +122,44 @@ const Group: React.FC<GroupProps> = memo(
 			 */
 			const handleChildDiagramClick = useCallback(
 				(e: DiagramSelectEvent) => {
-					if (isReselect) {
-						// 再選択時のクリック（ポインターアップ）時であれば、そのグループ内の図形を選択状態にする
+					if (isSequentialSelection) {
+						// グループ連続選択時のクリック（ポインターアップ）時であれば、そのグループ内の図形を選択状態にする
 						onDiagramSelect?.(e);
-						setIsReselect(false);
+						setIsSequentialSelection(false);
 					} else {
-						// 再選択でない場合は、グループ内の図形のクリックイベントを
-						// このグループのクリックイベントに差し替えて、このグループが選択されるようにする
+						// グループ連続選択時でない場合は、このグループのクリックイベントを発火させる。
+						// これにより、連続選択でないグループのうち、最も上位のグループのクリックイベントが
+						// 連続選択されたグループまで伝番し、そのグループの再選択時の処理（当該分岐のtrue側）が実行され、
+						// その直下のグループが選択状態になる。
 						onDiagramClick?.({
 							id,
 						});
 					}
 				},
-				[onDiagramSelect, onDiagramClick, isReselect, id],
+				[onDiagramSelect, onDiagramClick, isSequentialSelection, id],
 			);
 
 			useEffect(() => {
-				// 選択が外れたら再選択フラグも解除
+				// グループから選択が外れたら連続選択フラグも解除
 				if (!isSelected) {
-					setIsReselect(false);
+					setIsSequentialSelection(false);
 				}
 			}, [isSelected]);
+
+			// --- 以下、親グループの変更関連処理 ---
+
+			// 親グループの変更時に、親グループ側から実行してもらう関数を公開
+			useImperativeHandle(ref, () => ({
+				onGroupDrag: handleParentGroupDrag,
+				onGroupDragEnd: handleParentGroupDragEnd,
+				onGroupResize: onParentGroupResize,
+				onGroupResizeEnd: onParentGroupResizeEnd,
+			}));
+
+			// グループ内の各図形の関数の参照を保持するRef作成
+			const diagramsFunctionsRef = useRef<{
+				[key: string]: DiagramRef | undefined;
+			}>({});
 
 			/**
 			 * 親グループのドラッグ中イベントハンドラ
@@ -158,12 +169,13 @@ const Group: React.FC<GroupProps> = memo(
 			 */
 			const handleParentGroupDrag = useCallback(
 				(e: GroupDragEvent) => {
-					// グループのドラッグに伴うこの図形の座標を計算
+					// 親グループのドラッグに伴う、このグループの移動後の座標を計算
 					const newPoint = calcPointOnGroupDrag(e, point);
 
-					// グループ内の図形にドラッグ中イベントを通知
+					// 親グループのドラッグに伴うこのグループの移動後の座標を、グループ内の図形にドラッグ中イベントとして通知。
+					// なお、ドラッグ中イベント内では、DOMを直接操作して移動の描画を行うので、SvgCanvasへの変更通知は行わない。
 					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupDrag?.({
+						diagramsFunctionsRef.current[item.id]?.onGroupDrag?.({
 							id,
 							oldPoint: point,
 							newPoint,
@@ -181,19 +193,22 @@ const Group: React.FC<GroupProps> = memo(
 			 */
 			const handleParentGroupDragEnd = useCallback(
 				(e: GroupDragEvent) => {
-					// グループのドラッグに伴うこの図形の座標を計算
+					// 親グループのドラッグ完了に伴う、このグループの移動後の座標を計算
 					const newPoint = calcPointOnGroupDrag(e, point);
 
-					// グループ内の図形にドラッグ完了イベントを通知
+					// 親グループのドラッグ完了に伴うこのグループの移動後の座標を、グループ内の図形にドラッグ完了イベントとして通知。
+					// なお、グループ内の図形の座標変更は、グループ内の図形側でのonDiagramDragEndByGroup関数の実行により
+					// SvgCanvasへ通知が行われるため、ここでは変更通知は行わない。
 					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupDragEnd?.({
+						diagramsFunctionsRef.current[item.id]?.onGroupDragEnd?.({
 							id,
 							oldPoint: point,
 							newPoint,
 						});
 					}
 
-					// グループの位置も更新
+					// グループ自身の座標変更をSvgCanvasへ通知するためにイベント発火。
+					// onDiagramDragEndで発火するとグループ間で処理がループするため、onDiagramDragEndByGroupを使用。
 					onDiagramDragEndByGroup?.({
 						id,
 						old: {
@@ -241,7 +256,7 @@ const Group: React.FC<GroupProps> = memo(
 
 					// グループ内の図形にリサイズ中イベントを通知
 					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupResize?.(event);
+						diagramsFunctionsRef.current[item.id]?.onGroupResize?.(event);
 					}
 
 					// グループのリサイズが契機で、かつDOMを直接更新しての変更なので、グループ側への変更通知はしない
@@ -279,7 +294,7 @@ const Group: React.FC<GroupProps> = memo(
 
 					// グループ内の図形にリサイズ完了イベントを通知
 					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupResizeEnd?.(event);
+						diagramsFunctionsRef.current[item.id]?.onGroupResizeEnd?.(event);
 					}
 
 					// グループのリサイズ完了に伴うこのグループのサイズ変更を親に通知し、SvgCanvasまで変更を伝番してもらう
@@ -328,7 +343,7 @@ const Group: React.FC<GroupProps> = memo(
 					// グループ内の図形にドラッグ中イベントを通知し、同じグループ内の図形も移動させる
 					for (const item of items) {
 						if (e.id !== item.id) {
-							itemsRef.current[item.id]?.onGroupDrag?.({
+							diagramsFunctionsRef.current[item.id]?.onGroupDrag?.({
 								id,
 								oldPoint: point,
 								newPoint: {
@@ -431,7 +446,7 @@ const Group: React.FC<GroupProps> = memo(
 					// グループ内の図形にドラッグ完了イベントを通知し、同じグループ内の図形を移動させる
 					for (const item of items) {
 						if (e.id !== item.id) {
-							itemsRef.current[item.id]?.onGroupDragEnd?.({
+							diagramsFunctionsRef.current[item.id]?.onGroupDragEnd?.({
 								id,
 								oldPoint: point,
 								newPoint: {
@@ -517,7 +532,7 @@ const Group: React.FC<GroupProps> = memo(
 					onDiagramResizeEnd: handleChildDiagramResizeEnd,
 					onDiagramSelect: handleChildDiagramSelect,
 					ref: (r: DiagramRef) => {
-						itemsRef.current[item.id] = r;
+						diagramsFunctionsRef.current[item.id] = r;
 					},
 				};
 
@@ -551,7 +566,7 @@ const Group: React.FC<GroupProps> = memo(
 					// グループ内の図形に変更中イベントを通知
 					for (const item of items) {
 						if (e.id !== item.id) {
-							itemsRef.current[item.id]?.onGroupResize?.(event);
+							diagramsFunctionsRef.current[item.id]?.onGroupResize?.(event);
 						}
 					}
 				},
@@ -579,7 +594,7 @@ const Group: React.FC<GroupProps> = memo(
 					};
 					// グループ内の図形に変更完了イベントを通知
 					for (const item of items) {
-						itemsRef.current[item.id]?.onGroupResizeEnd?.(event);
+						diagramsFunctionsRef.current[item.id]?.onGroupResizeEnd?.(event);
 					}
 
 					// グループの枠表示用の四角形の変更完了イベントを親に伝番させて、Propsの更新を親側にしてもらう
