@@ -5,7 +5,7 @@ import { useState, useCallback } from "react";
 import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
 
 // SvgCanvas関連型定義をインポート
-import type { Diagram } from "../types/DiagramTypes";
+import type { Diagram, GroupData } from "../types/DiagramTypes";
 import type {
 	ItemSelectEvent,
 	DiagramDragEvent,
@@ -36,7 +36,10 @@ const applyRecursive = (items: Diagram[], func: (item: Diagram) => Diagram) => {
 	return items.map((item) => {
 		const newItem = func(item);
 		if (item.type === "group") {
-			newItem.items = applyRecursive(item.items ?? [], func);
+			(newItem as GroupData).items = applyRecursive(
+				(item as GroupData).items ?? [],
+				func,
+			);
 		}
 		return newItem;
 	});
@@ -97,7 +100,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					selectedItem = item;
 				}
 				if (item.type === "group") {
-					findSelectedItem(item.items ?? []);
+					findSelectedItem((item as GroupData).items ?? []);
 				}
 			}
 		};
@@ -112,7 +115,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				...prevState.items.map((item) => ({ ...item, isSelected: false })),
 				{
 					...DEFAULT_ITEM_VALUE,
-					id: String(prevState.items.length + 1),
+					id: String(prevState.items.length + 15),
 					isSelected: true,
 					...item,
 				},

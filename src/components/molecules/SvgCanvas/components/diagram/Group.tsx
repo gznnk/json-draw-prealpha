@@ -11,7 +11,7 @@ import React, {
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
-import type { Diagram, DiagramRef } from "../../types/DiagramTypes";
+import type { Diagram, DiagramRef, GroupData } from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
@@ -22,8 +22,8 @@ import type {
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
+import type { RectangleBaseProps } from "../core/RectangleBase";
 import RectangleBase from "../core/RectangleBase";
-import type { RectangleProps } from "./Rectangle";
 
 // RectangleBase関連関数をインポート
 import {
@@ -42,16 +42,22 @@ const getSelectedChildDiagramId = (diagrams: Diagram[]): string | undefined => {
 		if (diagram.isSelected) {
 			return diagram.id;
 		}
-		const id = getSelectedChildDiagramId(diagram.items || []);
-		if (id) {
-			return id;
+		if (diagram.type === "group") {
+			const id = getSelectedChildDiagramId((diagram as GroupData).items || []);
+			if (id) {
+				return id;
+			}
 		}
 	}
 };
 
-type GroupProps = RectangleProps & {
-	items?: Diagram[];
-};
+// TODO: 共通化
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+function isGroup(obj: any): obj is GroupData {
+	return obj && typeof obj.type === "string" && obj.type === "group";
+}
+
+export type GroupProps = RectangleBaseProps & GroupData;
 
 const Group: React.FC<GroupProps> = memo(
 	forwardRef<DiagramRef, GroupProps>(
@@ -148,7 +154,7 @@ const Group: React.FC<GroupProps> = memo(
 
 			// --- 以下、親グループの変更関連処理 ---
 
-			// 親グループの変更時に、親グループ側から実行してもらう関数を公開
+			// 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数を公開
 			useImperativeHandle(ref, () => ({
 				onGroupDrag: handleParentGroupDrag,
 				onGroupDragEnd: handleParentGroupDragEnd,
@@ -380,7 +386,7 @@ const Group: React.FC<GroupProps> = memo(
 					let right = point.x;
 					for (const item of list) {
 						if (e.id !== item.id) {
-							if (item.type === "group") {
+							if (isGroup(item)) {
 								const groupArrangment = calcGroupArrangmentOnChildDiagramEvent(
 									item.items ?? [],
 									e,

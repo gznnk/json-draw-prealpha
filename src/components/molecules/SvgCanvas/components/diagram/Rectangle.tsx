@@ -9,11 +9,11 @@ import {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { DiagramRef } from "../../types/DiagramTypes";
+import type { DiagramRef, RectangleData } from "../../types/DiagramTypes";
 import type {
 	DiagramResizeEvent,
-	GroupResizeEvent,
 	GroupDragEvent,
+	GroupResizeEvent,
 } from "../../types/EventTypes";
 
 // RectangleBase関連コンポーネントをインポート
@@ -26,12 +26,7 @@ import {
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
 
-export type RectangleProps = RectangleBaseProps & {
-	fill?: string;
-	stroke?: string;
-	strokeWidth?: string;
-	ref?: React.Ref<DiagramRef>;
-};
+export type RectangleProps = RectangleBaseProps & RectangleData;
 
 const Rectangle: React.FC<RectangleProps> = memo(
 	forwardRef<DiagramRef, RectangleProps>(
@@ -63,7 +58,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
 			const rectangleBaseRef = useRef<SVGGElement>({} as SVGGElement);
 
-			// 親から参照するためのRefを作成
+			// 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数を公開
 			useImperativeHandle(ref, () => ({
 				onGroupDrag: handleGroupDrag,
 				onGroupDragEnd: handleGroupDragEnd,

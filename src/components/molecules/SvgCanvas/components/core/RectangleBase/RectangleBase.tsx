@@ -11,13 +11,10 @@ import {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point } from "../../../types/CoordinateTypes";
+import type { DiagramBaseProps } from "../../../types/DiagramTypes";
 import type {
-	DiagramClickEvent,
 	DiagramDragEvent,
 	DiagramPointerEvent,
-	DiagramResizeEvent,
-	DiagramSelectEvent,
 } from "../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -44,25 +41,10 @@ import DragPointTopCenter from "./DragPointTopCenter";
 // RectangleBase関連関数をインポート
 import { calcArrangment } from "./RectangleBaseFunctions";
 
-export type RectangleBaseProps = {
-	id: string;
-	point: Point;
-	width: number;
-	height: number;
-	keepProportion?: boolean;
+export type RectangleBaseProps = DiagramBaseProps & {
 	tabIndex?: number;
-	isSelected?: boolean;
-	ref?: React.Ref<SVGGElement>;
-	onDiagramClick?: (e: DiagramClickEvent) => void;
-	onDiagramDragStart?: (e: DiagramDragEvent) => void;
-	onDiagramDrag?: (e: DiagramDragEvent) => void;
-	onDiagramDragEnd?: (e: DiagramDragEvent) => void;
-	onDiagramResizeStart?: (e: DiagramResizeEvent) => void;
-	onDiagramResizing?: (e: DiagramResizeEvent) => void;
-	onDiagramResizeEnd?: (e: DiagramResizeEvent) => void;
-	onDiagramDragEndByGroup?: (e: DiagramDragEvent) => void;
-	onDiagramSelect?: (e: DiagramSelectEvent) => void;
 	children?: React.ReactNode;
+	ref?: React.Ref<SVGGElement>;
 };
 
 const RectangleBase: React.FC<RectangleBaseProps> = memo(

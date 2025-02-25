@@ -9,7 +9,7 @@ import {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { DiagramRef } from "../../types/DiagramTypes";
+import type { EllipseData, DiagramRef } from "../../types/DiagramTypes";
 import type {
 	DiagramResizeEvent,
 	GroupResizeEvent,
@@ -26,12 +26,7 @@ import {
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
 
-type EllipseProps = RectangleBaseProps & {
-	fill?: string;
-	stroke?: string;
-	strokeWidth?: string;
-	ref?: React.Ref<DiagramRef>;
-};
+export type EllipseProps = RectangleBaseProps & EllipseData;
 
 const Ellipse: React.FC<EllipseProps> = memo(
 	forwardRef<DiagramRef, EllipseProps>(
@@ -62,7 +57,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 			const svgRef = useRef<SVGEllipseElement>({} as SVGEllipseElement);
 			const rectangleBaseRef = useRef<SVGGElement>({} as SVGGElement);
 
-			// 親から参照するためのRefを作成
+			// 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数を公開
 			useImperativeHandle(ref, () => ({
 				onGroupDrag: handleGroupDrag,
 				onGroupDragEnd: handleGroupDragEnd,

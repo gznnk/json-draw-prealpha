@@ -35,9 +35,6 @@ const testItems1 = [
 		point: { x: 200, y: 200 },
 		width: 400,
 		height: 400,
-		fill: "transparent",
-		stroke: "black",
-		strokeWidth: "1px",
 		keepProportion: true,
 		isSelected: false,
 		items: [
@@ -179,6 +176,19 @@ const testItems1 = [
 			},
 		],
 	},
+	{
+		id: "12",
+		type: "line",
+		point: { x: 0, y: 0 },
+		width: 100,
+		height: 100,
+		startPoint: { x: 0, y: 0 },
+		endPoint: { x: 100, y: 100 },
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+	},
 ] as Diagram[];
 
 function App() {
@@ -263,7 +273,7 @@ function App() {
 				<div>{`y:${canvasFunctions.getSelectedItem()?.point.y}`}</div>
 				<div>{`width:${canvasFunctions.getSelectedItem()?.width}`}</div>
 				<div>{`height:${canvasFunctions.getSelectedItem()?.height}`}</div>
-				<Input
+				{/* <Input
 					value={canvasFunctions.getSelectedItem()?.fill || ""}
 					onChange={(e) => {
 						if (!canvasState.selectedItemId) return;
@@ -272,7 +282,7 @@ function App() {
 							fill: e.target.value,
 						});
 					}}
-				/>
+				/> */}
 				<Input
 					value={canvasFunctions.getSelectedItem()?.width.toString() || ""}
 					onChange={(e) => {
