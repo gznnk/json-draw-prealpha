@@ -97,19 +97,11 @@ const Ellipse: React.FC<EllipseProps> = memo(
 					// グループのドラッグ完了に伴うこの図形の位置変更をグループ側に通知し、SvgCanvasまで変更を伝番してもらう
 					onDiagramDragEndByGroup?.({
 						id,
-						old: {
-							point,
-							width,
-							height,
-						},
-						new: {
-							point: calcPointOnGroupDrag(e, point),
-							width,
-							height,
-						},
+						startPoint: point,
+						endPoint: calcPointOnGroupDrag(e, point),
 					});
 				},
-				[onDiagramDragEndByGroup, id, point, width, height],
+				[onDiagramDragEndByGroup, id, point],
 			);
 
 			/**

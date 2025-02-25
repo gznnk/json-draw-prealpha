@@ -53,11 +53,11 @@ const DragPointRightCenter = forwardRef<
 		const calcArrangmentFunction = useCallback(
 			(e: DiagramDragEvent) => {
 				if (keepProportion && aspectRatio) {
-					const newWidth = e.new.point.x - leftTopPoint.x;
+					const newWidth = e.endPoint.x - leftTopPoint.x;
 					const newHeight = newWidth / aspectRatio;
 
 					const newRightBottomPoint = {
-						x: e.new.point.x,
+						x: e.endPoint.x,
 						y: leftTopPoint.y + newHeight,
 					};
 
@@ -65,7 +65,7 @@ const DragPointRightCenter = forwardRef<
 				}
 
 				const newRightBottomPoint = {
-					x: e.new.point.x,
+					x: e.endPoint.x,
 					y: rightBottomPoint.y,
 				};
 

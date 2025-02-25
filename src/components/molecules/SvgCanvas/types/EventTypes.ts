@@ -15,16 +15,8 @@ export type DiagramPointerEvent = {
  */
 export type DiagramDragEvent = {
 	id: string;
-	old: {
-		point: Point;
-		width: number;
-		height: number;
-	};
-	new: {
-		point: Point;
-		width: number;
-		height: number;
-	};
+	startPoint: Point;
+	endPoint: Point;
 };
 
 /**

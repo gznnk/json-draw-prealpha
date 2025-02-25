@@ -230,7 +230,10 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 				// ポインター押下イベント発火
 				onPointerDown?.({
 					id,
-					point: getPointOnDrag(e),
+					point: {
+						x: e.clientX,
+						y: e.clientY,
+					},
 				});
 			}
 		};
@@ -248,18 +251,10 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			}
 
 			// ドラッグ中のイベント情報を作成
-			const event = {
+			const dragEvent = {
 				id,
-				old: {
-					point: state.point,
-					width: 0,
-					height: 0,
-				},
-				new: {
-					point: getPointOnDrag(e),
-					width: 0,
-					height: 0,
-				},
+				startPoint: state.point,
+				endPoint: getPointOnDrag(e),
 			};
 
 			if (
@@ -268,7 +263,7 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 					Math.abs(e.clientY - state.point.y - startY.current) > 3)
 			) {
 				// ドラッグ中でない場合、かつポインターの移動量が一定以上の場合はドラッグ開始とする
-				onDragStart?.(event);
+				onDragStart?.(dragEvent);
 				setIsDragging(true);
 			}
 
@@ -280,12 +275,12 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			// 描画処理負荷軽減のため、DOMを直接操作し、ドラッグ中の描画を行う
 			gRef?.current?.setAttribute(
 				"transform",
-				`translate(${event.new.point.x}, ${event.new.point.y})`,
+				`translate(${dragEvent.endPoint.x}, ${dragEvent.endPoint.y})`,
 			);
 
 			// ドラッグ中イベント発火
 			// 親側ではこのドラッグ領域の座標の更新は行わないが（行ってはダメ）、通知のために発火する
-			onDrag?.(event);
+			onDrag?.(dragEvent);
 		};
 
 		/**
@@ -295,23 +290,12 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		 * @returns {void}
 		 */
 		const handlePointerUp = (e: React.PointerEvent<SVGElement>): void => {
-			// ドラッグ後のドラッグ領域の座標を取得
-			const newPoint = getPointOnDrag(e);
-
 			if (isDragging) {
 				// ドラッグ中だった場合はドラッグ終了イベントを発火
 				onDragEnd?.({
 					id,
-					old: {
-						point: state.point,
-						width: 0,
-						height: 0,
-					},
-					new: {
-						point: newPoint,
-						width: 0,
-						height: 0,
-					},
+					startPoint: state.point,
+					endPoint: getPointOnDrag(e),
 				});
 			}
 
@@ -325,7 +309,10 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			// ポインターの離上イベント発火
 			onPointerUp?.({
 				id,
-				point: newPoint,
+				point: {
+					x: e.clientX,
+					y: e.clientY,
+				},
 			});
 
 			// フラグのクリア
@@ -358,16 +345,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 				const dragEvent = {
 					id,
-					old: {
-						point: state.point,
-						width: 0,
-						height: 0,
-					},
-					new: {
-						point: newPoint,
-						width: 0,
-						height: 0,
-					},
+					startPoint: state.point,
+					endPoint: newPoint,
 				};
 
 				onDragStart?.(dragEvent);
@@ -397,16 +376,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 						// ドラッグ終了イベントを発火させSvgCanvas側に座標の更新を通知し、座標を更新する
 						onDragEnd?.({
 							id,
-							old: {
-								point: state.point,
-								width: 0,
-								height: 0,
-							},
-							new: {
-								point: state.point,
-								width: 0,
-								height: 0,
-							},
+							startPoint: state.point,
+							endPoint: state.point,
 						});
 						// 矢印キーによるドラッグ終了とマーク
 						setIsArrowDragging(false);
@@ -429,16 +400,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 					// SvgCanvas側に座標の更新を通知し、一度座標を更新する
 					const dragEvent = {
 						id,
-						old: {
-							point: state.point,
-							width: 0,
-							height: 0,
-						},
-						new: {
-							point: state.point,
-							width: 0,
-							height: 0,
-						},
+						startPoint: state.point,
+						endPoint: state.point,
 					};
 					onDragEnd?.(dragEvent);
 					onDragStart?.(dragEvent);
@@ -452,16 +415,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 					// 矢印キー離されたらドラッグ終了イベントを発火させSvgCanvas側に座標の更新を通知し、座標を更新する
 					onDragEnd?.({
 						id,
-						old: {
-							point: state.point,
-							width: 0,
-							height: 0,
-						},
-						new: {
-							point: state.point,
-							width: 0,
-							height: 0,
-						},
+						startPoint: state.point,
+						endPoint: state.point,
 					});
 
 					// 矢印キーによるドラッグ終了とマーク

@@ -105,21 +105,13 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			 * @param {DiagramDragEvent} e ドラッグイベント
 			 * @returns {void}
 			 */
-			const onDragStart = useCallback(
+			const handleDragStart = useCallback(
 				(e: DiagramDragEvent) => {
 					// 親にドラッグ開始イベントを通知
 					onDiagramDragStart?.({
 						id,
-						old: {
-							point: e.old.point,
-							width: state.width,
-							height: state.height,
-						},
-						new: {
-							point: e.new.point,
-							width: state.width,
-							height: state.height,
-						},
+						startPoint: e.startPoint,
+						endPoint: e.endPoint,
 					});
 
 					// ドラッグ中フラグを立てる
@@ -129,7 +121,7 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 						dragEndPointType: undefined,
 					}));
 				},
-				[onDiagramDragStart, id, state.width, state.height],
+				[onDiagramDragStart, id],
 			);
 
 			/**
@@ -138,24 +130,16 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			 * @param {DiagramDragEvent} e ドラッグイベント
 			 * @returns {void}
 			 */
-			const onDrag = useCallback(
+			const handleDrag = useCallback(
 				(e: DiagramDragEvent) => {
 					// 親にドラッグ中イベントを通知
 					onDiagramDrag?.({
 						id,
-						old: {
-							point: e.old.point,
-							width: state.width,
-							height: state.height,
-						},
-						new: {
-							point: e.new.point,
-							width: state.width,
-							height: state.height,
-						},
+						startPoint: e.startPoint,
+						endPoint: e.endPoint,
 					});
 				},
-				[onDiagramDrag, id, state.width, state.height],
+				[onDiagramDrag, id],
 			);
 
 			/**
@@ -164,34 +148,26 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 			 * @param {DiagramDragEvent} e ドラッグイベント
 			 * @returns {void}
 			 */
-			const onDragEnd = useCallback(
+			const handleDragEnd = useCallback(
 				(e: DiagramDragEvent) => {
 					// 親にドラッグ終了イベントを通知
 					onDiagramDragEnd?.({
 						id,
-						old: {
-							point: e.old.point,
-							width: state.width,
-							height: state.height,
-						},
-						new: {
-							point: e.new.point,
-							width: state.width,
-							height: state.height,
-						},
+						startPoint: e.startPoint,
+						endPoint: e.endPoint,
 					});
 
 					// ドラッグポイントの位置を更新
 					setState((prevState) => ({
 						...prevState,
-						...calcArrangment(e.new.point, {
-							x: e.new.point.x + prevState.width,
-							y: e.new.point.y + prevState.height,
+						...calcArrangment(e.endPoint, {
+							x: e.endPoint.x + prevState.width,
+							y: e.endPoint.y + prevState.height,
 						}),
 						isDragging: false,
 					}));
 				},
-				[onDiagramDragEnd, id, state.width, state.height],
+				[onDiagramDragEnd, id],
 			);
 
 			// --- 以下点のドラッグ ---
@@ -310,9 +286,9 @@ const RectangleBase: React.FC<RectangleBaseProps> = memo(
 						tabIndex={tabIndex}
 						onPointerDown={handlePointerDown}
 						onClick={onDiagramClick}
-						onDragStart={onDragStart}
-						onDrag={onDrag}
-						onDragEnd={onDragEnd}
+						onDragStart={handleDragStart}
+						onDrag={handleDrag}
+						onDragEnd={handleDragEnd}
 						ref={draggableRef}
 					>
 						{children}

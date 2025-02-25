@@ -54,7 +54,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, point: e.new.point } : item,
+				item.id === e.id ? { ...item, point: e.endPoint } : item,
 			),
 		}));
 	}, []);
