@@ -77,9 +77,11 @@ export const calcArrangment = (
  * @returns 移動後の図形の左上の頂点を表す点
  */
 export const calcPointOnGroupDrag = (e: GroupDragEvent, point: Point) => {
+	const dx = e.endPoint.x - e.startPoint.x;
+	const dy = e.endPoint.y - e.startPoint.y;
 	return {
-		x: e.endPoint.x + (point.x - e.startPoint.x),
-		y: e.endPoint.y + (point.y - e.startPoint.y),
+		x: point.x + dx,
+		y: point.y + dy,
 	};
 };
 

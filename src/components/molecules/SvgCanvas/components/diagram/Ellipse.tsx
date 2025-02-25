@@ -112,7 +112,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 			 */
 			const onGroupResize = useCallback(
 				(e: GroupResizeEvent) => {
-					// グループのリサイズ完了に伴うこの図形の変更を計算
+					// グループのリサイズに伴うこの図形のリサイズ後の座標とサイズを計算
 					const newArrangment = calcArrangmentOnGroupResize(
 						e,
 						point,
@@ -147,7 +147,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 			 */
 			const onGroupResizeEnd = useCallback(
 				(e: GroupResizeEvent) => {
-					// グループのリサイズ完了に伴うこの図形のサイズ変更を親に通知し、SvgCanvasまで変更を伝番してもらう
+					// グループのリサイズに伴うこの図形のサイズ変更を親に通知し、SvgCanvasまで変更を伝番してもらう
 					onDiagramResizeEnd?.({
 						id,
 						...calcArrangmentOnGroupResize(e, point, width, height),

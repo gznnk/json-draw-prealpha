@@ -26,7 +26,7 @@ import type {
 // ユーティリティをインポート
 import { getLogger } from "../../../../../utils/Logger";
 
-// RectangleBase関連関数をインポート TODO: 関数の場所
+// RectangleBase関連関数をインポート
 import { calcArrangmentOnGroupResize } from "../core/RectangleBase/RectangleBaseFunctions";
 
 const logger = getLogger("Line");
@@ -126,18 +126,6 @@ const Line: React.FC<LineProps> = memo(
 						},
 					});
 
-					logger.debug(
-						"handleGroupDragEnd id:",
-						id,
-						"startPoint:",
-						point,
-						"endPoint:",
-						{
-							x: point.x + dx,
-							y: point.y + dy,
-						},
-					);
-
 					// ドラッグポイントの位置変更も通知
 					for (const item of items) {
 						const x = item.point.x + dx;
@@ -168,16 +156,6 @@ const Line: React.FC<LineProps> = memo(
 						height,
 					);
 
-					logger.debug(
-						"onGroupResize newArrangment",
-						"point:",
-						newArrangment.point,
-						"width:",
-						newArrangment.width,
-						"height:",
-						newArrangment.height,
-					);
-
 					// 描画処理負荷軽減のため、DOMを直接操作
 					// 短径領域の移動をDOMの直接操作で実施
 					const scaleX = e.endSize.width / e.startSize.width;
@@ -185,18 +163,8 @@ const Line: React.FC<LineProps> = memo(
 					const newItems = items.map((item) => {
 						const relativeX = item.point.x - point.x;
 						const relativeY = item.point.y - point.y;
-
-						logger.debug(
-							"onGroupResize relativeX:",
-							relativeX,
-							"relativeY:",
-							relativeY,
-						);
-
 						const x = newArrangment.point.x + Math.round(relativeX * scaleX);
 						const y = newArrangment.point.y + Math.round(relativeY * scaleY);
-
-						logger.debug("onGroupResize x:", x, "y:", y);
 
 						return {
 							...item,
@@ -221,7 +189,7 @@ const Line: React.FC<LineProps> = memo(
 			 */
 			const onGroupResizeEnd = useCallback(
 				(e: GroupResizeEvent) => {
-					// グループのリサイズ完了に伴うこの図形の変更を計算
+					// グループのリサイズに伴うこの図形のリサイズ後の座標とサイズを計算
 					const newArrangment = calcArrangmentOnGroupResize(
 						e,
 						point,
@@ -332,17 +300,6 @@ const Line: React.FC<LineProps> = memo(
 						width: right - left,
 						height: bottom - top,
 					});
-
-					logger.debug(
-						"handleDragPointDragEnd",
-						id,
-						top,
-						left,
-						bottom,
-						right,
-						right - left,
-						bottom - top,
-					);
 				},
 				[onDiagramDragEnd, onDiagramResizeEnd, id, items],
 			);
@@ -386,15 +343,6 @@ const Line: React.FC<LineProps> = memo(
 			 */
 			const handleDragEnd = useCallback(
 				(e: DiagramDragEvent) => {
-					logger.debug(
-						"handleDragEnd id:",
-						id,
-						"startPoint:",
-						e.startPoint,
-						"endPoint:",
-						e.endPoint,
-					);
-
 					const dx = e.endPoint.x - e.startPoint.x;
 					const dy = e.endPoint.y - e.startPoint.y;
 					for (const item of items) {
