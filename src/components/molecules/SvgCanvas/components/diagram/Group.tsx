@@ -34,6 +34,11 @@ import {
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
 
+// ユーティリティをインポート
+import { getLogger } from "../../../../../utils/Logger";
+
+const logger = getLogger("Group");
+
 /**
  * 選択されたグループ内の図形を、配下のグループも含めて再帰的に取得する
  *
@@ -173,15 +178,15 @@ const Group: React.FC<GroupProps> = memo(
 			const handleParentGroupDrag = useCallback(
 				(e: GroupDragEvent) => {
 					// 親グループのドラッグに伴う、このグループの移動後の座標を計算
-					const newPoint = calcPointOnGroupDrag(e, point);
+					const endPoint = calcPointOnGroupDrag(e, point);
 
 					// 親グループのドラッグに伴うこのグループの移動後の座標を、グループ内の図形にドラッグ中イベントとして通知。
 					// なお、ドラッグ中イベント内では、DOMを直接操作して移動の描画を行うので、SvgCanvasへの変更通知は行わない。
 					for (const item of items) {
 						diagramsFunctionsRef.current[item.id]?.onGroupDrag?.({
 							id,
-							oldPoint: point,
-							newPoint,
+							startPoint: point,
+							endPoint,
 						});
 					}
 				},
@@ -197,7 +202,7 @@ const Group: React.FC<GroupProps> = memo(
 			const handleParentGroupDragEnd = useCallback(
 				(e: GroupDragEvent) => {
 					// 親グループのドラッグ完了に伴う、このグループの移動後の座標を計算
-					const newPoint = calcPointOnGroupDrag(e, point);
+					const endPoint = calcPointOnGroupDrag(e, point);
 
 					// 親グループのドラッグ完了に伴うこのグループの移動後の座標を、グループ内の図形にドラッグ完了イベントとして通知。
 					// なお、グループ内の図形の座標変更は、グループ内の図形側でのonDiagramDragEndByGroup関数の実行により
@@ -205,8 +210,8 @@ const Group: React.FC<GroupProps> = memo(
 					for (const item of items) {
 						diagramsFunctionsRef.current[item.id]?.onGroupDragEnd?.({
 							id,
-							oldPoint: point,
-							newPoint,
+							startPoint: point,
+							endPoint,
 						});
 					}
 
@@ -215,7 +220,7 @@ const Group: React.FC<GroupProps> = memo(
 					onDiagramDragEndByGroup?.({
 						id,
 						startPoint: point,
-						endPoint: newPoint,
+						endPoint: endPoint,
 					});
 				},
 				[onDiagramDragEndByGroup, id, point, items],
@@ -340,8 +345,8 @@ const Group: React.FC<GroupProps> = memo(
 						if (e.id !== item.id) {
 							diagramsFunctionsRef.current[item.id]?.onGroupDrag?.({
 								id,
-								oldPoint: point,
-								newPoint: {
+								startPoint: point,
+								endPoint: {
 									x: point.x + dx,
 									y: point.y + dy,
 								},
@@ -416,7 +421,14 @@ const Group: React.FC<GroupProps> = memo(
 
 					// グループ全体のドラッグでない、かつグループ内の選択された図形のドラッグの場合、その図形の位置変更によるグループの配置を更新する
 					const selectedDiagram = getSelectedChildDiagram(items);
-					console.log("selectedDiagram", id, selectedDiagram);
+
+					logger.debug(
+						"handleChildDiagramDragEnd id:",
+						id,
+						"selectedDiagram",
+						selectedDiagram,
+					);
+
 					if (!isDragging && selectedDiagram) {
 						const { top, bottom, left, right } =
 							calcGroupArrangmentOnChildDiagramEvent(items, {
@@ -448,8 +460,8 @@ const Group: React.FC<GroupProps> = memo(
 						if (e.id !== item.id) {
 							diagramsFunctionsRef.current[item.id]?.onGroupDragEnd?.({
 								id,
-								oldPoint: point,
-								newPoint: {
+								startPoint: point,
+								endPoint: {
 									x: point.x + dx,
 									y: point.y + dy,
 								},

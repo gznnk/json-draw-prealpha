@@ -40,8 +40,6 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 		onDiagramResizeEnd,
 		onItemSelect,
 	}) => {
-		// console.log("SvgCanvas render");
-
 		const createDiagram = (item: Diagram): React.ReactNode => {
 			const itemType = DiagramTypeComponentMap[item.type];
 			const props = {

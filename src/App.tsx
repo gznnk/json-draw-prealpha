@@ -4,6 +4,9 @@ import Button from "./components/atoms/Button";
 import Input from "./components/atoms/Input";
 import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramTypes";
 
+import { getLogger } from "./utils/Logger";
+const logger = getLogger("App");
+
 const testItems1 = [
 	{
 		id: "1",
@@ -261,14 +264,102 @@ const testItems2 = [
 	},
 ] as Diagram[];
 
-function App() {
-	// console.log("App render");
+const testItems3 = [
+	{
+		id: "g-1",
+		type: "group",
+		point: { x: 200, y: 200 },
+		width: 300,
+		height: 300,
+		keepProportion: true,
+		isSelected: false,
+		items: [
+			{
+				id: "3",
+				type: "rectangle",
+				point: { x: 200, y: 200 },
+				width: 100,
+				height: 100,
+				fill: "transparent",
+				stroke: "black",
+				strokeWidth: "1px",
+				keepProportion: false,
+				isSelected: false,
+			},
+			{
+				id: "4",
+				type: "ellipse",
+				point: { x: 300, y: 200 },
+				width: 100,
+				height: 100,
+				fill: "transparent",
+				stroke: "black",
+				strokeWidth: "1px",
+				keepProportion: false,
+				isSelected: false,
+			},
+			{
+				id: "5",
+				type: "rectangle",
+				point: { x: 300, y: 300 },
+				width: 100,
+				height: 100,
+				fill: "transparent",
+				stroke: "black",
+				strokeWidth: "1px",
+				keepProportion: false,
+				isSelected: false,
+			},
+			{
+				id: "12",
+				type: "line",
+				point: { x: 400, y: 400 },
+				width: 100,
+				height: 100,
+				stroke: "black",
+				strokeWidth: "1px",
+				keepProportion: false,
+				isSelected: false,
+				items: [
+					{
+						id: "12-1",
+						type: "linePoint",
+						point: { x: 400, y: 400 },
+						width: 0,
+						height: 0,
+						keepProportion: false,
+						isSelected: false,
+					},
+					{
+						id: "12-2",
+						type: "linePoint",
+						point: { x: 400, y: 500 },
+						width: 0,
+						height: 0,
+						keepProportion: false,
+						isSelected: false,
+					},
+					{
+						id: "12-3",
+						type: "linePoint",
+						point: { x: 500, y: 500 },
+						width: 0,
+						height: 0,
+						keepProportion: false,
+						isSelected: false,
+					},
+				],
+			},
+		],
+	},
+] as Diagram[];
 
+function App() {
 	const {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems2);
+	} = useSvgCanvas(testItems3);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem({
@@ -304,8 +395,8 @@ function App() {
 		});
 	};
 
-	console.log(`selectedItemId: ${canvasState.selectedItemId}`);
-	console.log("canvasState:", canvasState);
+	logger.debug("selectedItemId:", canvasState.selectedItemId);
+	logger.debug("canvasState:", canvasState);
 
 	return (
 		<div className="App">

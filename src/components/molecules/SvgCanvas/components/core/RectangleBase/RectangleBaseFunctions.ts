@@ -78,8 +78,8 @@ export const calcArrangment = (
  */
 export const calcPointOnGroupDrag = (e: GroupDragEvent, point: Point) => {
 	return {
-		x: e.newPoint.x + (point.x - e.oldPoint.x),
-		y: e.newPoint.y + (point.y - e.oldPoint.y),
+		x: e.endPoint.x + (point.x - e.startPoint.x),
+		y: e.endPoint.y + (point.y - e.startPoint.y),
 	};
 };
 

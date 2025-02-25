@@ -34,8 +34,8 @@ export type DiagramResizeEvent = {
  */
 export type GroupDragEvent = {
 	id: string;
-	oldPoint: Point;
-	newPoint: Point;
+	startPoint: Point;
+	endPoint: Point;
 };
 
 /**

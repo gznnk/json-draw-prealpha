@@ -15,6 +15,11 @@ import type {
 // SvgCanvas関連関数をインポート
 import { isGroupData } from "../SvgCanvasFunctions";
 
+// ユーティリティをインポート
+import { getLogger } from "../../../../utils/Logger";
+
+const logger = getLogger("SvgCanvasHooks");
+
 type SvgCanvasState = {
 	items: Diagram[];
 	selectedItemId?: string;
@@ -51,7 +56,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	});
 
 	const onDiagramDragEnd = useCallback((e: DiagramDragEvent) => {
-		console.log("SvgCanvas onDiagramDragEnd", e);
+		logger.debug("onDiagramDragEnd", e);
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
