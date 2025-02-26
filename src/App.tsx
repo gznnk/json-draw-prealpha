@@ -354,12 +354,39 @@ const testItems3 = [
 	},
 ] as Diagram[];
 
+const testItems4 = [
+	{
+		id: "1",
+		type: "rectangle",
+		point: { x: 200, y: 200 },
+		width: 100,
+		height: 100,
+		fill: "transparent",
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+	},
+	{
+		id: "2",
+		type: "rectangle",
+		point: { x: 500, y: 500 },
+		width: 100,
+		height: 100,
+		fill: "transparent",
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+	},
+] as Diagram[];
+
 function App() {
 	const {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems1);
+	} = useSvgCanvas(testItems4);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem({

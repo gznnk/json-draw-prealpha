@@ -5,7 +5,11 @@ import { memo, useState, useRef, useCallback, useEffect } from "react";
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
 // SvgCanvas関連型定義をインポート
-import type { DiagramRef, RectangleData } from "../../types/DiagramTypes";
+import type {
+	DiagramRef,
+	RectangleData,
+	ConnectPointData,
+} from "../../types/DiagramTypes";
 import type {
 	DiagramHoverEvent,
 	DiagramResizeEvent,
@@ -21,18 +25,15 @@ import Draggable from "../core/Draggable";
 
 import DragPoint from "../core/DragPoint";
 
-type ConnectPointProps = {
-	id: string;
-	point: Point;
+type ConnectPointProps = ConnectPointData & {
 	visible: boolean;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 };
 
 const ConnectPoint: React.FC<ConnectPointProps> = ({
-	id,
+	diagramId,
 	point,
 	visible,
-	onDrop,
 }) => {
 	// TODO useCallback使う
 
@@ -45,45 +46,50 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	const svgRef = useRef<SVGPathElement>({} as SVGPathElement);
 	const dragPointRef = useRef<SVGGElement>({} as SVGGElement);
 
-	const handleDragStart = (e: DiagramDragEvent) => {
-		// console.log(e);
+	const id = `connectPoint-${diagramId}`;
+
+	const handleDragStart = useCallback((_e: DiagramDragEvent) => {
 		setIsDragging(true);
-	};
+	}, []);
 
-	const handleDrag = (e: DiagramDragEvent) => {
-		svgRef.current.setAttribute(
-			"d",
-			`M ${point.x} ${point.y} L ${e.endPoint.x} ${e.endPoint.y}`,
-		);
-		// console.log(e);
-	};
+	const handleDrag = useCallback(
+		(e: DiagramDragEvent) => {
+			svgRef.current.setAttribute(
+				"d",
+				`M ${point.x} ${point.y} L ${e.endPoint.x} ${e.endPoint.y}`,
+			);
+		},
+		[point],
+	);
 
-	const handleDragEnd = (e: DiagramDragEvent) => {
-		setIsDragging(false);
-		svgRef.current.removeAttribute("d");
-		dragPointRef.current.setAttribute(
-			"transform",
-			`translate(${point.x}, ${point.y})`,
-		);
-		//console.log(e);
-	};
+	const handleDragEnd = useCallback(
+		(_e: DiagramDragEvent) => {
+			setIsDragging(false);
+			svgRef.current.removeAttribute("d");
+			dragPointRef.current.setAttribute(
+				"transform",
+				`translate(${point.x}, ${point.y})`,
+			);
+		},
+		[point],
+	);
 
-	const handleDragOver = (e: DiagramDragDropEvent) => {
+	const handleDragOver = useCallback((e: DiagramDragDropEvent) => {
 		if (e.dropItem.type === "connectPoint") {
 			setIsHovered(true);
 		}
-	};
+	}, []);
 
-	const handleDragLeave = (e: DiagramDragDropEvent) => {
+	const handleDragLeave = useCallback((_e: DiagramDragDropEvent) => {
 		setIsHovered(false);
-	};
+	}, []);
 
-	const handleDrop = (e: DiagramDragDropEvent) => {
+	const handleDrop = useCallback((e: DiagramDragDropEvent) => {
 		if (e.dropItem.type === "connectPoint") {
-			onDrop?.(e);
+			alert("connect");
 		}
 		setIsHovered(false);
-	};
+	}, []);
 
 	/**
 	 * ホバー状態変更イベントハンドラ
@@ -93,7 +99,6 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	 */
 	const handleHoverChange = useCallback((e: DiagramHoverEvent) => {
 		setIsHovered(e.isHovered);
-		//console.log("hovered", e.isHovered);
 	}, []);
 
 	return (

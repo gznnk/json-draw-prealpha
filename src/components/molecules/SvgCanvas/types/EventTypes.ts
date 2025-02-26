@@ -8,7 +8,6 @@ import type { DiagramType } from "./DiagramTypes";
  */
 export type DiagramPointerEvent = {
 	id: string;
-	point: Point;
 };
 
 /**
@@ -24,9 +23,12 @@ export type DiagramDragEvent = {
  * 図形のドラッグドロップイベント
  */
 export type DiagramDragDropEvent = {
-	id: string;
-	point: Point;
 	dropItem: {
+		id: string;
+		type?: DiagramType;
+		point: Point;
+	};
+	dropTargetItem: {
 		id: string;
 		type?: DiagramType;
 		point: Point;

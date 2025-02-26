@@ -25,6 +25,17 @@ import type {
 import type { DiagramType } from "../../types/DiagramTypes";
 
 /**
+ * 全体通知用ドラッグイベントの型定義
+ */
+type DraggableDragEvent = {
+	id: string;
+	type: DiagramType;
+	startPoint: Point;
+	endPoint: Point;
+	clientPoint: Point;
+};
+
+/**
  * ドラッグ領域用のG要素のPropsの型定義
  */
 type DraggableGProps = {
@@ -209,8 +220,9 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		 * @returns {Point} ドラッグ領域の座標
 		 */
 		const getPointOnDrag = (e: React.PointerEvent<SVGElement>): Point => {
-			let x = e.clientX - startX.current;
-			let y = e.clientY - startY.current;
+			// ドラッグ中のポインターの移動量から、ドラッグ中のこの領域の座標を計算
+			let x = state.point.x + (e.clientX - startX.current);
+			let y = state.point.y + (e.clientY - startY.current);
 
 			if (direction === DragDirection.Horizontal) {
 				// 水平移動の場合はY座標を固定
@@ -235,6 +247,27 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			});
 		};
 
+		// TODO 使ってない
+		/**
+		 * ドラッグ中のポインターの座標（SvgCanvas上の座標）を取得する
+		 *
+		 * @param e
+		 * @returns
+		 */
+		const getPointerPointOnDrag = (
+			e: React.PointerEvent<SVGElement>,
+		): Point => {
+			const dragX = state.point.x + (e.clientX - startX.current);
+			const dragY = state.point.y + (e.clientY - startY.current);
+			const x = dragX + e.clientX - gRef.current?.getBoundingClientRect().left;
+			const y = dragY + e.clientY - gRef.current?.getBoundingClientRect().top;
+
+			return {
+				x,
+				y,
+			};
+		};
+
 		/**
 		 * ドラッグ領域内でのポインターの押下イベントハンドラ
 		 *
@@ -248,17 +281,13 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 				setIsPointerDown(true);
 
-				// ドラッグ開始時の、このドラッグ領域の座標からのポインターの相対位置を計算して保持 TODO: コメント間違ってる
-				startX.current = e.clientX - state.point.x;
-				startY.current = e.clientY - state.point.y;
+				// ドラッグ開始時の座標を記憶
+				startX.current = e.clientX;
+				startY.current = e.clientY;
 
 				// ポインター押下イベント発火
 				onPointerDown?.({
 					id,
-					point: {
-						x: e.clientX,
-						y: e.clientY,
-					},
 				});
 			}
 		};
@@ -287,8 +316,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 			if (
 				!isDragging &&
-				(Math.abs(e.clientX - state.point.x - startX.current) > 3 ||
-					Math.abs(e.clientY - state.point.y - startY.current) > 3)
+				(Math.abs(e.clientX - startX.current) > 3 ||
+					Math.abs(e.clientY - startY.current) > 3)
 			) {
 				// ドラッグ中でない場合、かつポインターの移動量が一定以上の場合はドラッグ開始とする
 				onDragStart?.(dragEvent);
@@ -316,9 +345,14 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 					bubbles: true,
 					detail: {
 						id,
-						point: dragPoint, // TODO: ずれてる、あとドラッグ前の座標もほしい
 						type: type,
-					},
+						startPoint: state.point,
+						endPoint: dragPoint,
+						clientPoint: {
+							x: e.clientX,
+							y: e.clientY,
+						},
+					} as DraggableDragEvent,
 				}),
 			);
 		};
@@ -347,9 +381,14 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 						bubbles: true,
 						detail: {
 							id,
-							point: dragPoint, // TODO: ずれてる、あとドラッグ前の座標もほしい
-							type,
-						},
+							type: type,
+							startPoint: state.point,
+							endPoint: dragPoint,
+							clientPoint: {
+								x: e.clientX,
+								y: e.clientY,
+							},
+						} as DraggableDragEvent,
 					}),
 				);
 			}
@@ -364,10 +403,6 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			// ポインターの離上イベント発火
 			onPointerUp?.({
 				id,
-				point: {
-					x: e.clientX,
-					y: e.clientY,
-				},
 			});
 
 			// フラグのクリア
@@ -510,19 +545,27 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		 * ポインターがこのドラッグ領域上にあるかどうかを判定する
 		 * ポインターキャプチャー時は他の要素でポインター関連のイベントが発火しないため、自力で判定する必要がある
 		 *
-		 * @param {Point} pointerPoint ポインターの座標
+		 * @param {Point} clientPoint ポインターの座標
 		 * @returns {boolean} ポインターがこのドラッグ領域上にあるかどうか
 		 */
 		const isPointerOver = useCallback(
-			(pointerPoint: Point) => {
-				// TODO: 複数あるときの対応
-				const svgCanvas = document.querySelector("svg") as SVGSVGElement;
+			(clientPoint: Point) => {
+				const svgCanvas = gRef.current?.ownerSVGElement as SVGSVGElement;
 				const svgPoint = svgCanvas.createSVGPoint();
-				svgPoint.x = pointerPoint.x - point.x;
-				svgPoint.y = pointerPoint.y - point.y;
-				const svg = gRef.current?.firstChild;
-				if (svg instanceof SVGGeometryElement) {
-					return svg.isPointInFill(svgPoint) || svg.isPointInStroke(svgPoint);
+
+				if (svgPoint) {
+					svgPoint.x = clientPoint.x - point.x;
+					svgPoint.y = clientPoint.y - point.y;
+					const transformedPoint = svgPoint.matrixTransform(
+						svgCanvas.getScreenCTM()?.inverse(),
+					);
+					const svg = gRef.current?.firstChild;
+					if (svg instanceof SVGGeometryElement) {
+						return (
+							svg.isPointInFill(transformedPoint) ||
+							svg.isPointInStroke(transformedPoint)
+						);
+					}
 				}
 				return false;
 			},
@@ -536,34 +579,28 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 			if (onDragOver) {
 				handleDraggableDrag = (e: Event) => {
-					const customEvent = e as CustomEvent<{
-						id: string;
-						point: Point;
-						type: DiagramType;
-					}>;
+					const customEvent = e as CustomEvent<DraggableDragEvent>;
 
-					if (isPointerOver(customEvent.detail.point)) {
-						setDragEntered(true);
-						onDragOver?.({
+					// ドラッグ＆ドロップのイベント情報を作成
+					const dragDropEvent = {
+						dropItem: {
+							id: customEvent.detail.id,
+							type: customEvent.detail.type,
+							point: customEvent.detail.startPoint,
+						},
+						dropTargetItem: {
 							id,
-							point: customEvent.detail.point,
-							dropItem: {
-								id: customEvent.detail.id,
-								type: customEvent.detail.type,
-								point: customEvent.detail.point,
-							},
-						});
+							type,
+							point,
+						},
+					};
+
+					if (isPointerOver(customEvent.detail.clientPoint)) {
+						setDragEntered(true);
+						onDragOver?.(dragDropEvent);
 					} else if (dragEntered) {
 						setDragEntered(false);
-						onDragLeave?.({
-							id,
-							point,
-							dropItem: {
-								id: customEvent.detail.id,
-								type: customEvent.detail.type,
-								point: customEvent.detail.point,
-							},
-						});
+						onDragLeave?.(dragDropEvent);
 					}
 				};
 				document?.addEventListener("DraggableDrag", handleDraggableDrag);
@@ -571,19 +608,18 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 			if (onDrop) {
 				handleDraggableDragEnd = (e: Event) => {
-					const customEvent = e as CustomEvent<{
-						id: string;
-						point: Point;
-						type: DiagramType;
-					}>;
-					if (isPointerOver(customEvent.detail.point)) {
+					const customEvent = e as CustomEvent<DraggableDragEvent>;
+					if (isPointerOver(customEvent.detail.clientPoint)) {
 						onDrop?.({
-							id,
-							point,
 							dropItem: {
 								id: customEvent.detail.id,
 								type: customEvent.detail.type,
-								point: customEvent.detail.point,
+								point: customEvent.detail.startPoint,
+							},
+							dropTargetItem: {
+								id,
+								type,
+								point,
 							},
 						});
 					}
@@ -605,11 +641,12 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		}, [
 			id,
 			point,
+			type,
+			dragEntered,
 			isPointerOver,
 			onDragOver,
 			onDragLeave,
 			onDrop,
-			dragEntered,
 		]);
 
 		return (

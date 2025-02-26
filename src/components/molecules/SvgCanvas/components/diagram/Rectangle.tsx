@@ -52,7 +52,6 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				onDiagramDrag,
 				onDiagramDragEnd,
 				onDiagramDragEndByGroup,
-				onDiagramDrop,
 				onDiagramResizeStart,
 				onDiagramResizing,
 				onDiagramResizeEnd,
@@ -252,10 +251,10 @@ const Rectangle: React.FC<RectangleProps> = memo(
 						{children}
 					</RectangleBase>
 					<ConnectPoint
-						id={`${id}-1`}
+						id={`${id}-connectPoint`}
+						diagramId={id}
 						point={point}
 						visible={isHovered && !isTransformimg}
-						onDrop={onDiagramDrop}
 					/>
 				</>
 			);

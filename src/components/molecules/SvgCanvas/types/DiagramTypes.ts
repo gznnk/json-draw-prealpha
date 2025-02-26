@@ -41,6 +41,14 @@ export type DiagramBaseData = {
 	height: number;
 	keepProportion: boolean;
 	isSelected: boolean;
+	connectPoints?: ConnectPointData[];
+};
+
+export type ConnectPointData = {
+	id: string;
+	diagramId: string;
+	point: Point;
+	connectLineId?: string;
 };
 
 export type EllipseData = DiagramBaseData & {

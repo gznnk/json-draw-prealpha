@@ -85,9 +85,6 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 	const onDiagramDrop = useCallback(
 		(e: DiagramDragDropEvent) => {
-			// alert("onDiagramDrop");
-			console.log(e);
-
 			if (e.dropItem.type === "connectPoint") {
 				const dropItem = getDiagramById(canvasState.items, e.dropItem.id);
 				const targetItem = getDiagramById(canvasState.items, e.id);
