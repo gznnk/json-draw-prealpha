@@ -247,27 +247,6 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 			});
 		};
 
-		// TODO 使ってない
-		/**
-		 * ドラッグ中のポインターの座標（SvgCanvas上の座標）を取得する
-		 *
-		 * @param e
-		 * @returns
-		 */
-		const getPointerPointOnDrag = (
-			e: React.PointerEvent<SVGElement>,
-		): Point => {
-			const dragX = state.point.x + (e.clientX - startX.current);
-			const dragY = state.point.y + (e.clientY - startY.current);
-			const x = dragX + e.clientX - gRef.current?.getBoundingClientRect().left;
-			const y = dragY + e.clientY - gRef.current?.getBoundingClientRect().top;
-
-			return {
-				x,
-				y,
-			};
-		};
-
 		/**
 		 * ドラッグ領域内でのポインターの押下イベントハンドラ
 		 *
