@@ -154,6 +154,7 @@ const Group: React.FC<GroupProps> = memo(
 				onDiagramDragEndByGroup,
 				onDiagramSelect,
 				onDiagramConnect,
+				onConnectPointMove,
 				items = [],
 			},
 			ref,
@@ -550,6 +551,7 @@ const Group: React.FC<GroupProps> = memo(
 					onDiagramResizeEnd: handleChildDiagramResizeEnd,
 					onDiagramSelect: handleChildDiagramSelect,
 					onDiagramConnect: onDiagramConnect,
+					onConnectPointMove: onConnectPointMove,
 					ref: (r: DiagramRef) => {
 						diagramsFunctionsRef.current[item.id] = r;
 					},

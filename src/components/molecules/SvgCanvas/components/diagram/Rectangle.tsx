@@ -13,6 +13,7 @@ import {
 import type { DiagramRef, RectangleData } from "../../types/DiagramTypes";
 import type {
 	DiagramHoverEvent,
+	DiagramDragEvent,
 	DiagramResizeEvent,
 	GroupDragEvent,
 	GroupResizeEvent,
@@ -27,6 +28,7 @@ import RectangleBase from "../core/RectangleBase";
 
 // RectangleBase関連関数をインポート
 import {
+	calcArrangment,
 	calcArrangmentOnGroupResize,
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
@@ -58,6 +60,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				onDiagramResizeEnd,
 				onDiagramSelect,
 				onDiagramConnect,
+				onConnectPointMove,
 			},
 			ref,
 		) => {
@@ -170,6 +173,26 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				[onDiagramResizeEnd, id, point, width, height],
 			);
 
+			const handleDiagramDrag = useCallback(
+				(e: DiagramDragEvent) => {
+					const dx = e.endPoint.x - e.startPoint.x;
+					const dy = e.endPoint.y - e.startPoint.y;
+
+					for (const cp of connectPoints ?? []) {
+						onConnectPointMove?.({
+							id: cp.id,
+							point: {
+								x: cp.point.x + dx,
+								y: cp.point.y + dy,
+							},
+						});
+					}
+
+					onDiagramDrag?.(e);
+				},
+				[onDiagramDrag, onConnectPointMove, connectPoints],
+			);
+
 			/**
 			 * 短形領域の変更中イベントハンドラ
 			 *
@@ -229,7 +252,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 						isSelected={isSelected}
 						onDiagramClick={onDiagramClick}
 						onDiagramDragStart={onDiagramDragStart}
-						onDiagramDrag={onDiagramDrag}
+						onDiagramDrag={handleDiagramDrag}
 						onDiagramDragEnd={onDiagramDragEnd}
 						onDiagramResizeStart={onDiagramResizeStart}
 						onDiagramResizing={handleDiagramResizing}
@@ -253,6 +276,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					{connectPoints?.map((cp) => (
 						<ConnectPoint
 							key={cp.id}
+							name={cp.name}
 							id={cp.id}
 							point={cp.point}
 							visible={isHovered && !isTransformimg}

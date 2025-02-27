@@ -193,7 +193,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 			return (
 				<RectangleBase
 					id={id}
-					type="ellipse"
+					type="Ellipse"
 					point={point}
 					width={width}
 					height={height}

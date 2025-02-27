@@ -15,6 +15,7 @@ import type {
 	DiagramSelectEvent,
 	GroupDragEvent,
 	GroupResizeEvent,
+	ConnectPointMoveEvent,
 } from "./EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -49,7 +50,6 @@ export type ConnectPointData = {
 	id: string;
 	point: Point;
 	name: string;
-	connectLineId?: string;
 };
 
 export type EllipseData = DiagramBaseData & {
@@ -97,6 +97,7 @@ export type DiagramBaseProps = DiagramBaseData & {
 	onDiagramSelect?: (e: DiagramSelectEvent) => void;
 	onDiagramHoverChange?: (e: DiagramHoverEvent) => void;
 	onDiagramConnect?: (e: DiagramConnectEvent) => void;
+	onConnectPointMove?: (e: ConnectPointMoveEvent) => void;
 	ref?: React.Ref<DiagramRef>;
 };
 

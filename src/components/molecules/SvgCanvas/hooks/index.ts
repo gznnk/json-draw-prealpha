@@ -17,6 +17,7 @@ import type {
 	DiagramResizeEvent,
 	DiagramDragDropEvent,
 	DiagramConnectEvent,
+	ConnectPointMoveEvent,
 } from "../types/EventTypes";
 
 // SvgCanvas関連関数をインポート
@@ -95,6 +96,12 @@ const applyRecursive = (items: Diagram[], func: (item: Diagram) => Diagram) => {
 	});
 };
 
+/**
+ * SVGキャンバスのフック
+ *
+ * @param initialItems
+ * @returns
+ */
 export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
 		items: initialItems,
@@ -160,7 +167,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				isSelected: false,
 				items: [
 					{
-						id: generateId(),
+						id: e.startPoint.id,
 						type: "LinePoint",
 						point: startItem?.point ?? { x: 0, y: 0 },
 						width: 0,
@@ -169,7 +176,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 						isSelected: false,
 					},
 					{
-						id: generateId(),
+						id: e.endPoint.id,
 						type: "LinePoint",
 						point: endItem?.point ?? { x: 0, y: 0 },
 						width: 0,
@@ -183,6 +190,16 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		[canvasState.items],
 	);
 
+	const onConnectPointMove = useCallback((e: ConnectPointMoveEvent) => {
+		console.log("move");
+		setCanvasState((prevState) => ({
+			...prevState,
+			items: applyRecursive(prevState.items, (item) =>
+				item.id === e.id ? { ...item, point: e.point } : item,
+			),
+		}));
+	}, []);
+
 	const canvasProps = {
 		...canvasState,
 		onDiagramDragEnd,
@@ -192,6 +209,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onDiagramResizeEnd,
 		onDiagramSelect,
 		onDiagramConnect,
+		onConnectPointMove,
 	};
 
 	const getSelectedItem = useCallback(() => {

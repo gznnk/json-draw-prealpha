@@ -103,3 +103,8 @@ export type DiagramConnectEvent = {
 		// diagramId: string;
 	};
 };
+
+export type ConnectPointMoveEvent = {
+	id: string;
+	point: Point;
+};
