@@ -5,11 +5,39 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 import type { DraggableProps } from "../core/Draggable";
 import Draggable from "../core/Draggable";
 
+/**
+ * ドラッグポイントコンポーネントのPropsの型定義
+ *
+ * @property {string} [id] ID
+ * @property {DiagramType} [type] 図形の種類
+ * @property {Point} [point] 座標
+ * @property {DragDirection} [direction] ドラッグ方向
+ * @property {boolean} [allowXDecimal] X座標の小数点許可フラグ
+ * @property {boolean} [allowYDecimal] Y座標の小数点許可フラグ
+ * @property {string} [cursor] カーソル
+ * @property {boolean} [visible] 表示フラグ
+ * @property {(e: DiagramDragEvent) => void} [onDragStart] ドラッグ開始時のイベントハンドラ
+ * @property {(e: DiagramDragEvent) => void} [onDrag] ドラッグ中のイベントハンドラ
+ * @property {(e: DiagramDragEvent) => void} [onDragEnd] ドラッグ終了時のイベントハンドラ
+ * @property {(e: DiagramDragDropEvent) => void} [onDragOver] ドラッグオーバー時のイベントハンドラ
+ * @property {(e: DiagramDragDropEvent) => void} [onDragLeave] ドラッグリーブ時のイベントハンドラ
+ * @property {(e: DiagramDragDropEvent) => void} [onDrop] ドロップ時のイベントハンドラ
+ * @property {(e: DiagramHoverEvent) => void} [onHoverChange] ホバー変更時のイベントハンドラ
+ * @property {(point: Point) => Point} [dragPositioningFunction] ドラッグ位置変換関数
+ * @property {string} [color] 色
+ * @property {boolean} [hidden] 非表示フラグ
+ */
 export type DragPointProps = DraggableProps & {
 	color?: string;
 	hidden?: boolean;
 };
 
+/**
+ * ドラッグポイントコンポーネント
+ *
+ * @param {DragPointProps} props ドラッグポイントのProps
+ * @returns {JSX.Element} ドラッグポイントコンポーネント
+ */
 const DragPoint = forwardRef<SVGGElement, DragPointProps>(
 	(
 		{

@@ -169,10 +169,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		const isArrowDragging = useRef(false);
 		// ドラッグエンターしたかのフラグ
 		const dragEntered = useRef(false);
-
-		// ドラッグ開始時の、このドラッグ領域の座標からのポインターの相対位置
-		const startX = useRef(0);
-		const startY = useRef(0);
+		// ドラッグ開始時のブラウザウィンドウ上のポインタの座標
+		const startClientPoint = useRef<Point>({ x: 0, y: 0 });
 
 		// ドラッグ領域用のG要素への参照
 		const gRef = useRef<SVGGElement>({} as SVGGElement);
@@ -223,8 +221,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 		const getPointOnDrag = useCallback(
 			(e: React.PointerEvent<SVGElement>): Point => {
 				// ドラッグ中のポインターの移動量から、ドラッグ中のこの領域の座標を計算
-				let x = state.point.x + (e.clientX - startX.current);
-				let y = state.point.y + (e.clientY - startY.current);
+				let x = state.point.x + (e.clientX - startClientPoint.current.x);
+				let y = state.point.y + (e.clientY - startClientPoint.current.y);
 
 				if (direction === DragDirection.Horizontal) {
 					// 水平移動の場合はY座標を固定
@@ -265,9 +263,11 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 					isPointerDown.current = true;
 
-					// ドラッグ開始時の座標を記憶
-					startX.current = e.clientX;
-					startY.current = e.clientY;
+					// ドラッグ開始時のブラウザウィンドウ上のポインタの座標を記憶
+					startClientPoint.current = {
+						x: e.clientX,
+						y: e.clientY,
+					};
 
 					// ポインター押下イベント発火
 					onPointerDown?.({
@@ -303,8 +303,8 @@ const Draggable = forwardRef<SVGGElement, DraggableProps>(
 
 				if (
 					!isDragging.current &&
-					(Math.abs(e.clientX - startX.current) > 3 ||
-						Math.abs(e.clientY - startY.current) > 3)
+					(Math.abs(e.clientX - startClientPoint.current.x) > 3 ||
+						Math.abs(e.clientY - startClientPoint.current.y) > 3)
 				) {
 					// ドラッグ中でない場合、かつポインターの移動量が一定以上の場合はドラッグ開始とする
 					onDragStart?.(dragEvent);
