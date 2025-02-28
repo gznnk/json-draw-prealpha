@@ -3,6 +3,7 @@ import { useSvgCanvas } from "./components/molecules/SvgCanvas/hooks";
 import Button from "./components/atoms/Button";
 import Input from "./components/atoms/Input";
 import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramTypes";
+import { createRectangleData } from "./components/molecules/SvgCanvas/components/diagram/Rectangle";
 
 import { getLogger } from "./utils/Logger";
 const logger = getLogger("App");
@@ -355,44 +356,24 @@ const testItems3 = [
 ] as Diagram[];
 
 const testItems4 = [
-	{
-		id: "1",
-		type: "Rectangle",
-		point: { x: 200, y: 200 },
-		width: 100,
-		height: 100,
-		fill: "transparent",
-		stroke: "black",
-		strokeWidth: "1px",
-		keepProportion: false,
-		isSelected: false,
-		connectPoints: [
-			{
-				id: "1-1",
-				point: { x: 200, y: 200 },
-				name: "LeftTop",
-			},
-		],
-	},
-	{
-		id: "2",
-		type: "Rectangle",
-		point: { x: 500, y: 500 },
-		width: 100,
-		height: 100,
-		fill: "transparent",
-		stroke: "black",
-		strokeWidth: "1px",
-		keepProportion: false,
-		isSelected: false,
-		connectPoints: [
-			{
-				id: "2-1",
-				point: { x: 500, y: 500 },
-				name: "LeftTop",
-			},
-		],
-	},
+	createRectangleData(
+		crypto.randomUUID(),
+		{ x: 200, y: 200 },
+		100,
+		100,
+		"transparent",
+		"black",
+		"1px",
+	),
+	createRectangleData(
+		crypto.randomUUID(),
+		{ x: 500, y: 500 },
+		100,
+		100,
+		"transparent",
+		"black",
+		"1px",
+	),
 ] as Diagram[];
 
 function App() {
@@ -411,6 +392,18 @@ function App() {
 			height: 100,
 			keepProportion: false,
 			isSelected: false,
+			items: [
+				{
+					id: crypto.randomUUID(),
+					type: "ConnectPoint",
+					point: { x: 0, y: 0 },
+					name: "leftTopPoint",
+					keepProportion: false,
+					isSelected: false,
+					width: 200,
+					height: 100,
+				},
+			],
 		});
 	};
 

@@ -4,12 +4,9 @@
 import type { Point } from "../../../types/CoordinateTypes";
 
 /**
- * 矩形の配置情報
+ * 矩形のドラッグポイントの位置
  */
-export type RectangleBaseArrangement = {
-	point: Point;
-	width: number;
-	height: number;
+export type RectangleBaseDragPoints = {
 	leftTopPoint: Point;
 	leftBottomPoint: Point;
 	rightTopPoint: Point;
@@ -18,6 +15,15 @@ export type RectangleBaseArrangement = {
 	leftCenterPoint: Point;
 	rightCenterPoint: Point;
 	bottomCenterPoint: Point;
+};
+
+/**
+ * 矩形の配置情報
+ */
+export type RectangleBaseArrangement = RectangleBaseDragPoints & {
+	point: Point;
+	width: number;
+	height: number;
 };
 
 /**

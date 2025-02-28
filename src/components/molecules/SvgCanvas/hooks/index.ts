@@ -45,23 +45,23 @@ const getDiagramById = (
 	}
 };
 
-const getConnectPointById = (
-	diagrams: Diagram[],
-	id: string,
-): ConnectPointData | undefined => {
-	for (const diagram of diagrams) {
-		if (isGroupData(diagram)) {
-			const ret = getConnectPointById(diagram.items || [], id);
-			if (ret) {
-				return ret;
-			}
-		}
-		const ret = diagram.connectPoints?.find((cp) => cp.id === id);
-		if (ret) {
-			return ret;
-		}
-	}
-};
+// const getConnectPointById = (
+// 	diagrams: Diagram[],
+// 	id: string,
+// ): ConnectPointData | undefined => {
+// 	for (const diagram of diagrams) {
+// 		if (isGroupData(diagram)) {
+// 			const ret = getConnectPointById(diagram.items || [], id);
+// 			if (ret) {
+// 				return ret;
+// 			}
+// 		}
+// 		const ret = diagram.connectPoints?.find((cp) => cp.id === id);
+// 		if (ret) {
+// 			return ret;
+// 		}
+// 	}
+// };
 
 const generateId = (): string => crypto.randomUUID();
 
@@ -106,6 +106,15 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
 		items: initialItems,
 	});
+
+	const onDiagramDrag = useCallback((e: DiagramDragEvent) => {
+		// setCanvasState((prevState) => ({
+		// 	...prevState,
+		// 	items: applyRecursive(prevState.items, (item) =>
+		// 		item.id === e.id ? { ...item, point: e.endPoint } : item,
+		// 	),
+		// }));
+	}, []);
 
 	const onDiagramDragEnd = useCallback((e: DiagramDragEvent) => {
 		logger.debug("onDiagramDragEnd", e);
@@ -155,8 +164,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const onDiagramConnect = useCallback(
 		(e: DiagramConnectEvent) => {
 			// alert("connect");
-			const startItem = getConnectPointById(canvasState.items, e.startPoint.id);
-			const endItem = getConnectPointById(canvasState.items, e.endPoint.id);
+			const startItem = getDiagramById(canvasState.items, e.startPoint.id);
+			const endItem = getDiagramById(canvasState.items, e.endPoint.id);
 			addItem({
 				id: generateId(),
 				type: "Line",
@@ -191,7 +200,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	);
 
 	const onConnectPointMove = useCallback((e: ConnectPointMoveEvent) => {
-		console.log("move");
+		//console.log("move");
+		//console.log(e);
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
@@ -202,6 +212,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 	const canvasProps = {
 		...canvasState,
+		onDiagramDrag,
 		onDiagramDragEnd,
 		onDiagramDragEndByGroup: onDiagramDragEnd,
 		onDiagramDrop,

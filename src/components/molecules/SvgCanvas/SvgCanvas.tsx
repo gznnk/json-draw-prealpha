@@ -28,6 +28,7 @@ const ContainerDiv = styled.div`
 type SvgCanvasProps = {
 	title?: string;
 	items: Array<Diagram>;
+	onDiagramDrag?: (e: DiagramDragEvent) => void;
 	onDiagramDragEnd?: (e: DiagramDragEvent) => void;
 	onDiagramDragEndByGroup?: (e: DiagramDragEvent) => void;
 	onDiagramDrop?: (e: DiagramDragDropEvent) => void;
@@ -42,6 +43,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 	({
 		title,
 		items,
+		onDiagramDrag,
 		onDiagramDragEnd,
 		onDiagramDragEndByGroup,
 		onDiagramDrop,
@@ -56,6 +58,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 			const props = {
 				...item,
 				key: item.id,
+				onDiagramDrag,
 				onDiagramDragEnd,
 				onDiagramDragEndByGroup,
 				onDiagramDrop,

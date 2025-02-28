@@ -43,7 +43,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	// ドラッグ状態の管理
 	const [isDragging, setIsDragging] = useState(false);
 
-	const svgRef = useRef<SVGPathElement>({} as SVGPathElement);
+	const svgRef = useRef<SVGPathElement | null>(null);
 	const dragPointRef = useRef<SVGGElement>({} as SVGGElement);
 
 	const handleDragStart = useCallback((_e: DiagramDragEvent) => {
@@ -52,7 +52,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
-			svgRef.current.setAttribute(
+			svgRef?.current?.setAttribute(
 				"d",
 				`M ${point.x} ${point.y} L ${e.endPoint.x} ${e.endPoint.y}`,
 			);
@@ -63,7 +63,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	const handleDragEnd = useCallback(
 		(_e: DiagramDragEvent) => {
 			setIsDragging(false);
-			svgRef.current.removeAttribute("d");
+			svgRef?.current?.removeAttribute("d");
 			dragPointRef.current.setAttribute(
 				"transform",
 				`translate(${point.x}, ${point.y})`,

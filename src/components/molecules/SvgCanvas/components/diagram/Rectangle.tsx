@@ -10,7 +10,13 @@ import {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { DiagramRef, RectangleData } from "../../types/DiagramTypes";
+import type { Point } from "../../types/CoordinateTypes";
+import type {
+	ConnectPointData,
+	DiagramRef,
+	RectangleData,
+	Diagram,
+} from "../../types/DiagramTypes";
 import type {
 	DiagramHoverEvent,
 	DiagramDragEvent,
@@ -22,6 +28,9 @@ import type {
 // SvgCanvas関連コンポーネントをインポート
 import ConnectPoint from "../connector/ConnectPoint";
 
+// RectangleBase関連型定義をインポート
+import type { RectangleBaseDragPoints } from "../core/RectangleBase/RectangleBaseTypes";
+
 // RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
 import RectangleBase from "../core/RectangleBase";
@@ -32,6 +41,117 @@ import {
 	calcArrangmentOnGroupResize,
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
+
+export const createRectangleData = (
+	id: string,
+	point: Point,
+	width: number,
+	height: number,
+	fill: string,
+	stroke: string,
+	strokeWidth: string,
+): RectangleData => {
+	const arrangement = calcArrangment(point, {
+		x: point.x + width,
+		y: point.y + height,
+	});
+
+	const items: Diagram[] = [];
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.leftTopPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "leftTopPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.rightTopPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "rightTopPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.leftBottomPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "leftBottomPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.rightBottomPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "rightBottomPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.topCenterPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "topCenterPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.bottomCenterPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "bottomCenterPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.leftCenterPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "leftCenterPoint",
+	});
+	items.push({
+		id: crypto.randomUUID(),
+		type: "ConnectPoint",
+		point: arrangement.rightCenterPoint,
+		width: 0,
+		height: 0,
+		keepProportion: false,
+		isSelected: false,
+		name: "rightCenterPoint",
+	});
+
+	return {
+		id,
+		type: "Rectangle",
+		point,
+		width,
+		height,
+		fill,
+		stroke,
+		strokeWidth,
+		keepProportion: false,
+		isSelected: false,
+		items,
+	} as RectangleData;
+};
 
 export type RectangleProps = RectangleBaseProps & RectangleData;
 
@@ -49,7 +169,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				keepProportion = false,
 				tabIndex = 0,
 				isSelected = false,
-				connectPoints,
+				items,
 				onDiagramClick,
 				onDiagramDragStart,
 				onDiagramDrag,
@@ -87,6 +207,8 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			 */
 			const handleGroupDrag = useCallback(
 				(e: GroupDragEvent) => {
+					setIsTransforming(true); // TODO
+
 					// グループのドラッグに伴うこの図形の座標を計算
 					const newPoint = calcPointOnGroupDrag(e, point);
 
@@ -96,8 +218,6 @@ const Rectangle: React.FC<RectangleProps> = memo(
 						"transform",
 						`translate(${newPoint.x}, ${newPoint.y})`,
 					);
-
-					setIsTransforming(true); // TODO
 				},
 				[point],
 			);
@@ -173,49 +293,122 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				[onDiagramResizeEnd, id, point, width, height],
 			);
 
-			const handleDiagramDrag = useCallback(
+			/**
+			 * 四角形のドラッグ開始イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ開始イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDragStart = useCallback(
 				(e: DiagramDragEvent) => {
-					const dx = e.endPoint.x - e.startPoint.x;
-					const dy = e.endPoint.y - e.startPoint.y;
-
-					for (const cp of connectPoints ?? []) {
-						onConnectPointMove?.({
-							id: cp.id,
-							point: {
-								x: cp.point.x + dx,
-								y: cp.point.y + dy,
-							},
-						});
-					}
-
-					onDiagramDrag?.(e);
+					setIsTransforming(true);
+					onDiagramDragStart?.(e);
 				},
-				[onDiagramDrag, onConnectPointMove, connectPoints],
+				[onDiagramDragStart],
 			);
 
 			/**
-			 * 短形領域の変更中イベントハンドラ
+			 * 接続ポイントの位置を更新
 			 *
-			 * @param {DiagramResizeEvent} e 短形領域の変更中イベント
+			 * @param {Point} originalPoint 矩形の一つの頂点を表す点
+			 * @param {Point} diagonalPoint 矩形の対角線上のもう一つの頂点を表す点
+			 * @returns {void}
+			 */
+			const updateConnectPoints = useCallback(
+				(originalPoint: Point, diagonalPoint: Point) => {
+					const newArrangement = calcArrangment(originalPoint, diagonalPoint);
+
+					for (const cp of (items as ConnectPointData[]) ?? []) {
+						const cPoint = (newArrangement as RectangleBaseDragPoints)[
+							cp.name as keyof RectangleBaseDragPoints
+						];
+
+						onConnectPointMove?.({
+							id: cp.id,
+							point: {
+								x: cPoint.x,
+								y: cPoint.y,
+							},
+						});
+					}
+				},
+				[onConnectPointMove, items],
+			);
+
+			/**
+			 * 四角形のドラッグ中イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ中イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDrag = useCallback(
+				(e: DiagramDragEvent) => {
+					updateConnectPoints(e.endPoint, {
+						x: e.endPoint.x + width,
+						y: e.endPoint.y + height,
+					});
+
+					onDiagramDrag?.(e);
+				},
+				[onDiagramDrag, updateConnectPoints, width, height],
+			);
+
+			/**
+			 * 四角形のドラッグ完了イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ完了イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDragEnd = useCallback(
+				(e: DiagramDragEvent) => {
+					onDiagramDragEnd?.(e);
+					setIsTransforming(false);
+				},
+				[onDiagramDragEnd],
+			);
+
+			/**
+			 * 四角形のドラッグ開始イベントハンドラ
+			 *
+			 * @param {DiagramResizeEvent} e 四角形のドラッグ開始イベント
+			 * @returns {void}
+			 */
+			const handleDiagramResizeStart = useCallback(
+				(e: DiagramResizeEvent) => {
+					setIsTransforming(true);
+					onDiagramResizeStart?.(e);
+				},
+				[onDiagramResizeStart],
+			);
+
+			/**
+			 * 四角形のリサイズ中イベントハンドラ
+			 *
+			 * @param {DiagramResizeEvent} e 四角形のリサイズ中イベント
 			 */
 			const handleDiagramResizing = useCallback(
 				(e: DiagramResizeEvent) => {
+					setIsTransforming(true); // TODO
+
 					// 描画処理負荷軽減のため、DOMを直接操作
 					svgRef.current?.setAttribute("width", `${e.width}`);
 					svgRef.current?.setAttribute("height", `${e.height}`);
 
+					updateConnectPoints(e.point, {
+						x: e.point.x + e.width,
+						y: e.point.y + e.height,
+					});
+
 					// グループ側に変更中イベントを通知
 					onDiagramResizing?.(e);
-
-					setIsTransforming(true); // TODO
 				},
-				[onDiagramResizing],
+				[onDiagramResizing, updateConnectPoints],
 			);
 
 			/**
-			 * 短径領域の変更完了イベントハンドラ
+			 * 四角形のリサイズ完了イベントハンドラ
 			 *
-			 * @param {DiagramResizeEvent} e 短径領域の変更完了イベント
+			 * @param {DiagramResizeEvent} e 四角形のリサイズ完了イベント
 			 *
 			 */
 			const handleDiagramResizeEnd = useCallback(
@@ -251,10 +444,10 @@ const Rectangle: React.FC<RectangleProps> = memo(
 						keepProportion={keepProportion}
 						isSelected={isSelected}
 						onDiagramClick={onDiagramClick}
-						onDiagramDragStart={onDiagramDragStart}
+						onDiagramDragStart={handleDiagramDragStart}
 						onDiagramDrag={handleDiagramDrag}
-						onDiagramDragEnd={onDiagramDragEnd}
-						onDiagramResizeStart={onDiagramResizeStart}
+						onDiagramDragEnd={handleDiagramDragEnd}
+						onDiagramResizeStart={handleDiagramResizeStart}
 						onDiagramResizing={handleDiagramResizing}
 						onDiagramResizeEnd={handleDiagramResizeEnd}
 						onDiagramSelect={onDiagramSelect}
@@ -273,16 +466,21 @@ const Rectangle: React.FC<RectangleProps> = memo(
 							strokeWidth={strokeWidth}
 						/>
 					</RectangleBase>
-					{connectPoints?.map((cp) => (
-						<ConnectPoint
-							key={cp.id}
-							name={cp.name}
-							id={cp.id}
-							point={cp.point}
-							visible={isHovered && !isTransformimg}
-							onConnect={onDiagramConnect}
-						/>
-					))}
+					{!isSelected &&
+						(items as ConnectPointData[])?.map((cp) => (
+							<ConnectPoint
+								key={cp.id}
+								id={cp.id}
+								name={cp.name}
+								point={cp.point}
+								width={0}
+								height={0}
+								isSelected={false}
+								keepProportion={false}
+								visible={isHovered && !isTransformimg}
+								onConnect={onDiagramConnect}
+							/>
+						))}
 				</>
 			);
 		},

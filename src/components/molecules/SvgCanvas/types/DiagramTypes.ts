@@ -43,12 +43,10 @@ export type DiagramBaseData = {
 	height: number;
 	keepProportion: boolean;
 	isSelected: boolean;
-	connectPoints?: ConnectPointData[];
+	items?: Diagram[];
 };
 
-export type ConnectPointData = {
-	id: string;
-	point: Point;
+export type ConnectPointData = DiagramBaseData & {
 	name: string;
 };
 
@@ -64,7 +62,7 @@ export type LineData = GroupData & {
 	strokeWidth: string;
 };
 export type GroupData = DiagramBaseData & {
-	items: Diagram[];
+	items: Diagram[]; // TODO いらない？
 };
 export type RectangleData = DiagramBaseData & {
 	fill: string;
@@ -74,6 +72,7 @@ export type RectangleData = DiagramBaseData & {
 const DummyComponent: React.FC<DiagramBaseData> = () => null;
 
 type DiagramCombined =
+	| ConnectPointData
 	| EllipseData
 	| GroupData
 	| LineData
