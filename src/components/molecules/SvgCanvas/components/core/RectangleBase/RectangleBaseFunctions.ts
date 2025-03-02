@@ -5,7 +5,15 @@ import type {
 	GroupDragEvent,
 	GroupResizeEvent,
 } from "../../../types/EventTypes";
-import type { RectangleBaseArrangement } from "./RectangleBaseTypes";
+import type {
+	RectangleBaseArrangement,
+	RectangleBaseVertices,
+} from "./RectangleBaseTypes";
+
+import {
+	affineTransformation,
+	degreesToRadians,
+} from "../../../functions/Math";
 
 // TODO: 場所
 const rotatePoint = (center: Point, x: number, y: number, rotation: number) => {
@@ -15,6 +23,102 @@ const rotatePoint = (center: Point, x: number, y: number, rotation: number) => {
 	return {
 		x: center.x + dx * Math.cos(rad) - dy * Math.sin(rad),
 		y: center.y + dx * Math.sin(rad) + dy * Math.cos(rad),
+	};
+};
+
+export const calcRectangleVertices = (
+	point: Point, // 左上の点
+	width: number,
+	height: number,
+	rotation: number,
+): RectangleBaseVertices => {
+	const halfWidth = width / 2;
+	const halfHeight = height / 2;
+
+	const tx = point.x + halfWidth;
+	const ty = point.y + halfHeight;
+
+	const leftTopPoint = affineTransformation(
+		{ x: -halfWidth, y: -halfWidth },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const leftBottomPoint = affineTransformation(
+		{ x: -halfWidth, y: halfWidth },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const rightTopPoint = affineTransformation(
+		{ x: halfWidth, y: -halfWidth },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const rightBottomPoint = affineTransformation(
+		{ x: halfWidth, y: halfWidth },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const topCenterPoint = affineTransformation(
+		{ x: 0, y: -halfWidth },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const leftCenterPoint = affineTransformation(
+		{ x: -halfWidth, y: 0 },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const rightCenterPoint = affineTransformation(
+		{ x: halfWidth, y: 0 },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	const bottomCenterPoint = affineTransformation(
+		{ x: 0, y: halfWidth },
+		1,
+		1,
+		degreesToRadians(rotation),
+		tx,
+		ty,
+	);
+
+	return {
+		leftTopPoint,
+		leftBottomPoint,
+		rightTopPoint,
+		rightBottomPoint,
+		topCenterPoint,
+		leftCenterPoint,
+		rightCenterPoint,
+		bottomCenterPoint,
 	};
 };
 

@@ -2,6 +2,18 @@
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../../types/CoordinateTypes";
+import type { RectangleBaseData } from "../../../types/DiagramTypes";
+
+export type RectangleBaseVertices = {
+	leftTopPoint: Point;
+	leftBottomPoint: Point;
+	rightTopPoint: Point;
+	rightBottomPoint: Point;
+	topCenterPoint: Point;
+	leftCenterPoint: Point;
+	rightCenterPoint: Point;
+	bottomCenterPoint: Point;
+};
 
 /**
  * 矩形のドラッグポイントの位置
@@ -48,7 +60,7 @@ export enum DragPointType {
 /**
  * 矩形の基底コンポーネントのState型定義
  */
-export type RectangleBaseState = RectangleBaseArrangement & {
+export type RectangleBaseState = RectangleBaseVertices & {
 	aspectRatio: number;
 	isDragging: boolean;
 	draggingPointType?: DragPointType;

@@ -37,10 +37,12 @@ import RectangleBase from "../core/RectangleBase";
 
 // RectangleBase関連関数をインポート
 import {
+	calcRectangleVertices,
 	calcArrangment,
 	calcArrangmentOnGroupResize,
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
+import { degreesToRadians } from "../../functions/Math";
 
 export type RectangleProps = RectangleBaseProps & RectangleData;
 
@@ -330,6 +332,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			return (
 				<>
 					<RectangleBase
+						key={`rect-base-${id}`}
 						id={id}
 						type="Rectangle"
 						point={point}
@@ -352,16 +355,17 @@ const Rectangle: React.FC<RectangleProps> = memo(
 						ref={rectangleBaseRef}
 					>
 						<rect
+							key={`rect-${id}`}
 							id={id}
 							x={0}
 							y={0}
 							width={width}
 							height={height}
-							ref={svgRef}
 							fill={fill}
 							stroke={stroke}
 							strokeWidth={strokeWidth}
-							transform={`rotate(${rotation} ${width / 2} ${height / 2})`}
+							transform={`rotate(${rotation}, ${width / 2}, ${height / 2})`}
+							ref={svgRef}
 						/>
 					</RectangleBase>
 					{!isSelected &&
@@ -371,10 +375,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 								id={cp.id}
 								name={cp.name}
 								point={cp.point}
-								width={0}
-								height={0}
 								isSelected={false}
-								keepProportion={false}
 								visible={isHovered && !isTransformimg}
 								onConnect={onDiagramConnect}
 							/>
@@ -396,89 +397,62 @@ export const createRectangleData = (
 	stroke: string,
 	strokeWidth: string,
 ): RectangleData => {
-	const arrangement = calcArrangment(point, {
-		x: point.x + width,
-		y: point.y + height,
-	});
+	const vertices = calcRectangleVertices(point, width, height, 0);
 
 	const items: Diagram[] = [];
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.leftTopPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.leftTopPoint,
 		isSelected: false,
 		name: "leftTopPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.rightTopPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.rightTopPoint,
 		isSelected: false,
 		name: "rightTopPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.leftBottomPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.leftBottomPoint,
 		isSelected: false,
 		name: "leftBottomPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.rightBottomPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.rightBottomPoint,
 		isSelected: false,
 		name: "rightBottomPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.topCenterPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.topCenterPoint,
 		isSelected: false,
 		name: "topCenterPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.bottomCenterPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.bottomCenterPoint,
 		isSelected: false,
 		name: "bottomCenterPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.leftCenterPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.leftCenterPoint,
 		isSelected: false,
 		name: "leftCenterPoint",
 	});
 	items.push({
 		id: crypto.randomUUID(),
 		type: "ConnectPoint",
-		point: arrangement.rightCenterPoint,
-		width: 0,
-		height: 0,
-		keepProportion: false,
+		point: vertices.rightCenterPoint,
 		isSelected: false,
 		name: "rightCenterPoint",
 	});
@@ -489,6 +463,7 @@ export const createRectangleData = (
 		point,
 		width,
 		height,
+		rotation: degreesToRadians(0),
 		fill,
 		stroke,
 		strokeWidth,

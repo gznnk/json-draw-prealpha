@@ -40,19 +40,22 @@ export type DiagramBaseData = {
 	id: string;
 	type?: DiagramType;
 	point: Point;
-	width: number; // TODO: 場所
-	height: number; // TODO: 場所
-	rotation?: number; // TODO: 場所
-	keepProportion: boolean;
 	isSelected: boolean;
 	items?: Diagram[];
+};
+
+export type RectangleBaseData = DiagramBaseData & {
+	width: number;
+	height: number;
+	rotation: number;
+	keepProportion: boolean;
 };
 
 export type ConnectPointData = DiagramBaseData & {
 	name: string;
 };
 
-export type EllipseData = DiagramBaseData & {
+export type EllipseData = RectangleBaseData & {
 	fill: string;
 	stroke: string;
 	strokeWidth: string;
@@ -63,20 +66,13 @@ export type LineData = GroupData & {
 	stroke: string;
 	strokeWidth: string;
 };
-export type GroupData = DiagramBaseData & {
+export type GroupData = RectangleBaseData & {
 	items: Diagram[]; // TODO いらない？
 };
 export type RectangleData = DiagramBaseData & {
 	fill: string;
 	stroke: string;
 	strokeWidth: string;
-};
-
-export type RectangleBaseData = DiagramBaseData & {
-	scaleX: number;
-	scaleY: number;
-	rotation: number; // in radians
-	translation: Point;
 };
 
 const DummyComponent: React.FC<DiagramBaseData> = () => null;
