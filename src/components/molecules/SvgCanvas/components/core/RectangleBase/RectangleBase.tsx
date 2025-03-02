@@ -11,6 +11,7 @@ import {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
+import type { Point } from "../../../types/CoordinateTypes";
 import type { DiagramBaseProps } from "../../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
@@ -42,6 +43,10 @@ import DragPointTopCenter from "./DragPointTopCenter";
 import { calcArrangment } from "./RectangleBaseFunctions";
 
 export type RectangleBaseProps = DiagramBaseProps & {
+	scaleX: number;
+	scaleY: number;
+	rotation: number; // in radians
+	translation: Point;
 	tabIndex?: number;
 	children?: React.ReactNode;
 	ref?: React.Ref<SVGGElement>;

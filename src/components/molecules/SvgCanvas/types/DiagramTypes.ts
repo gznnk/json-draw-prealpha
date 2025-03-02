@@ -71,6 +71,14 @@ export type RectangleData = DiagramBaseData & {
 	stroke: string;
 	strokeWidth: string;
 };
+
+export type RectangleBaseData = DiagramBaseData & {
+	scaleX: number;
+	scaleY: number;
+	rotation: number; // in radians
+	translation: Point;
+};
+
 const DummyComponent: React.FC<DiagramBaseData> = () => null;
 
 type DiagramCombined =
@@ -79,7 +87,8 @@ type DiagramCombined =
 	| GroupData
 	| LineData
 	| LinePointData
-	| RectangleData;
+	| RectangleData
+	| RectangleBaseData;
 
 export type Diagram = DiagramCombined & {
 	type: DiagramType;
