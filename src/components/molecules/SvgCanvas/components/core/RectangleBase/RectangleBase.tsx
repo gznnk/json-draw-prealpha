@@ -26,6 +26,9 @@ import type {
 import Draggable from "../Draggable";
 import DragPoint from "../DragPoint";
 
+// SvgCanvas関連カスタムフックをインポート
+import { useDraggable } from "../../../hooks/draggableHooks";
+
 // RectangleBase関連型定義をインポート
 import type {
 	ArrangmentChangeEndEvent,

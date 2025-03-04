@@ -3,7 +3,9 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 
 // SvgCanvas関連コンポーネントをインポート
 import type { DraggableProps } from "../core/Draggable";
-import Draggable from "../core/Draggable";
+
+// SvgCanvas関連カスタムフックをインポート
+import { useDraggable } from "../../hooks/draggableHooks";
 
 /**
  * ドラッグポイントコンポーネントのPropsの型定義
@@ -62,37 +64,42 @@ const DragPoint = forwardRef<SVGGElement, DragPointProps>(
 		},
 		ref,
 	) => {
-		const svgRef = useRef<SVGGElement>({} as SVGGElement);
+		const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
 		useImperativeHandle(ref, () => svgRef.current);
+
+		const draggableProps = useDraggable({
+			id,
+			type,
+			point,
+			direction,
+			allowXDecimal,
+			allowYDecimal,
+			ref: svgRef,
+			onDragStart,
+			onDrag,
+			onDragEnd,
+			onDragOver,
+			onDragLeave,
+			onDrop,
+			onHoverChange,
+			dragPositioningFunction,
+		});
 
 		if (hidden) {
 			return;
 		}
 
 		return (
-			<Draggable
+			<circle
 				id={id}
-				type={type}
-				point={point}
-				direction={direction}
-				allowXDecimal={allowXDecimal}
-				allowYDecimal={allowYDecimal}
+				cx={draggableProps.point.x}
+				cy={draggableProps.point.y}
+				r="5"
+				fill={color}
 				cursor={cursor}
-				visible={visible}
-				outline="1px dashed blue"
-				outlineOffset="4px"
-				onDragStart={onDragStart}
-				onDrag={onDrag}
-				onDragEnd={onDragEnd}
-				onDragOver={onDragOver}
-				onDragLeave={onDragLeave}
-				onDrop={onDrop}
-				onHoverChange={onHoverChange}
-				dragPositioningFunction={dragPositioningFunction}
 				ref={svgRef}
-			>
-				<circle id={id} cx={0} cy={0} r="5" fill={color} />
-			</Draggable>
+				{...draggableProps}
+			/>
 		);
 	},
 );

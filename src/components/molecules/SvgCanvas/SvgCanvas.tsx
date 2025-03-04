@@ -17,6 +17,8 @@ import type {
 	DiagramRotateEvent,
 } from "./types/EventTypes";
 
+import DragPoint from "./components/core/DragPoint";
+
 const ContainerDiv = styled.div`
 	position: absolute;
     top: 0;
@@ -131,6 +133,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 				>
 					<title>{title}</title>
 					{renderedItems}
+					<DragPoint id="dummy-point" point={{ x: 50, y: 50 }} />
 				</svg>
 			</ContainerDiv>
 		);
