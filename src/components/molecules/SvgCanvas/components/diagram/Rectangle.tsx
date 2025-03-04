@@ -4,6 +4,7 @@ import {
 	forwardRef,
 	memo,
 	useCallback,
+	useEffect,
 	useImperativeHandle,
 	useRef,
 	useState,
@@ -23,6 +24,7 @@ import type {
 	DiagramResizeEvent,
 	GroupDragEvent,
 	GroupResizeEvent,
+	DiagramPointerEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -34,6 +36,7 @@ import type { RectangleBaseDragPoints } from "../core/RectangleBase/RectangleBas
 // RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
 import RectangleBase from "../core/RectangleBase";
+import Transformative from "../core/Transformative/Transformative";
 
 // RectangleBase関連関数をインポート
 import {
@@ -44,6 +47,9 @@ import {
 } from "../core/RectangleBase/RectangleBaseFunctions";
 import { degreesToRadians } from "../../functions/Math";
 import { createSvgTransform } from "../../functions/Svg";
+
+// SvgCanvas関連カスタムフックをインポート
+import { useDraggable } from "../../hooks/draggableHooks";
 
 export type RectangleProps = RectangleBaseProps & RectangleData;
 
@@ -80,6 +86,12 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			},
 			ref,
 		) => {
+			// このドラッグ領域の座標 TODO: 内部でもちたくない
+			const [state, setState] = useState({ point });
+			useEffect(() => {
+				setState({ point });
+			}, [point]);
+
 			const [isTransformimg, setIsTransforming] = useState(false);
 			// ホバー状態の管理
 			const [isHovered, setIsHovered] = useState(false);
@@ -243,12 +255,14 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			 */
 			const handleDiagramDrag = useCallback(
 				(e: DiagramDragEvent) => {
+					setState({ point: e.endPoint });
+
 					updateConnectPoints(e.endPoint, {
 						x: e.endPoint.x + width,
 						y: e.endPoint.y + height,
 					});
 
-					onDiagramDrag?.(e);
+					onDiagramDragEnd?.(e);
 				},
 				[onDiagramDrag, updateConnectPoints, width, height],
 			);
@@ -323,6 +337,20 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			);
 
 			/**
+			 * ポインターダウンイベントハンドラ
+			 *
+			 * @returns {void}
+			 */
+			const handlePointerDown = useCallback(() => {
+				if (!isSelected) {
+					// 図形選択イベントを発火
+					onDiagramSelect?.({
+						id,
+					});
+				}
+			}, [id, isSelected, onDiagramSelect]);
+
+			/**
 			 * ホバー状態変更イベントハンドラ
 			 *
 			 * @param {DiagramHoverEvent} e ホバー状態変更イベント
@@ -332,8 +360,64 @@ const Rectangle: React.FC<RectangleProps> = memo(
 				setIsHovered(e.isHovered);
 			}, []);
 
+			const draggableProps = useDraggable({
+				id,
+				type: "Rectangle",
+				point,
+				ref: svgRef,
+				onPointerDown: handlePointerDown,
+				onDragStart: handleDiagramDragStart,
+				onDrag: handleDiagramDrag,
+				onDragEnd: handleDiagramDragEnd,
+				onHoverChange: handleDiagramHoverChange,
+			});
+
 			return (
 				<>
+					<rect
+						key={id}
+						id={id}
+						x={-width / 2}
+						y={-height / 2}
+						width={width}
+						height={height}
+						fill={fill}
+						stroke={stroke}
+						strokeWidth={strokeWidth}
+						transform={createSvgTransform(
+							scaleX,
+							scaleY,
+							degreesToRadians(rotation),
+							point.x,
+							point.y,
+						)}
+						ref={svgRef}
+						{...draggableProps}
+					/>
+					<Transformative
+						id={id}
+						type="Rectangle"
+						point={point}
+						width={width}
+						height={height}
+						rotation={rotation}
+						scaleX={scaleX}
+						scaleY={scaleY}
+						keepProportion={keepProportion}
+						onTransform={(e) => {
+							onDiagramResizeEnd?.({
+								id,
+								point: e.point,
+								width: e.width,
+								height: e.height,
+								rotation: e.rotation,
+								scaleX: e.scaleX,
+								scaleY: e.scaleY,
+							});
+						}}
+					/>
+
+					{/* 
 					<RectangleBase
 						key={`rect-base-${id}`}
 						id={id}
@@ -379,7 +463,9 @@ const Rectangle: React.FC<RectangleProps> = memo(
 							ref={svgRef}
 						/>
 					</RectangleBase>
+					*/}
 					{!isSelected &&
+						false &&
 						(items as ConnectPointData[])?.map((cp) => (
 							<ConnectPoint
 								key={cp.id}
