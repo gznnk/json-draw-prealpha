@@ -4,7 +4,6 @@ import {
 	forwardRef,
 	memo,
 	useCallback,
-	useEffect,
 	useImperativeHandle,
 	useRef,
 	useState,
@@ -36,7 +35,7 @@ import type { RectangleBaseDragPoints } from "../core/RectangleBase/RectangleBas
 // RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
 import RectangleBase from "../core/RectangleBase";
-import Transformative from "../core/Transformative/Transformative";
+import Transformative from "../core/Transformative";
 
 // RectangleBase関連関数をインポート
 import {
@@ -195,20 +194,6 @@ const Rectangle: React.FC<RectangleProps> = memo(
 			);
 
 			/**
-			 * 四角形のドラッグ開始イベントハンドラ
-			 *
-			 * @param {DiagramDragEvent} e 四角形のドラッグ開始イベント
-			 * @returns {void}
-			 */
-			const handleDiagramDragStart = useCallback(
-				(e: DiagramDragEvent) => {
-					setIsTransforming(true);
-					onDiagramDragStart?.(e);
-				},
-				[onDiagramDragStart],
-			);
-
-			/**
 			 * 接続ポイントの位置を更新
 			 *
 			 * @param {Point} originalPoint 矩形の一つの頂点を表す点
@@ -238,6 +223,20 @@ const Rectangle: React.FC<RectangleProps> = memo(
 					}
 				},
 				[onConnectPointMove, rotation, items],
+			);
+
+			/**
+			 * 四角形のドラッグ開始イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ開始イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDragStart = useCallback(
+				(e: DiagramDragEvent) => {
+					setIsTransforming(true);
+					onDiagramDragStart?.(e);
+				},
+				[onDiagramDragStart],
 			);
 
 			/**
@@ -342,6 +341,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 						keepProportion={keepProportion}
 						isSelected={isSelected}
 						onTransform={(e) => {
+							// TODO
 							onDiagramResizeEnd?.({
 								id,
 								point: e.point,

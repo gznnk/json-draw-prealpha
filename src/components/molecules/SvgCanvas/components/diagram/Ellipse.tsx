@@ -14,6 +14,7 @@ import type {
 	DiagramResizeEvent,
 	GroupResizeEvent,
 	GroupDragEvent,
+	DiagramDragEvent,
 } from "../../types/EventTypes";
 
 // RectangleBase関連コンポーネントをインポート
@@ -26,6 +27,13 @@ import {
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
 
+// SvgCanvas関連カスタムフックをインポート
+import { useDraggable } from "../../hooks/draggableHooks";
+
+import { degreesToRadians } from "../../functions/Math";
+import { createSvgTransform } from "../../functions/Svg";
+import Transformative from "../core/Transformative";
+
 export type EllipseProps = RectangleBaseProps & EllipseData;
 
 const Ellipse: React.FC<EllipseProps> = memo(
@@ -36,6 +44,9 @@ const Ellipse: React.FC<EllipseProps> = memo(
 				point,
 				width,
 				height,
+				rotation = 0,
+				scaleX = 1,
+				scaleY = 1,
 				fill = "transparent",
 				stroke = "black",
 				strokeWidth = "1px",
@@ -190,38 +201,116 @@ const Ellipse: React.FC<EllipseProps> = memo(
 				[onDiagramResizeEnd],
 			);
 
+			/**
+			 * 四角形のドラッグ開始イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ開始イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDragStart = useCallback(
+				(e: DiagramDragEvent) => {
+					onDiagramDragStart?.(e);
+				},
+				[onDiagramDragStart],
+			);
+
+			/**
+			 * 四角形のドラッグ中イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ中イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDrag = useCallback(
+				(e: DiagramDragEvent) => {
+					onDiagramDragEnd?.(e);
+				},
+				[onDiagramDragEnd],
+			);
+
+			/**
+			 * 四角形のドラッグ完了イベントハンドラ
+			 *
+			 * @param {DiagramDragEvent} e 四角形のドラッグ完了イベント
+			 * @returns {void}
+			 */
+			const handleDiagramDragEnd = useCallback(
+				(e: DiagramDragEvent) => {
+					onDiagramDragEnd?.(e);
+				},
+				[onDiagramDragEnd],
+			);
+
+			/**
+			 * ポインターダウンイベントハンドラ
+			 *
+			 * @returns {void}
+			 */
+			const handlePointerDown = useCallback(() => {
+				if (!isSelected) {
+					// 図形選択イベントを発火
+					onDiagramSelect?.({
+						id,
+					});
+				}
+			}, [id, isSelected, onDiagramSelect]);
+
+			const draggableProps = useDraggable({
+				id,
+				type: "Ellipse",
+				point,
+				ref: svgRef,
+				onPointerDown: handlePointerDown,
+				onDragStart: handleDiagramDragStart,
+				onDrag: handleDiagramDrag,
+				onDragEnd: handleDiagramDragEnd,
+			});
+
 			return (
-				<RectangleBase
-					id={id}
-					type="Ellipse"
-					point={point}
-					width={width}
-					height={height}
-					keepProportion={keepProportion}
-					tabIndex={tabIndex}
-					isSelected={isSelected}
-					onDiagramClick={onDiagramClick}
-					onDiagramDragStart={onDiagramDragStart}
-					onDiagramDrag={onDiagramDrag}
-					onDiagramDragEnd={onDiagramDragEnd}
-					onDiagramResizeStart={onDiagramResizeStart}
-					onDiagramResizing={handleDiagramResizing}
-					onDiagramResizeEnd={handleDiagramResizeEnd}
-					onDiagramSelect={onDiagramSelect}
-					ref={rectangleBaseRef}
-				>
+				<>
 					<ellipse
 						id={id}
-						cx={width / 2}
-						cy={height / 2}
+						cx={0}
+						cy={0}
 						rx={width / 2}
 						ry={height / 2}
-						ref={svgRef}
 						fill={fill}
 						stroke={stroke}
 						strokeWidth={strokeWidth}
+						transform={createSvgTransform(
+							scaleX,
+							scaleY,
+							degreesToRadians(rotation),
+							point.x,
+							point.y,
+						)}
+						ref={svgRef}
+						{...draggableProps}
 					/>
-				</RectangleBase>
+					<Transformative
+						id={`${id}-transformative`}
+						type="Ellipse"
+						point={point}
+						width={width}
+						height={height}
+						rotation={rotation}
+						scaleX={scaleX}
+						scaleY={scaleY}
+						keepProportion={keepProportion}
+						isSelected={isSelected}
+						onTransform={(e) => {
+							// TODO
+							onDiagramResizeEnd?.({
+								id,
+								point: e.point,
+								width: e.width,
+								height: e.height,
+								rotation: e.rotation,
+								scaleX: e.scaleX,
+								scaleY: e.scaleY,
+							});
+						}}
+					/>
+				</>
 			);
 		},
 	),

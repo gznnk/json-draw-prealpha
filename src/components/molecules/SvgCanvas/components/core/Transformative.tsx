@@ -2,17 +2,17 @@
 import type React from "react";
 import { memo, useCallback, useMemo, useRef } from "react";
 
-import type { Point } from "../../../types/CoordinateTypes";
-import type { DiagramType } from "../../../types/DiagramTypes";
-import type { DiagramDragEvent } from "../../../types/EventTypes";
+import type { Point } from "../../types/CoordinateTypes";
+import type { DiagramType } from "../../types/DiagramTypes";
+import type { DiagramDragEvent } from "../../types/EventTypes";
 
-import DragPoint from "../DragPoint";
+import DragPoint from "./DragPoint";
 
 import {
 	calcRectangleVertices,
 	createLinerDragX2yFunction,
 	createLinerDragY2xFunction,
-} from "../RectangleBase/RectangleBaseFunctions";
+} from "./RectangleBase/RectangleBaseFunctions";
 
 import {
 	affineTransformation,
@@ -22,8 +22,8 @@ import {
 	inverseAffineTransformation,
 	nanToZero,
 	radiansToDegrees,
-} from "../../../functions/Math";
-import { createSvgTransform } from "../../../functions/Svg";
+} from "../../functions/Math";
+import { createSvgTransform } from "../../functions/Svg";
 
 type TransformEvent = {
 	point: Point;
