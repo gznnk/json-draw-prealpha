@@ -209,6 +209,50 @@ const Transformative: React.FC<TransformativeProps> = ({
 	);
 	// --- LeftTop End --- //
 
+	// --- RightTop Start --- //
+	const handleDragRightTop = useCallback(
+		(e: DiagramDragEvent) => {
+			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedLeftBottom = inverseAffineTransformationOnDrag(
+				startBox.current.leftBottomPoint,
+			);
+
+			const newWidth = inversedDragPoint.x - inversedLeftBottom.x;
+			let newHeight: number;
+			if (keepProportion && startBox.current.aspectRatio) {
+				newHeight =
+					newWidth === 0 ? 0 : newWidth / startBox.current.aspectRatio;
+			} else {
+				newHeight = inversedLeftBottom.y - inversedDragPoint.y;
+			}
+
+			const inversedCenter = {
+				x: inversedLeftBottom.x + (newWidth === 0 ? 0 : newWidth / 2),
+				y: inversedLeftBottom.y - (newHeight === 0 ? 0 : newHeight / 2),
+			};
+			const center = affineTransformationOnDrag(inversedCenter);
+
+			triggerTransform(center, newWidth, newHeight);
+		},
+		[
+			triggerTransform,
+			affineTransformationOnDrag,
+			inverseAffineTransformationOnDrag,
+			keepProportion,
+		],
+	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	const linerDragFunctionRightTop = useCallback(
+		(p: Point) =>
+			createLinerDragY2xFunction(
+				startBox.current.rightTopPoint,
+				startBox.current.leftBottomPoint,
+			)(p),
+		[startBox.current.rightTopPoint, startBox.current.leftBottomPoint],
+	);
+	// --- RightTop End --- //
+
 	// --- RightBottom Start --- //
 	const handleDragRightBottom = useCallback(
 		(e: DiagramDragEvent) => {
@@ -271,6 +315,15 @@ const Transformative: React.FC<TransformativeProps> = ({
 				onDrag={handleDragLeftTop}
 				dragPositioningFunction={
 					keepProportion ? linerDragFunctionLeftTop : undefined
+				}
+			/>
+			<DragPoint
+				id={`${id}-rightTop`}
+				point={vertices.rightTopPoint}
+				onDragStart={handleDragStart}
+				onDrag={handleDragRightTop}
+				dragPositioningFunction={
+					keepProportion ? linerDragFunctionRightTop : undefined
 				}
 			/>
 			<DragPoint
