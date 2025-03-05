@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Point } from "../../types/CoordinateTypes";
 import type { DiagramType } from "../../types/DiagramTypes";
@@ -60,6 +60,10 @@ const Transformative: React.FC<TransformativeProps> = ({
 	isSelected,
 	onTransform,
 }) => {
+	const [isShiftKeyDown, setShiftKeyDown] = useState(false);
+
+	const doKeepProportion = keepProportion || isShiftKeyDown;
+
 	const startBox = useRef({
 		point,
 		width,
@@ -145,7 +149,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			const newWidth = inversedRightBottom.x - inversedDragPoint.x;
 			let newHeight: number;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newHeight = nanToZero(newWidth / startBox.current.aspectRatio);
 			} else {
 				newHeight = inversedRightBottom.y - inversedDragPoint.y;
@@ -187,7 +191,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			const newWidth = inversedRightTop.x - inversedDragPoint.x;
 			let newHeight: number;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newHeight = nanToZero(newWidth / startBox.current.aspectRatio);
 			} else {
 				newHeight = inversedDragPoint.y - inversedRightTop.y;
@@ -205,7 +209,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -229,7 +233,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			const newWidth = inversedDragPoint.x - inversedLeftBottom.x;
 			let newHeight: number;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newHeight = nanToZero(newWidth / startBox.current.aspectRatio);
 			} else {
 				newHeight = inversedLeftBottom.y - inversedDragPoint.y;
@@ -247,7 +251,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -271,7 +275,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			const newWidth = inversedDragPoint.x - inversedLeftTop.x;
 			let newHeight: number;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newHeight = nanToZero(newWidth / startBox.current.aspectRatio);
 			} else {
 				newHeight = inversedDragPoint.y - inversedLeftTop.y;
@@ -289,7 +293,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -313,7 +317,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			let newWidth: number;
 			const newHeight = inversedBottomCenter.y - inversedDragPoint.y;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newWidth = nanToZero(newHeight * startBox.current.aspectRatio);
 			} else {
 				newWidth = startBox.current.width;
@@ -331,7 +335,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -355,7 +359,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			const newWidth = inversedRightCenter.x - inversedDragPoint.x;
 			let newHeight: number;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newHeight = nanToZero(newWidth / startBox.current.aspectRatio);
 			} else {
 				newHeight = startBox.current.height;
@@ -373,7 +377,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -397,7 +401,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			const newWidth = inversedDragPoint.x - inversedLeftCenter.x;
 			let newHeight: number;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newHeight = nanToZero(newWidth / startBox.current.aspectRatio);
 			} else {
 				newHeight = startBox.current.height;
@@ -415,7 +419,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -439,7 +443,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 			let newWidth: number;
 			const newHeight = inversedDragPoint.y - inversedTopCenter.y;
-			if (keepProportion && startBox.current.aspectRatio) {
+			if (doKeepProportion && startBox.current.aspectRatio) {
 				newWidth = nanToZero(newHeight * startBox.current.aspectRatio);
 			} else {
 				newWidth = startBox.current.width;
@@ -457,7 +461,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 			triggerTransform,
 			affineTransformationOnDrag,
 			inverseAffineTransformationOnDrag,
-			keepProportion,
+			doKeepProportion,
 		],
 	);
 
@@ -471,6 +475,34 @@ const Transformative: React.FC<TransformativeProps> = ({
 	);
 	// --- BottomCenter End --- //
 
+	// シフトキーの状態を監視
+	useEffect(() => {
+		let handleKeyDown: (e: KeyboardEvent) => void;
+		let handleKeyUp: (e: KeyboardEvent) => void;
+		if (isSelected) {
+			handleKeyDown = (e: KeyboardEvent) => {
+				setShiftKeyDown(e.shiftKey);
+			};
+			handleKeyUp = (e: KeyboardEvent) => {
+				if (e.key === "Shift") {
+					setShiftKeyDown(false);
+				}
+			};
+
+			window.addEventListener("keydown", handleKeyDown);
+			window.addEventListener("keyup", handleKeyUp);
+		}
+
+		return () => {
+			// クリーンアップ
+			if (isSelected) {
+				window.removeEventListener("keydown", handleKeyDown);
+				window.removeEventListener("keyup", handleKeyUp);
+			}
+		};
+	}, [isSelected]);
+
+	// 回転
 	const rp = affineTransformation(
 		{ x: width / 2 + 20, y: 0 },
 		1,
@@ -512,7 +544,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 				onDragStart={handleDragStart}
 				onDrag={handleDragLeftTop}
 				dragPositioningFunction={
-					keepProportion ? linerDragFunctionLeftTop : undefined
+					doKeepProportion ? linerDragFunctionLeftTop : undefined
 				}
 			/>
 			{/* 左下 */}
@@ -522,7 +554,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 				onDragStart={handleDragStart}
 				onDrag={handleDragLeftBottom}
 				dragPositioningFunction={
-					keepProportion ? linerDragFunctionLeftBottom : undefined
+					doKeepProportion ? linerDragFunctionLeftBottom : undefined
 				}
 			/>
 			{/* 右上 */}
@@ -532,7 +564,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 				onDragStart={handleDragStart}
 				onDrag={handleDragRightTop}
 				dragPositioningFunction={
-					keepProportion ? linerDragFunctionRightTop : undefined
+					doKeepProportion ? linerDragFunctionRightTop : undefined
 				}
 			/>
 			{/* 右下 */}
@@ -542,7 +574,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 				onDragStart={handleDragStart}
 				onDrag={handleDragRightBottom}
 				dragPositioningFunction={
-					keepProportion ? linerDragFunctionRightBottom : undefined
+					doKeepProportion ? linerDragFunctionRightBottom : undefined
 				}
 			/>
 			{/* 上中央 */}
