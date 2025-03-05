@@ -71,8 +71,6 @@ export const useDraggable = (props: DraggableProps) => {
 		dragPositioningFunction,
 	} = props;
 
-	// このドラッグ領域の座標
-	const [state, setState] = useState({ point });
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
 	// このドラッグ領域でポインターが押されたかどうかのフラグ
@@ -85,13 +83,6 @@ export const useDraggable = (props: DraggableProps) => {
 	const startPoint = useRef<Point>({ x: 0, y: 0 });
 	// ドラッグ開始時のブラウザウィンドウ上のポインタの座標
 	const startClientPoint = useRef<Point>({ x: 0, y: 0 });
-
-	// Propsで渡された座標が変更された場合、Stateにも反映する
-	useEffect(() => {
-		if (!isDragging) {
-			setState({ point });
-		}
-	}, [point, isDragging]);
 
 	/**
 	 * 座標を調整する
@@ -174,7 +165,7 @@ export const useDraggable = (props: DraggableProps) => {
 				isPointerDown.current = true;
 
 				// ドラッグ開始時のドラッグ領域の座標を記憶
-				startPoint.current = state.point;
+				startPoint.current = point;
 
 				// ドラッグ開始時のブラウザウィンドウ上のポインタの座標を記憶
 				startClientPoint.current = {
@@ -188,7 +179,7 @@ export const useDraggable = (props: DraggableProps) => {
 				});
 			}
 		},
-		[onPointerDown, id, state.point],
+		[onPointerDown, id, point],
 	);
 
 	/**
@@ -229,13 +220,7 @@ export const useDraggable = (props: DraggableProps) => {
 				return;
 			}
 
-			// 座標を更新
-			setState({
-				point: dragPoint,
-			});
-
 			// ドラッグ中イベント発火
-			// 親側ではこのドラッグ領域の座標の更新は行わないが（行ってはダメ）、通知のために発火する
 			onDrag?.(dragEvent);
 
 			// 親子関係にない図形でハンドリングする用のドラッグ中イベント発火
@@ -344,8 +329,8 @@ export const useDraggable = (props: DraggableProps) => {
 			 */
 			const movePoint = (dx: number, dy: number) => {
 				let newPoint = {
-					x: startPoint.current.x + dx,
-					y: startPoint.current.y + dy,
+					x: point.x + dx,
+					y: point.y + dy,
 				};
 
 				if (direction === DragDirection.Horizontal) {
@@ -365,15 +350,14 @@ export const useDraggable = (props: DraggableProps) => {
 				};
 
 				if (!isArrowDragging.current) {
+					startPoint.current = point;
+
 					onDragStart?.(dragEvent);
 				}
 
-				onDrag?.(dragEvent);
-				setState({
-					point: newPoint,
-				});
-
 				isArrowDragging.current = true;
+
+				onDrag?.(dragEvent);
 			};
 
 			switch (e.key) {
@@ -395,8 +379,8 @@ export const useDraggable = (props: DraggableProps) => {
 						// ドラッグ終了イベントを発火させSvgCanvas側に座標の更新を通知し、座標を更新する。
 						onDragEnd?.({
 							id,
-							startPoint: state.point,
-							endPoint: state.point,
+							startPoint: point,
+							endPoint: point,
 						});
 
 						// 矢印キーによるドラッグ終了とマーク
@@ -415,7 +399,7 @@ export const useDraggable = (props: DraggableProps) => {
 			onDragEnd,
 			id,
 			direction,
-			state.point,
+			point,
 		],
 	);
 
@@ -435,8 +419,8 @@ export const useDraggable = (props: DraggableProps) => {
 			// 矢印キー移動完了時のイベント情報を作成
 			const dragEvent = {
 				id,
-				startPoint: state.point,
-				endPoint: state.point,
+				startPoint: point,
+				endPoint: point,
 			};
 
 			if (isArrowDragging.current) {
@@ -460,7 +444,7 @@ export const useDraggable = (props: DraggableProps) => {
 				}
 			}
 		},
-		[onDragStart, onDragEnd, id, state.point],
+		[onDragStart, onDragEnd, id, point],
 	);
 
 	/**
@@ -590,7 +574,6 @@ export const useDraggable = (props: DraggableProps) => {
 	}, [id, point, type, isPointerOver, onDragOver, onDragLeave, onDrop]);
 
 	return {
-		point: state.point,
 		onPointerDown: handlePointerDown,
 		onPointerMove: handlePointerMove,
 		onPointerUp: handlePointerUp,

@@ -20,7 +20,6 @@ import type {
 import type {
 	DiagramHoverEvent,
 	DiagramDragEvent,
-	DiagramResizeEvent,
 	GroupDragEvent,
 	GroupResizeEvent,
 	DiagramPointerEvent,
@@ -28,14 +27,16 @@ import type {
 
 // SvgCanvas関連コンポーネントをインポート
 import ConnectPoint from "../connector/ConnectPoint";
+import Transformative from "../core/Transformative";
+
+// SvgCanvas関連カスタムフックをインポート
+import { useDraggable } from "../../hooks/draggableHooks";
 
 // RectangleBase関連型定義をインポート
 import type { RectangleBaseDragPoints } from "../core/RectangleBase/RectangleBaseTypes";
 
 // RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
-import RectangleBase from "../core/RectangleBase";
-import Transformative from "../core/Transformative";
 
 // RectangleBase関連関数をインポート
 import {
@@ -46,9 +47,6 @@ import {
 } from "../core/RectangleBase/RectangleBaseFunctions";
 import { degreesToRadians } from "../../functions/Math";
 import { createSvgTransform } from "../../functions/Svg";
-
-// SvgCanvas関連カスタムフックをインポート
-import { useDraggable } from "../../hooks/draggableHooks";
 
 export type RectangleProps = RectangleBaseProps & RectangleData;
 
@@ -326,6 +324,7 @@ const Rectangle: React.FC<RectangleProps> = memo(
 							point.x,
 							point.y,
 						)}
+						tabIndex={0}
 						ref={svgRef}
 						{...draggableProps}
 					/>

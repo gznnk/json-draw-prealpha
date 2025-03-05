@@ -92,11 +92,12 @@ const DragPoint = forwardRef<SVGGElement, DragPointProps>(
 		return (
 			<circle
 				id={id}
-				cx={draggableProps.point.x}
-				cy={draggableProps.point.y}
+				cx={point.x}
+				cy={point.y}
 				r="5"
 				fill={color}
 				cursor={cursor}
+				tabIndex={0}
 				ref={svgRef}
 				{...draggableProps}
 			/>

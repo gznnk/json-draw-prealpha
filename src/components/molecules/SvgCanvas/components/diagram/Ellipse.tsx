@@ -19,7 +19,6 @@ import type {
 
 // RectangleBase関連コンポーネントをインポート
 import type { RectangleBaseProps } from "../core/RectangleBase";
-import RectangleBase from "../core/RectangleBase";
 
 // RectangleBase関連関数をインポート
 import {
@@ -283,6 +282,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 							point.x,
 							point.y,
 						)}
+						tabIndex={0}
 						ref={svgRef}
 						{...draggableProps}
 					/>

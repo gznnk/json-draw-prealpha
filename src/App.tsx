@@ -313,7 +313,7 @@ const testItems3 = [
 			},
 			{
 				id: "12",
-				type: "line",
+				type: "Line",
 				point: { x: 400, y: 400 },
 				width: 100,
 				height: 100,
