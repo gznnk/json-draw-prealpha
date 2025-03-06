@@ -34,6 +34,17 @@ import {
 	calcPointOnGroupDrag,
 } from "../core/RectangleBase/RectangleBaseFunctions";
 
+import {
+	affineTransformation,
+	calcNearestCircleIntersectionPoint,
+	calculateAngle,
+	degreesToRadians,
+	inverseAffineTransformation,
+	nanToZero,
+	radiansToDegrees,
+	rotatePoint,
+} from "../../functions/Math";
+
 // ユーティリティをインポート
 import { getLogger } from "../../../../../utils/Logger";
 
@@ -148,7 +159,6 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 			isSelected = false,
 			onTransform,
 			onDiagramClick,
-			onDiagramResizeEnd,
 			onDiagramDragStart,
 			onDiagramDrag,
 			onDiagramDragEnd,
@@ -359,9 +369,22 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 					const newDx = dx * groupScaleX;
 					const newDy = dy * groupScaleY;
 
+					let newCenter = {
+						x: e.endShape.point.x + newDx,
+						y: e.endShape.point.y + newDy,
+					};
+
 					if (isRectangleBaseData(item)) {
-						const newRotation =
-							item.rotation + (e.endShape.rotation - e.startShape.rotation);
+						const rotationDiff = e.endShape.rotation - e.startShape.rotation;
+						const newRotation = item.rotation + rotationDiff;
+
+						if (rotationDiff !== 0) {
+							newCenter = rotatePoint(
+								newCenter,
+								e.startShape.point,
+								degreesToRadians(rotationDiff),
+							);
+						}
 
 						onTransform?.({
 							id: item.id,
@@ -374,10 +397,7 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 								scaleY: item.scaleY,
 							},
 							endShape: {
-								point: {
-									x: e.endShape.point.x + newDx,
-									y: e.endShape.point.y + newDy,
-								},
+								point: newCenter,
 								width: item.width * groupScaleX,
 								height: item.height * groupScaleY,
 								rotation: newRotation,

@@ -92,9 +92,8 @@ export const radiansToDegrees = (radians: number): number => {
 	return radians * (180 / Math.PI);
 };
 
-// TODO いらないかも
 /**
- * 座標を中心点の周りに回転させる関数
+ * 座標を中心点の周りに回転させる
  *
  * @param {Point} point - 回転させる座標
  * @param {Point} center - 回転の中心となる座標
