@@ -177,7 +177,7 @@ const Ellipse: React.FC<EllipseProps> = memo(
 						{...draggableProps}
 					/>
 					<Transformative
-						diagramId={`${id}-transformative`}
+						diagramId={id}
 						type="Ellipse"
 						point={point}
 						width={width}

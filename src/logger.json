@@ -1,6 +1,6 @@
 {
 	"root": "INFO",
-	"Group": "INFO",
+	"Group": "DEBUG",
 	"Line": "INFO",
 	"Rectangle": "INFO",
 	"SvgCanvas": "INFO",

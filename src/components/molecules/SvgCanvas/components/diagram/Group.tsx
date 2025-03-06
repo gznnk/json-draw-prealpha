@@ -19,6 +19,7 @@ import type {
 	GroupDragEvent,
 	GroupResizeEvent,
 	DiagramTransformEvent,
+	DiagramTransformEndEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -27,13 +28,6 @@ import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
 import { isRectangleBaseData, isGroupData } from "../../SvgCanvasFunctions";
-
-// RectangleBase関連関数をインポート
-import {
-	calcArrangmentOnGroupResize,
-	calcPointOnGroupDrag,
-} from "../core/RectangleBase/RectangleBaseFunctions";
-
 import {
 	affineTransformation,
 	calcNearestCircleIntersectionPoint,
@@ -73,58 +67,39 @@ const getSelectedChildDiagram = (diagrams: Diagram[]): Diagram | undefined => {
 	}
 };
 
-const calcBox = (item: Diagram, point: Point, rotation: number) => {
+const calcItemBox = (item: Diagram, point: Point, rotation: number) => {
 	const groupRadians = degreesToRadians(-rotation);
 
 	if (isRectangleBaseData(item)) {
 		const halfWidth = nanToZero(item.width / 2);
 		const halfHeight = nanToZero(item.height / 2);
-		let leftTop = rotatePoint(
-			{ x: item.point.x - halfWidth, y: item.point.y - halfHeight },
-			point,
-			groupRadians,
-		);
-		leftTop = rotatePoint(
-			leftTop,
-			item.point,
-			degreesToRadians(item.rotation - rotation),
+		const itemRadians = degreesToRadians(item.rotation - rotation);
+
+		const inversedCenter = rotatePoint(item.point, point, groupRadians);
+
+		const leftTop = rotatePoint(
+			{ x: inversedCenter.x - halfWidth, y: inversedCenter.y - halfHeight },
+			inversedCenter,
+			itemRadians,
 		);
 
-		let rightTop = rotatePoint(
-			{ x: item.point.x + halfWidth, y: item.point.y - halfHeight },
-			point,
-			groupRadians,
-		);
-		rightTop = rotatePoint(
-			rightTop,
-			item.point,
-			degreesToRadians(item.rotation - rotation),
+		const rightTop = rotatePoint(
+			{ x: inversedCenter.x + halfWidth, y: inversedCenter.y - halfHeight },
+			inversedCenter,
+			itemRadians,
 		);
 
-		let leftBottom = rotatePoint(
-			{ x: item.point.x - halfWidth, y: item.point.y + halfHeight },
-			point,
-			groupRadians,
-		);
-		leftBottom = rotatePoint(
-			leftBottom,
-			item.point,
-			degreesToRadians(item.rotation - rotation),
+		const leftBottom = rotatePoint(
+			{ x: inversedCenter.x - halfWidth, y: inversedCenter.y + halfHeight },
+			inversedCenter,
+			itemRadians,
 		);
 
-		let rightBottom = rotatePoint(
-			{ x: item.point.x + halfWidth, y: item.point.y + halfHeight },
-			point,
-			groupRadians,
+		const rightBottom = rotatePoint(
+			{ x: inversedCenter.x + halfWidth, y: inversedCenter.y + halfHeight },
+			inversedCenter,
+			itemRadians,
 		);
-		rightBottom = rotatePoint(
-			rightBottom,
-			item.point,
-			degreesToRadians(item.rotation - rotation),
-		);
-
-		logger.debug("calcBox leftTop", leftTop);
-		logger.debug("calcBox rightBottom", rightBottom);
 
 		return {
 			top: Math.min(leftTop.y, rightBottom.y, leftBottom.y, rightTop.y),
@@ -165,7 +140,7 @@ const calcGroupBox = (items: Diagram[], point: Point, rotation: number) => {
 			left = Math.min(left, groupBox.left);
 			right = Math.max(right, groupBox.right);
 		} else {
-			const box = calcBox(item, point, rotation);
+			const box = calcItemBox(item, point, rotation);
 			logger.debug("calcGroupBox box", box);
 			top = Math.min(top, box.top);
 			bottom = Math.max(bottom, box.bottom);
@@ -310,7 +285,51 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 			}
 		}, [isSelected]);
 
-		// --- 以下、親グループの変更関連処理 ---
+		const transformGroupOutline = useCallback(() => {
+			const box = calcGroupBox(items, point, rotation);
+			const leftTop = rotatePoint(
+				{ x: box.left, y: box.top },
+				point,
+				degreesToRadians(rotation),
+			);
+			const rightBottom = rotatePoint(
+				{ x: box.right, y: box.bottom },
+				point,
+				degreesToRadians(rotation),
+			);
+			onTransform?.({
+				id,
+				startShape: {
+					point,
+					width,
+					height,
+					rotation,
+					scaleX,
+					scaleY,
+				},
+				endShape: {
+					point: {
+						x: leftTop.x + (rightBottom.x - leftTop.x) / 2,
+						y: leftTop.y + (rightBottom.y - leftTop.y) / 2,
+					},
+					width: box.right - box.left,
+					height: box.bottom - box.top,
+					rotation,
+					scaleX,
+					scaleY,
+				},
+			});
+		}, [
+			onTransform,
+			id,
+			point,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+			items,
+		]);
 
 		/**
 		 * グループ内の図形のドラッグ開始イベントハンドラ
@@ -390,43 +409,16 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 				onDiagramDragEnd?.(e);
 				setIsDragging(false);
 
-				// TODO: グループのサイズ変更
-				const box = calcGroupBox(items, point, rotation);
-				onTransform?.({
-					id,
-					startShape: {
-						point,
-						width,
-						height,
-						rotation,
-						scaleX,
-						scaleY,
-					},
-					endShape: {
-						point: {
-							x: (box.left + box.right) / 2,
-							y: (box.top + box.bottom) / 2,
-						},
-						width: box.right - box.left,
-						height: box.bottom - box.top,
-						rotation,
-						scaleX,
-						scaleY,
-					},
-				});
+				transformGroupOutline();
 			},
-			[
-				onDiagramDragEnd,
-				onTransform,
-				id,
-				point,
-				width,
-				height,
-				rotation,
-				scaleX,
-				scaleY,
-				items,
-			],
+			[onDiagramDragEnd, transformGroupOutline],
+		);
+
+		const handleChildDiagramTransfromEnd = useCallback(
+			(e: DiagramTransformEndEvent) => {
+				transformGroupOutline();
+			},
+			[transformGroupOutline],
 		);
 
 		// グループ内の図形の作成
@@ -436,6 +428,7 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 				...item,
 				key: item.id,
 				onTransform: onTransform,
+				onTransformEnd: handleChildDiagramTransfromEnd,
 				onDiagramClick: handleChildDiagramClick,
 				onDiagramDragStart: handleChildDiagramDragStart,
 				onDiagramDrag: handleChildDiagramDrag,
@@ -513,8 +506,12 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 					// TODO: 再帰的にグループ内の図形のドラッグを行う
 				}
 			},
-			[onTransform, startItems],
+			[onTransform, transformGroupOutline, startItems],
 		);
+
+		const handleTransformEnd = useCallback((_e: DiagramTransformEndEvent) => {
+			// NOP
+		}, []);
 
 		return (
 			<>
@@ -532,6 +529,7 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 					isSelected={isSelected}
 					onTransformStart={handleTransformStart}
 					onTransform={handleTransform}
+					onTransformEnd={handleTransformEnd}
 				/>
 			</>
 		);
