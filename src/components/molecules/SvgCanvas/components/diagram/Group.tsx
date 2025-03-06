@@ -45,6 +45,8 @@ import {
 	rotatePoint,
 } from "../../functions/Math";
 
+import type { Point } from "../../types/CoordinateTypes";
+
 // ユーティリティをインポート
 import { getLogger } from "../../../../../utils/Logger";
 
@@ -71,6 +73,76 @@ const getSelectedChildDiagram = (diagrams: Diagram[]): Diagram | undefined => {
 	}
 };
 
+const calcBox = (item: Diagram, point: Point, rotation: number) => {
+	const groupRadians = degreesToRadians(-rotation);
+
+	if (isRectangleBaseData(item)) {
+		const halfWidth = nanToZero(item.width / 2);
+		const halfHeight = nanToZero(item.height / 2);
+		let leftTop = rotatePoint(
+			{ x: item.point.x - halfWidth, y: item.point.y - halfHeight },
+			point,
+			groupRadians,
+		);
+		leftTop = rotatePoint(
+			leftTop,
+			item.point,
+			degreesToRadians(item.rotation - rotation),
+		);
+
+		let rightTop = rotatePoint(
+			{ x: item.point.x + halfWidth, y: item.point.y - halfHeight },
+			point,
+			groupRadians,
+		);
+		rightTop = rotatePoint(
+			rightTop,
+			item.point,
+			degreesToRadians(item.rotation - rotation),
+		);
+
+		let leftBottom = rotatePoint(
+			{ x: item.point.x - halfWidth, y: item.point.y + halfHeight },
+			point,
+			groupRadians,
+		);
+		leftBottom = rotatePoint(
+			leftBottom,
+			item.point,
+			degreesToRadians(item.rotation - rotation),
+		);
+
+		let rightBottom = rotatePoint(
+			{ x: item.point.x + halfWidth, y: item.point.y + halfHeight },
+			point,
+			groupRadians,
+		);
+		rightBottom = rotatePoint(
+			rightBottom,
+			item.point,
+			degreesToRadians(item.rotation - rotation),
+		);
+
+		logger.debug("calcBox leftTop", leftTop);
+		logger.debug("calcBox rightBottom", rightBottom);
+
+		return {
+			top: Math.min(leftTop.y, rightBottom.y, leftBottom.y, rightTop.y),
+			left: Math.min(leftTop.x, rightBottom.x, leftBottom.x, rightTop.x),
+			bottom: Math.max(leftTop.y, rightBottom.y, leftBottom.y, rightTop.y),
+			right: Math.max(leftTop.x, rightBottom.x, leftBottom.x, rightTop.x),
+		};
+	}
+
+	// TODO
+	return {
+		top: 0,
+		left: 0,
+		bottom: 0,
+		right: 0,
+	};
+};
+
 /**
  * グループ内の図形のリサイズイベントに伴うグループの変更後の配置の計算する
  *
@@ -78,40 +150,35 @@ const getSelectedChildDiagram = (diagrams: Diagram[]): Diagram | undefined => {
  * @param {DiagramResizeEvent} e 図形リサイズイベント
  * @returns {Object} グループの変更後の配置
  */
-const calcGroupArrangmentOnChildDiagramResizeEvent = (
-	items: Diagram[],
-	e: DiagramResizeEvent,
-) => {
+const calcGroupBox = (items: Diagram[], point: Point, rotation: number) => {
 	// グループ内の図形を再帰的に取得し、グループの四辺の座標を計算する
 	let top = Number.POSITIVE_INFINITY;
 	let left = Number.POSITIVE_INFINITY;
 	let bottom = Number.NEGATIVE_INFINITY;
 	let right = Number.NEGATIVE_INFINITY;
+
 	for (const item of items) {
-		if (e.id !== item.id) {
-			if (isGroupData(item)) {
-				const groupArrangment = calcGroupArrangmentOnChildDiagramResizeEvent(
-					item.items ?? [],
-					e,
-				);
-				top = Math.min(top, groupArrangment.top);
-				bottom = Math.max(bottom, groupArrangment.bottom);
-				left = Math.min(left, groupArrangment.left);
-				right = Math.max(right, groupArrangment.right);
-			} else {
-				top = Math.min(top, item.point.y);
-				bottom = Math.max(bottom, item.point.y + item.height);
-				left = Math.min(left, item.point.x);
-				right = Math.max(right, item.point.x + item.width);
-			}
+		if (isGroupData(item)) {
+			const groupBox = calcGroupBox(item.items ?? [], point, rotation);
+			top = Math.min(top, groupBox.top);
+			bottom = Math.max(bottom, groupBox.bottom);
+			left = Math.min(left, groupBox.left);
+			right = Math.max(right, groupBox.right);
+		} else {
+			const box = calcBox(item, point, rotation);
+			logger.debug("calcGroupBox box", box);
+			top = Math.min(top, box.top);
+			bottom = Math.max(bottom, box.bottom);
+			left = Math.min(left, box.left);
+			right = Math.max(right, box.right);
 		}
 	}
 
 	return {
-		top: Math.min(top, e.point.y),
-		bottom: Math.max(bottom, e.point.y + e.height),
-		left: Math.min(left, e.point.x),
-		right: Math.max(right, e.point.x + e.width),
+		top,
+		bottom,
+		left,
+		right,
 	};
 };
 
@@ -324,8 +391,42 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 				setIsDragging(false);
 
 				// TODO: グループのサイズ変更
+				const box = calcGroupBox(items, point, rotation);
+				onTransform?.({
+					id,
+					startShape: {
+						point,
+						width,
+						height,
+						rotation,
+						scaleX,
+						scaleY,
+					},
+					endShape: {
+						point: {
+							x: (box.left + box.right) / 2,
+							y: (box.top + box.bottom) / 2,
+						},
+						width: box.right - box.left,
+						height: box.bottom - box.top,
+						rotation,
+						scaleX,
+						scaleY,
+					},
+				});
 			},
-			[onDiagramDragEnd],
+			[
+				onDiagramDragEnd,
+				onTransform,
+				id,
+				point,
+				width,
+				height,
+				rotation,
+				scaleX,
+				scaleY,
+				items,
+			],
 		);
 
 		// グループ内の図形の作成
