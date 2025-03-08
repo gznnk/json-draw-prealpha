@@ -1,7 +1,7 @@
 // イベント型定義
 
 import type { Point } from "./CoordinateTypes";
-import type { DiagramType } from "./DiagramTypes";
+import type { DiagramType, Diagram } from "./DiagramTypes";
 
 export type DiagramTransformStartEvent = {
 	id: string;
@@ -29,6 +29,17 @@ export type DiagramTransformEvent = {
 
 export type DiagramTransformEndEvent = {
 	id: string;
+};
+
+export type GroupDataChangeEvent = {
+	id: string;
+	point?: Point;
+	width?: number;
+	height?: number;
+	rotation?: number;
+	scaleX?: number;
+	scaleY?: number;
+	items?: Diagram[];
 };
 
 // --------------------------------------------------

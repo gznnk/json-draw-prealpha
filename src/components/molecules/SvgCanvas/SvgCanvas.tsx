@@ -16,6 +16,7 @@ import type {
 	DiagramSelectEvent,
 	DiagramRotateEvent,
 	DiagramTransformEvent,
+	GroupDataChangeEvent,
 } from "./types/EventTypes";
 
 // ユーティリティをインポート
@@ -39,6 +40,7 @@ type SvgCanvasProps = {
 	title?: string;
 	items: Array<Diagram>;
 	onTransform?: (e: DiagramTransformEvent) => void;
+	onGroupDataChange?: (e: GroupDataChangeEvent) => void;
 	// --------------------------------------------------
 	onDiagramDrag?: (e: DiagramDragEvent) => void;
 	onDiagramDragEnd?: (e: DiagramDragEvent) => void;
@@ -58,6 +60,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 		title,
 		items,
 		onTransform,
+		onGroupDataChange,
 		onDiagramDrag,
 		onDiagramDragEnd,
 		onDiagramDragEndByGroup,
@@ -87,6 +90,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 				...item,
 				key: item.id,
 				onTransform,
+				onGroupDataChange,
 				onDiagramDrag,
 				onDiagramDragEnd,
 				onDiagramDragEndByGroup,

@@ -17,6 +17,7 @@ import type {
 	DiagramSelectEvent,
 	DiagramTransformEvent,
 	DiagramTransformEndEvent,
+	GroupDataChangeEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -138,7 +139,6 @@ const calcGroupBox = (items: Diagram[], point: Point, rotation: number) => {
 			right = Math.max(right, groupBox.right);
 		} else {
 			const box = calcItemBox(item, point, rotation);
-			logger.debug("calcGroupBox box", box);
 			top = Math.min(top, box.top);
 			bottom = Math.max(bottom, box.bottom);
 			left = Math.min(left, box.left);
@@ -178,7 +178,10 @@ const calcGroupBox = (items: Diagram[], point: Point, rotation: number) => {
  * @property {Diagram[]} [items] グループ内の図形リスト
  * @property {React.Ref<DiagramRef>} [ref] 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数への参照
  */
-export type GroupProps = RectangleBaseProps & GroupData;
+export type GroupProps = RectangleBaseProps &
+	GroupData & {
+		onGroupDataChange?: (e: GroupDataChangeEvent) => void;
+	};
 
 /**
  * グループコンポーネント
@@ -202,11 +205,12 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 			onDiagramDrag,
 			onDiagramDragEnd,
 			onDiagramSelect,
+			onGroupDataChange,
 			items = [],
 		},
 		ref,
 	) => {
-		logger.debug("Group items", items);
+		// logger.debug("Group items", items);
 
 		// グループ全体のドラッグ中かどうかのフラグ（このグループが選択中でかつドラッグ中の場合のみtrueにする）
 		const [isDragging, setIsDragging] = useState(false);
@@ -367,38 +371,41 @@ const Group: React.FC<GroupProps> = forwardRef<DiagramRef, GroupProps>(
 					return;
 				}
 
+				logger.debug("handleChildDiagramDrag", id, e);
+
 				const dx = e.endPoint.x - e.startPoint.x;
 				const dy = e.endPoint.y - e.startPoint.y;
 
-				for (const item of startItems) {
-					const { x, y } = item.point;
-					onDiagramDrag?.({
-						id: item.id,
-						startPoint: {
-							x,
-							y,
-						},
-						endPoint: {
-							x: x + dx,
-							y: y + dy,
-						},
-					});
-					// TODO: 再帰的にグループ内の図形のドラッグを行う
-				}
+				const moveRecursive = (diagrams: Diagram[], dx: number, dy: number) => {
+					const events: GroupDataChangeEvent[] = [];
+					for (const item of diagrams) {
+						events.push({
+							...item,
+							point: {
+								x: item.point.x + dx,
+								y: item.point.y + dy,
+							},
+							items: isGroupData(item)
+								? moveRecursive(item.items ?? [], dx, dy)
+								: undefined,
+						});
+					}
 
-				onDiagramDrag?.({
-					id: id,
-					startPoint: {
-						x: startBox.current.x,
-						y: startBox.current.y,
-					},
-					endPoint: {
+					return events as Diagram[];
+				};
+
+				const event: GroupDataChangeEvent = {
+					id,
+					point: {
 						x: startBox.current.x + dx,
 						y: startBox.current.y + dy,
 					},
-				});
+					items: moveRecursive(startItems, dx, dy),
+				};
+
+				onGroupDataChange?.(event);
 			},
-			[onDiagramDrag, isDragging, startItems],
+			[onDiagramDrag, isDragging, startItems, id],
 		);
 
 		const handleChildDiagramDragEnd = useCallback(

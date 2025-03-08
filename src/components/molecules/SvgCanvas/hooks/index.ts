@@ -20,6 +20,7 @@ import type {
 	DiagramConnectEvent,
 	ConnectPointMoveEvent,
 	DiagramTransformEvent,
+	GroupDataChangeEvent,
 } from "../types/EventTypes";
 
 // SvgCanvas関連関数をインポート
@@ -66,6 +67,38 @@ const getDiagramById = (
 // };
 
 const generateId = (): string => crypto.randomUUID();
+
+function removeNulls<T extends object>(obj: T): Partial<T> {
+	return Object.fromEntries(
+		Object.entries(obj).filter(([_, value]) => value !== undefined),
+	) as Partial<T>;
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const deepMerge = <T extends Record<string, any>>(
+	target: T,
+	...sources: Partial<T>[]
+): T => {
+	for (const source of sources) {
+		if (typeof source !== "object" || source === null) continue;
+
+		for (const key of Object.keys(source)) {
+			const sourceValue = source[key];
+			const targetValue = target[key];
+
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			(target as any)[key] =
+				typeof sourceValue === "object" && sourceValue !== null
+					? deepMerge(
+							Array.isArray(sourceValue) ? [] : { ...targetValue },
+							sourceValue,
+						)
+					: sourceValue;
+		}
+	}
+
+	return target;
+};
 
 type SvgCanvasState = {
 	items: Diagram[];
@@ -114,6 +147,17 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
 				item.id === e.id ? { ...item, ...e.endShape } : item,
+			),
+		}));
+	}, []);
+
+	const onGroupDataChange = useCallback((e: GroupDataChangeEvent) => {
+		console.log("onGroupDataChange", e);
+
+		setCanvasState((prevState) => ({
+			...prevState,
+			items: applyRecursive(prevState.items, (item) =>
+				item.id === e.id ? deepMerge(item, e) : item,
 			),
 		}));
 	}, []);
@@ -259,6 +303,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onDiagramConnect,
 		onConnectPointMove,
 		onTransform,
+		onGroupDataChange,
 	};
 
 	const getSelectedItem = useCallback(() => {

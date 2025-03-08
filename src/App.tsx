@@ -37,7 +37,7 @@ const testItems1 = [
 	{
 		id: "g-1",
 		type: "Group",
-		point: { x: 200, y: 200 },
+		point: { x: 350, y: 350 },
 		width: 400,
 		height: 400,
 		keepProportion: true,
@@ -94,7 +94,7 @@ const testItems1 = [
 			{
 				id: "g-2",
 				type: "Group",
-				point: { x: 400, y: 400 },
+				point: { x: 450, y: 450 },
 				width: 200,
 				height: 200,
 				fill: "transparent",
@@ -144,7 +144,7 @@ const testItems1 = [
 			{
 				id: "g-3",
 				type: "Group",
-				point: { x: 400, y: 200 },
+				point: { x: 450, y: 250 },
 				width: 200,
 				height: 200,
 				fill: "transparent",
@@ -183,7 +183,7 @@ const testItems1 = [
 	},
 	{
 		id: "12",
-		type: "line",
+		type: "Line",
 		point: { x: 0, y: 100 },
 		width: 100,
 		height: 100,
@@ -444,7 +444,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems5);
+	} = useSvgCanvas(testItems1);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(
