@@ -19,19 +19,14 @@ import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
 import { isGroupData, isRectangleBaseData } from "../../SvgCanvasFunctions";
-import {
-	calcRotatedRectangleDimensions,
-	degreesToRadians,
-	nanToZero,
-	rotatePoint,
-} from "../../functions/Math";
-import { drawPoint, drawRect } from "../../functions/Svg";
+import { degreesToRadians, nanToZero, rotatePoint } from "../../functions/Math";
+// import { drawPoint, drawRect } from "../../functions/Svg";
 
 // ユーティリティをインポート
-import { getLogger } from "../../../../../utils/Logger";
+// import { getLogger } from "../../../../../utils/Logger";
 
 // ロガーを取得
-const logger = getLogger("Group");
+// const logger = getLogger("Group");
 
 /**
  * 選択されたグループ内の図形を、配下のグループも含めて再帰的に取得する
@@ -489,7 +484,6 @@ const Group: React.FC<GroupProps> = ({
 			const groupScaleX = e.endShape.width / e.startShape.width;
 			const groupScaleY = e.endShape.height / e.startShape.height;
 
-			// TODO: 回転している図形の、非等倍時の拡縮がおかしい
 			const transformRecursive = (diagrams: Diagram[]) => {
 				const events: GroupDataChangeEvent[] = [];
 				for (const item of diagrams) {
@@ -514,161 +508,15 @@ const Group: React.FC<GroupProps> = ({
 						degreesToRadians(e.endShape.rotation),
 					);
 
-					drawPoint(`newCenter-${item.id}`, newCenter, "gray");
-
 					if (isRectangleBaseData(item)) {
 						const rotationDiff = e.endShape.rotation - e.startShape.rotation;
 						const newRotation = item.rotation + rotationDiff;
 
-						// グループの回転を戻した座標系で考える
-						// 最初に、変更前のグループ回転を戻した時の各図形の４隅の座標を計算する
-						const calcGroupRotationInversedPoint = (targetPoint: Point) => {
-							const inversedPoint = rotatePoint(
-								targetPoint,
-								item.point,
-								degreesToRadians(item.rotation),
-							);
-							return rotatePoint(
-								inversedPoint,
-								e.startShape.point,
-								degreesToRadians(-e.startShape.rotation),
-							);
-						};
-
-						const inversedItemLeftTop = calcGroupRotationInversedPoint({
-							x: item.point.x - item.width / 2,
-							y: item.point.y - item.height / 2,
-						});
-						const inversedItemRightTop = calcGroupRotationInversedPoint({
-							x: item.point.x + item.width / 2,
-							y: item.point.y - item.height / 2,
-						});
-						const inversedItemRightBottom = calcGroupRotationInversedPoint({
-							x: item.point.x + item.width / 2,
-							y: item.point.y + item.height / 2,
-						});
-						const inversedItemLeftBottom = calcGroupRotationInversedPoint({
-							x: item.point.x - item.width / 2,
-							y: item.point.y + item.height / 2,
-						});
-						drawRect(
-							`inversedItem-${item.id}`,
-							inversedItemLeftTop,
-							inversedItemRightTop,
-							inversedItemRightBottom,
-							inversedItemLeftBottom,
-						);
-
-						// グループの拡縮を考慮して、各図形の４隅の座標を計算する
-						const calcTransformedPoint = (inversedPoint: Point) => {
-							const dx = inversedPoint.x - e.startShape.point.x;
-							const dy = inversedPoint.y - e.startShape.point.y;
-
-							const newDx = dx * groupScaleX;
-							const newDy = dy * groupScaleY;
-
-							return {
-								x: e.endShape.point.x + newDx,
-								y: e.endShape.point.y + newDy,
-							};
-						};
-						const transformedLeftTop =
-							calcTransformedPoint(inversedItemLeftTop);
-						const transformedRightTop =
-							calcTransformedPoint(inversedItemRightTop);
-						const transformedRightBottom = calcTransformedPoint(
-							inversedItemRightBottom,
-						);
-						const transformedLeftBottom = calcTransformedPoint(
-							inversedItemLeftBottom,
-						);
-						drawRect(
-							`transformedItem-${item.id}`,
-							transformedLeftTop,
-							transformedRightTop,
-							transformedRightBottom,
-							transformedLeftBottom,
-							"blue",
-						);
-
-						// let inversedItemLeftTop = rotatePoint(
-						// 	{
-						// 		x: item.point.x - item.width / 2,
-						// 		y: item.point.y - item.height / 2,
-						// 	},
-						// 	item.point,
-						// 	degreesToRadians(item.rotation),
-						// );
-						// inversedItemLeftTop = rotatePoint(
-						// 	inversedItemLeftTop,
-						// 	e.startShape.point,
-						// 	degreesToRadians(-e.startShape.rotation),
-						// );
-
-						// drawPoint(`inversedItemLeftTop-${item.id}`, inversedItemLeftTop);
-
-						const leftTopDx = inversedItemLeftTop.x - e.startShape.point.x;
-						const leftTopDy = inversedItemLeftTop.y - e.startShape.point.y;
-
-						const leftTopNewDx = leftTopDx * groupScaleX;
-						const leftTopNewDy = leftTopDy * groupScaleY;
-
-						const newLeftTop = {
-							x: e.endShape.point.x + leftTopNewDx,
-							y: e.endShape.point.y + leftTopNewDy,
-						};
-						// newLeftTop = rotatePoint(
-						// 	newLeftTop,
-						// 	e.endShape.point,
-						// 	degreesToRadians(newRotation),
-						// );
-						// drawPoint(`newLeftTop-${item.id}`, newLeftTop, "green");
-
-						//
-
-						// let inversedItemRightBottom = rotatePoint(
-						// 	{
-						// 		x: item.point.x + item.width / 2,
-						// 		y: item.point.y + item.height / 2,
-						// 	},
-						// 	item.point,
-						// 	degreesToRadians(item.rotation),
-						// );
-						// inversedItemRightBottom = rotatePoint(
-						// 	inversedItemRightBottom,
-						// 	e.startShape.point,
-						// 	degreesToRadians(-e.startShape.rotation),
-						// );
-
-						const rightBottomDx =
-							inversedItemRightBottom.x - e.startShape.point.x;
-						const rightBottomDy =
-							inversedItemRightBottom.y - e.startShape.point.y;
-
-						const rightBottomNewDx = rightBottomDx * groupScaleX;
-						const rightBottomNewDy = rightBottomDy * groupScaleY;
-
-						const newRightBottom = {
-							x: e.endShape.point.x + rightBottomNewDx,
-							y: e.endShape.point.y + rightBottomNewDy,
-						};
-						// newRightBottom = rotatePoint(
-						// 	newRightBottom,
-						// 	e.endShape.point,
-						// 	degreesToRadians(newRotation),
-						// );
-
-						const dimensions = calcRotatedRectangleDimensions(
-							newLeftTop,
-							newRightBottom,
-							degreesToRadians(newRotation),
-						);
-
 						events.push({
 							...item,
 							point: newCenter,
-							width: dimensions.width, // TODO: ここがおかしい
-							height: dimensions.height, // TODO: ここがおかしい
+							width: item.width * groupScaleX,
+							height: item.height * groupScaleY,
 							rotation: newRotation,
 							scaleX: e.endShape.scaleX,
 							scaleY: e.endShape.scaleY,
