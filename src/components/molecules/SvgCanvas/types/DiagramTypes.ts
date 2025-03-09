@@ -19,7 +19,6 @@ import type {
 	ConnectPointMoveEvent,
 	DiagramTransformStartEvent,
 	DiagramTransformEvent,
-	DiagramTransformEndEvent,
 } from "./EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -47,7 +46,7 @@ export type DiagramBaseData = {
 	items?: Diagram[];
 };
 
-export type RectangleBaseData = DiagramBaseData & {
+export type TransformativeData = DiagramBaseData & {
 	width: number;
 	height: number;
 	rotation: number;
@@ -60,7 +59,7 @@ export type ConnectPointData = DiagramBaseData & {
 	name: string;
 };
 
-export type EllipseData = RectangleBaseData & {
+export type EllipseData = TransformativeData & {
 	fill: string;
 	stroke: string;
 	strokeWidth: string;
@@ -71,10 +70,10 @@ export type LineData = GroupData & {
 	stroke: string;
 	strokeWidth: string;
 };
-export type GroupData = RectangleBaseData & {
+export type GroupData = TransformativeData & {
 	items: Diagram[]; // TODO いらない？
 };
-export type RectangleData = DiagramBaseData & {
+export type RectangleData = TransformativeData & {
 	fill: string;
 	stroke: string;
 	strokeWidth: string;
@@ -88,17 +87,17 @@ type DiagramCombined =
 	| GroupData
 	| LineData
 	| LinePointData
-	| RectangleData
-	| RectangleBaseData;
+	| RectangleData;
 
 export type Diagram = DiagramCombined & {
 	type: DiagramType;
 };
 
+// TODO: 整理
 export type DiagramBaseProps = DiagramBaseData & {
 	onTransformStart?: (e: DiagramTransformStartEvent) => void;
 	onTransform?: (e: DiagramTransformEvent) => void;
-	onTransformEnd?: (e: DiagramTransformEndEvent) => void;
+	onTransformEnd?: (e: DiagramTransformEvent) => void;
 	// --------------------------------------------------
 	onDiagramClick?: (e: DiagramClickEvent) => void;
 	onDiagramDragStart?: (e: DiagramDragEvent) => void;
@@ -116,6 +115,12 @@ export type DiagramBaseProps = DiagramBaseData & {
 	onDiagramConnect?: (e: DiagramConnectEvent) => void;
 	onConnectPointMove?: (e: ConnectPointMoveEvent) => void;
 	ref?: React.Ref<DiagramRef>;
+};
+
+export type TransformativeProps = TransformativeData & {
+	onTransformStart?: (e: DiagramTransformStartEvent) => void; // TODO: 必須にする
+	onTransform: (e: DiagramTransformEvent) => void;
+	onTransformEnd?: (e: DiagramTransformEvent) => void; // TODO: 必須にする
 };
 
 /**

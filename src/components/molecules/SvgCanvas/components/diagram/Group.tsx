@@ -3,7 +3,12 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
-import type { Diagram, GroupData } from "../../types/DiagramTypes";
+import type {
+	Diagram,
+	GroupData,
+	DiagramBaseProps,
+	TransformativeProps,
+} from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
@@ -13,11 +18,10 @@ import type {
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import type { RectangleBaseProps } from "../core/RectangleBase";
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
-import { isGroupData, isRectangleBaseData } from "../../SvgCanvasFunctions";
+import { isGroupData, isTransformativeData } from "../../SvgCanvasFunctions";
 import { degreesToRadians, nanToZero, rotatePoint } from "../../functions/Math";
 // import { drawPoint, drawRect } from "../../functions/Svg";
 
@@ -79,7 +83,7 @@ const calcItemBoxOfNoGroupRotation = (
 ) => {
 	const groupRadians = degreesToRadians(-groupRotation);
 
-	if (isRectangleBaseData(item)) {
+	if (isTransformativeData(item)) {
 		const halfWidth = nanToZero(item.width / 2);
 		const halfHeight = nanToZero(item.height / 2);
 		const itemRadians = degreesToRadians(item.rotation - groupRotation);
@@ -210,7 +214,8 @@ const calcGroupBoxOfNoRotation = (
  * @property {Diagram[]} [items] グループ内の図形リスト
  * @property {React.Ref<DiagramRef>} [ref] 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数への参照
  */
-export type GroupProps = RectangleBaseProps &
+export type GroupProps = DiagramBaseProps &
+	TransformativeProps &
 	GroupData & {
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void;
 	};
@@ -497,7 +502,7 @@ const Group: React.FC<GroupProps> = ({
 						degreesToRadians(e.endShape.rotation),
 					);
 
-					if (isRectangleBaseData(item)) {
+					if (isTransformativeData(item)) {
 						const rotationDiff = e.endShape.rotation - e.startShape.rotation;
 						const newRotation = item.rotation + rotationDiff;
 

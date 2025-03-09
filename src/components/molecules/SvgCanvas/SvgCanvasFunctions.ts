@@ -1,6 +1,6 @@
 import type {
 	Diagram,
-	RectangleBaseData,
+	TransformativeData,
 	GroupData,
 } from "./types/DiagramTypes";
 
@@ -11,7 +11,7 @@ export const isGroupData = (obj: any): obj is GroupData => {
 
 // TODO: 名前
 // biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isRectangleBaseData = (obj: any): obj is RectangleBaseData => {
+export const isTransformativeData = (obj: any): obj is TransformativeData => {
 	return (
 		obj &&
 		typeof obj.type === "string" &&
