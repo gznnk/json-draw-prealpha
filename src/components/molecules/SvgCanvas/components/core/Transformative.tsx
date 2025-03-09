@@ -13,6 +13,8 @@ import type {
 
 // SvgCanvas関連コンポーネントをインポート
 import DragPoint from "./DragPoint";
+import { useDraggable } from "../../hooks/draggableHooks";
+import type { DraggableProps } from "../../hooks/draggableHooks";
 
 // SvgCanvas関連関数をインポート
 import {
@@ -602,6 +604,50 @@ const Transformative: React.FC<TransformativeProps> = ({
 					)}
 				/>
 			</g>
+			{/* 上辺 */}
+			<DragLine
+				id={`${diagramId}-topCenter-line`}
+				point={vertices.topCenterPoint}
+				startPoint={vertices.leftTopPoint}
+				endPoint={vertices.rightTopPoint}
+				onDragStart={handleDragStart}
+				onDrag={handleDragTopCenter}
+				onDragEnd={handleDragEnd}
+				dragPositioningFunction={linerDragFunctionTopCenter}
+			/>
+			{/* 左辺 */}
+			<DragLine
+				id={`${diagramId}-leftCenter-line`}
+				point={vertices.leftCenterPoint}
+				startPoint={vertices.leftTopPoint}
+				endPoint={vertices.leftBottomPoint}
+				onDragStart={handleDragStart}
+				onDrag={handleDragLeftCenter}
+				onDragEnd={handleDragEnd}
+				dragPositioningFunction={linerDragFunctionLeftCenter}
+			/>
+			{/* 右辺 */}
+			<DragLine
+				id={`${diagramId}-rightCenter-line`}
+				point={vertices.rightCenterPoint}
+				startPoint={vertices.rightTopPoint}
+				endPoint={vertices.rightBottomPoint}
+				onDragStart={handleDragStart}
+				onDrag={handleDragRightCenter}
+				onDragEnd={handleDragEnd}
+				dragPositioningFunction={linerDragFunctionRightCenter}
+			/>
+			{/* 下辺 */}
+			<DragLine
+				id={`${diagramId}-bottomCenter-line`}
+				point={vertices.bottomCenterPoint}
+				startPoint={vertices.leftBottomPoint}
+				endPoint={vertices.rightBottomPoint}
+				onDragStart={handleDragStart}
+				onDrag={handleDragBottomCenter}
+				onDragEnd={handleDragEnd}
+				dragPositioningFunction={linerDragFunctionBottomCenter}
+			/>
 			{/* 左上 */}
 			<DragPoint
 				id={`${diagramId}-leftTop`}
@@ -696,3 +742,47 @@ const Transformative: React.FC<TransformativeProps> = ({
 };
 
 export default memo(Transformative);
+
+type DragLineProps = Omit<DraggableProps, "ref"> & {
+	startPoint: Point;
+	endPoint: Point;
+};
+
+const DragLine: React.FC<DragLineProps> = memo(
+	({
+		id,
+		point,
+		startPoint,
+		endPoint,
+		onDragStart,
+		onDrag,
+		onDragEnd,
+		dragPositioningFunction,
+	}) => {
+		const svgRef = useRef<SVGLineElement>({} as SVGLineElement);
+
+		const draggableProps = useDraggable({
+			id,
+			point,
+			ref: svgRef,
+			onDragStart,
+			onDrag,
+			onDragEnd,
+			dragPositioningFunction,
+		});
+
+		return (
+			<line
+				id={id}
+				x1={startPoint.x}
+				y1={startPoint.y}
+				x2={endPoint.x}
+				y2={endPoint.y}
+				stroke="transparent"
+				strokeWidth={3}
+				ref={svgRef}
+				{...draggableProps}
+			/>
+		);
+	},
+);
