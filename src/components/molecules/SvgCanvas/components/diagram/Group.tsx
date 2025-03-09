@@ -8,7 +8,6 @@ import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
 	DiagramSelectEvent,
-	DiagramTransformEndEvent,
 	DiagramTransformEvent,
 	GroupDataChangeEvent,
 } from "../../types/EventTypes";
@@ -142,10 +141,10 @@ const calcItemBoxOfNoGroupRotation = (
  * @returns グループの四辺の座標
  */
 const calcGroupBoxOfNoRotation = (
-	changeItem: Diagram,
 	items: Diagram[],
 	groupCenterPoint: Point,
 	groupRotation: number,
+	changeItem?: Diagram,
 ) => {
 	// グループ内の図形を再帰的に取得し、グループの四辺の座標を計算する
 	let top = Number.POSITIVE_INFINITY;
@@ -156,10 +155,10 @@ const calcGroupBoxOfNoRotation = (
 	for (const item of items) {
 		if (isGroupData(item)) {
 			const groupBox = calcGroupBoxOfNoRotation(
-				changeItem,
 				item.items ?? [],
 				groupCenterPoint,
 				groupRotation,
+				changeItem,
 			);
 			top = Math.min(top, groupBox.top);
 			bottom = Math.max(bottom, groupBox.bottom);
@@ -167,7 +166,7 @@ const calcGroupBoxOfNoRotation = (
 			right = Math.max(right, groupBox.right);
 		} else {
 			const box = calcItemBoxOfNoGroupRotation(
-				item.id === changeItem.id ? changeItem : item,
+				item.id === changeItem?.id ? changeItem : item,
 				groupCenterPoint,
 				groupRotation,
 			);
@@ -315,8 +314,8 @@ const Group: React.FC<GroupProps> = ({
 	}, [isSelected]);
 
 	const transformGroupOutline = useCallback(
-		(changeItem: Diagram) => {
-			const box = calcGroupBoxOfNoRotation(changeItem, items, point, rotation);
+		(changeItem?: Diagram) => {
+			const box = calcGroupBoxOfNoRotation(items, point, rotation, changeItem);
 			const leftTop = rotatePoint(
 				{ x: box.left, y: box.top },
 				point,
@@ -385,16 +384,6 @@ const Group: React.FC<GroupProps> = ({
 			if (!isDragging) {
 				// グループのドラッグでなければ、ドラッグイベントをそのまま伝番
 				onDiagramDrag?.(e);
-
-				// アウトラインの更新
-				const changeItem = getChildDiagramById(items, e.id);
-				if (changeItem) {
-					transformGroupOutline({
-						...changeItem,
-						point: e.endPoint,
-					});
-				}
-
 				return;
 			}
 
@@ -432,28 +421,35 @@ const Group: React.FC<GroupProps> = ({
 
 			onGroupDataChange?.(event);
 		},
-		[
-			onDiagramDrag,
-			onGroupDataChange,
-			transformGroupOutline,
-			id,
-			items,
-			isDragging,
-		],
+		[onDiagramDrag, onGroupDataChange, id, isDragging],
 	);
 
 	const handleChildDiagramDragEnd = useCallback(
 		(e: DiagramDragEvent) => {
 			onDiagramDragEnd?.(e);
 			setIsDragging(false);
+
+			// アウトラインの更新
+			const changeItem = getChildDiagramById(items, e.id);
+			if (changeItem) {
+				transformGroupOutline({
+					...changeItem,
+					point: e.endPoint,
+				});
+			}
 		},
-		[onDiagramDragEnd],
+		[onDiagramDragEnd, transformGroupOutline, items],
 	);
 
 	const handleChildDiagramTransfrom = useCallback(
 		(e: DiagramTransformEvent) => {
 			onTransform?.(e);
+		},
+		[onTransform],
+	);
 
+	const handleChildDiagramTransfromEnd = useCallback(
+		(e: DiagramTransformEvent) => {
 			// アウトラインの更新
 			const changeItem = getChildDiagramById(items, e.id);
 			if (changeItem) {
@@ -463,14 +459,7 @@ const Group: React.FC<GroupProps> = ({
 				});
 			}
 		},
-		[onTransform, transformGroupOutline, items],
-	);
-
-	const handleChildDiagramTransfromEnd = useCallback(
-		(_e: DiagramTransformEndEvent) => {
-			// NOP
-		},
-		[],
+		[transformGroupOutline, items],
 	);
 
 	const handleTransformStart = useCallback(() => {
@@ -541,9 +530,13 @@ const Group: React.FC<GroupProps> = ({
 		[onGroupDataChange, id],
 	);
 
-	const handleTransformEnd = useCallback((_e: DiagramTransformEndEvent) => {
-		// NOP
-	}, []);
+	const handleTransformEnd = useCallback(
+		(_e: DiagramTransformEvent) => {
+			// アウトラインの更新
+			transformGroupOutline();
+		},
+		[transformGroupOutline],
+	);
 
 	const handleChildGroupDataChange = useCallback(
 		(e: GroupDataChangeEvent) => {

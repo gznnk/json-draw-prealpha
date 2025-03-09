@@ -7,7 +7,6 @@ import type { Point } from "../../types/CoordinateTypes";
 import type { DiagramType } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
-	DiagramTransformEndEvent,
 	DiagramTransformEvent,
 	DiagramTransformStartEvent,
 } from "../../types/EventTypes";
@@ -43,7 +42,7 @@ type TransformativeProps = {
 	isSelected: boolean;
 	onTransformStart?: (e: DiagramTransformStartEvent) => void; // TODO: 必須にする
 	onTransform: (e: DiagramTransformEvent) => void;
-	onTransformEnd?: (e: DiagramTransformEndEvent) => void; // TODO: 必須にする
+	onTransformEnd?: (e: DiagramTransformEvent) => void; // TODO: 必須にする
 };
 
 const Transformative: React.FC<TransformativeProps> = ({
@@ -61,6 +60,9 @@ const Transformative: React.FC<TransformativeProps> = ({
 	onTransformEnd,
 }) => {
 	const [isShiftKeyDown, setShiftKeyDown] = useState(false);
+	const lastTransformEvent = useRef<DiagramTransformEvent>(
+		{} as DiagramTransformEvent,
+	);
 
 	const doKeepProportion = keepProportion || isShiftKeyDown;
 
@@ -114,7 +116,7 @@ const Transformative: React.FC<TransformativeProps> = ({
 
 	const triggerTransform = useCallback(
 		(centerPoint: Point, newWidth: number, newHeight: number) => {
-			onTransform({
+			const event = {
 				id: diagramId,
 				startShape: {
 					...startShape.current,
@@ -127,7 +129,11 @@ const Transformative: React.FC<TransformativeProps> = ({
 					scaleY: newHeight > 0 ? 1 : -1,
 					rotation,
 				},
-			});
+			};
+
+			lastTransformEvent.current = event;
+
+			onTransform(event);
 		},
 		[onTransform, diagramId, rotation],
 	);
@@ -495,10 +501,9 @@ const Transformative: React.FC<TransformativeProps> = ({
 	// --- BottomCenter End --- //
 
 	const handleDragEnd = useCallback(() => {
-		onTransformEnd?.({
-			id: diagramId,
-		});
-	}, [onTransformEnd, diagramId]);
+		onTransformEnd?.(lastTransformEvent.current);
+		lastTransformEvent.current = {} as DiagramTransformEvent;
+	}, [onTransformEnd]);
 
 	// シフトキーの状態を監視
 	useEffect(() => {
@@ -528,13 +533,46 @@ const Transformative: React.FC<TransformativeProps> = ({
 	}, [isSelected]);
 
 	// 回転
-	const rp = affineTransformation(
+	const rotationPoint = affineTransformation(
 		{ x: width / 2 + 20, y: 0 },
 		1,
 		1,
 		degreesToRadians(rotation),
 		point.x,
 		point.y,
+	);
+
+	const handleDragRotationPoint = useCallback(
+		(e: DiagramDragEvent) => {
+			const angle = calculateAngle(point, e.endPoint);
+			const event = {
+				id: diagramId,
+				startShape: {
+					...startShape.current,
+				},
+				endShape: {
+					point,
+					width,
+					height,
+					scaleX,
+					scaleY,
+					rotation: radiansToDegrees(angle),
+				},
+			};
+			lastTransformEvent.current = event;
+			onTransform(event);
+		},
+		[onTransform, diagramId, point, width, height, scaleX, scaleY],
+	);
+
+	const dragFunctionRotationPoint = useCallback(
+		(p: Point) =>
+			calcNearestCircleIntersectionPoint(
+				{ x: point.x, y: point.y },
+				width / 2 + 20,
+				p,
+			),
+		[point, width],
 	);
 
 	if (!isSelected) {
@@ -647,34 +685,11 @@ const Transformative: React.FC<TransformativeProps> = ({
 			{/* 回転 */}
 			<DragPoint
 				id={`rotation-${diagramId}`}
-				point={rp}
+				point={rotationPoint}
 				onDragStart={handleDragStart}
-				onDrag={(e) => {
-					const angle = calculateAngle(point, e.endPoint);
-					console.log(radiansToDegrees(angle));
-					onTransform({
-						id: diagramId,
-						startShape: {
-							...startShape.current,
-						},
-						endShape: {
-							point,
-							width,
-							height,
-							scaleX,
-							scaleY,
-							rotation: radiansToDegrees(angle),
-						},
-					});
-				}}
+				onDrag={handleDragRotationPoint}
 				onDragEnd={handleDragEnd}
-				dragPositioningFunction={(p: Point) => {
-					return calcNearestCircleIntersectionPoint(
-						{ x: point.x, y: point.y },
-						width / 2 + 20,
-						p,
-					);
-				}}
+				dragPositioningFunction={dragFunctionRotationPoint}
 			/>
 		</>
 	);

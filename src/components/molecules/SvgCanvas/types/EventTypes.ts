@@ -27,10 +27,6 @@ export type DiagramTransformEvent = {
 	};
 };
 
-export type DiagramTransformEndEvent = {
-	id: string;
-};
-
 export type GroupDataChangeEvent = {
 	id: string;
 	point?: Point;
