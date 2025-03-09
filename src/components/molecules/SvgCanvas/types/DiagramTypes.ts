@@ -65,13 +65,14 @@ export type EllipseData = TransformativeData & {
 	strokeWidth: string;
 };
 export type LinePointData = DiagramBaseData;
-export type LineData = GroupData & {
+export type LineData = DiagramBaseData & {
 	fill?: string;
 	stroke: string;
 	strokeWidth: string;
+	items: Diagram[];
 };
 export type GroupData = TransformativeData & {
-	items: Diagram[]; // TODO いらない？
+	items: Diagram[];
 };
 export type RectangleData = TransformativeData & {
 	fill: string;

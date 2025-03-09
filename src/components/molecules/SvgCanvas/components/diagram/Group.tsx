@@ -23,7 +23,7 @@ import Transformative from "../core/Transformative";
 // SvgCanvas関連関数をインポート
 import { isGroupData, isTransformativeData } from "../../SvgCanvasFunctions";
 import { degreesToRadians, nanToZero, rotatePoint } from "../../functions/Math";
-// import { drawPoint, drawRect } from "../../functions/Svg";
+//import { drawPoint, drawRect } from "../../functions/Svg";
 
 // ユーティリティをインポート
 // import { getLogger } from "../../../../../utils/Logger";
@@ -83,16 +83,16 @@ const calcItemBoxOfNoGroupRotation = (
 ) => {
 	const groupRadians = degreesToRadians(-groupRotation);
 
+	const inversedCenter = rotatePoint(
+		item.point,
+		groupCenterPoint,
+		groupRadians,
+	);
+
 	if (isTransformativeData(item)) {
 		const halfWidth = nanToZero(item.width / 2);
 		const halfHeight = nanToZero(item.height / 2);
 		const itemRadians = degreesToRadians(item.rotation - groupRotation);
-
-		const inversedCenter = rotatePoint(
-			item.point,
-			groupCenterPoint,
-			groupRadians,
-		);
 
 		const leftTop = rotatePoint(
 			{ x: inversedCenter.x - halfWidth, y: inversedCenter.y - halfHeight },
@@ -126,12 +126,11 @@ const calcItemBoxOfNoGroupRotation = (
 		};
 	}
 
-	// TODO
 	return {
-		top: 0,
-		left: 0,
-		bottom: 0,
-		right: 0,
+		top: inversedCenter.y,
+		left: inversedCenter.x,
+		bottom: inversedCenter.y,
+		right: inversedCenter.x,
 	};
 };
 
@@ -517,6 +516,11 @@ const Group: React.FC<GroupProps> = ({
 							items: isGroupData(item)
 								? transformRecursive(item.items ?? [])
 								: undefined,
+						});
+					} else {
+						events.push({
+							...item,
+							point: newCenter,
 						});
 					}
 				}

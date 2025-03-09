@@ -312,18 +312,24 @@ const testItems3 = [
 	{
 		id: "g-1",
 		type: "Group",
-		point: { x: 200, y: 200 },
+		point: { x: 250, y: 250 },
 		width: 300,
 		height: 300,
+		rotation: radiansToDegrees(0),
+		scaleX: 1,
+		scaleY: 1,
 		keepProportion: true,
 		isSelected: false,
 		items: [
 			{
 				id: "3",
 				type: "Rectangle",
-				point: { x: 200, y: 200 },
+				point: { x: 150, y: 150 },
 				width: 100,
 				height: 100,
+				rotation: radiansToDegrees(0),
+				scaleX: 1,
+				scaleY: 1,
 				fill: "transparent",
 				stroke: "black",
 				strokeWidth: "1px",
@@ -333,9 +339,12 @@ const testItems3 = [
 			{
 				id: "4",
 				type: "Ellipse",
-				point: { x: 300, y: 200 },
+				point: { x: 250, y: 150 },
 				width: 100,
 				height: 100,
+				rotation: radiansToDegrees(0),
+				scaleX: 1,
+				scaleY: 1,
 				fill: "transparent",
 				stroke: "black",
 				strokeWidth: "1px",
@@ -345,9 +354,12 @@ const testItems3 = [
 			{
 				id: "5",
 				type: "Rectangle",
-				point: { x: 300, y: 300 },
+				point: { x: 250, y: 250 },
 				width: 100,
 				height: 100,
+				rotation: radiansToDegrees(0),
+				scaleX: 1,
+				scaleY: 1,
 				fill: "transparent",
 				stroke: "black",
 				strokeWidth: "1px",
@@ -357,9 +369,12 @@ const testItems3 = [
 			{
 				id: "12",
 				type: "Line",
-				point: { x: 400, y: 400 },
+				point: { x: 300, y: 300 },
 				width: 100,
 				height: 100,
+				rotation: radiansToDegrees(0),
+				scaleX: 1,
+				scaleY: 1,
 				stroke: "black",
 				strokeWidth: "1px",
 				keepProportion: false,
@@ -368,7 +383,7 @@ const testItems3 = [
 					{
 						id: "12-1",
 						type: "LinePoint",
-						point: { x: 400, y: 400 },
+						point: { x: 300, y: 300 },
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -377,7 +392,7 @@ const testItems3 = [
 					{
 						id: "12-2",
 						type: "LinePoint",
-						point: { x: 400, y: 500 },
+						point: { x: 300, y: 400 },
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -386,7 +401,7 @@ const testItems3 = [
 					{
 						id: "12-3",
 						type: "LinePoint",
-						point: { x: 500, y: 500 },
+						point: { x: 400, y: 400 },
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -486,7 +501,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems1);
+	} = useSvgCanvas(testItems3);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(
