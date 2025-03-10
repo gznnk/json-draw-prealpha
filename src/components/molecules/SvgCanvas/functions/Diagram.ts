@@ -30,6 +30,12 @@ export const createSvgTransform = (
 	return `matrix(${a}, ${b}, ${c}, ${d}, ${e}, ${f})`;
 };
 
+/**
+ * 角度に対応するカーソルを取得する
+ *
+ * @param angle - 角度
+ * @returns - カーソル
+ */
 export const getCursorFromAngle = (angle: number): string => {
 	// angleに360度を加算して0度以上にする
 	const _angle = (angle + 360) % 360;

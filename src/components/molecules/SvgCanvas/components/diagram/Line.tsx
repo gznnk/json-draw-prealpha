@@ -243,6 +243,7 @@ const Line: React.FC<LineProps> = ({
 				fill="none"
 				stroke="transparent"
 				strokeWidth={7}
+				tabIndex={0}
 				ref={dragSvgRef}
 				{...draggableProps}
 			/>
