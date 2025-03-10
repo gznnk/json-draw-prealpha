@@ -220,7 +220,6 @@ const calcGroupBoxOfNoRotation = (
 export type GroupProps = DiagramBaseProps &
 	TransformativeProps &
 	GroupData & {
-		isTransformActive?: boolean;
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
 	};
 
@@ -237,7 +236,6 @@ const Group: React.FC<GroupProps> = ({
 	scaleY = 1,
 	keepProportion = false,
 	isSelected = false,
-	isTransformActive = true,
 	onTransform,
 	onClick,
 	onDragStart,
@@ -595,23 +593,21 @@ const Group: React.FC<GroupProps> = ({
 	return (
 		<>
 			{children}
-			{isTransformActive && (
-				<Transformative
-					diagramId={id}
-					type="Group"
-					point={point}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					isSelected={isSelected}
-					onTransformStart={handleTransformStart}
-					onTransform={handleTransform}
-					onTransformEnd={handleTransformEnd}
-				/>
-			)}
+			<Transformative
+				diagramId={id}
+				type="Group"
+				point={point}
+				width={width}
+				height={height}
+				rotation={rotation}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				keepProportion={keepProportion}
+				isSelected={isSelected}
+				onTransformStart={handleTransformStart}
+				onTransform={handleTransform}
+				onTransformEnd={handleTransformEnd}
+			/>
 		</>
 	);
 };

@@ -1,25 +1,25 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
 // SvgCanvas関連型定義をインポート
 import type {
-	PathPointData,
 	ConnectPointData,
 	Diagram,
+	PathPointData,
 } from "../../types/DiagramTypes";
 import type {
-	DiagramHoverEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
 	DiagramDragEvent,
+	DiagramHoverEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import Path from "../diagram/Path";
 import DragPoint from "../core/DragPoint";
+import Path from "../diagram/Path";
 
 const createPathPointId = (id: string, index: number) => `${id}-pp-${index}`;
 
@@ -31,6 +31,7 @@ const createPathPointData = (id: string, point: Point): PathPointData => ({
 
 type ConnectionEvent = {
 	id: string;
+	type: "connecting" | "connect" | "disconnect";
 	point: Point;
 };
 
@@ -50,6 +51,8 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	const [isHovered, setIsHovered] = useState(false);
 	// ドラッグ状態の管理
 	const [isDragging, setIsDragging] = useState(false);
+
+	const isConnecting = useRef(false);
 
 	const pathPointNames = useMemo(
 		() => ({
@@ -74,6 +77,9 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
+			if (isConnecting.current) {
+				return;
+			}
 			setPathPoints((prev) =>
 				prev.map((item) => {
 					if (item.id === pathPointNames.p1) {
@@ -114,15 +120,35 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 		[point],
 	);
 
-	const handleDragOver = useCallback((e: DiagramDragDropEvent) => {
-		if (e.dropItem.type === "ConnectPoint") {
-			setIsHovered(true);
-		}
-	}, []);
+	const handleDragOver = useCallback(
+		(e: DiagramDragDropEvent) => {
+			if (e.dropItem.type === "ConnectPoint") {
+				setIsHovered(true);
+				// 接続中の処理
+				document.dispatchEvent(
+					new CustomEvent("Connection", {
+						detail: { id, type: "connecting", point },
+					}),
+				);
+			}
+		},
+		[id, point],
+	);
 
-	const handleDragLeave = useCallback((_e: DiagramDragDropEvent) => {
-		setIsHovered(false);
-	}, []);
+	const handleDragLeave = useCallback(
+		(e: DiagramDragDropEvent) => {
+			setIsHovered(false);
+			// 接続が切れた時の処理
+			if (e.dropItem.type === "ConnectPoint") {
+				document.dispatchEvent(
+					new CustomEvent("Connection", {
+						detail: { id, type: "disconnect", point },
+					}),
+				);
+			}
+		},
+		[id, point],
+	);
 
 	const handleDrop = useCallback(
 		(e: DiagramDragDropEvent) => {
@@ -130,7 +156,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 			if (e.dropItem.type === "ConnectPoint") {
 				document.dispatchEvent(
 					new CustomEvent("Connection", {
-						detail: { id, point },
+						detail: { id, type: "connect", point },
 					}),
 				);
 			}
@@ -149,37 +175,76 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 		setIsHovered(e.isHovered);
 	}, []);
 
-	// 接続中、切断イベントのリスナー登録
+	// 接続イベントのリスナー登録
 	useEffect(() => {
 		let handleConnection: (e: Event) => void;
 		if (isDragging) {
 			handleConnection = (e: Event) => {
 				const customEvent = e as CustomEvent<ConnectionEvent>;
 				if (customEvent.detail.id !== id) {
-					console.log("connecting event", customEvent.detail.id);
+					if (customEvent.detail.type === "connecting") {
+						console.log("connecting", customEvent.detail.id);
 
-					const points: PathPointData[] = [];
-					points.push({
-						id,
-						point,
-						isSelected: false,
-					});
-					for (let i = 1; i < pathPoints.length - 1; i++) {
+						isConnecting.current = true;
+
+						// TODO: パスポイントの制御処理の共通化
+						setPathPoints((prev) =>
+							prev.map((item) => {
+								if (item.id === pathPointNames.p1) {
+									return item;
+								}
+								if (item.id === pathPointNames.p2) {
+									return {
+										...item,
+										point: {
+											x: point.x,
+											y: (point.y + customEvent.detail.point.y) / 2,
+										},
+									};
+								}
+								if (item.id === pathPointNames.p3) {
+									return {
+										...item,
+										point: {
+											x: customEvent.detail.point.x,
+											y: (point.y + customEvent.detail.point.y) / 2,
+										},
+									};
+								}
+								if (item.id === pathPointNames.p4) {
+									return { ...item, point: customEvent.detail.point };
+								}
+								return item;
+							}),
+						);
+					} else if (customEvent.detail.type === "disconnect") {
+						// 切断
+						isConnecting.current = false;
+					} else if (customEvent.detail.type === "connect") {
+						console.log("connect", customEvent.detail.id);
+						const points: PathPointData[] = [];
 						points.push({
-							id: pathPoints[i].id,
-							point: pathPoints[i].point,
+							id,
+							point,
 							isSelected: false,
 						});
-					}
-					points.push({
-						id: customEvent.detail.id,
-						point: customEvent.detail.point,
-						isSelected: false,
-					});
+						for (let i = 1; i < pathPoints.length - 1; i++) {
+							points.push({
+								id: pathPoints[i].id,
+								point: pathPoints[i].point,
+								isSelected: false,
+							});
+						}
+						points.push({
+							id: customEvent.detail.id,
+							point: customEvent.detail.point,
+							isSelected: false,
+						});
 
-					onConnect?.({
-						points,
-					});
+						onConnect?.({
+							points,
+						});
+					}
 				}
 			};
 
@@ -191,7 +256,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				document.removeEventListener("Connection", handleConnection);
 			}
 		};
-	}, [onConnect, id, point, isDragging, pathPoints]);
+	}, [onConnect, id, point, isDragging, pathPoints, pathPointNames]);
 
 	return (
 		<>

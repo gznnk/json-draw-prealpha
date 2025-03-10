@@ -515,7 +515,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems1);
+	} = useSvgCanvas(testItems3);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(

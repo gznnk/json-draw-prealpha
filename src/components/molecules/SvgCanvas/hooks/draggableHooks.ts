@@ -557,8 +557,10 @@ export const useDraggable = (props: DraggableProps) => {
 				};
 
 				if (isPointerOver(customEvent.detail.clientPoint)) {
-					dragEntered.current = true;
-					onDragOver?.(dragDropEvent);
+					if (!dragEntered.current) {
+						dragEntered.current = true;
+						onDragOver?.(dragDropEvent);
+					}
 				} else if (dragEntered.current) {
 					dragEntered.current = false;
 					onDragLeave?.(dragDropEvent);

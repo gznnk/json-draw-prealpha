@@ -74,13 +74,10 @@ const Path: React.FC<PathProps> = ({
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
 
 	/**
-	 * ポインターダウンイベントハンドラ
-	 *
-	 * @param {DiagramPointerEvent} e ポインターイベント
-	 * @returns {void}
+	 * 折れ線のポインターダウンイベントハンドラ
 	 */
 	const handlePointerDown = useCallback(
-		(e: DiagramPointerEvent) => {
+		(_e: DiagramPointerEvent) => {
 			// 図形選択イベントを発火
 			onSelect?.({
 				id,
@@ -94,13 +91,10 @@ const Path: React.FC<PathProps> = ({
 	);
 
 	/**
-	 * 図形クリックイベントハンドラ
-	 *
-	 * @param {DiagramClickEvent} e クリックイベント
-	 * @returns {void}
+	 * 折れ線のクリックイベントハンドラ
 	 */
 	const handleClick = useCallback(
-		(e: DiagramClickEvent) => {
+		(_e: DiagramClickEvent) => {
 			if (isSequentialSelection) {
 				setIsTransformMode(!isTransformMode);
 			}
@@ -111,6 +105,7 @@ const Path: React.FC<PathProps> = ({
 		[onClick, id, isSequentialSelection, isTransformMode],
 	);
 
+	// 折れ線の選択状態制御
 	useEffect(() => {
 		// グループから選択が外れたら連続選択フラグも解除
 		if (!isSelected) {
@@ -120,10 +115,7 @@ const Path: React.FC<PathProps> = ({
 	}, [isSelected]);
 
 	/**
-	 * 線分のドラッグ開始イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e ドラッグ開始イベント
-	 * @returns {void}
+	 * 折れ線のドラッグ開始イベントハンドラ
 	 */
 	const handleDragStart = useCallback(
 		(e: DiagramDragEvent) => {
@@ -136,10 +128,7 @@ const Path: React.FC<PathProps> = ({
 	);
 
 	/**
-	 * 線分のドラッグ中イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e ドラッグ中イベント
-	 * @returns {void}
+	 * 折れ線のドラッグ中イベントハンドラ
 	 */
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
@@ -162,7 +151,7 @@ const Path: React.FC<PathProps> = ({
 	);
 
 	/**
-	 * 線分のドラッグ完了イベントハンドラ
+	 * 折れ線のドラッグ完了イベントハンドラ
 	 *
 	 * @param {DiagramDragEvent} _e ドラッグ完了イベント
 	 * @returns {void}
@@ -171,6 +160,7 @@ const Path: React.FC<PathProps> = ({
 		setIsDragging(false);
 	}, []);
 
+	// 折れ線のドラッグ用要素のプロパティ生成
 	const draggableProps = useDraggable({
 		id,
 		type: "Path",
@@ -184,7 +174,7 @@ const Path: React.FC<PathProps> = ({
 	});
 
 	/**
-	 * ドラッグポイントのドラッグ開始イベントハンドラ
+	 * 頂点のドラッグ開始イベントハンドラ
 	 *
 	 * @param {DiagramDragEvent} e ドラッグ開始イベント
 	 * @returns {void}
@@ -197,7 +187,7 @@ const Path: React.FC<PathProps> = ({
 	);
 
 	/**
-	 * ドラッグポイントのドラッグ中イベントハンドラ
+	 * 頂点のドラッグ中イベントハンドラ
 	 *
 	 * @param {DiagramDragEvent} e ドラッグ中イベント
 	 * @returns {void}
@@ -205,12 +195,21 @@ const Path: React.FC<PathProps> = ({
 	const handleLinePointDrag = useCallback(
 		(e: DiagramDragEvent) => {
 			onDrag?.(e);
+
+			const dragPoint = items.find((item) => item.id === e.id) as PathPointData;
+			if (!dragPoint) {
+				return;
+			}
+
+			if (dragPoint.rightAngle) {
+				const index = items.findIndex((item) => item.id === e.id);
+			}
 		},
 		[onDrag],
 	);
 
 	/**
-	 * ドラッグポイントのドラッグ完了イベントハンドラ
+	 * 頂点のドラッグ完了イベントハンドラ
 	 *
 	 * @param {DiagramDragEvent} e ドラッグ完了イベント
 	 * @returns {void}
@@ -222,9 +221,10 @@ const Path: React.FC<PathProps> = ({
 		[onDragEnd],
 	);
 
-	// 線分のd属性値を生成
+	// 折れ線のd属性値を生成
 	const d = createDValue(items);
 
+	// 頂点情報を生成
 	const linePoints = items.map((item) => ({
 		...item,
 		isActive: !isTransformMode,
@@ -243,6 +243,7 @@ const Path: React.FC<PathProps> = ({
 				fill="none"
 				stroke="transparent"
 				strokeWidth={7}
+				cursor="move"
 				tabIndex={0}
 				ref={dragSvgRef}
 				{...draggableProps}
@@ -260,7 +261,6 @@ const Path: React.FC<PathProps> = ({
 					scaleY={scaleY}
 					keepProportion={false}
 					items={linePoints}
-					isTransformActive={isTransformMode}
 					onDragStart={handleLinePointDragStart}
 					onDrag={handleLinePointDrag}
 					onDragEnd={handleLinePointDragEnd}

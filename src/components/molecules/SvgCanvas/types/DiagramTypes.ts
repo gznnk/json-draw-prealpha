@@ -88,14 +88,15 @@ export type EllipseData = TransformativeData & {
 };
 
 /**
- * パスの頂点のデータ
+ * 折れ線の頂点のデータ
  */
 export type PathPointData = DiagramBaseData & {
 	isActive?: boolean;
+	rightAngle?: boolean;
 };
 
 /**
- * パスのデータ
+ * 折れ線のデータ
  */
 export type PathData = TransformativeData & {
 	fill?: string;
