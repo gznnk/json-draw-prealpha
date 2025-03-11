@@ -1,4 +1,4 @@
-import type { Point, RectangleVertices } from "../types/CoordinateTypes";
+import type { Point, Box, RectangleVertices } from "../types/CoordinateTypes";
 import type { Shape } from "../types/DiagramTypes";
 
 /**
@@ -19,6 +19,18 @@ export const nanToZero = (value: number): number => {
  */
 export const signNonZero = (value: number): number => {
 	return value >= 0 ? 1 : -1;
+};
+
+/**
+ * ２つの数値のうち、指定した数値に近い方を返す
+ *
+ * @param value - 基準の数値
+ * @param a - 比較対象の数値
+ * @param b - 比較対象の数値
+ * @returns - 指定した数値に近い方の数値
+ */
+export const closer = (value: number, a: number, b: number): number => {
+	return Math.abs(value - a) < Math.abs(value - b) ? a : b;
 };
 
 /**
@@ -45,6 +57,29 @@ export const calculateAngle = (p1: Point, p2: Point): number => {
 	const deltaX = p2.x - p1.x;
 	const angle = Math.atan2(deltaY, deltaX); // ラジアンで角度を計算
 	return angle;
+};
+
+/**
+ * 急勾配（45～135度、225～315度）かどうかを判定する
+ *
+ * @param angle 角度（ラジアン）
+ * @returns 急勾配かどうか
+ */
+export const isSteepAngle = (angle: number): boolean => {
+	return Math.abs(angle) > Math.PI / 4 && Math.abs(angle) < (Math.PI * 3) / 4;
+};
+
+// TODO いらない？
+/**
+ * 2点を結ぶ直線が急勾配（45～135度、225～315度）かどうかを判定する
+ *
+ * @param {Point} p1 - 1つ目の点の座標
+ * @param {Point} p2 - 2つ目の点の座標
+ * @returns 急勾配かどうか
+ */
+export const isSteepLine = (p1: Point, p2: Point): boolean => {
+	const angle = calculateAngle(p1, p2);
+	return isSteepAngle(angle);
 };
 
 /**
@@ -296,14 +331,9 @@ export const createLinerX2yFunction = (p1: Point, p2: Point) => {
  * @param scaleY - 短径のY軸方向の拡大率
  * @returns 矩形の頂点座標
  */
-export const calcRectangleVertices = (
-	point: Point,
-	width: number,
-	height: number,
-	rotation: number,
-	scaleX: number,
-	scaleY: number,
-): RectangleVertices => {
+export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
+	const { point, width, height, rotation, scaleX, scaleY } = shape;
+
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;
 
@@ -391,6 +421,28 @@ export const calcRectangleVertices = (
 		leftCenterPoint,
 		rightCenterPoint,
 		bottomCenterPoint,
+	};
+};
+
+/**
+ * 短径の外接枠を計算する
+ *
+ * @param shape - 短径
+ * @returns 短径の外接枠
+ */
+export const calcRectangleOuterBox = (shape: Shape): Box => {
+	const { leftTopPoint, rightBottomPoint } = calcRectangleVertices(shape);
+
+	const left = Math.min(leftTopPoint.x, rightBottomPoint.x);
+	const top = Math.min(leftTopPoint.y, rightBottomPoint.y);
+	const right = Math.max(leftTopPoint.x, rightBottomPoint.x);
+	const bottom = Math.max(leftTopPoint.y, rightBottomPoint.y);
+
+	return {
+		top,
+		left,
+		right,
+		bottom,
 	};
 };
 

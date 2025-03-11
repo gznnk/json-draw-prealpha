@@ -9,6 +9,16 @@ export type Point = {
 };
 
 /**
+ * 矩形の枠の型定義
+ */
+export type Box = {
+	top: number;
+	left: number;
+	right: number;
+	bottom: number;
+};
+
+/**
  * 矩形の頂点の型定義
  */
 export type RectangleVertices = {

@@ -83,17 +83,24 @@ const Transformative: React.FC<TransformativeProps> = ({
 		scaleX,
 		scaleY,
 		aspectRatio: width / height,
-		...calcRectangleVertices(point, width, height, rotation, scaleX, scaleY),
+		...calcRectangleVertices({
+			point,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		}),
 	});
 
-	const vertices = calcRectangleVertices(
+	const vertices = calcRectangleVertices({
 		point,
 		width,
 		height,
 		rotation,
 		scaleX,
 		scaleY,
-	);
+	});
 
 	const radians = useMemo(() => degreesToRadians(rotation), [rotation]);
 	const isSwapped = useMemo(() => {

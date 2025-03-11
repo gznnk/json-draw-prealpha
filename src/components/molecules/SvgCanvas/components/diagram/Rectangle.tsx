@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
@@ -27,8 +27,12 @@ import Transformative from "../core/Transformative";
 import { useDraggable } from "../../hooks/draggableHooks";
 
 // SvgCanvas関連関数をインポート
-import { calcRectangleVertices, degreesToRadians } from "../../functions/Math";
 import { createSvgTransform } from "../../functions/Diagram";
+import {
+	calcRectangleVertices,
+	degreesToRadians,
+	isSteepAngle,
+} from "../../functions/Math";
 
 // ユーティリティをインポート
 // import { getLogger } from "../../../../../utils/Logger";
@@ -71,6 +75,10 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
 
+	const radians = useMemo(() => degreesToRadians(rotation), [rotation]);
+
+	const isSteep = useMemo(() => isSteepAngle(radians), [radians]);
+
 	/**
 	 * 接続ポイントの位置を更新
 	 *
@@ -80,14 +88,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 */
 	const updateConnectPoints = useCallback(
 		(shape: Shape) => {
-			const vertices = calcRectangleVertices(
-				shape.point,
-				shape.width,
-				shape.height,
-				shape.rotation,
-				shape.scaleX,
-				shape.scaleY,
-			);
+			const vertices = calcRectangleVertices(shape);
 
 			for (const cp of (items as ConnectPointData[]) ?? []) {
 				const cPoint = (vertices as RectangleVertices)[
@@ -217,6 +218,11 @@ const Rectangle: React.FC<RectangleProps> = ({
 		onHoverChange: handleHoverChange,
 	});
 
+	const rectTransform = useMemo(
+		() => createSvgTransform(scaleX, scaleY, radians, point.x, point.y),
+		[radians, scaleX, scaleY, point.x, point.y],
+	);
+
 	return (
 		<>
 			<g transform="translate(0.5,0.5)">
@@ -232,13 +238,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					strokeWidth={strokeWidth}
 					tabIndex={0}
 					cursor="move"
-					transform={createSvgTransform(
-						scaleX,
-						scaleY,
-						degreesToRadians(rotation),
-						point.x,
-						point.y,
-					)}
+					transform={rectTransform}
 					ref={svgRef}
 					{...draggableProps}
 				/>
@@ -296,7 +296,14 @@ export const createRectangleData = (
 	stroke: string,
 	strokeWidth: string,
 ): RectangleData => {
-	const vertices = calcRectangleVertices(point, width, height, 0, 1, 1);
+	const vertices = calcRectangleVertices({
+		point,
+		width,
+		height,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
+	});
 
 	const items: Diagram[] = [];
 	items.push({
