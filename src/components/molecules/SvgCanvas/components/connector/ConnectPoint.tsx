@@ -75,6 +75,91 @@ const isLeftRight = (direction: Direction): boolean => {
 	return direction === "left" || direction === "right";
 };
 
+// 幅優先探索
+const findShortestPath = (grid: Point[], start: Point, end: Point): Point[] => {
+	const queue: { point: Point; route: Point[] }[] = [
+		{ point: start, route: [start] },
+	];
+	const visited = new Set<string>();
+
+	const key = (p: Point) => `${p.x},${p.y}`;
+	visited.add(key(start));
+
+	while (queue.length > 0) {
+		const item = queue.shift();
+		console.log(item?.route);
+		if (!item) break;
+		const { point, route } = item;
+
+		if (point.x === end.x && point.y === end.y) {
+			return route;
+		}
+
+		for (const next of grid) {
+			if (visited.has(key(next))) continue;
+			if (point.x !== next.x && point.y !== next.y) continue;
+
+			// const isPathClear = route.every((p) => p.x === next.x || p.y === next.y);
+			// if (!isPathClear) continue;
+
+			visited.add(key(next));
+			queue.push({ point: next, route: [...route, next] });
+		}
+	}
+
+	return [];
+};
+
+const findOptimalPath = (grid: Point[], start: Point, end: Point): Point[] => {
+	const queue: { point: Point; route: Point[]; turns: number }[] = [
+		{ point: start, route: [start], turns: 0 },
+	];
+	const visited = new Map<string, number>(); // 訪問済みの点とそのターン数を記録
+
+	const key = (p: Point) => `${p.x},${p.y}`;
+	visited.set(key(start), 0);
+
+	let bestPath: Point[] = [];
+	let minTurns = Number.POSITIVE_INFINITY;
+	let minDistance = Number.POSITIVE_INFINITY;
+
+	while (queue.length > 0) {
+		const { point, route, turns } = queue.shift()!;
+
+		if (point.x === end.x && point.y === end.y) {
+			const distance = route.length;
+			if (
+				distance < minDistance ||
+				(distance === minDistance && turns < minTurns)
+			) {
+				minDistance = distance;
+				minTurns = turns;
+				bestPath = route;
+			}
+			continue;
+		}
+
+		for (const next of grid) {
+			if (point.x !== next.x && point.y !== next.y) continue; // 直線移動のみ許可
+
+			const nextKey = key(next);
+			const newTurns =
+				route.length > 1 &&
+				route[route.length - 2].x !== next.x &&
+				route[route.length - 2].y !== next.y
+					? turns + 1
+					: turns;
+
+			if (!visited.has(nextKey) || visited.get(nextKey)! > newTurns) {
+				visited.set(nextKey, newTurns);
+				queue.push({ point: next, route: [...route, next], turns: newTurns });
+			}
+		}
+	}
+
+	return bestPath;
+};
+
 type ConnectionEvent = {
 	id: string;
 	type: "connecting" | "connect" | "disconnect";
@@ -285,99 +370,140 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 			// 接続中の図形がある場合
 			if (connectingPoint.current?.ownerShape) {
-				// 接続の方向が一致しているかチェック
-				const targetDirection = getDirectionFromPoint(
-					connectingPoint.current?.point,
-					connectingPoint.current?.ownerShape.point,
-				);
-				const connectDirection = getDirectionFromPoint(p3, p4);
-
-				if (targetDirection !== connectDirection) {
-					// 接続の方向が違う場合
-
-					const targetOwnerOuterBox = calcRectangleOuterBox(
-						connectingPoint.current.ownerShape,
-					);
-					const targetOwnerEdges = {
-						leftTop: {
-							x: targetOwnerOuterBox.left,
-							y: targetOwnerOuterBox.top,
-						},
-						rightTop: {
-							x: targetOwnerOuterBox.right,
-							y: targetOwnerOuterBox.top,
-						},
-						rightBottom: {
-							x: targetOwnerOuterBox.right,
-							y: targetOwnerOuterBox.bottom,
-						},
-						leftBottom: {
-							x: targetOwnerOuterBox.left,
-							y: targetOwnerOuterBox.bottom,
-						},
-					};
-
-					if (isUpDown(targetDirection) === isUpDown(connectDirection)) {
-						// 反対向きの場合
-					} else {
-						// 反対向きでもない場合
-
-						// １つ前の線の方向
-						const prevDirection = getDirectionFromPoint(p2, p3);
-
-						if (prevDirection === targetDirection) {
-							// １つ前の線の方向が接続の方向と一致している場合
-							if (isP2ReverseDirection) {
-								// p2の向きが逆向きの場合、点を１つ追加して接続する
-								const p5 = { ...endPoint };
-								if (targetDirection === "up") {
-									p5.y = targetOwnerOuterBox.bottom + CONNECT_LINE_MARGIN;
-									p3.y = p5.y;
-									p4.y = p5.y;
-								} else if (targetDirection === "down") {
-									p5.y = targetOwnerOuterBox.top - CONNECT_LINE_MARGIN;
-									p3.y = p5.y;
-									p4.y = p5.y;
-								} else if (targetDirection === "right") {
-									p5.x = targetOwnerOuterBox.left - CONNECT_LINE_MARGIN;
-									p3.y = p5.x;
-									p4.y = p5.x;
-								} else if (targetDirection === "left") {
-									p5.x = targetOwnerOuterBox.right + CONNECT_LINE_MARGIN;
-									p3.y = p5.x;
-									p4.y = p5.x;
-								}
-
-								newPoints.push(createPathPointData(pathPointIds.p5, p5));
-								newPoints.push(
-									createPathPointData(pathPointIds.p6, { ...endPoint }),
-								);
-							} else {
-								// p2の向きが逆向きでない場合、１つ前の線を接続する
-								newPoints.pop();
-								newPoints[newPoints.length - 1].point = endPoint;
-								if (isUpDown(prevDirection)) {
-									newPoints[newPoints.length - 2].point.x = endPoint.x;
-								} else {
-									newPoints[newPoints.length - 2].point.y = endPoint.y;
-								}
-							}
-						} else {
-						}
-
-						// TODO: ダメ
-						// if (
-						// 	!isLineIntersectingBox(
-						// 		newPoints[newPoints.length - 2].point,
-						// 		newPoints[newPoints.length - 3].point,
-						// 		targetOwnerOuterBox,
-						// 	)
-						// ) {
-						// 	newPoints.pop();
-						// 	newPoints[newPoints.length - 1].point = endPoint;
-						// }
-					}
+				// ルート作成用のマトリクスを作成
+				const grid: Point[] = [];
+				grid.push(point);
+				grid.push({
+					x: ownerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: ownerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: ownerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: ownerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+				if (direction === "up") {
+					grid.push({
+						x: point.x,
+						y: ownerOuterBox.top - CONNECT_LINE_MARGIN,
+					});
+				} else if (direction === "down") {
+					grid.push({
+						x: point.x,
+						y: ownerOuterBox.bottom + CONNECT_LINE_MARGIN,
+					});
+				} else if (direction === "left") {
+					grid.push({
+						x: ownerOuterBox.left - CONNECT_LINE_MARGIN,
+						y: point.y,
+					});
+				} else if (direction === "right") {
+					grid.push({
+						x: ownerOuterBox.right + CONNECT_LINE_MARGIN,
+						y: point.y,
+					});
 				}
+
+				const targetOwnerOuterBox = calcRectangleOuterBox(
+					connectingPoint.current.ownerShape,
+				);
+				grid.push({
+					x: targetOwnerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: targetOwnerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: targetOwnerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: targetOwnerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+				const targetDirection = getDirectionFromPoint(
+					connectingPoint.current.ownerShape.point,
+					connectingPoint.current.point,
+				);
+				if (targetDirection === "up") {
+					grid.push({
+						x: connectingPoint.current.point.x,
+						y: targetOwnerOuterBox.top - CONNECT_LINE_MARGIN,
+					});
+				} else if (targetDirection === "down") {
+					grid.push({
+						x: connectingPoint.current.point.x,
+						y: targetOwnerOuterBox.bottom + CONNECT_LINE_MARGIN,
+					});
+				} else if (targetDirection === "left") {
+					grid.push({
+						x: targetOwnerOuterBox.left - CONNECT_LINE_MARGIN,
+						y: connectingPoint.current.point.y,
+					});
+				} else if (targetDirection === "right") {
+					grid.push({
+						x: targetOwnerOuterBox.right + CONNECT_LINE_MARGIN,
+						y: connectingPoint.current.point.y,
+					});
+				}
+				grid.push(endPoint);
+
+				grid.push({
+					x: ownerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: ownerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: ownerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: ownerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: targetOwnerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+
+				grid.push({
+					x: targetOwnerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: targetOwnerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.top - CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: targetOwnerOuterBox.right + CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+				grid.push({
+					x: targetOwnerOuterBox.left - CONNECT_LINE_MARGIN,
+					y: ownerOuterBox.bottom + CONNECT_LINE_MARGIN,
+				});
+
+				for (const p of grid) {
+					drawPoint(`${id}-grid-${p.x}-${p.y}`, p);
+				}
+
+				// ルートを作成
+				const route = findOptimalPath(grid, point, endPoint);
+
+				// console.log(route);
+
+				return route.map((p, i) => {
+					const pathPointId = createPathPointId(id, i + 1);
+					return createPathPointData(pathPointId, p);
+				});
 			}
 
 			return newPoints;
