@@ -318,8 +318,6 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 	const calcPathPoints = useCallback(
 		(dragPoint: Point) => {
-			const newPoints: PathPointData[] = [];
-
 			// 接続中のポイントがある場合は、そのポイントを終点とする
 			// ない場合は、ドラッグ中のポイントを終点とする
 			const endPoint = connectingPoint.current
@@ -327,191 +325,100 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				: dragPoint;
 
 			// 図形と重ならないように線を引く
-
-			// p1
-			newPoints.push(createPathPointData(pathPointIds.p1, point));
-
-			// p2
-			const p2 = {
-				x: isDirectionUpDown ? point.x : Math.abs((point.x + endPoint.x) / 2),
-				y: isDirectionUpDown ? Math.abs((point.y + endPoint.y) / 2) : point.y,
-			};
-			// p1-p2間の線の方向が逆向きになっているかチェック
-			const isP2ReverseDirection = getLineDirection(point, p2) !== direction;
-			if (isP2ReverseDirection) {
-				// 逆向きになっている場合は、p2を反対方向に移動
-				if (isDirectionUpDown) {
-					if (direction === "up") {
-						p2.y = ownerOuterBox.top - CONNECT_LINE_MARGIN;
-					} else {
-						p2.y = ownerOuterBox.bottom + CONNECT_LINE_MARGIN;
-					}
-				} else {
-					if (direction === "right") {
-						p2.x = ownerOuterBox.right + CONNECT_LINE_MARGIN;
-					} else {
-						p2.x = ownerOuterBox.left - CONNECT_LINE_MARGIN;
-					}
-				}
-			}
-			newPoints.push(createPathPointData(pathPointIds.p2, p2));
-
-			// p3
-			const p3 = {
-				x: isDirectionUpDown ? endPoint.x : p2.x,
-				y: isDirectionUpDown ? p2.y : endPoint.y,
-			};
-
-			// p4
-			const p4 = { ...endPoint };
-
-			// p3-p4間の線が図形の辺と交差しているかチェック
-			let isAccrossCloserLine = false;
-			let isAccrossFartherLine = false;
-			const edges = {
-				leftTop: { x: ownerOuterBox.left, y: ownerOuterBox.top },
-				rightTop: { x: ownerOuterBox.right, y: ownerOuterBox.top },
-				rightBottom: { x: ownerOuterBox.right, y: ownerOuterBox.bottom },
-				leftBottom: { x: ownerOuterBox.left, y: ownerOuterBox.bottom },
-			};
-			if (direction === "up") {
-				isAccrossCloserLine = lineIntersects(
-					edges.leftTop,
-					edges.rightTop,
-					p3,
-					p4,
-				);
-				isAccrossFartherLine = lineIntersects(
-					edges.leftBottom,
-					edges.rightBottom,
-					p3,
-					p4,
-				);
-			}
-			if (direction === "down") {
-				isAccrossCloserLine = lineIntersects(
-					edges.leftBottom,
-					edges.rightBottom,
-					p3,
-					p4,
-				);
-				isAccrossFartherLine = lineIntersects(
-					edges.leftTop,
-					edges.rightTop,
-					p3,
-					p4,
-				);
-			}
-			if (direction === "left") {
-				isAccrossCloserLine = lineIntersects(
-					edges.leftTop,
-					edges.leftBottom,
-					p3,
-					p4,
-				);
-				isAccrossFartherLine = lineIntersects(
-					edges.rightTop,
-					edges.rightBottom,
-					p3,
-					p4,
-				);
-			}
-			if (direction === "right") {
-				isAccrossCloserLine = lineIntersects(
-					edges.rightTop,
-					edges.rightBottom,
-					p3,
-					p4,
-				);
-				isAccrossFartherLine = lineIntersects(
-					edges.leftTop,
-					edges.leftBottom,
-					p3,
-					p4,
-				);
-			}
-
-			if (isAccrossCloserLine) {
-				// 近い辺と交差している場合は、p3を近い辺に移動
-				if (isDirectionUpDown) {
-					p3.x = closer(
-						endPoint.x,
-						ownerOuterBox.left - CONNECT_LINE_MARGIN,
-						ownerOuterBox.right + CONNECT_LINE_MARGIN,
-					);
-				} else {
-					p3.y = closer(
-						endPoint.y,
-						ownerOuterBox.top - CONNECT_LINE_MARGIN,
-						ownerOuterBox.bottom + CONNECT_LINE_MARGIN,
-					);
-				}
-				// p4が図形の中に入らないよう位置を修正
-				if (isDirectionUpDown) {
-					p4.x = p3.x;
-					p4.y = endPoint.y;
-				} else {
-					p4.x = endPoint.x;
-					p4.y = p3.y;
-				}
-			}
-			newPoints.push(createPathPointData(pathPointIds.p3, p3));
-			newPoints.push(createPathPointData(pathPointIds.p4, p4));
-
-			if (isAccrossFartherLine) {
-				// 遠い辺も交差している場合は、p5を追加して交差しないようにする
-				newPoints.push(createPathPointData(pathPointIds.p5, { ...endPoint }));
-			}
+			const newPoints = createConnectPathOnDrag(
+				point,
+				direction,
+				ownerOuterBox,
+				endPoint,
+			).map((p, i) => {
+				const pathPointId = createPathPointId(id, i + 1); // TODO: IDの振り方改善
+				return createPathPointData(pathPointId, p);
+			});
 
 			// drawPoint(`${pathPointIds.p1}-point`, {
 			// 	x: newPoints[1].point.x,
 			// 	y: point.y + signNonZero(newPoints[1].point.y - point.y) * 2,
 			// });
 
+			// ----------------------------------------------------------------
 			// 接続中の図形がある場合
-			if (connectingPoint.current?.ownerShape) {
-				// ルート作成用のマトリクスを作成
-				const grid: Point[] = [];
-				const box1 = addMarginToBox(ownerOuterBox);
-				const box2 = addMarginToBox(
+			if (connectingPoint.current) {
+				const targetPoint = connectingPoint.current.point;
+
+				// 始点と終点の中間地点を取得
+				const midPoint = {
+					x: (point.x + targetPoint.x) / 2,
+					y: (point.y + targetPoint.y) / 2,
+				};
+
+				const path1 = createConnectPathOnDrag(
+					point,
+					direction,
+					ownerOuterBox,
+					midPoint,
+				);
+
+				const path2 = createConnectPathOnDrag(
+					targetPoint,
+					getLineDirection(
+						connectingPoint.current.ownerShape.point,
+						targetPoint,
+					),
 					calcRectangleOuterBox(connectingPoint.current.ownerShape),
+					midPoint,
 				);
-				addGridCrossPoint(grid, box1.leftTop);
-				addGridCrossPoint(grid, box1.leftBottom);
-				addGridCrossPoint(grid, box1.rightTop);
-				addGridCrossPoint(grid, box1.rightBottom);
-				addGridCrossPoint(grid, box2.leftTop);
-				addGridCrossPoint(grid, box2.leftBottom);
-				addGridCrossPoint(grid, box2.rightTop);
-				addGridCrossPoint(grid, box2.rightBottom);
 
-				const secondConnectPoint = getSecondConnectPoint(ownerShape, point);
-				const targetSecondConnectPoint = getSecondConnectPoint(
-					connectingPoint.current.ownerShape,
-					endPoint,
-				);
-				addGridCrossPoint(grid, secondConnectPoint);
-				addGridCrossPoint(grid, targetSecondConnectPoint);
-
-				// grid.push(point);
-				grid.push(endPoint);
-
-				for (const p of grid) {
-					drawPoint(`${id}-grid-${p.x}-${p.y}`, p);
-				}
-
-				// ルートを作成
-				const route = findOptimalPath(grid, point, endPoint, [
-					ownerShape.point,
-					connectingPoint.current.ownerShape.point,
-				]);
-
-				// console.log(route);
-
-				return route.map((p, i) => {
+				return [...path1, ...path2.reverse()].map((p, i) => {
 					const pathPointId = createPathPointId(id, i + 1);
 					return createPathPointData(pathPointId, p);
 				});
+
+				// const targetOwnerShape = connectingPoint.current.ownerShape;
+				// // 接続中のポイントを取得
+				// const secondConnectPoint = getSecondConnectPoint(ownerShape, point);
+
+				// ルート作成用のマトリクスを作成
+				// const grid: Point[] = [];
+				// const box1 = addMarginToBox(ownerOuterBox);
+				// const box2 = addMarginToBox(
+				// 	calcRectangleOuterBox(connectingPoint.current.ownerShape),
+				// );
+				// addGridCrossPoint(grid, box1.leftTop);
+				// addGridCrossPoint(grid, box1.leftBottom);
+				// addGridCrossPoint(grid, box1.rightTop);
+				// addGridCrossPoint(grid, box1.rightBottom);
+				// addGridCrossPoint(grid, box2.leftTop);
+				// addGridCrossPoint(grid, box2.leftBottom);
+				// addGridCrossPoint(grid, box2.rightTop);
+				// addGridCrossPoint(grid, box2.rightBottom);
+
+				// const secondConnectPoint = getSecondConnectPoint(ownerShape, point);
+				// const targetSecondConnectPoint = getSecondConnectPoint(
+				// 	connectingPoint.current.ownerShape,
+				// 	endPoint,
+				// );
+				// addGridCrossPoint(grid, secondConnectPoint);
+				// addGridCrossPoint(grid, targetSecondConnectPoint);
+
+				// // grid.push(point);
+				// grid.push(endPoint);
+
+				// for (const p of grid) {
+				// 	drawPoint(`${id}-grid-${p.x}-${p.y}`, p);
+				// }
+
+				// // ルートを作成
+				// const route = findOptimalPath(grid, point, endPoint, [
+				// 	ownerShape.point,
+				// 	connectingPoint.current.ownerShape.point,
+				// ]);
+
+				// // console.log(route);
+
+				// return route.map((p, i) => {
+				// 	const pathPointId = createPathPointId(id, i + 1);
+				// 	return createPathPointData(pathPointId, p);
+				// });
 			}
 
 			return newPoints;
@@ -707,3 +614,148 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 };
 
 export default memo(ConnectPoint);
+
+const createConnectPathOnDrag = (
+	startPoint: Point,
+	startDirection: Direction,
+	startOwnerOuterBox: Box,
+	endPoint: Point,
+) => {
+	// 図形と重ならないように線を引く
+	const newPoints: Point[] = [];
+
+	// 開始方向が上下かどうか
+	const isDirectionUpDown = isUpDown(startDirection);
+
+	// p1
+	const p1 = { ...startPoint };
+	newPoints.push(startPoint);
+
+	// p2
+	const p2 = {
+		x: isDirectionUpDown ? p1.x : Math.abs((p1.x + endPoint.x) / 2),
+		y: isDirectionUpDown ? Math.abs((p1.y + endPoint.y) / 2) : p1.y,
+	};
+	// p1-p2間の線の方向が逆向きになっているかチェック
+	const isP2ReverseDirection = getLineDirection(p1, p2) !== startDirection;
+	if (isP2ReverseDirection) {
+		// 逆向きになっている場合は、p2を反対方向に移動
+		if (isDirectionUpDown) {
+			if (startDirection === "up") {
+				p2.y = startOwnerOuterBox.top - CONNECT_LINE_MARGIN;
+			} else {
+				p2.y = startOwnerOuterBox.bottom + CONNECT_LINE_MARGIN;
+			}
+		} else {
+			if (startDirection === "right") {
+				p2.x = startOwnerOuterBox.right + CONNECT_LINE_MARGIN;
+			} else {
+				p2.x = startOwnerOuterBox.left - CONNECT_LINE_MARGIN;
+			}
+		}
+	}
+	newPoints.push(p2);
+
+	// p3
+	const p3 = {
+		x: isDirectionUpDown ? endPoint.x : p2.x,
+		y: isDirectionUpDown ? p2.y : endPoint.y,
+	};
+
+	// p4
+	const p4 = { ...endPoint };
+
+	// p3-p4間の線が図形の辺と交差しているかチェック
+	let isAccrossCloserLine = false;
+	let isAccrossFartherLine = false;
+	if (startDirection === "up") {
+		isAccrossCloserLine = lineIntersects(
+			startOwnerOuterBox.leftTop,
+			startOwnerOuterBox.rightTop,
+			p3,
+			p4,
+		);
+		isAccrossFartherLine = lineIntersects(
+			startOwnerOuterBox.leftBottom,
+			startOwnerOuterBox.rightBottom,
+			p3,
+			p4,
+		);
+	}
+	if (startDirection === "down") {
+		isAccrossCloserLine = lineIntersects(
+			startOwnerOuterBox.leftBottom,
+			startOwnerOuterBox.rightBottom,
+			p3,
+			p4,
+		);
+		isAccrossFartherLine = lineIntersects(
+			startOwnerOuterBox.leftTop,
+			startOwnerOuterBox.rightTop,
+			p3,
+			p4,
+		);
+	}
+	if (startDirection === "left") {
+		isAccrossCloserLine = lineIntersects(
+			startOwnerOuterBox.leftTop,
+			startOwnerOuterBox.leftBottom,
+			p3,
+			p4,
+		);
+		isAccrossFartherLine = lineIntersects(
+			startOwnerOuterBox.rightTop,
+			startOwnerOuterBox.rightBottom,
+			p3,
+			p4,
+		);
+	}
+	if (startDirection === "right") {
+		isAccrossCloserLine = lineIntersects(
+			startOwnerOuterBox.rightTop,
+			startOwnerOuterBox.rightBottom,
+			p3,
+			p4,
+		);
+		isAccrossFartherLine = lineIntersects(
+			startOwnerOuterBox.leftTop,
+			startOwnerOuterBox.leftBottom,
+			p3,
+			p4,
+		);
+	}
+
+	if (isAccrossCloserLine) {
+		// 近い辺と交差している場合は、p3を近い辺に移動
+		if (isDirectionUpDown) {
+			p3.x = closer(
+				endPoint.x,
+				startOwnerOuterBox.left - CONNECT_LINE_MARGIN,
+				startOwnerOuterBox.right + CONNECT_LINE_MARGIN,
+			);
+		} else {
+			p3.y = closer(
+				endPoint.y,
+				startOwnerOuterBox.top - CONNECT_LINE_MARGIN,
+				startOwnerOuterBox.bottom + CONNECT_LINE_MARGIN,
+			);
+		}
+		// p4が図形の中に入らないよう位置を修正
+		if (isDirectionUpDown) {
+			p4.x = p3.x;
+			p4.y = endPoint.y;
+		} else {
+			p4.x = endPoint.x;
+			p4.y = p3.y;
+		}
+	}
+	newPoints.push(p3);
+	newPoints.push(p4);
+
+	if (isAccrossFartherLine) {
+		// 遠い辺も交差している場合は、p5を追加して交差しないようにする
+		newPoints.push({ ...endPoint });
+	}
+
+	return newPoints;
+};
