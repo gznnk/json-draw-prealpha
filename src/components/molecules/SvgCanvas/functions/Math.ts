@@ -57,6 +57,26 @@ export const calcDistance = (p1: Point, p2: Point): number => {
 };
 
 /**
+ * 指定した点 p が、2点 a, b を結ぶ線分上にあるかを判定
+ *
+ * @param {Point} a - 線分の始点
+ * @param {Point} b - 線分の終点
+ * @param {Point} p - 判定する点
+ * @returns {boolean} p が a, b を結ぶ線分上にある場合は true、それ以外は false
+ */
+export const isPointOnSegment = (a: Point, b: Point, p: Point): boolean => {
+	// 外積を計算（3点が一直線上にあるか）
+	const crossProduct = (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
+	if (crossProduct !== 0) return false;
+
+	// p が a と b の間にあるか (範囲内にあるか)
+	const withinX = Math.min(a.x, b.x) <= p.x && p.x <= Math.max(a.x, b.x);
+	const withinY = Math.min(a.y, b.y) <= p.y && p.y <= Math.max(a.y, b.y);
+
+	return withinX && withinY;
+};
+
+/**
  * ２点のうち、指定した点に近い方の点を返す
  *
  * @param p - 指定した点
@@ -487,9 +507,26 @@ export const calcRectangleOuterBox = (shape: Shape): Box => {
 		left,
 		right,
 		bottom,
+		leftTop: {
+			x: left,
+			y: top,
+		},
+		leftBottom: {
+			x: left,
+			y: bottom,
+		},
+		rightTop: {
+			x: right,
+			y: top,
+		},
+		rightBottom: {
+			x: right,
+			y: bottom,
+		},
 	};
 };
 
+// TODO: いらんかも
 /**
  * 線分がボックスと交差しているか判定する
  *
