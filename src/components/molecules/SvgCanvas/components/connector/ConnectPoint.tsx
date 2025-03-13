@@ -533,8 +533,8 @@ const createBestConnectPath = (
 	const startP2 = getSecondConnectPoint(startOwnerShape, startPoint);
 	const endP2 = getSecondConnectPoint(endOwnerShape, endPoint);
 	const midPoint = {
-		x: endP2.x,
-		y: startP2.y,
+		x: (startP2.x + endP2.x) / 2,
+		y: (startP2.y + endP2.y) / 2,
 	};
 
 	// 接続線の中心候補となるポイントのグリッドを作成
@@ -592,16 +592,31 @@ const createBestConnectPath = (
 		: getBestPath(intersectsPathList);
 };
 
+const isStraight = (p1: Point, p2: Point, p3: Point): boolean => {
+	return (p1.x === p2.x && p2.x === p3.x) || (p1.y === p2.y && p2.y === p3.y);
+};
+
 const getBestPath = (list: Point[][]): Point[] => {
 	return list.reduce((a, b) => {
 		const distanceA = a.reduce((acc, p, i) => {
 			if (i === 0) return acc;
 			return acc + calcDistance(a[i - 1], p);
 		}, 0);
+		const turnsA = a.reduce((acc, p, i) => {
+			if (i < 2) return acc;
+			return acc + (isStraight(a[i - 2], a[i - 1], p) ? 0 : 1);
+		}, 0);
 		const distanceB = b.reduce((acc, p, i) => {
 			if (i === 0) return acc;
 			return acc + calcDistance(b[i - 1], p);
 		}, 0);
-		return distanceA < distanceB ? a : b;
+		const turnsB = b.reduce((acc, p, i) => {
+			if (i < 2) return acc;
+			return acc + (isStraight(b[i - 2], b[i - 1], p) ? 0 : 1);
+		}, 0);
+
+		return distanceA < distanceB || (distanceA === distanceB && turnsA < turnsB)
+			? a
+			: b;
 	});
 };

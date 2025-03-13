@@ -41,7 +41,7 @@ export const boolSign = (value: boolean): number => {
  * @returns - 指定した数値に近い方の数値
  */
 export const closer = (value: number, a: number, b: number): number => {
-	return Math.abs(value - a) < Math.abs(value - b) ? a : b;
+	return Math.abs(value - a) <= Math.abs(value - b) ? a : b;
 };
 
 /**
