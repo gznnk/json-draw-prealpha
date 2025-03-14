@@ -18,7 +18,7 @@ import type {
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連カスタムフックをインポート
-import { useDraggable } from "../../hooks/draggableHooks";
+import { useDrag } from "../../hooks/dragHooks";
 
 // SvgCanvas関連関数をインポート
 import { degreesToRadians } from "../../functions/Math";
@@ -103,7 +103,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 		}
 	}, [id, isSelected, onSelect]);
 
-	const draggableProps = useDraggable({
+	const dragProps = useDrag({
 		id,
 		type: "Ellipse",
 		point,
@@ -158,7 +158,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 						point.y,
 					)}
 					ref={svgRef}
-					{...draggableProps}
+					{...dragProps}
 				/>
 			</g>
 			<Transformative

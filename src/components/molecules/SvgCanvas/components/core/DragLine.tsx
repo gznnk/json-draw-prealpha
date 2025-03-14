@@ -6,13 +6,13 @@ import { memo, useRef } from "react";
 import type { Point } from "../../types/CoordinateTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import type { DraggableProps } from "../../hooks/draggableHooks";
-import { useDraggable } from "../../hooks/draggableHooks";
+import type { DragProps } from "../../hooks/dragHooks";
+import { useDrag } from "../../hooks/dragHooks";
 
 /**
  * 辺ドラッグ用の線のプロパティ
  */
-type DragLineProps = Omit<DraggableProps, "ref"> & {
+type DragLineProps = Omit<DragProps, "ref"> & {
 	startPoint: Point;
 	endPoint: Point;
 	cursor: string;
@@ -35,7 +35,7 @@ const DragLine: React.FC<DragLineProps> = memo(
 	}) => {
 		const svgRef = useRef<SVGLineElement>({} as SVGLineElement);
 
-		const draggableProps = useDraggable({
+		const dragProps = useDrag({
 			id,
 			point,
 			ref: svgRef,
@@ -56,7 +56,7 @@ const DragLine: React.FC<DragLineProps> = memo(
 				strokeWidth={3}
 				cursor={cursor}
 				ref={svgRef}
-				{...draggableProps}
+				{...dragProps}
 			/>
 		);
 	},

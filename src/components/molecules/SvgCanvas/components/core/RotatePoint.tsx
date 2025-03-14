@@ -3,10 +3,10 @@ import type React from "react";
 import { useRef } from "react";
 
 // SvgCanvas関連カスタムフックをインポート
-import { useDraggable } from "../../hooks/draggableHooks";
-import type { DraggableProps } from "../../hooks/draggableHooks";
+import { useDrag } from "../../hooks/dragHooks";
+import type { DragProps } from "../../hooks/dragHooks";
 
-export type RotatePointProps = Omit<DraggableProps, "ref"> & {
+export type RotatePointProps = Omit<DragProps, "ref"> & {
 	rotation?: number;
 	color?: string;
 	visible?: boolean;
@@ -34,7 +34,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 }) => {
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
 
-	const draggableProps = useDraggable({
+	const dragProps = useDrag({
 		id,
 		type,
 		point,
@@ -88,7 +88,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 				cursor={"move"}
 				tabIndex={0}
 				ref={svgRef}
-				{...draggableProps}
+				{...dragProps}
 			/>
 		</>
 	);

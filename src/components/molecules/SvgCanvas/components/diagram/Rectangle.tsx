@@ -24,7 +24,7 @@ import ConnectPoint from "../connector/ConnectPoint";
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連カスタムフックをインポート
-import { useDraggable } from "../../hooks/draggableHooks";
+import { useDrag } from "../../hooks/dragHooks";
 
 // SvgCanvas関連関数をインポート
 import { createSvgTransform } from "../../functions/Diagram";
@@ -199,7 +199,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 		setIsHovered(e.isHovered);
 	}, []);
 
-	const draggableProps = useDraggable({
+	const dragProps = useDrag({
 		id,
 		type: "Rectangle",
 		point,
@@ -239,7 +239,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					cursor="move"
 					transform={rectTransform}
 					ref={svgRef}
-					{...draggableProps}
+					{...dragProps}
 				/>
 			</g>
 			<Transformative

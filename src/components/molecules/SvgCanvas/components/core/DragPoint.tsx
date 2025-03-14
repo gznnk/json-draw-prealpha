@@ -3,13 +3,13 @@ import type React from "react";
 import { useRef } from "react";
 
 // SvgCanvas関連カスタムフックをインポート
-import { useDraggable } from "../../hooks/draggableHooks";
-import type { DraggableProps } from "../../hooks/draggableHooks";
+import { useDrag } from "../../hooks/dragHooks";
+import type { DragProps } from "../../hooks/dragHooks";
 
 /**
  * ドラッグポイントコンポーネントのPropsの型定義
  */
-export type DragPointProps = Omit<DraggableProps, "ref"> & {
+export type DragPointProps = Omit<DragProps, "ref"> & {
 	radius?: number;
 	stroke?: string;
 	fill?: string;
@@ -64,7 +64,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 }) => {
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
 
-	const draggableProps = useDraggable({
+	const dragProps = useDrag({
 		id,
 		type,
 		point,
@@ -97,7 +97,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 			tabIndex={0}
 			style={{ opacity: visible ? 1 : 0 }}
 			ref={svgRef}
-			{...draggableProps}
+			{...dragProps}
 		/>
 	);
 };

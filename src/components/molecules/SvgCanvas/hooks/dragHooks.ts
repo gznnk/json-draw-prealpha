@@ -14,15 +14,15 @@ import type {
 } from "../types/EventTypes";
 
 /** 全体通知用ドラッグイベントの名前 */
-const CUSTOM_EVENT_NAME_DRAG = "DraggableDrag";
+const EVENT_NAME_BROADCAST_DRAG = "BroadcastDrag";
 
 /** 全体通知用ドラッグ完了イベントの名前 */
-const CUSTOM_EVENT_NAME_DRAG_END = "DraggableDragEnd";
+const EVENT_NAME_BROADCAST_DRAG_END = "BroadcastDragEnd";
 
 /**
  * 全体通知用ドラッグイベントの型定義
  */
-type DraggableDragEvent = {
+type BroadcastDragEvent = {
 	id: string;
 	type: DiagramType;
 	startPoint: Point;
@@ -33,7 +33,7 @@ type DraggableDragEvent = {
 /**
  * ドラッグ領域のPropsの型定義
  */
-export type DraggableProps = {
+export type DragProps = {
 	id: string;
 	type?: DiagramType;
 	point: Point;
@@ -56,7 +56,7 @@ export type DraggableProps = {
 /**
  * ドラッグ可能な領域を作成するカスタムフック
  *
- * @param {DraggableProps} props ドラッグ領域のProps
+ * @param {DragProps} props ドラッグ領域のProps
  * @param {string} props.id ID（ドラッグ可能にする要素にも同じIDを設定すること。しない場合は正しく動作しなくなる）
  * @param {DiagramType} [props.type] 図形の種類
  * @param {Point} props.point 座標
@@ -75,7 +75,7 @@ export type DraggableProps = {
  * @param {(e: DiagramHoverEvent) => void} [props.onHoverChange] ホバー変更時のイベントハンドラ
  * @param {(point: Point) => Point} [props.dragPositioningFunction] ドラッグ位置変換関数
  */
-export const useDraggable = (props: DraggableProps) => {
+export const useDrag = (props: DragProps) => {
 	const {
 		id,
 		point,
@@ -232,7 +232,7 @@ export const useDraggable = (props: DraggableProps) => {
 
 		// 親子関係にない図形でハンドリングする用のドラッグ中イベント発火
 		ref.current?.dispatchEvent(
-			new CustomEvent(CUSTOM_EVENT_NAME_DRAG, {
+			new CustomEvent(EVENT_NAME_BROADCAST_DRAG, {
 				bubbles: true,
 				detail: {
 					id,
@@ -243,7 +243,7 @@ export const useDraggable = (props: DraggableProps) => {
 						x: e.clientX,
 						y: e.clientY,
 					},
-				} as DraggableDragEvent,
+				} as BroadcastDragEvent,
 			}),
 		);
 	};
@@ -266,7 +266,7 @@ export const useDraggable = (props: DraggableProps) => {
 
 			// 親子関係にない図形でハンドリングする用のドラッグ終了イベント発火
 			ref.current?.dispatchEvent(
-				new CustomEvent(CUSTOM_EVENT_NAME_DRAG_END, {
+				new CustomEvent(EVENT_NAME_BROADCAST_DRAG_END, {
 					bubbles: true,
 					detail: {
 						id,
@@ -277,7 +277,7 @@ export const useDraggable = (props: DraggableProps) => {
 							x: e.clientX,
 							y: e.clientY,
 						},
-					} as DraggableDragEvent,
+					} as BroadcastDragEvent,
 				}),
 			);
 		}
@@ -446,12 +446,12 @@ export const useDraggable = (props: DraggableProps) => {
 
 	// 全体周知用ドラッグイベントリスナー登録
 	useEffect(() => {
-		let handleDraggableDrag: (e: Event) => void;
-		let handleDraggableDragEnd: (e: Event) => void;
+		let handleBroadcastDrag: (e: Event) => void;
+		let handleBroadcastDragEnd: (e: Event) => void;
 
 		if (onDragOver) {
-			handleDraggableDrag = (e: Event) => {
-				const customEvent = e as CustomEvent<DraggableDragEvent>;
+			handleBroadcastDrag = (e: Event) => {
+				const customEvent = e as CustomEvent<BroadcastDragEvent>;
 
 				// ドラッグ＆ドロップのイベント情報を作成
 				const dragDropEvent = {
@@ -477,12 +477,15 @@ export const useDraggable = (props: DraggableProps) => {
 					onDragLeave?.(dragDropEvent);
 				}
 			};
-			document?.addEventListener(CUSTOM_EVENT_NAME_DRAG, handleDraggableDrag);
+			document?.addEventListener(
+				EVENT_NAME_BROADCAST_DRAG,
+				handleBroadcastDrag,
+			);
 		}
 
 		if (onDrop) {
-			handleDraggableDragEnd = (e: Event) => {
-				const customEvent = e as CustomEvent<DraggableDragEvent>;
+			handleBroadcastDragEnd = (e: Event) => {
+				const customEvent = e as CustomEvent<BroadcastDragEvent>;
 				if (isPointerOver(ref, customEvent.detail.clientPoint)) {
 					onDrop?.({
 						dropItem: {
@@ -499,22 +502,22 @@ export const useDraggable = (props: DraggableProps) => {
 				}
 			};
 			document?.addEventListener(
-				CUSTOM_EVENT_NAME_DRAG_END,
-				handleDraggableDragEnd,
+				EVENT_NAME_BROADCAST_DRAG_END,
+				handleBroadcastDragEnd,
 			);
 		}
 
 		return () => {
-			if (handleDraggableDrag) {
+			if (handleBroadcastDrag) {
 				document?.removeEventListener(
-					CUSTOM_EVENT_NAME_DRAG,
-					handleDraggableDrag,
+					EVENT_NAME_BROADCAST_DRAG,
+					handleBroadcastDrag,
 				);
 			}
-			if (handleDraggableDragEnd) {
+			if (handleBroadcastDragEnd) {
 				document?.removeEventListener(
-					CUSTOM_EVENT_NAME_DRAG_END,
-					handleDraggableDragEnd,
+					EVENT_NAME_BROADCAST_DRAG_END,
+					handleBroadcastDragEnd,
 				);
 			}
 		};

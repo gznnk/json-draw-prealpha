@@ -23,7 +23,7 @@ import type {
 } from "../../types/EventTypes";
 
 // SvgCanvas関連カスタムフックをインポート
-import { useDraggable } from "../../hooks/draggableHooks";
+import { useDrag } from "../../hooks/dragHooks";
 import { calcPointsOuterBox } from "../../functions/Math";
 
 // ユーティリティをインポート
@@ -187,7 +187,7 @@ const Path: React.FC<PathProps> = ({
 	}, []);
 
 	// 折れ線のドラッグ用要素のプロパティ生成
-	const draggableProps = useDraggable({
+	const dragProps = useDrag({
 		id,
 		type: "Path",
 		point,
@@ -367,7 +367,7 @@ const Path: React.FC<PathProps> = ({
 				cursor={dragEnabled ? "move" : "default"}
 				tabIndex={0}
 				ref={dragSvgRef}
-				{...draggableProps}
+				{...dragProps}
 			/>
 			{/* 変形用グループ */}
 			{isSelected && (
