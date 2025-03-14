@@ -6,8 +6,24 @@ import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramType
 import { createRectangleData } from "./components/molecules/SvgCanvas/components/diagram/Rectangle";
 
 import { getLogger } from "./utils/Logger";
+import { Profiler } from "./utils/Profiler";
+
 import { radiansToDegrees } from "./components/molecules/SvgCanvas/functions/Math";
+import { useEffect } from "react";
 const logger = getLogger("App");
+declare global {
+	interface Window {
+		profiler: Profiler;
+	}
+}
+
+if (!window.profiler) {
+	window.profiler = new Profiler();
+
+	setInterval(() => {
+		window.profiler.summary();
+	}, 5000);
+}
 
 const testItems1 = [
 	{

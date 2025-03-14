@@ -31,6 +31,7 @@ import {
 	lineIntersects,
 	radiansToDegrees,
 } from "../../functions/Math";
+import { newId } from "../../functions/Diagram";
 
 // import { drawPoint, drawRect } from "../../functions/Diagram";
 
@@ -84,15 +85,15 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				);
 			}
 
-			const newPathPoints = newPoints.map((p, i) => ({
-				id: `${id}-path-point-${i}`,
+			const newPathPoints = newPoints.map((p) => ({
+				id: newId(),
 				point: p,
 				isSelected: false,
 			}));
 
 			setPathPoints(newPathPoints);
 		},
-		[point, ownerShape, ownerOuterBox, direction, id],
+		[point, ownerShape, ownerOuterBox, direction],
 	);
 
 	const handleDragStart = useCallback((_e: DiagramDragEvent) => {
@@ -216,6 +217,8 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 								points.splice(i + 1, 1);
 							}
 						}
+						points[0].id = id;
+						points[points.length - 1].id = customEvent.detail.id;
 
 						onConnect?.({
 							points,
@@ -254,7 +257,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 			/>
 			{isDragging && (
 				<Path
-					id={`${id}-path`}
+					id={`${id}-connecting-path`}
 					point={{ x: 0, y: 0 }}
 					width={0}
 					height={0}

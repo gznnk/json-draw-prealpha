@@ -44,6 +44,7 @@ export type PathProps = DiagramBaseProps &
 	TransformativeProps &
 	PathData & {
 		dragEnabled?: boolean;
+		newVertexEnabled?: boolean;
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
 	};
 
@@ -60,6 +61,7 @@ const Path: React.FC<PathProps> = ({
 	strokeWidth = "1px",
 	isSelected = false,
 	dragEnabled = true,
+	newVertexEnabled = true,
 	onClick,
 	onDragStart,
 	onDrag,
@@ -258,34 +260,39 @@ const Path: React.FC<PathProps> = ({
 
 	// 頂点作成ポイントを生成
 	const newVertexList: NewVertexData[] = [];
-	if (draggingNewVertex) {
-		newVertexList.push({
-			id: draggingNewVertex.id,
-			point: draggingNewVertex.point,
-			hidden: false,
-		});
-	} else {
-		const showNewVertex =
-			isSelected && !isDragging && !isTransformMode && !isPathPointDragging;
-		if (showNewVertex) {
-			for (let i = 0; i < items.length - 1; i++) {
-				const item = items[i];
-				const nextItem = items[i + 1];
+	if (newVertexEnabled) {
+		if (draggingNewVertex) {
+			newVertexList.push({
+				id: draggingNewVertex.id,
+				point: draggingNewVertex.point,
+				hidden: false,
+			});
+		} else {
+			const showNewVertex =
+				isSelected && !isDragging && !isTransformMode && !isPathPointDragging;
+			if (showNewVertex) {
+				for (let i = 0; i < items.length - 1; i++) {
+					const item = items[i];
+					const nextItem = items[i + 1];
 
-				const x = (item.point.x + nextItem.point.x) / 2;
-				const y = (item.point.y + nextItem.point.y) / 2;
+					const x = (item.point.x + nextItem.point.x) / 2;
+					const y = (item.point.y + nextItem.point.y) / 2;
 
-				newVertexList.push({
-					id: `${item.id}-${nextItem.id}`, // TODO
-					// id: crypto.randomUUID(),
-					point: { x, y },
-					hidden: false,
-				});
+					newVertexList.push({
+						id: `${item.id}-${nextItem.id}`, // TODO
+						// id: crypto.randomUUID(),
+						point: { x, y },
+						hidden: false,
+					});
+				}
 			}
 		}
 	}
 
-	// newVertexListが描画のたび更新されるのでメモ化しない
+	/**
+	 * 頂点作成ポイントのドラッグ開始イベントハンドラ.
+	 * 関数更新頻度が高いのでメモ化しない
+	 */
 	const handleNewVertexDragStart = (e: DiagramDragEvent) => {
 		const idx = newVertexList.findIndex((v) => v.id === e.id);
 		const newItems = [...items];
@@ -306,6 +313,9 @@ const Path: React.FC<PathProps> = ({
 		});
 	};
 
+	/**
+	 * 頂点作成ポイントのドラッグ中イベントハンドラ
+	 */
 	const handleNewVertexDrag = useCallback(
 		(e: DiagramDragEvent) => {
 			setDraggingNewVertex({ id: e.id, point: e.endPoint });
@@ -319,6 +329,9 @@ const Path: React.FC<PathProps> = ({
 		[onGroupDataChange, id, items],
 	);
 
+	/**
+	 * 頂点作成ポイントのドラッグ完了イベントハンドラ
+	 */
 	const handleNewVertexDragEnd = useCallback(
 		(e: DiagramDragEvent) => {
 			setDraggingNewVertex(undefined);
@@ -376,15 +389,17 @@ const Path: React.FC<PathProps> = ({
 					onGroupDataChange={onGroupDataChange}
 				/>
 			)}
-			{newVertexList.map((item) => (
-				<NewVertex
-					key={item.id}
-					{...item}
-					onDragStart={handleNewVertexDragStart}
-					onDrag={handleNewVertexDrag}
-					onDragEnd={handleNewVertexDragEnd}
-				/>
-			))}
+			{/* 頂点作成ポイント */}
+			{newVertexEnabled &&
+				newVertexList.map((item) => (
+					<NewVertex
+						key={item.id}
+						{...item}
+						onDragStart={handleNewVertexDragStart}
+						onDrag={handleNewVertexDrag}
+						onDragEnd={handleNewVertexDragEnd}
+					/>
+				))}
 		</>
 	);
 };

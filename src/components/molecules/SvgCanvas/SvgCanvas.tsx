@@ -68,6 +68,8 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 		onConnect,
 		onConnectPointMove,
 	}) => {
+		const k1 = window.profiler.start("SvgCanvas render");
+
 		const isCtrlDown = useRef(false);
 
 		const handleSelect = useCallback(
@@ -132,6 +134,8 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 		}, []);
 
 		// console.log(items);
+
+		window.profiler.end("SvgCanvas render", k1);
 
 		return (
 			<ContainerDiv>

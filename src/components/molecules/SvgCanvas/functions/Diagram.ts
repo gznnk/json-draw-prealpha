@@ -1,6 +1,13 @@
 import type { Point } from "../types/CoordinateTypes";
 
 /**
+ * 新規IDを生成する
+ *
+ * @returns 新規ID
+ */
+export const newId = (): string => crypto.randomUUID();
+
+/**
  * 指定されたパラメータからSVGのtransform属性を作成する
  *
  * @param {number} sx - x方向の拡大縮小率
