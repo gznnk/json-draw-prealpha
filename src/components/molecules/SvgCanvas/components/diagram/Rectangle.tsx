@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useCallback, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
@@ -65,6 +65,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onTransform,
 	onTransformEnd,
 }) => {
+	const rectangleRenderKey = window.profiler.start(`Rectangle render ${id}`);
+
 	const [isTransformimg, setIsTransforming] = useState(false);
 	// ホバー状態の管理
 	const [isHovered, setIsHovered] = useState(false);
@@ -218,6 +220,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 		point.y,
 	);
 
+	window.profiler.end(`Rectangle render ${id}`, rectangleRenderKey);
+
 	return (
 		<>
 			<g transform="translate(0.5,0.5)">
@@ -278,6 +282,31 @@ const Rectangle: React.FC<RectangleProps> = ({
 };
 
 export default memo(Rectangle);
+
+// export default memo(
+// 	Rectangle,
+// 	(prevProps: RectangleProps, nextProps: RectangleProps) => {
+// 		console.log("前回の props:", prevProps);
+// 		console.log("今回の props:", nextProps);
+
+// 		// どのプロパティが変わったか確認
+// 		for (const key in nextProps) {
+// 			if (
+// 				prevProps[key as keyof RectangleProps] !==
+// 				nextProps[key as keyof RectangleProps]
+// 			) {
+// 				console.log(`変更された prop: ${key}`);
+// 			}
+// 		}
+
+// 		// デフォルトの比較ロジック（=== 比較）を維持
+// 		return Object.keys(prevProps).every(
+// 			(key: string) =>
+// 				prevProps[key as keyof RectangleProps] ===
+// 				nextProps[key as keyof RectangleProps],
+// 		);
+// 	},
+// );
 
 /**
  * 短径データ作成

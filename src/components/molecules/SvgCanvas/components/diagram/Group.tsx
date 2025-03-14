@@ -613,3 +613,23 @@ const Group: React.FC<GroupProps> = ({
 };
 
 export default memo(Group);
+
+// export default memo(Group, (prevProps: GroupProps, nextProps: GroupProps) => {
+// 	console.log("前回の props:", prevProps);
+// 	console.log("今回の props:", nextProps);
+
+// 	// どのプロパティが変わったか確認
+// 	for (const key in nextProps) {
+// 		if (
+// 			prevProps[key as keyof GroupProps] !== nextProps[key as keyof GroupProps]
+// 		) {
+// 			console.log(`変更された prop: ${key}`);
+// 		}
+// 	}
+
+// 	// デフォルトの比較ロジック（=== 比較）を維持
+// 	return Object.keys(prevProps).every(
+// 		(key: string) =>
+// 			prevProps[key as keyof GroupProps] === nextProps[key as keyof GroupProps],
+// 	);
+// });

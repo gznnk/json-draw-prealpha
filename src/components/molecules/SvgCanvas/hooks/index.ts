@@ -73,6 +73,7 @@ function removeNulls<T extends object>(obj: T): Partial<T> {
 	) as Partial<T>;
 }
 
+// TODO: ちゃんと中身を見ていないので要確認
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const deepMerge = <T extends Record<string, any>>(
 	target: T,
@@ -96,7 +97,7 @@ const deepMerge = <T extends Record<string, any>>(
 		}
 	}
 
-	return target;
+	return Array.isArray(target) ? target : { ...target };
 };
 
 type SvgCanvasState = {
@@ -121,13 +122,28 @@ const DEFAULT_ITEM_VALUE = {
 };
 
 const applyRecursive = (items: Diagram[], func: (item: Diagram) => Diagram) => {
-	return items.map((item) => {
+	let isItemChanged = false;
+	const newItems: Diagram[] = [];
+	for (const item of items) {
 		const newItem = func(item);
-		if (isGroupData(item) && isGroupData(newItem)) {
-			newItem.items = applyRecursive(item.items ?? [], func);
+		newItems.push(newItem);
+
+		// アイテムの参照先が変わった場合は変更ありと判断する
+		if (item !== newItem) {
+			isItemChanged = true;
 		}
-		return newItem;
-	});
+		if (isGroupData(item) && isGroupData(newItem)) {
+			const newGroupItems = applyRecursive(item.items ?? [], func);
+			// 配列の参照先が変わった場合は変更ありと判断する
+			if (newGroupItems !== item.items) {
+				newItem.items = newGroupItems;
+				isItemChanged = true;
+			}
+		}
+	}
+
+	// 変更がない場合はReactが変更なしと検知するよう元の配列を返す
+	return isItemChanged ? newItems : items;
 };
 
 /**
