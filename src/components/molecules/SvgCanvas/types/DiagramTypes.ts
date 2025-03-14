@@ -91,7 +91,7 @@ export type EllipseData = TransformativeData & {
  * 折れ線の頂点のデータ
  */
 export type PathPointData = DiagramBaseData & {
-	isActive?: boolean;
+	hidden?: boolean;
 	rightAngle?: boolean;
 };
 

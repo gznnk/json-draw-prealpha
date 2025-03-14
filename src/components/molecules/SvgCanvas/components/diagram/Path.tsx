@@ -24,6 +24,7 @@ import type {
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDraggable } from "../../hooks/draggableHooks";
+import { calcPointsOuterBox } from "../../functions/Math";
 
 // ユーティリティをインポート
 // import { getLogger } from "../../../../../utils/Logger";
@@ -67,8 +68,11 @@ const Path: React.FC<PathProps> = ({
 	items = [],
 }) => {
 	const [isDragging, setIsDragging] = useState(false);
+	const [isPathPointDragging, setIsPathPointDragging] = useState(false);
+	const [isNewVertexDragging, setIsNewVertexDragging] = useState(false);
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
 	const [isTransformMode, setIsTransformMode] = useState(false);
+	const [newVertexList, setNewVertexList] = useState<NewVertexData[]>([]);
 
 	const startItems = useRef<Diagram[]>(items);
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
@@ -189,6 +193,7 @@ const Path: React.FC<PathProps> = ({
 	 */
 	const handleLinePointDragStart = useCallback(
 		(e: DiagramDragEvent) => {
+			setIsPathPointDragging(true);
 			onDragStart?.(e);
 		},
 		[onDragStart],
@@ -224,6 +229,7 @@ const Path: React.FC<PathProps> = ({
 	 */
 	const handleLinePointDragEnd = useCallback(
 		(e: DiagramDragEvent) => {
+			setIsPathPointDragging(false);
 			onDragEnd?.(e);
 		},
 		[onDragEnd],
@@ -235,23 +241,122 @@ const Path: React.FC<PathProps> = ({
 	// 頂点情報を生成
 	const linePoints = items.map((item) => ({
 		...item,
-		isActive: !isTransformMode,
+		hidden: isTransformMode || isDragging,
 	}));
 
-	const newVertexList: NewVertexData[] = [];
-	for (let i = 0; i < items.length - 1; i++) {
-		const item = items[i];
-		const nextItem = items[i + 1];
+	// 頂点作成ポイントを生成
+	useEffect(() => {
+		if (!isSelected || isDragging || isNewVertexDragging || isTransformMode) {
+			return;
+		}
+		setNewVertexList((prev) => {
+			const isPathPointMove = items.length - 1 === prev.length;
+			const list: NewVertexData[] = [];
+			for (let i = 0; i < items.length - 1; i++) {
+				const item = items[i];
+				const nextItem = items[i + 1];
 
-		const x = (item.point.x + nextItem.point.x) / 2;
-		const y = (item.point.y + nextItem.point.y) / 2;
+				const x = (item.point.x + nextItem.point.x) / 2;
+				const y = (item.point.y + nextItem.point.y) / 2;
 
-		newVertexList.push({
-			id: crypto.randomUUID(),
-			point: { x, y },
-			index: i,
+				list.push({
+					id: isPathPointMove ? prev[i].id : crypto.randomUUID(),
+					point: { x, y },
+					hidden: false,
+				});
+			}
+			return list;
 		});
-	}
+		const newBox = calcPointsOuterBox(items.map((item) => item.point));
+		// onTransform?.({
+		// 	id,
+		// 	startShape: {
+		// 		point,
+		// 		width,
+		// 		height,
+		// 		rotation,
+		// 		scaleX,
+		// 		scaleY,
+		// 	},
+		// 	endShape: {
+		// 		point: newBox.center,
+		// 		width: newBox.right - newBox.left,
+		// 		height: newBox.bottom - newBox.top,
+		// 		rotation,
+		// 		scaleX,
+		// 		scaleY,
+		// 	},
+		// });
+		// onGroupDataChange?.({
+		// 	id,
+		// 	point: newBox.center,
+		// 	width: newBox.right - newBox.left,
+		// 	height: newBox.bottom - newBox.top,
+		// });
+	}, [
+		onGroupDataChange,
+		onTransform,
+		isDragging,
+		isNewVertexDragging,
+		isTransformMode,
+		id,
+		isSelected,
+		items,
+	]);
+
+	const handleNewVertexDragStart = useCallback(
+		(e: DiagramDragEvent) => {
+			setIsNewVertexDragging(true);
+
+			// 頂点を追加
+			const idx = newVertexList.findIndex((v) => v.id === e.id);
+			const newItems = [...items];
+			const newItem = {
+				id: e.id,
+				type: "PathPoint",
+				point: e.startPoint,
+				isSelected: false,
+			} as Diagram;
+			newItems.splice(idx + 1, 0, newItem);
+			onGroupDataChange?.({
+				id,
+				point,
+				items: newItems,
+			});
+
+			// 頂点作成ポイントの位置更新
+			setNewVertexList((prev) =>
+				prev.map((v) => {
+					if (v.id !== e.id) {
+						return { ...v, hidden: true };
+					}
+					return v;
+				}),
+			);
+		},
+		[onGroupDataChange, id, point, items, newVertexList],
+	);
+
+	const handleNewVertexDrag = useCallback(
+		(e: DiagramDragEvent) => {
+			const idx = newVertexList.findIndex((v) => v.id === e.id);
+			setNewVertexList((prev) => {
+				const newItems = [...prev];
+				newItems[idx].point = e.endPoint;
+				return newItems;
+			});
+			onDrag?.(e);
+		},
+		[onDrag, newVertexList],
+	);
+
+	const handleNewVertexDragEnd = useCallback(
+		(e: DiagramDragEvent) => {
+			setIsNewVertexDragging(false);
+			onDragEnd?.(e);
+		},
+		[onDragEnd],
+	);
 
 	return (
 		<>
@@ -292,27 +397,16 @@ const Path: React.FC<PathProps> = ({
 				/>
 			)}
 			{isSelected &&
+				!isDragging &&
 				!isTransformMode &&
+				!isPathPointDragging &&
 				newVertexList.map((item) => (
 					<NewVertex
 						key={item.id}
 						{...item}
-						onDoubleClick={(e) => {
-							const index = e.index;
-							const newItems = [...items];
-							const newItem = {
-								id: crypto.randomUUID(),
-								type: "PathPoint",
-								point: e.point,
-								isSelected: false,
-							} as Diagram;
-							newItems.splice(index + 1, 0, newItem);
-							onGroupDataChange?.({
-								id,
-								point,
-								items: newItems,
-							});
-						}}
+						onDragStart={handleNewVertexDragStart}
+						onDrag={handleNewVertexDrag}
+						onDragEnd={handleNewVertexDragEnd}
 					/>
 				))}
 		</>
@@ -324,15 +418,12 @@ export default memo(Path);
 type PathPointProps = DiagramBaseProps & PathPointData;
 
 export const PathPoint: React.FC<PathPointProps> = memo(
-	({ id, point, isActive = true, onDragStart, onDrag, onDragEnd }) => {
-		if (!isActive) {
-			return null;
-		}
-
+	({ id, point, hidden, onDragStart, onDrag, onDragEnd }) => {
 		return (
 			<DragPoint
 				id={id}
 				point={point}
+				hidden={hidden}
 				onDragStart={onDragStart}
 				onDrag={onDrag}
 				onDragEnd={onDragEnd}
@@ -344,29 +435,26 @@ export const PathPoint: React.FC<PathPointProps> = memo(
 type NewVertexData = {
 	id: string;
 	point: Point;
-	index: number;
+	hidden: boolean;
 };
 
 type NewVertexProps = NewVertexData & {
-	onDoubleClick?: (e: NewVertexData) => void;
+	onDragStart?: (e: DiagramDragEvent) => void;
+	onDrag?: (e: DiagramDragEvent) => void;
+	onDragEnd?: (e: DiagramDragEvent) => void;
 };
 
 const NewVertex: React.FC<NewVertexProps> = memo(
-	({ id, point, index, onDoubleClick }) => {
-		const handleDoubleClick = () => {
-			onDoubleClick?.({ id, point, index });
-		};
-
+	({ id, point, hidden, onDragStart, onDrag, onDragEnd }) => {
 		return (
-			<circle
+			<DragPoint
 				id={id}
-				cx={point.x}
-				cy={point.y}
-				r={5}
+				point={point}
 				fill="white"
-				stroke="rgba(100, 149, 237, 0.8)"
-				strokeWidth="1px"
-				onDoubleClick={handleDoubleClick}
+				hidden={hidden}
+				onDragStart={onDragStart}
+				onDrag={onDrag}
+				onDragEnd={onDragEnd}
 			/>
 		);
 	},

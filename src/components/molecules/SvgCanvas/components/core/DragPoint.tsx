@@ -11,7 +11,8 @@ import type { DraggableProps } from "../../hooks/draggableHooks";
  */
 export type DragPointProps = Omit<DraggableProps, "ref"> & {
 	radius?: number;
-	color?: string;
+	stroke?: string;
+	fill?: string;
 	cursor?: string;
 	visible?: boolean;
 	hidden?: boolean;
@@ -55,8 +56,9 @@ const DragPoint: React.FC<DragPointProps> = ({
 	onHoverChange,
 	dragPositioningFunction,
 	radius = 5,
-	color = "rgba(100, 149, 237, 0.8)",
-	cursor,
+	stroke = "rgba(100, 149, 237, 0.8)",
+	fill = "rgba(100, 149, 237, 0.8)",
+	cursor = "move",
 	visible = true,
 	hidden = false,
 }) => {
@@ -89,7 +91,8 @@ const DragPoint: React.FC<DragPointProps> = ({
 			cx={point.x}
 			cy={point.y}
 			r={radius}
-			fill={color}
+			stroke={stroke}
+			fill={fill}
 			cursor={cursor}
 			tabIndex={0}
 			style={{ opacity: visible ? 1 : 0 }}

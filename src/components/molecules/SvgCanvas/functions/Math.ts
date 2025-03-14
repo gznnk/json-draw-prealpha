@@ -468,6 +468,46 @@ export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
 };
 
 /**
+ * 座標集合の外接枠を計算する
+ *
+ * @param points - 座標集合
+ * @returns 外接枠
+ */
+export const calcPointsOuterBox = (points: Point[]): Box => {
+	const left = Math.min(...points.map((p) => p.x));
+	const top = Math.min(...points.map((p) => p.y));
+	const right = Math.max(...points.map((p) => p.x));
+	const bottom = Math.max(...points.map((p) => p.y));
+
+	return {
+		top,
+		left,
+		right,
+		bottom,
+		center: {
+			x: (left + right) / 2,
+			y: (top + bottom) / 2,
+		},
+		leftTop: {
+			x: left,
+			y: top,
+		},
+		leftBottom: {
+			x: left,
+			y: bottom,
+		},
+		rightTop: {
+			x: right,
+			y: top,
+		},
+		rightBottom: {
+			x: right,
+			y: bottom,
+		},
+	};
+};
+
+/**
  * 短径の外接枠を計算する
  *
  * @param shape - 短径
@@ -507,6 +547,10 @@ export const calcRectangleOuterBox = (shape: Shape): Box => {
 		left,
 		right,
 		bottom,
+		center: {
+			x: (left + right) / 2,
+			y: (top + bottom) / 2,
+		},
 		leftTop: {
 			x: left,
 			y: top,
@@ -526,7 +570,6 @@ export const calcRectangleOuterBox = (shape: Shape): Box => {
 	};
 };
 
-// TODO: いらんかも
 /**
  * 線分がボックスと交差しているか判定する
  *

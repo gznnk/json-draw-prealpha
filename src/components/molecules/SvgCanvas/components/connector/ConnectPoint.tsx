@@ -241,7 +241,8 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				point={point}
 				type="ConnectPoint"
 				radius={6}
-				color="rgba(255, 204, 0, 0.8)"
+				stroke="rgba(255, 204, 0, 0.8)"
+				fill="rgba(255, 204, 0, 0.8)"
 				visible={visible || isHovered}
 				onDragStart={handleDragStart}
 				onDrag={handleDrag}
@@ -360,6 +361,7 @@ const addMarginToBox = (box: Box): Box => {
 		left,
 		right,
 		bottom,
+		center: box.center,
 		leftTop: { x: left, y: top },
 		leftBottom: { x: left, y: bottom },
 		rightTop: { x: right, y: top },

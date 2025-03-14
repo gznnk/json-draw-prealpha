@@ -26,6 +26,7 @@ import { isGroupData } from "../SvgCanvasFunctions";
 
 // ユーティリティをインポート
 import { getLogger } from "../../../../utils/Logger";
+import { calcPointsOuterBox } from "../functions/Math";
 
 const logger = getLogger("SvgCanvasHooks");
 
@@ -230,12 +231,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		// const endItem = getDiagramById(canvasState.items, e.endPoint.id);
 		console.log("onConnect", e);
 
+		const box = calcPointsOuterBox(e.points.map((p) => p.point));
+
 		addItem({
 			id: generateId(),
 			type: "Path",
-			point: e.points[0].point,
-			width: 100,
-			height: 100,
+			point: box.center,
+			width: box.right - box.left,
+			height: box.bottom - box.top,
 			keepProportion: false,
 			isSelected: false,
 			items: e.points.map((p) => ({

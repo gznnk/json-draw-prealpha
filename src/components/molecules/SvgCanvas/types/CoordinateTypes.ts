@@ -16,6 +16,7 @@ export type Box = {
 	left: number;
 	right: number;
 	bottom: number;
+	center: Point;
 	leftTop: Point;
 	leftBottom: Point;
 	rightTop: Point;
