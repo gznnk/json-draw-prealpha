@@ -269,6 +269,9 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 					strokeWidth="1px"
 					keepProportion={false}
 					isSelected={false}
+					dragEnabled={false}
+					segmentDragEnabled={false}
+					newVertexEnabled={false}
 					items={pathPoints as Diagram[]}
 				/>
 			)}

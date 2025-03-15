@@ -3,6 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連コンポーネントをインポート
+import DragLine from "../core/DragLine";
 import DragPoint from "../core/DragPoint";
 import Group from "./Group";
 
@@ -24,6 +25,8 @@ import type {
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDrag } from "../../hooks/dragHooks";
+
+// SvgCanvas関連関数をインポート
 import {
 	calcPointsOuterBox,
 	calcRadian,
@@ -33,7 +36,8 @@ import {
 	radiansToDegrees,
 	rotatePoint,
 } from "../../functions/Math";
-import DragLine from "../core/DragLine";
+import { newId } from "../../functions/Diagram";
+
 import { drawPoint } from "../../functions/Diagram";
 
 // ユーティリティをインポート
@@ -87,10 +91,6 @@ const Path: React.FC<PathProps> = ({
 	const [isPathPointDragging, setIsPathPointDragging] = useState(false);
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
 	const [isTransformMode, setIsTransformMode] = useState(false);
-
-	const [draggingNewVertex, setDraggingNewVertex] = useState<
-		{ id: string; point: Point } | undefined
-	>();
 
 	const [draggingSegment, setDraggingSegment] = useState<
 		SegmentData | undefined
@@ -266,97 +266,6 @@ const Path: React.FC<PathProps> = ({
 		...item,
 		hidden: isTransformMode || isDragging,
 	}));
-
-	// 頂点作成ポイントを生成
-	const newVertexList: NewVertexData[] = [];
-	if (newVertexEnabled) {
-		if (draggingNewVertex) {
-			newVertexList.push({
-				id: draggingNewVertex.id,
-				point: draggingNewVertex.point,
-			});
-		} else {
-			const showNewVertex =
-				isSelected && !isDragging && !isTransformMode && !isPathPointDragging;
-			if (showNewVertex) {
-				for (let i = 0; i < items.length - 1; i++) {
-					const item = items[i];
-					const nextItem = items[i + 1];
-
-					const x = (item.point.x + nextItem.point.x) / 2;
-					const y = (item.point.y + nextItem.point.y) / 2;
-
-					newVertexList.push({
-						id: `${item.id}-${nextItem.id}`, // TODO
-						// id: crypto.randomUUID(),
-						point: { x, y },
-					});
-				}
-			}
-		}
-	}
-
-	/**
-	 * 頂点作成ポイントのドラッグ開始イベントハンドラ.
-	 * 関数更新頻度が高いのでメモ化しない
-	 */
-	const handleNewVertexDragStart = (e: DiagramDragEvent) => {
-		const idx = newVertexList.findIndex((v) => v.id === e.id);
-		const newItems = [...items];
-		const newItem = {
-			id: e.id,
-			type: "PathPoint",
-			point: e.startPoint,
-			isSelected: false,
-		} as Diagram;
-		newItems.splice(idx + 1, 0, newItem);
-
-		setDraggingNewVertex({ id: e.id, point: e.startPoint });
-
-		onGroupDataChange?.({
-			id,
-			point,
-			items: newItems,
-		});
-	};
-
-	/**
-	 * 頂点作成ポイントのドラッグ中イベントハンドラ
-	 */
-	const handleNewVertexDrag = useCallback(
-		(e: DiagramDragEvent) => {
-			setDraggingNewVertex({ id: e.id, point: e.endPoint });
-			onGroupDataChange?.({
-				id,
-				items: items.map((item) =>
-					item.id === e.id ? { ...item, point: e.endPoint } : item,
-				),
-			});
-		},
-		[onGroupDataChange, id, items],
-	);
-
-	/**
-	 * 頂点作成ポイントのドラッグ完了イベントハンドラ
-	 */
-	const handleNewVertexDragEnd = useCallback(
-		(e: DiagramDragEvent) => {
-			setDraggingNewVertex(undefined);
-			const box = calcPointsOuterBox(
-				items.map((item) => (item.id === e.id ? e.endPoint : item.point)),
-			);
-			onGroupDataChange?.({
-				id,
-				point: box.center,
-				width: box.right - box.left,
-				height: box.bottom - box.top,
-				items: items.map((item) =>
-					item.id === e.id ? { ...item, point: e.endPoint } : item,
-				),
-			});
-		},
-		[onGroupDataChange, id, items],
-	);
 
 	// 以下線分ドラッグ関連
 
@@ -544,25 +453,31 @@ const Path: React.FC<PathProps> = ({
 						dragPositioningFunction={draggingSegmentFunc.current}
 					/>
 				))}
-			{/* 頂点作成ポイント */}
+			{/* 新規頂点 */}
 			{newVertexEnabled &&
-				newVertexList.map((item) => (
-					<NewVertex
-						key={item.id}
-						{...item}
-						onDragStart={handleNewVertexDragStart}
-						onDrag={handleNewVertexDrag}
-						onDragEnd={handleNewVertexDragEnd}
+				isSelected &&
+				!isTransformMode &&
+				!isPathPointDragging && (
+					<NewVertexList
+						id={id}
+						items={items}
+						onGroupDataChange={onGroupDataChange}
 					/>
-				))}
+				)}
 		</>
 	);
 };
 
 export default memo(Path);
 
+/**
+ * 折れ線の頂点プロパティ
+ */
 type PathPointProps = DiagramBaseProps & PathPointData;
 
+/**
+ * 折れ線の頂点コンポーネント
+ */
 export const PathPoint: React.FC<PathPointProps> = memo(
 	({ id, point, hidden, onDragStart, onDrag, onDragEnd }) => {
 		return (
@@ -577,18 +492,28 @@ export const PathPoint: React.FC<PathPointProps> = memo(
 		);
 	},
 );
+PathPoint.displayName = "PathPoint";
 
+/**
+ * 新規頂点データ
+ */
 type NewVertexData = {
 	id: string;
 	point: Point;
 };
 
+/**
+ * 新規頂点プロパティ
+ */
 type NewVertexProps = NewVertexData & {
 	onDragStart?: (e: DiagramDragEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDragEnd?: (e: DiagramDragEvent) => void;
 };
 
+/**
+ * 新規頂点コンポーネント
+ */
 const NewVertex: React.FC<NewVertexProps> = memo(
 	({ id, point, onDragStart, onDrag, onDragEnd }) => {
 		return (
@@ -603,6 +528,141 @@ const NewVertex: React.FC<NewVertexProps> = memo(
 		);
 	},
 );
+NewVertex.displayName = "NewVertex";
+
+/**
+ * 新規頂点リストプロパティ
+ */
+type NewVertexListProps = {
+	id: string;
+	items: Diagram[];
+	onGroupDataChange?: (e: GroupDataChangeEvent) => void;
+};
+
+/**
+ * 新規頂点リストコンポーネント
+ */
+const NewVertexList: React.FC<NewVertexListProps> = memo(
+	({ id, items, onGroupDataChange }) => {
+		// ドラッグ中の新規頂点
+		const [draggingNewVertex, setDraggingNewVertex] = useState<
+			NewVertexData | undefined
+		>();
+
+		// 描画する新規頂点リスト
+		const newVertexList: NewVertexData[] = [];
+		if (draggingNewVertex) {
+			// ドラッグ中の場合はその新規頂点のみ描画
+			newVertexList.push(draggingNewVertex);
+		} else {
+			// ドラッグ中でなければ、各頂点の中点に新規頂点を描画
+			for (let i = 0; i < items.length - 1; i++) {
+				const item = items[i];
+				const nextItem = items[i + 1];
+
+				const x = (item.point.x + nextItem.point.x) / 2;
+				const y = (item.point.y + nextItem.point.y) / 2;
+
+				newVertexList.push({
+					id: `${item.id}-${nextItem.id}`, // 前後の頂点からIDを生成
+					point: { x, y },
+				});
+			}
+		}
+
+		/**
+		 * 新規頂点のドラッグ開始イベントハンドラ
+		 */
+		const handleNewVertexDragStart = useCallback(
+			(e: DiagramDragEvent) => {
+				const idx = newVertexList.findIndex((v) => v.id === e.id);
+				const newItems = [...items];
+				const newItem = {
+					id: e.id,
+					type: "PathPoint",
+					point: e.startPoint,
+					isSelected: false,
+				} as Diagram;
+				newItems.splice(idx + 1, 0, newItem);
+
+				setDraggingNewVertex({ id: e.id, point: e.startPoint });
+
+				onGroupDataChange?.({
+					id,
+					items: newItems,
+				});
+			},
+			[onGroupDataChange, id, items],
+		);
+
+		/**
+		 * 新規頂点のドラッグ中イベントハンドラ
+		 */
+		const handleNewVertexDrag = useCallback(
+			(e: DiagramDragEvent) => {
+				// ドラッグ中の新規頂点の位置を更新
+				setDraggingNewVertex({ id: e.id, point: e.endPoint });
+
+				// 新規頂点のドラッグに伴うパスの頂点の位置変更
+				onGroupDataChange?.({
+					id,
+					items: items.map((item) =>
+						item.id === e.id ? { ...item, point: e.endPoint } : item,
+					),
+				});
+			},
+			[onGroupDataChange, id, items],
+		);
+
+		/**
+		 * 新規頂点のドラッグ完了イベントハンドラ
+		 */
+		const handleNewVertexDragEnd = useCallback(
+			(e: DiagramDragEvent) => {
+				// ドラッグ中の新規頂点を解除
+				setDraggingNewVertex(undefined);
+
+				// 新規頂点のドラッグ完了に伴うパスの外枠の形状計算
+				const box = calcPointsOuterBox(
+					items.map((item) => (item.id === e.id ? e.endPoint : item.point)),
+				);
+
+				// 新規頂点のドラッグ完了に伴うパスのデータ変更
+				onGroupDataChange?.({
+					id,
+					point: box.center,
+					width: box.right - box.left,
+					height: box.bottom - box.top,
+					items: items.map((item) =>
+						item.id === e.id
+							? {
+									...item,
+									id: newId(), // ドラッグが完了したら、新規頂点用のIDから新しいIDに変更
+									point: e.endPoint,
+								}
+							: item,
+					),
+				});
+			},
+			[onGroupDataChange, id, items],
+		);
+
+		return (
+			<>
+				{newVertexList.map((item) => (
+					<NewVertex
+						key={item.id}
+						{...item}
+						onDragStart={handleNewVertexDragStart}
+						onDrag={handleNewVertexDrag}
+						onDragEnd={handleNewVertexDragEnd}
+					/>
+				))}
+			</>
+		);
+	},
+);
+NewVertexList.displayName = "NewVertexList";
 
 type SegmentData = {
 	id: string;

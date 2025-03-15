@@ -27,7 +27,7 @@ import Transformative from "../core/Transformative";
 import { useDrag } from "../../hooks/dragHooks";
 
 // SvgCanvas関連関数をインポート
-import { createSvgTransform } from "../../functions/Diagram";
+import { newId, createSvgTransform } from "../../functions/Diagram";
 import { calcRectangleVertices, degreesToRadians } from "../../functions/Math";
 
 // ユーティリティをインポート
@@ -331,56 +331,56 @@ export const createRectangleData = (
 
 	const items: Diagram[] = [];
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.leftTopPoint,
 		isSelected: false,
 		name: "leftTopPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.rightTopPoint,
 		isSelected: false,
 		name: "rightTopPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.leftBottomPoint,
 		isSelected: false,
 		name: "leftBottomPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.rightBottomPoint,
 		isSelected: false,
 		name: "rightBottomPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.topCenterPoint,
 		isSelected: false,
 		name: "topCenterPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.bottomCenterPoint,
 		isSelected: false,
 		name: "bottomCenterPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.leftCenterPoint,
 		isSelected: false,
 		name: "leftCenterPoint",
 	});
 	items.push({
-		id: crypto.randomUUID(),
+		id: newId(),
 		type: "ConnectPoint",
 		point: vertices.rightCenterPoint,
 		isSelected: false,
@@ -393,7 +393,7 @@ export const createRectangleData = (
 		point,
 		width,
 		height,
-		rotation: degreesToRadians(0),
+		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,
 		fill,
