@@ -24,7 +24,17 @@ import type {
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDrag } from "../../hooks/dragHooks";
-import { calcPointsOuterBox } from "../../functions/Math";
+import {
+	calcPointsOuterBox,
+	calcRadian,
+	createLinerX2yFunction,
+	createLinerY2xFunction,
+	degreesToRadians,
+	radiansToDegrees,
+	rotatePoint,
+} from "../../functions/Math";
+import DragLine from "../core/DragLine";
+import { drawPoint } from "../../functions/Diagram";
 
 // ユーティリティをインポート
 // import { getLogger } from "../../../../../utils/Logger";
@@ -44,6 +54,7 @@ export type PathProps = DiagramBaseProps &
 	TransformativeProps &
 	PathData & {
 		dragEnabled?: boolean;
+		segmentDragEnabled?: boolean;
 		newVertexEnabled?: boolean;
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
 	};
@@ -60,7 +71,8 @@ const Path: React.FC<PathProps> = ({
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
-	dragEnabled = true,
+	dragEnabled = false,
+	segmentDragEnabled = true,
 	newVertexEnabled = true,
 	onClick,
 	onDragStart,
@@ -79,6 +91,12 @@ const Path: React.FC<PathProps> = ({
 	const [draggingNewVertex, setDraggingNewVertex] = useState<
 		{ id: string; point: Point } | undefined
 	>();
+
+	const [draggingSegment, setDraggingSegment] = useState<
+		SegmentData | undefined
+	>();
+	const segmentDragStart = useRef<SegmentData>(undefined);
+	const draggingSegmentFunc = useRef<(point: Point) => Point>(undefined);
 
 	const startItems = useRef<Diagram[]>(items);
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
@@ -222,15 +240,6 @@ const Path: React.FC<PathProps> = ({
 	const handlePathPointDrag = useCallback(
 		(e: DiagramDragEvent) => {
 			onDrag?.(e);
-
-			const dragPoint = items.find((item) => item.id === e.id) as PathPointData;
-			if (!dragPoint) {
-				return;
-			}
-
-			if (dragPoint.rightAngle) {
-				const index = items.findIndex((item) => item.id === e.id);
-			}
 		},
 		[onDrag],
 	);
@@ -265,7 +274,6 @@ const Path: React.FC<PathProps> = ({
 			newVertexList.push({
 				id: draggingNewVertex.id,
 				point: draggingNewVertex.point,
-				hidden: false,
 			});
 		} else {
 			const showNewVertex =
@@ -282,7 +290,6 @@ const Path: React.FC<PathProps> = ({
 						id: `${item.id}-${nextItem.id}`, // TODO
 						// id: crypto.randomUUID(),
 						point: { x, y },
-						hidden: false,
 					});
 				}
 			}
@@ -351,6 +358,142 @@ const Path: React.FC<PathProps> = ({
 		[onGroupDataChange, id, items],
 	);
 
+	// 以下線分ドラッグ関連
+
+	const segmentList: SegmentData[] = [];
+	if (segmentDragEnabled) {
+		if (draggingSegment) {
+			segmentList.push(draggingSegment);
+		} else {
+			const showSegument =
+				isSelected && !isDragging && !isTransformMode && !isPathPointDragging;
+			if (showSegument) {
+				for (let i = 0; i < items.length - 1; i++) {
+					const item = items[i];
+					const nextItem = items[i + 1];
+
+					segmentList.push({
+						id: `${item.id}-${nextItem.id}`, // TODO
+						// id: crypto.randomUUID(),
+						startPoint: item.point,
+						startPointId: item.id,
+						endPoint: nextItem.point,
+						endPointId: nextItem.id,
+					});
+				}
+			}
+		}
+	}
+
+	const handleSegmentDragStart = (e: DiagramDragEvent) => {
+		const idx = segmentList.findIndex((v) => v.id === e.id);
+		if (idx !== 0 && idx !== segmentList.length - 1) {
+			const segment = segmentList[idx];
+			segmentDragStart.current = { ...segment };
+			const midPoint = {
+				x: (segment.startPoint.x + segment.endPoint.x) / 2,
+				y: (segment.startPoint.y + segment.endPoint.y) / 2,
+			};
+			const rotateStartPoint = rotatePoint(
+				segment.startPoint,
+				midPoint,
+				Math.PI / 2,
+			);
+			const rotateEndPoint = rotatePoint(
+				segment.endPoint,
+				midPoint,
+				Math.PI / 2,
+			);
+			const degree = radiansToDegrees(
+				calcRadian(rotateStartPoint, rotateEndPoint),
+			);
+			const isX2y = (degree + 405) % 180 > 90;
+
+			draggingSegmentFunc.current = (p: Point) =>
+				isX2y
+					? createLinerX2yFunction(rotateStartPoint, rotateEndPoint)(p)
+					: createLinerY2xFunction(rotateStartPoint, rotateEndPoint)(p);
+			setDraggingSegment(segment);
+		} else {
+			const newItems = [...items];
+			const newItem = {
+				id: e.id,
+				type: "PathPoint",
+				point: e.startPoint,
+				isSelected: false,
+			} as Diagram;
+			newItems.splice(idx + 1, 0, newItem);
+
+			// setDraggingSegment({
+			// 	id: e.id,
+			// 	startPoint: e.startPoint,
+			// 	endPoint: e.endPoint,
+			// });
+
+			// onGroupDataChange?.({
+			// 	id,
+			// 	point,
+			// 	items: newItems,
+			// });
+		}
+	};
+
+	const handleSegmentDrag = useCallback(
+		(e: DiagramDragEvent) => {
+			if (!draggingSegment || !segmentDragStart.current) {
+				return;
+			}
+			const dx = e.endPoint.x - e.startPoint.x;
+			const dy = e.endPoint.y - e.startPoint.y;
+			const newStartPoint = {
+				x: segmentDragStart.current.startPoint.x + dx,
+				y: segmentDragStart.current.startPoint.y + dy,
+			};
+			const newEndPoint = {
+				x: segmentDragStart.current.endPoint.x + dx,
+				y: segmentDragStart.current.endPoint.y + dy,
+			};
+
+			setDraggingSegment({
+				...draggingSegment,
+				startPoint: newStartPoint,
+				endPoint: newEndPoint,
+			});
+			onGroupDataChange?.({
+				id,
+				items: items.map((item) => {
+					if (item.id === draggingSegment.startPointId) {
+						return { ...item, point: newStartPoint };
+					}
+					if (item.id === draggingSegment.endPointId) {
+						return { ...item, point: newEndPoint };
+					}
+					return item;
+				}),
+			});
+		},
+		[onGroupDataChange, id, items, draggingSegment],
+	);
+
+	const handleSegmentDragEnd = useCallback(
+		(e: DiagramDragEvent) => {
+			setDraggingSegment(undefined);
+			const box = calcPointsOuterBox(
+				items.map((item) => (item.id === e.id ? e.endPoint : item.point)),
+			);
+			onGroupDataChange?.({
+				id,
+				point: box.center,
+				width: box.right - box.left,
+				height: box.bottom - box.top,
+				items: items.map((item) =>
+					item.id === e.id ? { ...item, point: e.endPoint } : item,
+				),
+			});
+		},
+		[onGroupDataChange, id, items],
+	);
+
 	return (
 		<>
 			{/* 描画用のパス */}
@@ -389,6 +532,18 @@ const Path: React.FC<PathProps> = ({
 					onGroupDataChange={onGroupDataChange}
 				/>
 			)}
+			{/* 線分ドラッグ */}
+			{segmentDragEnabled &&
+				segmentList.map((item) => (
+					<Segment
+						key={item.id}
+						{...item}
+						onDragStart={handleSegmentDragStart}
+						onDrag={handleSegmentDrag}
+						onDragEnd={handleSegmentDragEnd}
+						dragPositioningFunction={draggingSegmentFunc.current}
+					/>
+				))}
 			{/* 頂点作成ポイント */}
 			{newVertexEnabled &&
 				newVertexList.map((item) => (
@@ -426,7 +581,6 @@ export const PathPoint: React.FC<PathPointProps> = memo(
 type NewVertexData = {
 	id: string;
 	point: Point;
-	hidden: boolean;
 };
 
 type NewVertexProps = NewVertexData & {
@@ -436,16 +590,61 @@ type NewVertexProps = NewVertexData & {
 };
 
 const NewVertex: React.FC<NewVertexProps> = memo(
-	({ id, point, hidden, onDragStart, onDrag, onDragEnd }) => {
+	({ id, point, onDragStart, onDrag, onDragEnd }) => {
 		return (
 			<DragPoint
 				id={id}
 				point={point}
 				fill="white"
-				hidden={hidden}
 				onDragStart={onDragStart}
 				onDrag={onDrag}
 				onDragEnd={onDragEnd}
+			/>
+		);
+	},
+);
+
+type SegmentData = {
+	id: string;
+	startPointId: string;
+	startPoint: Point;
+	endPointId: string;
+	endPoint: Point;
+};
+
+type SegmentProps = SegmentData & {
+	onDragStart?: (e: DiagramDragEvent) => void;
+	onDrag?: (e: DiagramDragEvent) => void;
+	onDragEnd?: (e: DiagramDragEvent) => void;
+	dragPositioningFunction?: (point: Point) => Point;
+};
+
+const Segment: React.FC<SegmentProps> = memo(
+	({
+		id,
+		startPoint,
+		endPoint,
+		onDragStart,
+		onDrag,
+		onDragEnd,
+		dragPositioningFunction,
+	}) => {
+		const midPoint = {
+			x: (startPoint.x + endPoint.x) / 2,
+			y: (startPoint.y + endPoint.y) / 2,
+		};
+
+		return (
+			<DragLine
+				id={id}
+				point={midPoint}
+				startPoint={startPoint}
+				endPoint={endPoint}
+				cursor="move"
+				onDragStart={onDragStart}
+				onDrag={onDrag}
+				onDragEnd={onDragEnd}
+				dragPositioningFunction={dragPositioningFunction}
 			/>
 		);
 	},
