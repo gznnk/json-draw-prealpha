@@ -8,7 +8,6 @@ import type { DiagramType } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
 	DiagramTransformEvent,
-	DiagramTransformStartEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -52,7 +51,7 @@ type TransformativeProps = {
 	scaleY: number;
 	keepProportion: boolean;
 	isSelected: boolean;
-	onTransformStart?: (e: DiagramTransformStartEvent) => void;
+	onTransformStart?: (e: DiagramTransformEvent) => void;
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onTransformEnd?: (e: DiagramTransformEvent) => void;
 };
@@ -168,8 +167,18 @@ const Transformative: React.FC<TransformativeProps> = ({
 	);
 
 	const handleDragStart = useCallback(() => {
+		const shape = {
+			point,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		};
 		onTransformStart?.({
 			id: diagramId,
+			startShape: shape,
+			endShape: shape,
 		});
 		startShape.current = {
 			point,
@@ -624,8 +633,9 @@ const Transformative: React.FC<TransformativeProps> = ({
 				x: point.x + width,
 				y: point.y - height,
 			});
-			const newRotation =
-				(radiansToDegrees(radian - rotatePointRadian) + 360) % 360;
+			const newRotation = Math.round(
+				(radiansToDegrees(radian - rotatePointRadian) + 360) % 360,
+			);
 			const event = {
 				id: diagramId,
 				startShape: {
@@ -669,19 +679,16 @@ const Transformative: React.FC<TransformativeProps> = ({
 		[point, width],
 	);
 
-	// TODO: memo化が必要か検討
-	const cursors = useMemo(() => {
-		return {
-			topCenter: getCursorFromAngle(rotation),
-			rightTop: getCursorFromAngle(rotation + 45),
-			rightCenter: getCursorFromAngle(rotation + 90),
-			rightBottom: getCursorFromAngle(rotation + 135),
-			bottomCenter: getCursorFromAngle(rotation + 180),
-			leftBottom: getCursorFromAngle(rotation + 225),
-			leftCenter: getCursorFromAngle(rotation + 270),
-			leftTop: getCursorFromAngle(rotation + 315),
-		};
-	}, [rotation]);
+	const cursors = {
+		topCenter: getCursorFromAngle(rotation),
+		rightTop: getCursorFromAngle(rotation + 45),
+		rightCenter: getCursorFromAngle(rotation + 90),
+		rightBottom: getCursorFromAngle(rotation + 135),
+		bottomCenter: getCursorFromAngle(rotation + 180),
+		leftBottom: getCursorFromAngle(rotation + 225),
+		leftCenter: getCursorFromAngle(rotation + 270),
+		leftTop: getCursorFromAngle(rotation + 315),
+	};
 
 	if (!isSelected) {
 		return null;

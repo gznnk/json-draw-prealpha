@@ -8,20 +8,12 @@ import type {
 	Shape,
 } from "./DiagramTypes";
 
-// TODO: まとめる？
-/**
- * 図形の変更開始イベント
- */
-export type DiagramTransformStartEvent = {
-	id: string;
-};
-
 /**
  * 図形の変形イベント
  */
 export type DiagramTransformEvent = {
 	id: string;
-	// type: "transform" | "transformEnd";
+	// type: "transformStart" | "transform" | "transformEnd";
 	startShape: Shape;
 	endShape: Shape;
 };
@@ -100,5 +92,6 @@ export type DiagramConnectEvent = {
 
 export type ConnectPointMoveEvent = {
 	id: string;
+	type: "moveStart" | "move" | "moveEnd";
 	point: Point;
 };

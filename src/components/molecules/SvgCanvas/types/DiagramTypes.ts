@@ -6,7 +6,6 @@ import type React from "react";
 // SvgCanvas関連型定義をインポート
 import type { Point } from "./CoordinateTypes";
 import type {
-	ConnectPointMoveEvent,
 	DiagramClickEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
@@ -14,7 +13,6 @@ import type {
 	DiagramHoverEvent,
 	DiagramSelectEvent,
 	DiagramTransformEvent,
-	DiagramTransformStartEvent,
 } from "./EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -179,7 +177,7 @@ export type DiagramBaseProps = DiagramBaseData & {
  * 変形可能な図形のプロパティ
  */
 export type TransformativeProps = TransformativeData & {
-	onTransformStart?: (e: DiagramTransformStartEvent) => void;
+	onTransformStart?: (e: DiagramTransformEvent) => void;
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onTransformEnd?: (e: DiagramTransformEvent) => void;
 };

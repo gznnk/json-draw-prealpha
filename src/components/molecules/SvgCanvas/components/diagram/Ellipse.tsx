@@ -11,7 +11,6 @@ import type {
 import type {
 	DiagramDragEvent,
 	DiagramTransformEvent,
-	DiagramTransformStartEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -116,7 +115,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 	});
 
 	const handleTransformStart = useCallback(
-		(e: DiagramTransformStartEvent) => {
+		(e: DiagramTransformEvent) => {
 			onTransformStart?.(e);
 		},
 		[onTransformStart],

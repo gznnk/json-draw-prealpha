@@ -11,6 +11,7 @@ import type {
 	Shape,
 } from "../../types/DiagramTypes";
 import type {
+	ConnectPointMoveEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
 	DiagramDragEvent,
@@ -22,6 +23,7 @@ import DragPoint from "../core/DragPoint";
 import Path from "../diagram/Path";
 
 // SvgCanvas関連関数をインポート
+import { newId } from "../../functions/Diagram";
 import {
 	calcDistance,
 	calcRadian,
@@ -31,7 +33,6 @@ import {
 	lineIntersects,
 	radiansToDegrees,
 } from "../../functions/Math";
-import { newId } from "../../functions/Diagram";
 
 // import { drawPoint, drawRect } from "../../functions/Diagram";
 
@@ -50,10 +51,10 @@ export const EVENT_NAME_CONNECT_POINT_MOVE = "ConnectPointMove";
  * @param id 接続ポイントID
  * @param point 移動先座標
  */
-export const triggerConnectPointMove = (id: string, point: Point) => {
+export const triggerConnectPointMove = (e: ConnectPointMoveEvent) => {
 	document.dispatchEvent(
 		new CustomEvent(EVENT_NAME_CONNECT_POINT_MOVE, {
-			detail: { id, point },
+			detail: e,
 		}),
 	);
 };

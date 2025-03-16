@@ -16,7 +16,6 @@ import type {
 	DiagramDragEvent,
 	DiagramHoverEvent,
 	DiagramTransformEvent,
-	DiagramTransformStartEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -74,13 +73,9 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	/**
 	 * 接続ポイントの位置を更新
-	 *
-	 * @param {Point} originalPoint 矩形の一つの頂点を表す点
-	 * @param {Point} diagonalPoint 矩形の対角線上のもう一つの頂点を表す点
-	 * @returns {void}
 	 */
-	const updateConnectPoints = useCallback(
-		(shape: Shape) => {
+	const triggerConnectPointsMove = useCallback(
+		(type: "move" | "moveStart" | "moveEnd", shape: Shape) => {
 			const vertices = calcRectangleVertices(shape);
 
 			for (const cp of (items as ConnectPointData[]) ?? []) {
@@ -88,9 +83,13 @@ const Rectangle: React.FC<RectangleProps> = ({
 					cp.name as keyof RectangleVertices
 				];
 
-				triggerConnectPointMove(cp.id, {
-					x: cPoint.x,
-					y: cPoint.y,
+				triggerConnectPointMove({
+					id: cp.id,
+					type,
+					point: {
+						x: cPoint.x,
+						y: cPoint.y,
+					},
 				});
 			}
 		},
@@ -103,9 +102,27 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const handleDragStart = useCallback(
 		(e: DiagramDragEvent) => {
 			setIsTransforming(true);
+
+			triggerConnectPointsMove("moveStart", {
+				point: e.endPoint,
+				width,
+				height,
+				rotation,
+				scaleX,
+				scaleY,
+			});
+
 			onDragStart?.(e);
 		},
-		[onDragStart],
+		[
+			onDragStart,
+			triggerConnectPointsMove,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		],
 	);
 
 	/**
@@ -113,7 +130,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 */
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
-			updateConnectPoints({
+			triggerConnectPointsMove("move", {
 				point: e.endPoint,
 				width,
 				height,
@@ -124,7 +141,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 			onDrag?.(e);
 		},
-		[onDrag, updateConnectPoints, width, height, rotation, scaleX, scaleY],
+		[onDrag, triggerConnectPointsMove, width, height, rotation, scaleX, scaleY],
 	);
 
 	/**
@@ -133,20 +150,39 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const handleDragEnd = useCallback(
 		(e: DiagramDragEvent) => {
 			onDragEnd?.(e);
+
+			triggerConnectPointsMove("moveEnd", {
+				point: e.endPoint,
+				width,
+				height,
+				rotation,
+				scaleX,
+				scaleY,
+			});
+
 			setIsTransforming(false);
 		},
-		[onDragEnd],
+		[
+			onDragEnd,
+			triggerConnectPointsMove,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		],
 	);
 
 	/**
 	 * 四角形の変形開始イベントハンドラ
 	 */
 	const handleTransformStart = useCallback(
-		(e: DiagramTransformStartEvent) => {
+		(e: DiagramTransformEvent) => {
 			onTransformStart?.(e);
+			triggerConnectPointsMove("moveStart", e.endShape);
 			setIsTransforming(true);
 		},
-		[onTransformStart],
+		[onTransformStart, triggerConnectPointsMove],
 	);
 
 	/**
@@ -155,9 +191,9 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const handleTransform = useCallback(
 		(e: DiagramTransformEvent) => {
 			onTransform?.(e);
-			updateConnectPoints(e.endShape);
+			triggerConnectPointsMove("move", e.endShape);
 		},
-		[onTransform, updateConnectPoints],
+		[onTransform, triggerConnectPointsMove],
 	);
 
 	/**
@@ -166,9 +202,10 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const handleTransformEnd = useCallback(
 		(e: DiagramTransformEvent) => {
 			onTransformEnd?.(e);
+			triggerConnectPointsMove("moveEnd", e.endShape);
 			setIsTransforming(false);
 		},
-		[onTransformEnd],
+		[onTransformEnd, triggerConnectPointsMove],
 	);
 
 	/**

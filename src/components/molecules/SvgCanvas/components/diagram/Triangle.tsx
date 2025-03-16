@@ -11,7 +11,6 @@ import type {
 import type {
 	DiagramDragEvent,
 	DiagramTransformEvent,
-	DiagramTransformStartEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -118,7 +117,7 @@ const Triangle: React.FC<TriangleProps> = ({
 	});
 
 	const handleTransformStart = useCallback(
-		(e: DiagramTransformStartEvent) => {
+		(e: DiagramTransformEvent) => {
 			onTransformStart?.(e);
 		},
 		[onTransformStart],
