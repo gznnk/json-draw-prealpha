@@ -291,7 +291,7 @@ const Path: React.FC<PathProps> = ({
 					const nextItem = items[i + 1];
 
 					segmentList.push({
-						id: `${item.id}-${nextItem.id}`, // TODO
+						id: `${item.id}-${nextItem.id}`,
 						startPoint: item.point,
 						startPointId: item.id,
 						endPoint: nextItem.point,
@@ -369,6 +369,7 @@ const Path: React.FC<PathProps> = ({
 			if (!draggingSegment || !segmentDragStart.current) {
 				return;
 			}
+
 			const dx = e.endPoint.x - e.startPoint.x;
 			const dy = e.endPoint.y - e.startPoint.y;
 			const newStartPoint = {
@@ -385,6 +386,7 @@ const Path: React.FC<PathProps> = ({
 				startPoint: newStartPoint,
 				endPoint: newEndPoint,
 			});
+
 			onGroupDataChange?.({
 				id,
 				items: items.map((item) => {
@@ -403,7 +405,20 @@ const Path: React.FC<PathProps> = ({
 
 	const handleSegmentDragEnd = useCallback(
 		(e: DiagramDragEvent) => {
-			setDraggingSegment(undefined);
+			if (!draggingSegment || !segmentDragStart.current) {
+				return;
+			}
+
+			const dx = e.endPoint.x - e.startPoint.x;
+			const dy = e.endPoint.y - e.startPoint.y;
+			const newStartPoint = {
+				x: segmentDragStart.current.startPoint.x + dx,
+				y: segmentDragStart.current.startPoint.y + dy,
+			};
+			const newEndPoint = {
+				x: segmentDragStart.current.endPoint.x + dx,
+				y: segmentDragStart.current.endPoint.y + dy,
+			};
 			const box = calcPointsOuterBox(
 				items.map((item) => (item.id === e.id ? e.endPoint : item.point)),
 			);
@@ -412,12 +427,21 @@ const Path: React.FC<PathProps> = ({
 				point: box.center,
 				width: box.right - box.left,
 				height: box.bottom - box.top,
-				// items: items.map((item) =>
-				// 	item.id === e.id ? { ...item, point: e.endPoint } : item,
-				// ),
+				items: items.map((item) => {
+					// ドラッグが完了したら、線分用のIDから新しいIDに変更
+					const itemId = item.id === e.id ? newId() : item.id;
+					if (item.id === draggingSegment.startPointId) {
+						return { ...item, id: itemId, point: newStartPoint };
+					}
+					if (item.id === draggingSegment.endPointId) {
+						return { ...item, id: itemId, point: newEndPoint };
+					}
+					return item;
+				}),
 			});
+			setDraggingSegment(undefined);
 		},
-		[onGroupDataChange, id, items],
+		[onGroupDataChange, id, items, draggingSegment],
 	);
 
 	return (
