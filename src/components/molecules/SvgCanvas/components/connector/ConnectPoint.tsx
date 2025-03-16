@@ -38,6 +38,26 @@ import { newId } from "../../functions/Diagram";
 /** 図形と接続線のマージン */
 const CONNECT_LINE_MARGIN = 20;
 
+/** 接続イベントの名前 */
+const EVENT_NAME_CONNECTTION = "Connection";
+
+/** 接続ポイント移動イベントの名前 */
+export const EVENT_NAME_CONNECT_POINT_MOVE = "ConnectPointMove";
+
+/**
+ * 接続ポイント移動イベントを発火する
+ *
+ * @param id 接続ポイントID
+ * @param point 移動先座標
+ */
+export const triggerConnectPointMove = (id: string, point: Point) => {
+	document.dispatchEvent(
+		new CustomEvent(EVENT_NAME_CONNECT_POINT_MOVE, {
+			detail: { id, point },
+		}),
+	);
+};
+
 type ConnectPointProps = ConnectPointData & {
 	ownerShape: Shape;
 	visible: boolean;
@@ -124,7 +144,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				setIsHovered(true);
 				// 接続中の処理
 				document.dispatchEvent(
-					new CustomEvent("Connection", {
+					new CustomEvent(EVENT_NAME_CONNECTTION, {
 						detail: { id, type: "connecting", point, ownerShape },
 					}),
 				);
@@ -140,7 +160,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 			if (e.dropItem.type === "ConnectPoint") {
 				// 接続元に情報を送信
 				document.dispatchEvent(
-					new CustomEvent("Connection", {
+					new CustomEvent(EVENT_NAME_CONNECTTION, {
 						detail: { id, type: "disconnect", point },
 					}),
 				);
@@ -155,7 +175,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 			if (e.dropItem.type === "ConnectPoint") {
 				// 接続元に情報を送信
 				document.dispatchEvent(
-					new CustomEvent("Connection", {
+					new CustomEvent(EVENT_NAME_CONNECTTION, {
 						detail: { id, type: "connect", point, ownerShape },
 					}),
 				);
@@ -227,12 +247,12 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				}
 			};
 
-			document.addEventListener("Connection", handleConnection);
+			document.addEventListener(EVENT_NAME_CONNECTTION, handleConnection);
 		}
 
 		return () => {
 			if (handleConnection) {
-				document.removeEventListener("Connection", handleConnection);
+				document.removeEventListener(EVENT_NAME_CONNECTTION, handleConnection);
 			}
 		};
 	}, [onConnect, updatePathPoints, id, isDragging, pathPoints]);

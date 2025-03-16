@@ -20,7 +20,9 @@ import type {
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import ConnectPoint from "../connector/ConnectPoint";
+import ConnectPoint, {
+	triggerConnectPointMove,
+} from "../connector/ConnectPoint";
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連カスタムフックをインポート
@@ -60,13 +62,10 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onClick,
 	onSelect,
 	onConnect,
-	onConnectPointMove,
 	onTransformStart,
 	onTransform,
 	onTransformEnd,
 }) => {
-	const rectangleRenderKey = window.profiler.start(`Rectangle render ${id}`);
-
 	const [isTransformimg, setIsTransforming] = useState(false);
 	// ホバー状態の管理
 	const [isHovered, setIsHovered] = useState(false);
@@ -89,23 +88,17 @@ const Rectangle: React.FC<RectangleProps> = ({
 					cp.name as keyof RectangleVertices
 				];
 
-				onConnectPointMove?.({
-					id: cp.id,
-					point: {
-						x: cPoint.x,
-						y: cPoint.y,
-					},
+				triggerConnectPointMove(cp.id, {
+					x: cPoint.x,
+					y: cPoint.y,
 				});
 			}
 		},
-		[onConnectPointMove, items],
+		[items],
 	);
 
 	/**
 	 * 四角形のドラッグ開始イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e 四角形のドラッグ開始イベント
-	 * @returns {void}
 	 */
 	const handleDragStart = useCallback(
 		(e: DiagramDragEvent) => {
@@ -117,9 +110,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	/**
 	 * 四角形のドラッグ中イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e 四角形のドラッグ中イベント
-	 * @returns {void}
 	 */
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
@@ -139,9 +129,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	/**
 	 * 四角形のドラッグ完了イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e 四角形のドラッグ完了イベント
-	 * @returns {void}
 	 */
 	const handleDragEnd = useCallback(
 		(e: DiagramDragEvent) => {
@@ -151,6 +138,9 @@ const Rectangle: React.FC<RectangleProps> = ({
 		[onDragEnd],
 	);
 
+	/**
+	 * 四角形の変形開始イベントハンドラ
+	 */
 	const handleTransformStart = useCallback(
 		(e: DiagramTransformStartEvent) => {
 			onTransformStart?.(e);
@@ -159,6 +149,9 @@ const Rectangle: React.FC<RectangleProps> = ({
 		[onTransformStart],
 	);
 
+	/**
+	 * 四角形の変形中イベントハンドラ
+	 */
 	const handleTransform = useCallback(
 		(e: DiagramTransformEvent) => {
 			onTransform?.(e);
@@ -167,6 +160,9 @@ const Rectangle: React.FC<RectangleProps> = ({
 		[onTransform, updateConnectPoints],
 	);
 
+	/**
+	 * 四角形の変形完了イベントハンドラ
+	 */
 	const handleTransformEnd = useCallback(
 		(e: DiagramTransformEvent) => {
 			onTransformEnd?.(e);
@@ -177,8 +173,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	/**
 	 * ポインターダウンイベントハンドラ
-	 *
-	 * @returns {void}
 	 */
 	const handlePointerDown = useCallback(() => {
 		if (!isSelected) {
@@ -191,9 +185,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	/**
 	 * ホバー状態変更イベントハンドラ
-	 *
-	 * @param {DiagramHoverEvent} e ホバー状態変更イベント
-	 * @returns {void}
 	 */
 	const handleHoverChange = useCallback((e: DiagramHoverEvent) => {
 		setIsHovered(e.isHovered);
@@ -220,7 +211,14 @@ const Rectangle: React.FC<RectangleProps> = ({
 		point.y,
 	);
 
-	window.profiler.end(`Rectangle render ${id}`, rectangleRenderKey);
+	const ownerShape = {
+		point,
+		width,
+		height,
+		rotation,
+		scaleX,
+		scaleY,
+	};
 
 	return (
 		<>
@@ -265,14 +263,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 						name={cp.name}
 						point={cp.point}
 						isSelected={false}
-						ownerShape={{
-							point,
-							width,
-							height,
-							rotation,
-							scaleX,
-							scaleY,
-						}}
+						ownerShape={ownerShape}
 						visible={isHovered && !isTransformimg}
 						onConnect={onConnect}
 					/>

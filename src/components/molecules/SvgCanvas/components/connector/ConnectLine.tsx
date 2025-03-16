@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 
 // SvgCanvas関連コンポーネントをインポート
 import Path from "../diagram/Path";

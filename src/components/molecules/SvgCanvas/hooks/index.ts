@@ -1,5 +1,5 @@
 // Reactのインポート
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 // 型定義をインポート
 import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
@@ -23,6 +23,8 @@ import type {
 
 // SvgCanvas関連関数をインポート
 import { isGroupData } from "../SvgCanvasFunctions";
+
+import { EVENT_NAME_CONNECT_POINT_MOVE } from "../components/connector/ConnectPoint";
 
 // ユーティリティをインポート
 import { getLogger } from "../../../../utils/Logger";
@@ -245,7 +247,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		// alert("connect");
 		// const startItem = getDiagramById(canvasState.items, e.startPoint.id);
 		// const endItem = getDiagramById(canvasState.items, e.endPoint.id);
-		console.log("onConnect", e);
+		// console.log("onConnect", e);
 
 		const box = calcPointsOuterBox(e.points.map((p) => p.point));
 
@@ -265,15 +267,29 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		});
 	}, []);
 
-	const onConnectPointMove = useCallback((e: ConnectPointMoveEvent) => {
-		//console.log("move");
-		//console.log(e);
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, point: e.point } : item,
-			),
-		}));
+	useEffect(() => {
+		const handleConnectPointMove = (e: Event) => {
+			const event = e as CustomEvent<ConnectPointMoveEvent>;
+			setCanvasState((prevState) => ({
+				...prevState,
+				items: applyRecursive(prevState.items, (item) =>
+					item.id === event.detail.id //&& item.type !== "PathPoint"
+						? { ...item, point: event.detail.point }
+						: item,
+				),
+			}));
+		};
+		document.addEventListener(
+			EVENT_NAME_CONNECT_POINT_MOVE,
+			handleConnectPointMove,
+		);
+
+		return () => {
+			document.removeEventListener(
+				EVENT_NAME_CONNECT_POINT_MOVE,
+				handleConnectPointMove,
+			);
+		};
 	}, []);
 
 	const canvasProps = {
@@ -285,7 +301,6 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onSelect,
 		onDelete,
 		onConnect,
-		onConnectPointMove,
 		onTransform,
 		onGroupDataChange,
 	};

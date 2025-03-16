@@ -173,7 +173,6 @@ export type DiagramBaseProps = DiagramBaseData & {
 	onSelect?: (e: DiagramSelectEvent) => void;
 	onHoverChange?: (e: DiagramHoverEvent) => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
-	onConnectPointMove?: (e: ConnectPointMoveEvent) => void;
 };
 
 /**

@@ -8,7 +8,6 @@ import styled from "@emotion/styled";
 import type { Diagram } from "./types/DiagramTypes";
 import { DiagramTypeComponentMap } from "./types/DiagramTypes";
 import type {
-	ConnectPointMoveEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
 	DiagramDragEvent,
@@ -50,7 +49,6 @@ type SvgCanvasProps = {
 	onSelect?: (e: DiagramSelectEvent) => void;
 	onDelete?: () => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
-	onConnectPointMove?: (e: ConnectPointMoveEvent) => void;
 };
 
 const SvgCanvas: React.FC<SvgCanvasProps> = memo(
@@ -66,7 +64,6 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 		onSelect,
 		onDelete,
 		onConnect,
-		onConnectPointMove,
 	}) => {
 		const k1 = window.profiler.start("SvgCanvas render");
 
@@ -94,7 +91,6 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 				onDrop,
 				onSelect: handleSelect,
 				onConnect,
-				onConnectPointMove,
 			};
 
 			return React.createElement(itemType, props);
