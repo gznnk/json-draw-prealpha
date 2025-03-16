@@ -549,9 +549,15 @@ const createBestConnectPath = (
 
 	const startP2 = getSecondConnectPoint(startOwnerShape, startPoint);
 	const endP2 = getSecondConnectPoint(endOwnerShape, endPoint);
+
+	const minX = Math.min(startOuterBox.left, endOuterBox.left);
+	const minY = Math.min(startOuterBox.top, endOuterBox.top);
+	const maxX = Math.max(startOuterBox.right, endOuterBox.right);
+	const maxY = Math.max(startOuterBox.bottom, endOuterBox.bottom);
+
 	const midPoint = {
-		x: (startP2.x + endP2.x) / 2,
-		y: (startP2.y + endP2.y) / 2,
+		x: Math.round((minX + maxX) / 2),
+		y: Math.round((minY + maxY) / 2),
 		score: 1,
 	};
 
@@ -605,9 +611,12 @@ const createBestConnectPath = (
 		}
 	}
 
-	return pathList.length !== 0
-		? getBestPath(pathList, [midPoint])
-		: getBestPath(intersectsPathList, [midPoint]);
+	const bestPath =
+		pathList.length !== 0
+			? getBestPath(pathList, [midPoint])
+			: getBestPath(intersectsPathList, [midPoint]);
+
+	return cleanPath(bestPath);
 };
 
 const cleanPath = (list: Point[]): Point[] => {
