@@ -541,8 +541,6 @@ type SegmentProps = SegmentData & {
  */
 const Segment: React.FC<SegmentProps> = memo(
 	({ id, startPoint, endPoint, onDragStart, onDrag, onDragEnd }) => {
-		const k1 = window.profiler.start(`Segment ${id}`);
-
 		const midPoint = {
 			x: (startPoint.x + endPoint.x) / 2,
 			y: (startPoint.y + endPoint.y) / 2,
@@ -565,8 +563,6 @@ const Segment: React.FC<SegmentProps> = memo(
 
 			[radian, rotateStartPoint, rotateEndPoint],
 		);
-
-		window.profiler.end(`Segment ${id}`, k1);
 
 		return (
 			<DragLine
@@ -637,26 +633,27 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 				};
 				if (idx === 0 || idx === segmentList.length - 1) {
 					const newItems = [...items];
-					let newItem: Diagram;
 
-					if (idx === 0) {
-						newItem = {
-							id: e.id,
-							type: "PathPoint",
-							point: segment.startPoint,
-							isSelected: false,
-						};
-						newItems.splice(1, 0, newItem);
-						newSegment.startPointId = newItem.id;
-					} else {
-						newItem = {
-							id: e.id,
+					if (idx === segmentList.length - 1) {
+						const newItem = {
+							id: newId(),
 							type: "PathPoint",
 							point: segment.endPoint,
 							isSelected: false,
-						};
+						} as Diagram;
 						newItems.splice(newItems.length - 1, 0, newItem);
 						newSegment.endPointId = newItem.id;
+					}
+
+					if (idx === 0) {
+						const newItem = {
+							id: newId(),
+							type: "PathPoint",
+							point: segment.startPoint,
+							isSelected: false,
+						} as Diagram;
+						newItems.splice(1, 0, newItem);
+						newSegment.startPointId = newItem.id;
 					}
 
 					onGroupDataChange?.({
@@ -741,12 +738,11 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					height: box.bottom - box.top,
 					items: items.map((item) => {
 						// ドラッグが完了したら、線分用のIDから新しいIDに変更
-						const itemId = item.id === e.id ? newId() : item.id;
 						if (item.id === draggingSegment.startPointId) {
-							return { ...item, id: itemId, point: newStartPoint };
+							return { ...item, point: newStartPoint };
 						}
 						if (item.id === draggingSegment.endPointId) {
-							return { ...item, id: itemId, point: newEndPoint };
+							return { ...item, point: newEndPoint };
 						}
 						return item;
 					}),
