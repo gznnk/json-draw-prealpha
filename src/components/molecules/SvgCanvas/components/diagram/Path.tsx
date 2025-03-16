@@ -6,7 +6,6 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import DragLine from "../core/DragLine";
 import DragPoint from "../core/DragPoint";
 import Group from "./Group";
-import { EVENT_NAME_CONNECT_POINT_MOVE } from "../connector/ConnectPoint";
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
@@ -22,13 +21,13 @@ import type {
 	DiagramDragEvent,
 	DiagramPointerEvent,
 	GroupDataChangeEvent,
-	ConnectPointMoveEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDrag } from "../../hooks/dragHooks";
 
 // SvgCanvas関連関数をインポート
+import { getCursorFromAngle, newId } from "../../functions/Diagram";
 import {
 	calcPointsOuterBox, // TODO: 回転時にずれるので要修正
 	calcRadian,
@@ -37,7 +36,6 @@ import {
 	radiansToDegrees,
 	rotatePoint,
 } from "../../functions/Math";
-import { newId, getCursorFromAngle } from "../../functions/Diagram";
 
 import { drawPoint } from "../../functions/Diagram";
 
@@ -263,60 +261,6 @@ const Path: React.FC<PathProps> = ({
 		hidden: isTransformMode || isDragging,
 		pointerEventsDisabled: idx === 0 || idx === items.length - 1,
 	}));
-
-	useEffect(() => {
-		const handleConnectPointMove = (e: Event) => {
-			const event = e as CustomEvent<ConnectPointMoveEvent>;
-			const movedId = event.detail.id;
-			const movedPoint = event.detail.point;
-			const i = items.findIndex((item) => item.id === movedId);
-			if (0 <= i) {
-				const p = items[i];
-				const dx = movedPoint.x - p.point.x;
-				const dy = movedPoint.y - p.point.y;
-				const newItems = items.map((item, idx) => {
-					if (item.id === movedId) {
-						return { ...item, point: movedPoint };
-					}
-
-					const direction = calcRadian(p.point, item.point);
-					const degrees = radiansToDegrees(direction);
-					const isVertical = (degrees + 405) % 180 > 90;
-
-					const mustMove =
-						(i === 0 && idx === 1) ||
-						(i === items.length - 1 && idx === items.length - 2);
-
-					if (mustMove) {
-						return {
-							...item,
-							point: {
-								x: isVertical ? item.point.x : item.point.x + dx,
-								y: isVertical ? item.point.y + dy : item.point.y,
-							},
-						};
-					}
-
-					return item;
-				});
-				onGroupDataChange?.({
-					id,
-					items: newItems,
-				});
-			}
-		};
-		document.addEventListener(
-			EVENT_NAME_CONNECT_POINT_MOVE,
-			handleConnectPointMove,
-		);
-
-		return () => {
-			document.removeEventListener(
-				EVENT_NAME_CONNECT_POINT_MOVE,
-				handleConnectPointMove,
-			);
-		};
-	}, [onGroupDataChange, id, items]);
 
 	return (
 		<>
