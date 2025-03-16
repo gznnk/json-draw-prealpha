@@ -99,7 +99,7 @@ export type EllipseData = TransformativeData & {
  */
 export type PathPointData = DiagramBaseData & {
 	hidden?: boolean;
-	rightAngle?: boolean;
+	pointerEventsDisabled?: boolean;
 };
 
 /**

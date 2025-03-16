@@ -16,6 +16,7 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
 	cursor?: string;
 	visible?: boolean;
 	hidden?: boolean;
+	pointerEventsDisabled?: boolean;
 };
 
 /**
@@ -61,6 +62,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 	cursor = "move",
 	visible = true,
 	hidden = false,
+	pointerEventsDisabled = false,
 }) => {
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
 
@@ -95,6 +97,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 			fill={fill}
 			cursor={cursor}
 			tabIndex={0}
+			pointerEvents={pointerEventsDisabled ? "none" : "auto"}
 			style={{ opacity: visible ? 1 : 0 }}
 			ref={svgRef}
 			{...dragProps}

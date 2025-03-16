@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useCallback } from "react";
+import { memo } from "react";
 
 // SvgCanvas関連コンポーネントをインポート
 import Path from "../diagram/Path";
@@ -11,10 +11,7 @@ import type {
 	DiagramBaseProps,
 	TransformativeProps,
 } from "../../types/DiagramTypes";
-import type {
-	DiagramDragEvent,
-	GroupDataChangeEvent,
-} from "../../types/EventTypes";
+import type { GroupDataChangeEvent } from "../../types/EventTypes";
 
 type ConnectLineProps = DiagramBaseProps &
 	TransformativeProps &
@@ -43,54 +40,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	onGroupDataChange,
 	items = [],
 }) => {
-	const isBothEndsPathPoint = useCallback(
-		(id: string) => {
-			const startId = items[0]?.id;
-			const endId = items[items.length - 1]?.id;
-			return id === startId || id === endId;
-		},
-		[items],
-	);
-
-	/**
-	 * ドラッグ開始イベントハンドラ
-	 */
-	const handleDragStart = useCallback(
-		(e: DiagramDragEvent) => {
-			if (isBothEndsPathPoint(e.id)) {
-				return;
-			}
-			onDragStart?.(e);
-		},
-		[onDragStart, isBothEndsPathPoint],
-	);
-
-	/**
-	 * ドラッグ中イベントハンドラ
-	 */
-	const handleDrag = useCallback(
-		(e: DiagramDragEvent) => {
-			if (isBothEndsPathPoint(e.id)) {
-				return;
-			}
-			onDrag?.(e);
-		},
-		[onDrag, isBothEndsPathPoint],
-	);
-
-	/**
-	 * ドラッグ完了イベントハンドラ
-	 */
-	const handleDragEnd = useCallback(
-		(e: DiagramDragEvent) => {
-			if (isBothEndsPathPoint(e.id)) {
-				return;
-			}
-			onDragEnd?.(e);
-		},
-		[onDragEnd, isBothEndsPathPoint],
-	);
-
 	return (
 		<Path
 			id={id}
@@ -110,9 +59,9 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			segmentDragEnabled={true}
 			newVertexEnabled={true}
 			onClick={onClick}
-			onDragStart={handleDragStart}
-			onDrag={handleDrag}
-			onDragEnd={handleDragEnd}
+			onDragStart={onDragStart}
+			onDrag={onDrag}
+			onDragEnd={onDragEnd}
 			onSelect={onSelect}
 			onTransform={onTransform}
 			onGroupDataChange={onGroupDataChange}

@@ -256,9 +256,10 @@ const Path: React.FC<PathProps> = ({
 	const d = createDValue(items);
 
 	// 頂点情報を生成
-	const linePoints = items.map((item) => ({
+	const linePoints = items.map((item, idx) => ({
 		...item,
 		hidden: isTransformMode || isDragging,
+		pointerEventsDisabled: idx === 0 || idx === items.length - 1,
 	}));
 
 	return (
@@ -338,12 +339,21 @@ type PathPointProps = DiagramBaseProps & PathPointData;
  * 折れ線の頂点コンポーネント
  */
 export const PathPoint: React.FC<PathPointProps> = memo(
-	({ id, point, hidden, onDragStart, onDrag, onDragEnd }) => {
+	({
+		id,
+		point,
+		hidden,
+		pointerEventsDisabled,
+		onDragStart,
+		onDrag,
+		onDragEnd,
+	}) => {
 		return (
 			<DragPoint
 				id={id}
 				point={point}
 				hidden={hidden}
+				pointerEventsDisabled={pointerEventsDisabled}
 				onDragStart={onDragStart}
 				onDrag={onDrag}
 				onDragEnd={onDragEnd}
