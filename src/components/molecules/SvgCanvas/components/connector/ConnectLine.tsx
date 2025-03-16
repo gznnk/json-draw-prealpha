@@ -26,11 +26,21 @@ import type {
 import { calcRadian, radiansToDegrees } from "../../functions/Math";
 import { newId } from "../../functions/Diagram";
 
+// 型ユーティリティをインポート
+import type {
+	AddUnderscoreToProperties,
+	PartiallyRequired,
+} from "../../../../../types/UtilTypes";
+
 type ConnectLineProps = DiagramBaseProps &
 	TransformativeProps &
 	ConnectLineData & {
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
 	};
+
+type PropsRef = AddUnderscoreToProperties<
+	PartiallyRequired<ConnectLineProps, "id" | "items">
+>;
 
 const ConnectLine: React.FC<ConnectLineProps> = ({
 	id,
@@ -53,51 +63,69 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	onGroupDataChange,
 	items = [],
 }) => {
+	// 一番最初の描画時のitems
 	const initialItems = useRef(items);
+	// 移動開始時のitems
 	const startItems = useRef(items);
+	// 垂直と水平の線のみかどうか
 	const isVerticalHorizontalLines = useRef<boolean>(true);
-
 	// 一番最初の描画時からitemsが変更されているかどうか
-	const isItemsChanged =
-		initialItems.current.length !== startItems.current.length ||
-		initialItems.current.some(
-			(item, idx) => item.id !== startItems.current[idx].id,
-		);
+	const isItemsChanged = useRef<boolean>(false);
+
+	// propsの参照を作成
+	const props = {
+		_id: id,
+		_items: items,
+		_onGroupDataChange: onGroupDataChange,
+	};
+	const propsRef = useRef<PropsRef>(props);
+	propsRef.current = props;
 
 	useEffect(() => {
 		const handleConnectPointMove = (e: Event) => {
+			const { _id, _items, _onGroupDataChange } = propsRef.current;
+
 			const event = e as CustomEvent<ConnectPointMoveEvent>;
-			const movedId = event.detail.id;
-			const movedPoint = event.detail.point;
-			const type = event.detail.type;
-			const ownerShape = event.detail.ownerShape;
+			const { id: movedId, point: movedPoint, type, ownerShape } = event.detail;
 
 			if (type === "moveStart") {
-				startItems.current = items;
-				isVerticalHorizontalLines.current = items.every((item, idx) => {
+				// 移動開始時のitemsを保持
+				startItems.current = _items;
+
+				// 垂直と水平の線のみかどうかを判定
+				isVerticalHorizontalLines.current = _items.every((item, idx) => {
 					if (idx === 0) {
 						return true;
 					}
 
-					const prev = items[idx - 1];
+					const prev = _items[idx - 1];
 					const direction = calcRadian(prev.point, item.point);
 					const degrees = radiansToDegrees(direction);
 					return degrees % 90 === 0;
 				});
+
+				// 一番最初の描画時からitemsが変更されているかどうかを判定
+				isItemsChanged.current =
+					initialItems.current.length !== startItems.current.length ||
+					initialItems.current.some(
+						(item, idx) => item.id !== startItems.current[idx].id,
+					);
 				return;
 			}
 
+			// 移動中と移動終了時の処理
 			const _startItems = startItems.current;
-
+			const _isItemsChanged = isItemsChanged.current;
+			const _isVerticalHorizontalLines = isVerticalHorizontalLines.current;
 			const foundIdx = _startItems.findIndex((item) => item.id === movedId);
 			if (0 <= foundIdx) {
-				if (isItemsChanged) {
+				if (_isItemsChanged) {
 					// 一番最初の描画時からitemsが変更されている場合は、
 					// 接続ポイントとその隣の点のみ位置を変更する
-					const p = startItems.current[foundIdx];
+					const p = _startItems[foundIdx];
 					const dx = movedPoint.x - p.point.x;
 					const dy = movedPoint.y - p.point.y;
-					const newItems = startItems.current.map((item, idx) => {
+					const newItems = _startItems.map((item, idx) => {
 						if (item.id === movedId) {
 							return { ...item, point: movedPoint };
 						}
@@ -116,11 +144,11 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 								...item,
 								point: {
 									x:
-										!isVertical && isVerticalHorizontalLines.current
+										!isVertical && _isVerticalHorizontalLines
 											? item.point.x + dx
 											: item.point.x,
 									y:
-										isVertical && isVerticalHorizontalLines.current
+										isVertical && _isVerticalHorizontalLines
 											? item.point.y + dy
 											: item.point.y,
 								},
@@ -129,8 +157,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 						return item;
 					});
-					onGroupDataChange?.({
-						id,
+					_onGroupDataChange?.({
+						id: _id,
 						items: newItems,
 					});
 				} else {
@@ -159,25 +187,27 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 							rotation: 0,
 							scaleX: 1,
 							scaleY: 1,
-						},
+						}, // TODO: 仮の値
 					);
-					const newItems = newPath.map((p, idx) => ({
-						id: newId(),
-						name: `cp-${idx}`,
-						type: "PathPoint",
-						point: p,
-						isSelected: false,
-					})) as Diagram[];
+					const newItems = (foundIdx === 0 ? newPath : newPath.reverse()).map(
+						(p, idx) => ({
+							id: type === "moveEnd" ? newId() : `${_id}-${idx}`,
+							name: `cp-${idx}`,
+							type: "PathPoint",
+							point: p,
+							isSelected: false,
+						}),
+					) as Diagram[];
 					newItems[0].id = _startItems[0].id;
-					newItems[lastIdx].id = _startItems[lastIdx].id;
-					onGroupDataChange?.({
-						id,
+					newItems[newItems.length - 1].id = _startItems[lastIdx].id;
+					_onGroupDataChange?.({
+						id: _id,
 						items: newItems,
 					});
 
 					if (type === "moveEnd") {
 						startItems.current = [];
-						if (!isItemsChanged) {
+						if (!_isItemsChanged) {
 							initialItems.current = newItems;
 						}
 					}
@@ -195,7 +225,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				handleConnectPointMove,
 			);
 		};
-	}, [onGroupDataChange, isItemsChanged, id, items]);
+	}, []);
 
 	return (
 		<Path

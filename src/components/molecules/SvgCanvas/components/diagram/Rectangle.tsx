@@ -59,6 +59,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onTransform,
 	onTransformEnd,
 }) => {
+	// ドラッグ中かのフラグ
+	const [isDragging, setIsDragging] = useState(false);
 	// 変形中かのフラグ
 	const [isTransformimg, setIsTransforming] = useState(false);
 	// ホバー中かのフラグ
@@ -97,7 +99,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 */
 	const handleDragStart = useCallback(
 		(e: DiagramDragEvent) => {
-			setIsTransforming(true);
+			setIsDragging(true);
 
 			triggerConnectPointsMove("moveStart", {
 				point: e.endPoint,
@@ -156,7 +158,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 				scaleY,
 			});
 
-			setIsTransforming(false);
+			setIsDragging(false);
 		},
 		[
 			onDragEnd,
@@ -174,9 +176,9 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 */
 	const handleTransformStart = useCallback(
 		(e: DiagramTransformEvent) => {
+			setIsTransforming(true);
 			onTransformStart?.(e);
 			triggerConnectPointsMove("moveStart", e.endShape);
-			setIsTransforming(true);
 		},
 		[onTransformStart, triggerConnectPointsMove],
 	);
@@ -273,21 +275,23 @@ const Rectangle: React.FC<RectangleProps> = ({
 					{...dragProps}
 				/>
 			</g>
-			<Transformative
-				diagramId={id}
-				type="Rectangle"
-				point={point}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				keepProportion={keepProportion}
-				isSelected={isSelected}
-				onTransformStart={handleTransformStart}
-				onTransform={handleTransform}
-				onTransformEnd={handleTransformEnd}
-			/>
+			{!isDragging && (
+				<Transformative
+					diagramId={id}
+					type="Rectangle"
+					point={point}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+					keepProportion={keepProportion}
+					isSelected={isSelected}
+					onTransformStart={handleTransformStart}
+					onTransform={handleTransform}
+					onTransformEnd={handleTransformEnd}
+				/>
+			)}
 			{!isSelected &&
 				(items as ConnectPointData[])?.map((cp) => (
 					<ConnectPoint
@@ -297,7 +301,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 						point={cp.point}
 						isSelected={false}
 						ownerShape={ownerShape}
-						visible={isHovered && !isTransformimg}
+						visible={isHovered && !isDragging && !isTransformimg}
 						onConnect={onConnect}
 					/>
 				))}

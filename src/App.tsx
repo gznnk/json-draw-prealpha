@@ -589,12 +589,33 @@ const testItems5 = [
 	},
 ] as Diagram[];
 
+const testItems6 = [
+	createRectangleData(
+		crypto.randomUUID(),
+		{ x: 300, y: 300 },
+		100,
+		100,
+		"transparent",
+		"black",
+		"1px",
+	),
+	createRectangleData(
+		crypto.randomUUID(),
+		{ x: 500, y: 300 },
+		100,
+		100,
+		"transparent",
+		"black",
+		"1px",
+	),
+] as Diagram[];
+
 function App() {
 	const {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems4);
+	} = useSvgCanvas(testItems6);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(
