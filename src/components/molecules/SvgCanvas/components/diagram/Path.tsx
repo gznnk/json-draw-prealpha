@@ -53,7 +53,7 @@ const createDValue = (items: Diagram[]) => {
 
 export type PathProps = DiagramBaseProps &
 	TransformativeProps &
-	PathData & {
+	Omit<PathData, "type"> & {
 		dragEnabled?: boolean;
 		transformEnabled?: boolean;
 		segmentDragEnabled?: boolean;
@@ -80,7 +80,6 @@ const Path: React.FC<PathProps> = ({
 	scaleX,
 	scaleY,
 	keepProportion = false,
-	fill = "none",
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
@@ -264,7 +263,7 @@ const Path: React.FC<PathProps> = ({
 		<>
 			{/* 描画用のパス */}
 			<g transform="translate(0.5,0.5)">
-				<path d={d} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
+				<path d={d} fill="none" stroke={stroke} strokeWidth={strokeWidth} />
 			</g>
 			{/* ドラッグ用のパス */}
 			<path
@@ -331,7 +330,7 @@ export default memo(Path);
 /**
  * 折れ線の頂点プロパティ
  */
-type PathPointProps = DiagramBaseProps & PathPointData;
+type PathPointProps = DiagramBaseProps & Omit<PathPointData, "type">;
 
 /**
  * 折れ線の頂点コンポーネント

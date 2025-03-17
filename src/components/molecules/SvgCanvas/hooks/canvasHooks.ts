@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
 
 // SvgCanvas関連型定義をインポート
-import type { Diagram } from "../types/DiagramTypes";
+import type { ConnectLineData, Diagram } from "../types/DiagramTypes";
 import type {
 	ConnectPointMoveEvent,
 	DiagramConnectEvent,
@@ -20,7 +20,7 @@ import type {
 import { EVENT_NAME_CONNECT_POINT_MOVE } from "../components/connector/ConnectPoint";
 
 // SvgCanvas関連関数をインポート
-import { isGroupData, newId } from "../functions/Diagram";
+import { isItemableData, isSelectableData, newId } from "../functions/Diagram";
 import { calcPointsOuterBox } from "../functions/Math";
 
 /**
@@ -87,11 +87,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 	const onSelect = useCallback((e: DiagramSelectEvent) => {
 		setCanvasState((prevState) => {
-			const items = applyRecursive(prevState.items, (item) =>
-				item.id === e.id
+			const items = applyRecursive(prevState.items, (item) => {
+				if (!isSelectableData(item)) {
+					return item;
+				}
+				return item.id === e.id
 					? { ...item, isSelected: true }
-					: { ...item, isSelected: e.isMultiSelect ? item.isSelected : false },
-			);
+					: { ...item, isSelected: e.isMultiSelect ? item.isSelected : false };
+			});
 
 			return {
 				...prevState,
@@ -104,9 +107,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const onDelete = useCallback(() => {
 		setCanvasState((prevState) => {
 			const items = applyRecursive(prevState.items, (item) => {
-				item.items = item.items?.filter((i) => !i.isSelected);
+				if (!isSelectableData(item)) {
+					return item;
+				}
+				item.items = item.items?.filter(
+					(i) => !isSelectableData(i) || !i.isSelected,
+				);
 				return item;
-			}).filter((item) => !item.isSelected);
+			}).filter((item) => !isSelectableData(item) || !item.isSelected);
 
 			return {
 				...prevState,
@@ -124,15 +132,15 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			point: box.center,
 			width: box.right - box.left,
 			height: box.bottom - box.top,
-			keepProportion: false,
 			isSelected: false,
+			keepProportion: false,
 			items: e.points.map((p) => ({
-				type: "PathPoint",
 				...p,
+				type: "PathPoint",
 				isSelected: false,
 			})) as Diagram[],
 			endOwnerId: e.endOwnerId,
-		});
+		} as ConnectLineData);
 	}, []);
 
 	useEffect(() => {
@@ -176,10 +184,10 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		let selectedItem: Diagram | undefined;
 		const findSelectedItem = (items: Diagram[]) => {
 			for (const item of items) {
-				if (item.isSelected) {
+				if (isSelectableData(item) && item.isSelected) {
 					selectedItem = item;
 				}
-				if (isGroupData(item)) {
+				if (isItemableData(item)) {
 					findSelectedItem(item.items ?? []);
 				}
 			}
@@ -243,7 +251,7 @@ const applyRecursive = (
 		if (item !== newItem) {
 			isItemChanged = true;
 		}
-		if (isGroupData(item) && isGroupData(newItem)) {
+		if (isItemableData(item) && isItemableData(newItem)) {
 			const newGroupItems = applyRecursive(item.items ?? [], updateFunction);
 			// 配列の参照先が変わった場合は変更ありと判断する
 			if (newGroupItems !== item.items) {

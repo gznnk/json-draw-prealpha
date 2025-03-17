@@ -23,7 +23,9 @@ import { useDrag } from "../../hooks/dragHooks";
 import { degreesToRadians } from "../../functions/Math";
 import { createSvgTransform } from "../../functions/Diagram";
 
-export type EllipseProps = DiagramBaseProps & TransformativeProps & EllipseData;
+export type EllipseProps = DiagramBaseProps &
+	TransformativeProps &
+	Omit<EllipseData, "type">;
 
 const Ellipse: React.FC<EllipseProps> = ({
 	id,

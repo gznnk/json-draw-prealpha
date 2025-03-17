@@ -1,4 +1,9 @@
-import type { TransformativeData, GroupData } from "../types/DiagramTypes";
+import type {
+	GroupData,
+	SelectableData,
+	Shape,
+	TransformativeData,
+} from "../types/DiagramTypes";
 
 /**
  * 新規IDを生成する
@@ -75,20 +80,36 @@ export const getCursorFromAngle = (angle: number): string => {
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isGroupData = (obj: any): obj is GroupData => {
-	return obj && typeof obj.type === "string" && Array.isArray(obj.items);
-};
-
-// TODO: 名前
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isTransformativeData = (obj: any): obj is TransformativeData => {
+export const isShape = (obj: any): obj is Shape => {
 	return (
-		obj &&
-		typeof obj.type === "string" &&
+		obj?.point &&
 		typeof obj.width === "number" &&
 		typeof obj.height === "number" &&
 		typeof obj.rotation === "number" &&
 		typeof obj.scaleX === "number" &&
 		typeof obj.scaleY === "number"
+	);
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
+export const isSelectableData = (obj: any): obj is SelectableData => {
+	return obj && typeof obj.isSelected === "boolean";
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
+export const isItemableData = (obj: any): obj is GroupData => {
+	return obj && Array.isArray(obj.items);
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
+export const isTransformativeData = (obj: any): obj is TransformativeData => {
+	return (
+		obj?.point &&
+		typeof obj.width === "number" &&
+		typeof obj.height === "number" &&
+		typeof obj.rotation === "number" &&
+		typeof obj.scaleX === "number" &&
+		typeof obj.scaleY === "number" &&
+		typeof obj.keepProportion === "boolean"
 	);
 };

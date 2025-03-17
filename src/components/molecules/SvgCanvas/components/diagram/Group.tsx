@@ -21,7 +21,11 @@ import type {
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
-import { isGroupData, isTransformativeData } from "../../functions/Diagram";
+import {
+	isSelectableData,
+	isItemableData,
+	isTransformativeData,
+} from "../../functions/Diagram";
 import { degreesToRadians, nanToZero, rotatePoint } from "../../functions/Math";
 
 /**
@@ -32,10 +36,10 @@ import { degreesToRadians, nanToZero, rotatePoint } from "../../functions/Math";
  */
 const getSelectedChildDiagram = (diagrams: Diagram[]): Diagram | undefined => {
 	for (const diagram of diagrams) {
-		if (diagram.isSelected) {
+		if (isSelectableData(diagram) && diagram.isSelected) {
 			return diagram;
 		}
-		if (isGroupData(diagram)) {
+		if (isItemableData(diagram)) {
 			const ret = getSelectedChildDiagram(diagram.items || []);
 			if (ret) {
 				return ret;
@@ -59,7 +63,7 @@ const getChildDiagramById = (
 		if (diagram.id === id) {
 			return diagram;
 		}
-		if (isGroupData(diagram)) {
+		if (isItemableData(diagram)) {
 			const ret = getChildDiagramById(diagram.items || [], id);
 			if (ret) {
 				return ret;
@@ -156,7 +160,7 @@ const calcGroupBoxOfNoRotation = (
 	let right = Number.NEGATIVE_INFINITY;
 
 	for (const item of items) {
-		if (isGroupData(item)) {
+		if (isItemableData(item)) {
 			const groupBox = calcGroupBoxOfNoRotation(
 				item.items ?? [],
 				groupCenterPoint,
@@ -211,7 +215,7 @@ const calcGroupBoxOfNoRotation = (
  */
 export type GroupProps = DiagramBaseProps &
 	TransformativeProps &
-	GroupData & {
+	Omit<GroupData, "type"> & {
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
 	};
 
@@ -401,7 +405,7 @@ const Group: React.FC<GroupProps> = ({
 							x: item.point.x + dx,
 							y: item.point.y + dy,
 						},
-						items: isGroupData(item)
+						items: isItemableData(item)
 							? moveRecursive(item.items ?? [])
 							: undefined,
 					});
@@ -433,7 +437,7 @@ const Group: React.FC<GroupProps> = ({
 					transformGroupOutline({
 						...changeItem,
 						point: e.endPoint,
-					});
+					} as Diagram);
 				}
 			}
 
@@ -458,7 +462,7 @@ const Group: React.FC<GroupProps> = ({
 				transformGroupOutline({
 					...changeItem,
 					...e,
-				});
+				} as Diagram);
 			}
 		},
 		[transformGroupOutline, items],
@@ -517,7 +521,7 @@ const Group: React.FC<GroupProps> = ({
 							rotation: newRotation,
 							scaleX: e.endShape.scaleX,
 							scaleY: e.endShape.scaleY,
-							items: isGroupData(item)
+							items: isItemableData(item)
 								? transformRecursive(item.items ?? [])
 								: undefined,
 						});
@@ -555,7 +559,7 @@ const Group: React.FC<GroupProps> = ({
 				transformGroupOutline({
 					...changeItem,
 					...e,
-				});
+				} as Diagram);
 			}
 
 			onGroupDataChange?.(e);

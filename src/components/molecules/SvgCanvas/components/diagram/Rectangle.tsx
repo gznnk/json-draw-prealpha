@@ -37,7 +37,7 @@ import { calcRectangleVertices, degreesToRadians } from "../../functions/Math";
  */
 export type RectangleProps = DiagramBaseProps &
 	TransformativeProps &
-	RectangleData;
+	Omit<RectangleData, "type">;
 
 /**
  * 四角形コンポーネント
@@ -306,7 +306,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 						id={cp.id}
 						name={cp.name}
 						point={cp.point}
-						isSelected={false}
 						ownerId={id}
 						ownerShape={ownerShape}
 						visible={isHovered && !isDragging && !isTransformimg}

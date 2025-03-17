@@ -18,7 +18,7 @@ import type {
 } from "./types/EventTypes";
 
 // SvgCanvas関連関数をインポート
-import { isGroupData } from "./functions/Diagram";
+import { isItemableData } from "./functions/Diagram";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -219,7 +219,7 @@ const getDiagramById = (
 			return diagram;
 		}
 		// グループデータの場合は再帰的に探索
-		if (isGroupData(diagram)) {
+		if (isItemableData(diagram)) {
 			const ret = getDiagramById(diagram.items || [], id);
 			if (ret) {
 				return ret;

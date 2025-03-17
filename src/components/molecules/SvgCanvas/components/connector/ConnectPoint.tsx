@@ -57,7 +57,7 @@ export const triggerConnectPointMove = (e: ConnectPointMoveEvent) => {
 	);
 };
 
-type ConnectPointProps = ConnectPointData & {
+type ConnectPointProps = Omit<ConnectPointData, "type"> & {
 	ownerId: string;
 	ownerShape: Shape;
 	visible: boolean;
@@ -109,11 +109,13 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				);
 			}
 
-			const newPathPoints = newPoints.map((p) => ({
-				id: newId(),
-				point: p,
-				isSelected: false,
-			}));
+			const newPathPoints = newPoints.map(
+				(p) =>
+					({
+						id: newId(),
+						point: p,
+					}) as PathPointData,
+			);
 
 			setPathPoints(newPathPoints);
 		},
@@ -335,7 +337,6 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 					rotation={0}
 					scaleX={1}
 					scaleY={1}
-					fill="none"
 					stroke="black"
 					strokeWidth="1px"
 					keepProportion={false}

@@ -25,7 +25,7 @@ import { createSvgTransform } from "../../functions/Diagram";
 
 export type TriangleProps = DiagramBaseProps &
 	TransformativeProps &
-	TriangleData;
+	Omit<TriangleData, "type">;
 
 const Triangle: React.FC<TriangleProps> = ({
 	id,

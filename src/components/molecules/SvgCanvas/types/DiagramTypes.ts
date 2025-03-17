@@ -53,32 +53,118 @@ export type DiagramType =
  */
 export type DiagramBaseData = {
 	id: string;
-	type?: DiagramType;
+	type: DiagramType;
 	point: Point;
+};
+
+/**
+ * 選択可能な図形のデータ
+ */
+export type SelectableData = {
 	isSelected: boolean;
-	items?: Diagram[];
 };
 
 /**
  * 変形可能な図形のデータ
  */
-export type TransformativeData = DiagramBaseData & {
-	width: number;
-	height: number;
-	rotation: number;
-	scaleX: number;
-	scaleY: number;
+export type TransformativeData = Shape & {
 	keepProportion: boolean;
 };
 
 /**
- * 接続線のデータ
+ * 子図形をもつ図形のデータ
  */
-export type ConnectLineData = PathData & {
-	// startOwnerId: string;
-	startOwnerShape: Shape;
-	endOwnerId: string;
+export type ItemableData = {
+	items: Diagram[];
 };
+
+/**
+ * 接続可能な図形のデータ
+ */
+export type ConnectableData = ItemableData; // 接続ポイントを子図形としてもつ
+
+/**
+ * 枠線を持つ図形のデータ
+ */
+export type BorderedData = {
+	stroke: string;
+	strokeWidth: string;
+};
+
+/**
+ * 塗り潰しできる図形のデータ
+ */
+export type FillableData = {
+	fill: string;
+};
+
+/**
+ * 図形の型作成オプション
+ */
+type DiagramOptions = {
+	selectable?: boolean;
+	transformative?: boolean;
+	itemable?: boolean;
+	connectable?: boolean;
+	bordered?: boolean;
+	fillable?: boolean;
+};
+
+/**
+ * 空の型
+ */
+type Empty = object;
+
+/**
+ * 図形のデータ型を作成する型
+ */
+type CreateDiagramType<T extends DiagramOptions> = DiagramBaseData &
+	(T["selectable"] extends true ? SelectableData : Empty) &
+	(T["transformative"] extends true ? TransformativeData : Empty) &
+	(T["itemable"] extends true ? ItemableData : Empty) &
+	(T["connectable"] extends true ? ConnectableData : Empty) &
+	(T["bordered"] extends true ? BorderedData : Empty) &
+	(T["fillable"] extends true ? FillableData : Empty);
+
+/**
+ * 楕円のデータ
+ */
+export type EllipseData = CreateDiagramType<{
+	selectable: true;
+	transformative: true;
+	connectable: true;
+	bordered: true;
+	fillable: true;
+}>;
+
+/**
+ * 矩形のデータ
+ */
+export type RectangleData = CreateDiagramType<{
+	selectable: true;
+	transformative: true;
+	connectable: true;
+	bordered: true;
+	fillable: true;
+}>;
+
+/**
+ * 折れ線の頂点のデータ
+ */
+export type PathPointData = DiagramBaseData & {
+	hidden: boolean;
+	pointerEventsDisabled: boolean;
+};
+
+/**
+ * 折れ線のデータ
+ */
+export type PathData = CreateDiagramType<{
+	selectable: true;
+	transformative: true;
+	itemable: true;
+	bordered: true;
+}>;
 
 /**
  * 接続ポイントのデータ
@@ -88,56 +174,37 @@ export type ConnectPointData = DiagramBaseData & {
 };
 
 /**
- * 楕円のデータ
+ * 接続線のデータ
  */
-export type EllipseData = TransformativeData & {
-	fill: string;
-	stroke: string;
-	strokeWidth: string;
-};
-
-/**
- * 折れ線の頂点のデータ
- */
-export type PathPointData = DiagramBaseData & {
-	hidden?: boolean;
-	pointerEventsDisabled?: boolean;
-};
-
-/**
- * 折れ線のデータ
- */
-export type PathData = TransformativeData & {
-	fill?: string;
-	stroke: string;
-	strokeWidth: string;
-	items: Diagram[];
+export type ConnectLineData = CreateDiagramType<{
+	selectable: true;
+	transformative: true;
+	itemable: true;
+	bordered: true;
+}> & {
+	startOwnerId: string;
+	endOwnerId: string;
 };
 
 /**
  * グループのデータ
  */
-export type GroupData = TransformativeData & {
-	items: Diagram[];
-};
-
-/**
- * 矩形のデータ
- */
-export type RectangleData = TransformativeData & {
-	fill: string;
-	stroke: string;
-	strokeWidth: string;
-};
+export type GroupData = CreateDiagramType<{
+	selectable: true;
+	transformative: true;
+	itemable: true;
+}>;
 
 /**
  * 三角形のデータ TODO: 三角形いる？
  */
-export type TriangleData = TransformativeData & {
-	fill: string;
-	stroke: string;
-	strokeWidth: string;
-};
+export type TriangleData = CreateDiagramType<{
+	selectable: true;
+	transformative: true;
+	connectable: true;
+	bordered: true;
+	fillable: true;
+}>;
 
 /**
  * ダミー図形コンポーネント
@@ -166,7 +233,7 @@ export type Diagram = DiagramCombined & {
 /**
  * 図形のプロパティ
  */
-export type DiagramBaseProps = DiagramBaseData & {
+export type DiagramBaseProps = {
 	onDragStart?: (e: DiagramDragEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDragEnd?: (e: DiagramDragEvent) => void;
@@ -180,7 +247,7 @@ export type DiagramBaseProps = DiagramBaseData & {
 /**
  * 変形可能な図形のプロパティ
  */
-export type TransformativeProps = TransformativeData & {
+export type TransformativeProps = {
 	onTransformStart?: (e: DiagramTransformEvent) => void;
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onTransformEnd?: (e: DiagramTransformEvent) => void;

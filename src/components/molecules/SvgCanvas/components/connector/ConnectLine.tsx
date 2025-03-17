@@ -25,23 +25,13 @@ import type {
 
 // SvgCanvas関連関数をインポート
 import { calcRadian, radiansToDegrees } from "../../functions/Math";
-import { newId } from "../../functions/Diagram";
-
-// 型ユーティリティをインポート
-import type {
-	AddUnderscoreToProperties,
-	PartiallyRequired,
-} from "../../../../../types/UtilTypes";
+import { isShape, newId } from "../../functions/Diagram";
 
 type ConnectLineProps = DiagramBaseProps &
 	TransformativeProps &
-	ConnectLineData & {
+	Omit<ConnectLineData, "type"> & {
 		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
 	};
-
-type PropsRef = AddUnderscoreToProperties<
-	PartiallyRequired<ConnectLineProps, "id" | "items" | "endOwnerId">
->;
 
 const ConnectLine: React.FC<ConnectLineProps> = ({
 	id,
@@ -51,7 +41,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	fill = "none",
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
@@ -171,7 +160,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 						}
 
 						return item;
-					});
+					}) as Diagram[];
 					_onGroupDataChange?.({
 						id: _id,
 						items: newItems,
@@ -192,7 +181,9 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 					const endPointOwner =
 						_canvasStateProvider?.getDiagramById(_endOwnerId);
-					// TODO: 型エラー修正
+					if (!isShape(endPointOwner)) {
+						return;
+					}
 					const endOwnerShape = {
 						point: endPointOwner?.point ?? { x: 0, y: 0 },
 						width: endPointOwner?.width ?? 10,
@@ -215,7 +206,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 							name: `cp-${idx}`,
 							type: "PathPoint",
 							point: p,
-							isSelected: false,
 						}),
 					) as Diagram[];
 					newItems[0].id = _startItems[0].id;
@@ -257,7 +247,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			scaleX={scaleX}
 			scaleY={scaleY}
 			keepProportion={false}
-			fill={fill}
 			stroke={stroke}
 			strokeWidth={strokeWidth}
 			isSelected={isSelected}
