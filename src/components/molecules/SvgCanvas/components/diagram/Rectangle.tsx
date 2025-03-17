@@ -6,16 +6,16 @@ import { memo, useCallback, useRef, useState } from "react";
 import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
 import type {
 	ConnectPointData,
+	CreateDiagramProps,
 	Diagram,
 	RectangleData,
 	Shape,
-	CreateDiagramProps,
 } from "../../types/DiagramTypes";
 import type {
+	ConnectPointMoveEventType,
 	DiagramDragEvent,
 	DiagramHoverEvent,
 	DiagramTransformEvent,
-	ConnectPointMoveEventType,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -54,10 +54,10 @@ const Rectangle: React.FC<RectangleProps> = ({
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
+	keepProportion = false,
 	fill = "transparent",
 	stroke = "black",
 	strokeWidth = "1px",
-	keepProportion = false,
 	isSelected = false,
 	items,
 	onDragStart,
@@ -113,6 +113,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 		(e: DiagramDragEvent) => {
 			setIsDragging(true);
 
+			// TODO: 簡潔に書きたい
 			triggerConnectPointsMove("moveStart", {
 				point: e.endPoint,
 				width,
@@ -351,22 +352,37 @@ export default memo(Rectangle);
 /**
  * 短径データ作成
  */
-export const createRectangleData = (
-	id: string,
-	point: Point,
-	width: number,
-	height: number,
-	fill: string,
-	stroke: string,
-	strokeWidth: string,
-): RectangleData => {
+export const createRectangleData = ({
+	point,
+	width = 100,
+	height = 100,
+	rotation = 0,
+	scaleX = 1,
+	scaleY = 1,
+	keepProportion = false,
+	fill = "transparent",
+	stroke = "black",
+	strokeWidth = "1px",
+}: {
+	point: Point;
+	width?: number;
+	height?: number;
+	rotation?: number;
+	scaleX?: number;
+	scaleY?: number;
+	keepProportion?: boolean;
+	fill?: string;
+	stroke?: string;
+	strokeWidth?: string;
+}): RectangleData => {
+	// 接続ポイントを生成
 	const vertices = calcRectangleVertices({
 		point,
 		width,
 		height,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
+		rotation,
+		scaleX,
+		scaleY,
 	});
 
 	const items: Diagram[] = [];
@@ -381,18 +397,18 @@ export const createRectangleData = (
 	}
 
 	return {
-		id,
+		id: newId(),
 		type: "Rectangle",
 		point,
 		width,
 		height,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
+		rotation,
+		scaleX,
+		scaleY,
+		keepProportion,
 		fill,
 		stroke,
 		strokeWidth,
-		keepProportion: false,
 		isSelected: false,
 		items,
 	} as RectangleData;

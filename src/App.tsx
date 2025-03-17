@@ -444,87 +444,33 @@ const testItems3 = [
 ] as Diagram[];
 
 const testItems4 = [
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 300, y: 300 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 500, y: 300 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 700, y: 300 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 300, y: 500 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 500, y: 500 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 700, y: 500 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 300, y: 700 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 500, y: 700 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 700, y: 700 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
+	createRectangleData({
+		point: { x: 300, y: 300 },
+	}),
+	createRectangleData({
+		point: { x: 500, y: 300 },
+	}),
+	createRectangleData({
+		point: { x: 700, y: 300 },
+	}),
+	createRectangleData({
+		point: { x: 300, y: 500 },
+	}),
+	createRectangleData({
+		point: { x: 500, y: 500 },
+	}),
+	createRectangleData({
+		point: { x: 700, y: 500 },
+	}),
+	createRectangleData({
+		point: { x: 300, y: 700 },
+	}),
+	createRectangleData({
+		point: { x: 500, y: 700 },
+	}),
+	createRectangleData({
+		point: { x: 700, y: 700 },
+	}),
 ] as Diagram[];
 
 const testItems5 = [
@@ -590,24 +536,12 @@ const testItems5 = [
 ] as Diagram[];
 
 const testItems6 = [
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 300, y: 300 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
-	createRectangleData(
-		crypto.randomUUID(),
-		{ x: 500, y: 300 },
-		100,
-		100,
-		"transparent",
-		"black",
-		"1px",
-	),
+	createRectangleData({
+		point: { x: 300, y: 300 },
+	}),
+	createRectangleData({
+		point: { x: 500, y: 300 },
+	}),
 ] as Diagram[];
 
 function App() {
@@ -619,15 +553,7 @@ function App() {
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(
-			createRectangleData(
-				crypto.randomUUID(),
-				{ x: 50, y: 50 },
-				100,
-				100,
-				"transparent",
-				"black",
-				"1px",
-			) as Diagram,
+			createRectangleData({ point: { x: 50, y: 50 } }) as Diagram,
 		);
 	};
 
@@ -640,19 +566,16 @@ function App() {
 			height: 100,
 			keepProportion: false,
 			isSelected: false,
-		});
+		} as Diagram);
 	};
 
 	const handleAddSquare = () => {
-		canvasFunctions.addItem({
-			id: crypto.randomUUID(),
-			type: "Rectangle",
-			point: { x: 0, y: 0 },
-			width: 100,
-			height: 100,
-			keepProportion: true,
-			isSelected: false,
-		});
+		canvasFunctions.addItem(
+			createRectangleData({
+				point: { x: 50, y: 50 },
+				keepProportion: true,
+			}) as Diagram,
+		);
 	};
 
 	const handleAddCircle = () => {
@@ -664,7 +587,7 @@ function App() {
 			height: 100,
 			keepProportion: true,
 			isSelected: false,
-		});
+		} as Diagram);
 	};
 
 	logger.debug("selectedItemId:", canvasState.selectedItemId);
