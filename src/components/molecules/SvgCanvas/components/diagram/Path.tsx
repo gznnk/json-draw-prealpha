@@ -260,7 +260,7 @@ const Path: React.FC<PathProps> = ({
 	const linePoints = items.map((item, idx) => ({
 		...item,
 		hidden: isTransformMode || isDragging,
-		pointerEventsDisabled: idx === 0 || idx === items.length - 1,
+		pointerEventsDisabled: idx === 0 || idx === items.length - 1, // TODO: 接続ポイントの場合のみにする
 	}));
 
 	return (
@@ -608,12 +608,12 @@ const Segment: React.FC<SegmentProps> = memo(
 		const cursor = getCursorFromAngle(radiansToDegrees(radian));
 
 		const dragPositioningFunction = useCallback(
-			(p: Point) => {
+			(x: number, y: number) => {
 				const degrees = radiansToDegrees(radian);
 				const isX2y = (degrees + 405) % 180 > 90;
 				return isX2y
-					? createLinerX2yFunction(rotateStartPoint, rotateEndPoint)(p)
-					: createLinerY2xFunction(rotateStartPoint, rotateEndPoint)(p);
+					? createLinerX2yFunction(rotateStartPoint, rotateEndPoint)(x, y)
+					: createLinerY2xFunction(rotateStartPoint, rotateEndPoint)(x, y);
 			},
 
 			[radian, rotateStartPoint, rotateEndPoint],

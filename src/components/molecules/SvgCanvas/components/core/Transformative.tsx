@@ -247,11 +247,11 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionLeftTop = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			createLinerY2xFunction(
 				startShape.current.leftTopPoint,
 				startShape.current.rightBottomPoint,
-			)(p),
+			)(x, y),
 		[],
 	);
 	// --- LeftTop End --- //
@@ -298,11 +298,11 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionLeftBottom = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			createLinerY2xFunction(
 				startShape.current.rightTopPoint,
 				startShape.current.leftBottomPoint,
-			)(p),
+			)(x, y),
 		[],
 	);
 	// --- LeftTop Bottom --- //
@@ -349,11 +349,11 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionRightTop = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			createLinerY2xFunction(
 				startShape.current.rightTopPoint,
 				startShape.current.leftBottomPoint,
-			)(p),
+			)(x, y),
 		[],
 	);
 	// --- RightTop End --- //
@@ -400,11 +400,11 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionRightBottom = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			createLinerY2xFunction(
 				startShape.current.rightBottomPoint,
 				startShape.current.leftTopPoint,
-			)(p),
+			)(x, y),
 		[],
 	);
 	// --- RightBottom End --- //
@@ -451,16 +451,16 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionTopCenter = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			!isSwapped
 				? createLinerY2xFunction(
 						startShape.current.bottomCenterPoint,
 						startShape.current.topCenterPoint,
-					)(p)
+					)(x, y)
 				: createLinerX2yFunction(
 						startShape.current.bottomCenterPoint,
 						startShape.current.topCenterPoint,
-					)(p),
+					)(x, y),
 		[isSwapped],
 	);
 	// --- TopCenter End --- //
@@ -507,16 +507,16 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionLeftCenter = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			!isSwapped
 				? createLinerX2yFunction(
 						startShape.current.leftCenterPoint,
 						startShape.current.rightCenterPoint,
-					)(p)
+					)(x, y)
 				: createLinerY2xFunction(
 						startShape.current.leftCenterPoint,
 						startShape.current.rightCenterPoint,
-					)(p),
+					)(x, y),
 		[isSwapped],
 	);
 	// --- LeftCenter End --- //
@@ -563,16 +563,16 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionRightCenter = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			!isSwapped
 				? createLinerX2yFunction(
 						startShape.current.leftCenterPoint,
 						startShape.current.rightCenterPoint,
-					)(p)
+					)(x, y)
 				: createLinerY2xFunction(
 						startShape.current.leftCenterPoint,
 						startShape.current.rightCenterPoint,
-					)(p),
+					)(x, y),
 		[isSwapped],
 	);
 	// --- RightCenter End --- //
@@ -619,16 +619,16 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const linerDragFunctionBottomCenter = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			!isSwapped
 				? createLinerY2xFunction(
 						startShape.current.bottomCenterPoint,
 						startShape.current.topCenterPoint,
-					)(p)
+					)(x, y)
 				: createLinerX2yFunction(
 						startShape.current.bottomCenterPoint,
 						startShape.current.topCenterPoint,
-					)(p),
+					)(x, y),
 		[isSwapped],
 	);
 	// --- BottomCenter End --- //
@@ -714,13 +714,13 @@ const Transformative: React.FC<Props> = ({
 	);
 
 	const dragFunctionRotationPoint = useCallback(
-		(p: Point) =>
+		(rx: number, ry: number) =>
 			calcNearestCircleIntersectionPoint(
 				x,
 				y,
 				width / 2 + ROTATE_POINT_MARGIN,
-				p.x,
-				p.y,
+				rx,
+				ry,
 			),
 		[x, y, width],
 	);

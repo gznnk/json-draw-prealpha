@@ -42,26 +42,6 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
 
 /**
  * ドラッグポイントコンポーネント
- *
- * @param {DragPointProps} props ドラッグポイントのProps
- * @param {string} [props.id] ID
- * @param {DiagramType} [props.type] 図形の種類
- * @param {Point} [props.point] 座標
- * @param {boolean} [props.allowXDecimal] X座標の小数点許可フラグ
- * @param {boolean} [props.allowYDecimal] Y座標の小数点許可フラグ
- * @param {string} [props.cursor] カーソル
- * @param {boolean} [props.visible] 表示フラグ
- * @param {string} [props.color] 色
- * @param {boolean} [props.hidden] 非表示フラグ
- * @param {(e: DiagramDragEvent) => void} [props.onDragStart] ドラッグ開始時のイベントハンドラ
- * @param {(e: DiagramDragEvent) => void} [props.onDrag] ドラッグ中のイベントハンドラ
- * @param {(e: DiagramDragEvent) => void} [props.onDragEnd] ドラッグ終了時のイベントハンドラ
- * @param {(e: DiagramDragDropEvent) => void} [props.onDragOver] ドラッグオーバー時のイベントハンドラ
- * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] ドラッグリーブ時のイベントハンドラ
- * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] ドロップ時のイベントハンドラ
- * @param {(e: DiagramHoverEvent) => void} [props.onHover] ホバー変更時のイベントハンドラ
- * @param {(point: Point) => Point} [props.dragPositioningFunction] ドラッグ位置変換関数
- * @returns {JSX.Element} ドラッグポイントコンポーネント
  */
 const DragPoint: React.FC<DragPointProps> = ({
 	id,

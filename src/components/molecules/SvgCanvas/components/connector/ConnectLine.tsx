@@ -78,37 +78,38 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	// 接続ポイント移動イベントハンドラ
 	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
-		_id: id,
-		_items: items,
-		_startOwnerId: startOwnerId,
-		_endOwnerId: endOwnerId,
-		_onItemableChange: onItemableChange,
-		_canvasStateProvider: canvasStateProvider,
+		id,
+		items,
+		startOwnerId,
+		endOwnerId,
+		onItemableChange,
+		canvasStateProvider,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	useEffect(() => {
 		const handleConnectPointMove = (e: Event) => {
+			// refBusを介して参照値を取得
 			const {
-				_id,
-				_items,
-				_startOwnerId,
-				_endOwnerId,
-				_onItemableChange,
-				_canvasStateProvider,
+				id,
+				items,
+				startOwnerId,
+				endOwnerId,
+				onItemableChange,
+				canvasStateProvider,
 			} = refBus.current;
 
 			const event = (e as CustomEvent<ConnectPointMoveEvent>).detail;
 
 			// 関係ない接続ポイントの移動イベントは無視
-			if (_items.every((item) => item.id !== event.id)) {
+			if (items.every((item) => item.id !== event.id)) {
 				return;
 			}
 
 			if (event.type === "moveStart") {
 				// 移動開始時のitemsを保持
-				startItems.current = _items;
+				startItems.current = items;
 
 				// 移動開始時の接続ポイントの向きを保持
 				startDirection.current = getLineDirection(
@@ -119,12 +120,12 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				);
 
 				// 垂直と水平の線のみかどうかを判定
-				isVerticalHorizontalLines.current = _items.every((item, idx) => {
+				isVerticalHorizontalLines.current = items.every((item, idx) => {
 					if (idx === 0) {
 						return true;
 					}
 
-					const prev = _items[idx - 1];
+					const prev = items[idx - 1];
 					const degrees = radiansToDegrees(
 						calcRadians(prev.x, prev.y, item.x, item.y),
 					);
@@ -192,8 +193,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					}) as Diagram[];
 
 					// 子図形の変更イベントを発火
-					_onItemableChange?.({
-						id: _id,
+					onItemableChange?.({
+						id,
 						items: newItems,
 					});
 				} else {
@@ -205,8 +206,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 						foundIdx === 0 ? _startItems[lastIdx] : _startItems[0];
 
 					// 反対側の図形の情報を取得
-					const oppositeOwnerShape = _canvasStateProvider?.getDiagramById(
-						event.ownerId === _startOwnerId ? _endOwnerId : _startOwnerId,
+					const oppositeOwnerShape = canvasStateProvider?.getDiagramById(
+						event.ownerId === startOwnerId ? endOwnerId : startOwnerId,
 					);
 
 					// 型チェック（以降の処理で型エラーが出ないようにするためだけ）
@@ -228,7 +229,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					// 接続線の点のデータを作成
 					const newItems = (foundIdx === 0 ? newPath : newPath.reverse()).map(
 						(p, idx) => ({
-							id: event.type === "moveEnd" ? newId() : `${_id}-${idx}`,
+							id: event.type === "moveEnd" ? newId() : `${id}-${idx}`,
 							name: `cp-${idx}`,
 							type: "PathPoint",
 							x: p.x,
@@ -240,8 +241,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					newItems[newItems.length - 1].id = _startItems[lastIdx].id;
 
 					// 子図形の変更イベントを発火
-					_onItemableChange?.({
-						id: _id,
+					onItemableChange?.({
+						id,
 						items: newItems,
 					});
 

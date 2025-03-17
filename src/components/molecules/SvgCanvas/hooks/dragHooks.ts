@@ -54,7 +54,7 @@ export type DragProps = {
 	onDragLeave?: (e: DiagramDragDropEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onHover?: (e: DiagramHoverEvent) => void;
-	dragPositioningFunction?: (point: Point) => Point;
+	dragPositioningFunction?: (x: number, y: number) => Point;
 };
 
 /**
@@ -78,7 +78,7 @@ export type DragProps = {
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] ドラッグリーブ時のイベントハンドラ
  * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] ドロップ時のイベントハンドラ
  * @param {(e: DiagramHoverEvent) => void} [props.onHover] ホバー変更時のイベントハンドラ
- * @param {(point: Point) => Point} [props.dragPositioningFunction] ドラッグ位置変換関数
+ * @param {(x: number, y: number) => Point} [props.dragPositioningFunction] ドラッグ位置変換関数
  */
 export const useDrag = (props: DragProps) => {
 	const {
@@ -157,10 +157,7 @@ export const useDrag = (props: DragProps) => {
 
 		if (dragPositioningFunction) {
 			// ドラッグ位置変換関数が指定されている場合は、その関数を適用
-			const p = dragPositioningFunction({
-				x: newX,
-				y: newY,
-			});
+			const p = dragPositioningFunction(newX, newY);
 			newX = p.x;
 			newY = p.y;
 		}
@@ -330,7 +327,7 @@ export const useDrag = (props: DragProps) => {
 			};
 
 			if (dragPositioningFunction) {
-				newPoint = dragPositioningFunction({ ...newPoint });
+				newPoint = dragPositioningFunction(newPoint.x, newPoint.y);
 			}
 
 			newPoint = adjustCoordinates(newPoint.x, newPoint.y);
@@ -463,14 +460,14 @@ export const useDrag = (props: DragProps) => {
 	// 全体周知用ドラッグイベントリスナー登録
 	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
-		_id: id,
-		_x: x,
-		_y: y,
-		_type: type,
-		_ref: ref,
-		_onDragOver: onDragOver,
-		_onDragLeave: onDragLeave,
-		_onDrop: onDrop,
+		id,
+		x,
+		y,
+		type,
+		ref,
+		onDragOver,
+		onDragLeave,
+		onDrop,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -479,11 +476,11 @@ export const useDrag = (props: DragProps) => {
 		let handleBroadcastDrag: (e: Event) => void;
 		let handleBroadcastDragEnd: (e: Event) => void;
 
-		const { _onDragOver, _onDrop } = refBus.current;
-		if (_onDragOver) {
+		const { onDragOver, onDrop } = refBus.current;
+		if (onDragOver) {
 			handleBroadcastDrag = (e: Event) => {
-				const { _id, _x, _y, _type, _ref, _onDragOver, _onDragLeave } =
-					refBus.current;
+				// refBusを介して参照値を取得
+				const { id, x, y, type, ref, onDragOver, onDragLeave } = refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
 
 				// ドラッグ＆ドロップのイベント情報を作成
@@ -495,44 +492,45 @@ export const useDrag = (props: DragProps) => {
 						y: customEvent.detail.startY,
 					},
 					dropTargetItem: {
-						id: _id,
-						type: _type,
-						x: _x,
-						y: _y,
+						id,
+						type,
+						x,
+						y,
 					},
 				};
 
 				if (
 					isPointerOver(
-						_ref,
+						ref,
 						customEvent.detail.clientX,
 						customEvent.detail.clientY,
 					)
 				) {
 					if (!dragEntered.current) {
 						dragEntered.current = true;
-						_onDragOver?.(dragDropEvent);
+						onDragOver?.(dragDropEvent);
 					}
 				} else if (dragEntered.current) {
 					dragEntered.current = false;
-					_onDragLeave?.(dragDropEvent);
+					onDragLeave?.(dragDropEvent);
 				}
 			};
 			document.addEventListener(EVENT_NAME_BROADCAST_DRAG, handleBroadcastDrag);
 		}
 
-		if (_onDrop) {
+		if (onDrop) {
 			handleBroadcastDragEnd = (e: Event) => {
-				const { _id, _x, _y, _type, _ref, _onDrop } = refBus.current;
+				// refBusを介して参照値を取得
+				const { id, x, y, type, ref, onDrop } = refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
 				if (
 					isPointerOver(
-						_ref,
+						ref,
 						customEvent.detail.clientX,
 						customEvent.detail.clientY,
 					)
 				) {
-					_onDrop?.({
+					onDrop?.({
 						dropItem: {
 							id: customEvent.detail.id,
 							type: customEvent.detail.type,
@@ -540,10 +538,10 @@ export const useDrag = (props: DragProps) => {
 							y: customEvent.detail.startY,
 						},
 						dropTargetItem: {
-							id: _id,
-							type: _type,
-							x: _x,
-							y: _y,
+							id,
+							type,
+							x,
+							y,
 						},
 					});
 				}

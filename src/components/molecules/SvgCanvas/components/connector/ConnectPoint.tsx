@@ -263,24 +263,24 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 	// 接続イベントのハンドラ登録
 	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
-	// TODO: アンダーバーつけるのやめたい
 	const refBusVal = {
-		_id: id,
-		_ownerId: ownerId,
-		_pathPoints: pathPoints,
-		_onConnect: onConnect,
-		_updatePathPoints: updatePathPoints,
+		id,
+		ownerId,
+		pathPoints,
+		onConnect,
+		updatePathPoints,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	useEffect(() => {
 		const handleConnection = (e: Event) => {
-			const { _id, _pathPoints, _ownerId, _onConnect, _updatePathPoints } =
+			// refBusを介して参照値を取得
+			const { id, pathPoints, ownerId, onConnect, updatePathPoints } =
 				refBus.current;
 
 			const customEvent = e as CustomEvent<ConnectionEvent>;
-			if (customEvent.detail.startPointId === _id) {
+			if (customEvent.detail.startPointId === id) {
 				if (customEvent.detail.type === "connecting") {
 					// 接続が始まった時の処理
 					// 接続先のポイントを保持
@@ -293,7 +293,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 					};
 
 					// 接続先のポイントと線がつながるよう、パスポイントを再計算
-					_updatePathPoints(customEvent.detail.endX, customEvent.detail.endY);
+					updatePathPoints(customEvent.detail.endX, customEvent.detail.endY);
 				}
 
 				if (customEvent.detail.type === "disconnect") {
@@ -306,12 +306,12 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 					// 接続完了時の処理
 					// 接続線のデータを生成してイベント発火
 
-					const points: PathPointData[] = [..._pathPoints];
-					points[0].id = _id;
+					const points: PathPointData[] = [...pathPoints];
+					points[0].id = id;
 					points[points.length - 1].id = customEvent.detail.endPointId;
 
-					_onConnect?.({
-						startOwnerId: _ownerId,
+					onConnect?.({
+						startOwnerId: ownerId,
 						points: points,
 						endOwnerId: customEvent.detail.endOwnerId,
 					});

@@ -294,10 +294,10 @@ export const createLinerY2xFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);
 	const b = p1.y - a * p1.x;
 
-	return (p: Point) => {
+	return (_x: number, y: number) => {
 		return {
-			x: Number.isFinite(a) ? (p.y - b) / a : p1.x,
-			y: p.y,
+			x: Number.isFinite(a) ? (y - b) / a : p1.x,
+			y,
 		};
 	};
 };
@@ -313,10 +313,10 @@ export const createLinerX2yFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);
 	const b = p1.y - a * p1.x;
 
-	return (p: Point) => {
+	return (x: number, _y: number) => {
 		return {
-			x: p.x,
-			y: Number.isFinite(a) ? a * p.x + b : p1.y,
+			x: x,
+			y: Number.isFinite(a) ? a * x + b : p1.y,
 		};
 	};
 };
