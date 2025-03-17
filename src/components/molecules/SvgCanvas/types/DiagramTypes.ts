@@ -75,8 +75,9 @@ export type TransformativeData = DiagramBaseData & {
  * 接続線のデータ
  */
 export type ConnectLineData = PathData & {
+	// startOwnerId: string;
 	startOwnerShape: Shape;
-	endOwnerShape: Shape;
+	endOwnerId: string;
 };
 
 /**

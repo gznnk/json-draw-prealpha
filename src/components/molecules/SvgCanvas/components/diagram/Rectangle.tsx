@@ -16,6 +16,7 @@ import type {
 	DiagramDragEvent,
 	DiagramHoverEvent,
 	DiagramTransformEvent,
+	ConnectPointMoveEventType,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -72,7 +73,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 * 接続ポイントの位置を更新
 	 */
 	const triggerConnectPointsMove = useCallback(
-		(type: "move" | "moveStart" | "moveEnd", ownerShape: Shape) => {
+		(type: ConnectPointMoveEventType, ownerShape: Shape) => {
 			const vertices = calcRectangleVertices(ownerShape);
 
 			for (const cp of (items as ConnectPointData[]) ?? []) {
@@ -300,6 +301,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 						name={cp.name}
 						point={cp.point}
 						isSelected={false}
+						ownerId={id}
 						ownerShape={ownerShape}
 						visible={isHovered && !isDragging && !isTransformimg}
 						onConnect={onConnect}

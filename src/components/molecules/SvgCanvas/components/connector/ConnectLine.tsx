@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useContext } from "react";
 
 // SvgCanvas関連コンポーネントをインポート
 import {
@@ -9,6 +9,7 @@ import {
 	EVENT_NAME_CONNECT_POINT_MOVE,
 } from "../connector/ConnectPoint";
 import Path from "../diagram/Path";
+import { SvgCanvasContext } from "../../SvgCanvas";
 
 // SvgCanvas関連型定義をインポート
 import type {
@@ -39,7 +40,7 @@ type ConnectLineProps = DiagramBaseProps &
 	};
 
 type PropsRef = AddUnderscoreToProperties<
-	PartiallyRequired<ConnectLineProps, "id" | "items">
+	PartiallyRequired<ConnectLineProps, "id" | "items" | "endOwnerId">
 >;
 
 const ConnectLine: React.FC<ConnectLineProps> = ({
@@ -62,6 +63,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	onTransform,
 	onGroupDataChange,
 	items = [],
+	endOwnerId,
 }) => {
 	// 一番最初の描画時のitems
 	const initialItems = useRef(items);
@@ -72,18 +74,28 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	// 一番最初の描画時からitemsが変更されているかどうか
 	const isItemsChanged = useRef<boolean>(false);
 
-	// propsの参照を作成
-	const props = {
+	const canvasStateProvider = useContext(SvgCanvasContext);
+
+	// 参照を作成
+	const refBusVal = {
 		_id: id,
 		_items: items,
+		_endOwnerId: endOwnerId,
 		_onGroupDataChange: onGroupDataChange,
+		_canvasStateProvider: canvasStateProvider,
 	};
-	const propsRef = useRef<PropsRef>(props);
-	propsRef.current = props;
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
 
 	useEffect(() => {
 		const handleConnectPointMove = (e: Event) => {
-			const { _id, _items, _onGroupDataChange } = propsRef.current;
+			const {
+				_id,
+				_items,
+				_endOwnerId,
+				_onGroupDataChange,
+				_canvasStateProvider,
+			} = refBus.current;
 
 			const event = e as CustomEvent<ConnectPointMoveEvent>;
 			const { id: movedId, point: movedPoint, type, ownerShape } = event.detail;
@@ -108,7 +120,10 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				isItemsChanged.current =
 					initialItems.current.length !== startItems.current.length ||
 					initialItems.current.some(
-						(item, idx) => item.id !== startItems.current[idx].id,
+						(item, idx) =>
+							item.id !== startItems.current[idx].id ||
+							item.point.x !== startItems.current[idx].point.x ||
+							item.point.y !== startItems.current[idx].point.y,
 					);
 				return;
 			}
@@ -175,19 +190,24 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 						thisSide2th.point,
 					);
 
+					const endPointOwner =
+						_canvasStateProvider?.getDiagramById(_endOwnerId);
+					// TODO: 型エラー修正
+					const endOwnerShape = {
+						point: endPointOwner?.point ?? { x: 0, y: 0 },
+						width: endPointOwner?.width ?? 10,
+						height: endPointOwner?.height ?? 10,
+						rotation: endPointOwner?.rotation ?? 0,
+						scaleX: endPointOwner?.scaleX ?? 1,
+						scaleY: endPointOwner?.scaleY ?? 1,
+					};
+
 					const newPath = createBestConnectPath(
 						movedPoint,
 						thisSidedirection,
 						ownerShape,
 						thatSide.point,
-						{
-							point: thatSide.point,
-							width: 10,
-							height: 10,
-							rotation: 0,
-							scaleX: 1,
-							scaleY: 1,
-						}, // TODO: 仮の値
+						endOwnerShape,
 					);
 					const newItems = (foundIdx === 0 ? newPath : newPath.reverse()).map(
 						(p, idx) => ({

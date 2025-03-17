@@ -1,5 +1,5 @@
 // Reactのインポート
-import React, { memo, useCallback, useRef } from "react";
+import React, { createContext, memo, useCallback, useRef } from "react";
 
 // ライブラリのインポート
 import styled from "@emotion/styled";
@@ -15,6 +15,13 @@ import type {
 	DiagramTransformEvent,
 	GroupDataChangeEvent,
 } from "./types/EventTypes";
+
+import type { SvgCanvasState } from "./hooks";
+import { isGroupData } from "./SvgCanvasFunctions";
+
+export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
+	null,
+);
 
 // ユーティリティをインポート
 import { getLogger } from "../../../utils/Logger";
@@ -133,21 +140,62 @@ const SvgCanvas: React.FC<SvgCanvasProps> = memo(
 
 		window.profiler.end("SvgCanvas render", k1);
 
+		const stateProvider = useRef(new SvgCanvasStateProvider({ items }));
+		stateProvider.current.setState({ items });
+
 		return (
 			<ContainerDiv>
-				<Svg
-					width="120vw"
-					height="120vh"
-					onPointerDown={handlePointerDown}
-					onKeyDown={handleKeyDown}
-					onKeyUp={handleKeyUp}
-				>
-					<title>{title}</title>
-					{renderedItems}
-				</Svg>
+				<SvgCanvasContext.Provider value={stateProvider.current}>
+					<Svg
+						width="120vw"
+						height="120vh"
+						onPointerDown={handlePointerDown}
+						onKeyDown={handleKeyDown}
+						onKeyUp={handleKeyUp}
+					>
+						<title>{title}</title>
+						{renderedItems}
+					</Svg>
+				</SvgCanvasContext.Provider>
 			</ContainerDiv>
 		);
 	},
 );
 
 export default SvgCanvas;
+
+class SvgCanvasStateProvider {
+	s: SvgCanvasState;
+	constructor(state: SvgCanvasState) {
+		this.s = state;
+	}
+	setState(state: SvgCanvasState) {
+		this.s = state;
+	}
+	state(): SvgCanvasState {
+		return this.s;
+	}
+	items(): Diagram[] {
+		return this.s.items;
+	}
+	getDiagramById(id: string): Diagram | undefined {
+		return getDiagramById(this.s.items, id);
+	}
+}
+
+const getDiagramById = (
+	diagrams: Diagram[],
+	id: string,
+): Diagram | undefined => {
+	for (const diagram of diagrams) {
+		if (diagram.id === id) {
+			return diagram;
+		}
+		if (isGroupData(diagram)) {
+			const ret = getDiagramById(diagram.items || [], id);
+			if (ret) {
+				return ret;
+			}
+		}
+	}
+};

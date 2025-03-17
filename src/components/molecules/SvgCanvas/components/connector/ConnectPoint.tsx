@@ -58,6 +58,7 @@ export const triggerConnectPointMove = (e: ConnectPointMoveEvent) => {
 };
 
 type ConnectPointProps = ConnectPointData & {
+	ownerId: string;
 	ownerShape: Shape;
 	visible: boolean;
 	onConnect?: (e: DiagramConnectEvent) => void;
@@ -66,6 +67,7 @@ type ConnectPointProps = ConnectPointData & {
 const ConnectPoint: React.FC<ConnectPointProps> = ({
 	id,
 	point,
+	ownerId,
 	ownerShape,
 	visible,
 	onConnect,
@@ -160,17 +162,19 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				document.dispatchEvent(
 					new CustomEvent(EVENT_NAME_CONNECTTION, {
 						detail: {
-							id,
 							type: "connecting",
-							point,
-							ownerShape,
-							dropItemId: e.dropItem.id,
+							startPointId: e.dropItem.id,
+							point: e.dropItem.point,
+							endPointId: id,
+							endPoint: point,
+							endOwnerId: ownerId,
+							endOwnerShape: ownerShape,
 						},
 					}),
 				);
 			}
 		},
-		[id, point, ownerShape],
+		[id, point, ownerId, ownerShape],
 	);
 
 	/**
@@ -185,16 +189,19 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				document.dispatchEvent(
 					new CustomEvent(EVENT_NAME_CONNECTTION, {
 						detail: {
-							id,
 							type: "disconnect",
-							point,
-							dropItemId: e.dropItem.id,
+							startPointId: e.dropItem.id,
+							point: e.dropItem.point,
+							endPointId: id,
+							endPoint: point,
+							endOwnerId: ownerId,
+							endOwnerShape: ownerShape,
 						},
 					}),
 				);
 			}
 		},
-		[id, point],
+		[id, point, ownerId, ownerShape],
 	);
 
 	/**
@@ -210,16 +217,19 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 						detail: {
 							id,
 							type: "connect",
-							point,
-							ownerShape,
-							dropItemId: e.dropItem.id,
+							startPointId: e.dropItem.id,
+							point: e.dropItem.point,
+							endPointId: id,
+							endPoint: point,
+							endOwnerId: ownerId,
+							endOwnerShape: ownerShape,
 						},
 					}),
 				);
 			}
 			setIsHovered(false);
 		},
-		[id, point, ownerShape],
+		[id, point, ownerId, ownerShape],
 	);
 
 	/**
@@ -233,31 +243,36 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	}, []);
 
 	// 接続イベントのハンドラ登録
-	// ハンドラ登録の頻発を回避するため、参照するpropsの最新をuseRefで保持する
+	// ハンドラ登録の頻発を回避するため、参照するprops等の最新をuseRefで保持する
 	// 参照の作成
-	const onConnectRef = useRef(onConnect);
-	const updatePathPointsRef = useRef(updatePathPoints);
-	const idRef = useRef(id);
-	const pathPointsRef = useRef(pathPoints);
-	// 参照の更新
-	onConnectRef.current = onConnect;
-	updatePathPointsRef.current = updatePathPoints;
-	idRef.current = id;
-	pathPointsRef.current = pathPoints;
+	const refBusVal = {
+		_id: id,
+		_pathPoints: pathPoints,
+		_onConnect: onConnect,
+		_updatePathPoints: updatePathPoints,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
 
 	useEffect(() => {
 		const handleConnection = (e: Event) => {
+			const { _id, _pathPoints, _onConnect, _updatePathPoints } =
+				refBus.current;
+
 			const customEvent = e as CustomEvent<ConnectionEvent>;
-			if (customEvent.detail.dropItemId === idRef.current) {
+			if (customEvent.detail.startPointId === _id) {
 				if (customEvent.detail.type === "connecting") {
 					// 接続が始まった時の処理
 					// 接続中のポイントを保持
 					connectingPoint.current = {
-						...customEvent.detail,
+						id: customEvent.detail.endPointId,
+						point: customEvent.detail.endPoint,
+						onwerId: customEvent.detail.endOwnerId,
+						ownerShape: customEvent.detail.endOwnerShape,
 					};
 
 					// 接続中のポイントと線がつながるよう、パスポイントを再計算
-					updatePathPointsRef.current(customEvent.detail.point);
+					_updatePathPoints(customEvent.detail.endPoint);
 				}
 
 				if (customEvent.detail.type === "disconnect") {
@@ -270,12 +285,14 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 					// 接続完了時の処理
 					// 接続線のデータを生成してイベント発火
 
-					const points: PathPointData[] = [...pathPointsRef.current];
-					points[0].id = idRef.current;
-					points[points.length - 1].id = customEvent.detail.id;
+					const points: PathPointData[] = [..._pathPoints];
+					points[0].id = _id;
+					points[points.length - 1].id = customEvent.detail.endPointId;
 
-					onConnectRef.current?.({
+					_onConnect?.({
+						startOwnerId: _id,
 						points: points,
+						endOwnerId: customEvent.detail.endOwnerId,
 					});
 				}
 			}
@@ -338,16 +355,19 @@ export default memo(ConnectPoint);
 // 以下内部型定義
 // TODO: keyがわかりにくいので変更
 type ConnectionEvent = {
-	id: string;
 	type: "connecting" | "connect" | "disconnect";
-	point: Point;
-	ownerShape: Shape;
-	dropItemId: string;
+	startPointId: string;
+	startPoint: Point;
+	endPointId: string;
+	endPoint: Point;
+	endOwnerId: string;
+	endOwnerShape: Shape;
 };
 
 type ConnectingPoint = {
 	id: string;
 	point: Point;
+	onwerId: string;
 	ownerShape: Shape;
 };
 

@@ -1,5 +1,5 @@
 // Reactのインポート
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef, use } from "react";
 
 // 型定義をインポート
 import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
@@ -102,7 +102,7 @@ const deepMerge = <T extends Record<string, any>>(
 	return Array.isArray(target) ? target : { ...target };
 };
 
-type SvgCanvasState = {
+export type SvgCanvasState = {
 	items: Diagram[];
 	selectedItemId?: string;
 };
@@ -264,6 +264,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				...p,
 				isSelected: false,
 			})) as Diagram[],
+			endOwnerId: e.endOwnerId,
 		});
 	}, []);
 
