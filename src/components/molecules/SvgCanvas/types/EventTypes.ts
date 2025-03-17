@@ -1,6 +1,5 @@
 // イベント型定義
 
-import type { Point } from "./CoordinateTypes";
 import type {
 	Diagram,
 	DiagramType,
@@ -21,8 +20,10 @@ export type DiagramPointerEvent = {
 export type DiagramDragEvent = {
 	id: string;
 	type: "dragStart" | "drag" | "dragEnd";
-	startPoint: Point;
-	endPoint: Point;
+	startX: number;
+	startY: number;
+	endX: number;
+	endY: number;
 };
 
 /**
@@ -32,12 +33,14 @@ export type DiagramDragDropEvent = {
 	dropItem: {
 		id: string;
 		type?: DiagramType;
-		point: Point;
+		x: number;
+		y: number;
 	};
 	dropTargetItem: {
 		id: string;
 		type?: DiagramType;
-		point: Point;
+		x: number;
+		y: number;
 	};
 };
 
@@ -79,7 +82,8 @@ export type DiagramTransformEvent = {
  */
 export type ItemableChangeEvent = {
 	id: string;
-	point?: Point;
+	x?: number;
+	y?: number;
 	width?: number;
 	height?: number;
 	rotation?: number;
@@ -107,13 +111,15 @@ export type ConnectPointMoveEventType = "moveStart" | "move" | "moveEnd";
  *
  * @param id 移動した接続ポイントID
  * @param type イベントタイプ
- * @param point 移動先座標
+ * @param x 移動先X座標
+ * @param y 移動先Y座標
  * @param ownerShape 接続ポイントの所有者の形状（接続線の再描画時に利用、接続先側の所有者の形状は接続線コンポーネント内で取得する）
  */
 export type ConnectPointMoveEvent = {
 	id: string;
 	type: ConnectPointMoveEventType;
-	point: Point;
+	x: number;
+	y: number;
 	ownerId: string;
 	ownerShape: Shape;
 };

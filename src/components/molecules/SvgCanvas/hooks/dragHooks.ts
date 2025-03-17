@@ -25,9 +25,12 @@ const EVENT_NAME_BROADCAST_DRAG_END = "BroadcastDragEnd";
 type BroadcastDragEvent = {
 	id: string;
 	type: DiagramType;
-	startPoint: Point;
-	endPoint: Point;
-	clientPoint: Point;
+	startX: number;
+	startY: number;
+	endX: number;
+	endY: number;
+	clientX: number;
+	clientY: number;
 };
 
 /**
@@ -36,7 +39,8 @@ type BroadcastDragEvent = {
 export type DragProps = {
 	id: string;
 	type?: DiagramType;
-	point: Point;
+	x: number;
+	y: number;
 	allowXDecimal?: boolean;
 	allowYDecimal?: boolean;
 	ref: React.RefObject<SVGElement>;
@@ -59,7 +63,8 @@ export type DragProps = {
  * @param {DragProps} props ドラッグ領域のProps
  * @param {string} props.id ID（ドラッグ可能にする要素にも同じIDを設定すること。しない場合は正しく動作しなくなる）
  * @param {DiagramType} [props.type] 図形の種類
- * @param {Point} props.point 座標
+ * @param {number} props.x X座標
+ * @param {number} props.y Y座標
  * @param {boolean} [props.allowXDecimal] X座標の小数点許可フラグ
  * @param {boolean} [props.allowYDecimal] Y座標の小数点許可フラグ
  * @param {React.RefObject<SVGElement>} props.ref ドラッグ可能にする要素の参照
@@ -78,7 +83,8 @@ export type DragProps = {
 export const useDrag = (props: DragProps) => {
 	const {
 		id,
-		point,
+		x,
+		y,
 		type,
 		allowXDecimal = true,
 		allowYDecimal = true,
@@ -105,33 +111,36 @@ export const useDrag = (props: DragProps) => {
 	// ドラッグエンターしたかのフラグ
 	const dragEntered = useRef(false);
 	// ドラッグ開始時のドラッグ領域の座標
-	const startPoint = useRef<Point>({ x: 0, y: 0 });
+	const startX = useRef(0);
+	const startY = useRef(0);
 	// ドラッグ開始時のブラウザウィンドウ上のポインタの座標
-	const startClientPoint = useRef<Point>({ x: 0, y: 0 });
+	const startClientX = useRef(0);
+	const startClientY = useRef(0);
 
 	/**
 	 * 座標を調整する
 	 *
 	 * 基本的には座標は整数値とし、小数点での指定が必要な場合のみ小数点以下を許容する。
 	 *
-	 * @param {Point} p 座標
+	 * @param {number} px X座標
+	 * @param {number} py Y座標
 	 * @returns {Point} 調整後の座標
 	 */
-	const adjustCoordinates = (p: Point): Point => {
-		let x = p.x;
-		let y = p.y;
+	const adjustCoordinates = (px: number, py: number): Point => {
+		let newX = px;
+		let newY = py;
 
 		if (!allowXDecimal) {
-			x = Math.round(x);
+			newX = Math.round(newX);
 		}
 
 		if (!allowYDecimal) {
-			y = Math.round(y);
+			newY = Math.round(newY);
 		}
 
 		return {
-			x,
-			y,
+			x: newX,
+			y: newY,
 		};
 	};
 
@@ -143,24 +152,21 @@ export const useDrag = (props: DragProps) => {
 	 */
 	const getPointOnDrag = (e: React.PointerEvent<SVGElement>): Point => {
 		// ドラッグ中のポインターの移動量から、ドラッグ中のこの領域の座標を計算
-		let x = startPoint.current.x + (e.clientX - startClientPoint.current.x);
-		let y = startPoint.current.y + (e.clientY - startClientPoint.current.y);
+		let newX = startX.current + (e.clientX - startClientX.current);
+		let newY = startY.current + (e.clientY - startClientY.current);
 
 		if (dragPositioningFunction) {
 			// ドラッグ位置変換関数が指定されている場合は、その関数を適用
 			const p = dragPositioningFunction({
-				x,
-				y,
+				x: newX,
+				y: newY,
 			});
-			x = p.x;
-			y = p.y;
+			newX = p.x;
+			newY = p.y;
 		}
 
 		// 座標を調整して返却
-		return adjustCoordinates({
-			x,
-			y,
-		});
+		return adjustCoordinates(newX, newY);
 	};
 
 	/**
@@ -174,13 +180,12 @@ export const useDrag = (props: DragProps) => {
 			isPointerDown.current = true;
 
 			// ドラッグ開始時のドラッグ領域の座標を記憶
-			startPoint.current = point;
+			startX.current = x;
+			startY.current = y;
 
 			// ドラッグ開始時のブラウザウィンドウ上のポインタの座標を記憶
-			startClientPoint.current = {
-				x: e.clientX,
-				y: e.clientY,
-			};
+			startClientX.current = e.clientX;
+			startClientY.current = e.clientY;
 
 			// ポインター押下イベント発火
 			onPointerDown?.({
@@ -205,14 +210,16 @@ export const useDrag = (props: DragProps) => {
 		const dragEvent = {
 			id,
 			type: "drag",
-			startPoint: startPoint.current,
-			endPoint: dragPoint,
+			startX: startX.current,
+			startY: startY.current,
+			endX: dragPoint.x,
+			endY: dragPoint.y,
 		} as DiagramDragEvent;
 
 		if (
 			!isDragging &&
-			(Math.abs(e.clientX - startClientPoint.current.x) > 3 ||
-				Math.abs(e.clientY - startClientPoint.current.y) > 3)
+			(Math.abs(e.clientX - startClientX.current) > 3 ||
+				Math.abs(e.clientY - startClientY.current) > 3)
 		) {
 			// ドラッグ中でない場合、かつポインターの移動量が一定以上の場合はドラッグ開始とする
 			onDragStart?.({
@@ -237,12 +244,12 @@ export const useDrag = (props: DragProps) => {
 				detail: {
 					id,
 					type: type,
-					startPoint: startPoint.current,
-					endPoint: dragPoint,
-					clientPoint: {
-						x: e.clientX,
-						y: e.clientY,
-					},
+					startX: startX.current,
+					startY: startY.current,
+					endX: dragPoint.x,
+					endY: dragPoint.y,
+					clientX: e.clientX,
+					clientY: e.clientY,
 				} as BroadcastDragEvent,
 			}),
 		);
@@ -260,8 +267,10 @@ export const useDrag = (props: DragProps) => {
 			onDragEnd?.({
 				id,
 				type: "dragEnd",
-				startPoint: startPoint.current,
-				endPoint: dragPoint,
+				startX: startX.current,
+				startY: startY.current,
+				endX: dragPoint.x,
+				endY: dragPoint.y,
 			});
 
 			// 親子関係にない図形でハンドリングする用のドラッグ終了イベント発火
@@ -271,12 +280,12 @@ export const useDrag = (props: DragProps) => {
 					detail: {
 						id,
 						type: type,
-						startPoint: startPoint.current,
-						endPoint: dragPoint,
-						clientPoint: {
-							x: e.clientX,
-							y: e.clientY,
-						},
+						startX: startX.current,
+						startY: startY.current,
+						endX: dragPoint.x,
+						endY: dragPoint.y,
+						clientX: e.clientX,
+						clientY: e.clientY,
 					} as BroadcastDragEvent,
 				}),
 			);
@@ -316,25 +325,28 @@ export const useDrag = (props: DragProps) => {
 		 */
 		const movePoint = (dx: number, dy: number) => {
 			let newPoint = {
-				x: point.x + dx,
-				y: point.y + dy,
+				x: x + dx,
+				y: y + dy,
 			};
 
 			if (dragPositioningFunction) {
 				newPoint = dragPositioningFunction({ ...newPoint });
 			}
 
-			newPoint = adjustCoordinates(newPoint);
+			newPoint = adjustCoordinates(newPoint.x, newPoint.y);
 
 			const dragEvent = {
 				id,
 				type: "drag",
-				startPoint: startPoint.current,
-				endPoint: newPoint,
+				startX: startX.current,
+				startY: startY.current,
+				endX: newPoint.x,
+				endY: newPoint.y,
 			} as DiagramDragEvent;
 
 			if (!isArrowDragging.current) {
-				startPoint.current = point;
+				startX.current = x;
+				startY.current = y;
 
 				onDragStart?.({
 					...dragEvent,
@@ -367,8 +379,10 @@ export const useDrag = (props: DragProps) => {
 					onDragEnd?.({
 						id,
 						type: "dragEnd",
-						startPoint: point,
-						endPoint: point,
+						startX: x,
+						startY: y,
+						endX: x,
+						endY: y,
 					});
 
 					// 矢印キーによるドラッグ終了とマーク
@@ -393,8 +407,10 @@ export const useDrag = (props: DragProps) => {
 		const dragEvent = {
 			id,
 			type: "dragEnd",
-			startPoint: point,
-			endPoint: point,
+			startX: x,
+			startY: y,
+			endX: x,
+			endY: y,
 		} as DiagramDragEvent;
 
 		if (isArrowDragging.current) {
@@ -445,12 +461,29 @@ export const useDrag = (props: DragProps) => {
 	};
 
 	// 全体周知用ドラッグイベントリスナー登録
+	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
+	const refBusVal = {
+		_id: id,
+		_x: x,
+		_y: y,
+		_type: type,
+		_ref: ref,
+		_onDragOver: onDragOver,
+		_onDragLeave: onDragLeave,
+		_onDrop: onDrop,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
 	useEffect(() => {
 		let handleBroadcastDrag: (e: Event) => void;
 		let handleBroadcastDragEnd: (e: Event) => void;
 
-		if (onDragOver) {
+		const { _onDragOver, _onDrop } = refBus.current;
+		if (_onDragOver) {
 			handleBroadcastDrag = (e: Event) => {
+				const { _id, _x, _y, _type, _ref, _onDragOver, _onDragLeave } =
+					refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
 
 				// ドラッグ＆ドロップのイベント情報を作成
@@ -458,42 +491,59 @@ export const useDrag = (props: DragProps) => {
 					dropItem: {
 						id: customEvent.detail.id,
 						type: customEvent.detail.type,
-						point: customEvent.detail.startPoint,
+						x: customEvent.detail.startX,
+						y: customEvent.detail.startY,
 					},
 					dropTargetItem: {
-						id,
-						type,
-						point,
+						id: _id,
+						type: _type,
+						x: _x,
+						y: _y,
 					},
 				};
 
-				if (isPointerOver(ref, customEvent.detail.clientPoint)) {
+				if (
+					isPointerOver(
+						_ref,
+						customEvent.detail.clientX,
+						customEvent.detail.clientY,
+					)
+				) {
 					if (!dragEntered.current) {
 						dragEntered.current = true;
-						onDragOver?.(dragDropEvent);
+						_onDragOver?.(dragDropEvent);
 					}
 				} else if (dragEntered.current) {
 					dragEntered.current = false;
-					onDragLeave?.(dragDropEvent);
+					_onDragLeave?.(dragDropEvent);
 				}
 			};
 			document.addEventListener(EVENT_NAME_BROADCAST_DRAG, handleBroadcastDrag);
 		}
 
-		if (onDrop) {
+		if (_onDrop) {
 			handleBroadcastDragEnd = (e: Event) => {
+				const { _id, _x, _y, _type, _ref, _onDrop } = refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
-				if (isPointerOver(ref, customEvent.detail.clientPoint)) {
-					onDrop?.({
+				if (
+					isPointerOver(
+						_ref,
+						customEvent.detail.clientX,
+						customEvent.detail.clientY,
+					)
+				) {
+					_onDrop?.({
 						dropItem: {
 							id: customEvent.detail.id,
 							type: customEvent.detail.type,
-							point: customEvent.detail.startPoint,
+							x: customEvent.detail.startX,
+							y: customEvent.detail.startY,
 						},
 						dropTargetItem: {
-							id,
-							type,
-							point,
+							id: _id,
+							type: _type,
+							x: _x,
+							y: _y,
 						},
 					});
 				}
@@ -518,7 +568,7 @@ export const useDrag = (props: DragProps) => {
 				);
 			}
 		};
-	}, [id, point, type, ref, onDragOver, onDragLeave, onDrop]);
+	}, []);
 
 	return {
 		onPointerDown: handlePointerDown,
@@ -536,19 +586,21 @@ export const useDrag = (props: DragProps) => {
  * ポインターキャプチャー時は他の要素でポインター関連のイベントが発火しないため、自力で判定する必要がある
  *
  * @param {React.RefObject<SVGElement>} ref ドラッグ領域の参照
- * @param {Point} clientPoint ポインターの座標
+ * @param {number} clientX ポインターのX座標
+ * @param {number} clientY ポインターのY座標
  * @returns {boolean} ポインターがこのドラッグ領域上にあるかどうか
  */
 const isPointerOver = (
 	ref: React.RefObject<SVGElement>,
-	clientPoint: Point,
+	clientX: number,
+	clientY: number,
 ): boolean => {
 	const svgCanvas = ref.current?.ownerSVGElement as SVGSVGElement;
 	const svgPoint = svgCanvas.createSVGPoint();
 
 	if (svgPoint) {
-		svgPoint.x = clientPoint.x;
-		svgPoint.y = clientPoint.y;
+		svgPoint.x = clientX;
+		svgPoint.y = clientY;
 		const svg = ref.current;
 
 		if (svg instanceof SVGGeometryElement) {

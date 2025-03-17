@@ -29,7 +29,8 @@ const testItems1 = [
 	{
 		id: "1",
 		type: "Rectangle",
-		point: { x: 0, y: 0 },
+		x: 0,
+		y: 0,
 		width: 100,
 		height: 100,
 		rotation: radiansToDegrees(0),
@@ -44,7 +45,8 @@ const testItems1 = [
 	{
 		id: "2",
 		type: "Ellipse",
-		point: { x: 100, y: 100 },
+		x: 100,
+		y: 100,
 		width: 100,
 		height: 100,
 		rotation: radiansToDegrees(0),
@@ -59,7 +61,8 @@ const testItems1 = [
 	{
 		id: "g-1",
 		type: "Group",
-		point: { x: 350, y: 350 },
+		x: 350,
+		y: 350,
 		width: 400,
 		height: 400,
 		rotation: radiansToDegrees(0),
@@ -71,7 +74,8 @@ const testItems1 = [
 			{
 				id: "3",
 				type: "Rectangle",
-				point: { x: 200, y: 200 },
+				x: 200,
+				y: 200,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -86,7 +90,8 @@ const testItems1 = [
 			{
 				id: "4",
 				type: "Ellipse",
-				point: { x: 300, y: 200 },
+				x: 300,
+				y: 200,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -101,7 +106,8 @@ const testItems1 = [
 			{
 				id: "5",
 				type: "Rectangle",
-				point: { x: 300, y: 300 },
+				x: 300,
+				y: 300,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -116,7 +122,8 @@ const testItems1 = [
 			{
 				id: "6",
 				type: "Ellipse",
-				point: { x: 200, y: 300 },
+				x: 200,
+				y: 300,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -131,7 +138,8 @@ const testItems1 = [
 			{
 				id: "g-2",
 				type: "Group",
-				point: { x: 450, y: 450 },
+				x: 450,
+				y: 450,
 				width: 200,
 				height: 200,
 				rotation: radiansToDegrees(0),
@@ -146,7 +154,8 @@ const testItems1 = [
 					{
 						id: "7",
 						type: "Rectangle",
-						point: { x: 400, y: 400 },
+						x: 400,
+						y: 400,
 						width: 100,
 						height: 100,
 						rotation: radiansToDegrees(0),
@@ -161,7 +170,8 @@ const testItems1 = [
 					{
 						id: "8",
 						type: "Ellipse",
-						point: { x: 500, y: 400 },
+						x: 500,
+						y: 400,
 						width: 100,
 						height: 100,
 						rotation: radiansToDegrees(0),
@@ -176,7 +186,8 @@ const testItems1 = [
 					{
 						id: "9",
 						type: "Rectangle",
-						point: { x: 500, y: 500 },
+						x: 500,
+						y: 500,
 						width: 100,
 						height: 100,
 						rotation: radiansToDegrees(0),
@@ -193,7 +204,8 @@ const testItems1 = [
 			{
 				id: "g-3",
 				type: "Group",
-				point: { x: 450, y: 250 },
+				x: 450,
+				y: 250,
 				width: 200,
 				height: 200,
 				rotation: radiansToDegrees(0),
@@ -208,7 +220,8 @@ const testItems1 = [
 					{
 						id: "10",
 						type: "Rectangle",
-						point: { x: 400, y: 200 },
+						x: 400,
+						y: 200,
 						width: 100,
 						height: 100,
 						rotation: radiansToDegrees(0),
@@ -223,10 +236,11 @@ const testItems1 = [
 					{
 						id: "11",
 						type: "Rectangle",
-						point: { x: 500, y: 300 },
+						x: 500,
+						y: 300,
 						width: 100,
 						height: 100,
-						rotation: radiansToDegrees(0),
+						rotation: 0,
 						scaleX: 1,
 						scaleY: 1,
 						fill: "transparent",
@@ -242,7 +256,8 @@ const testItems1 = [
 	{
 		id: "12",
 		type: "Path",
-		point: { x: 0, y: 100 },
+		x: 0,
+		y: 100,
 		width: 100,
 		height: 100,
 		stroke: "black",
@@ -253,7 +268,8 @@ const testItems1 = [
 			{
 				id: "12-1",
 				type: "PathPoint",
-				point: { x: 0, y: 100 },
+				x: 0,
+				y: 100,
 				width: 0,
 				height: 0,
 				keepProportion: false,
@@ -262,7 +278,8 @@ const testItems1 = [
 			{
 				id: "12-2",
 				type: "PathPoint",
-				point: { x: 100, y: 100 },
+				x: 100,
+				y: 100,
 				width: 0,
 				height: 0,
 				keepProportion: false,
@@ -271,7 +288,8 @@ const testItems1 = [
 			{
 				id: "12-3",
 				type: "PathPoint",
-				point: { x: 200, y: 200 },
+				x: 200,
+				y: 200,
 				width: 0,
 				height: 0,
 				keepProportion: false,
@@ -285,7 +303,8 @@ const testItems2 = [
 	{
 		id: "12",
 		type: "Path",
-		point: { x: 0, y: 100 },
+		x: 0,
+		y: 100,
 		width: 100,
 		height: 100,
 		stroke: "black",
@@ -296,7 +315,8 @@ const testItems2 = [
 			{
 				id: "12-1",
 				type: "PathPoint",
-				point: { x: 0, y: 100 },
+				x: 0,
+				y: 100,
 				width: 0,
 				height: 0,
 				keepProportion: false,
@@ -305,7 +325,8 @@ const testItems2 = [
 			{
 				id: "12-2",
 				type: "PathPoint",
-				point: { x: 100, y: 100 },
+				x: 100,
+				y: 100,
 				width: 0,
 				height: 0,
 				keepProportion: false,
@@ -314,7 +335,8 @@ const testItems2 = [
 			{
 				id: "12-3",
 				type: "PathPoint",
-				point: { x: 200, y: 200 },
+				x: 200,
+				y: 200,
 				width: 0,
 				height: 0,
 				keepProportion: false,
@@ -328,7 +350,8 @@ const testItems3 = [
 	{
 		id: "g-1",
 		type: "Group",
-		point: { x: 250, y: 250 },
+		x: 250,
+		y: 250,
 		width: 300,
 		height: 300,
 		rotation: radiansToDegrees(0),
@@ -340,7 +363,8 @@ const testItems3 = [
 			{
 				id: "3",
 				type: "Rectangle",
-				point: { x: 150, y: 150 },
+				x: 150,
+				y: 150,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -355,7 +379,8 @@ const testItems3 = [
 			{
 				id: "4",
 				type: "Ellipse",
-				point: { x: 250, y: 150 },
+				x: 250,
+				y: 150,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -370,7 +395,8 @@ const testItems3 = [
 			{
 				id: "x",
 				type: "Triangle",
-				point: { x: 350, y: 150 },
+				x: 350,
+				y: 150,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -384,7 +410,8 @@ const testItems3 = [
 			{
 				id: "5",
 				type: "Rectangle",
-				point: { x: 250, y: 250 },
+				x: 250,
+				y: 250,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -399,7 +426,8 @@ const testItems3 = [
 			{
 				id: "12",
 				type: "Path",
-				point: { x: 350, y: 350 },
+				x: 350,
+				y: 350,
 				width: 100,
 				height: 100,
 				rotation: radiansToDegrees(0),
@@ -413,7 +441,8 @@ const testItems3 = [
 					{
 						id: "12-1",
 						type: "PathPoint",
-						point: { x: 300, y: 300 },
+						x: 300,
+						y: 300,
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -422,7 +451,8 @@ const testItems3 = [
 					{
 						id: "12-2",
 						type: "PathPoint",
-						point: { x: 300, y: 400 },
+						x: 300,
+						y: 400,
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -431,7 +461,8 @@ const testItems3 = [
 					{
 						id: "12-3",
 						type: "PathPoint",
-						point: { x: 400, y: 400 },
+						x: 400,
+						y: 400,
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -445,31 +476,40 @@ const testItems3 = [
 
 const testItems4 = [
 	createRectangleData({
-		point: { x: 300, y: 300 },
+		x: 300,
+		y: 300,
 	}),
 	createRectangleData({
-		point: { x: 500, y: 300 },
+		x: 500,
+		y: 300,
 	}),
 	createRectangleData({
-		point: { x: 700, y: 300 },
+		x: 700,
+		y: 300,
 	}),
 	createRectangleData({
-		point: { x: 300, y: 500 },
+		x: 300,
+		y: 500,
 	}),
 	createRectangleData({
-		point: { x: 500, y: 500 },
+		x: 500,
+		y: 500,
 	}),
 	createRectangleData({
-		point: { x: 700, y: 500 },
+		x: 700,
+		y: 500,
 	}),
 	createRectangleData({
-		point: { x: 300, y: 700 },
+		x: 300,
+		y: 700,
 	}),
 	createRectangleData({
-		point: { x: 500, y: 700 },
+		x: 500,
+		y: 700,
 	}),
 	createRectangleData({
-		point: { x: 700, y: 700 },
+		x: 700,
+		y: 700,
 	}),
 ] as Diagram[];
 
@@ -477,10 +517,11 @@ const testItems5 = [
 	{
 		id: "g-1",
 		type: "Group",
-		point: { x: 200, y: 200 },
+		x: 200,
+		y: 200,
 		width: 200,
 		height: 200,
-		rotation: radiansToDegrees(0),
+		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,
 		keepProportion: true,
@@ -489,10 +530,11 @@ const testItems5 = [
 			{
 				id: "3",
 				type: "Rectangle",
-				point: { x: 150, y: 150 },
+				x: 150,
+				y: 150,
 				width: 100,
 				height: 100,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -504,10 +546,11 @@ const testItems5 = [
 			{
 				id: "4",
 				type: "Ellipse",
-				point: { x: 150, y: 250 },
+				x: 150,
+				y: 250,
 				width: 100,
 				height: 100,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -519,10 +562,11 @@ const testItems5 = [
 			{
 				id: "5",
 				type: "Rectangle",
-				point: { x: 250, y: 250 },
+				x: 250,
+				y: 250,
 				width: 100,
 				height: 100,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -537,10 +581,12 @@ const testItems5 = [
 
 const testItems6 = [
 	createRectangleData({
-		point: { x: 300, y: 300 },
+		x: 300,
+		y: 300,
 	}),
 	createRectangleData({
-		point: { x: 500, y: 300 },
+		x: 500,
+		y: 300,
 	}),
 ] as Diagram[];
 
@@ -549,19 +595,18 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems6);
+	} = useSvgCanvas(testItems1);
 
 	const handleAddRectangle = () => {
-		canvasFunctions.addItem(
-			createRectangleData({ point: { x: 50, y: 50 } }) as Diagram,
-		);
+		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);
 	};
 
 	const handleAddEllipse = () => {
 		canvasFunctions.addItem({
 			id: crypto.randomUUID(),
 			type: "Ellipse",
-			point: { x: 0, y: 0 },
+			x: 0,
+			y: 0,
 			width: 200,
 			height: 100,
 			keepProportion: false,
@@ -572,7 +617,8 @@ function App() {
 	const handleAddSquare = () => {
 		canvasFunctions.addItem(
 			createRectangleData({
-				point: { x: 50, y: 50 },
+				x: 50,
+				y: 50,
 				keepProportion: true,
 			}) as Diagram,
 		);
@@ -582,7 +628,8 @@ function App() {
 		canvasFunctions.addItem({
 			id: crypto.randomUUID(),
 			type: "Ellipse",
-			point: { x: 0, y: 0 },
+			x: 0,
+			y: 0,
 			width: 100,
 			height: 100,
 			keepProportion: true,
@@ -625,8 +672,8 @@ function App() {
 				<Button onClick={handleAddSquare}>Add Square</Button>
 				<Button onClick={handleAddCircle}>Add Circle</Button>
 				<div>{`id:${canvasState.selectedItemId}`}</div>
-				<div>{`x:${canvasFunctions.getSelectedItem()?.point.x}`}</div>
-				<div>{`y:${canvasFunctions.getSelectedItem()?.point.y}`}</div>
+				<div>{`x:${canvasFunctions.getSelectedItem()?.x}`}</div>
+				<div>{`y:${canvasFunctions.getSelectedItem()?.y}`}</div>
 				<div>{`width:${canvasFunctions.getSelectedItem()?.width}`}</div>
 				<div>{`height:${canvasFunctions.getSelectedItem()?.height}`}</div>
 				<div>{`rotation:${canvasFunctions.getSelectedItem()?.rotation}`}</div>

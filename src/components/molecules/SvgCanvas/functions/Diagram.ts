@@ -82,7 +82,9 @@ export const getCursorFromAngle = (angle: number): string => {
 // biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
 export const isShape = (obj: any): obj is Shape => {
 	return (
-		obj?.point &&
+		obj &&
+		typeof obj.x === "number" &&
+		typeof obj.y === "number" &&
 		typeof obj.width === "number" &&
 		typeof obj.height === "number" &&
 		typeof obj.rotation === "number" &&
@@ -104,7 +106,9 @@ export const isItemableData = (obj: any): obj is GroupData => {
 // biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
 export const isTransformativeData = (obj: any): obj is TransformativeData => {
 	return (
-		obj?.point &&
+		obj &&
+		typeof obj.x === "number" &&
+		typeof obj.y === "number" &&
 		typeof obj.width === "number" &&
 		typeof obj.height === "number" &&
 		typeof obj.rotation === "number" &&

@@ -4,7 +4,6 @@
 import type React from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point } from "./CoordinateTypes";
 import type {
 	DiagramClickEvent,
 	DiagramConnectEvent,
@@ -28,7 +27,8 @@ import Triangle from "../components/diagram/Triangle";
  * 図形の形状
  */
 export type Shape = {
-	point: Point;
+	x: number;
+	y: number;
 	width: number;
 	height: number;
 	rotation: number;
@@ -55,7 +55,8 @@ export type DiagramType =
 export type DiagramBaseData = {
 	id: string;
 	type: DiagramType;
-	point: Point;
+	x: number;
+	y: number;
 };
 
 /**
@@ -166,7 +167,7 @@ export type PathData = CreateDiagramType<{
  * 接続ポイントのデータ
  */
 export type ConnectPointData = DiagramBaseData & {
-	name: string; // TODO: 今んとこ使ってない
+	name: string;
 };
 
 /**

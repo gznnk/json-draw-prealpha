@@ -6,8 +6,8 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Point } from "../../types/CoordinateTypes";
 import type {
 	DiagramType,
-	TransformativeData,
 	SelectableData,
+	TransformativeData,
 	TransformativeProps,
 } from "../../types/DiagramTypes";
 import type { DiagramDragEvent } from "../../types/EventTypes";
@@ -25,7 +25,7 @@ import {
 import {
 	affineTransformation,
 	calcNearestCircleIntersectionPoint,
-	calcRadian,
+	calcRadians,
 	calcRectangleVertices,
 	createLinerX2yFunction,
 	createLinerY2xFunction,
@@ -54,7 +54,8 @@ type Props = TransformativeData &
  */
 const Transformative: React.FC<Props> = ({
 	diagramId,
-	point,
+	x,
+	y,
 	width,
 	height,
 	rotation,
@@ -71,7 +72,8 @@ const Transformative: React.FC<Props> = ({
 	const doKeepProportion = keepProportion || isShiftKeyDown;
 
 	const startShape = useRef({
-		point,
+		x,
+		y,
 		width,
 		height,
 		rotation,
@@ -79,7 +81,8 @@ const Transformative: React.FC<Props> = ({
 		scaleY,
 		aspectRatio: width / height,
 		...calcRectangleVertices({
-			point,
+			x,
+			y,
 			width,
 			height,
 			rotation,
@@ -89,7 +92,8 @@ const Transformative: React.FC<Props> = ({
 	});
 
 	const vertices = calcRectangleVertices({
-		point,
+		x,
+		y,
 		width,
 		height,
 		rotation,
@@ -97,33 +101,35 @@ const Transformative: React.FC<Props> = ({
 		scaleY,
 	});
 
-	const radians = useMemo(() => degreesToRadians(rotation), [rotation]);
+	const radians = degreesToRadians(rotation);
 	const isSwapped = useMemo(() => {
 		return (rotation + 405) % 180 > 90;
 	}, [rotation]);
 
 	const affineTransformationOnDrag = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			affineTransformation(
-				p,
+				x,
+				y,
 				1,
 				1,
 				radians,
-				startShape.current.point.x,
-				startShape.current.point.y,
+				startShape.current.x,
+				startShape.current.y,
 			),
 		[radians],
 	);
 
 	const inverseAffineTransformationOnDrag = useCallback(
-		(p: Point) =>
+		(x: number, y: number) =>
 			inverseAffineTransformation(
-				p,
+				x,
+				y,
 				1,
 				1,
 				radians,
-				startShape.current.point.x,
-				startShape.current.point.y,
+				startShape.current.x,
+				startShape.current.y,
 			),
 		[radians],
 	);
@@ -141,7 +147,8 @@ const Transformative: React.FC<Props> = ({
 					...startShape.current,
 				},
 				endShape: {
-					point: centerPoint,
+					x: centerPoint.x,
+					y: centerPoint.y,
 					width: Math.abs(newWidth),
 					height: Math.abs(newHeight),
 					scaleX: signNonZero(newWidth),
@@ -161,7 +168,8 @@ const Transformative: React.FC<Props> = ({
 
 	const handleDragStart = useCallback(() => {
 		const shape = {
-			point,
+			x,
+			y,
 			width,
 			height,
 			rotation,
@@ -174,7 +182,8 @@ const Transformative: React.FC<Props> = ({
 			endShape: shape,
 		});
 		startShape.current = {
-			point,
+			x,
+			y,
 			width,
 			height,
 			rotation,
@@ -186,21 +195,26 @@ const Transformative: React.FC<Props> = ({
 	}, [
 		onTransformStart,
 		diagramId,
-		point,
+		x,
+		y,
 		width,
 		height,
 		rotation,
 		scaleX,
 		scaleY,
-		vertices,
+		vertices, // TODO: プリミティブじゃない
 	]);
 
 	// --- LeftTop Start --- //
 	const handleDragLeftTop = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedRightBottom = inverseAffineTransformationOnDrag(
-				startShape.current.rightBottomPoint,
+				startShape.current.rightBottomPoint.x,
+				startShape.current.rightBottomPoint.y,
 			);
 
 			const newWidth = inversedRightBottom.x - inversedDragPoint.x;
@@ -214,11 +228,13 @@ const Transformative: React.FC<Props> = ({
 				newHeight = inversedRightBottom.y - inversedDragPoint.y;
 			}
 
-			const inversedCenter = {
-				x: inversedRightBottom.x - nanToZero(newWidth / 2),
-				y: inversedRightBottom.y - nanToZero(newHeight / 2),
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedRightBottom.x - nanToZero(newWidth / 2);
+			const inversedCenterY = inversedRightBottom.y - nanToZero(newHeight / 2);
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -243,9 +259,13 @@ const Transformative: React.FC<Props> = ({
 	// --- LeftBottom Start --- //
 	const handleDragLeftBottom = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedRightTop = inverseAffineTransformationOnDrag(
-				startShape.current.rightTopPoint,
+				startShape.current.rightTopPoint.x,
+				startShape.current.rightTopPoint.y,
 			);
 
 			const newWidth = inversedRightTop.x - inversedDragPoint.x;
@@ -259,11 +279,13 @@ const Transformative: React.FC<Props> = ({
 				newHeight = inversedDragPoint.y - inversedRightTop.y;
 			}
 
-			const inversedCenter = {
-				x: inversedRightTop.x - nanToZero(newWidth / 2),
-				y: inversedRightTop.y + nanToZero(newHeight / 2),
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedRightTop.x - nanToZero(newWidth / 2);
+			const inversedCenterY = inversedRightTop.y + nanToZero(newHeight / 2);
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -288,9 +310,13 @@ const Transformative: React.FC<Props> = ({
 	// --- RightTop Start --- //
 	const handleDragRightTop = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedLeftBottom = inverseAffineTransformationOnDrag(
-				startShape.current.leftBottomPoint,
+				startShape.current.leftBottomPoint.x,
+				startShape.current.leftBottomPoint.y,
 			);
 
 			const newWidth = inversedDragPoint.x - inversedLeftBottom.x;
@@ -304,11 +330,13 @@ const Transformative: React.FC<Props> = ({
 				newHeight = inversedLeftBottom.y - inversedDragPoint.y;
 			}
 
-			const inversedCenter = {
-				x: inversedLeftBottom.x + nanToZero(newWidth / 2),
-				y: inversedLeftBottom.y - nanToZero(newHeight / 2),
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedLeftBottom.x + nanToZero(newWidth / 2);
+			const inversedCenterY = inversedLeftBottom.y - nanToZero(newHeight / 2);
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -333,9 +361,13 @@ const Transformative: React.FC<Props> = ({
 	// --- RightBottom Start --- //
 	const handleDragRightBottom = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedLeftTop = inverseAffineTransformationOnDrag(
-				startShape.current.leftTopPoint,
+				startShape.current.leftTopPoint.x,
+				startShape.current.leftTopPoint.y,
 			);
 
 			const newWidth = inversedDragPoint.x - inversedLeftTop.x;
@@ -349,11 +381,13 @@ const Transformative: React.FC<Props> = ({
 				newHeight = inversedDragPoint.y - inversedLeftTop.y;
 			}
 
-			const inversedCenter = {
-				x: inversedLeftTop.x + (newWidth === 0 ? 0 : newWidth / 2),
-				y: inversedLeftTop.y + (newHeight === 0 ? 0 : newHeight / 2),
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedLeftTop.x + nanToZero(newWidth / 2);
+			const inversedCenterY = inversedLeftTop.y + nanToZero(newHeight / 2);
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -378,9 +412,13 @@ const Transformative: React.FC<Props> = ({
 	// --- TopCenter Start --- //
 	const handleDragTopCenter = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedBottomCenter = inverseAffineTransformationOnDrag(
-				startShape.current.bottomCenterPoint,
+				startShape.current.bottomCenterPoint.x,
+				startShape.current.bottomCenterPoint.y,
 			);
 
 			let newWidth: number;
@@ -394,11 +432,13 @@ const Transformative: React.FC<Props> = ({
 				newWidth = startShape.current.width * startShape.current.scaleX;
 			}
 
-			const inversedCenter = {
-				x: inversedBottomCenter.x,
-				y: inversedBottomCenter.y - (newHeight === 0 ? 0 : newHeight / 2),
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedBottomCenter.x;
+			const inversedCenterY = inversedBottomCenter.y - nanToZero(newHeight / 2);
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -428,9 +468,13 @@ const Transformative: React.FC<Props> = ({
 	// --- LeftCenter Start --- //
 	const handleDragLeftCenter = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedRightCenter = inverseAffineTransformationOnDrag(
-				startShape.current.rightCenterPoint,
+				startShape.current.rightCenterPoint.x,
+				startShape.current.rightCenterPoint.y,
 			);
 
 			const newWidth = inversedRightCenter.x - inversedDragPoint.x;
@@ -444,11 +488,13 @@ const Transformative: React.FC<Props> = ({
 				newHeight = startShape.current.height * startShape.current.scaleY;
 			}
 
-			const inversedCenter = {
-				x: inversedRightCenter.x - (newWidth === 0 ? 0 : newWidth / 2),
-				y: inversedRightCenter.y,
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedRightCenter.x - nanToZero(newWidth / 2);
+			const inversedCenterY = inversedRightCenter.y;
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -478,9 +524,13 @@ const Transformative: React.FC<Props> = ({
 	// --- RightCenter Start --- //
 	const handleDragRightCenter = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedLeftCenter = inverseAffineTransformationOnDrag(
-				startShape.current.leftCenterPoint,
+				startShape.current.leftCenterPoint.x,
+				startShape.current.leftCenterPoint.y,
 			);
 
 			const newWidth = inversedDragPoint.x - inversedLeftCenter.x;
@@ -494,11 +544,13 @@ const Transformative: React.FC<Props> = ({
 				newHeight = startShape.current.height * startShape.current.scaleY;
 			}
 
-			const inversedCenter = {
-				x: inversedLeftCenter.x + (newWidth === 0 ? 0 : newWidth / 2),
-				y: inversedLeftCenter.y,
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedLeftCenter.x + nanToZero(newWidth / 2);
+			const inversedCenterY = inversedLeftCenter.y;
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -528,9 +580,13 @@ const Transformative: React.FC<Props> = ({
 	// --- BottomCenter Start --- //
 	const handleDragBottomCenter = useCallback(
 		(e: DiagramDragEvent) => {
-			const inversedDragPoint = inverseAffineTransformationOnDrag(e.endPoint);
+			const inversedDragPoint = inverseAffineTransformationOnDrag(
+				e.endX,
+				e.endY,
+			);
 			const inversedTopCenter = inverseAffineTransformationOnDrag(
-				startShape.current.topCenterPoint,
+				startShape.current.topCenterPoint.x,
+				startShape.current.topCenterPoint.y,
 			);
 
 			let newWidth: number;
@@ -544,11 +600,13 @@ const Transformative: React.FC<Props> = ({
 				newWidth = startShape.current.width * startShape.current.scaleX;
 			}
 
-			const inversedCenter = {
-				x: inversedTopCenter.x,
-				y: inversedTopCenter.y + (newHeight === 0 ? 0 : newHeight / 2),
-			};
-			const center = affineTransformationOnDrag(inversedCenter);
+			const inversedCenterX = inversedTopCenter.x;
+			const inversedCenterY = inversedTopCenter.y + nanToZero(newHeight / 2);
+
+			const center = affineTransformationOnDrag(
+				inversedCenterX,
+				inversedCenterY,
+			);
 
 			triggerTransform(center, newWidth, newHeight, e.type);
 		},
@@ -603,29 +661,20 @@ const Transformative: React.FC<Props> = ({
 	}, [isSelected]);
 
 	// 回転
-	const rotationPoint = useMemo(
-		() =>
-			affineTransformation(
-				{
-					x: width / 2 + ROTATE_POINT_MARGIN,
-					y: -(height / 2 + ROTATE_POINT_MARGIN),
-				},
-				1,
-				1,
-				degreesToRadians(rotation),
-				point.x,
-				point.y,
-			),
-		[width, height, rotation, point],
+	const rotationPoint = affineTransformation(
+		width / 2 + ROTATE_POINT_MARGIN,
+		-(height / 2 + ROTATE_POINT_MARGIN),
+		1,
+		1,
+		radians,
+		x,
+		y,
 	);
 
 	const handleDragRotationPoint = useCallback(
 		(e: DiagramDragEvent) => {
-			const radian = calcRadian(point, e.endPoint);
-			const rotatePointRadian = calcRadian(point, {
-				x: point.x + width,
-				y: point.y - height,
-			});
+			const radian = calcRadians(x, y, e.endX, e.endY);
+			const rotatePointRadian = calcRadians(x, y, x + width, y - height);
 			const newRotation = Math.round(
 				(radiansToDegrees(radian - rotatePointRadian) + 360) % 360,
 			);
@@ -635,7 +684,8 @@ const Transformative: React.FC<Props> = ({
 					...startShape.current,
 				},
 				endShape: {
-					point,
+					x,
+					y,
 					width,
 					height,
 					scaleX,
@@ -654,7 +704,8 @@ const Transformative: React.FC<Props> = ({
 			onTransform,
 			onTransformEnd,
 			diagramId,
-			point,
+			x,
+			y,
 			width,
 			height,
 			scaleX,
@@ -665,11 +716,13 @@ const Transformative: React.FC<Props> = ({
 	const dragFunctionRotationPoint = useCallback(
 		(p: Point) =>
 			calcNearestCircleIntersectionPoint(
-				{ x: point.x, y: point.y },
+				x,
+				y,
 				width / 2 + ROTATE_POINT_MARGIN,
-				p,
+				p.x,
+				p.y,
 			),
-		[point, width],
+		[x, y, width],
 	);
 
 	const cursors = {
@@ -701,21 +754,18 @@ const Transformative: React.FC<Props> = ({
 					strokeWidth="1px"
 					strokeDasharray="3,3"
 					pointerEvents={"none"}
-					transform={createSvgTransform(
-						scaleX,
-						scaleY,
-						radians,
-						point.x,
-						point.y,
-					)}
+					transform={createSvgTransform(scaleX, scaleY, radians, x, y)}
 				/>
 			</g>
 			{/* 上辺 */}
 			<DragLine
 				id={`${diagramId}-topCenter-line`}
-				point={vertices.topCenterPoint}
-				startPoint={vertices.leftTopPoint}
-				endPoint={vertices.rightTopPoint}
+				x={vertices.topCenterPoint.x}
+				y={vertices.topCenterPoint.y}
+				startX={vertices.leftTopPoint.x}
+				startY={vertices.leftTopPoint.y}
+				endX={vertices.rightTopPoint.x}
+				endY={vertices.rightTopPoint.y}
 				cursor={cursors.topCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragTopCenter}
@@ -725,9 +775,12 @@ const Transformative: React.FC<Props> = ({
 			{/* 左辺 */}
 			<DragLine
 				id={`${diagramId}-leftCenter-line`}
-				point={vertices.leftCenterPoint}
-				startPoint={vertices.leftTopPoint}
-				endPoint={vertices.leftBottomPoint}
+				x={vertices.leftCenterPoint.x}
+				y={vertices.leftCenterPoint.y}
+				startX={vertices.leftTopPoint.x}
+				startY={vertices.leftTopPoint.y}
+				endX={vertices.leftBottomPoint.x}
+				endY={vertices.leftBottomPoint.y}
 				cursor={cursors.leftCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragLeftCenter}
@@ -737,9 +790,12 @@ const Transformative: React.FC<Props> = ({
 			{/* 右辺 */}
 			<DragLine
 				id={`${diagramId}-rightCenter-line`}
-				point={vertices.rightCenterPoint}
-				startPoint={vertices.rightTopPoint}
-				endPoint={vertices.rightBottomPoint}
+				x={vertices.rightCenterPoint.x}
+				y={vertices.rightCenterPoint.y}
+				startX={vertices.rightTopPoint.x}
+				startY={vertices.rightTopPoint.y}
+				endX={vertices.rightBottomPoint.x}
+				endY={vertices.rightBottomPoint.y}
 				cursor={cursors.rightCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragRightCenter}
@@ -749,9 +805,12 @@ const Transformative: React.FC<Props> = ({
 			{/* 下辺 */}
 			<DragLine
 				id={`${diagramId}-bottomCenter-line`}
-				point={vertices.bottomCenterPoint}
-				startPoint={vertices.leftBottomPoint}
-				endPoint={vertices.rightBottomPoint}
+				x={vertices.bottomCenterPoint.x}
+				y={vertices.bottomCenterPoint.y}
+				startX={vertices.leftBottomPoint.x}
+				startY={vertices.leftBottomPoint.y}
+				endX={vertices.rightBottomPoint.x}
+				endY={vertices.rightBottomPoint.y}
 				cursor={cursors.bottomCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragBottomCenter}
@@ -761,7 +820,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 左上 */}
 			<DragPoint
 				id={`${diagramId}-leftTop`}
-				point={vertices.leftTopPoint}
+				x={vertices.leftTopPoint.x}
+				y={vertices.leftTopPoint.y}
 				cursor={cursors.leftTop}
 				onDragStart={handleDragStart}
 				onDrag={handleDragLeftTop}
@@ -773,7 +833,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 左下 */}
 			<DragPoint
 				id={`${diagramId}-leftBottom`}
-				point={vertices.leftBottomPoint}
+				x={vertices.leftBottomPoint.x}
+				y={vertices.leftBottomPoint.y}
 				cursor={cursors.leftBottom}
 				onDragStart={handleDragStart}
 				onDrag={handleDragLeftBottom}
@@ -785,7 +846,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 右上 */}
 			<DragPoint
 				id={`${diagramId}-rightTop`}
-				point={vertices.rightTopPoint}
+				x={vertices.rightTopPoint.x}
+				y={vertices.rightTopPoint.y}
 				cursor={cursors.rightTop}
 				onDragStart={handleDragStart}
 				onDrag={handleDragRightTop}
@@ -797,7 +859,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 右下 */}
 			<DragPoint
 				id={`${diagramId}-rightBottom`}
-				point={vertices.rightBottomPoint}
+				x={vertices.rightBottomPoint.x}
+				y={vertices.rightBottomPoint.y}
 				cursor={cursors.rightBottom}
 				onDragStart={handleDragStart}
 				onDrag={handleDragRightBottom}
@@ -809,7 +872,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 上中央 */}
 			<DragPoint
 				id={`${diagramId}-topCenter`}
-				point={vertices.topCenterPoint}
+				x={vertices.topCenterPoint.x}
+				y={vertices.topCenterPoint.y}
 				cursor={cursors.topCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragTopCenter}
@@ -819,7 +883,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 左中央 */}
 			<DragPoint
 				id={`${diagramId}-leftCenter`}
-				point={vertices.leftCenterPoint}
+				x={vertices.leftCenterPoint.x}
+				y={vertices.leftCenterPoint.y}
 				cursor={cursors.leftCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragLeftCenter}
@@ -829,7 +894,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 右中央 */}
 			<DragPoint
 				id={`${diagramId}-rightCenter`}
-				point={vertices.rightCenterPoint}
+				x={vertices.rightCenterPoint.x}
+				y={vertices.rightCenterPoint.y}
 				cursor={cursors.rightCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragRightCenter}
@@ -839,7 +905,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 下中央 */}
 			<DragPoint
 				id={`${diagramId}-bottomCenter`}
-				point={vertices.bottomCenterPoint}
+				x={vertices.bottomCenterPoint.x}
+				y={vertices.bottomCenterPoint.y}
 				cursor={cursors.bottomCenter}
 				onDragStart={handleDragStart}
 				onDrag={handleDragBottomCenter}
@@ -849,7 +916,8 @@ const Transformative: React.FC<Props> = ({
 			{/* 回転 */}
 			<RotatePoint
 				id={`rotation-${diagramId}`}
-				point={rotationPoint}
+				x={rotationPoint.x}
+				y={rotationPoint.y}
 				rotation={rotation}
 				onDragStart={handleDragStart}
 				onDrag={handleDragRotationPoint}

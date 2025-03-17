@@ -22,7 +22,8 @@ export type RotatePointProps = Omit<DragProps, "ref"> & {
 const RotatePoint: React.FC<RotatePointProps> = ({
 	id,
 	type,
-	point,
+	x,
+	y,
 	allowXDecimal = false,
 	allowYDecimal = false,
 	onDragStart,
@@ -43,7 +44,8 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 	const dragProps = useDrag({
 		id,
 		type,
-		point,
+		x,
+		y,
 		allowXDecimal,
 		allowYDecimal,
 		ref: svgRef,
@@ -63,9 +65,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 
 	return (
 		<>
-			<g
-				transform={`translate(${point.x} ${point.y}) rotate(${rotation}) scale(0.02)`}
-			>
+			<g transform={`translate(${x} ${y}) rotate(${rotation}) scale(0.02)`}>
 				<g transform="translate(-440 -440)">
 					<path
 						fill={color}
@@ -86,8 +86,8 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 			</g>
 			<circle
 				id={id}
-				cx={point.x}
-				cy={point.y}
+				cx={x}
+				cy={y}
 				r={7}
 				fill="transparent"
 				color="rgba(100, 149, 237, 0.8)"

@@ -29,7 +29,7 @@ import { useDrag } from "../../hooks/dragHooks";
 import { getCursorFromAngle, newId } from "../../functions/Diagram";
 import {
 	calcPointsOuterBox, // TODO: 回転時にずれるので要修正
-	calcRadian,
+	calcRadians,
 	createLinerX2yFunction,
 	createLinerY2xFunction,
 	radiansToDegrees,
@@ -40,7 +40,7 @@ const createDValue = (items: Diagram[]) => {
 	let d = "";
 	for (let i = 0; i < items.length; i++) {
 		const item = items[i];
-		d += `${i === 0 ? "M" : "L"} ${item.point.x} ${item.point.y} `;
+		d += `${i === 0 ? "M" : "L"} ${item.x} ${item.y} `;
 	}
 	return d;
 };
@@ -74,7 +74,8 @@ export type PathProps = CreateDiagramProps<
  */
 const Path: React.FC<PathProps> = ({
 	id,
-	point,
+	x,
+	y,
 	width,
 	height,
 	rotation,
@@ -180,18 +181,19 @@ const Path: React.FC<PathProps> = ({
 				return;
 			}
 
-			const dx = e.endPoint.x - e.startPoint.x;
-			const dy = e.endPoint.y - e.startPoint.y;
+			const dx = e.endX - e.startX;
+			const dy = e.endY - e.startY;
 
 			const newItems = startItems.current.map((item) => {
-				const x = item.point.x + dx;
-				const y = item.point.y + dy;
-				return { ...item, point: { x, y } };
+				const x = item.x + dx;
+				const y = item.y + dy;
+				return { ...item, x, y };
 			});
 
 			onItemableChange?.({
 				id,
-				point: e.endPoint,
+				x: e.endX,
+				y: e.endY,
 				items: newItems,
 			});
 		},
@@ -209,7 +211,8 @@ const Path: React.FC<PathProps> = ({
 	const dragProps = useDrag({
 		id,
 		type: "Path",
-		point,
+		x,
+		y,
 		ref: dragSvgRef,
 		onPointerDown: handlePointerDown,
 		onClick: handleClick,
@@ -306,7 +309,8 @@ const Path: React.FC<PathProps> = ({
 			{isSelected && (
 				<Group
 					id={id}
-					point={point}
+					x={x}
+					y={y}
 					isSelected={transformEnabled && isTransformMode}
 					width={width}
 					height={height}
@@ -339,7 +343,8 @@ type PathPointProps = CreateDiagramProps<PathPointData, object>;
 export const PathPoint: React.FC<PathPointProps> = memo(
 	({
 		id,
-		point,
+		x,
+		y,
 		hidden,
 		pointerEventsDisabled,
 		onDragStart,
@@ -349,7 +354,8 @@ export const PathPoint: React.FC<PathPointProps> = memo(
 		return (
 			<DragPoint
 				id={id}
-				point={point}
+				x={x}
+				y={y}
 				hidden={hidden}
 				pointerEventsDisabled={pointerEventsDisabled}
 				onDragStart={onDragStart}
@@ -366,7 +372,8 @@ PathPoint.displayName = "PathPoint";
  */
 type NewVertexData = {
 	id: string;
-	point: Point;
+	x: number;
+	y: number;
 };
 
 /**
@@ -382,11 +389,12 @@ type NewVertexProps = NewVertexData & {
  * 新規頂点コンポーネント
  */
 const NewVertex: React.FC<NewVertexProps> = memo(
-	({ id, point, onDragStart, onDrag, onDragEnd }) => {
+	({ id, x, y, onDragStart, onDrag, onDragEnd }) => {
 		return (
 			<DragPoint
 				id={id}
-				point={point}
+				x={x}
+				y={y}
 				fill="white"
 				onDragStart={onDragStart}
 				onDrag={onDrag}
@@ -427,12 +435,13 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 				const item = items[i];
 				const nextItem = items[i + 1];
 
-				const x = (item.point.x + nextItem.point.x) / 2;
-				const y = (item.point.y + nextItem.point.y) / 2;
+				const x = (item.x + nextItem.x) / 2;
+				const y = (item.y + nextItem.y) / 2;
 
 				newVertexList.push({
 					id: `${item.id}-${nextItem.id}`, // 前後の頂点からIDを生成
-					point: { x, y },
+					x,
+					y,
 				});
 			}
 		}
@@ -447,12 +456,12 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 				const newItem = {
 					id: e.id,
 					type: "PathPoint",
-					point: e.startPoint,
-					isSelected: false,
+					x: e.startX,
+					y: e.startY,
 				} as Diagram;
 				newItems.splice(idx + 1, 0, newItem);
 
-				setDraggingNewVertex({ id: e.id, point: e.startPoint });
+				setDraggingNewVertex({ id: e.id, x: e.startX, y: e.startY });
 
 				onItemableChange?.({
 					id,
@@ -468,13 +477,13 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 		const handleNewVertexDrag = useCallback(
 			(e: DiagramDragEvent) => {
 				// ドラッグ中の新規頂点の位置を更新
-				setDraggingNewVertex({ id: e.id, point: e.endPoint });
+				setDraggingNewVertex({ id: e.id, x: e.endX, y: e.endY });
 
 				// 新規頂点のドラッグに伴うパスの頂点の位置変更
 				onItemableChange?.({
 					id,
 					items: items.map((item) =>
-						item.id === e.id ? { ...item, point: e.endPoint } : item,
+						item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
 					),
 				});
 			},
@@ -491,13 +500,18 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 
 				// 新規頂点のドラッグ完了に伴うパスの外枠の形状計算
 				const box = calcPointsOuterBox(
-					items.map((item) => (item.id === e.id ? e.endPoint : item.point)),
+					items.map((item) =>
+						item.id === e.id
+							? { x: e.endX, y: e.endY }
+							: { x: item.x, y: item.y },
+					),
 				);
 
 				// 新規頂点のドラッグ完了に伴うパスのデータ変更
 				onItemableChange?.({
 					id,
-					point: box.center,
+					x: box.center.x,
+					y: box.center.y,
 					width: box.right - box.left,
 					height: box.bottom - box.top,
 					items: items.map((item) =>
@@ -505,7 +519,8 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 							? {
 									...item,
 									id: newId(), // ドラッグが完了したら、新規頂点用のIDから新しいIDに変更
-									point: e.endPoint,
+									x: e.endX,
+									y: e.endY,
 								}
 							: item,
 					),
@@ -537,9 +552,11 @@ NewVertexList.displayName = "NewVertexList";
 type SegmentData = {
 	id: string;
 	startPointId: string;
-	startPoint: Point;
+	startX: number;
+	startY: number;
 	endPointId: string;
-	endPoint: Point;
+	endX: number;
+	endY: number;
 };
 
 /**
@@ -560,23 +577,34 @@ type SegmentProps = SegmentData & {
 const Segment: React.FC<SegmentProps> = memo(
 	({
 		id,
-		startPoint,
-		endPoint,
+		startX,
+		startY,
+		endX,
+		endY,
 		onPointerDown,
 		onClick,
 		onDragStart,
 		onDrag,
 		onDragEnd,
 	}) => {
-		const midPoint = {
-			x: (startPoint.x + endPoint.x) / 2,
-			y: (startPoint.y + endPoint.y) / 2,
-		};
+		const midX = (startX + endX) / 2;
+		const midY = (startY + endY) / 2;
 
-		const rotateStartPoint = rotatePoint(startPoint, midPoint, Math.PI / 2);
-		const rotateEndPoint = rotatePoint(endPoint, midPoint, Math.PI / 2);
+		const rotateStartPoint = rotatePoint(
+			startX,
+			startY,
+			midX,
+			midY,
+			Math.PI / 2,
+		);
+		const rotateEndPoint = rotatePoint(endX, endY, midX, midY, Math.PI / 2);
 
-		const radian = calcRadian(rotateStartPoint, rotateEndPoint);
+		const radian = calcRadians(
+			rotateStartPoint.x,
+			rotateStartPoint.y,
+			rotateEndPoint.x,
+			rotateEndPoint.y,
+		);
 		const cursor = getCursorFromAngle(radiansToDegrees(radian));
 
 		const dragPositioningFunction = useCallback(
@@ -594,9 +622,12 @@ const Segment: React.FC<SegmentProps> = memo(
 		return (
 			<DragLine
 				id={id}
-				point={midPoint}
-				startPoint={startPoint}
-				endPoint={endPoint}
+				x={midX}
+				y={midY}
+				startX={startX}
+				startY={startY}
+				endX={endX}
+				endY={endY}
 				cursor={cursor}
 				onPointerDown={onPointerDown}
 				onClick={onClick}
@@ -641,9 +672,11 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 
 				segmentList.push({
 					id: `${item.id}-${nextItem.id}`,
-					startPoint: item.point,
+					startX: item.x,
+					startY: item.y,
 					startPointId: item.id,
-					endPoint: nextItem.point,
+					endX: nextItem.x,
+					endY: nextItem.y,
 					endPointId: nextItem.id,
 				});
 			}
@@ -669,9 +702,9 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 						const newItem = {
 							id: newId(),
 							type: "PathPoint",
-							point: segment.endPoint,
-							isSelected: false,
-						} as Diagram;
+							x: segment.endX,
+							y: segment.endY,
+						} as PathPointData;
 						newItems.splice(newItems.length - 1, 0, newItem);
 						newSegment.endPointId = newItem.id;
 					}
@@ -680,9 +713,9 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 						const newItem = {
 							id: newId(),
 							type: "PathPoint",
-							point: segment.startPoint,
-							isSelected: false,
-						} as Diagram;
+							x: segment.startX,
+							y: segment.startY,
+						} as PathPointData;
 						newItems.splice(1, 0, newItem);
 						newSegment.startPointId = newItem.id;
 					}
@@ -707,31 +740,29 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					return;
 				}
 
-				const dx = e.endPoint.x - e.startPoint.x;
-				const dy = e.endPoint.y - e.startPoint.y;
-				const newStartPoint = {
-					x: startSegment.current.startPoint.x + dx,
-					y: startSegment.current.startPoint.y + dy,
-				};
-				const newEndPoint = {
-					x: startSegment.current.endPoint.x + dx,
-					y: startSegment.current.endPoint.y + dy,
-				};
+				const dx = e.endX - e.startX;
+				const dy = e.endY - e.startY;
+				const newStartX = startSegment.current.startX + dx;
+				const newStartY = startSegment.current.startY + dy;
+				const newEndX = startSegment.current.endX + dx;
+				const newEndY = startSegment.current.endY + dy;
 
 				setDraggingSegment({
 					...draggingSegment,
-					startPoint: newStartPoint,
-					endPoint: newEndPoint,
+					startX: newStartX,
+					startY: newStartY,
+					endX: newEndX,
+					endY: newEndY,
 				});
 
 				onItemableChange?.({
 					id,
 					items: items.map((item) => {
 						if (item.id === draggingSegment.startPointId) {
-							return { ...item, point: newStartPoint };
+							return { ...item, x: newStartX, y: newStartY };
 						}
 						if (item.id === draggingSegment.endPointId) {
-							return { ...item, point: newEndPoint };
+							return { ...item, x: newEndX, y: newEndY };
 						}
 						return item;
 					}),
@@ -749,31 +780,32 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					return;
 				}
 
-				const dx = e.endPoint.x - e.startPoint.x;
-				const dy = e.endPoint.y - e.startPoint.y;
-				const newStartPoint = {
-					x: startSegment.current.startPoint.x + dx,
-					y: startSegment.current.startPoint.y + dy,
-				};
-				const newEndPoint = {
-					x: startSegment.current.endPoint.x + dx,
-					y: startSegment.current.endPoint.y + dy,
-				};
+				const dx = e.endX - e.startX;
+				const dy = e.endY - e.startY;
+				const newStartX = startSegment.current.startX + dx;
+				const newStartY = startSegment.current.startY + dy;
+				const newEndX = startSegment.current.endX + dx;
+				const newEndY = startSegment.current.endY + dy;
 				const box = calcPointsOuterBox(
-					items.map((item) => (item.id === e.id ? e.endPoint : item.point)),
+					items.map((item) =>
+						item.id === e.id
+							? { x: e.endX, y: e.endY }
+							: { x: item.x, y: item.y },
+					),
 				);
 				onItemableChange?.({
 					id,
-					point: box.center,
+					x: box.center.x,
+					y: box.center.y,
 					width: box.right - box.left,
 					height: box.bottom - box.top,
 					items: items.map((item) => {
 						// ドラッグが完了したら、線分用のIDから新しいIDに変更
 						if (item.id === draggingSegment.startPointId) {
-							return { ...item, point: newStartPoint };
+							return { ...item, x: newStartX, y: newStartY };
 						}
 						if (item.id === draggingSegment.endPointId) {
-							return { ...item, point: newEndPoint };
+							return { ...item, x: newEndX, y: newEndY };
 						}
 						return item;
 					}),

@@ -66,7 +66,8 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
 const DragPoint: React.FC<DragPointProps> = ({
 	id,
 	type,
-	point,
+	x,
+	y,
 	allowXDecimal = false,
 	allowYDecimal = false,
 	onDragStart,
@@ -86,12 +87,15 @@ const DragPoint: React.FC<DragPointProps> = ({
 	hidden = false,
 	pointerEventsDisabled = false,
 }) => {
+	window.profiler.call(`DragPoint render: ${id}`);
+
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
 
 	const dragProps = useDrag({
 		id,
 		type,
-		point,
+		x,
+		y,
 		allowXDecimal,
 		allowYDecimal,
 		ref: svgRef,
@@ -112,8 +116,8 @@ const DragPoint: React.FC<DragPointProps> = ({
 	return (
 		<Circle
 			id={id}
-			cx={point.x}
-			cy={point.y}
+			cx={x}
+			cy={y}
 			r={radius}
 			stroke={stroke}
 			fill={fill}

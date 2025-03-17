@@ -71,7 +71,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, point: e.endPoint } : item,
+				item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
 			),
 		}));
 	}, []);
@@ -80,7 +80,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, point: e.endPoint } : item,
+				item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
 			),
 		}));
 	}, []);
@@ -128,12 +128,13 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	}, []);
 
 	const onConnect = useCallback((e: DiagramConnectEvent) => {
-		const box = calcPointsOuterBox(e.points.map((p) => p.point));
+		const box = calcPointsOuterBox(e.points.map((p) => ({ x: p.x, y: p.y })));
 
 		addItem({
 			id: newId(),
 			type: "ConnectLine",
-			point: box.center,
+			x: box.center.x,
+			y: box.center.y,
 			width: box.right - box.left,
 			height: box.bottom - box.top,
 			isSelected: false,
@@ -154,7 +155,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				...prevState,
 				items: applyRecursive(prevState.items, (item) =>
 					item.id === event.detail.id //&& item.type !== "PathPoint"
-						? { ...item, point: event.detail.point }
+						? { ...item, x: event.detail.x, y: event.detail.y }
 						: item,
 				),
 			}));

@@ -1,4 +1,4 @@
-import { radiansToDegrees, degreesToRadians, calcRadian } from "../Math";
+import { radiansToDegrees, degreesToRadians, calcRadians } from "../Math";
 
 test("Math radiansToDegrees", () => {
 	expect(radiansToDegrees(0)).toBe(0);
@@ -25,28 +25,12 @@ test("Math degreesToRadians", () => {
 });
 
 test("Math calcRadian", () => {
-	expect(calcRadian({ x: 0, y: 0 }, { x: 0, y: -10 })).toBe(
-		degreesToRadians(0),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: 10, y: -10 })).toBe(
-		degreesToRadians(45),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: 10, y: 0 })).toBe(
-		degreesToRadians(90),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: 10, y: 10 })).toBe(
-		degreesToRadians(135),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: 0, y: 10 })).toBe(
-		degreesToRadians(180),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: -10, y: 10 })).toBe(
-		degreesToRadians(225),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: -10, y: 0 })).toBe(
-		degreesToRadians(270),
-	);
-	expect(calcRadian({ x: 0, y: 0 }, { x: -10, y: -10 })).toBe(
-		degreesToRadians(315),
-	);
+	expect(calcRadians(0, 0, 0, -10)).toBe(degreesToRadians(0));
+	expect(calcRadians(0, 0, 10, -10)).toBe(degreesToRadians(45));
+	expect(calcRadians(0, 0, 10, 0)).toBe(degreesToRadians(90));
+	expect(calcRadians(0, 0, 10, 10)).toBe(degreesToRadians(135));
+	expect(calcRadians(0, 0, 0, 10)).toBe(degreesToRadians(180));
+	expect(calcRadians(0, 0, -10, 10)).toBe(degreesToRadians(225));
+	expect(calcRadians(0, 0, -10, 0)).toBe(degreesToRadians(270));
+	expect(calcRadians(0, 0, -10, -10)).toBe(degreesToRadians(315));
 });

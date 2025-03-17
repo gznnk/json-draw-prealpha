@@ -30,7 +30,8 @@ export type EllipseProps = CreateDiagramProps<
 
 const Ellipse: React.FC<EllipseProps> = ({
 	id,
-	point,
+	x,
+	y,
 	width,
 	height,
 	rotation = 0,
@@ -108,7 +109,8 @@ const Ellipse: React.FC<EllipseProps> = ({
 	const dragProps = useDrag({
 		id,
 		type: "Ellipse",
-		point,
+		x,
+		y,
 		ref: svgRef,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
@@ -156,8 +158,8 @@ const Ellipse: React.FC<EllipseProps> = ({
 						scaleX,
 						scaleY,
 						degreesToRadians(rotation),
-						point.x,
-						point.y,
+						x,
+						y,
 					)}
 					ref={svgRef}
 					{...dragProps}
@@ -166,7 +168,8 @@ const Ellipse: React.FC<EllipseProps> = ({
 			<Transformative
 				diagramId={id}
 				type="Ellipse"
-				point={point}
+				x={x}
+				y={y}
 				width={width}
 				height={height}
 				rotation={rotation}

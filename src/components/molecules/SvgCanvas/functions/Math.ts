@@ -21,17 +21,6 @@ export const signNonZero = (value: number): number => {
 	return value >= 0 ? 1 : -1;
 };
 
-// TODO いらんかも
-/**
- * 数値がtrueなら1、falseなら-1を返す
- *
- * @param value - 数値
- * @returns - 結果
- */
-export const boolSign = (value: boolean): number => {
-	return value ? 1 : -1;
-};
-
 /**
  * ２つの数値のうち、指定した数値に近い方を返す
  *
@@ -47,77 +36,65 @@ export const closer = (value: number, a: number, b: number): number => {
 /**
  * ２点間のユークリッド距離を算出する
  *
- * @param {Point} p1 - 1つ目の点の座標
- * @param {Point} p2 - 2つ目の点の座標
+ * @param {number} x1 - 1つ目の点のX座標
+ * @param {number} y1 - 1つ目の点のY座標
+ * @param {number} x2 - 2つ目の点のX座標
+ * @param {number} y2 - 2つ目の点のY座標
  * @returns {number} ２点間の距離
  */
-export const calcDistance = (p1: Point, p2: Point): number => {
-	const distance = Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
+export const calcDistance = (
+	x1: number,
+	y1: number,
+	x2: number,
+	y2: number,
+): number => {
+	const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 	return distance;
-};
-
-/**
- * 指定した点 p が、2点 a, b を結ぶ線分上にあるかを判定
- *
- * @param {Point} a - 線分の始点
- * @param {Point} b - 線分の終点
- * @param {Point} p - 判定する点
- * @returns {boolean} p が a, b を結ぶ線分上にある場合は true、それ以外は false
- */
-export const isPointOnSegment = (a: Point, b: Point, p: Point): boolean => {
-	// 外積を計算（3点が一直線上にあるか）
-	const crossProduct = (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
-	if (crossProduct !== 0) return false;
-
-	// p が a と b の間にあるか (範囲内にあるか)
-	const withinX = Math.min(a.x, b.x) <= p.x && p.x <= Math.max(a.x, b.x);
-	const withinY = Math.min(a.y, b.y) <= p.y && p.y <= Math.max(a.y, b.y);
-
-	return withinX && withinY;
 };
 
 /**
  * ２点のうち、指定した点に近い方の点を返す
  *
- * @param p - 指定した点
- * @param a - 1つ目の点の座標
- * @param b - 2つ目の点の座標
+ * @param px - 指定した点のX座標
+ * @param py - 指定した点のY座標
+ * @param ax - 1つ目の点のX座標
+ * @param ay - 1つ目の点のY座標
+ * @param bx - 2つ目の点のX座標
+ * @param by - 2つ目の点のY座標
  * @returns - 近い方の点
  */
-export const closerPoint = (p: Point, a: Point, b: Point): Point => {
-	const distanceA = calcDistance(p, a);
-	const distanceB = calcDistance(p, b);
+export const closerPoint = (
+	px: number,
+	py: number,
+	ax: number,
+	ay: number,
+	bx: number,
+	by: number,
+): Point => {
+	const distanceA = calcDistance(px, py, ax, ay);
+	const distanceB = calcDistance(px, py, bx, by);
 
-	return distanceA < distanceB ? a : b;
-};
-
-// TODO いらんかも
-/**
- * aがbよりもpに近いかどうかを判定する
- *
- * @param p - 指定した点
- * @param a - 1つ目の点の座標
- * @param b - 2つ目の点の座標
- * @returns - 指定した点に近い方の点かどうか
- */
-export const isCloserPoint = (p: Point, a: Point, b: Point): boolean => {
-	const distanceA = calcDistance(p, a);
-	const distanceB = calcDistance(p, b);
-
-	return distanceA < distanceB;
+	return distanceA < distanceB ? { x: ax, y: ay } : { x: bx, y: by };
 };
 
 /**
  * ２点間の角度を算出する.
  * 時計の12時を0度とし、時計回りに角度を算出する.
  *
- * @param {Point} o - 原点の座標
- * @param {Point} p - 動点の座標
+ * @param {number} ox - 原点のX座標
+ * @param {number} oy - 原点のY座標
+ * @param {number} px - 動点のX座標
+ * @param {number} py - 動点のY座標
  * @returns {number} ２点間の角度（ラジアン）
  */
-export const calcRadian = (o: Point, p: Point): number => {
-	const dx = p.x - o.x;
-	const dy = o.y - p.y; // y軸の正方向を上向きにするため反転
+export const calcRadians = (
+	ox: number,
+	oy: number,
+	px: number,
+	py: number,
+): number => {
+	const dx = px - ox;
+	const dy = oy - py; // y軸の正方向を上向きにするため反転
 
 	let angle = Math.atan2(dx, dy); // atan2(y, x)ではなく(x, y)とすることで12時基準に
 
@@ -131,34 +108,35 @@ export const calcRadian = (o: Point, p: Point): number => {
 /**
  * 半径rの円があり、また任意の座標(x,y)があるときに、円の中心(x,y)と任意の座標を結ぶ直線と円周が交わる点のうち、任意の座標に近い方の座標を算出する
  *
- * @param {Point} center - 円の中心の座標オブジェクト
+ * @param {number} cx - 円の中心のX座標
+ * @param {number} cy - 円の中心のY座標
  * @param {number} r - 円の半径
- * @param {Point} point - 任意の座標オブジェクト
+ * @param {number} px - 任意のX座標
+ * @param {number} py - 任意のY座標
  * @returns {Point} 円周と直線が交わる点のうち、任意の座標に近い方の座標
  */
 export const calcNearestCircleIntersectionPoint = (
-	center: Point,
+	cx: number,
+	cy: number,
 	r: number,
-	point: Point,
+	px: number,
+	py: number,
 ): Point => {
-	const dx = point.x - center.x;
-	const dy = point.y - center.y;
+	const dx = px - cx;
+	const dy = py - cy;
 	const dist = Math.sqrt(dx * dx + dy * dy);
 
 	// 任意の点が円の中心と一致する場合
 	if (dist === 0) {
-		return { x: center.x + r, y: center.y }; // ラジアンが0の円周上の点を返す
+		return { x: cx + r, y: cy }; // ラジアンが0の円周上の点を返す
 	}
 
 	// 円の中心と任意の点を結ぶ直線が円周と交わる場合
 	const a = (r * dx) / dist;
 	const b = (r * dy) / dist;
 
-	const intersection1: Point = { x: center.x + a, y: center.y + b };
-	const intersection2: Point = { x: center.x - a, y: center.y - b };
-
 	// 任意の点に近い方の交点を返す
-	return closerPoint(point, intersection1, intersection2);
+	return closerPoint(px, py, cx + a, cy + b, cx - a, cy - b);
 };
 
 /**
@@ -184,59 +162,36 @@ export const radiansToDegrees = (radians: number): number => {
 /**
  * 座標を中心点の周りに回転させる
  *
- * @param {Point} point - 回転させる座標
- * @param {Point} center - 回転の中心となる座標
+ * @param {number} px - 回転させるX座標
+ * @param {number} py - 回転させるY座標
+ * @param {number} cx - 回転の中心となるX座標
+ * @param {number} cy - 回転の中心となるY座標
  * @param {number} theta - 回転角度（ラジアン）
  * @returns {Point} 回転後の座標
  */
 export const rotatePoint = (
-	point: Point,
-	center: Point,
+	px: number,
+	py: number,
+	cx: number,
+	cy: number,
 	theta: number,
 ): Point => {
 	const cosTheta = Math.cos(theta);
 	const sinTheta = Math.sin(theta);
-	const dx = point.x - center.x;
-	const dy = point.y - center.y;
+	const dx = px - cx;
+	const dy = py - cy;
 
-	const x = center.x + (dx * cosTheta - dy * sinTheta);
-	const y = center.y + (dx * sinTheta + dy * cosTheta);
+	const x = cx + (dx * cosTheta - dy * sinTheta);
+	const y = cy + (dx * sinTheta + dy * cosTheta);
 
 	return { x, y };
-};
-
-// TODO いらない？
-/**
- * すでに回転している四角形の幅と高さを計算する関数
- *
- * @param {Point} topLeft - 左上の座標
- * @param {Point} bottomRight - 右下の座標
- * @param {number} theta - 回転角度（ラジアン）
- * @returns {{ width: number, height: number }} 四角形の幅と高さ
- */
-export const calcRotatedRectangleDimensions = (
-	topLeft: Point,
-	bottomRight: Point,
-	theta: number,
-): { width: number; height: number } => {
-	const center: Point = {
-		x: (topLeft.x + bottomRight.x) / 2,
-		y: (topLeft.y + bottomRight.y) / 2,
-	};
-
-	const topLeftRotated = rotatePoint(topLeft, center, -theta);
-	const bottomRightRotated = rotatePoint(bottomRight, center, -theta);
-
-	const width = Math.abs(bottomRightRotated.x - topLeftRotated.x);
-	const height = Math.abs(bottomRightRotated.y - topLeftRotated.y);
-
-	return { width, height };
 };
 
 /**
  * 点にアフィン変換を適用する
  *
- * @param point - 変換対象の座標
+ * @param px - 変換対象のX座標
+ * @param py - 変換対象のY座標
  * @param sx - x方向の拡大縮小率
  * @param sy - y方向の拡大縮小率
  * @param theta - 回転角度（ラジアン）
@@ -245,7 +200,8 @@ export const calcRotatedRectangleDimensions = (
  * @returns 変換後の点
  */
 export const affineTransformation = (
-	point: Point,
+	px: number,
+	py: number,
 	sx: number,
 	sy: number,
 	theta: number,
@@ -262,7 +218,7 @@ export const affineTransformation = (
 	const translationVector = [tx, ty];
 
 	// 変換前の座標ベクトル
-	const originalVector = [point.x, point.y];
+	const originalVector = [px, py];
 
 	// アフィン変換を適用
 	const transformedVector = [
@@ -280,7 +236,8 @@ export const affineTransformation = (
 /**
  * 点に対してアフィン変換の逆変換を適用する
  *
- * @param point - 逆変換対象の座標
+ * @param px - 逆変換対象のX座標
+ * @param py - 逆変換対象のY座標
  * @param sx - x方向の拡大縮小率
  * @param sy - y方向の拡大縮小率
  * @param theta - 回転角度（ラジアン）
@@ -289,7 +246,8 @@ export const affineTransformation = (
  * @returns 逆変換後の元の点
  */
 export const inverseAffineTransformation = (
-	point: Point,
+	px: number,
+	py: number,
 	sx: number,
 	sy: number,
 	theta: number,
@@ -306,7 +264,7 @@ export const inverseAffineTransformation = (
 	const inverseTranslationVector = [-tx, -ty];
 
 	// 変換後の座標ベクトル
-	const transformedVector = [point.x, point.y];
+	const transformedVector = [px, py];
 
 	// 平行移動の逆変換を適用
 	const translatedVector = [
@@ -375,82 +333,92 @@ export const createLinerX2yFunction = (p1: Point, p2: Point) => {
  * @returns 矩形の頂点座標
  */
 export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
-	const { point, width, height, rotation, scaleX, scaleY } = shape;
+	const { x, y, width, height, rotation, scaleX, scaleY } = shape;
 
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;
 
-	const tx = point.x;
-	const ty = point.y;
+	const tx = x;
+	const ty = y;
+
+	const radians = degreesToRadians(rotation);
 
 	const leftTopPoint = affineTransformation(
-		{ x: -halfWidth, y: -halfHeight },
+		-halfWidth,
+		-halfHeight,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const leftBottomPoint = affineTransformation(
-		{ x: -halfWidth, y: halfHeight },
+		-halfWidth,
+		halfHeight,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const rightTopPoint = affineTransformation(
-		{ x: halfWidth, y: -halfHeight },
+		halfWidth,
+		-halfHeight,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const rightBottomPoint = affineTransformation(
-		{ x: halfWidth, y: halfHeight },
+		halfWidth,
+		halfHeight,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const topCenterPoint = affineTransformation(
-		{ x: 0, y: -halfHeight },
+		0,
+		-halfHeight,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const leftCenterPoint = affineTransformation(
-		{ x: -halfWidth, y: 0 },
+		-halfWidth,
+		0,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const rightCenterPoint = affineTransformation(
-		{ x: halfWidth, y: 0 },
+		halfWidth,
+		0,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
 
 	const bottomCenterPoint = affineTransformation(
-		{ x: 0, y: halfHeight },
+		0,
+		halfHeight,
 		scaleX,
 		scaleY,
-		degreesToRadians(rotation),
+		radians,
 		tx,
 		ty,
 	);
@@ -636,53 +604,4 @@ export const lineIntersects = (
 	const t = crossProduct(subtract(q1, p1), s) / denominator;
 
 	return t >= 0 && t <= 1 && u >= 0 && u <= 1;
-};
-
-// TODO: いらんかも
-/**
- * 短径内に座標が含まれるかどうかを判定する
- *
- * @param point - 判定する座標
- * @param shape - 短径のShape
- * @returns 短径内に座標が含まれるかどうか
- */
-export const isPointInShape = (point: Point, shape: Shape): boolean => {
-	const { point: center, width, height, rotation, scaleX, scaleY } = shape;
-
-	const radians = degreesToRadians(rotation);
-
-	const inversedCenter = inverseAffineTransformation(
-		center,
-		scaleX,
-		scaleY,
-		radians,
-		center.x,
-		center.y,
-	);
-
-	const inversedPoint = inverseAffineTransformation(
-		point,
-		scaleX,
-		scaleY,
-		radians,
-		center.x,
-		center.y,
-	);
-
-	const halfWidth = width / 2;
-	const halfHeight = height / 2;
-
-	const left = inversedCenter.x - halfWidth;
-	const right = inversedCenter.x + halfWidth;
-	const top = inversedCenter.y - halfHeight;
-	const bottom = inversedCenter.y + halfHeight;
-
-	// 短径の内部にあるかどうかを判定
-	const isInside =
-		left <= inversedPoint.x &&
-		inversedPoint.x <= right &&
-		top <= inversedPoint.y &&
-		inversedPoint.y <= bottom;
-
-	return isInside;
 };

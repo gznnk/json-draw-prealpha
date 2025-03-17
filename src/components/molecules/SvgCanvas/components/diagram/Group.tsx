@@ -75,20 +75,24 @@ const getChildDiagramById = (
  * グループの回転を戻した時の、図形の四辺の座標を計算する
  *
  * @param item - 図形
- * @param groupCenterPoint - グループの中心座標
+ * @param groupCenterX - グループの中心X座標
+ * @param groupCenterY - グループの中心Y座標
  * @param groupRotation - グループの回転角度
  * @returns 図形の四辺の座標
  */
 const calcItemBoxOfNoGroupRotation = (
 	item: Diagram,
-	groupCenterPoint: Point,
+	groupCenterX: number,
+	groupCenterY: number,
 	groupRotation: number,
 ) => {
 	const groupRadians = degreesToRadians(-groupRotation);
 
 	const inversedCenter = rotatePoint(
-		item.point,
-		groupCenterPoint,
+		item.x,
+		item.y,
+		groupCenterX,
+		groupCenterY,
 		groupRadians,
 	);
 
@@ -98,26 +102,34 @@ const calcItemBoxOfNoGroupRotation = (
 		const itemRadians = degreesToRadians(item.rotation - groupRotation);
 
 		const leftTop = rotatePoint(
-			{ x: inversedCenter.x - halfWidth, y: inversedCenter.y - halfHeight },
-			inversedCenter,
+			inversedCenter.x - halfWidth,
+			inversedCenter.y - halfHeight,
+			inversedCenter.x,
+			inversedCenter.y,
 			itemRadians,
 		);
 
 		const rightTop = rotatePoint(
-			{ x: inversedCenter.x + halfWidth, y: inversedCenter.y - halfHeight },
-			inversedCenter,
+			inversedCenter.x + halfWidth,
+			inversedCenter.y - halfHeight,
+			inversedCenter.x,
+			inversedCenter.y,
 			itemRadians,
 		);
 
 		const leftBottom = rotatePoint(
-			{ x: inversedCenter.x - halfWidth, y: inversedCenter.y + halfHeight },
-			inversedCenter,
+			inversedCenter.x - halfWidth,
+			inversedCenter.y + halfHeight,
+			inversedCenter.x,
+			inversedCenter.y,
 			itemRadians,
 		);
 
 		const rightBottom = rotatePoint(
-			{ x: inversedCenter.x + halfWidth, y: inversedCenter.y + halfHeight },
-			inversedCenter,
+			inversedCenter.x + halfWidth,
+			inversedCenter.y + halfHeight,
+			inversedCenter.x,
+			inversedCenter.y,
 			itemRadians,
 		);
 
@@ -142,13 +154,15 @@ const calcItemBoxOfNoGroupRotation = (
  *
  * @param changeItem - グループ内の変更された図形
  * @param items - グループ内の図形リスト
- * @param groupCenterPoint - グループの中心座標
+ * @param groupCenterX - グループの中心X座標
+ * @param groupCenterY - グループの中心Y座標
  * @param groupRotation - グループの回転角度
  * @returns グループの四辺の座標
  */
 const calcGroupBoxOfNoRotation = (
 	items: Diagram[],
-	groupCenterPoint: Point,
+	groupCenterX: number,
+	groupCenterY: number,
 	groupRotation: number,
 	changeItem?: Diagram,
 ) => {
@@ -162,7 +176,8 @@ const calcGroupBoxOfNoRotation = (
 		if (isItemableData(item)) {
 			const groupBox = calcGroupBoxOfNoRotation(
 				item.items ?? [],
-				groupCenterPoint,
+				groupCenterX,
+				groupCenterY,
 				groupRotation,
 				changeItem,
 			);
@@ -173,7 +188,8 @@ const calcGroupBoxOfNoRotation = (
 		} else {
 			const box = calcItemBoxOfNoGroupRotation(
 				item.id === changeItem?.id ? changeItem : item,
-				groupCenterPoint,
+				groupCenterX,
+				groupCenterY,
 				groupRotation,
 			);
 			top = Math.min(top, box.top);
@@ -191,26 +207,8 @@ const calcGroupBoxOfNoRotation = (
 	};
 };
 
-// TODO: JSDoc最新化
 /**
  * グループのPropsの型定義
- *
- * @type {Object} GroupProps
- * @property {string} [id] ID
- * @property {Point} [point] 左上の頂点の座標
- * @property {number} [width] 幅
- * @property {number} [height] 高さ
- * @property {boolean} [keepProportion] アスペクト比を保持するかどうか
- * @property {boolean} [isSelected] 選択されているかどうか
- * @property {(e: DiagramClickEvent) => void} [onClick] グループ内の図形のクリック時のイベントハンドラ
- * @property {(e: DiagramDragEvent) => void} [onDragStart] グループ内の図形のドラッグ開始時のイベントハンドラ（グループのドラッグはグループ内の図形のドラッグに連動して行わせるため、グループ自体のドラッグは存在しない）
- * @property {(e: DiagramDragEvent) => void} [onDrag] グループ内の図形のドラッグ中のイベントハンドラ（グループのドラッグはグループ内の図形のドラッグに連動して行わせるため、グループ自体のドラッグは存在しない）
- * @property {(e: DiagramDragEvent) => void} [onDragEnd] グループ内の図形のドラッグ終了時のイベントハンドラ（グループのドラッグはグループ内の図形のドラッグに連動して行わせるため、グループ自体のドラッグは存在しない）
- * @property {(e: DiagramDragDropEvent) => void} [onDrop] グループ内の図形のドラッグ＆ドロップ時のイベントハンドラ
- * @property {(e: DiagramSelectEvent) => void} [onSelect] 選択時のイベントハンドラ
- * @property {(e: DiagramConnectEvent) => void} [onConnect] 図形の接続時のイベントハンドラ
- * @property {Diagram[]} [items] グループ内の図形リスト
- * @property {React.Ref<DiagramRef>} [ref] 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数への参照
  */
 export type GroupProps = CreateDiagramProps<
 	GroupData,
@@ -226,7 +224,8 @@ export type GroupProps = CreateDiagramProps<
  */
 const Group: React.FC<GroupProps> = ({
 	id,
-	point,
+	x,
+	y,
 	width,
 	height,
 	rotation = 0,
@@ -252,7 +251,7 @@ const Group: React.FC<GroupProps> = ({
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
 
 	const startItems = useRef<Diagram[]>(items);
-	const startBox = useRef({ x: point.x, y: point.y, width, height });
+	const startBox = useRef({ x, y, width, height });
 
 	// --- 以下、図形選択関連処理 ---
 
@@ -321,21 +320,15 @@ const Group: React.FC<GroupProps> = ({
 
 	const transformGroupOutline = useCallback(
 		(changeItem?: Diagram) => {
-			const box = calcGroupBoxOfNoRotation(items, point, rotation, changeItem);
-			const leftTop = rotatePoint(
-				{ x: box.left, y: box.top },
-				point,
-				degreesToRadians(rotation),
-			);
-			const rightBottom = rotatePoint(
-				{ x: box.right, y: box.bottom },
-				point,
-				degreesToRadians(rotation),
-			);
+			const radians = degreesToRadians(rotation);
+			const box = calcGroupBoxOfNoRotation(items, x, y, rotation, changeItem);
+			const leftTop = rotatePoint(box.left, box.top, x, y, radians);
+			const rightBottom = rotatePoint(box.right, box.bottom, x, y, radians);
 			onTransform?.({
 				id,
 				startShape: {
-					point,
+					x,
+					y,
 					width,
 					height,
 					rotation,
@@ -343,10 +336,8 @@ const Group: React.FC<GroupProps> = ({
 					scaleY,
 				},
 				endShape: {
-					point: {
-						x: leftTop.x + (rightBottom.x - leftTop.x) / 2,
-						y: leftTop.y + (rightBottom.y - leftTop.y) / 2,
-					},
+					x: leftTop.x + (rightBottom.x - leftTop.x) / 2,
+					y: leftTop.y + (rightBottom.y - leftTop.y) / 2,
 					width: box.right - box.left,
 					height: box.bottom - box.top,
 					rotation,
@@ -355,7 +346,7 @@ const Group: React.FC<GroupProps> = ({
 				},
 			});
 		},
-		[onTransform, id, point, width, height, rotation, scaleX, scaleY, items],
+		[onTransform, id, x, y, width, height, rotation, scaleX, scaleY, items],
 	);
 
 	/**
@@ -375,9 +366,9 @@ const Group: React.FC<GroupProps> = ({
 
 			// ドラッグ開始時のグループの形状を記憶
 			startItems.current = items;
-			startBox.current = { x: point.x, y: point.y, width, height };
+			startBox.current = { x, y, width, height };
 		},
-		[onDragStart, point, width, height, isSelected, items],
+		[onDragStart, x, y, width, height, isSelected, items],
 	);
 
 	/**
@@ -395,18 +386,16 @@ const Group: React.FC<GroupProps> = ({
 
 			// グループ内の図形を再帰的に移動させる
 
-			const dx = e.endPoint.x - e.startPoint.x;
-			const dy = e.endPoint.y - e.startPoint.y;
+			const dx = e.endX - e.startX;
+			const dy = e.endY - e.startY;
 
 			const moveRecursive = (diagrams: Diagram[]) => {
 				const events: ItemableChangeEvent[] = [];
 				for (const item of diagrams) {
 					events.push({
 						...item,
-						point: {
-							x: item.point.x + dx,
-							y: item.point.y + dy,
-						},
+						x: item.x + dx,
+						y: item.y + dy,
 						items: isItemableData(item)
 							? moveRecursive(item.items ?? [])
 							: undefined,
@@ -418,10 +407,8 @@ const Group: React.FC<GroupProps> = ({
 
 			const event: ItemableChangeEvent = {
 				id,
-				point: {
-					x: startBox.current.x + dx,
-					y: startBox.current.y + dy,
-				},
+				x: startBox.current.x + dx,
+				y: startBox.current.y + dy,
 				items: moveRecursive(startItems.current),
 			};
 
@@ -438,7 +425,8 @@ const Group: React.FC<GroupProps> = ({
 				if (changeItem) {
 					transformGroupOutline({
 						...changeItem,
-						point: e.endPoint,
+						x: e.endX,
+						y: e.endY,
 					} as Diagram);
 				}
 			}
@@ -463,7 +451,7 @@ const Group: React.FC<GroupProps> = ({
 			if (changeItem) {
 				transformGroupOutline({
 					...changeItem,
-					...e,
+					...e.endShape,
 				} as Diagram);
 			}
 		},
@@ -471,9 +459,9 @@ const Group: React.FC<GroupProps> = ({
 	);
 
 	const handleTransformStart = useCallback(() => {
-		startBox.current = { x: point.x, y: point.y, width, height };
+		startBox.current = { x, y, width, height };
 		startItems.current = items;
-	}, [point, width, height, items]);
+	}, [x, y, width, height, items]);
 
 	const handleTransform = useCallback(
 		(e: DiagramTransformEvent) => {
@@ -485,16 +473,18 @@ const Group: React.FC<GroupProps> = ({
 				const events: ItemableChangeEvent[] = [];
 				for (const item of diagrams) {
 					const inversedItemCenter = rotatePoint(
-						item.point,
-						e.startShape.point,
+						item.x,
+						item.y,
+						e.startShape.x,
+						e.startShape.y,
 						degreesToRadians(-e.startShape.rotation),
 					);
 					const dx =
-						(inversedItemCenter.x - e.startShape.point.x) *
+						(inversedItemCenter.x - e.startShape.x) *
 						e.startShape.scaleX *
 						e.endShape.scaleX;
 					const dy =
-						(inversedItemCenter.y - e.startShape.point.y) *
+						(inversedItemCenter.y - e.startShape.y) *
 						e.startShape.scaleY *
 						e.endShape.scaleY;
 
@@ -502,12 +492,14 @@ const Group: React.FC<GroupProps> = ({
 					const newDy = dy * groupScaleY;
 
 					let newCenter = {
-						x: e.endShape.point.x + newDx,
-						y: e.endShape.point.y + newDy,
+						x: e.endShape.x + newDx,
+						y: e.endShape.y + newDy,
 					};
 					newCenter = rotatePoint(
-						newCenter,
-						e.endShape.point,
+						newCenter.x,
+						newCenter.y,
+						e.endShape.x,
+						e.endShape.y,
 						degreesToRadians(e.endShape.rotation),
 					);
 
@@ -517,7 +509,8 @@ const Group: React.FC<GroupProps> = ({
 
 						events.push({
 							...item,
-							point: newCenter,
+							x: newCenter.x,
+							y: newCenter.y,
 							width: item.width * groupScaleX,
 							height: item.height * groupScaleY,
 							rotation: newRotation,
@@ -530,7 +523,8 @@ const Group: React.FC<GroupProps> = ({
 					} else {
 						events.push({
 							...item,
-							point: newCenter,
+							x: newCenter.x,
+							y: newCenter.y,
 						});
 					}
 				}
@@ -594,7 +588,8 @@ const Group: React.FC<GroupProps> = ({
 			<Transformative
 				diagramId={id}
 				type="Group"
-				point={point}
+				x={x}
+				y={y}
 				width={width}
 				height={height}
 				rotation={rotation}

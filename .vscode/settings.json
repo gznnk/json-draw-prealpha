@@ -5,6 +5,6 @@
 		"quickfix.biome": "explicit"
 	},
 	"files.exclude": {
-		"**/__tests__": true
+		"**/__tests__": false
 	}
 }

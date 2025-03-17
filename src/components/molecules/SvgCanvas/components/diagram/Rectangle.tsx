@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
+import type { RectangleVertices } from "../../types/CoordinateTypes";
 import type {
 	ConnectPointData,
 	CreateDiagramProps,
@@ -48,17 +48,18 @@ export type RectangleProps = CreateDiagramProps<
  */
 const Rectangle: React.FC<RectangleProps> = ({
 	id,
-	point,
+	x,
+	y,
 	width,
 	height,
-	rotation = 0,
-	scaleX = 1,
-	scaleY = 1,
-	keepProportion = false,
-	fill = "transparent",
-	stroke = "black",
-	strokeWidth = "1px",
-	isSelected = false,
+	rotation,
+	scaleX,
+	scaleY,
+	keepProportion,
+	fill,
+	stroke,
+	strokeWidth,
+	isSelected,
 	items,
 	onDragStart,
 	onDrag,
@@ -70,6 +71,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onTransformEnd,
 	onConnect,
 }) => {
+	window.profiler.call(`Rectangle render: ${id}`);
+
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
 	// 変形中かのフラグ
@@ -86,18 +89,16 @@ const Rectangle: React.FC<RectangleProps> = ({
 		(type: ConnectPointMoveEventType, ownerShape: Shape) => {
 			const vertices = calcRectangleVertices(ownerShape);
 
-			for (const cp of (items as ConnectPointData[]) ?? []) {
-				const cPoint = (vertices as RectangleVertices)[
-					cp.name as keyof RectangleVertices
+			for (const connectPointData of (items as ConnectPointData[]) ?? []) {
+				const connectPoint = (vertices as RectangleVertices)[
+					connectPointData.name as keyof RectangleVertices
 				];
 
 				triggerConnectPointMove({
-					id: cp.id,
+					id: connectPointData.id,
 					type,
-					point: {
-						x: cPoint.x,
-						y: cPoint.y,
-					},
+					x: connectPoint.x,
+					y: connectPoint.y,
 					ownerId: id,
 					ownerShape,
 				});
@@ -115,7 +116,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 			// TODO: 簡潔に書きたい
 			triggerConnectPointsMove("moveStart", {
-				point: e.endPoint,
+				x: e.endX,
+				y: e.endY,
 				width,
 				height,
 				rotation,
@@ -142,7 +144,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
 			triggerConnectPointsMove("move", {
-				point: e.endPoint,
+				x: e.endX,
+				y: e.endY,
 				width,
 				height,
 				rotation,
@@ -163,7 +166,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 			onDragEnd?.(e);
 
 			triggerConnectPointsMove("moveEnd", {
-				point: e.endPoint,
+				x: e.endX,
+				y: e.endY,
 				width,
 				height,
 				rotation,
@@ -241,7 +245,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const dragProps = useDrag({
 		id,
 		type: "Rectangle",
-		point,
+		x,
+		y,
 		ref: svgRef,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
@@ -255,12 +260,14 @@ const Rectangle: React.FC<RectangleProps> = ({
 		scaleX,
 		scaleY,
 		degreesToRadians(rotation),
-		point.x,
-		point.y,
+		x,
+		y,
 	);
 
+	// TODO:
 	const ownerShape = {
-		point,
+		x,
+		y,
 		width,
 		height,
 		rotation,
@@ -292,7 +299,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 				<Transformative
 					diagramId={id}
 					type="Rectangle"
-					point={point}
+					x={x}
+					y={y}
 					width={width}
 					height={height}
 					rotation={rotation}
@@ -311,7 +319,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 						key={cp.id}
 						id={cp.id}
 						name={cp.name}
-						point={cp.point}
+						x={cp.x}
+						y={cp.y}
 						ownerId={id}
 						ownerShape={ownerShape}
 						visible={isHovered && !isDragging && !isTransformimg}
@@ -353,7 +362,8 @@ export default memo(Rectangle);
  * 短径データ作成
  */
 export const createRectangleData = ({
-	point,
+	x,
+	y,
 	width = 100,
 	height = 100,
 	rotation = 0,
@@ -364,7 +374,8 @@ export const createRectangleData = ({
 	stroke = "black",
 	strokeWidth = "1px",
 }: {
-	point: Point;
+	x: number;
+	y: number;
 	width?: number;
 	height?: number;
 	rotation?: number;
@@ -377,7 +388,8 @@ export const createRectangleData = ({
 }): RectangleData => {
 	// 接続ポイントを生成
 	const vertices = calcRectangleVertices({
-		point,
+		x,
+		y,
 		width,
 		height,
 		rotation,
@@ -387,19 +399,22 @@ export const createRectangleData = ({
 
 	const items: Diagram[] = [];
 	for (const key of Object.keys(vertices)) {
+		const point = vertices[key as keyof RectangleVertices];
 		items.push({
 			id: newId(),
 			type: "ConnectPoint",
-			point: vertices[key as keyof RectangleVertices],
+			x: point.x,
+			y: point.y,
 			isSelected: false,
-			name: key, // TODO: 今んとこ使ってない
+			name: key,
 		});
 	}
 
 	return {
 		id: newId(),
 		type: "Rectangle",
-		point,
+		x,
+		y,
 		width,
 		height,
 		rotation,

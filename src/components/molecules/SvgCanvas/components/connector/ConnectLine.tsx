@@ -21,7 +21,7 @@ import type {
 import type { ConnectPointMoveEvent } from "../../types/EventTypes";
 
 // SvgCanvas関連関数をインポート
-import { calcRadian, radiansToDegrees } from "../../functions/Math";
+import { calcRadians, radiansToDegrees } from "../../functions/Math";
 import { isShape, newId } from "../../functions/Diagram";
 
 /**
@@ -41,7 +41,8 @@ type ConnectLineProps = CreateDiagramProps<
  */
 const ConnectLine: React.FC<ConnectLineProps> = ({
 	id,
-	point,
+	x,
+	y,
 	width,
 	height,
 	rotation,
@@ -111,8 +112,10 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 				// 移動開始時の接続ポイントの向きを保持
 				startDirection.current = getLineDirection(
-					event.ownerShape.point,
-					event.point,
+					event.ownerShape.x,
+					event.ownerShape.y,
+					event.x,
+					event.y,
 				);
 
 				// 垂直と水平の線のみかどうかを判定
@@ -122,8 +125,9 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					}
 
 					const prev = _items[idx - 1];
-					const direction = calcRadian(prev.point, item.point);
-					const degrees = radiansToDegrees(direction);
+					const degrees = radiansToDegrees(
+						calcRadians(prev.x, prev.y, item.x, item.y),
+					);
 					return degrees % 90 === 0;
 				});
 
@@ -133,8 +137,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					initialItems.current.some(
 						(item, idx) =>
 							item.id !== startItems.current[idx].id ||
-							item.point.x !== startItems.current[idx].point.x ||
-							item.point.y !== startItems.current[idx].point.y,
+							item.x !== startItems.current[idx].x ||
+							item.y !== startItems.current[idx].y,
 					);
 				return;
 			}
@@ -149,12 +153,12 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					// 一番最初の描画時からitemsが変更されている場合は、
 					// 接続ポイントとその隣の点のみ位置を変更する
 					const p = _startItems[foundIdx];
-					const dx = event.point.x - p.point.x;
-					const dy = event.point.y - p.point.y;
+					const dx = event.x - p.x;
+					const dy = event.y - p.y;
 					const newItems = _startItems.map((item, idx) => {
 						// 接続ポイントの移動にあわせて接続線側の点を移動
 						if (item.id === event.id) {
-							return { ...item, point: event.point };
+							return { ...item, x: event.x, y: event.y };
 						}
 
 						// 移動した点の隣の点かどうか
@@ -172,17 +176,15 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 							// 接続線が垂直と水平の線のみは、それが維持されるよう２番目の点も移動する
 
 							// ２点間の角度を計算
-							const direction = calcRadian(p.point, item.point);
+							const direction = calcRadians(p.x, p.y, item.x, item.y);
 							const degrees = radiansToDegrees(direction);
 							const isVertical = (degrees + 405) % 180 > 90;
 
 							// ２点間の線が水平であればx座標のみ、垂直であればy座標のみ移動
 							return {
 								...item,
-								point: {
-									x: !isVertical ? item.point.x + dx : item.point.x,
-									y: isVertical ? item.point.y + dy : item.point.y,
-								},
+								x: !isVertical ? item.x + dx : item.x,
+								y: isVertical ? item.y + dy : item.y,
 							};
 						}
 
@@ -214,10 +216,12 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 					// 最適な接続線を再計算
 					const newPath = createBestConnectPath(
-						event.point,
+						event.x,
+						event.y,
 						startDirection.current,
 						event.ownerShape,
-						oppositePoint.point,
+						oppositePoint.x,
+						oppositePoint.y,
 						oppositeOwnerShape,
 					);
 
@@ -227,7 +231,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 							id: event.type === "moveEnd" ? newId() : `${_id}-${idx}`,
 							name: `cp-${idx}`,
 							type: "PathPoint",
-							point: p,
+							x: p.x,
+							y: p.y,
 						}),
 					) as Diagram[];
 					// 両端の点のIDは維持する
@@ -267,7 +272,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	return (
 		<Path
 			id={id}
-			point={point}
+			x={x}
+			y={y}
 			width={width}
 			height={height}
 			rotation={rotation}
