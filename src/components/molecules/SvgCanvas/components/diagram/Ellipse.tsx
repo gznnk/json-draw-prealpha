@@ -3,11 +3,7 @@ import type React from "react";
 import { memo, useCallback, useRef } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type {
-	DiagramBaseProps,
-	EllipseData,
-	TransformativeProps,
-} from "../../types/DiagramTypes";
+import type { CreateDiagramProps, EllipseData } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
 	DiagramTransformEvent,
@@ -20,12 +16,17 @@ import Transformative from "../core/Transformative";
 import { useDrag } from "../../hooks/dragHooks";
 
 // SvgCanvas関連関数をインポート
-import { degreesToRadians } from "../../functions/Math";
 import { createSvgTransform } from "../../functions/Diagram";
+import { degreesToRadians } from "../../functions/Math";
 
-export type EllipseProps = DiagramBaseProps &
-	TransformativeProps &
-	Omit<EllipseData, "type">;
+export type EllipseProps = CreateDiagramProps<
+	EllipseData,
+	{
+		selectable: true;
+		transformative: true;
+		connectable: true;
+	}
+>;
 
 const Ellipse: React.FC<EllipseProps> = ({
 	id,

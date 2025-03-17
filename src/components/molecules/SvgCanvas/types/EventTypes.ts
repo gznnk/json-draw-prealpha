@@ -9,28 +9,6 @@ import type {
 } from "./DiagramTypes";
 
 /**
- * 図形の変形イベント
- */
-export type DiagramTransformEvent = {
-	id: string;
-	// type: "transformStart" | "transform" | "transformEnd";
-	startShape: Shape;
-	endShape: Shape;
-};
-
-// TODO: なんかいい名前
-export type GroupDataChangeEvent = {
-	id: string;
-	point?: Point;
-	width?: number;
-	height?: number;
-	rotation?: number;
-	scaleX?: number;
-	scaleY?: number;
-	items?: Diagram[];
-};
-
-/**
  * 図形のポインターダウンイベント
  */
 export type DiagramPointerEvent = {
@@ -86,6 +64,31 @@ export type DiagramSelectEvent = {
 	isMultiSelect?: boolean;
 };
 
+/**
+ * 図形の変形イベント
+ */
+export type DiagramTransformEvent = {
+	id: string;
+	// type: "transformStart" | "transform" | "transformEnd";
+	startShape: Shape;
+	endShape: Shape;
+};
+
+// TODO: なんかいい名前
+export type GroupDataChangeEvent = {
+	id: string;
+	point?: Point;
+	width?: number;
+	height?: number;
+	rotation?: number;
+	scaleX?: number;
+	scaleY?: number;
+	items?: Diagram[];
+};
+
+/**
+ * 図形の接続イベント
+ */
 export type DiagramConnectEvent = {
 	startOwnerId: string;
 	points: PathPointData[];

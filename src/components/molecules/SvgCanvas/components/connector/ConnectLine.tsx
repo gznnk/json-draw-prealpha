@@ -13,10 +13,9 @@ import { SvgCanvasContext } from "../../SvgCanvas";
 
 // SvgCanvas関連型定義をインポート
 import type {
+	CreateDiagramProps,
 	Diagram,
 	ConnectLineData,
-	DiagramBaseProps,
-	TransformativeProps,
 } from "../../types/DiagramTypes";
 import type {
 	ConnectPointMoveEvent,
@@ -27,11 +26,15 @@ import type {
 import { calcRadian, radiansToDegrees } from "../../functions/Math";
 import { isShape, newId } from "../../functions/Diagram";
 
-type ConnectLineProps = DiagramBaseProps &
-	TransformativeProps &
-	Omit<ConnectLineData, "type"> & {
-		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
-	};
+type ConnectLineProps = CreateDiagramProps<
+	ConnectLineData,
+	{
+		selectable: true;
+		transformative: true;
+	}
+> & {
+	onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
+};
 
 const ConnectLine: React.FC<ConnectLineProps> = ({
 	id,

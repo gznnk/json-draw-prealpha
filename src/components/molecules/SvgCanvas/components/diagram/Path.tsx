@@ -10,11 +10,10 @@ import Group from "./Group";
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
 import type {
+	CreateDiagramProps,
 	Diagram,
-	DiagramBaseProps,
 	PathData,
 	PathPointData,
-	TransformativeProps,
 } from "../../types/DiagramTypes";
 import type {
 	DiagramClickEvent,
@@ -37,11 +36,6 @@ import {
 	rotatePoint,
 } from "../../functions/Math";
 
-// ユーティリティをインポート
-// import { getLogger } from "../../../../../utils/Logger";
-
-// const logger = getLogger("Path");
-
 const createDValue = (items: Diagram[]) => {
 	let d = "";
 	for (let i = 0; i < items.length; i++) {
@@ -51,15 +45,22 @@ const createDValue = (items: Diagram[]) => {
 	return d;
 };
 
-export type PathProps = DiagramBaseProps &
-	TransformativeProps &
-	Omit<PathData, "type"> & {
-		dragEnabled?: boolean;
-		transformEnabled?: boolean;
-		segmentDragEnabled?: boolean;
-		newVertexEnabled?: boolean;
-		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
-	};
+/**
+ * 折れ線コンポーネントのプロパティ
+ */
+export type PathProps = CreateDiagramProps<
+	PathData,
+	{
+		selectable: true;
+		transformative: true;
+	}
+> & {
+	dragEnabled?: boolean;
+	transformEnabled?: boolean;
+	segmentDragEnabled?: boolean;
+	newVertexEnabled?: boolean;
+	onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
+};
 
 /**
  * 折れ線コンポーネント.
@@ -330,7 +331,7 @@ export default memo(Path);
 /**
  * 折れ線の頂点プロパティ
  */
-type PathPointProps = DiagramBaseProps & Omit<PathPointData, "type">;
+type PathPointProps = CreateDiagramProps<PathPointData, object>;
 
 /**
  * 折れ線の頂点コンポーネント

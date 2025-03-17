@@ -49,7 +49,7 @@ export type DragProps = {
 	onDragOver?: (e: DiagramDragDropEvent) => void;
 	onDragLeave?: (e: DiagramDragDropEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
-	onHoverChange?: (e: DiagramHoverEvent) => void;
+	onHover?: (e: DiagramHoverEvent) => void;
 	dragPositioningFunction?: (point: Point) => Point;
 };
 
@@ -72,7 +72,7 @@ export type DragProps = {
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragOver] ドラッグオーバー時のイベントハンドラ
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] ドラッグリーブ時のイベントハンドラ
  * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] ドロップ時のイベントハンドラ
- * @param {(e: DiagramHoverEvent) => void} [props.onHoverChange] ホバー変更時のイベントハンドラ
+ * @param {(e: DiagramHoverEvent) => void} [props.onHover] ホバー変更時のイベントハンドラ
  * @param {(point: Point) => Point} [props.dragPositioningFunction] ドラッグ位置変換関数
  */
 export const useDrag = (props: DragProps) => {
@@ -92,7 +92,7 @@ export const useDrag = (props: DragProps) => {
 		onDragOver,
 		onDragLeave,
 		onDrop,
-		onHoverChange,
+		onHover,
 		dragPositioningFunction,
 	} = props;
 
@@ -427,7 +427,7 @@ export const useDrag = (props: DragProps) => {
 	 */
 	const handlePointerEnter = () => {
 		// ホバー時のイベント発火
-		onHoverChange?.({
+		onHover?.({
 			id,
 			isHovered: true,
 		});
@@ -438,7 +438,7 @@ export const useDrag = (props: DragProps) => {
 	 */
 	const handlePointerLeave = () => {
 		// ホバー解除時のイベント発火
-		onHoverChange?.({
+		onHover?.({
 			id,
 			isHovered: false,
 		});

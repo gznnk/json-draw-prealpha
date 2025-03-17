@@ -6,6 +6,7 @@ import type React from "react";
 // SvgCanvas関連型定義をインポート
 import type { Point } from "./CoordinateTypes";
 import type {
+	ConnectPointMoveEvent,
 	DiagramClickEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
@@ -101,7 +102,7 @@ export type FillableData = {
 /**
  * 図形の型作成オプション
  */
-type DiagramOptions = {
+type DiagramDataOptions = {
 	selectable?: boolean;
 	transformative?: boolean;
 	itemable?: boolean;
@@ -118,7 +119,7 @@ type Empty = object;
 /**
  * 図形のデータ型を作成する型
  */
-type CreateDiagramType<T extends DiagramOptions> = DiagramBaseData &
+type CreateDiagramType<T extends DiagramDataOptions> = DiagramBaseData &
 	(T["selectable"] extends true ? SelectableData : Empty) &
 	(T["transformative"] extends true ? TransformativeData : Empty) &
 	(T["itemable"] extends true ? ItemableData : Empty) &
@@ -231,7 +232,7 @@ export type Diagram = DiagramCombined & {
 };
 
 /**
- * 図形のプロパティ
+ * 図形の基本プロパティ
  */
 export type DiagramBaseProps = {
 	onDragStart?: (e: DiagramDragEvent) => void;
@@ -239,9 +240,14 @@ export type DiagramBaseProps = {
 	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
+	onHover?: (e: DiagramHoverEvent) => void;
+};
+
+/**
+ * 選択可能な図形のプロパティ
+ */
+export type SelectableProps = {
 	onSelect?: (e: DiagramSelectEvent) => void;
-	onHoverChange?: (e: DiagramHoverEvent) => void;
-	onConnect?: (e: DiagramConnectEvent) => void;
 };
 
 /**
@@ -252,6 +258,37 @@ export type TransformativeProps = {
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onTransformEnd?: (e: DiagramTransformEvent) => void;
 };
+
+/**
+ * 接続可能な図形のプロパティ
+ */
+export type ConnectableProps = {
+	onConnect?: (e: DiagramConnectEvent) => void;
+};
+
+/**
+ * 図形のプロパティ作成オプション
+ */
+type DiagramPropsOptions = {
+	selectable?: boolean;
+	transformative?: boolean;
+	itemable?: boolean;
+	connectable?: boolean;
+	bordered?: boolean;
+	fillable?: boolean;
+};
+
+/**
+ * 図形のデータ型を作成する型
+ */
+export type CreateDiagramProps<T, U extends DiagramPropsOptions> = Omit<
+	T,
+	"type"
+> &
+	DiagramBaseProps &
+	(U["selectable"] extends true ? SelectableProps : Empty) &
+	(U["transformative"] extends true ? TransformativeProps : Empty) &
+	(U["connectable"] extends true ? ConnectableProps : Empty);
 
 /**
  * 図形の種類とコンポーネントのマッピング

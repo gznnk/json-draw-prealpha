@@ -7,10 +7,9 @@ import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
 import type {
 	ConnectPointData,
 	Diagram,
-	DiagramBaseProps,
 	RectangleData,
 	Shape,
-	TransformativeProps,
+	CreateDiagramProps,
 } from "../../types/DiagramTypes";
 import type {
 	DiagramDragEvent,
@@ -35,9 +34,14 @@ import { calcRectangleVertices, degreesToRadians } from "../../functions/Math";
 /**
  * 四角形コンポーネントのプロパティ
  */
-export type RectangleProps = DiagramBaseProps &
-	TransformativeProps &
-	Omit<RectangleData, "type">;
+export type RectangleProps = CreateDiagramProps<
+	RectangleData,
+	{
+		selectable: true;
+		transformative: true;
+		connectable: true;
+	}
+>;
 
 /**
  * 四角形コンポーネント
@@ -61,10 +65,10 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onDragEnd,
 	onClick,
 	onSelect,
-	onConnect,
 	onTransformStart,
 	onTransform,
 	onTransformEnd,
+	onConnect,
 }) => {
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
@@ -228,7 +232,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	/**
 	 * ホバー状態変更イベントハンドラ
 	 */
-	const handleHoverChange = useCallback((e: DiagramHoverEvent) => {
+	const handleHover = useCallback((e: DiagramHoverEvent) => {
 		setIsHovered(e.isHovered);
 	}, []);
 
@@ -242,7 +246,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 		onDragStart: handleDragStart,
 		onDrag: handleDrag,
 		onDragEnd: handleDragEnd,
-		onHoverChange: handleHoverChange,
+		onHover: handleHover,
 	});
 
 	const rectTransform = createSvgTransform(

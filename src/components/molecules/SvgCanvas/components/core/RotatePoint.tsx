@@ -31,7 +31,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 	onDragOver,
 	onDragLeave,
 	onDrop,
-	onHoverChange,
+	onHover,
 	dragPositioningFunction,
 	rotation = 0,
 	color = "rgba(100, 149, 237, 0.8)",
@@ -53,7 +53,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 		onDragOver,
 		onDragLeave,
 		onDrop,
-		onHoverChange,
+		onHover,
 		dragPositioningFunction,
 	});
 

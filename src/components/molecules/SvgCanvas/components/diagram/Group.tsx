@@ -4,10 +4,9 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../../types/CoordinateTypes";
 import type {
+	CreateDiagramProps,
 	Diagram,
 	GroupData,
-	DiagramBaseProps,
-	TransformativeProps,
 } from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
@@ -22,8 +21,8 @@ import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
 import {
-	isSelectableData,
 	isItemableData,
+	isSelectableData,
 	isTransformativeData,
 } from "../../functions/Diagram";
 import { degreesToRadians, nanToZero, rotatePoint } from "../../functions/Math";
@@ -213,11 +212,15 @@ const calcGroupBoxOfNoRotation = (
  * @property {Diagram[]} [items] グループ内の図形リスト
  * @property {React.Ref<DiagramRef>} [ref] 親グループのドラッグ・リサイズ時に、親グループ側から実行してもらう関数への参照
  */
-export type GroupProps = DiagramBaseProps &
-	TransformativeProps &
-	Omit<GroupData, "type"> & {
-		onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
-	};
+export type GroupProps = CreateDiagramProps<
+	GroupData,
+	{
+		selectable: true;
+		transformative: true;
+	}
+> & {
+	onGroupDataChange?: (e: GroupDataChangeEvent) => void; // TODO: 共通化
+};
 
 /**
  * グループコンポーネント

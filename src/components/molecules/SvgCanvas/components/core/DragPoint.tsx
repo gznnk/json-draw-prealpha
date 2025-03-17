@@ -59,7 +59,7 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragOver] ドラッグオーバー時のイベントハンドラ
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] ドラッグリーブ時のイベントハンドラ
  * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] ドロップ時のイベントハンドラ
- * @param {(e: DiagramHoverEvent) => void} [props.onHoverChange] ホバー変更時のイベントハンドラ
+ * @param {(e: DiagramHoverEvent) => void} [props.onHover] ホバー変更時のイベントハンドラ
  * @param {(point: Point) => Point} [props.dragPositioningFunction] ドラッグ位置変換関数
  * @returns {JSX.Element} ドラッグポイントコンポーネント
  */
@@ -75,7 +75,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 	onDragOver,
 	onDragLeave,
 	onDrop,
-	onHoverChange,
+	onHover,
 	dragPositioningFunction,
 	radius = 5,
 	stroke = "rgba(100, 149, 237, 0.8)",
@@ -101,7 +101,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 		onDragOver,
 		onDragLeave,
 		onDrop,
-		onHoverChange,
+		onHover,
 		dragPositioningFunction,
 	});
 

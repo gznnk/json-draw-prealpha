@@ -6,6 +6,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import type { Box, Point } from "../../types/CoordinateTypes";
 import type {
 	ConnectPointData,
+	CreateDiagramProps,
 	Diagram,
 	PathPointData,
 	Shape,
@@ -57,7 +58,10 @@ export const triggerConnectPointMove = (e: ConnectPointMoveEvent) => {
 	);
 };
 
-type ConnectPointProps = Omit<ConnectPointData, "type"> & {
+type ConnectPointProps = CreateDiagramProps<
+	ConnectPointData,
+	{ connectable: true }
+> & {
 	ownerId: string;
 	ownerShape: Shape;
 	visible: boolean;
@@ -240,7 +244,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	 * @param {DiagramHoverEvent} e ホバー状態変更イベント
 	 * @returns {void}
 	 */
-	const handleHoverChange = useCallback((e: DiagramHoverEvent) => {
+	const handleHover = useCallback((e: DiagramHoverEvent) => {
 		setIsHovered(e.isHovered);
 	}, []);
 
@@ -326,7 +330,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}
 				onDrop={handleDrop}
-				onHoverChange={handleHoverChange}
+				onHover={handleHover}
 			/>
 			{isDragging && (
 				<Path
@@ -354,7 +358,6 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 export default memo(ConnectPoint);
 
 // 以下内部型定義
-// TODO: keyがわかりにくいので変更
 type ConnectionEvent = {
 	type: "connecting" | "connect" | "disconnect";
 	startPointId: string;
