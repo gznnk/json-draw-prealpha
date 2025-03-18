@@ -26,22 +26,10 @@ if (!window.profiler) {
 }
 
 const testItems1 = [
-	{
-		id: "1",
-		type: "Rectangle",
-		x: 0,
-		y: 0,
-		width: 100,
-		height: 100,
-		rotation: radiansToDegrees(0),
-		scaleX: 1,
-		scaleY: 1,
-		fill: "transparent",
-		stroke: "black",
-		strokeWidth: "1px",
-		keepProportion: false,
-		isSelected: false,
-	},
+	createRectangleData({
+		x: 100,
+		y: 100,
+	}),
 	{
 		id: "2",
 		type: "Ellipse",
@@ -71,22 +59,10 @@ const testItems1 = [
 		keepProportion: true,
 		isSelected: false,
 		items: [
-			{
-				id: "3",
-				type: "Rectangle",
+			createRectangleData({
 				x: 200,
 				y: 200,
-				width: 100,
-				height: 100,
-				rotation: radiansToDegrees(0),
-				scaleX: 1,
-				scaleY: 1,
-				fill: "transparent",
-				stroke: "black",
-				strokeWidth: "1px",
-				keepProportion: false,
-				isSelected: false,
-			},
+			}),
 			{
 				id: "4",
 				type: "Ellipse",
@@ -103,22 +79,10 @@ const testItems1 = [
 				keepProportion: false,
 				isSelected: false,
 			},
-			{
-				id: "5",
-				type: "Rectangle",
+			createRectangleData({
 				x: 300,
 				y: 300,
-				width: 100,
-				height: 100,
-				rotation: radiansToDegrees(0),
-				scaleX: 1,
-				scaleY: 1,
-				fill: "transparent",
-				stroke: "black",
-				strokeWidth: "1px",
-				keepProportion: false,
-				isSelected: false,
-			},
+			}),
 			{
 				id: "6",
 				type: "Ellipse",
@@ -151,22 +115,10 @@ const testItems1 = [
 				keepProportion: true,
 				isSelected: false,
 				items: [
-					{
-						id: "7",
-						type: "Rectangle",
+					createRectangleData({
 						x: 400,
 						y: 400,
-						width: 100,
-						height: 100,
-						rotation: radiansToDegrees(0),
-						scaleX: 1,
-						scaleY: 1,
-						fill: "transparent",
-						stroke: "black",
-						strokeWidth: "1px",
-						keepProportion: false,
-						isSelected: false,
-					},
+					}),
 					{
 						id: "8",
 						type: "Ellipse",
@@ -183,22 +135,10 @@ const testItems1 = [
 						keepProportion: false,
 						isSelected: false,
 					},
-					{
-						id: "9",
-						type: "Rectangle",
+					createRectangleData({
 						x: 500,
 						y: 500,
-						width: 100,
-						height: 100,
-						rotation: radiansToDegrees(0),
-						scaleX: 1,
-						scaleY: 1,
-						fill: "transparent",
-						stroke: "black",
-						strokeWidth: "1px",
-						keepProportion: false,
-						isSelected: false,
-					},
+					}),
 				],
 			},
 			{
@@ -217,38 +157,14 @@ const testItems1 = [
 				keepProportion: true,
 				isSelected: false,
 				items: [
-					{
-						id: "10",
-						type: "Rectangle",
+					createRectangleData({
 						x: 400,
 						y: 200,
-						width: 100,
-						height: 100,
-						rotation: radiansToDegrees(0),
-						scaleX: 1,
-						scaleY: 1,
-						fill: "transparent",
-						stroke: "black",
-						strokeWidth: "1px",
-						keepProportion: false,
-						isSelected: false,
-					},
-					{
-						id: "11",
-						type: "Rectangle",
+					}),
+					createRectangleData({
 						x: 500,
 						y: 300,
-						width: 100,
-						height: 100,
-						rotation: 0,
-						scaleX: 1,
-						scaleY: 1,
-						fill: "transparent",
-						stroke: "black",
-						strokeWidth: "1px",
-						keepProportion: false,
-						isSelected: false,
-					},
+					}),
 				],
 			},
 		],
@@ -595,7 +511,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems4);
+	} = useSvgCanvas(testItems1);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);

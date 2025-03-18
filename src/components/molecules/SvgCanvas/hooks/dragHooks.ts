@@ -597,6 +597,9 @@ const isPointerOver = (
 	clientY: number,
 ): boolean => {
 	const svgCanvas = ref.current?.ownerSVGElement as SVGSVGElement;
+	if (!svgCanvas) {
+		return false;
+	}
 	const svgPoint = svgCanvas.createSVGPoint();
 
 	if (svgPoint) {

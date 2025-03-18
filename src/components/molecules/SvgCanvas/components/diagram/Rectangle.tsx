@@ -1,6 +1,6 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { RectangleVertices } from "../../types/CoordinateTypes";
@@ -61,6 +61,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	strokeWidth,
 	isSelected,
 	items,
+	showConnectPoints = true,
 	onDragStart,
 	onDrag,
 	onDragEnd,
@@ -87,9 +88,19 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 */
 	const triggerConnectPointsMove = (
 		type: ConnectPointMoveEventType,
-		ownerShape: Shape,
+		ownerShape: Partial<Shape>,
 	) => {
-		const vertices = calcRectangleVertices(ownerShape);
+		const newShape = {
+			x,
+			y,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+			...ownerShape,
+		};
+		const vertices = calcRectangleVertices(newShape);
 
 		for (const connectPointData of (items as ConnectPointData[]) ?? []) {
 			const connectPoint = (vertices as RectangleVertices)[
@@ -102,7 +113,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 				x: connectPoint.x,
 				y: connectPoint.y,
 				ownerId: id,
-				ownerShape,
+				ownerShape: newShape,
 			});
 		}
 	};
@@ -111,11 +122,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 	const refBusVal = {
 		// プロパティ
 		id,
-		width,
-		height,
-		rotation,
-		scaleX,
-		scaleY,
 		isSelected,
 		onDragStart,
 		onDrag,
@@ -134,27 +140,13 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 * 四角形のドラッグ開始イベントハンドラ
 	 */
 	const handleDragStart = useCallback((e: DiagramDragEvent) => {
-		const {
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
-			onDragStart,
-			triggerConnectPointsMove,
-		} = refBus.current;
+		const { onDragStart, triggerConnectPointsMove } = refBus.current;
 
 		setIsDragging(true);
 
-		// TODO: 簡潔に書きたい
 		triggerConnectPointsMove("moveStart", {
 			x: e.endX,
 			y: e.endY,
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
 		});
 
 		onDragStart?.(e);
@@ -164,24 +156,11 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 * 四角形のドラッグ中イベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const {
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
-			onDrag,
-			triggerConnectPointsMove,
-		} = refBus.current;
+		const { onDrag, triggerConnectPointsMove } = refBus.current;
 
 		triggerConnectPointsMove("move", {
 			x: e.endX,
 			y: e.endY,
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
 		});
 
 		onDrag?.(e);
@@ -191,24 +170,11 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 * 四角形のドラッグ完了イベントハンドラ
 	 */
 	const handleDragEnd = useCallback((e: DiagramDragEvent) => {
-		const {
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
-			onDragEnd,
-			triggerConnectPointsMove,
-		} = refBus.current;
+		const { onDragEnd, triggerConnectPointsMove } = refBus.current;
 
 		triggerConnectPointsMove("moveEnd", {
 			x: e.endX,
 			y: e.endY,
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
 		});
 
 		onDragEnd?.(e);
@@ -280,16 +246,24 @@ const Rectangle: React.FC<RectangleProps> = ({
 		onHover: handleHover,
 	});
 
-	// TODO:
-	const ownerShape = {
-		x,
-		y,
-		width,
-		height,
-		rotation,
-		scaleX,
-		scaleY,
-	};
+	// memo化によりConnectPointの再描画を抑制
+	// keyで分解してばらばらにpropsで渡すと、各ConnectPoint側それぞれで各keyに対して
+	// 比較処理が走り非効率なので、ここでまとめてShapeの差異を検知する
+	const ownerShape = useMemo(
+		() => ({
+			x,
+			y,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		}),
+		[x, y, width, height, rotation, scaleX, scaleY],
+	);
+
+	const doShowConnectPoints =
+		showConnectPoints && !isSelected && !isDragging && !isTransformimg;
 
 	return (
 		<>
@@ -335,7 +309,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					onTransformEnd={handleTransformEnd}
 				/>
 			)}
-			{!isSelected &&
+			{doShowConnectPoints &&
 				(items as ConnectPointData[])?.map((cp) => (
 					<ConnectPoint
 						key={cp.id}

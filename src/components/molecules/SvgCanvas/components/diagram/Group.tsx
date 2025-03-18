@@ -9,6 +9,7 @@ import type {
 } from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
+	DiagramConnectEvent,
 	DiagramDragEvent,
 	DiagramSelectEvent,
 	DiagramTransformEvent,
@@ -35,6 +36,7 @@ export type GroupProps = CreateDiagramProps<
 		selectable: true;
 		transformative: true;
 		itemable: true;
+		connectable: true;
 	}
 >;
 
@@ -53,16 +55,22 @@ const Group: React.FC<GroupProps> = ({
 	keepProportion,
 	isSelected,
 	items,
+	showConnectPoints = true,
 	onDragStart,
 	onDrag,
 	onDragEnd,
 	onClick,
 	onSelect,
 	onTransform,
+	onTransformEnd,
 	onItemableChange,
+	onConnect,
 }) => {
 	// グループ全体のドラッグ中かどうかのフラグ（このグループが選択中でかつドラッグ中の場合のみtrueにする）
 	const [isDragging, setIsDragging] = useState(false);
+	// 変形中かのフラグ
+	const [isTransformimg, setIsTransforming] = useState(false);
+
 	// グループ連続選択フラグ。グループ連続選択とは、グループ内の図形（同じ図形でなくてよい）を連続して選択する操作のこと。
 	// このグループが選択中でかつ再度グループ内の図形でポインター押下された場合のみtrueにする
 	const isSequentialSelection = useRef(false);
@@ -121,7 +129,9 @@ const Group: React.FC<GroupProps> = ({
 		onClick,
 		onSelect,
 		onTransform,
+		onTransformEnd,
 		onItemableChange,
+		onConnect,
 		// 内部変数・内部関数
 		isDragging,
 		transformGroupOutline,
@@ -287,7 +297,7 @@ const Group: React.FC<GroupProps> = ({
 	 */
 	const handleChildDiagramTransfromEnd = useCallback(
 		(e: DiagramTransformEvent) => {
-			const { items, transformGroupOutline } = refBus.current;
+			const { items, onTransformEnd, transformGroupOutline } = refBus.current;
 
 			// アウトラインの更新
 			const changeItem = getChildDiagramById(items, e.id);
@@ -297,6 +307,8 @@ const Group: React.FC<GroupProps> = ({
 					...e.endShape,
 				} as Diagram);
 			}
+
+			onTransformEnd?.(e);
 		},
 		[],
 	);
@@ -320,14 +332,23 @@ const Group: React.FC<GroupProps> = ({
 	}, []);
 
 	/**
+	 * グループ内の図形の接続イベントハンドラ
+	 */
+	const handleChildDiagramConnect = useCallback((e: DiagramConnectEvent) => {
+		const { onConnect } = refBus.current;
+		onConnect?.(e);
+	}, []);
+
+	/**
 	 * グループの変形開始イベントハンドラ
 	 */
 	const handleTransformStart = useCallback(() => {
+		setIsTransforming(true);
+
 		const { x, y, width, height, items } = refBus.current;
 
 		startBox.current = { x, y, width, height };
 		startItems.current = items;
-		// TODO: 伝番させる
 	}, []);
 
 	const handleTransform = useCallback((e: DiagramTransformEvent) => {
@@ -410,8 +431,12 @@ const Group: React.FC<GroupProps> = ({
 	}, []);
 
 	const handleTransformEnd = useCallback((_e: DiagramTransformEvent) => {
+		setIsTransforming(false);
 		// TODO: 伝番させる
 	}, []);
+
+	const doShowConnectPoints =
+		showConnectPoints && !isDragging && !isTransformimg;
 
 	// グループ内の図形の作成
 	const children = items.map((item) => {
@@ -419,14 +444,16 @@ const Group: React.FC<GroupProps> = ({
 		const props = {
 			...item,
 			key: item.id,
+			showConnectPoints: doShowConnectPoints,
 			onClick: handleChildDiagramClick,
+			onSelect: handleChildDiagramSelect,
 			onDragStart: handleChildDiagramDragStart,
 			onDrag: handleChildDiagramDrag,
 			onDragEnd: handleChildDiagramDragEnd,
 			onTransform: handleChildDiagramTransfrom,
 			onTransformEnd: handleChildDiagramTransfromEnd,
 			onItemableChange: handleChildItemableChange,
-			onSelect: handleChildDiagramSelect,
+			onConnect: handleChildDiagramConnect,
 		};
 
 		return React.createElement(itemType, props);
@@ -605,9 +632,13 @@ const calcGroupBoxOfNoRotation = (
 	let right = Number.NEGATIVE_INFINITY;
 
 	for (const item of items) {
-		if (isItemableData(item)) {
+		// TODO: いけてない。ConnectPointは別配列でもつ？
+		const itemItems = isItemableData(item)
+			? (item.items ?? []).filter((i) => i.type !== "ConnectPoint")
+			: [];
+		if (itemItems.length > 0) {
 			const groupBox = calcGroupBoxOfNoRotation(
-				item.items ?? [],
+				itemItems,
 				groupCenterX,
 				groupCenterY,
 				groupRotation,

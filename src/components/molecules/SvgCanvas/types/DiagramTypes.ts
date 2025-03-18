@@ -266,6 +266,7 @@ export type ItemableProps = {
  * 接続可能な図形のプロパティ
  */
 export type ConnectableProps = {
+	showConnectPoints?: boolean;
 	onConnect?: (e: DiagramConnectEvent) => void;
 };
 
