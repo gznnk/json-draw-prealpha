@@ -176,6 +176,9 @@ const testItems1 = [
 		y: 100,
 		width: 100,
 		height: 100,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
 		stroke: "black",
 		strokeWidth: "1px",
 		keepProportion: false,
@@ -496,7 +499,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems1);
+	} = useSvgCanvas(testItems4);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);

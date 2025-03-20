@@ -126,7 +126,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				return;
 			}
 
-			if (event.type === "Start") {
+			if (event.eventType === "Start") {
 				// 移動開始時のitemsを保持
 				startItems.current = items;
 
@@ -213,7 +213,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 					// 子図形の変更イベントを発火
 					onItemableChange?.({
-						type: event.type,
+						eventType: event.eventType,
 						id,
 						items: newItems,
 					});
@@ -249,7 +249,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					// 接続線の点のデータを作成
 					const newItems = (foundIdx === 0 ? newPath : newPath.reverse()).map(
 						(p, idx) => ({
-							id: event.type === "End" ? newId() : `${id}-${idx}`,
+							id: event.eventType === "End" ? newId() : `${id}-${idx}`,
 							name: `cp-${idx}`,
 							type: "PathPoint",
 							x: p.x,
@@ -262,12 +262,12 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 					// 子図形の変更イベントを発火
 					onItemableChange?.({
-						type: event.type,
+						eventType: event.eventType,
 						id,
 						items: newItems,
 					});
 
-					if (event.type === "End") {
+					if (event.eventType === "End") {
 						startItems.current = [];
 						if (!_isItemsChanged) {
 							// 一番最初の描画時からitemsが変更されていない場合は、
