@@ -1,6 +1,7 @@
 // イベント型定義
 
 import type {
+	ConnectPointData,
 	Diagram,
 	DiagramType,
 	PathPointData,
@@ -90,6 +91,7 @@ export type ItemableChangeEvent = {
 	scaleX?: number;
 	scaleY?: number;
 	items?: Diagram[];
+	connectPoints?: ConnectPointData[];
 };
 
 /**

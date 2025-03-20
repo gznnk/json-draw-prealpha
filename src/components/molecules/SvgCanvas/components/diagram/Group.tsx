@@ -3,9 +3,11 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type {
+	ConnectPointData,
 	CreateDiagramProps,
 	Diagram,
 	GroupData,
+	Shape,
 } from "../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
@@ -17,10 +19,12 @@ import type {
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
+import { triggerConnectPointMove } from "../connector/ConnectPoint";
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
 import {
+	isConnectableData,
 	isItemableData,
 	isSelectableData,
 	isTransformativeData,
@@ -235,16 +239,37 @@ const Group: React.FC<GroupProps> = ({
 		const moveRecursive = (diagrams: Diagram[]) => {
 			const events: ItemableChangeEvent[] = [];
 			for (const item of diagrams) {
-				events.push({
+				const event = {
 					...item,
 					x: item.x + dx,
 					y: item.y + dy,
 					items: isItemableData(item)
 						? moveRecursive(item.items ?? [])
 						: undefined,
-				});
+				} as ItemableChangeEvent;
 
-				// TODO: 接続ポイントの移動
+				if (isConnectableData(item)) {
+					event.connectPoints = item.connectPoints.map(
+						(connectPointData) =>
+							({
+								...connectPointData,
+								x: connectPointData.x + dx,
+								y: connectPointData.y + dy,
+							}) as ConnectPointData,
+					);
+					for (const connectPointData of item.connectPoints) {
+						triggerConnectPointMove({
+							id: connectPointData.id,
+							type: "move",
+							x: connectPointData.x + dx,
+							y: connectPointData.y + dy,
+							ownerId: id,
+							ownerShape: event as Shape,
+						});
+					}
+				}
+
+				events.push(event);
 			}
 
 			return events as Diagram[];
