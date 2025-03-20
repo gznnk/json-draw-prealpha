@@ -57,21 +57,18 @@ const Group: React.FC<GroupProps> = ({
 	isSelected,
 	items,
 	showConnectPoints = true,
-	onDragStart,
 	onDrag,
-	onDragEnd,
 	onClick,
 	onSelect,
 	onTransform,
-	onTransformEnd,
 	onItemableChange,
 	onConnect,
 	onConnectPointsMove,
 }) => {
 	// グループ全体のドラッグ中かどうかのフラグ（このグループが選択中でかつドラッグ中の場合のみtrueにする）
-	const [isDragging, setIsDragging] = useState(false);
-	// 変形中かのフラグ
-	const [isTransformimg, setIsTransforming] = useState(false);
+	const [isGroupDragging, setIsGroupDragging] = useState(false);
+	// グループ全体の変形中かのフラグ
+	const [isGroupTransforming, setIsGroupTransforming] = useState(false);
 
 	// グループ連続選択フラグ。グループ連続選択とは、グループ内の図形（同じ図形でなくてよい）を連続して選択する操作のこと。
 	// このグループが選択中でかつ再度グループ内の図形でポインター押下された場合のみtrueにする
@@ -92,7 +89,9 @@ const Group: React.FC<GroupProps> = ({
 		const box = calcGroupBoxOfNoRotation(items, x, y, rotation, changeItem);
 		const leftTop = rotatePoint(box.left, box.top, x, y, radians);
 		const rightBottom = rotatePoint(box.right, box.bottom, x, y, radians);
+
 		onTransform?.({
+			eventType: "End",
 			id,
 			startShape: {
 				x,
@@ -125,18 +124,15 @@ const Group: React.FC<GroupProps> = ({
 		height,
 		isSelected,
 		items,
-		onDragStart,
 		onDrag,
-		onDragEnd,
 		onClick,
 		onSelect,
 		onTransform,
-		onTransformEnd,
 		onItemableChange,
 		onConnect,
 		onConnectPointsMove,
 		// 内部変数・内部関数
-		isDragging,
+		isGroupDragging,
 		transformGroupOutline,
 	};
 	const refBus = useRef(refBusVal);
@@ -199,89 +195,99 @@ const Group: React.FC<GroupProps> = ({
 	}, [isSelected]);
 
 	/**
-	 * グループ内の図形のドラッグ開始イベントハンドラ
-	 */
-	const handleChildDiagramDragStart = useCallback((e: DiagramDragEvent) => {
-		const { x, y, width, height, isSelected, items, onDragStart } =
-			refBus.current;
-
-		if (isSelected) {
-			// グループ選択時であれば、グループ全体をドラッグ可能にする
-			setIsDragging(true);
-		}
-
-		// ドラッグ開始イベントをそのまま伝番させる
-		onDragStart?.(e);
-
-		// ドラッグ開始時のグループの形状を記憶
-		startItems.current = items;
-		startBox.current = { x, y, width, height };
-	}, []);
-
-	/**
 	 * グループ内の図形のドラッグ中イベントハンドラ
 	 */
 	const handleChildDiagramDrag = useCallback((e: DiagramDragEvent) => {
-		const { id, onDrag, onItemableChange, isDragging } = refBus.current;
+		const {
+			id,
+			x,
+			y,
+			width,
+			height,
+			isSelected,
+			items,
+			onDrag,
+			onItemableChange,
+			isGroupDragging,
+			transformGroupOutline,
+		} = refBus.current;
 
-		if (!isDragging) {
-			// グループのドラッグでなければ、ドラッグイベントをそのまま伝番
-			onDrag?.(e);
+		// ドラッグ開始時の処理
+		if (e.eventType === "Start") {
+			if (!isSelected) {
+				// グループ選択時でなければ、ドラッグイベントをそのまま伝番し、
+				// 選択されている図形のみ移動を行う
+				onDrag?.(e);
+			} else {
+				// グループ選択時であれば、グループ全体をドラッグ可能にする
+				setIsGroupDragging(true);
+
+				// ドラッグ開始時のグループの形状を記憶
+				startItems.current = items;
+				startBox.current = { x, y, width, height };
+
+				// グループ全体の変更開始を通知
+				onItemableChange?.({
+					eventType: "Start",
+					id,
+				});
+			}
 			return;
 		}
 
-		// グループ内の図形を再帰的に移動させる
-
-		const dx = e.endX - e.startX;
-		const dy = e.endY - e.startY;
-
-		const moveRecursive = (diagrams: Diagram[]) => {
-			const events: ItemableChangeEvent[] = [];
-			for (const item of diagrams) {
-				events.push({
-					...item,
-					x: item.x + dx,
-					y: item.y + dy,
-					items: isItemableData(item)
-						? moveRecursive(item.items ?? [])
-						: undefined,
-				});
+		// 以降ドラッグ中・ドラッグ終了時の処理
+		if (!isGroupDragging) {
+			if (e.eventType === "End") {
+				// グループ全体のドラッグでない場合、ドラッグ終了時に
+				// 子図形のドラッグに伴うアウトラインの更新を行う
+				const changeItem = getChildDiagramById(items, e.id);
+				if (changeItem) {
+					transformGroupOutline({
+						...changeItem,
+						x: e.endX,
+						y: e.endY,
+					} as Diagram);
+				}
 			}
 
-			return events as Diagram[];
-		};
+			// グループ全体のドラッグでなければ、ドラッグイベントをそのまま伝番し、
+			// 選択されている図形のみ移動を行う
+			onDrag?.(e);
+		} else {
+			// グループ全体のドラッグの場合、グループ内の図形を再帰的に移動させる
+			const dx = e.endX - e.startX;
+			const dy = e.endY - e.startY;
 
-		const event: ItemableChangeEvent = {
-			id,
-			x: startBox.current.x + dx,
-			y: startBox.current.y + dy,
-			items: moveRecursive(startItems.current),
-		};
+			// グループ内の図形を再帰的に移動させる（接続ポイントも含む）
+			const moveRecursive = (diagrams: Diagram[]) => {
+				const newItems: Diagram[] = [];
+				for (const item of diagrams) {
+					const newItem = { ...item, x: item.x + dx, y: item.y + dy };
+					if (isItemableData(newItem)) {
+						newItem.items = moveRecursive(newItem.items ?? []);
+					}
+					newItems.push(newItem);
+				}
 
-		onItemableChange?.(event);
-	}, []);
+				return newItems;
+			};
 
-	/**
-	 * グループ内の図形のドラッグ完了イベントハンドラ
-	 */
-	const handleChildDiagramDragEnd = useCallback((e: DiagramDragEvent) => {
-		const { items, onDragEnd, isDragging, transformGroupOutline } =
-			refBus.current;
+			const event: ItemableChangeEvent = {
+				eventType: e.eventType,
+				id,
+				x: startBox.current.x + dx,
+				y: startBox.current.y + dy,
+				items: moveRecursive(startItems.current),
+			};
 
-		if (!isDragging) {
-			// グループのドラッグでなければ、子図形のドラッグに伴うアウトラインの更新を行う
-			const changeItem = getChildDiagramById(items, e.id);
-			if (changeItem) {
-				transformGroupOutline({
-					...changeItem,
-					x: e.endX,
-					y: e.endY,
-				} as Diagram);
-			}
+			// グループ内の全ての図形の移動をまとめて通知
+			onItemableChange?.(event);
 		}
 
-		onDragEnd?.(e);
-		setIsDragging(false);
+		// ドラッグ終了時にドラッグ中フラグを解除
+		if (e.eventType === "End") {
+			setIsGroupDragging(false);
+		}
 	}, []);
 
 	/**
@@ -289,29 +295,25 @@ const Group: React.FC<GroupProps> = ({
 	 */
 	const handleChildDiagramTransfrom = useCallback(
 		(e: DiagramTransformEvent) => {
-			const { onTransform } = refBus.current;
-			onTransform?.(e);
-		},
-		[],
-	);
+			const { items, onTransform, isGroupDragging, transformGroupOutline } =
+				refBus.current;
 
-	/**
-	 * グループ内の図形の変形完了イベントハンドラ
-	 */
-	const handleChildDiagramTransfromEnd = useCallback(
-		(e: DiagramTransformEvent) => {
-			const { items, onTransformEnd, transformGroupOutline } = refBus.current;
-
-			// アウトラインの更新
-			const changeItem = getChildDiagramById(items, e.id);
-			if (changeItem) {
-				transformGroupOutline({
-					...changeItem,
-					...e.endShape,
-				} as Diagram);
+			if (e.eventType === "End" && !isGroupDragging) {
+				// グループ内の図形の変形完了時にアウトラインの更新を行う
+				// ただし、グループ全体のドラッグ中に来る変形通知は子供のグループのアウトライン更新通知で、
+				// ここでアウトライン更新するとドラッグ側のアウトライン更新と競合してしまうため、
+				// グループ全体のドラッグ中はアウトライン更新を行わない
+				const changeItem = getChildDiagramById(items, e.id);
+				if (changeItem) {
+					transformGroupOutline({
+						...changeItem,
+						...e.endShape,
+					} as Diagram);
+				}
 			}
 
-			onTransformEnd?.(e);
+			// アウトライン以外はグループへの影響はないので、変形イベントをそのまま伝番する
+			onTransform?.(e);
 		},
 		[],
 	);
@@ -322,7 +324,7 @@ const Group: React.FC<GroupProps> = ({
 	const handleChildItemableChange = useCallback((e: ItemableChangeEvent) => {
 		const { items, transformGroupOutline, onItemableChange } = refBus.current;
 
-		// アウトラインの更新
+		// グループ内の図形の変更完了時にアウトラインの更新を行う
 		const changeItem = getChildDiagramById(items, e.id);
 		if (changeItem) {
 			transformGroupOutline({
@@ -331,6 +333,7 @@ const Group: React.FC<GroupProps> = ({
 			} as Diagram);
 		}
 
+		// アウトライン以外はグループへの影響はないので、変更イベントをそのまま伝番する
 		onItemableChange?.(e);
 	}, []);
 
@@ -339,6 +342,8 @@ const Group: React.FC<GroupProps> = ({
 	 */
 	const handleChildDiagramConnect = useCallback((e: DiagramConnectEvent) => {
 		const { onConnect } = refBus.current;
+
+		// 特にすることはないのでそのまま伝番する
 		onConnect?.(e);
 	}, []);
 
@@ -347,33 +352,50 @@ const Group: React.FC<GroupProps> = ({
 	 */
 	const handleChildDiagramConnectPointsMove = useCallback(
 		(e: ConnectPointsMoveEvent) => {
-			const { onConnectPointsMove } = refBus.current;
+			const { isSelected, onConnectPointsMove } = refBus.current;
+			if (isSelected) {
+				// グループが選択されている場合は、ドラッグもしくは変形側のハンドリング内で
+				// グループ内の図形全ての接続ポイントの移動処理を行うので、ここでは何もしない
+				return;
+			}
+
+			// グループが選択されていない場合は、接続ポイントの移動イベントをそのまま伝番する
 			onConnectPointsMove?.(e);
 		},
 		[],
 	);
 
 	/**
-	 * グループの変形開始イベントハンドラ
+	 * グループの変形イベントハンドラ
 	 */
-	const handleTransformStart = useCallback(() => {
-		setIsTransforming(true);
-
-		const { x, y, width, height, items } = refBus.current;
-
-		startBox.current = { x, y, width, height };
-		startItems.current = items;
-	}, []);
-
 	const handleTransform = useCallback((e: DiagramTransformEvent) => {
-		const { id, onItemableChange } = refBus.current;
+		const { id, x, y, width, height, items, onItemableChange } = refBus.current;
+
+		// グループの変形開始時の処理
+		if (e.eventType === "Start") {
+			// 変形開始時のグループの形状を記憶
+			startBox.current = { x, y, width, height };
+			startItems.current = items;
+
+			// まだ何も変形してないので、開始の通知のみ行う
+			onItemableChange?.({
+				eventType: "Start",
+				id,
+			});
+
+			setIsGroupTransforming(true);
+			return;
+		}
+
+		// 以降グループの変形中・変形終了時の処理
 
 		// グループの拡縮を計算
 		const groupScaleX = e.endShape.width / e.startShape.width;
 		const groupScaleY = e.endShape.height / e.startShape.height;
 
+		// グループ内の図形を再帰的に変形させる（接続ポイントも含む）
 		const transformRecursive = (diagrams: Diagram[]) => {
-			const events: ItemableChangeEvent[] = [];
+			const newItems: Diagram[] = [];
 			for (const item of diagrams) {
 				const inversedItemCenter = rotatePoint(
 					item.x,
@@ -410,7 +432,7 @@ const Group: React.FC<GroupProps> = ({
 					const rotationDiff = e.endShape.rotation - e.startShape.rotation;
 					const newRotation = item.rotation + rotationDiff;
 
-					events.push({
+					newItems.push({
 						...item,
 						x: newCenter.x,
 						y: newCenter.y,
@@ -422,9 +444,9 @@ const Group: React.FC<GroupProps> = ({
 						items: isItemableData(item)
 							? transformRecursive(item.items ?? [])
 							: undefined,
-					});
+					} as Diagram);
 				} else {
-					events.push({
+					newItems.push({
 						...item,
 						x: newCenter.x,
 						y: newCenter.y,
@@ -432,25 +454,26 @@ const Group: React.FC<GroupProps> = ({
 				}
 			}
 
-			return events as Diagram[];
+			return newItems;
 		};
 
 		const event: ItemableChangeEvent = {
+			eventType: e.eventType,
 			id,
 			...e.endShape,
 			items: transformRecursive(startItems.current),
 		};
 
+		// グループ内の全ての図形の変形をまとめて通知
 		onItemableChange?.(event);
-	}, []);
 
-	const handleTransformEnd = useCallback((_e: DiagramTransformEvent) => {
-		setIsTransforming(false);
-		// TODO: 伝番させる
+		if (e.eventType === "End") {
+			setIsGroupTransforming(false);
+		}
 	}, []);
 
 	const doShowConnectPoints =
-		showConnectPoints && !isDragging && !isTransformimg;
+		showConnectPoints && !isGroupDragging && !isGroupTransforming;
 
 	// グループ内の図形の作成
 	const children = items.map((item) => {
@@ -461,11 +484,8 @@ const Group: React.FC<GroupProps> = ({
 			showConnectPoints: doShowConnectPoints,
 			onClick: handleChildDiagramClick,
 			onSelect: handleChildDiagramSelect,
-			onDragStart: handleChildDiagramDragStart,
 			onDrag: handleChildDiagramDrag,
-			onDragEnd: handleChildDiagramDragEnd,
 			onTransform: handleChildDiagramTransfrom,
-			onTransformEnd: handleChildDiagramTransfromEnd,
 			onItemableChange: handleChildItemableChange,
 			onConnect: handleChildDiagramConnect,
 			onConnectPointsMove: handleChildDiagramConnectPointsMove,
@@ -477,7 +497,7 @@ const Group: React.FC<GroupProps> = ({
 	return (
 		<>
 			{children}
-			{!isDragging && (
+			{!isGroupDragging && (
 				<Transformative
 					diagramId={id}
 					type="Group"
@@ -490,9 +510,7 @@ const Group: React.FC<GroupProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					isSelected={isSelected}
-					onTransformStart={handleTransformStart}
 					onTransform={handleTransform}
-					onTransformEnd={handleTransformEnd}
 				/>
 			)}
 		</>

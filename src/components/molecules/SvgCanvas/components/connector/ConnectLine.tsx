@@ -68,9 +68,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	strokeWidth = "1px",
 	isSelected = false,
 	onClick,
-	onDragStart,
 	onDrag,
-	onDragEnd,
 	onSelect,
 	onTransform,
 	onItemableChange,
@@ -128,7 +126,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				return;
 			}
 
-			if (event.type === "moveStart") {
+			if (event.type === "Start") {
 				// 移動開始時のitemsを保持
 				startItems.current = items;
 
@@ -162,7 +160,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 							item.x !== startItems.current[idx].x ||
 							item.y !== startItems.current[idx].y,
 					);
-				return;
+				// return;
 			}
 
 			// 移動中と移動終了時の処理
@@ -215,6 +213,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 					// 子図形の変更イベントを発火
 					onItemableChange?.({
+						type: event.type,
 						id,
 						items: newItems,
 					});
@@ -250,7 +249,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					// 接続線の点のデータを作成
 					const newItems = (foundIdx === 0 ? newPath : newPath.reverse()).map(
 						(p, idx) => ({
-							id: event.type === "moveEnd" ? newId() : `${id}-${idx}`,
+							id: event.type === "End" ? newId() : `${id}-${idx}`,
 							name: `cp-${idx}`,
 							type: "PathPoint",
 							x: p.x,
@@ -263,11 +262,12 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 					// 子図形の変更イベントを発火
 					onItemableChange?.({
+						type: event.type,
 						id,
 						items: newItems,
 					});
 
-					if (event.type === "moveEnd") {
+					if (event.type === "End") {
 						startItems.current = [];
 						if (!_isItemsChanged) {
 							// 一番最初の描画時からitemsが変更されていない場合は、
@@ -310,9 +310,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			segmentDragEnabled={true}
 			newVertexEnabled={true}
 			onClick={onClick}
-			onDragStart={onDragStart}
 			onDrag={onDrag}
-			onDragEnd={onDragEnd}
 			onSelect={onSelect}
 			onTransform={onTransform}
 			onItemableChange={onItemableChange}

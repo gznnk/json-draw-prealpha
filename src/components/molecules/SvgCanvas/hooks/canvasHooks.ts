@@ -7,7 +7,6 @@ import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
 // SvgCanvas関連型定義をインポート
 import type {
 	ConnectLineData,
-	ConnectPointData,
 	Diagram,
 	PathPointData,
 } from "../types/DiagramTypes";
@@ -70,7 +69,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 		// 接続ポイントの移動を通知
 		const connectPoints: ConnectPointMoveData[] = [];
-		const findRecursive = (data: Diagram) => {
+		const findRecursive = (data: Partial<Diagram>) => {
 			if (isItemableData(data)) {
 				for (const item of data.items ?? []) {
 					if (item.type === "ConnectPoint") {
@@ -90,24 +89,15 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				}
 			}
 		};
-		findRecursive(e as Diagram);
+		findRecursive(e);
 
 		notifyConnectPointsMove({
-			type: "move",
+			eventType: e.eventType,
 			points: connectPoints,
 		});
 	}, []);
 
 	const onDrag = useCallback((e: DiagramDragEvent) => {
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
-			),
-		}));
-	}, []);
-
-	const onDragEnd = useCallback((e: DiagramDragEvent) => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
@@ -201,7 +191,6 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	const canvasProps = {
 		...canvasState,
 		onDrag,
-		onDragEnd,
 		onDrop,
 		onSelect,
 		onDelete,

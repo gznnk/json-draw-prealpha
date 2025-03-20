@@ -22,7 +22,6 @@ import Ellipse from "../components/diagram/Ellipse";
 import Group from "../components/diagram/Group";
 import Path, { PathPoint } from "../components/diagram/Path";
 import Rectangle from "../components/diagram/Rectangle";
-import Triangle from "../components/diagram/Triangle";
 
 /**
  * 図形の形状
@@ -47,8 +46,7 @@ export type DiagramType =
 	| "Group"
 	| "Path"
 	| "PathPoint"
-	| "Rectangle"
-	| "Triangle";
+	| "Rectangle";
 
 /**
  * 図形の基本データ
@@ -194,17 +192,6 @@ export type GroupData = CreateDiagramType<{
 }>;
 
 /**
- * 三角形のデータ TODO: 三角形いる？
- */
-export type TriangleData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	connectable: true;
-	bordered: true;
-	fillable: true;
-}>;
-
-/**
  * ダミー図形コンポーネント
  */
 const DummyComponent: React.FC<DiagramBaseData> = () => null;
@@ -232,9 +219,7 @@ export type Diagram = DiagramCombined & {
  * 図形の基本プロパティ
  */
 export type DiagramBaseProps = {
-	onDragStart?: (e: DiagramDragEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
-	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
 	onHover?: (e: DiagramHoverEvent) => void;
@@ -251,9 +236,7 @@ export type SelectableProps = {
  * 変形可能な図形のプロパティ
  */
 export type TransformativeProps = {
-	onTransformStart?: (e: DiagramTransformEvent) => void;
 	onTransform?: (e: DiagramTransformEvent) => void;
-	onTransformEnd?: (e: DiagramTransformEvent) => void;
 };
 
 /**
@@ -311,5 +294,4 @@ export const DiagramTypeComponentMap: {
 	Path: Path,
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
-	Triangle: Triangle,
 };

@@ -48,29 +48,12 @@ const Ellipse: React.FC<EllipseProps> = ({
 	strokeWidth = "1px",
 	keepProportion = false,
 	isSelected = false,
-	onDragStart,
 	onDrag,
-	onDragEnd,
 	onClick,
 	onSelect,
-	onTransformStart,
 	onTransform,
-	onTransformEnd,
 }) => {
 	const svgRef = useRef<SVGEllipseElement>({} as SVGEllipseElement);
-
-	/**
-	 * 四角形のドラッグ開始イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e 四角形のドラッグ開始イベント
-	 * @returns {void}
-	 */
-	const handleDragStart = useCallback(
-		(e: DiagramDragEvent) => {
-			onDragStart?.(e);
-		},
-		[onDragStart],
-	);
 
 	/**
 	 * 四角形のドラッグ中イベントハンドラ
@@ -83,19 +66,6 @@ const Ellipse: React.FC<EllipseProps> = ({
 			onDrag?.(e);
 		},
 		[onDrag],
-	);
-
-	/**
-	 * 四角形のドラッグ完了イベントハンドラ
-	 *
-	 * @param {DiagramDragEvent} e 四角形のドラッグ完了イベント
-	 * @returns {void}
-	 */
-	const handleDragEnd = useCallback(
-		(e: DiagramDragEvent) => {
-			onDragEnd?.(e);
-		},
-		[onDragEnd],
 	);
 
 	/**
@@ -120,30 +90,14 @@ const Ellipse: React.FC<EllipseProps> = ({
 		ref: svgRef,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
-		onDragStart: handleDragStart,
 		onDrag: handleDrag,
-		onDragEnd: handleDragEnd,
 	});
-
-	const handleTransformStart = useCallback(
-		(e: DiagramTransformEvent) => {
-			onTransformStart?.(e);
-		},
-		[onTransformStart],
-	);
 
 	const handleTransform = useCallback(
 		(e: DiagramTransformEvent) => {
 			onTransform?.(e);
 		},
 		[onTransform],
-	);
-
-	const handleTransformEnd = useCallback(
-		(e: DiagramTransformEvent) => {
-			onTransformEnd?.(e);
-		},
-		[onTransformEnd],
 	);
 
 	return (
@@ -183,9 +137,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 				scaleY={scaleY}
 				keepProportion={keepProportion}
 				isSelected={isSelected}
-				onTransformStart={handleTransformStart}
 				onTransform={handleTransform}
-				onTransformEnd={handleTransformEnd}
 			/>
 		</>
 	);

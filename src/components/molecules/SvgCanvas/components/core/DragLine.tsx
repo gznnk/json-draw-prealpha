@@ -31,9 +31,7 @@ const DragLine: React.FC<DragLineProps> = ({
 	cursor,
 	onPointerDown,
 	onClick,
-	onDragStart,
 	onDrag,
-	onDragEnd,
 	dragPositioningFunction,
 }) => {
 	const svgRef = useRef<SVGLineElement>({} as SVGLineElement);
@@ -45,9 +43,7 @@ const DragLine: React.FC<DragLineProps> = ({
 		ref: svgRef,
 		onPointerDown,
 		onClick,
-		onDragStart,
 		onDrag,
-		onDragEnd,
 		dragPositioningFunction,
 	});
 

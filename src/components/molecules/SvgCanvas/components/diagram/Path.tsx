@@ -191,6 +191,7 @@ const Path: React.FC<PathProps> = ({
 			});
 
 			onItemableChange?.({
+				type: e.eventType,
 				id,
 				x: e.endX,
 				y: e.endY,
@@ -464,6 +465,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 				setDraggingNewVertex({ id: e.id, x: e.startX, y: e.startY });
 
 				onItemableChange?.({
+					type: e.eventType,
 					id,
 					items: newItems,
 				});
@@ -481,6 +483,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 
 				// 新規頂点のドラッグに伴うパスの頂点の位置変更
 				onItemableChange?.({
+					type: e.eventType,
 					id,
 					items: items.map((item) =>
 						item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
@@ -509,6 +512,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 
 				// 新規頂点のドラッグ完了に伴うパスのデータ変更
 				onItemableChange?.({
+					type: e.eventType,
 					id,
 					x: box.center.x,
 					y: box.center.y,
@@ -721,6 +725,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					}
 
 					onItemableChange?.({
+						type: e.eventType,
 						id,
 						items: newItems,
 					});
@@ -756,6 +761,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 				});
 
 				onItemableChange?.({
+					type: e.eventType,
 					id,
 					items: items.map((item) => {
 						if (item.id === draggingSegment.startPointId) {
@@ -794,6 +800,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					),
 				);
 				onItemableChange?.({
+					type: e.eventType,
 					id,
 					x: box.center.x,
 					y: box.center.y,

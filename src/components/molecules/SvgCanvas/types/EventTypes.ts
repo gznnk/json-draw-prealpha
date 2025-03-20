@@ -8,6 +8,11 @@ import type {
 } from "./DiagramTypes";
 
 /**
+ * イベントの種類
+ */
+export type EventType = "Start" | "InProgress" | "End";
+
+/**
  * 図形のポインターダウンイベント
  */
 export type DiagramPointerEvent = {
@@ -18,8 +23,8 @@ export type DiagramPointerEvent = {
  * 図形のドラッグイベント
  */
 export type DiagramDragEvent = {
+	eventType: EventType;
 	id: string;
-	type: "dragStart" | "drag" | "dragEnd";
 	startX: number;
 	startY: number;
 	endX: number;
@@ -72,7 +77,7 @@ export type DiagramSelectEvent = {
  */
 export type DiagramTransformEvent = {
 	id: string;
-	// type: "transformStart" | "transform" | "transformEnd";
+	eventType: EventType;
 	startShape: Shape;
 	endShape: Shape;
 };
@@ -81,6 +86,7 @@ export type DiagramTransformEvent = {
  * 子図形をもつ図形の変更イベント
  */
 export type ItemableChangeEvent = {
+	eventType: EventType;
 	id: string;
 	x?: number;
 	y?: number;
@@ -100,11 +106,6 @@ export type DiagramConnectEvent = {
 	points: PathPointData[];
 	endOwnerId: string;
 };
-
-/**
- * 接続ポイント移動イベントタイプ
- */
-export type ConnectPointsMoveEventType = "moveStart" | "move" | "moveEnd";
 
 /**
  * 接続ポイント移動データ
@@ -130,6 +131,6 @@ export type ConnectPointMoveData = {
  * @param points 移動した接続ポイントのデータ
  */
 export type ConnectPointsMoveEvent = {
-	type: ConnectPointsMoveEventType;
+	eventType: EventType;
 	points: ConnectPointMoveData[];
 };

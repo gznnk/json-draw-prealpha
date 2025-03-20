@@ -124,7 +124,6 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 		setPathPoints(newPathPoints);
 	};
 
-	// 接続イベントのハンドラ登録
 	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		// プロパティ
@@ -142,16 +141,13 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	refBus.current = refBusVal;
 
 	/**
-	 * 接続ポイントのドラッグ開始イベントハンドラ
-	 */
-	const handleDragStart = useCallback((_e: DiagramDragEvent) => {
-		setIsDragging(true);
-	}, []);
-
-	/**
 	 * 接続ポイントのドラッグイベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
+		if (e.eventType === "Start") {
+			setIsDragging(true);
+		}
+
 		if (connectingPoint.current) {
 			// 接続中のポイントがある場合は、そのポイントを終点とする
 			return;
@@ -159,14 +155,11 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 		// 接続線の座標を再計算
 		refBus.current.updatePathPoints(e.endX, e.endY);
-	}, []);
 
-	/**
-	 * 接続ポイントのドラッグ終了イベントハンドラ
-	 */
-	const handleDragEnd = useCallback((_e: DiagramDragEvent) => {
-		setPathPoints([]);
-		setIsDragging(false);
+		if (e.eventType === "End") {
+			setPathPoints([]);
+			setIsDragging(false);
+		}
 	}, []);
 
 	/**
@@ -330,9 +323,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				fill="rgba(255, 204, 0, 0.8)"
 				outline="none"
 				visible={visible || isHovered}
-				onDragStart={handleDragStart}
 				onDrag={handleDrag}
-				onDragEnd={handleDragEnd}
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}
 				onDrop={handleDrop}

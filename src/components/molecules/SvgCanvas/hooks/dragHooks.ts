@@ -50,9 +50,7 @@ export type DragProps = {
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onPointerUp?: (e: DiagramPointerEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
-	onDragStart?: (e: DiagramDragEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
-	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDragOver?: (e: DiagramDragDropEvent) => void;
 	onDragLeave?: (e: DiagramDragDropEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
@@ -95,9 +93,7 @@ export const useDrag = (props: DragProps) => {
 		onPointerDown,
 		onPointerUp,
 		onClick,
-		onDragStart,
 		onDrag,
-		onDragEnd,
 		onDragOver,
 		onDragLeave,
 		onDrop,
@@ -209,7 +205,7 @@ export const useDrag = (props: DragProps) => {
 		// ドラッグ中のイベント情報を作成
 		const dragEvent = {
 			id,
-			type: "drag",
+			eventType: "InProgress",
 			startX: startX.current,
 			startY: startY.current,
 			endX: dragPoint.x,
@@ -222,11 +218,12 @@ export const useDrag = (props: DragProps) => {
 				Math.abs(e.clientY - startClientY.current) > DRAG_DEAD_ZONE)
 		) {
 			// ドラッグ中でない場合、かつポインターの移動量が一定以上の場合はドラッグ開始とする
-			onDragStart?.({
+			onDrag?.({
 				...dragEvent,
-				type: "dragStart",
+				eventType: "Start",
 			});
 			setIsDragging(true);
+			return;
 		}
 
 		if (!isDragging) {
@@ -264,9 +261,9 @@ export const useDrag = (props: DragProps) => {
 			const dragPoint = getPointOnDrag(e);
 
 			// ドラッグ中だった場合はドラッグ終了イベントを発火
-			onDragEnd?.({
+			onDrag?.({
 				id,
-				type: "dragEnd",
+				eventType: "End",
 				startX: startX.current,
 				startY: startY.current,
 				endX: dragPoint.x,
@@ -337,7 +334,7 @@ export const useDrag = (props: DragProps) => {
 
 			const dragEvent = {
 				id,
-				type: "drag",
+				eventType: "InProgress",
 				startX: startX.current,
 				startY: startY.current,
 				endX: newPoint.x,
@@ -348,13 +345,15 @@ export const useDrag = (props: DragProps) => {
 				startX.current = x;
 				startY.current = y;
 
-				onDragStart?.({
+				onDrag?.({
 					...dragEvent,
-					type: "dragStart",
+					eventType: "Start",
 				});
-			}
 
-			isArrowDragging.current = true;
+				isArrowDragging.current = true;
+
+				return;
+			}
 
 			onDrag?.(dragEvent);
 		};
@@ -376,9 +375,9 @@ export const useDrag = (props: DragProps) => {
 				if (isArrowDragging.current) {
 					// 矢印キーによるドラッグ中にシフトキーが押された場合はドラッグを終了させる。
 					// ドラッグ終了イベントを発火させSvgCanvas側に座標の更新を通知し、座標を更新する。
-					onDragEnd?.({
+					onDrag?.({
 						id,
-						type: "dragEnd",
+						eventType: "End",
 						startX: x,
 						startY: y,
 						endX: x,
@@ -406,7 +405,7 @@ export const useDrag = (props: DragProps) => {
 		// 矢印キー移動完了時のイベント情報を作成
 		const dragEvent = {
 			id,
-			type: "dragEnd",
+			eventType: "End",
 			startX: x,
 			startY: y,
 			endX: x,
@@ -417,10 +416,10 @@ export const useDrag = (props: DragProps) => {
 			if (e.key === "Shift") {
 				// 矢印キーによるドラッグ中にシフトキーが離された場合はドラッグ終了イベントを発火させ
 				// SvgCanvas側に座標の更新を通知し、一度座標を更新する
-				onDragEnd?.(dragEvent);
-				onDragStart?.({
+				onDrag?.(dragEvent);
+				onDrag?.({
 					...dragEvent,
-					type: "dragStart",
+					eventType: "Start",
 				});
 			}
 			if (
@@ -430,7 +429,7 @@ export const useDrag = (props: DragProps) => {
 				e.key === "ArrowDown"
 			) {
 				// 矢印キーが離されたらドラッグ終了イベントを発火させSvgCanvas側に座標の更新を通知し、座標を更新する
-				onDragEnd?.(dragEvent);
+				onDrag?.(dragEvent);
 
 				// 矢印キーによるドラッグ終了とマーク
 				isArrowDragging.current = false;
