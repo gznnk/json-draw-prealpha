@@ -155,40 +155,40 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		} as ConnectLineData);
 	}, []);
 
-	// useEffect(() => {
-	// 	const handleConnectPointMove = (e: Event) => {
-	// 		const event = e as CustomEvent<ConnectPointMoveEvent>;
-	// 		setCanvasState((prevState) => ({
-	// 			...prevState,
-	// 			items: applyRecursive(prevState.items, (item) => {
-	// 				if (isConnectableData(item)) {
-	// 					if (item.connectPoints.some((p) => p.id === event.detail.id)) {
-	// 						return {
-	// 							...item,
-	// 							connectPoints: item.connectPoints.map((p) =>
-	// 								p.id === event.detail.id
-	// 									? { ...p, x: event.detail.x, y: event.detail.y }
-	// 									: p,
-	// 							),
-	// 						};
-	// 					}
-	// 				}
-	// 				return item;
-	// 			}),
-	// 		}));
-	// 	};
-	// 	document.addEventListener(
-	// 		EVENT_NAME_CONNECT_POINT_MOVE,
-	// 		handleConnectPointMove,
-	// 	);
+	useEffect(() => {
+		const handleConnectPointMove = (e: Event) => {
+			const event = e as CustomEvent<ConnectPointMoveEvent>;
+			setCanvasState((prevState) => ({
+				...prevState,
+				items: applyRecursive(prevState.items, (item) => {
+					if (isConnectableData(item)) {
+						if (item.connectPoints.some((p) => p.id === event.detail.id)) {
+							return {
+								...item,
+								connectPoints: item.connectPoints.map((p) =>
+									p.id === event.detail.id
+										? { ...p, x: event.detail.x, y: event.detail.y }
+										: p,
+								),
+							};
+						}
+					}
+					return item;
+				}),
+			}));
+		};
+		document.addEventListener(
+			EVENT_NAME_CONNECT_POINT_MOVE,
+			handleConnectPointMove,
+		);
 
-	// 	return () => {
-	// 		document.removeEventListener(
-	// 			EVENT_NAME_CONNECT_POINT_MOVE,
-	// 			handleConnectPointMove,
-	// 		);
-	// 	};
-	// }, []);
+		return () => {
+			document.removeEventListener(
+				EVENT_NAME_CONNECT_POINT_MOVE,
+				handleConnectPointMove,
+			);
+		};
+	}, []);
 
 	const canvasProps = {
 		...canvasState,
