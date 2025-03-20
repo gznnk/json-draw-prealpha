@@ -243,6 +243,8 @@ const Group: React.FC<GroupProps> = ({
 						? moveRecursive(item.items ?? [])
 						: undefined,
 				});
+
+				// TODO: 接続ポイントの移動
 			}
 
 			return events as Diagram[];
@@ -276,6 +278,8 @@ const Group: React.FC<GroupProps> = ({
 				} as Diagram);
 			}
 		}
+
+		// TODO: このイベント内でもグループ図形の移動を行う
 
 		onDragEnd?.(e);
 		setIsDragging(false);
@@ -632,13 +636,9 @@ const calcGroupBoxOfNoRotation = (
 	let right = Number.NEGATIVE_INFINITY;
 
 	for (const item of items) {
-		// TODO: いけてない。ConnectPointは別配列でもつ？
-		const itemItems = isItemableData(item)
-			? (item.items ?? []).filter((i) => i.type !== "ConnectPoint")
-			: [];
-		if (itemItems.length > 0) {
+		if (isItemableData(item)) {
 			const groupBox = calcGroupBoxOfNoRotation(
-				itemItems,
+				item.items,
 				groupCenterX,
 				groupCenterY,
 				groupRotation,

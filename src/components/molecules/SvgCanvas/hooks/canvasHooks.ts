@@ -24,7 +24,12 @@ import type {
 import { EVENT_NAME_CONNECT_POINT_MOVE } from "../components/connector/ConnectPoint";
 
 // SvgCanvas関連関数をインポート
-import { isItemableData, isSelectableData, newId } from "../functions/Diagram";
+import {
+	isConnectableData,
+	isItemableData,
+	isSelectableData,
+	newId,
+} from "../functions/Diagram";
 import { calcPointsOuterBox } from "../functions/Math";
 
 /**
@@ -114,9 +119,11 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				if (!isSelectableData(item)) {
 					return item;
 				}
-				item.items = item.items?.filter(
-					(i) => !isSelectableData(i) || !i.isSelected,
-				);
+				if (isItemableData(item)) {
+					item.items = item.items?.filter(
+						(i) => !isSelectableData(i) || !i.isSelected,
+					);
+				}
 				return item;
 			}).filter((item) => !isSelectableData(item) || !item.isSelected);
 
@@ -153,11 +160,21 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			const event = e as CustomEvent<ConnectPointMoveEvent>;
 			setCanvasState((prevState) => ({
 				...prevState,
-				items: applyRecursive(prevState.items, (item) =>
-					item.id === event.detail.id //&& item.type !== "PathPoint"
-						? { ...item, x: event.detail.x, y: event.detail.y }
-						: item,
-				),
+				items: applyRecursive(prevState.items, (item) => {
+					if (isConnectableData(item)) {
+						if (item.connectPoints.some((p) => p.id === event.detail.id)) {
+							return {
+								...item,
+								connectPoints: item.connectPoints.map((p) =>
+									p.id === event.detail.id
+										? { ...p, x: event.detail.x, y: event.detail.y }
+										: p,
+								),
+							};
+						}
+					}
+					return item;
+				}),
 			}));
 		};
 		document.addEventListener(

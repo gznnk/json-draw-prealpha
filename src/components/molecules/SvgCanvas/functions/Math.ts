@@ -333,6 +333,8 @@ export const createLinerX2yFunction = (p1: Point, p2: Point) => {
  * @returns 矩形の頂点座標
  */
 export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
+	// TODO: 計算の最適化
+
 	const { x, y, width, height, rotation, scaleX, scaleY } = shape;
 
 	const halfWidth = width / 2;

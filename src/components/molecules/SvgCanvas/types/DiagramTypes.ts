@@ -83,7 +83,9 @@ export type ItemableData = {
 /**
  * 接続可能な図形のデータ
  */
-export type ConnectableData = ItemableData; // 接続ポイントを子図形としてもつ
+export type ConnectableData = {
+	connectPoints: ConnectPointData[];
+};
 
 /**
  * 枠線を持つ図形のデータ
