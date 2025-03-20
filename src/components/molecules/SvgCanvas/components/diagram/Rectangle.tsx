@@ -7,6 +7,7 @@ import type { RectangleVertices } from "../../types/CoordinateTypes";
 import type {
 	ConnectPointData,
 	CreateDiagramProps,
+	Diagram,
 	RectangleData,
 	Shape,
 } from "../../types/DiagramTypes";
@@ -59,7 +60,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	stroke,
 	strokeWidth,
 	isSelected,
-	connectPoints,
+	items,
 	showConnectPoints = true,
 	onDragStart,
 	onDrag,
@@ -101,7 +102,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 		};
 		const vertices = calcRectangleVertices(newShape);
 
-		for (const connectPointData of connectPoints ?? []) {
+		for (const connectPointData of (items as ConnectPointData[]) ?? []) {
 			const connectPoint = (vertices as RectangleVertices)[
 				connectPointData.name as keyof RectangleVertices
 			];
@@ -309,7 +310,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 				/>
 			)}
 			{doShowConnectPoints &&
-				connectPoints?.map((cp) => (
+				(items as ConnectPointData[])?.map((cp) => (
 					<ConnectPoint
 						key={cp.id}
 						id={cp.id}
@@ -367,14 +368,15 @@ export const createRectangleData = ({
 		scaleY,
 	});
 
-	const connectPoints: ConnectPointData[] = [];
+	const items: Diagram[] = [];
 	for (const key of Object.keys(vertices)) {
 		const point = vertices[key as keyof RectangleVertices];
-		connectPoints.push({
+		items.push({
 			id: newId(),
 			type: "ConnectPoint",
 			x: point.x,
 			y: point.y,
+			isSelected: false,
 			name: key,
 		});
 	}
@@ -394,6 +396,6 @@ export const createRectangleData = ({
 		stroke,
 		strokeWidth,
 		isSelected: false,
-		connectPoints,
+		items,
 	} as RectangleData;
 };
