@@ -90,7 +90,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	const canvasStateProvider = useContext(SvgCanvasContext);
 
 	// 接続ポイント移動イベントハンドラ
-	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
+	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		id,
 		items,

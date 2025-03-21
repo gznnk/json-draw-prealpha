@@ -460,7 +460,7 @@ export const useDrag = (props: DragProps) => {
 	};
 
 	// 全体周知用ドラッグイベントリスナー登録
-	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
+	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		id,
 		x,

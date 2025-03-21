@@ -104,37 +104,62 @@ const Path: React.FC<PathProps> = ({
 	const startItems = useRef<Diagram[]>(items);
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
 
+	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+	const refBusVal = {
+		// プロパティ
+		id,
+		x,
+		y,
+		isSelected,
+		transformEnabled,
+		dragEnabled,
+		items,
+		onDrag,
+		onSelect,
+		onClick,
+		onItemableChange,
+		// 内部変数・内部関数
+		isSequentialSelection,
+		isTransformMode,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
 	/**
 	 * 折れ線のポインターダウンイベントハンドラ
 	 */
-	const handlePointerDown = useCallback(
-		(_e: DiagramPointerEvent) => {
-			// 図形選択イベントを発火
-			onSelect?.({
-				id,
-			});
+	const handlePointerDown = useCallback((_e: DiagramPointerEvent) => {
+		const { id, isSelected, onSelect } = refBus.current;
 
-			if (isSelected) {
-				setIsSequentialSelection(true);
-			}
-		},
-		[onSelect, id, isSelected],
-	);
+		// 図形選択イベントを発火
+		onSelect?.({
+			id,
+		});
+
+		if (isSelected) {
+			setIsSequentialSelection(true);
+		}
+	}, []);
 
 	/**
 	 * 折れ線のクリックイベントハンドラ
 	 */
-	const handleClick = useCallback(
-		(_e: DiagramClickEvent) => {
-			if (isSequentialSelection && transformEnabled) {
-				setIsTransformMode(!isTransformMode);
-			}
-			onClick?.({
-				id,
-			});
-		},
-		[onClick, id, transformEnabled, isSequentialSelection, isTransformMode],
-	);
+	const handleClick = useCallback((_e: DiagramClickEvent) => {
+		const {
+			id,
+			isSequentialSelection,
+			isTransformMode,
+			transformEnabled,
+			onClick,
+		} = refBus.current;
+
+		if (isSequentialSelection && transformEnabled) {
+			setIsTransformMode(!isTransformMode);
+		}
+		onClick?.({
+			id,
+		});
+	}, []);
 
 	// 折れ線の選択状態制御
 	useEffect(() => {
@@ -148,56 +173,61 @@ const Path: React.FC<PathProps> = ({
 	/**
 	 * 折れ線のドラッグイベントハンドラ
 	 */
-	const handleDrag = useCallback(
-		(e: DiagramDragEvent) => {
-			// ドラッグが無効な場合はイベントを潰してドラッグを無効化
-			if (!dragEnabled) {
-				return;
-			}
+	const handleDrag = useCallback((e: DiagramDragEvent) => {
+		const { id, dragEnabled, items, onDrag, onItemableChange } = refBus.current;
 
-			// ドラッグ開始時の処理
-			if (e.eventType === "Start") {
-				if (isSelected) {
-					// TODO: ここの条件は不要かも
-					setIsDragging(true);
-				}
+		// ドラッグが無効な場合はイベントを潰してドラッグを無効化
+		if (!dragEnabled) {
+			return;
+		}
 
-				startItems.current = items;
+		// ドラッグ開始時の処理
+		if (e.eventType === "Start") {
+			setIsDragging(true);
 
-				onDrag?.(e);
+			startItems.current = items;
 
-				return;
-			}
+			onDrag?.(e);
 
-			if (!isDragging) {
-				// TODO: ここの処理は不要かも
-				onDrag?.(e);
-				return;
-			}
+			return;
+		}
 
-			const dx = e.endX - e.startX;
-			const dy = e.endY - e.startY;
+		const dx = e.endX - e.startX;
+		const dy = e.endY - e.startY;
 
-			const newItems = startItems.current.map((item) => {
-				const x = item.x + dx;
-				const y = item.y + dy;
-				return { ...item, x, y };
-			});
+		const newItems = startItems.current.map((item) => {
+			const x = item.x + dx;
+			const y = item.y + dy;
+			return { ...item, x, y };
+		});
 
-			onItemableChange?.({
-				eventType: e.eventType,
-				id,
-				x: e.endX,
-				y: e.endY,
-				items: newItems,
-			});
+		onItemableChange?.({
+			eventType: e.eventType,
+			id,
+			x: e.endX,
+			y: e.endY,
+			items: newItems,
+		});
 
-			if (e.eventType === "End") {
-				setIsDragging(false);
-			}
-		},
-		[onDrag, onItemableChange, id, isSelected, dragEnabled, items, isDragging],
-	);
+		if (e.eventType === "End") {
+			setIsDragging(false);
+		}
+	}, []);
+
+	/**
+	 * 頂点のドラッグ中イベントハンドラ
+	 */
+	const handlePathPointDrag = useCallback((e: DiagramDragEvent) => {
+		if (e.eventType === "Start") {
+			setIsPathPointDragging(true);
+		}
+
+		refBus.current.onDrag?.(e);
+
+		if (e.eventType === "End") {
+			setIsPathPointDragging(false);
+		}
+	}, []);
 
 	// 折れ線のドラッグ用要素のプロパティ生成
 	const dragProps = useDrag({
@@ -210,24 +240,6 @@ const Path: React.FC<PathProps> = ({
 		onClick: handleClick,
 		onDrag: handleDrag,
 	});
-
-	/**
-	 * 頂点のドラッグ中イベントハンドラ
-	 */
-	const handlePathPointDrag = useCallback(
-		(e: DiagramDragEvent) => {
-			if (e.eventType === "Start") {
-				setIsPathPointDragging(true);
-			}
-
-			onDrag?.(e);
-
-			if (e.eventType === "End") {
-				setIsPathPointDragging(false);
-			}
-		},
-		[onDrag],
-	);
 
 	// 折れ線のd属性値を生成
 	const d = createDValue(items);
@@ -260,6 +272,7 @@ const Path: React.FC<PathProps> = ({
 			{/* 線分ドラッグ */}
 			{segmentDragEnabled &&
 				isSelected &&
+				!isDragging &&
 				!isTransformMode &&
 				!isPathPointDragging && (
 					<SegmentList
@@ -273,6 +286,7 @@ const Path: React.FC<PathProps> = ({
 			{/* 新規頂点 */}
 			{newVertexEnabled &&
 				isSelected &&
+				!isDragging &&
 				!isTransformMode &&
 				!isPathPointDragging && (
 					<NewVertexList
@@ -395,87 +409,97 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 			}
 		}
 
+		// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+		const refBusVal = {
+			// プロパティ
+			id,
+			items,
+			onItemableChange,
+			// 内部変数・内部関数
+			newVertexList,
+		};
+		const refBus = useRef(refBusVal);
+		refBus.current = refBusVal;
+
 		/**
 		 * 新規頂点のドラッグイベントハンドラ
 		 */
-		const handleNewVertexDrag = useCallback(
-			(e: DiagramDragEvent) => {
-				// ドラッグ開始時の処理
-				if (e.eventType === "Start") {
-					// ドラッグ中の新規頂点を設定
-					setDraggingNewVertex({ id: e.id, x: e.startX, y: e.startY });
+		const handleNewVertexDrag = useCallback((e: DiagramDragEvent) => {
+			const { id, items, onItemableChange, newVertexList } = refBus.current;
+			// ドラッグ開始時の処理
+			if (e.eventType === "Start") {
+				// ドラッグ中の新規頂点を設定
+				setDraggingNewVertex({ id: e.id, x: e.startX, y: e.startY });
 
-					// 新規頂点と同じ位置に頂点を追加し、パスを更新する
-					const idx = newVertexList.findIndex((v) => v.id === e.id);
-					const newItems = [...items];
-					const newItem = {
-						id: e.id,
-						type: "PathPoint",
-						x: e.startX,
-						y: e.startY,
-					} as Diagram;
-					newItems.splice(idx + 1, 0, newItem);
+				// 新規頂点と同じ位置に頂点を追加し、パスを更新する
+				const idx = newVertexList.findIndex((v) => v.id === e.id);
+				const newItems = [...items];
+				const newItem = {
+					id: e.id,
+					type: "PathPoint",
+					x: e.startX,
+					y: e.startY,
+				} as Diagram;
+				newItems.splice(idx + 1, 0, newItem);
 
-					// パスの変更を通知
-					onItemableChange?.({
-						eventType: e.eventType,
-						id,
-						items: newItems,
-					});
-				}
+				// パスの変更を通知
+				onItemableChange?.({
+					eventType: e.eventType,
+					id,
+					items: newItems,
+				});
+			}
 
-				// ドラッグ中の処理
-				if (e.eventType === "InProgress") {
-					// ドラッグ中の新規頂点の位置を更新
-					setDraggingNewVertex({ id: e.id, x: e.endX, y: e.endY });
+			// ドラッグ中の処理
+			if (e.eventType === "InProgress") {
+				// ドラッグ中の新規頂点の位置を更新
+				setDraggingNewVertex({ id: e.id, x: e.endX, y: e.endY });
 
-					// 新規頂点のドラッグに伴うパスの頂点の位置変更を通知
-					onItemableChange?.({
-						eventType: e.eventType,
-						id,
-						items: items.map((item) =>
-							item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
-						),
-					});
-				}
+				// 新規頂点のドラッグに伴うパスの頂点の位置変更を通知
+				onItemableChange?.({
+					eventType: e.eventType,
+					id,
+					items: items.map((item) =>
+						item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
+					),
+				});
+			}
 
-				// ドラッグ完了時の処理
-				if (e.eventType === "End") {
-					// ドラッグ中の新規頂点を解除
-					setDraggingNewVertex(undefined);
+			// ドラッグ完了時の処理
+			if (e.eventType === "End") {
+				// ドラッグ中の新規頂点を解除
+				setDraggingNewVertex(undefined);
 
-					// 新規頂点のドラッグ完了に伴うパスの外枠の形状計算
-					const box = calcPointsOuterBox(
-						items.map((item) =>
-							item.id === e.id
-								? { x: e.endX, y: e.endY }
-								: { x: item.x, y: item.y },
-						),
-					);
+				// 新規頂点のドラッグ完了に伴うパスの外枠の形状計算
+				const box = calcPointsOuterBox(
+					items.map((item) =>
+						item.id === e.id
+							? { x: e.endX, y: e.endY }
+							: { x: item.x, y: item.y },
+					),
+				);
 
-					// 新規頂点のドラッグ完了に伴うパスのデータ変更を通知
-					onItemableChange?.({
-						eventType: e.eventType,
-						id,
-						x: box.center.x,
-						y: box.center.y,
-						width: box.right - box.left,
-						height: box.bottom - box.top,
-						items: items.map((item) =>
-							item.id === e.id
-								? {
-										...item,
-										id: newId(), // ドラッグが完了したら、新規頂点用のIDから新しいIDに変更
-										x: e.endX,
-										y: e.endY,
-									}
-								: item,
-						),
-					});
-				}
-			},
-			[onItemableChange, id, items],
-		);
+				// 新規頂点のドラッグ完了に伴うパスのデータ変更を通知
+				onItemableChange?.({
+					eventType: e.eventType,
+					id,
+					x: box.center.x,
+					y: box.center.y,
+					width: box.right - box.left,
+					height: box.bottom - box.top,
+					items: items.map((item) =>
+						item.id === e.id
+							? {
+									...item,
+									id: newId(), // ドラッグが完了したら、新規頂点用のIDから新しいIDに変更
+									x: e.endX,
+									y: e.endY,
+								}
+							: item,
+					),
+				});
+			}
+		}, []);
 
 		return (
 			<>
@@ -536,17 +560,25 @@ const Segment: React.FC<SegmentProps> = memo(
 		);
 		const cursor = getCursorFromAngle(radiansToDegrees(radian));
 
-		const dragPositioningFunction = useCallback(
-			(x: number, y: number) => {
-				const degrees = radiansToDegrees(radian);
-				const isX2y = (degrees + 405) % 180 > 90;
-				return isX2y
-					? createLinerX2yFunction(rotateStartPoint, rotateEndPoint)(x, y)
-					: createLinerY2xFunction(rotateStartPoint, rotateEndPoint)(x, y);
-			},
+		// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+		const refBusVal = {
+			// 内部変数・内部関数
+			radian,
+			rotateStartPoint,
+			rotateEndPoint,
+		};
+		const refBus = useRef(refBusVal);
+		refBus.current = refBusVal;
 
-			[radian, rotateStartPoint, rotateEndPoint],
-		);
+		const dragPositioningFunction = useCallback((x: number, y: number) => {
+			const { radian, rotateStartPoint, rotateEndPoint } = refBus.current;
+
+			const degrees = radiansToDegrees(radian);
+			const isX2y = (degrees + 405) % 180 > 90;
+			return isX2y
+				? createLinerX2yFunction(rotateStartPoint, rotateEndPoint)(x, y)
+				: createLinerY2xFunction(rotateStartPoint, rotateEndPoint)(x, y);
+		}, []);
 
 		return (
 			<DragLine
@@ -609,131 +641,135 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 			}
 		}
 
+		// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+		const refBusVal = {
+			// プロパティ
+			id,
+			items,
+			onItemableChange,
+			// 内部変数・内部関数
+			draggingSegment,
+			segmentList,
+		};
+		const refBus = useRef(refBusVal);
+		refBus.current = refBusVal;
+
 		/**
-		 * 線分のドラッグ中イベントハンドラ
+		 * 線分のドラッグイベントハンドラ
 		 */
-		const handleSegmentDrag = useCallback(
-			(e: DiagramDragEvent) => {
-				if (e.eventType === "Start") {
-					const idx = segmentList.findIndex((v) => v.id === e.id);
+		const handleSegmentDrag = useCallback((e: DiagramDragEvent) => {
+			const { id, items, onItemableChange, draggingSegment, segmentList } =
+				refBus.current;
 
-					const segment = segmentList[idx];
-					startSegment.current = segment;
+			// ドラッグ開始時の処理
+			if (e.eventType === "Start") {
+				const idx = segmentList.findIndex((v) => v.id === e.id);
 
-					const newSegment = {
-						...segment,
-					};
-					if (idx === 0 || idx === segmentList.length - 1) {
-						const newItems = [...items];
+				const segment = segmentList[idx];
+				startSegment.current = segment;
 
-						if (idx === segmentList.length - 1) {
-							const newItem = {
-								id: newId(),
-								type: "PathPoint",
-								x: segment.endX,
-								y: segment.endY,
-							} as PathPointData;
-							newItems.splice(newItems.length - 1, 0, newItem);
-							newSegment.endPointId = newItem.id;
-						}
+				const newSegment = {
+					...segment,
+				};
+				if (idx === 0 || idx === segmentList.length - 1) {
+					const newItems = [...items];
 
-						if (idx === 0) {
-							const newItem = {
-								id: newId(),
-								type: "PathPoint",
-								x: segment.startX,
-								y: segment.startY,
-							} as PathPointData;
-							newItems.splice(1, 0, newItem);
-							newSegment.startPointId = newItem.id;
-						}
-
-						onItemableChange?.({
-							eventType: e.eventType,
-							id,
-							items: newItems,
-						});
+					if (idx === segmentList.length - 1) {
+						const newItem = {
+							id: newId(),
+							type: "PathPoint",
+							x: segment.endX,
+							y: segment.endY,
+						} as PathPointData;
+						newItems.splice(newItems.length - 1, 0, newItem);
+						newSegment.endPointId = newItem.id;
 					}
 
-					setDraggingSegment(newSegment);
-				}
-
-				if (e.eventType === "InProgress") {
-					if (!draggingSegment || !startSegment.current) {
-						return;
+					if (idx === 0) {
+						const newItem = {
+							id: newId(),
+							type: "PathPoint",
+							x: segment.startX,
+							y: segment.startY,
+						} as PathPointData;
+						newItems.splice(1, 0, newItem);
+						newSegment.startPointId = newItem.id;
 					}
-
-					const dx = e.endX - e.startX;
-					const dy = e.endY - e.startY;
-					const newStartX = startSegment.current.startX + dx;
-					const newStartY = startSegment.current.startY + dy;
-					const newEndX = startSegment.current.endX + dx;
-					const newEndY = startSegment.current.endY + dy;
-
-					setDraggingSegment({
-						...draggingSegment,
-						startX: newStartX,
-						startY: newStartY,
-						endX: newEndX,
-						endY: newEndY,
-					});
 
 					onItemableChange?.({
 						eventType: e.eventType,
 						id,
-						items: items.map((item) => {
-							if (item.id === draggingSegment.startPointId) {
-								return { ...item, x: newStartX, y: newStartY };
-							}
-							if (item.id === draggingSegment.endPointId) {
-								return { ...item, x: newEndX, y: newEndY };
-							}
-							return item;
-						}),
+						items: newItems,
 					});
 				}
 
-				if (e.eventType === "End") {
-					if (!draggingSegment || !startSegment.current) {
-						return;
-					}
+				setDraggingSegment(newSegment);
+			}
 
-					const dx = e.endX - e.startX;
-					const dy = e.endY - e.startY;
-					const newStartX = startSegment.current.startX + dx;
-					const newStartY = startSegment.current.startY + dy;
-					const newEndX = startSegment.current.endX + dx;
-					const newEndY = startSegment.current.endY + dy;
-					const box = calcPointsOuterBox(
-						items.map((item) =>
-							item.id === e.id
-								? { x: e.endX, y: e.endY }
-								: { x: item.x, y: item.y },
-						),
-					);
-					onItemableChange?.({
-						eventType: e.eventType,
-						id,
-						x: box.center.x,
-						y: box.center.y,
-						width: box.right - box.left,
-						height: box.bottom - box.top,
-						items: items.map((item) => {
-							// ドラッグが完了したら、線分用のIDから新しいIDに変更
-							if (item.id === draggingSegment.startPointId) {
-								return { ...item, x: newStartX, y: newStartY };
-							}
-							if (item.id === draggingSegment.endPointId) {
-								return { ...item, x: newEndX, y: newEndY };
-							}
-							return item;
-						}),
-					});
-					setDraggingSegment(undefined);
-				}
-			},
-			[onItemableChange, id, items, draggingSegment],
-		);
+			if (!draggingSegment || !startSegment.current) {
+				return;
+			}
+
+			const dx = e.endX - e.startX;
+			const dy = e.endY - e.startY;
+			const newStartX = startSegment.current.startX + dx;
+			const newStartY = startSegment.current.startY + dy;
+			const newEndX = startSegment.current.endX + dx;
+			const newEndY = startSegment.current.endY + dy;
+
+			if (e.eventType === "InProgress") {
+				setDraggingSegment({
+					...draggingSegment,
+					startX: newStartX,
+					startY: newStartY,
+					endX: newEndX,
+					endY: newEndY,
+				});
+
+				onItemableChange?.({
+					eventType: e.eventType,
+					id,
+					items: items.map((item) => {
+						if (item.id === draggingSegment.startPointId) {
+							return { ...item, x: newStartX, y: newStartY };
+						}
+						if (item.id === draggingSegment.endPointId) {
+							return { ...item, x: newEndX, y: newEndY };
+						}
+						return item;
+					}),
+				});
+			}
+
+			if (e.eventType === "End") {
+				const box = calcPointsOuterBox(
+					items.map((item) =>
+						item.id === e.id
+							? { x: e.endX, y: e.endY }
+							: { x: item.x, y: item.y },
+					),
+				);
+				onItemableChange?.({
+					eventType: e.eventType,
+					id,
+					x: box.center.x,
+					y: box.center.y,
+					width: box.right - box.left,
+					height: box.bottom - box.top,
+					items: items.map((item) => {
+						// ドラッグが完了したら、線分用のIDから新しいIDに変更
+						if (item.id === draggingSegment.startPointId) {
+							return { ...item, x: newStartX, y: newStartY };
+						}
+						if (item.id === draggingSegment.endPointId) {
+							return { ...item, x: newEndX, y: newEndY };
+						}
+						return item;
+					}),
+				});
+				setDraggingSegment(undefined);
+			}
+		}, []);
 
 		return segmentList.map((item) => (
 			<Segment

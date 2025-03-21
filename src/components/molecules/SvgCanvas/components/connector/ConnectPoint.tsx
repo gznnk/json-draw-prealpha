@@ -23,7 +23,6 @@ import DragPoint from "../core/DragPoint";
 import Path from "../diagram/Path";
 
 // SvgCanvas関連関数をインポート
-import { newId } from "../../functions/Diagram";
 import {
 	calcDistance,
 	calcRadians,
@@ -113,9 +112,9 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 		}
 
 		const newPathPoints = newPoints.map(
-			(p) =>
+			(p, i) =>
 				({
-					id: newId(), // TODO: 接続が確定する前は仮のIDにしたい
+					id: `${id}-${i}`, // 仮のIDを付与
 					x: p.x,
 					y: p.y,
 				}) as PathPointData,
@@ -124,7 +123,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 		setPathPoints(newPathPoints);
 	};
 
-	// ハンドラ登録の頻発を回避するため、参照する値をuseRefで保持する
+	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		// プロパティ
 		id,
@@ -171,7 +170,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 
 			const { id, x, y, ownerId, ownerShape } = refBus.current;
 
-			// 接続中の処理
+			// 接続元に情報を送信
 			document.dispatchEvent(
 				new CustomEvent(EVENT_NAME_CONNECTTION, {
 					detail: {
@@ -298,6 +297,8 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 						points: points,
 						endOwnerId: customEvent.detail.endOwnerId,
 					});
+
+					setPathPoints([]);
 				}
 			}
 		};
