@@ -168,10 +168,12 @@ export const useDrag = (props: DragProps) => {
 	 * ドラッグ領域内でのポインターの押下イベントハンドラ
 	 */
 	const handlePointerDown = (e: React.PointerEvent<SVGElement>): void => {
-		// ポインターイベントが発生した要素のIDがこのドラッグ領域のIDと一致する場合のみ、ポインターキャプチャを設定する
+		// ポインターイベントが発生した要素のIDがこのドラッグ領域のIDと一致する場合のみイベントを処理する
 		if ((e.target as HTMLElement).id === id) {
+			// ポインターキャプチャーを設定
 			e.currentTarget.setPointerCapture(e.pointerId);
 
+			// ポインターが押されたフラグを立てる
 			isPointerDown.current = true;
 
 			// ドラッグ開始時のドラッグ領域の座標を記憶
@@ -271,6 +273,9 @@ export const useDrag = (props: DragProps) => {
 	 * ドラッグ領域内でのポインターの離上イベントハンドラ
 	 */
 	const handlePointerUp = (e: React.PointerEvent<SVGElement>): void => {
+		// ポインターキャプチャーを解放
+		e.currentTarget.releasePointerCapture(e.pointerId);
+
 		if (isDragging) {
 			// ドラッグ座標を取得
 			const dragPoint = getPointOnDrag(e);

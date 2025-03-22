@@ -49,7 +49,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	id,
 	x,
 	y,
-	hidden,
+	visible = true,
 	width,
 	height,
 	rotation,
@@ -223,10 +223,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 		[x, y, width, height, rotation, scaleX, scaleY],
 	);
 
-	if (hidden) {
-		return null;
-	}
-
 	// rectのtransform属性を生成
 	const transform = createSvgTransform(
 		scaleX,
@@ -237,11 +233,18 @@ const Rectangle: React.FC<RectangleProps> = ({
 	);
 
 	const doShowConnectPoints =
-		showConnectPoints && !isSelected && !isDragging && !isTransformimg;
+		visible &&
+		showConnectPoints &&
+		!isSelected &&
+		!isDragging &&
+		!isTransformimg;
 
 	return (
 		<>
-			<g transform="translate(0.5,0.5)">
+			<g
+				transform="translate(0.5,0.5)"
+				style={{ visibility: visible ? "visible" : "hidden" }}
+			>
 				<rect
 					key={id}
 					id={id}
@@ -259,7 +262,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					{...dragProps}
 				/>
 			</g>
-			{!isDragging && (
+			{visible && !isDragging && (
 				<Transformative
 					diagramId={id}
 					type="Rectangle"
@@ -285,7 +288,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 						y={cp.y}
 						ownerId={id}
 						ownerShape={ownerShape}
-						visible={isHovered && !isDragging && !isTransformimg}
+						isTransparent={!isHovered || isDragging || isTransformimg}
 						onConnect={onConnect}
 					/>
 				))}

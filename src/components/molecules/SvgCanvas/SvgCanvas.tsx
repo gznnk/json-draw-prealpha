@@ -63,6 +63,7 @@ type SvgCanvasProps = {
 	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onSelect?: (e: DiagramSelectEvent) => void;
+	onSelectionClear?: () => void;
 	onDelete?: () => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
 	onConnectPointsMove?: (e: ConnectPointsMoveEvent) => void;
@@ -80,6 +81,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	onDrag,
 	onDrop,
 	onSelect,
+	onSelectionClear,
 	onDelete,
 	onConnect,
 	onConnectPointsMove,
@@ -99,10 +101,10 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	const handlePointerDown = useCallback(
 		(e: React.PointerEvent<SVGSVGElement>) => {
 			if (e.target === e.currentTarget) {
-				onSelect?.({ id: "dummy" });
+				onSelectionClear?.();
 			}
 		},
-		[onSelect],
+		[onSelectionClear],
 	);
 
 	/**
@@ -183,7 +185,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 					{multiSelectGroup && (
 						<Group
 							{...multiSelectGroup}
-							id="multiSelectGroup"
+							id="MultiSelectGroup"
 							onTransform={onTransform} // TODO: 必要か精査
 							onItemableChange={onItemableChange}
 							onDrag={onDrag} // TODO: 必要か精査
@@ -246,39 +248,4 @@ const getDiagramById = (
 			}
 		}
 	}
-};
-
-/**
- * 再帰的に更新関数を適用する
- *
- * @param items 更新対象の図形配列
- * @param updateFunction 更新関数
- * @returns 更新後の図形配列
- */
-const applyRecursive = (
-	items: Diagram[],
-	updateFunction: (item: Diagram) => Diagram,
-) => {
-	let isItemChanged = false;
-	const newItems: Diagram[] = [];
-	for (const item of items) {
-		const newItem = updateFunction(item);
-		newItems.push(newItem);
-
-		// アイテムの参照先が変わった場合は変更ありと判断する
-		if (item !== newItem) {
-			isItemChanged = true;
-		}
-		if (isItemableData(item) && isItemableData(newItem)) {
-			const newGroupItems = applyRecursive(item.items ?? [], updateFunction);
-			// 配列の参照先が変わった場合は変更ありと判断する
-			if (newGroupItems !== item.items) {
-				newItem.items = newGroupItems;
-				isItemChanged = true;
-			}
-		}
-	}
-
-	// 変更がない場合はReactが変更なしと検知するよう元の配列を返す
-	return isItemChanged ? newItems : items;
 };

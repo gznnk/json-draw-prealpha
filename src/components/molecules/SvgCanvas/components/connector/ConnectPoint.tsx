@@ -54,7 +54,7 @@ type ConnectPointProps = CreateDiagramProps<
 > & {
 	ownerId: string;
 	ownerShape: Shape; // memo化して渡すこと
-	visible: boolean;
+	isTransparent: boolean;
 	onConnect?: (e: DiagramConnectEvent) => void;
 };
 
@@ -67,7 +67,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 	y,
 	ownerId,
 	ownerShape,
-	visible,
+	isTransparent,
 	onConnect,
 }) => {
 	// ホバー状態の管理
@@ -327,7 +327,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 				stroke="rgba(255, 204, 0, 0.8)"
 				fill="rgba(255, 204, 0, 0.8)"
 				outline="none"
-				visible={visible || isHovered}
+				isTransparent={isTransparent && !isHovered}
 				onDrag={handleDrag}
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}

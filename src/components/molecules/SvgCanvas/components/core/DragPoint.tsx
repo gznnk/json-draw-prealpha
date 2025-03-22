@@ -35,7 +35,7 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
 	fill?: string;
 	cursor?: string;
 	outline?: string;
-	visible?: boolean;
+	isTransparent?: boolean;
 	hidden?: boolean;
 	pointerEventsDisabled?: boolean;
 };
@@ -61,7 +61,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 	fill = "rgba(100, 149, 237, 0.8)",
 	cursor = "move",
 	outline = "1px rgba(100, 149, 237, 0.8) dashed",
-	visible = true,
+	isTransparent = false,
 	hidden = false,
 	pointerEventsDisabled = false,
 }) => {
@@ -101,7 +101,7 @@ const DragPoint: React.FC<DragPointProps> = ({
 			outline={outline}
 			tabIndex={0}
 			pointerEvents={pointerEventsDisabled ? "none" : "auto"}
-			style={{ opacity: visible ? 1 : 0 }}
+			style={{ opacity: isTransparent ? 0 : 1 }}
 			ref={svgRef}
 			{...dragProps}
 		/>

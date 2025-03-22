@@ -12,7 +12,7 @@ import { useDrag } from "../../hooks/dragHooks";
 export type RotatePointProps = Omit<DragProps, "ref"> & {
 	rotation?: number;
 	color?: string;
-	visible?: boolean;
+	isTransparent?: boolean;
 	hidden?: boolean;
 };
 
@@ -34,7 +34,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 	dragPositioningFunction,
 	rotation = 0,
 	color = "rgba(100, 149, 237, 0.8)",
-	visible = true,
+	isTransparent = false,
 	hidden = false,
 }) => {
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
@@ -65,7 +65,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 				<g transform="translate(-440 -440)">
 					<path
 						fill={color}
-						style={{ opacity: visible ? 1 : 0 }}
+						style={{ opacity: isTransparent ? 0 : 1 }}
 						d="M803.661,613.847c21.129-49.956,31.842-102.991,31.842-157.634c0-46.664-7.883-92.431-23.43-136.031
 							c-15.025-42.134-36.846-81.294-64.859-116.393c-27.734-34.751-60.746-64.539-98.117-88.534
 							c-38.072-24.445-79.621-42.192-123.492-52.748c-28.191-6.782-56.543,10.571-63.326,38.761s10.572,56.542,38.762,63.325

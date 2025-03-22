@@ -119,26 +119,32 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		});
 
 		setCanvasState((prevState) => {
-			let items = applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? deepMerge(item, e) : item,
-			);
+			let items = prevState.items;
 			let multiSelectGroup: GroupData | undefined = prevState.multiSelectGroup;
 
-			if (e.id === "multiSelectGroup") {
+			if (e.id === "MultiSelectGroup") {
 				multiSelectGroup = {
 					...multiSelectGroup,
 					...e,
 				} as GroupData;
-				items = applyRecursive(prevState.items, (item) => {
-					const changedItem = (e.items ?? []).find((i) => i.id === item.id);
-					if (changedItem) {
-						return {
-							...item,
-							...changedItem,
-						};
-					}
-					return item;
-				});
+
+				if (e.eventType === "End") {
+					items = applyRecursive(prevState.items, (item) => {
+						const changedItem = (e.items ?? []).find((i) => i.id === item.id);
+						if (changedItem) {
+							return {
+								...item,
+								...changedItem,
+								visible: false,
+							};
+						}
+						return item;
+					});
+				}
+			} else {
+				items = applyRecursive(prevState.items, (item) =>
+					item.id === e.id ? { ...item, ...e } : item,
+				);
 			}
 
 			return {
@@ -159,14 +165,13 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					return item;
 				}
 				if (item.id === e.id) {
-					return { ...item, isSelected: true, hidden: false };
+					return { ...item, isSelected: true };
 				}
 
 				return {
 					...item,
 					// 複数選択でない場合は、選択された図形以外の選択状態を解除
 					isSelected: e.isMultiSelect ? item.isSelected : false,
-					hidden: false,
 				};
 			});
 
@@ -190,15 +195,16 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					items: selectedItems.map((item) => ({
 						...item,
 						isSelected: false, // 複数選択用のグループ内の図形は選択状態を解除
+						visible: true,
 					})),
 				} as GroupData;
 
 				// 元の図形は非表示にする
-				items = applyRecursive(prevState.items, (item) => {
+				items = applyRecursive(items, (item) => {
 					if (!isSelectableData(item)) {
 						return item;
 					}
-					return item.isSelected ? { ...item, hidden: true } : item;
+					return item.isSelected ? { ...item, visible: false } : item;
 				});
 			}
 
@@ -209,6 +215,22 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				selectedItemId: e.id,
 			};
 		});
+	}, []);
+
+	/**
+	 * 選択状態の解除イベントハンドラ
+	 */
+	const onSelectionClear = useCallback(() => {
+		setCanvasState((prevState) => ({
+			...prevState,
+			items: applyRecursive(prevState.items, (item) =>
+				isSelectableData(item)
+					? { ...item, isSelected: false, visible: true }
+					: item,
+			),
+			multiSelectGroup: undefined,
+			selectedItemId: undefined,
+		}));
 	}, []);
 
 	const onDelete = useCallback(() => {
@@ -275,6 +297,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onDrag,
 		onDrop,
 		onSelect,
+		onSelectionClear,
 		onDelete,
 		onConnect,
 		onConnectPointsMove,
@@ -324,8 +347,6 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		addItem,
 		updateItem,
 	};
-
-	console.log("canvasState", canvasState);
 
 	return {
 		state: [canvasState, setCanvasState],
