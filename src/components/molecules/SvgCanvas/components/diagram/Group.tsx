@@ -143,7 +143,11 @@ const Group: React.FC<GroupProps> = ({
 	 * グループ内の図形の選択イベントハンドラ
 	 */
 	const handleChildDiagramSelect = useCallback((e: DiagramSelectEvent) => {
-		const { id, isSelected, items, onSelect } = refBus.current;
+		const { id, isSelected, items, onSelect, transformGroupOutline } =
+			refBus.current;
+
+		// 複数選択時の移動・変形でアウトラインがずれるので、選択時にアウトラインを更新する
+		transformGroupOutline();
 
 		const selectedChild = getSelectedChildDiagram(items);
 		if (!selectedChild) {
