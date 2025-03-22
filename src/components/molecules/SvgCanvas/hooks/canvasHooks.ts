@@ -136,12 +136,17 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 						// 元図形に対応する複数選択グループ側の変更データを取得
 						const changedItem = (e.items ?? []).find((i) => i.id === item.id);
 						if (changedItem && isSelectableData(item)) {
-							return {
+							const newItem = {
 								...item,
 								...changedItem,
 								isSelected: item.isSelected, // 元図形の選択状態を維持（これをやらないとchangeItem側の値で上書きされてしまう）
-								visible: false, // 元図形の非表示を維持（これをやらないとchangeItem側の値で上書きされてしまう）
+								visible: false, // 元図形の非表示を維持（同上）
 							};
+							if (isItemableData(newItem)) {
+								newItem.items = hideRecursive(newItem.items ?? [], true); // 子図形の非表示を維持（同上）
+							}
+
+							return newItem;
 						}
 
 						// 対応する変更データがない場合はそのまま
@@ -211,13 +216,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					})),
 				} as GroupData;
 
-				// 元の図形は非表示にする TODO: グループの場合に子図形が非表示にならない問題を解決する、Group側にvisibleを持たせ、伝番させる
-				items = applyRecursive(items, (item) => {
-					if (!isSelectableData(item)) {
-						return item;
-					}
-					return item.isSelected ? { ...item, visible: false } : item;
-				});
+				// 元の図形は非表示にする
+				items = hideRecursive(items, false);
 			}
 
 			return {
@@ -441,4 +441,21 @@ const getSelectedRecursive = (items: Diagram[], selectedItems?: Diagram[]) => {
 		}
 	}
 	return _selectedItems;
+};
+
+const hideRecursive = (items: Diagram[], isGroupHidden: boolean): Diagram[] => {
+	return items.map((item) => {
+		const newItem = { ...item };
+		if (!isSelectableData(item)) {
+			return item;
+		}
+		if (isItemableData(newItem)) {
+			newItem.items = hideRecursive(
+				newItem.items ?? [],
+				isGroupHidden || item.isSelected,
+			);
+		}
+		newItem.visible = !(isGroupHidden || item.isSelected);
+		return newItem;
+	});
 };
