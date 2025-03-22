@@ -222,6 +222,15 @@ const Rectangle: React.FC<RectangleProps> = ({
 		[x, y, width, height, rotation, scaleX, scaleY],
 	);
 
+	// rectのtransform属性を生成
+	const transform = createSvgTransform(
+		scaleX,
+		scaleY,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
+
 	const doShowConnectPoints =
 		showConnectPoints && !isSelected && !isDragging && !isTransformimg;
 
@@ -240,13 +249,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					strokeWidth={strokeWidth}
 					tabIndex={0}
 					cursor="move"
-					transform={createSvgTransform(
-						scaleX,
-						scaleY,
-						degreesToRadians(rotation),
-						x,
-						y,
-					)}
+					transform={transform}
 					ref={svgRef}
 					{...dragProps}
 				/>
