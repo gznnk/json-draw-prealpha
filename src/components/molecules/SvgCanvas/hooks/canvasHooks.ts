@@ -132,11 +132,17 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					items = applyRecursive(prevState.items, (item) => {
 						const changedItem = (e.items ?? []).find((i) => i.id === item.id);
 						if (changedItem) {
-							return {
+							const newItem = {
 								...item,
 								...changedItem,
 								visible: false,
 							};
+
+							if (isSelectableData(item) && isSelectableData(newItem)) {
+								newItem.isSelected = item.isSelected;
+							}
+
+							return newItem;
 						}
 						return item;
 					});

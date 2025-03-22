@@ -175,6 +175,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 				<Svg
 					width="120vw"
 					height="120vh"
+					tabIndex={0}
 					onPointerDown={handlePointerDown}
 					onKeyDown={handleKeyDown}
 					onKeyUp={handleKeyUp}
