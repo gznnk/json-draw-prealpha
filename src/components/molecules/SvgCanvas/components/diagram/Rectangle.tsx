@@ -49,7 +49,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	id,
 	x,
 	y,
-	visible = true,
+	visible,
 	width,
 	height,
 	rotation,
@@ -69,8 +69,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onConnect,
 	onConnectPointsMove,
 }) => {
-	window.profiler.call(`Rectangle render: ${id}`);
-
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
 	// 変形中かのフラグ
@@ -142,7 +140,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	refBus.current = refBusVal;
 
 	/**
-	 * 四角形のドラッグ中イベントハンドラ
+	 * 四角形のドラッグイベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
 		const { onDrag, updateConnectPoints } = refBus.current;
@@ -164,10 +162,11 @@ const Rectangle: React.FC<RectangleProps> = ({
 	}, []);
 
 	/**
-	 * 四角形の変形中イベントハンドラ
+	 * 四角形の変形イベントハンドラ
 	 */
 	const handleTransform = useCallback((e: DiagramTransformEvent) => {
 		const { onTransform, updateConnectPoints } = refBus.current;
+
 		if (e.eventType === "Start") {
 			setIsTransforming(true);
 		}
@@ -309,7 +308,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 export default memo(Rectangle);
 
 /**
- * 短径データ作成
+ * 四角形データ作成
  */
 export const createRectangleData = ({
 	x,
@@ -365,6 +364,7 @@ export const createRectangleData = ({
 		type: "Rectangle",
 		x,
 		y,
+		visible: true,
 		width,
 		height,
 		rotation,

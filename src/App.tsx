@@ -4,12 +4,12 @@ import Button from "./components/atoms/Button";
 import Input from "./components/atoms/Input";
 import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramTypes";
 import { createRectangleData } from "./components/molecules/SvgCanvas/components/diagram/Rectangle";
+import { createEllipseData } from "./components/molecules/SvgCanvas/components/diagram/Ellipse";
 
 import { getLogger } from "./utils/Logger";
 import { Profiler } from "./utils/Profiler";
 
 import { radiansToDegrees } from "./components/molecules/SvgCanvas/functions/Math";
-import { useEffect } from "react";
 const logger = getLogger("App");
 declare global {
 	interface Window {
@@ -30,22 +30,10 @@ const testItems1 = [
 		x: 100,
 		y: 100,
 	}),
-	{
-		id: "2",
-		type: "Ellipse",
+	createEllipseData({
 		x: 100,
 		y: 100,
-		width: 100,
-		height: 100,
-		rotation: radiansToDegrees(0),
-		scaleX: 1,
-		scaleY: 1,
-		fill: "transparent",
-		stroke: "black",
-		strokeWidth: "1px",
-		keepProportion: false,
-		isSelected: false,
-	},
+	}),
 	{
 		id: "g-1",
 		type: "Group",
@@ -63,42 +51,18 @@ const testItems1 = [
 				x: 200,
 				y: 200,
 			}),
-			{
-				id: "4",
-				type: "Ellipse",
+			createEllipseData({
 				x: 300,
 				y: 200,
-				width: 100,
-				height: 100,
-				rotation: radiansToDegrees(0),
-				scaleX: 1,
-				scaleY: 1,
-				fill: "transparent",
-				stroke: "black",
-				strokeWidth: "1px",
-				keepProportion: false,
-				isSelected: false,
-			},
+			}),
 			createRectangleData({
 				x: 300,
 				y: 300,
 			}),
-			{
-				id: "6",
-				type: "Ellipse",
+			createEllipseData({
 				x: 200,
 				y: 300,
-				width: 100,
-				height: 100,
-				rotation: radiansToDegrees(0),
-				scaleX: 1,
-				scaleY: 1,
-				fill: "transparent",
-				stroke: "black",
-				strokeWidth: "1px",
-				keepProportion: false,
-				isSelected: false,
-			},
+			}),
 			{
 				id: "g-2",
 				type: "Group",
@@ -119,22 +83,10 @@ const testItems1 = [
 						x: 400,
 						y: 400,
 					}),
-					{
-						id: "8",
-						type: "Ellipse",
+					createEllipseData({
 						x: 500,
 						y: 400,
-						width: 100,
-						height: 100,
-						rotation: radiansToDegrees(0),
-						scaleX: 1,
-						scaleY: 1,
-						fill: "transparent",
-						stroke: "black",
-						strokeWidth: "1px",
-						keepProportion: false,
-						isSelected: false,
-					},
+					}),
 					createRectangleData({
 						x: 500,
 						y: 500,
@@ -295,22 +247,10 @@ const testItems3 = [
 				keepProportion: false,
 				isSelected: false,
 			},
-			{
-				id: "4",
-				type: "Ellipse",
+			createEllipseData({
 				x: 250,
 				y: 150,
-				width: 100,
-				height: 100,
-				rotation: radiansToDegrees(0),
-				scaleX: 1,
-				scaleY: 1,
-				fill: "transparent",
-				stroke: "black",
-				strokeWidth: "1px",
-				keepProportion: false,
-				isSelected: false,
-			},
+			}),
 			{
 				id: "5",
 				type: "Rectangle",
@@ -435,22 +375,10 @@ const testItems5 = [
 				x: 150,
 				y: 150,
 			}),
-			{
-				id: "4",
-				type: "Ellipse",
+			createEllipseData({
 				x: 150,
 				y: 250,
-				width: 100,
-				height: 100,
-				rotation: 0,
-				scaleX: 1,
-				scaleY: 1,
-				fill: "transparent",
-				stroke: "black",
-				strokeWidth: "1px",
-				keepProportion: false,
-				isSelected: false,
-			},
+			}),
 			createRectangleData({
 				x: 250,
 				y: 250,
