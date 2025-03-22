@@ -126,7 +126,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 				/>
 			</g>
 			<Transformative
-				diagramId={id}
+				id={id}
 				type="Ellipse"
 				x={x}
 				y={y}

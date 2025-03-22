@@ -501,7 +501,7 @@ const Group: React.FC<GroupProps> = ({
 			{children}
 			{!isGroupDragging && (
 				<Transformative
-					diagramId={id}
+					id={id}
 					type="Group"
 					x={x}
 					y={y}
@@ -655,9 +655,9 @@ const calcItemBoxOfNoGroupRotation = (
  */
 export const calcGroupBoxOfNoRotation = (
 	items: Diagram[],
-	groupCenterX: number,
-	groupCenterY: number,
-	groupRotation: number,
+	groupCenterX = 0,
+	groupCenterY = 0,
+	groupRotation = 0,
 	changeItem?: Diagram,
 ) => {
 	// グループ内の図形を再帰的に取得し、グループの四辺の座標を計算する

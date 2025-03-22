@@ -82,12 +82,16 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	/**
 	 * 接続ポイントの位置を更新
+	 *
+	 * @param eventType イベントタイプ
+	 * @param rectShape 四角形の形状（差分）
 	 */
 	const updateConnectPoints = (
 		eventType: EventType,
-		ownerShape: Partial<Shape>,
+		rectShape: Partial<Shape>,
 	) => {
-		const newShape = {
+		// 更新後の四角形の形状
+		const newRectShape = {
 			x,
 			y,
 			width,
@@ -95,28 +99,31 @@ const Rectangle: React.FC<RectangleProps> = ({
 			rotation,
 			scaleX,
 			scaleY,
-			...ownerShape,
+			...rectShape,
 		};
-		const vertices = calcRectangleVertices(newShape);
+		// 更新後の四角形の頂点座標を計算
+		const vertices = calcRectangleVertices(newRectShape);
 
-		const moveDataList: ConnectPointMoveData[] = [];
+		// 接続ポイントの移動データを生成
+		const newConnectPoints: ConnectPointMoveData[] = [];
 		for (const connectPointData of (items as ConnectPointData[]) ?? []) {
-			const connectPoint = (vertices as RectangleVertices)[
+			const vertex = (vertices as RectangleVertices)[
 				connectPointData.name as keyof RectangleVertices
 			];
 
-			moveDataList.push({
+			newConnectPoints.push({
 				id: connectPointData.id,
-				x: connectPoint.x,
-				y: connectPoint.y,
+				x: vertex.x,
+				y: vertex.y,
 				ownerId: id,
-				ownerShape: newShape,
+				ownerShape: newRectShape,
 			});
 		}
 
+		// 接続ポイント移動イベントを発火
 		onConnectPointsMove?.({
 			eventType,
-			points: moveDataList,
+			points: newConnectPoints,
 		});
 	};
 
@@ -195,6 +202,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 		setIsHovered(e.isHovered);
 	}, []);
 
+	// ドラッグ用のプロパティを生成
 	const dragProps = useDrag({
 		id,
 		type: "Rectangle",
@@ -232,6 +240,10 @@ const Rectangle: React.FC<RectangleProps> = ({
 		y,
 	);
 
+	// 変形コンポーネントを表示するかのフラグ
+	const showTransformative = visible && !isDragging;
+
+	// 接続ポイントを表示するかのフラグ
 	const doShowConnectPoints =
 		visible &&
 		showConnectPoints &&
@@ -241,10 +253,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 	return (
 		<>
-			<g
-				transform="translate(0.5,0.5)"
-				style={{ visibility: visible ? "visible" : "hidden" }}
-			>
+			<g transform="translate(0.5,0.5)">
 				<rect
 					key={id}
 					id={id}
@@ -258,13 +267,14 @@ const Rectangle: React.FC<RectangleProps> = ({
 					tabIndex={0}
 					cursor="move"
 					transform={transform}
+					style={{ visibility: visible ? "visible" : "hidden" }}
 					ref={svgRef}
 					{...dragProps}
 				/>
 			</g>
-			{visible && !isDragging && (
+			{showTransformative && (
 				<Transformative
-					diagramId={id}
+					id={id}
 					type="Rectangle"
 					x={x}
 					y={y}

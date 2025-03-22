@@ -118,36 +118,38 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			points: connectPoints,
 		});
 
+		// 図形の変更を反映
 		setCanvasState((prevState) => {
 			let items = prevState.items;
 			let multiSelectGroup: GroupData | undefined = prevState.multiSelectGroup;
 
 			if (e.id === "MultiSelectGroup") {
+				// 複数選択グループの変更の場合、複数選択グループ内の図形を更新
 				multiSelectGroup = {
 					...multiSelectGroup,
 					...e,
 				} as GroupData;
 
+				// // 複数選択グループの変更が終了したタイミングで、元の図形にも変更を反映する
 				if (e.eventType === "End") {
 					items = applyRecursive(prevState.items, (item) => {
+						// 元図形に対応する複数選択グループ側の変更データを取得
 						const changedItem = (e.items ?? []).find((i) => i.id === item.id);
-						if (changedItem) {
-							const newItem = {
+						if (changedItem && isSelectableData(item)) {
+							return {
 								...item,
 								...changedItem,
-								visible: false,
+								isSelected: item.isSelected, // 元図形の選択状態を維持（これをやらないとchangeItem側の値で上書きされてしまう）
+								visible: false, // 元図形の非表示を維持（これをやらないとchangeItem側の値で上書きされてしまう）
 							};
-
-							if (isSelectableData(item) && isSelectableData(newItem)) {
-								newItem.isSelected = item.isSelected;
-							}
-
-							return newItem;
 						}
+
+						// 対応する変更データがない場合はそのまま
 						return item;
 					});
 				}
 			} else {
+				// 複数選択グループ以外の場合は、普通に更新
 				items = applyRecursive(prevState.items, (item) =>
 					item.id === e.id ? { ...item, ...e } : item,
 				);
@@ -168,9 +170,12 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		setCanvasState((prevState) => {
 			let items = applyRecursive(prevState.items, (item) => {
 				if (!isSelectableData(item)) {
+					// 選択不可能な図形は無視
 					return item;
 				}
+
 				if (item.id === e.id) {
+					// 図形を選択状態にする
 					return { ...item, isSelected: true };
 				}
 
@@ -187,7 +192,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			// 複数選択の場合は、選択されている図形をグループ化
 			let multiSelectGroup: GroupData | undefined = undefined;
 			if (1 < selectedItems.length) {
-				const box = calcGroupBoxOfNoRotation(selectedItems, 0, 0, 0);
+				// 複数選択グループの初期値を作成
+				const box = calcGroupBoxOfNoRotation(selectedItems);
 				multiSelectGroup = {
 					x: box.left + (box.right - box.left) / 2,
 					y: box.top + (box.bottom - box.top) / 2,
@@ -205,7 +211,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					})),
 				} as GroupData;
 
-				// 元の図形は非表示にする
+				// 元の図形は非表示にする TODO: グループの場合に子図形が非表示にならない問題を解決する、Group側にvisibleを持たせ、伝番させる
 				items = applyRecursive(items, (item) => {
 					if (!isSelectableData(item)) {
 						return item;
@@ -224,14 +230,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	}, []);
 
 	/**
-	 * 選択状態の解除イベントハンドラ
+	 * 選択状態の全解除イベントハンドラ
 	 */
-	const onSelectionClear = useCallback(() => {
+	const onAllSelectionClear = useCallback(() => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
 				isSelectableData(item)
-					? { ...item, isSelected: false, visible: true }
+					? { ...item, isSelected: false, visible: true } // 全ての図形の選択状態を解除し、かつ表示状態を元に戻す
 					: item,
 			),
 			multiSelectGroup: undefined,
@@ -303,7 +309,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onDrag,
 		onDrop,
 		onSelect,
-		onSelectionClear,
+		onAllSelectionClear,
 		onDelete,
 		onConnect,
 		onConnectPointsMove,

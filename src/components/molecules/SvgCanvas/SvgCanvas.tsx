@@ -63,7 +63,7 @@ type SvgCanvasProps = {
 	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onSelect?: (e: DiagramSelectEvent) => void;
-	onSelectionClear?: () => void;
+	onAllSelectionClear?: () => void;
 	onDelete?: () => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
 	onConnectPointsMove?: (e: ConnectPointsMoveEvent) => void;
@@ -81,7 +81,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	onDrag,
 	onDrop,
 	onSelect,
-	onSelectionClear,
+	onAllSelectionClear,
 	onDelete,
 	onConnect,
 	onConnectPointsMove,
@@ -101,10 +101,10 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	const handlePointerDown = useCallback(
 		(e: React.PointerEvent<SVGSVGElement>) => {
 			if (e.target === e.currentTarget) {
-				onSelectionClear?.();
+				onAllSelectionClear?.();
 			}
 		},
-		[onSelectionClear],
+		[onAllSelectionClear],
 	);
 
 	/**
@@ -187,7 +187,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 						<Group
 							{...multiSelectGroup}
 							id="MultiSelectGroup"
-							onTransform={onTransform} // TODO: 必要か精査
+							onTransform={onTransform}
 							onItemableChange={onItemableChange}
 							onDrag={onDrag} // TODO: 必要か精査
 							onDrop={onDrop} // TODO: 必要か精査

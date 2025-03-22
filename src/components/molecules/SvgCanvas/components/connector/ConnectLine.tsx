@@ -170,7 +170,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			if (startItems.current.length === 0) {
 				// 移動開始時のitemsがない場合は何もしない
 				// フェイルセーフの処理で、ここにくる場合はバグ
-				console.error("ConnectLine: startItems is empty");
+				console.error("Illegal state: startItems is empty.");
 				return;
 			}
 

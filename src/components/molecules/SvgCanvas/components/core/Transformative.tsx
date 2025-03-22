@@ -45,7 +45,7 @@ const ROTATE_POINT_MARGIN = 15;
 type Props = TransformativeData &
 	SelectableData &
 	TransformativeProps & {
-		diagramId: string;
+		id: string;
 		type: DiagramType;
 	};
 
@@ -53,7 +53,7 @@ type Props = TransformativeData &
  * 変形コンポーネント
  */
 const Transformative: React.FC<Props> = ({
-	diagramId,
+	id,
 	x,
 	y,
 	width,
@@ -139,7 +139,7 @@ const Transformative: React.FC<Props> = ({
 
 		onTransform?.({
 			eventType: "Start",
-			id: diagramId,
+			id,
 			startShape: startShape.current,
 			endShape: startShape.current,
 		});
@@ -153,7 +153,7 @@ const Transformative: React.FC<Props> = ({
 	) => {
 		const event = {
 			eventType,
-			id: diagramId,
+			id,
 			startShape: {
 				...startShape.current,
 			},
@@ -174,7 +174,7 @@ const Transformative: React.FC<Props> = ({
 	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		// プロパティ
-		diagramId,
+		id,
 		x,
 		y,
 		width,
@@ -650,7 +650,7 @@ const Transformative: React.FC<Props> = ({
 	 */
 	const handleDragRotationPoint = useCallback((e: DiagramDragEvent) => {
 		const {
-			diagramId,
+			id,
 			x,
 			y,
 			width,
@@ -672,7 +672,7 @@ const Transformative: React.FC<Props> = ({
 		);
 		const event = {
 			eventType: e.eventType,
-			id: diagramId,
+			id,
 			startShape: {
 				...startShape.current,
 			},
@@ -736,7 +736,7 @@ const Transformative: React.FC<Props> = ({
 			</g>
 			{/* 上辺 */}
 			<DragLine
-				id={`${diagramId}-topCenter-line`}
+				id={`${id}-topCenter-line`}
 				x={vertices.topCenterPoint.x}
 				y={vertices.topCenterPoint.y}
 				startX={vertices.leftTopPoint.x}
@@ -749,7 +749,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 左辺 */}
 			<DragLine
-				id={`${diagramId}-leftCenter-line`}
+				id={`${id}-leftCenter-line`}
 				x={vertices.leftCenterPoint.x}
 				y={vertices.leftCenterPoint.y}
 				startX={vertices.leftTopPoint.x}
@@ -762,7 +762,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 右辺 */}
 			<DragLine
-				id={`${diagramId}-rightCenter-line`}
+				id={`${id}-rightCenter-line`}
 				x={vertices.rightCenterPoint.x}
 				y={vertices.rightCenterPoint.y}
 				startX={vertices.rightTopPoint.x}
@@ -775,7 +775,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 下辺 */}
 			<DragLine
-				id={`${diagramId}-bottomCenter-line`}
+				id={`${id}-bottomCenter-line`}
 				x={vertices.bottomCenterPoint.x}
 				y={vertices.bottomCenterPoint.y}
 				startX={vertices.leftBottomPoint.x}
@@ -788,7 +788,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 左上 */}
 			<DragPoint
-				id={`${diagramId}-leftTop`}
+				id={`${id}-leftTop`}
 				x={vertices.leftTopPoint.x}
 				y={vertices.leftTopPoint.y}
 				cursor={cursors.leftTop}
@@ -799,7 +799,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 左下 */}
 			<DragPoint
-				id={`${diagramId}-leftBottom`}
+				id={`${id}-leftBottom`}
 				x={vertices.leftBottomPoint.x}
 				y={vertices.leftBottomPoint.y}
 				cursor={cursors.leftBottom}
@@ -810,7 +810,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 右上 */}
 			<DragPoint
-				id={`${diagramId}-rightTop`}
+				id={`${id}-rightTop`}
 				x={vertices.rightTopPoint.x}
 				y={vertices.rightTopPoint.y}
 				cursor={cursors.rightTop}
@@ -821,7 +821,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 右下 */}
 			<DragPoint
-				id={`${diagramId}-rightBottom`}
+				id={`${id}-rightBottom`}
 				x={vertices.rightBottomPoint.x}
 				y={vertices.rightBottomPoint.y}
 				cursor={cursors.rightBottom}
@@ -832,7 +832,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 上中央 */}
 			<DragPoint
-				id={`${diagramId}-topCenter`}
+				id={`${id}-topCenter`}
 				x={vertices.topCenterPoint.x}
 				y={vertices.topCenterPoint.y}
 				cursor={cursors.topCenter}
@@ -841,7 +841,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 左中央 */}
 			<DragPoint
-				id={`${diagramId}-leftCenter`}
+				id={`${id}-leftCenter`}
 				x={vertices.leftCenterPoint.x}
 				y={vertices.leftCenterPoint.y}
 				cursor={cursors.leftCenter}
@@ -850,7 +850,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 右中央 */}
 			<DragPoint
-				id={`${diagramId}-rightCenter`}
+				id={`${id}-rightCenter`}
 				x={vertices.rightCenterPoint.x}
 				y={vertices.rightCenterPoint.y}
 				cursor={cursors.rightCenter}
@@ -859,7 +859,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 下中央 */}
 			<DragPoint
-				id={`${diagramId}-bottomCenter`}
+				id={`${id}-bottomCenter`}
 				x={vertices.bottomCenterPoint.x}
 				y={vertices.bottomCenterPoint.y}
 				cursor={cursors.bottomCenter}
@@ -868,7 +868,7 @@ const Transformative: React.FC<Props> = ({
 			/>
 			{/* 回転 */}
 			<RotatePoint
-				id={`rotation-${diagramId}`}
+				id={`rotation-${id}`}
 				x={rotationPoint.x}
 				y={rotationPoint.y}
 				rotation={rotation}
