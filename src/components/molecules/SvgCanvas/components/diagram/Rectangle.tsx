@@ -89,6 +89,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 		eventType: EventType,
 		rectShape: Partial<Shape>,
 	) => {
+		if (!visible) return; // TODO: 別の名前にする
+
 		// 更新後の四角形の形状
 		const newRectShape = {
 			x,

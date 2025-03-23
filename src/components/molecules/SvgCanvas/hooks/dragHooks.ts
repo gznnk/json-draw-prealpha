@@ -508,7 +508,7 @@ export const useDrag = (props: DragProps) => {
 		let handleBroadcastDrag: (e: Event) => void;
 		let handleBroadcastDragForSync: (e: Event) => void;
 
-		const { syncWithSameId, onDrag, onDragOver, onDrop } = refBus.current;
+		const { ref, onDrag, onDragOver, onDrop, syncWithSameId } = refBus.current;
 
 		if (onDragOver || onDrop) {
 			handleBroadcastDrag = (e: Event) => {

@@ -91,7 +91,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		// 接続ポイントの移動データを取得
 		const connectPoints: ConnectPointMoveData[] = [];
 		const findRecursive = (data: Partial<Diagram>) => {
-			if (isItemableData(data)) {
+			if (data.visible !== false && isItemableData(data)) {
 				for (const item of data.items ?? []) {
 					if (item.type === "ConnectPoint") {
 						connectPoints.push({
@@ -112,11 +112,13 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		};
 		findRecursive(e);
 
-		// 接続ポイントの移動を通知
-		notifyConnectPointsMove({
-			eventType: e.eventType,
-			points: connectPoints,
-		});
+		if (0 < connectPoints.length) {
+			// 接続ポイントの移動を通知
+			notifyConnectPointsMove({
+				eventType: e.eventType,
+				points: connectPoints,
+			});
+		}
 
 		// 図形の変更を反映
 		setCanvasState((prevState) => {
