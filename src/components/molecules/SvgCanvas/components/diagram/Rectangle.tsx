@@ -49,7 +49,6 @@ const Rectangle: React.FC<RectangleProps> = ({
 	id,
 	x,
 	y,
-	visible,
 	width,
 	height,
 	rotation,
@@ -60,6 +59,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	stroke,
 	strokeWidth,
 	isSelected,
+	isMultiSelected,
 	items,
 	showConnectPoints = true,
 	syncWithSameId = false,
@@ -89,7 +89,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 		eventType: EventType,
 		rectShape: Partial<Shape>,
 	) => {
-		if (!visible) return; // TODO: 別の名前にする
+		// 複数選択されている場合、複数選択グループ側の処理と重複するためスキップ
+		if (isMultiSelected) return;
 
 		// 更新後の四角形の形状
 		const newRectShape = {
@@ -244,13 +245,13 @@ const Rectangle: React.FC<RectangleProps> = ({
 	);
 
 	// 変形コンポーネントを表示するかのフラグ
-	const showTransformative = visible && !isDragging;
+	const showTransformative = isSelected && !isMultiSelected && !isDragging;
 
 	// 接続ポイントを表示するかのフラグ
 	const doShowConnectPoints =
-		visible &&
 		showConnectPoints &&
 		!isSelected &&
+		!isMultiSelected &&
 		!isDragging &&
 		!isTransformimg;
 
@@ -270,7 +271,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					tabIndex={0}
 					cursor="move"
 					transform={transform}
-					style={{ visibility: visible ? "visible" : "hidden" }}
+					style={{ visibility: isMultiSelected ? "hidden" : "visible" }}
 					ref={svgRef}
 					{...dragProps}
 				/>
@@ -288,6 +289,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					isSelected={isSelected}
+					isMultiSelected={isMultiSelected}
 					onTransform={handleTransform}
 				/>
 			)}
@@ -368,7 +370,6 @@ export const createRectangleData = ({
 		type: "Rectangle",
 		x,
 		y,
-		visible: true,
 		width,
 		height,
 		rotation,
@@ -379,6 +380,7 @@ export const createRectangleData = ({
 		stroke,
 		strokeWidth,
 		isSelected: false,
+		isMultiSelected: false,
 		items,
 	} as RectangleData;
 };

@@ -56,7 +56,6 @@ export type DiagramBaseData = {
 	type: DiagramType;
 	x: number;
 	y: number;
-	visible?: boolean; // 永続化されないプロパティ TODO: 永続化されるプロパティと分ける TODO: 名前を改善
 	syncWithSameId?: boolean; // 永続化されないプロパティ TODO: 永続化されるプロパティと分ける
 };
 
@@ -65,6 +64,7 @@ export type DiagramBaseData = {
  */
 export type SelectableData = {
 	isSelected: boolean;
+	isMultiSelected: boolean;
 };
 
 /**

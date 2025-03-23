@@ -39,17 +39,17 @@ const Ellipse: React.FC<EllipseProps> = ({
 	id,
 	x,
 	y,
-	visible = true,
 	width,
 	height,
-	rotation = 0,
-	scaleX = 1,
-	scaleY = 1,
-	fill = "transparent",
-	stroke = "black",
-	strokeWidth = "1px",
-	keepProportion = false,
-	isSelected = false,
+	rotation,
+	scaleX,
+	scaleY,
+	fill,
+	stroke,
+	strokeWidth,
+	keepProportion,
+	isSelected,
+	isMultiSelected,
 	onDrag,
 	onClick,
 	onSelect,
@@ -156,7 +156,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 	);
 
 	// 変形コンポーネントを表示するかのフラグ
-	const showTransformative = visible && !isDragging;
+	const showTransformative = isSelected && !isMultiSelected && !isDragging;
 
 	return (
 		<>
@@ -173,7 +173,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 					tabIndex={0}
 					cursor="move"
 					transform={transform}
-					style={{ visibility: visible ? "visible" : "hidden" }}
+					style={{ visibility: isMultiSelected ? "hidden" : "visible" }}
 					ref={svgRef}
 					{...dragProps}
 				/>
@@ -191,6 +191,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					isSelected={isSelected}
+					isMultiSelected={isMultiSelected}
 					onTransform={handleTransform}
 				/>
 			)}
@@ -233,7 +234,6 @@ export const createEllipseData = ({
 		type: "Ellipse",
 		x,
 		y,
-		visible: true,
 		width,
 		height,
 		rotation,
@@ -244,6 +244,7 @@ export const createEllipseData = ({
 		stroke,
 		strokeWidth,
 		isSelected: false,
-		// items,
+		isMultiSelected: false,
+		items: [],
 	} as EllipseData;
 };
