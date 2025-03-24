@@ -91,7 +91,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		// 接続ポイントの移動データを取得
 		const connectPoints: ConnectPointMoveData[] = [];
 		const findRecursive = (data: Partial<Diagram>) => {
-			if (isItemableData(data) && !data.isMultiSelected) {
+			if (isItemableData(data) && !data.isMultiSelectSource) {
 				for (const item of data.items ?? []) {
 					if (item.type === "ConnectPoint") {
 						connectPoints.push({
@@ -142,12 +142,12 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 								...item,
 								...changedItem,
 								isSelected: item.isSelected, // 元図形の選択状態を維持（これをやらないとchangeItem側の値で上書きされてしまう）
-								isMultiSelected: item.isMultiSelected, // 元図形の非表示を維持（同上）
+								isMultiSelectSource: item.isMultiSelectSource, // 元図形の非表示を維持（同上）
 							};
 							if (isItemableData(newItem)) {
-								newItem.items = applyMultiSelectRecursive(
+								newItem.items = applyMultiSelectSourceRecursive(
 									newItem.items ?? [],
-									item.isMultiSelected,
+									item.isMultiSelectSource,
 								); // 子図形の非表示を維持（同上）
 							}
 
@@ -214,7 +214,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					scaleY: 1,
 					keepProportion: false,
 					isSelected: true, // 複数選択用のグループは常に選択状態にする
-					isMultiSelected: false, // 複数選択用のグループ側は複数選択状態を常に解除し、通常どおり動くようにする
+					isMultiSelectSource: false, // 複数選択の選択元ではないと設定
 					items: applyRecursive(selectedItems, (item) => {
 						if (!isSelectableData(item)) {
 							return item;
@@ -222,20 +222,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 						return {
 							...item,
 							isSelected: false, // 複数選択用のグループ内の図形は選択状態を解除
-							isMultiSelected: false, // 複数選択用のグループ内の図形は複数選択状態を解除し、通常どおり動くようにする
+							isMultiSelectSource: false, // 複数選択の選択元ではないと設定
 						};
 					}),
 				} as GroupData;
 
 				// 元の図形は非表示にする
-				items = applyMultiSelectRecursive(items, false);
+				items = applyMultiSelectSourceRecursive(items, false);
 			}
-
-			console.log({
-				...prevState,
-				items,
-				multiSelectGroup,
-			});
 
 			return {
 				...prevState,
@@ -254,7 +248,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
 				isSelectableData(item)
-					? { ...item, isSelected: false, isMultiSelected: false } // 全ての図形の選択状態を解除し、かつ表示状態を元に戻す
+					? { ...item, isSelected: false, isMultiSelectSource: false } // 全ての図形の選択状態を解除し、かつ表示状態を元に戻す
 					: item,
 			),
 			multiSelectGroup: undefined,
@@ -460,7 +454,7 @@ const getSelectedRecursive = (items: Diagram[], selectedItems?: Diagram[]) => {
 	return _selectedItems;
 };
 
-const applyMultiSelectRecursive = (
+const applyMultiSelectSourceRecursive = (
 	items: Diagram[],
 	isGroupMultiSelected: boolean,
 ): Diagram[] => {
@@ -469,11 +463,11 @@ const applyMultiSelectRecursive = (
 		if (!isSelectableData(newItem)) {
 			return item;
 		}
-		newItem.isMultiSelected = isGroupMultiSelected || newItem.isSelected;
+		newItem.isMultiSelectSource = isGroupMultiSelected || newItem.isSelected;
 		if (isItemableData(newItem)) {
-			newItem.items = applyMultiSelectRecursive(
+			newItem.items = applyMultiSelectSourceRecursive(
 				newItem.items ?? [],
-				newItem.isMultiSelected,
+				newItem.isMultiSelectSource,
 			);
 		}
 		return newItem;

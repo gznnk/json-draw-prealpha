@@ -64,7 +64,7 @@ export type DiagramBaseData = {
  */
 export type SelectableData = {
 	isSelected: boolean;
-	isMultiSelected: boolean;
+	isMultiSelectSource: boolean; // 複数選択時の選択元かどうか
 };
 
 /**

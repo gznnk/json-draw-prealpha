@@ -63,7 +63,7 @@ const Transformative: React.FC<Props> = ({
 	scaleY,
 	keepProportion,
 	isSelected,
-	isMultiSelected,
+	isMultiSelectSource,
 	onTransform,
 }) => {
 	const [isShiftKeyDown, setShiftKeyDown] = useState(false);
@@ -718,7 +718,7 @@ const Transformative: React.FC<Props> = ({
 		return null;
 	}
 
-	if (isMultiSelected) {
+	if (isMultiSelectSource) {
 		return null;
 	}
 

@@ -55,7 +55,7 @@ const Group: React.FC<GroupProps> = ({
 	scaleY,
 	keepProportion,
 	isSelected,
-	isMultiSelected,
+	isMultiSelectSource,
 	items,
 	showConnectPoints = true,
 	syncWithSameId = false,
@@ -506,7 +506,7 @@ const Group: React.FC<GroupProps> = ({
 	return (
 		<>
 			{children}
-			{!isMultiSelected && !isGroupDragging && (
+			{!isMultiSelectSource && !isGroupDragging && (
 				<Transformative
 					id={id}
 					type="Group"
@@ -519,7 +519,7 @@ const Group: React.FC<GroupProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					isSelected={isSelected}
-					isMultiSelected={isMultiSelected}
+					isMultiSelectSource={isMultiSelectSource}
 					onTransform={handleTransform}
 				/>
 			)}

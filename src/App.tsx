@@ -46,7 +46,7 @@ const testItems1 = [
 		scaleY: 1,
 		keepProportion: true,
 		isSelected: false,
-		isMultiSelected: false,
+		isMultiSelectSource: false,
 		items: [
 			createRectangleData({
 				x: 200,
@@ -79,7 +79,7 @@ const testItems1 = [
 				strokeWidth: "1px",
 				keepProportion: true,
 				isSelected: false,
-				isMultiSelected: false,
+				isMultiSelectSource: false,
 				items: [
 					createRectangleData({
 						x: 400,
@@ -110,7 +110,7 @@ const testItems1 = [
 				strokeWidth: "1px",
 				keepProportion: true,
 				isSelected: false,
-				isMultiSelected: false,
+				isMultiSelectSource: false,
 				items: [
 					createRectangleData({
 						x: 400,
@@ -138,7 +138,7 @@ const testItems1 = [
 		strokeWidth: "1px",
 		keepProportion: false,
 		isSelected: false,
-		isMultiSelected: false,
+		isMultiSelectSource: false,
 		items: [
 			{
 				id: "12-1",
