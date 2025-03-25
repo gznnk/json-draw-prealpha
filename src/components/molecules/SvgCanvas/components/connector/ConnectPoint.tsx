@@ -348,6 +348,7 @@ const ConnectPoint: React.FC<ConnectPointProps> = ({
 					strokeWidth="1px"
 					keepProportion={false}
 					isSelected={false}
+					isMultiSelectSource={false}
 					dragEnabled={false}
 					segmentDragEnabled={false}
 					newVertexEnabled={false}

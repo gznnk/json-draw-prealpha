@@ -60,6 +60,7 @@ export type PathProps = CreateDiagramProps<
 	transformEnabled?: boolean;
 	segmentDragEnabled?: boolean;
 	newVertexEnabled?: boolean;
+	fixBothEnds?: boolean;
 };
 
 /**
@@ -92,6 +93,7 @@ const Path: React.FC<PathProps> = ({
 	transformEnabled = true,
 	segmentDragEnabled = true,
 	newVertexEnabled = true,
+	fixBothEnds = false,
 	onClick,
 	onDrag,
 	onSelect,
@@ -284,7 +286,8 @@ const Path: React.FC<PathProps> = ({
 	const linePoints = items.map((item, idx) => ({
 		...item,
 		hidden: isTransformMode || isDragging,
-		pointerEventsDisabled: idx === 0 || idx === items.length - 1, // TODO: 接続ポイントの場合のみにする
+		pointerEventsDisabled:
+			fixBothEnds && (idx === 0 || idx === items.length - 1),
 	}));
 
 	return (
@@ -313,6 +316,7 @@ const Path: React.FC<PathProps> = ({
 				!isPathPointDragging && (
 					<SegmentList
 						id={id}
+						fixBothEnds={fixBothEnds}
 						items={items}
 						onPointerDown={handlePointerDown}
 						onClick={handleClick}
@@ -629,6 +633,7 @@ Segment.displayName = "Segment";
  */
 type SegmentListProps = {
 	id: string;
+	fixBothEnds: boolean;
 	items: Diagram[];
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
@@ -639,7 +644,7 @@ type SegmentListProps = {
  * 線分リストコンポーネント
  */
 const SegmentList: React.FC<SegmentListProps> = memo(
-	({ id, items, onPointerDown, onClick, onItemableChange }) => {
+	({ id, items, fixBothEnds, onPointerDown, onClick, onItemableChange }) => {
 		const [draggingSegment, setDraggingSegment] = useState<
 			SegmentData | undefined
 		>();
@@ -670,6 +675,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 			// プロパティ
 			id,
 			items,
+			fixBothEnds,
 			onItemableChange,
 			// 内部変数・内部関数
 			draggingSegment,
@@ -682,8 +688,14 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 		 * 線分のドラッグイベントハンドラ
 		 */
 		const handleSegmentDrag = useCallback((e: DiagramDragEvent) => {
-			const { id, items, onItemableChange, draggingSegment, segmentList } =
-				refBus.current;
+			const {
+				id,
+				fixBothEnds,
+				items,
+				onItemableChange,
+				draggingSegment,
+				segmentList,
+			} = refBus.current;
 
 			// ドラッグ開始時の処理
 			if (e.eventType === "Start") {
@@ -695,7 +707,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 				const newSegment = {
 					...segment,
 				};
-				if (idx === 0 || idx === segmentList.length - 1) {
+				if (fixBothEnds && (idx === 0 || idx === segmentList.length - 1)) {
 					const newItems = [...items];
 
 					if (idx === segmentList.length - 1) {
