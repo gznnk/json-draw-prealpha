@@ -95,6 +95,16 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	// Ctrlキーが押されているかどうかのフラグ
 	const isCtrlDown = useRef(false);
 
+	const isScrolling = useRef(false);
+	const scrollStart = useRef({
+		clientX: 0,
+		clientY: 0,
+		scrollLeft: 0,
+		scrollTop: 0,
+	});
+
+	const containerRef = useRef<HTMLDivElement>(null);
+
 	// SvgCanvasStateProviderのインスタンスを生成
 	// 現時点ではシングルトン的に扱うため、useRefで保持し、以降再作成しない
 	// TODO: レンダリングの負荷が高くなければ、都度インスタンスを更新して再レンダリングさせたい
@@ -108,10 +118,41 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 		(e: React.PointerEvent<SVGSVGElement>) => {
 			if (e.target === e.currentTarget) {
 				onAllSelectionClear?.();
+				isScrolling.current = true;
+				scrollStart.current = {
+					clientX: e.clientX,
+					clientY: e.clientY,
+					scrollLeft: containerRef.current?.scrollLeft ?? 0,
+					scrollTop: containerRef.current?.scrollTop ?? 0,
+				};
 			}
 		},
 		[onAllSelectionClear],
 	);
+
+	/**
+	 * SvgCanvasのポインタームーブイベントハンドラ
+	 */
+	const handlePointerMove = useCallback(
+		(e: React.PointerEvent<SVGSVGElement>) => {
+			if (isScrolling.current) {
+				const dx = scrollStart.current.clientX - e.clientX;
+				const dy = scrollStart.current.clientY - e.clientY;
+				if (containerRef.current) {
+					containerRef.current.scrollLeft = scrollStart.current.scrollLeft + dx;
+					containerRef.current.scrollTop = scrollStart.current.scrollTop + dy;
+				}
+			}
+		},
+		[],
+	);
+
+	/**
+	 * SvgCanvasのポインターアップイベントハンドラ
+	 */
+	const handlePointerUp = useCallback(() => {
+		isScrolling.current = false;
+	}, []);
 
 	/**
 	 * SvgCanvasのキーダウンイベントハンドラ
@@ -182,13 +223,15 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	});
 
 	return (
-		<ContainerDiv>
+		<ContainerDiv ref={containerRef}>
 			<SvgCanvasContext.Provider value={stateProvider.current}>
 				<Svg
 					width="120vw"
 					height="120vh"
 					tabIndex={0}
 					onPointerDown={handlePointerDown}
+					onPointerMove={handlePointerMove}
+					onPointerUp={handlePointerUp}
 					onKeyDown={handleKeyDown}
 				>
 					<title>{title}</title>
