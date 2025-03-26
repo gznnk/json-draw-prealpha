@@ -64,6 +64,7 @@ export type PathProps = CreateDiagramProps<
 	fixBothEnds?: boolean;
 };
 
+// TODO: 枠線と重なっていると頂点編集モードにできない
 /**
  * 折れ線コンポーネント.
  * できること：

@@ -153,6 +153,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 			setIsDragging(true);
 		}
 
+		// TODO: onItemableChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onDrag?.(e);
 
 		updateConnectPoints(e.eventType, {
@@ -175,6 +176,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 			setIsTransforming(true);
 		}
 
+		// TODO: onItemableChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onTransform?.(e);
 
 		updateConnectPoints(e.eventType, e.endShape);
@@ -188,14 +190,12 @@ const Ellipse: React.FC<EllipseProps> = ({
 	 * ポインターダウンイベントハンドラ
 	 */
 	const handlePointerDown = useCallback(() => {
-		const { id, isSelected, onSelect } = refBus.current;
+		const { id, onSelect } = refBus.current;
 
-		if (!isSelected) {
-			// 図形選択イベントを発火
-			onSelect?.({
-				id,
-			});
-		}
+		// 図形選択イベントを発火
+		onSelect?.({
+			id,
+		});
 	}, []);
 
 	/**

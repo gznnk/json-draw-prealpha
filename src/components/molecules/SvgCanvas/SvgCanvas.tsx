@@ -1,5 +1,11 @@
 // Reactのインポート
-import React, { createContext, memo, useCallback, useRef } from "react";
+import React, {
+	createContext,
+	memo,
+	useCallback,
+	useEffect,
+	useRef,
+} from "react";
 
 // ライブラリのインポート
 import styled from "@emotion/styled";
@@ -112,11 +118,6 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	 */
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<SVGSVGElement>) => {
-			// Controlキー押下の検知のみを行い、処理はHooksに委譲
-			if (e.key === "Control") {
-				isCtrlDown.current = true;
-			}
-
 			// Deleteキー押下の検知のみを行い、処理はHooksに委譲
 			if (e.key === "Delete") {
 				onDelete?.();
@@ -131,16 +132,6 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	);
 
 	/**
-	 * SvgCanvasのキーアップイベントハンドラ
-	 */
-	const handleKeyUp = useCallback((e: React.KeyboardEvent<SVGSVGElement>) => {
-		// Controlキー離上の検知のみを行い、処理はHooksに委譲
-		if (e.key === "Control") {
-			isCtrlDown.current = false;
-		}
-	}, []);
-
-	/**
 	 * 図形選択イベントハンドラ
 	 */
 	const handleSelect = useCallback(
@@ -150,6 +141,27 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 		},
 		[onSelect],
 	);
+
+	// Ctrlキーの押下状態を監視
+	useEffect(() => {
+		const onDocumentKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Control") {
+				isCtrlDown.current = true;
+			}
+		};
+		const onDocumentKeyUp = (e: KeyboardEvent) => {
+			if (e.key === "Control") {
+				isCtrlDown.current = false;
+			}
+		};
+		document.addEventListener("keydown", onDocumentKeyDown);
+		document.addEventListener("keyup", onDocumentKeyUp);
+
+		return () => {
+			document.removeEventListener("keydown", onDocumentKeyDown);
+			document.removeEventListener("keyup", onDocumentKeyUp);
+		};
+	}, []);
 
 	// 図形の描画
 	const renderedItems = items.map((item) => {
@@ -178,7 +190,6 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 					tabIndex={0}
 					onPointerDown={handlePointerDown}
 					onKeyDown={handleKeyDown}
-					onKeyUp={handleKeyUp}
 				>
 					<title>{title}</title>
 					{renderedItems}
@@ -188,6 +199,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 							{...multiSelectGroup}
 							id="MultiSelectGroup"
 							syncWithSameId
+							onSelect={handleSelect}
 							onTransform={onTransform}
 							onItemableChange={onItemableChange}
 							onDrag={onDrag} // TODO: 必要か精査

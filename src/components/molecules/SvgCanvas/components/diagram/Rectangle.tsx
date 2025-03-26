@@ -188,14 +188,12 @@ const Rectangle: React.FC<RectangleProps> = ({
 	 * ポインターダウンイベントハンドラ
 	 */
 	const handlePointerDown = useCallback(() => {
-		const { id, isSelected, onSelect } = refBus.current;
+		const { id, onSelect } = refBus.current;
 
-		if (!isSelected) {
-			// 図形選択イベントを発火
-			onSelect?.({
-				id,
-			});
-		}
+		// 図形選択イベントを発火
+		onSelect?.({
+			id,
+		});
 	}, []);
 
 	/**

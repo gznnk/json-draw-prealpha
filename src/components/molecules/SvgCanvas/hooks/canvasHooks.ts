@@ -179,6 +179,9 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	 * 図形の選択イベントハンドラ
 	 */
 	const onSelect = useCallback((e: DiagramSelectEvent) => {
+		// 複数選択グループ自身の選択イベントは無視
+		if (e.id === "MultiSelectGroup") return;
+
 		setCanvasState((prevState) => {
 			let items = applyRecursive(prevState.items, (item) => {
 				if (!isSelectableData(item)) {
@@ -187,6 +190,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				}
 
 				if (item.id === e.id) {
+					if (e.isMultiSelect) {
+						// 複数選択の場合は、選択された図形の選択状態を反転
+						return {
+							...item,
+							isSelected: !item.isSelected,
+						};
+					}
+
 					// 図形を選択状態にする
 					return { ...item, isSelected: true };
 				}
@@ -237,6 +248,17 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 				// 元の図形は非表示にする
 				items = applyMultiSelectSourceRecursive(items, false);
+			} else {
+				// 複数選択でない場合は、全図形に対して複数選択の選択元ではないと設定
+				items = applyRecursive(items, (item) => {
+					if (isSelectableData(item)) {
+						return {
+							...item,
+							isMultiSelectSource: false,
+						};
+					}
+					return item;
+				});
 			}
 
 			return {
