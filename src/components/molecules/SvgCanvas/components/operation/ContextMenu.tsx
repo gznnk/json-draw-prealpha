@@ -56,6 +56,9 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
 				<ContextMenuItem menuType="Group" onMenuClick={onMenuClick}>
 					グループ化
 				</ContextMenuItem>
+				<ContextMenuItem menuType="Ungroup" onMenuClick={onMenuClick}>
+					グループ解除
+				</ContextMenuItem>
 			</ContextMenuDiv>
 		</ContainerDiv>
 	);

@@ -407,23 +407,16 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems1);
+	} = useSvgCanvas(testItems4);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);
 	};
 
 	const handleAddEllipse = () => {
-		canvasFunctions.addItem({
-			id: crypto.randomUUID(),
-			type: "Ellipse",
-			x: 0,
-			y: 0,
-			width: 200,
-			height: 100,
-			keepProportion: false,
-			isSelected: false,
-		} as Diagram);
+		canvasFunctions.addItem(
+			createEllipseData({ x: 50, y: 50, width: 100, height: 50 }) as Diagram,
+		);
 	};
 
 	const handleAddSquare = () => {

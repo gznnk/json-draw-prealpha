@@ -394,6 +394,20 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		});
 	}, []);
 
+	const onUngroup = useCallback(() => {
+		// TODO: 複数選択時のグループ解除に対応する
+		setCanvasState((prevState) => {
+			let newItems = ungroupRecursive(prevState.items);
+			newItems = clearMultiSelectSourceRecursive(newItems);
+
+			return {
+				...prevState,
+				items: newItems,
+				multiSelectGroup: undefined,
+			};
+		});
+	}, []);
+
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -406,6 +420,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onTransform,
 		onItemableChange,
 		onGroup,
+		onUngroup,
 	};
 
 	const getSelectedItem = useCallback(() => {
@@ -607,4 +622,29 @@ const removeGroupedRecursive = (items: Diagram[]) => {
 		}
 		return true;
 	});
+};
+
+/**
+ * 選択されているグループを解除する
+ *
+ * @param items 図形配列
+ * @returns 更新後の図形配列
+ */
+const ungroupRecursive = (items: Diagram[]) => {
+	const newItems: Diagram[] = [];
+	for (const item of [...items]) {
+		if (isItemableData(item) && item.type === "Group") {
+			if (item.isSelected) {
+				for (const groupItem of item.items ?? []) {
+					newItems.push(groupItem);
+				}
+			} else {
+				item.items = ungroupRecursive(item.items ?? []);
+				newItems.push(item);
+			}
+		} else {
+			newItems.push(item);
+		}
+	}
+	return newItems;
 };

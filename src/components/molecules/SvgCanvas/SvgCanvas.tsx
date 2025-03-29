@@ -78,6 +78,7 @@ type SvgCanvasProps = {
 	onConnect?: (e: DiagramConnectEvent) => void;
 	onConnectPointsMove?: (e: ConnectPointsMoveEvent) => void;
 	onGroup?: () => void;
+	onUngroup?: () => void;
 };
 
 /**
@@ -97,6 +98,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	onConnect,
 	onConnectPointsMove,
 	onGroup,
+	onUngroup,
 }) => {
 	// Ctrlキーが押されているかどうかのフラグ
 	const isCtrlDown = useRef(false);
@@ -258,6 +260,9 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 			switch (menuType) {
 				case "Group":
 					onGroup?.();
+					break;
+				case "Ungroup":
+					onUngroup?.();
 					break;
 			}
 			setContextMenu({ x: 0, y: 0, isVisible: false });
