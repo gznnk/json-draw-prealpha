@@ -10,7 +10,7 @@ import type {
 /**
  * イベントの種類
  */
-export type EventType = "Start" | "InProgress" | "End";
+export type EventType = "Start" | "InProgress" | "End" | "Immediate";
 
 /**
  * 図形のポインターダウンイベント

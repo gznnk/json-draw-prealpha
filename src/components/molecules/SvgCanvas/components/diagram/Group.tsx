@@ -96,7 +96,7 @@ const Group: React.FC<GroupProps> = ({
 		const rightBottom = rotatePoint(box.right, box.bottom, x, y, radians);
 
 		onTransform?.({
-			eventType: "End",
+			eventType: "Immediate",
 			id,
 			startShape: {
 				x,

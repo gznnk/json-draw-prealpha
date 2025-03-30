@@ -19,6 +19,7 @@ import type {
 	DiagramDragEvent,
 	DiagramSelectEvent,
 	DiagramTextChangeEvent,
+	DiagramTextEditEvent,
 	DiagramTransformEvent,
 	ItemableChangeEvent,
 } from "../types/EventTypes";
@@ -32,12 +33,20 @@ import { isItemableData, isSelectableData, newId } from "../functions/Diagram";
 import { calcPointsOuterShape } from "../functions/Math";
 
 /**
+ * 最大履歴サイズ
+ */
+const MAX_HISTORY_SIZE = 20;
+
+/**
  * SvgCanvasの状態の型定義
  */
 export type SvgCanvasState = {
 	items: Diagram[];
 	multiSelectGroup?: GroupData;
-	selectedItemId?: string;
+	selectedItemId?: string; // TODO: いらないかも
+	history: SvgCanvasState[];
+	historyIndex: number;
+	lastUpdateTime: number;
 };
 
 // TODO: 精査
@@ -50,20 +59,36 @@ type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
  * @returns キャンバスの状態と関数
  */
 export const useSvgCanvas = (initialItems: Diagram[]) => {
+	// SVGキャンバスの状態
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
 		items: initialItems,
+		history: [
+			{ items: initialItems, history: [], historyIndex: 0, lastUpdateTime: 0 },
+		],
+		historyIndex: 0,
+		lastUpdateTime: 0,
 	});
 
 	/**
 	 * 図形のドラッグイベントハンドラ
 	 */
 	const onDrag = useCallback((e: DiagramDragEvent) => {
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
-			),
-		}));
+		setCanvasState((prevState) => {
+			// 新しい状態を作成
+			let newState = {
+				...prevState,
+				items: applyRecursive(prevState.items, (item) =>
+					item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
+				),
+			};
+
+			if (e.eventType === "End") {
+				// 終了時に履歴を追加
+				newState = addHistory(prevState, newState);
+			}
+
+			return newState;
+		});
 	}, []);
 
 	/**
@@ -77,12 +102,22 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	 * 図形の変形イベントハンドラ
 	 */
 	const onTransform = useCallback((e: DiagramTransformEvent) => {
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id ? { ...item, ...e.endShape } : item,
-			),
-		}));
+		setCanvasState((prevState) => {
+			// 新しい状態を作成
+			let newState = {
+				...prevState,
+				items: applyRecursive(prevState.items, (item) =>
+					item.id === e.id ? { ...item, ...e.endShape } : item,
+				),
+			};
+
+			if (e.eventType === "End") {
+				// 終了時に履歴を追加
+				newState = addHistory(prevState, newState);
+			}
+
+			return newState;
+		});
 	}, []);
 
 	/**
@@ -168,11 +203,19 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				);
 			}
 
-			return {
+			// 新しい状態を作成
+			let newState = {
 				...prevState,
 				items,
 				multiSelectGroup,
-			};
+			} as SvgCanvasState;
+
+			if (e.eventType === "End") {
+				// 終了時に履歴を追加
+				newState = addHistory(prevState, newState);
+			}
+
+			return newState;
 		});
 	}, []);
 
@@ -287,6 +330,9 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		}));
 	}, []);
 
+	/**
+	 * 図形の削除イベントハンドラ
+	 */
 	const onDelete = useCallback(() => {
 		setCanvasState((prevState) => {
 			const items = applyRecursive(prevState.items, (item) => {
@@ -299,13 +345,22 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				return item;
 			}).filter((item) => !isSelectableData(item) || !item.isSelected);
 
-			return {
+			// 新しい状態を作成
+			let newState = {
 				...prevState,
 				items,
 			};
+
+			// 履歴を追加
+			newState = addHistory(prevState, newState);
+
+			return newState;
 		});
 	}, []);
 
+	/**
+	 * 図形の接続イベントハンドラ
+	 */
 	const onConnect = useCallback((e: DiagramConnectEvent) => {
 		const shape = calcPointsOuterShape(
 			e.points.map((p) => ({ x: p.x, y: p.y })),
@@ -351,7 +406,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	/**
 	 * テキスト編集イベントハンドラ（開始時のみ発火する）
 	 */
-	const onTextEdit = useCallback((e: DiagramTextChangeEvent) => {
+	const onTextEdit = useCallback((e: DiagramTextEditEvent) => {
 		setCanvasState((prevState) => ({
 			...prevState,
 			items: applyRecursive(prevState.items, (item) =>
@@ -364,16 +419,27 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	 * テキスト変更イベントハンドラ（完了時のみ発火する）
 	 */
 	const onTextChange = useCallback((e: DiagramTextChangeEvent) => {
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: applyRecursive(prevState.items, (item) =>
-				item.id === e.id
-					? { ...item, text: e.text, isTextEditing: false }
-					: item,
-			),
-		}));
+		setCanvasState((prevState) => {
+			// 新しい状態を作成
+			let newState = {
+				...prevState,
+				items: applyRecursive(prevState.items, (item) =>
+					item.id === e.id
+						? { ...item, text: e.text, isTextEditing: false }
+						: item,
+				),
+			};
+
+			// 履歴を追加
+			newState = addHistory(prevState, newState);
+
+			return newState;
+		});
 	}, []);
 
+	/**
+	 * グループ化イベントハンドラ
+	 */
 	const onGroup = useCallback(() => {
 		setCanvasState((prevState) => {
 			const selectedItems = getSelectedRecursive(prevState.items);
@@ -413,25 +479,40 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			// 複数選択の選択元設定を解除
 			items = clearMultiSelectSourceRecursive(items);
 
-			return {
+			// 新しい状態を作成
+			let newState = {
 				...prevState,
 				items,
 				multiSelectGroup: undefined,
-			};
+			} as SvgCanvasState;
+
+			// 履歴を追加
+			newState = addHistory(prevState, newState);
+
+			return newState;
 		});
 	}, []);
 
+	/**
+	 * グループ解除イベントハンドラ
+	 */
 	const onUngroup = useCallback(() => {
 		// TODO: 複数選択時のグループ解除に対応する
 		setCanvasState((prevState) => {
 			let newItems = ungroupRecursive(prevState.items);
 			newItems = clearMultiSelectSourceRecursive(newItems);
 
-			return {
+			// 新しい状態を作成
+			let newState = {
 				...prevState,
 				items: newItems,
 				multiSelectGroup: undefined,
-			};
+			} as SvgCanvasState;
+
+			// 履歴を追加
+			newState = addHistory(prevState, newState);
+
+			return newState;
 		});
 	}, []);
 
@@ -469,15 +550,23 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	}, [canvasState.items]);
 
 	const addItem = useCallback((item: Diagram) => {
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: [
-				...prevState.items.map((item) => ({ ...item, isSelected: false })),
-				{
-					...item,
-				},
-			],
-		}));
+		setCanvasState((prevState) => {
+			let newState = {
+				...prevState,
+				items: [
+					...prevState.items.map((item) => ({ ...item, isSelected: false })),
+					{
+						...item,
+						isSelected: true,
+					},
+				],
+			} as SvgCanvasState;
+
+			// 履歴を追加
+			newState = addHistory(prevState, newState);
+
+			return newState;
+		});
 	}, []);
 
 	const updateItem = useCallback((item: UpdateItem) => {
@@ -489,10 +578,52 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		}));
 	}, []);
 
+	/**
+	 * 元に戻す
+	 */
+	const undo = useCallback(() => {
+		setCanvasState((prevState) => {
+			// 前の状態を取得
+			const prevIndex = prevState.historyIndex - 1;
+			if (prevIndex < 0) {
+				// 履歴がない場合は何もしない
+				return prevState;
+			}
+			const prevHistory = prevState.history[prevIndex];
+			return {
+				...prevHistory,
+				history: prevState.history,
+				historyIndex: prevIndex,
+			};
+		});
+	}, []);
+
+	/**
+	 * やり直す
+	 */
+	const redo = useCallback(() => {
+		setCanvasState((prevState) => {
+			// 次の状態を取得
+			const nextIndex = prevState.historyIndex + 1;
+			if (nextIndex >= prevState.history.length) {
+				// 履歴がない場合は何もしない
+				return prevState;
+			}
+			const nextHistory = prevState.history[nextIndex];
+			return {
+				...nextHistory,
+				history: prevState.history,
+				historyIndex: nextIndex,
+			};
+		});
+	}, []);
+
 	const canvasFunctions = {
 		getSelectedItem,
 		addItem,
 		updateItem,
+		undo,
+		redo,
 	};
 
 	return {
@@ -676,4 +807,44 @@ const ungroupRecursive = (items: Diagram[]) => {
 		}
 	}
 	return newItems;
+};
+
+/**
+ * 履歴を追加
+ */
+const addHistory = (
+	prevState: SvgCanvasState,
+	newState: SvgCanvasState,
+): SvgCanvasState => {
+	// 履歴データからは履歴データを削除
+	newState.history = [];
+	newState.historyIndex = 0;
+
+	// 前回の履歴追加から10ms以上経過していない場合は最後の履歴を上書き
+	if (prevState.lastUpdateTime + 10 > Date.now()) {
+		// 履歴を上書き
+		prevState.history[prevState.history.length - 1] = newState;
+		return {
+			...prevState,
+			history: prevState.history,
+			historyIndex: prevState.historyIndex,
+			lastUpdateTime: Date.now(),
+		};
+	}
+
+	// 履歴を追加
+	let newHistory = prevState.history.slice(0, prevState.historyIndex + 1);
+	newHistory.push(newState);
+
+	// 履歴のサイズが最大値を超えた場合、古い履歴を削除
+	if (MAX_HISTORY_SIZE <= newHistory.length) {
+		newHistory = newHistory.slice(1);
+	}
+
+	return {
+		...newState,
+		history: newHistory,
+		historyIndex: newHistory.length - 1,
+		lastUpdateTime: Date.now(),
+	};
 };

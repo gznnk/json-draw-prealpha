@@ -407,7 +407,7 @@ function App() {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems1);
+	} = useSvgCanvas(testItems4);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);
@@ -518,6 +518,20 @@ function App() {
 						}}
 					/>
 				</div>
+				<Button
+					onClick={() => {
+						canvasFunctions.redo();
+					}}
+				>
+					Redo
+				</Button>
+				<Button
+					onClick={() => {
+						canvasFunctions.undo();
+					}}
+				>
+					Undo
+				</Button>
 				<Button
 					onClick={() => {
 						window.profiler.summary();
