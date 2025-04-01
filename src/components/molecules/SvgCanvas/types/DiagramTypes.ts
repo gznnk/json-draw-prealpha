@@ -88,9 +88,9 @@ export type ItemableData = {
 export type ConnectableData = ItemableData; // 接続ポイントを子図形としてもつ
 
 /**
- * 枠線を持つ図形のデータ TODO: 名前をStrokableDataに変更する
+ * 枠線を持つ図形のデータ
  */
-export type BorderedData = {
+export type StrokableData = {
 	stroke: string;
 	strokeWidth: string;
 };
@@ -133,7 +133,7 @@ type DiagramDataOptions = {
 	transformative?: boolean;
 	itemable?: boolean;
 	connectable?: boolean;
-	bordered?: boolean;
+	strokable?: boolean;
 	fillable?: boolean;
 	textable?: boolean;
 };
@@ -146,7 +146,7 @@ type CreateDiagramType<T extends DiagramDataOptions> = DiagramBaseData &
 	(T["transformative"] extends true ? TransformativeData : object) &
 	(T["itemable"] extends true ? ItemableData : object) &
 	(T["connectable"] extends true ? ConnectableData : object) &
-	(T["bordered"] extends true ? BorderedData : object) &
+	(T["strokable"] extends true ? StrokableData : object) &
 	(T["fillable"] extends true ? FillableData : object) &
 	(T["textable"] extends true ? TextableData : object);
 
@@ -157,7 +157,7 @@ export type EllipseData = CreateDiagramType<{
 	selectable: true;
 	transformative: true;
 	connectable: true;
-	bordered: true;
+	strokable: true;
 	fillable: true;
 }>;
 
@@ -168,7 +168,7 @@ export type RectangleData = CreateDiagramType<{
 	selectable: true;
 	transformative: true;
 	connectable: true;
-	bordered: true;
+	strokable: true;
 	fillable: true;
 	textable: true;
 }>;
@@ -188,7 +188,7 @@ export type PathData = CreateDiagramType<{
 	selectable: true;
 	transformative: true;
 	itemable: true;
-	bordered: true;
+	strokable: true;
 }>;
 
 /**
@@ -205,7 +205,7 @@ export type ConnectLineData = CreateDiagramType<{
 	selectable: true;
 	transformative: true;
 	itemable: true;
-	bordered: true;
+	strokable: true;
 }> & {
 	startOwnerId: string;
 	endOwnerId: string;
