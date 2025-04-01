@@ -521,9 +521,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	 * グループ解除イベントハンドラ
 	 */
 	const onUngroup = useCallback(() => {
-		// TODO: 複数選択時のグループ解除に対応する
 		setCanvasState((prevState) => {
-			let newItems = ungroupRecursive(prevState.items);
+			let newItems = ungroupSelectedGroupsRecursive(prevState.items);
 			newItems = clearMultiSelectSourceRecursive(newItems);
 
 			// 新しい状態を作成
@@ -818,13 +817,14 @@ const removeGroupedRecursive = (items: Diagram[]) => {
 };
 
 /**
- * 選択されているグループを解除する
+ * Ungroup selected groups.
  *
- * @param items 図形配列
- * @returns 更新後の図形配列
+ * @param items - List of diagrams.
+ * @returns Updated list of diagrams.
  */
-const ungroupRecursive = (items: Diagram[]) => {
-	const newItems: Diagram[] = [];
+const ungroupSelectedGroupsRecursive = (items: Diagram[]) => {
+	// Extract the diagrams from the selected groups.
+	let newItems: Diagram[] = [];
 	for (const item of [...items]) {
 		if (isItemableData(item) && item.type === "Group") {
 			if (item.isSelected) {
@@ -832,13 +832,24 @@ const ungroupRecursive = (items: Diagram[]) => {
 					newItems.push(groupItem);
 				}
 			} else {
-				item.items = ungroupRecursive(item.items ?? []);
+				item.items = ungroupSelectedGroupsRecursive(item.items ?? []);
 				newItems.push(item);
 			}
 		} else {
 			newItems.push(item);
 		}
 	}
+
+	// Remove empty groups.
+	newItems = newItems.filter((item) => {
+		if (isItemableData(item) && item.type === "Group") {
+			if (item.items?.length === 0) {
+				return false;
+			}
+		}
+		return true;
+	});
+
 	return newItems;
 };
 
@@ -852,7 +863,6 @@ const addHistory = (
 	// 履歴データからは履歴データを削除
 	newState.history = [];
 	newState.historyIndex = -1;
-	// newState.lastHistoryEventId = "";
 
 	// 前回の履歴追加時と同じイベントIDの場合、履歴を上書きする
 	if (prevState.lastHistoryEventId === newState.lastHistoryEventId) {
@@ -890,7 +900,8 @@ const addHistory = (
 		historyIndex,
 	};
 
-	console.log("history", JSON.stringify(ret, null, 2));
+	// console.log("history", JSON.stringify(ret, null, 2));
+	console.log("history", ret);
 
 	return ret;
 };
