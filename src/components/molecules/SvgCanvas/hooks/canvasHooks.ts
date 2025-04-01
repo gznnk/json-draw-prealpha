@@ -876,16 +876,18 @@ const addHistory = (
 	// 履歴を追加
 	let newHistory = prevState.history.slice(0, prevState.historyIndex + 1);
 	newHistory.push(deepCopy(newState));
+	let historyIndex = prevState.historyIndex + 1;
 
 	// 履歴のサイズが最大値を超えた場合、古い履歴を削除
 	if (MAX_HISTORY_SIZE <= newHistory.length) {
 		newHistory = newHistory.slice(1);
+		historyIndex = MAX_HISTORY_SIZE - 1;
 	}
 
 	const ret = {
 		...newState,
 		history: newHistory,
-		historyIndex: prevState.historyIndex + 1,
+		historyIndex,
 	};
 
 	console.log("history", JSON.stringify(ret, null, 2));

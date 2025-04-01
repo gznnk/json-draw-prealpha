@@ -36,6 +36,7 @@ import ContextMenu, {
 
 // SvgCanvas関連関数をインポート
 import { isItemableData } from "./functions/Diagram";
+import { newEventId } from "./functions/Util";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -126,8 +127,10 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	// SvgCanvasStateProviderのインスタンスを生成
 	// 現時点ではシングルトン的に扱うため、useRefで保持し、以降再作成しない
 	// TODO: レンダリングの負荷が高くなければ、都度インスタンスを更新して再レンダリングさせたい
-	const stateProvider = useRef(new SvgCanvasStateProvider({ items }));
-	stateProvider.current.setState({ items });
+	const stateProvider = useRef(
+		new SvgCanvasStateProvider({ items } as SvgCanvasState),
+	);
+	stateProvider.current.setState({ items } as SvgCanvasState);
 
 	/**
 	 * SvgCanvasのポインターダウンイベントハンドラ
@@ -203,7 +206,11 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	const handleSelect = useCallback(
 		(e: DiagramSelectEvent) => {
 			// Ctrlキーの押下状態を付与して、処理をHooksに委譲
-			onSelect?.({ id: e.id, isMultiSelect: isCtrlDown.current });
+			onSelect?.({
+				eventId: newEventId(),
+				id: e.id,
+				isMultiSelect: isCtrlDown.current,
+			});
 		},
 		[onSelect],
 	);
