@@ -15,7 +15,7 @@ import type {
 	DiagramSelectEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
-	ItemableChangeEvent,
+	DiagramChangeEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -65,7 +65,7 @@ const Group: React.FC<GroupProps> = ({
 	onClick,
 	onSelect,
 	onTransform,
-	onItemableChange,
+	onDiagramChange,
 	onConnect,
 	onConnectPointsMove,
 	onTextEdit,
@@ -134,7 +134,7 @@ const Group: React.FC<GroupProps> = ({
 		onClick,
 		onSelect,
 		onTransform,
-		onItemableChange,
+		onDiagramChange,
 		onConnect,
 		onConnectPointsMove,
 		onTextEdit,
@@ -220,7 +220,7 @@ const Group: React.FC<GroupProps> = ({
 			isSelected,
 			items,
 			onDrag,
-			onItemableChange,
+			onDiagramChange,
 			isGroupDragging,
 			transformGroupOutline,
 		} = refBus.current;
@@ -240,16 +240,16 @@ const Group: React.FC<GroupProps> = ({
 				startBox.current = { x, y, width, height };
 
 				// グループ全体の変更開始を通知
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: "Start",
 					id,
-					startItemable: {
+					startDiagram: {
 						x,
 						y,
 						items,
 					},
-					endItemable: {
+					endDiagram: {
 						x,
 						y,
 						items,
@@ -296,16 +296,16 @@ const Group: React.FC<GroupProps> = ({
 				return newItems;
 			};
 
-			const event: ItemableChangeEvent = {
+			const event: DiagramChangeEvent = {
 				eventId: e.eventId,
 				eventType: e.eventType,
 				id,
-				startItemable: {
+				startDiagram: {
 					x: startBox.current.x,
 					y: startBox.current.y,
 					items: startItems.current,
 				},
-				endItemable: {
+				endDiagram: {
 					x: startBox.current.x + dx,
 					y: startBox.current.y + dy,
 					items: moveRecursive(startItems.current),
@@ -313,7 +313,7 @@ const Group: React.FC<GroupProps> = ({
 			};
 
 			// グループ内の全ての図形の移動をまとめて通知
-			onItemableChange?.(event);
+			onDiagramChange?.(event);
 		}
 
 		// ドラッグ終了時にドラッグ中フラグを解除
@@ -353,9 +353,9 @@ const Group: React.FC<GroupProps> = ({
 	/**
 	 * グループ内の図形の変更イベントハンドラ
 	 */
-	const handleChildItemableChange = useCallback(
-		(e: ItemableChangeEvent) => {
-			const { id, isSelected, items, transformGroupOutline, onItemableChange } =
+	const handleChildDiagramChange = useCallback(
+		(e: DiagramChangeEvent) => {
+			const { id, isSelected, items, transformGroupOutline, onDiagramChange } =
 				refBus.current;
 
 			// グループ内の図形の変更完了時にアウトラインの更新を行う
@@ -372,16 +372,16 @@ const Group: React.FC<GroupProps> = ({
 				const dragEvent = {
 					eventType: e.eventType,
 					id,
-					startX: e.startItemable.x,
-					startY: e.startItemable.y,
-					endX: e.endItemable.x,
-					endY: e.endItemable.y,
+					startX: e.startDiagram.x,
+					startY: e.startDiagram.y,
+					endX: e.endDiagram.x,
+					endY: e.endDiagram.y,
 				} as DiagramDragEvent;
 
 				handleChildDiagramDrag(dragEvent);
 			} else {
 				// グループ選択時でない場合、アウトライン以外はグループへの影響はないので、変更イベントをそのまま伝番する
-				onItemableChange?.(e);
+				onDiagramChange?.(e);
 			}
 		},
 		[handleChildDiagramDrag],
@@ -429,7 +429,7 @@ const Group: React.FC<GroupProps> = ({
 	 * グループの変形イベントハンドラ
 	 */
 	const handleTransform = useCallback((e: DiagramTransformEvent) => {
-		const { id, x, y, width, height, items, onItemableChange } = refBus.current;
+		const { id, x, y, width, height, items, onDiagramChange } = refBus.current;
 
 		// グループの変形開始時の処理
 		if (e.eventType === "Start") {
@@ -438,15 +438,15 @@ const Group: React.FC<GroupProps> = ({
 			startItems.current = items;
 
 			// まだ何も変形してないので、開始の通知のみ行う
-			onItemableChange?.({
+			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: "Start",
 				id,
-				startItemable: {
+				startDiagram: {
 					...e.startShape,
 					items,
 				},
-				endItemable: {
+				endDiagram: {
 					...e.endShape,
 					items,
 				},
@@ -526,22 +526,22 @@ const Group: React.FC<GroupProps> = ({
 			return newItems;
 		};
 
-		const event: ItemableChangeEvent = {
+		const event: DiagramChangeEvent = {
 			eventId: e.eventId,
 			eventType: e.eventType,
 			id,
-			startItemable: {
+			startDiagram: {
 				...e.startShape,
 				items: startItems.current,
 			},
-			endItemable: {
+			endDiagram: {
 				...e.endShape,
 				items: transformRecursive(startItems.current),
 			},
 		};
 
 		// グループ内の全ての図形の変形をまとめて通知
-		onItemableChange?.(event);
+		onDiagramChange?.(event);
 
 		if (e.eventType === "End") {
 			setIsGroupTransforming(false);
@@ -563,7 +563,7 @@ const Group: React.FC<GroupProps> = ({
 			onSelect: handleChildDiagramSelect,
 			onDrag: handleChildDiagramDrag,
 			onTransform: handleChildDiagramTransfrom,
-			onItemableChange: handleChildItemableChange,
+			onDiagramChange: handleChildDiagramChange,
 			onConnect: handleChildDiagramConnect,
 			onConnectPointsMove: handleChildDiagramConnectPointsMove,
 			onTextEdit: handleChildDiagramTextEdit,

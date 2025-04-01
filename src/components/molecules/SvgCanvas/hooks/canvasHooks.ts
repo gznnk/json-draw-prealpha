@@ -21,7 +21,7 @@ import type {
 	DiagramTextChangeEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
-	ItemableChangeEvent,
+	DiagramChangeEvent,
 } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -137,9 +137,9 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	}, []);
 
 	/**
-	 * 子図形をもつ図形の変更イベントハンドラ
+	 * 図形の変更イベントハンドラ
 	 */
-	const onItemableChange = useCallback((e: ItemableChangeEvent) => {
+	const onDiagramChange = useCallback((e: DiagramChangeEvent) => {
 		// 接続ポイントの移動データを取得
 		const connectPoints: ConnectPointMoveData[] = [];
 		const findRecursive = (data: Partial<Diagram>) => {
@@ -162,7 +162,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				}
 			}
 		};
-		findRecursive(e.endItemable);
+		findRecursive(e.endDiagram);
 
 		if (0 < connectPoints.length) {
 			// 接続ポイントの移動を通知
@@ -182,14 +182,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				// 複数選択グループの変更の場合、複数選択グループ内の図形を更新
 				multiSelectGroup = {
 					...multiSelectGroup,
-					...e.endItemable,
+					...e.endDiagram,
 				} as GroupData;
 
 				// // 複数選択グループの変更が終了したタイミングで、元の図形にも変更を反映する
 				if (e.eventType === "End") {
 					items = applyRecursive(prevState.items, (item) => {
 						// 元図形に対応する複数選択グループ側の変更データを取得
-						const changedItem = (e.endItemable.items ?? []).find(
+						const changedItem = (e.endDiagram.items ?? []).find(
 							(i) => i.id === item.id,
 						);
 						if (changedItem && isSelectableData(item)) {
@@ -216,7 +216,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			} else {
 				// 複数選択グループ以外の場合は、普通に更新
 				items = applyRecursive(prevState.items, (item) =>
-					item.id === e.id ? { ...item, ...e.endItemable } : item,
+					item.id === e.id ? { ...item, ...e.endDiagram } : item,
 				);
 			}
 
@@ -231,7 +231,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				// 終了時に履歴を追加
 				newState.lastHistoryEventId = e.eventId;
 				newState = addHistory(prevState, newState);
-				console.log("addHistory caused by onItemableChange", e.eventId);
+				console.log("addHistory caused by onDiagramChange", e.eventId);
 			}
 
 			return newState;
@@ -551,7 +551,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onConnect,
 		onConnectPointsMove,
 		onTransform,
-		onItemableChange,
+		onDiagramChange,
 		onTextEdit,
 		onTextChange,
 		onGroup,

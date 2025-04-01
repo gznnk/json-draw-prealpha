@@ -78,7 +78,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	onSelect,
 	onTransform,
 	onConnect,
-	onConnectPointsMove, // TODO: onItemableChangeに変更すべきか？
+	onConnectPointsMove, // TODO: onDiagramChangeに変更すべきか？
 	onTextEdit,
 }) => {
 	// ドラッグ中かのフラグ

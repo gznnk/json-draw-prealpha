@@ -19,7 +19,7 @@ import type {
 	DiagramClickEvent,
 	DiagramDragEvent,
 	DiagramPointerEvent,
-	ItemableChangeEvent,
+	DiagramChangeEvent,
 } from "../../types/EventTypes";
 
 // Import SvgCanvas related hooks.
@@ -101,7 +101,7 @@ const Path: React.FC<PathProps> = ({
 	onDrag,
 	onSelect,
 	onTransform,
-	onItemableChange,
+	onDiagramChange,
 }) => {
 	const [isDragging, setIsDragging] = useState(false);
 	const [isPathPointDragging, setIsPathPointDragging] = useState(false);
@@ -127,7 +127,7 @@ const Path: React.FC<PathProps> = ({
 		onDrag,
 		onSelect,
 		onClick,
-		onItemableChange,
+		onDiagramChange,
 		// 内部変数・内部関数
 		isSequentialSelection,
 		isVerticesMode,
@@ -190,7 +190,7 @@ const Path: React.FC<PathProps> = ({
 	 * 折れ線のドラッグイベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { id, dragEnabled, items, onItemableChange, isVerticesMode } =
+		const { id, dragEnabled, items, onDiagramChange, isVerticesMode } =
 			refBus.current;
 
 		// ドラッグが無効な場合はイベントを潰してドラッグを無効化
@@ -209,18 +209,18 @@ const Path: React.FC<PathProps> = ({
 
 			startItems.current = items;
 
-			const startItemable = {
+			const startDiagram = {
 				x: e.startX,
 				y: e.startY,
 				items: startItems.current,
 			};
 
-			onItemableChange?.({
+			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
 				id,
-				startItemable,
-				endItemable: startItemable,
+				startDiagram,
+				endDiagram: startDiagram,
 			});
 
 			return;
@@ -235,16 +235,16 @@ const Path: React.FC<PathProps> = ({
 			return { ...item, x, y };
 		});
 
-		onItemableChange?.({
+		onDiagramChange?.({
 			eventId: e.eventId,
 			eventType: e.eventType,
 			id,
-			startItemable: {
+			startDiagram: {
 				x: e.startX,
 				y: e.startY,
 				items: startItems.current,
 			},
-			endItemable: {
+			endDiagram: {
 				x: e.endX,
 				y: e.endY,
 				items: newItems,
@@ -274,24 +274,24 @@ const Path: React.FC<PathProps> = ({
 	/**
 	 * 線分および新規頂点の変更イベントハンドラ
 	 */
-	const handleItemableChangeBySegumentAndNewVertex = useCallback(
-		(e: ItemableChangeEvent) => {
-			const { rotation, scaleX, scaleY, onItemableChange } = refBus.current;
+	const handleDiagramChangeBySegumentAndNewVertex = useCallback(
+		(e: DiagramChangeEvent) => {
+			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 
 			if (e.eventType === "End") {
 				// 新規頂点および線分のドラッグ完了に伴うパスの外枠の形状計算
 				const newShape = calcPointsOuterShape(
-					(e.endItemable.items ?? []).map((p) => ({ x: p.x, y: p.y })),
+					(e.endDiagram.items ?? []).map((p) => ({ x: p.x, y: p.y })),
 					rotation,
 					scaleX,
 					scaleY,
 				);
 
 				// Apply the new shape of the Path component.
-				onItemableChange?.({
+				onDiagramChange?.({
 					...e,
-					endItemable: {
-						...e.endItemable,
+					endDiagram: {
+						...e.endDiagram,
 						x: newShape.x,
 						y: newShape.y,
 						width: newShape.width,
@@ -299,7 +299,7 @@ const Path: React.FC<PathProps> = ({
 					},
 				});
 			} else {
-				onItemableChange?.(e);
+				onDiagramChange?.(e);
 			}
 		},
 		[],
@@ -383,7 +383,7 @@ const Path: React.FC<PathProps> = ({
 					items={items}
 					onPointerDown={handlePointerDown}
 					onClick={handleClick}
-					onItemableChange={handleItemableChangeBySegumentAndNewVertex}
+					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
 			{/* 新規頂点 */}
@@ -391,7 +391,7 @@ const Path: React.FC<PathProps> = ({
 				<NewVertexList
 					id={id}
 					items={items}
-					onItemableChange={handleItemableChangeBySegumentAndNewVertex}
+					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
 			{/* 全体変形用グループ */}
@@ -411,7 +411,7 @@ const Path: React.FC<PathProps> = ({
 					items={linePoints}
 					onDrag={handlePathPointDrag}
 					onTransform={onTransform}
-					onItemableChange={onItemableChange}
+					onDiagramChange={onDiagramChange}
 				/>
 			)}
 		</>
@@ -474,14 +474,14 @@ NewVertex.displayName = "NewVertex";
 type NewVertexListProps = {
 	id: string;
 	items: Diagram[];
-	onItemableChange?: (e: ItemableChangeEvent) => void;
+	onDiagramChange?: (e: DiagramChangeEvent) => void;
 };
 
 /**
  * 新規頂点リストコンポーネント
  */
 const NewVertexList: React.FC<NewVertexListProps> = memo(
-	({ id, items, onItemableChange }) => {
+	({ id, items, onDiagramChange }) => {
 		// Dragging NewVertex component data.
 		const [draggingNewVertex, setDraggingNewVertex] = useState<
 			NewVertexData | undefined
@@ -517,7 +517,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 			// プロパティ
 			id,
 			items,
-			onItemableChange,
+			onDiagramChange,
 			// 内部変数・内部関数
 			newVertexList,
 		};
@@ -528,7 +528,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 		 * 新規頂点のドラッグイベントハンドラ
 		 */
 		const handleNewVertexDrag = useCallback((e: DiagramDragEvent) => {
-			const { id, items, onItemableChange, newVertexList } = refBus.current;
+			const { id, items, onDiagramChange, newVertexList } = refBus.current;
 			// ドラッグ開始時の処理
 			if (e.eventType === "Start") {
 				// Store the items of owner Path component at the start of the new vertex drag.
@@ -549,14 +549,14 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 				newItems.splice(idx + 1, 0, newItem);
 
 				// パスの変更を通知
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: e.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: startItems.current,
 					},
-					endItemable: {
+					endDiagram: {
 						items: newItems,
 					},
 				});
@@ -568,14 +568,14 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 				setDraggingNewVertex({ id: e.id, x: e.endX, y: e.endY });
 
 				// 新規頂点のドラッグに伴うパスの頂点の位置変更を通知
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: e.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: startItems.current,
 					},
-					endItemable: {
+					endDiagram: {
 						items: items.map((item) =>
 							item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
 						),
@@ -589,14 +589,14 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 				setDraggingNewVertex(undefined);
 
 				// 新規頂点のドラッグ完了に伴うパスのデータ変更を通知
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: e.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: startItems.current,
 					},
-					endItemable: {
+					endDiagram: {
 						items: items.map((item) =>
 							item.id === e.id
 								? {
@@ -736,7 +736,7 @@ type SegmentListProps = {
 	items: Diagram[];
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
-	onItemableChange?: (e: ItemableChangeEvent) => void;
+	onDiagramChange?: (e: DiagramChangeEvent) => void;
 };
 
 /**
@@ -750,7 +750,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 		items,
 		onPointerDown,
 		onClick,
-		onItemableChange,
+		onDiagramChange,
 	}) => {
 		const [draggingSegment, setDraggingSegment] = useState<
 			SegmentData | undefined
@@ -786,7 +786,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 			id,
 			items,
 			fixBothEnds,
-			onItemableChange,
+			onDiagramChange,
 			// Internal variables and functions
 			draggingSegment,
 			segmentList,
@@ -803,7 +803,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 				id,
 				fixBothEnds,
 				items,
-				onItemableChange,
+				onDiagramChange,
 				draggingSegment,
 				segmentList,
 			} = refBus.current;
@@ -851,14 +851,14 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 						newSegment.startPointId = newItem.id;
 					}
 
-					onItemableChange?.({
+					onDiagramChange?.({
 						eventId: e.eventId,
 						eventType: e.eventType,
 						id,
-						startItemable: {
+						startDiagram: {
 							items: startItems.current,
 						},
-						endItemable: {
+						endDiagram: {
 							items: newItems,
 						},
 					});
@@ -887,14 +887,14 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					endY: newEndY,
 				});
 
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: e.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: startItems.current,
 					},
-					endItemable: {
+					endDiagram: {
 						items: items.map((item) => {
 							if (item.id === draggingSegment.startPointId) {
 								return { ...item, x: newStartX, y: newStartY };
@@ -909,14 +909,14 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 			}
 
 			if (e.eventType === "End") {
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: e.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: startItems.current,
 					},
-					endItemable: {
+					endDiagram: {
 						items: items.map((item) => {
 							// ドラッグが完了したら、線分用のIDから新しいIDに変更
 							if (item.id === draggingSegment.startPointId) {

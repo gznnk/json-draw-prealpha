@@ -90,9 +90,9 @@ export type DiagramTransformEvent = {
 };
 
 /**
- * 子図形をもつ図形の変更イベントデータ
+ * 図形の変更イベントデータ
  */
-export type ItemableChangeData = {
+export type DiagramChangeData = {
 	x?: number;
 	y?: number;
 	width?: number;
@@ -101,18 +101,18 @@ export type ItemableChangeData = {
 	scaleX?: number;
 	scaleY?: number;
 	items?: Diagram[];
-	autoRouting?: boolean; // TODO: Itemableじゃないが、入れたいので、名前をかえる？
+	autoRouting?: boolean;
 };
 
 /**
- * 子図形をもつ図形の変更イベント
+ * 図形の変更イベント
  */
-export type ItemableChangeEvent = {
+export type DiagramChangeEvent = {
 	eventId: string;
 	eventType: EventType;
 	id: string;
-	startItemable: ItemableChangeData;
-	endItemable: ItemableChangeData;
+	startDiagram: DiagramChangeData;
+	endDiagram: DiagramChangeData;
 };
 
 /**

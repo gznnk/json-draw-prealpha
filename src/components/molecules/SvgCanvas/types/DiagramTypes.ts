@@ -14,7 +14,7 @@ import type {
 	DiagramSelectEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
-	ItemableChangeEvent,
+	DiagramChangeEvent,
 } from "./EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -273,7 +273,7 @@ export type TransformativeProps = {
  * 子図形を持つ図形のプロパティ
  */
 export type ItemableProps = {
-	onItemableChange?: (e: ItemableChangeEvent) => void;
+	onDiagramChange?: (e: DiagramChangeEvent) => void;
 };
 
 /**

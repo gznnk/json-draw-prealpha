@@ -21,7 +21,7 @@ import type {
 import type {
 	ConnectPointMoveData,
 	ConnectPointsMoveEvent,
-	ItemableChangeEvent,
+	DiagramChangeEvent,
 } from "../../types/EventTypes";
 
 // Import SvgCanvas related functions.
@@ -77,7 +77,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	autoRouting,
 	onClick,
 	onSelect,
-	onItemableChange,
+	onDiagramChange,
 }) => {
 	// Items of ConnectLine component at the start of the change event.
 	const startItems = useRef<Diagram[]>([]);
@@ -95,7 +95,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 		startOwnerId,
 		endOwnerId,
 		autoRouting,
-		onItemableChange,
+		onDiagramChange,
 		canvasStateProvider,
 	};
 	const refBus = useRef(refBusVal);
@@ -111,7 +111,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				startOwnerId,
 				endOwnerId,
 				autoRouting,
-				onItemableChange,
+				onDiagramChange,
 				canvasStateProvider,
 			} = refBus.current;
 
@@ -253,14 +253,14 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				}) as Diagram[];
 
 				// 接続線の変更イベントを発火
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: event.eventId,
 					eventType: event.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: _startItems,
 					},
-					endItemable: {
+					endDiagram: {
 						items: newItems,
 					},
 				});
@@ -310,14 +310,14 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					_startItems[_startItems.length - 1].id;
 
 				// 接続線の変更イベントを発火
-				onItemableChange?.({
+				onDiagramChange?.({
 					eventId: event.eventId,
 					eventType: event.eventType,
 					id,
-					startItemable: {
+					startDiagram: {
 						items: _startItems,
 					},
-					endItemable: {
+					endDiagram: {
 						items: newItems,
 					},
 				});
@@ -343,11 +343,11 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	/**
 	 * Handle Path component change event.
 	 */
-	const handlePathChange = useCallback((e: ItemableChangeEvent) => {
-		refBus.current.onItemableChange?.({
+	const handlePathChange = useCallback((e: DiagramChangeEvent) => {
+		refBus.current.onDiagramChange?.({
 			...e,
-			endItemable: {
-				...e.endItemable,
+			endDiagram: {
+				...e.endDiagram,
 				autoRouting: false,
 			},
 		});
@@ -376,7 +376,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			fixBothEnds={true}
 			onClick={onClick}
 			onSelect={onSelect}
-			onItemableChange={handlePathChange}
+			onDiagramChange={handlePathChange}
 			items={items}
 		/>
 	);

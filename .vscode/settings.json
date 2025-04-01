@@ -8,5 +8,5 @@
 		"chrome_extensions": true,
 		"**/__tests__": true
 	},
-	"todo-tree.filtering.excludeGlobs": ["chrome_extensions"]
+	"todo-tree.filtering.excludeGlobs": ["node_modules", "chrome_extensions"]
 }

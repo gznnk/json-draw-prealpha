@@ -69,7 +69,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 	onSelect,
 	onTransform,
 	onConnect,
-	onConnectPointsMove, // TODO: onItemableChangeに変更すべきか？
+	onConnectPointsMove, // TODO: onDiagramChangeに変更すべきか？
 }) => {
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
@@ -156,7 +156,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 			setIsDragging(true);
 		}
 
-		// TODO: onItemableChangeに変更し、接続ポイントの位置更新も同時におこなう？
+		// TODO: onDiagramChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onDrag?.(e);
 
 		updateConnectPoints(e.eventId, e.eventType, {
@@ -179,7 +179,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 			setIsTransforming(true);
 		}
 
-		// TODO: onItemableChangeに変更し、接続ポイントの位置更新も同時におこなう？
+		// TODO: onDiagramChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onTransform?.(e);
 
 		updateConnectPoints(e.eventId, e.eventType, e.endShape);
