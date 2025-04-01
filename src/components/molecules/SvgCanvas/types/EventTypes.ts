@@ -101,6 +101,7 @@ export type ItemableChangeData = {
 	scaleX?: number;
 	scaleY?: number;
 	items?: Diagram[];
+	autoRouting?: boolean; // TODO: Itemableじゃないが、入れたいので、名前をかえる？
 };
 
 /**

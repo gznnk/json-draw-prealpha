@@ -209,6 +209,7 @@ export type ConnectLineData = CreateDiagramType<{
 }> & {
 	startOwnerId: string;
 	endOwnerId: string;
+	autoRouting: boolean;
 };
 
 /**

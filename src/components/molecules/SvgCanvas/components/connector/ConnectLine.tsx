@@ -1,8 +1,8 @@
-// Reactのインポート
+// Import React library.
 import type React from "react";
-import { memo, useContext, useEffect, useRef } from "react";
+import { memo, useCallback, useContext, useEffect, useRef } from "react";
 
-// SvgCanvas関連コンポーネントをインポート
+// Import SvgCanvas related components.
 import { SvgCanvasContext } from "../../SvgCanvas";
 import type { Direction } from "../connector/ConnectPoint";
 import {
@@ -11,7 +11,7 @@ import {
 } from "../connector/ConnectPoint";
 import Path from "../diagram/Path";
 
-// SvgCanvas関連型定義をインポート
+// Import SvgCanvas related types.
 import type {
 	ConnectLineData,
 	CreateDiagramProps,
@@ -21,20 +21,20 @@ import type {
 import type {
 	ConnectPointMoveData,
 	ConnectPointsMoveEvent,
+	ItemableChangeEvent,
 } from "../../types/EventTypes";
 
-// SvgCanvas関連関数をインポート
+// Import SvgCanvas related functions.
 import { newId } from "../../functions/Diagram";
 import { calcRadians, radiansToDegrees } from "../../functions/Math";
 
-/** 接続ポイント移動イベントの名前 */
+/** Event name of ConnectPoint component move. */
 export const EVENT_NAME_CONNECT_POINTS_MOVE = "ConnectPointMove";
 
 /**
- * 接続ポイント移動イベントを発火する
+ * Trigger the ConnectPoint components move event.
  *
- * @param id 接続ポイントID
- * @param point 移動先座標
+ * @param e - ConnectPoint components move event data.
  */
 export const notifyConnectPointsMove = (e: ConnectPointsMoveEvent) => {
 	document.dispatchEvent(
@@ -45,7 +45,7 @@ export const notifyConnectPointsMove = (e: ConnectPointsMoveEvent) => {
 };
 
 /**
- * 接続線コンポーネントのプロパティ
+ * Properties of ConnectLine component.
  */
 type ConnectLineProps = CreateDiagramProps<
 	ConnectLineData,
@@ -57,7 +57,7 @@ type ConnectLineProps = CreateDiagramProps<
 >;
 
 /**
- * 接続線コンポーネント
+ * ConnectLine component.
  */
 const ConnectLine: React.FC<ConnectLineProps> = ({
 	id,
@@ -71,61 +71,58 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
-	onClick,
-	onDrag,
-	onSelect,
-	onTransform,
-	onItemableChange,
 	items = [],
 	startOwnerId,
 	endOwnerId,
+	autoRouting,
+	onClick,
+	onSelect,
+	onItemableChange,
 }) => {
-	// 一番最初の描画時のitems
-	const initialItems = useRef(items);
-	// 移動開始時のitems
+	// Items of ConnectLine component at the start of the change event.
 	const startItems = useRef<Diagram[]>([]);
-	// 移動開始時の接続ポイントの向き
+	// Direction of ConnectLine component at the start of the change event.
 	const startDirection = useRef<Direction>("up");
-	// 垂直と水平の線のみかどうか
+	// Is the line only vertical or horizontal.
 	const isVerticalHorizontalLines = useRef<boolean>(true);
-	// 一番最初の描画時からitemsが変更されているかどうか
-	const isItemsChanged = useRef<boolean>(false);
-	// SvgCanvasの状態プロバイダ
+	// SvgCanvas state provider.
 	const canvasStateProvider = useContext(SvgCanvasContext);
 
-	// 接続ポイント移動イベントハンドラ
-	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		id,
 		items,
 		startOwnerId,
 		endOwnerId,
+		autoRouting,
 		onItemableChange,
 		canvasStateProvider,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
+	// Register handler for ConnectPoint components move event.
 	useEffect(() => {
 		const handleConnectPointsMove = (e: Event) => {
-			// refBusを介して参照値を取得
+			// Bypass references to avoid function creation in every render.
 			const {
 				id,
 				items,
 				startOwnerId,
 				endOwnerId,
+				autoRouting,
 				onItemableChange,
 				canvasStateProvider,
 			} = refBus.current;
 
 			const event = (e as CustomEvent<ConnectPointsMoveEvent>).detail;
 
-			// イベントの中からこの接続線に対応する接続ポイントを取得
+			// Find point data in the event that this ConnectLine component owns.
 			const movedPoint = event.points.find((p) =>
 				items.some((item) => item.id === p.id),
 			);
 			if (!movedPoint) {
-				// 関係ない接続ポイントの移動イベントは無視
+				// Ignore unrelated ConnectPoint components move events.
 				return;
 			}
 
@@ -153,16 +150,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					);
 					return degrees % 90 === 0;
 				});
-
-				// 一番最初の描画時からitemsが変更されているかどうかを判定
-				isItemsChanged.current =
-					initialItems.current.length !== startItems.current.length ||
-					initialItems.current.some(
-						(item, idx) =>
-							item.id !== startItems.current[idx].id ||
-							item.x !== startItems.current[idx].x ||
-							item.y !== startItems.current[idx].y,
-					);
 				return;
 			}
 
@@ -175,7 +162,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			}
 
 			const _startItems = startItems.current;
-			const _isItemsChanged = isItemsChanged.current;
 			const _isVerticalHorizontalLines = isVerticalHorizontalLines.current;
 			const movedPointIdx = _startItems.findIndex(
 				(item) => item.id === movedPoint.id,
@@ -194,8 +180,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				(p) => p.id === oppositeItem.id,
 			);
 
-			if (_isItemsChanged) {
-				// 一番最初の描画時からitemsが変更されている場合
+			if (!autoRouting) {
+				// 自動ルーティング無効時
 
 				// 移動後のポイント作成関数
 				const createNewPoint = (
@@ -279,7 +265,7 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 					},
 				});
 			} else {
-				// 一番最初の描画時からitemsが変更されていない場合は、最適な接続線を再計算
+				// 自動ルーティング有効時は、最適な接続線を再計算
 
 				if (movedOppositPoint) {
 					// 反対側の点が動いている場合は、その座標を利用
@@ -338,11 +324,6 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 
 				if (event.eventType === "End") {
 					startItems.current = [];
-					if (!_isItemsChanged) {
-						// 一番最初の描画時からitemsが変更されていない場合は、
-						// 再計算後の接続線を初期状態として保持
-						initialItems.current = newItems;
-					}
 				}
 			}
 		};
@@ -357,6 +338,19 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 				handleConnectPointsMove,
 			);
 		};
+	}, []);
+
+	/**
+	 * Handle Path component change event.
+	 */
+	const handlePathChange = useCallback((e: ItemableChangeEvent) => {
+		refBus.current.onItemableChange?.({
+			...e,
+			endItemable: {
+				...e.endItemable,
+				autoRouting: false,
+			},
+		});
 	}, []);
 
 	return (
@@ -381,10 +375,8 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 			newVertexEnabled={true}
 			fixBothEnds={true}
 			onClick={onClick}
-			onDrag={onDrag}
 			onSelect={onSelect}
-			onTransform={onTransform}
-			onItemableChange={onItemableChange}
+			onItemableChange={handlePathChange}
 			items={items}
 		/>
 	);

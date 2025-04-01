@@ -402,6 +402,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			})) as PathPointData[],
 			startOwnerId: e.startOwnerId,
 			endOwnerId: e.endOwnerId,
+			autoRouting: true,
 		} as ConnectLineData);
 	}, []);
 
