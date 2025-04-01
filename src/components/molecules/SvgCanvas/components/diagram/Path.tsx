@@ -1,13 +1,13 @@
-// Reactのインポート
+// Import React library.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// SvgCanvas関連コンポーネントをインポート
+// Import SvgCanvas related components.
 import DragLine from "../core/DragLine";
 import DragPoint from "../core/DragPoint";
 import Group from "./Group";
 
-// SvgCanvas関連型定義をインポート
+// Import SvgCanvas related types.
 import type { Point } from "../../types/CoordinateTypes";
 import type {
 	CreateDiagramProps,
@@ -22,10 +22,10 @@ import type {
 	ItemableChangeEvent,
 } from "../../types/EventTypes";
 
-// SvgCanvas関連カスタムフックをインポート
+// Import SvgCanvas related hooks.
 import { useDrag } from "../../hooks/dragHooks";
 
-// SvgCanvas関連関数をインポート
+// Import SvgCanvas related functions.
 import { getCursorFromAngle, newId } from "../../functions/Diagram";
 import {
 	calcPointsOuterShape,
@@ -287,8 +287,9 @@ const Path: React.FC<PathProps> = ({
 					scaleY,
 				);
 
+				// Apply the new shape of the Path component.
 				onItemableChange?.({
-					...e, // TODO: 開始時の形状情報がない
+					...e,
 					endItemable: {
 						...e.endItemable,
 						x: newShape.x,
@@ -481,12 +482,15 @@ type NewVertexListProps = {
  */
 const NewVertexList: React.FC<NewVertexListProps> = memo(
 	({ id, items, onItemableChange }) => {
-		// ドラッグ中の新規頂点
+		// Dragging NewVertex component data.
 		const [draggingNewVertex, setDraggingNewVertex] = useState<
 			NewVertexData | undefined
 		>();
 
-		// 描画する新規頂点リスト
+		// Items of owner Path component at the start of the new vertex drag.
+		const startItems = useRef<Diagram[]>(items);
+
+		// NewVertex data list for rendering.
 		const newVertexList: NewVertexData[] = [];
 		if (draggingNewVertex) {
 			// ドラッグ中の場合はその新規頂点のみ描画
@@ -527,6 +531,9 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 			const { id, items, onItemableChange, newVertexList } = refBus.current;
 			// ドラッグ開始時の処理
 			if (e.eventType === "Start") {
+				// Store the items of owner Path component at the start of the new vertex drag.
+				startItems.current = items;
+
 				// ドラッグ中の新規頂点を設定
 				setDraggingNewVertex({ id: e.id, x: e.startX, y: e.startY });
 
@@ -547,7 +554,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 					eventType: e.eventType,
 					id,
 					startItemable: {
-						items, // TODO: 正しくない
+						items: startItems.current,
 					},
 					endItemable: {
 						items: newItems,
@@ -566,7 +573,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 					eventType: e.eventType,
 					id,
 					startItemable: {
-						items, // TODO: 正しくない
+						items: startItems.current,
 					},
 					endItemable: {
 						items: items.map((item) =>
@@ -587,7 +594,7 @@ const NewVertexList: React.FC<NewVertexListProps> = memo(
 					eventType: e.eventType,
 					id,
 					startItemable: {
-						items, // TODO: 正しくない
+						items: startItems.current,
 					},
 					endItemable: {
 						items: items.map((item) =>
@@ -750,6 +757,9 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 		>();
 		const startSegment = useRef<SegmentData>(undefined);
 
+		// Items of owner Path component at the start of the segment drag.
+		const startItems = useRef<Diagram[]>(items);
+
 		const segmentList: SegmentData[] = [];
 		if (draggingSegment) {
 			segmentList.push(draggingSegment);
@@ -770,14 +780,14 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 			}
 		}
 
-		// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+		// Create references bypass to avoid function creation in every render.
 		const refBusVal = {
-			// プロパティ
+			// Component properties
 			id,
 			items,
 			fixBothEnds,
 			onItemableChange,
-			// 内部変数・内部関数
+			// Internal variables and functions
 			draggingSegment,
 			segmentList,
 		};
@@ -785,9 +795,10 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 		refBus.current = refBusVal;
 
 		/**
-		 * 線分のドラッグイベントハンドラ
+		 * Handle segment drag event.
 		 */
 		const handleSegmentDrag = useCallback((e: DiagramDragEvent) => {
+			// Bypass references to avoid function creation in every render.
 			const {
 				id,
 				fixBothEnds,
@@ -797,18 +808,25 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 				segmentList,
 			} = refBus.current;
 
-			// ドラッグ開始時の処理
+			// Process the drag start event.
 			if (e.eventType === "Start") {
+				// Store the items at the start of the segment drag.
+				startItems.current = items;
+
+				// Find the index of the segment being dragged.
 				const idx = segmentList.findIndex((v) => v.id === e.id);
 
+				// Store segment data at the start of the segment drag.
 				const segment = segmentList[idx];
 				startSegment.current = segment;
 
+				// Prepare a new segment data.
 				const newSegment = {
 					...segment,
 				};
+
 				if (fixBothEnds && (idx === 0 || idx === segmentList.length - 1)) {
-					// 両端を固定する場合は、端の線分の移動時に新しい頂点を追加する
+					// If both ends are fixed, add a new vertex when moving both ends of the segment.
 					const newItems = [...items];
 
 					if (idx === segmentList.length - 1) {
@@ -838,7 +856,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 						eventType: e.eventType,
 						id,
 						startItemable: {
-							items, // TODO: 正しくない
+							items: startItems.current,
 						},
 						endItemable: {
 							items: newItems,
@@ -874,7 +892,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					eventType: e.eventType,
 					id,
 					startItemable: {
-						items, // TODO: 正しくない
+						items: startItems.current,
 					},
 					endItemable: {
 						items: items.map((item) => {
@@ -896,7 +914,7 @@ const SegmentList: React.FC<SegmentListProps> = memo(
 					eventType: e.eventType,
 					id,
 					startItemable: {
-						items, // TODO: 正しくない
+						items: startItems.current,
 					},
 					endItemable: {
 						items: items.map((item) => {
