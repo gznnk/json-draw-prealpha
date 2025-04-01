@@ -237,6 +237,7 @@ const testItems3 = [
 		scaleY: 1,
 		keepProportion: true,
 		isSelected: false,
+		isMultiSelectSource: false,
 		items: [
 			{
 				id: "3",
@@ -253,6 +254,7 @@ const testItems3 = [
 				strokeWidth: "1px",
 				keepProportion: false,
 				isSelected: false,
+				isMultiSelectSource: false,
 			},
 			createEllipseData({
 				x: 250,
@@ -273,6 +275,7 @@ const testItems3 = [
 				strokeWidth: "1px",
 				keepProportion: false,
 				isSelected: false,
+				isMultiSelectSource: false,
 			},
 			{
 				id: "12",
@@ -288,6 +291,7 @@ const testItems3 = [
 				strokeWidth: "1px",
 				keepProportion: false,
 				isSelected: false,
+				isMultiSelectSource: false,
 				items: [
 					{
 						id: "12-1",
@@ -302,8 +306,8 @@ const testItems3 = [
 					{
 						id: "12-2",
 						type: "PathPoint",
-						x: 300,
-						y: 400,
+						x: 320,
+						y: 340,
 						width: 0,
 						height: 0,
 						keepProportion: false,
@@ -402,12 +406,63 @@ const testItems5 = [
 	}),
 ] as Diagram[];
 
+const testItems6 = [
+	{
+		id: "12",
+		type: "Path",
+		x: 350,
+		y: 350,
+		width: 100,
+		height: 100,
+		rotation: radiansToDegrees(0),
+		scaleX: 1,
+		scaleY: 1,
+		stroke: "black",
+		strokeWidth: "1px",
+		keepProportion: false,
+		isSelected: false,
+		isMultiSelectSource: false,
+		items: [
+			{
+				id: "12-1",
+				type: "PathPoint",
+				x: 300,
+				y: 300,
+				width: 0,
+				height: 0,
+				keepProportion: false,
+				isSelected: false,
+			},
+			{
+				id: "12-2",
+				type: "PathPoint",
+				x: 320,
+				y: 340,
+				width: 0,
+				height: 0,
+				keepProportion: false,
+				isSelected: false,
+			},
+			{
+				id: "12-3",
+				type: "PathPoint",
+				x: 400,
+				y: 400,
+				width: 0,
+				height: 0,
+				keepProportion: false,
+				isSelected: false,
+			},
+		],
+	},
+] as Diagram[];
+
 function App() {
 	const {
 		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems4);
+	} = useSvgCanvas(testItems6);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);

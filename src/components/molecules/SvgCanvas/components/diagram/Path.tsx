@@ -190,7 +190,7 @@ const Path: React.FC<PathProps> = ({
 	 * 折れ線のドラッグイベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { id, dragEnabled, items, onDrag, onItemableChange, isVerticesMode } =
+		const { id, dragEnabled, items, onItemableChange, isVerticesMode } =
 			refBus.current;
 
 		// ドラッグが無効な場合はイベントを潰してドラッグを無効化
@@ -209,7 +209,19 @@ const Path: React.FC<PathProps> = ({
 
 			startItems.current = items;
 
-			onDrag?.(e);
+			const startItemable = {
+				x: e.startX,
+				y: e.startY,
+				items: startItems.current,
+			};
+
+			onItemableChange?.({
+				eventId: e.eventId,
+				eventType: e.eventType,
+				id,
+				startItemable,
+				endItemable: startItemable,
+			});
 
 			return;
 		}

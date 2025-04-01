@@ -31,7 +31,7 @@ import { calcGroupBoxOfNoRotation } from "../components/diagram/Group";
 // SvgCanvas関連関数をインポート
 import { isItemableData, isSelectableData, newId } from "../functions/Diagram";
 import { calcPointsOuterShape } from "../functions/Math";
-import { newEventId } from "../functions/Util";
+import { newEventId, deepCopy } from "../functions/Util";
 
 /**
  * 最大履歴サイズ
@@ -47,7 +47,7 @@ export type SvgCanvasState = {
 	selectedItemId?: string; // TODO: いらないかも
 	history: SvgCanvasState[];
 	historyIndex: number;
-	lastUpdateEventId: string;
+	lastHistoryEventId: string;
 };
 
 // TODO: 精査
@@ -65,14 +65,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		items: initialItems,
 		history: [
 			{
-				items: initialItems,
+				items: deepCopy(initialItems),
 				history: [],
-				historyIndex: 0,
-				lastUpdateEventId: "",
+				historyIndex: -1,
+				lastHistoryEventId: "",
 			},
 		],
 		historyIndex: 0,
-		lastUpdateEventId: "",
+		lastHistoryEventId: "",
 	});
 
 	/**
@@ -86,11 +86,17 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				items: applyRecursive(prevState.items, (item) =>
 					item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
 				),
-				lastUpdateEventId: e.eventId,
 			};
 
 			if (e.eventType === "End") {
+				console.log(
+					"onDrag",
+					prevState.lastHistoryEventId,
+					newState.lastHistoryEventId,
+				);
+
 				// 終了時に履歴を追加
+				newState.lastHistoryEventId = e.eventId;
 				newState = addHistory(prevState, newState);
 				console.log("addHistory caused by Drag", e.eventId);
 			}
@@ -117,11 +123,11 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				items: applyRecursive(prevState.items, (item) =>
 					item.id === e.id ? { ...item, ...e.endShape } : item,
 				),
-				lastUpdateEventId: e.eventId,
 			};
 
 			if (e.eventType === "End") {
 				// 終了時に履歴を追加
+				newState.lastHistoryEventId = e.eventId;
 				newState = addHistory(prevState, newState);
 				console.log("addHistory caused by onTransform", e.eventId);
 			}
@@ -218,12 +224,12 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			let newState = {
 				...prevState,
 				items,
-				lastUpdateEventId: e.eventId,
 				multiSelectGroup,
 			} as SvgCanvasState;
 
 			if (e.eventType === "End") {
 				// 終了時に履歴を追加
+				newState.lastHistoryEventId = e.eventId;
 				newState = addHistory(prevState, newState);
 				console.log("addHistory caused by onItemableChange", e.eventId);
 			}
@@ -362,10 +368,10 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			let newState = {
 				...prevState,
 				items,
-				lastUpdateEventId: newEventId(),
 			};
 
 			// 履歴を追加
+			newState.lastHistoryEventId = newEventId();
 			newState = addHistory(prevState, newState);
 			console.log("addHistory caused by Delete");
 
@@ -443,10 +449,10 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 						? { ...item, text: e.text, isTextEditing: false }
 						: item,
 				),
-				lastUpdateEventId: e.eventId,
 			};
 
 			// 履歴を追加
+			newState.lastHistoryEventId = e.eventId;
 			newState = addHistory(prevState, newState);
 
 			return newState;
@@ -499,11 +505,11 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			let newState = {
 				...prevState,
 				items,
-				lastUpdateEventId: newEventId(),
 				multiSelectGroup: undefined,
 			} as SvgCanvasState;
 
 			// 履歴を追加
+			newState.lastHistoryEventId = newEventId();
 			newState = addHistory(prevState, newState);
 
 			return newState;
@@ -523,11 +529,11 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			let newState = {
 				...prevState,
 				items: newItems,
-				lastUpdateEventId: newEventId(),
 				multiSelectGroup: undefined,
 			} as SvgCanvasState;
 
 			// 履歴を追加
+			newState.lastHistoryEventId = newEventId();
 			newState = addHistory(prevState, newState);
 
 			return newState;
@@ -578,10 +584,10 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 						isSelected: true,
 					},
 				],
-				lastUpdateEventId: newEventId(),
 			} as SvgCanvasState;
 
 			// 履歴を追加
+			newState.lastHistoryEventId = newEventId();
 			newState = addHistory(prevState, newState);
 			console.log("addHistory caused by addItem");
 
@@ -610,6 +616,9 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				return prevState;
 			}
 			const prevHistory = prevState.history[prevIndex];
+
+			console.log("undo", prevHistory.lastHistoryEventId);
+
 			return {
 				...prevHistory,
 				history: prevState.history,
@@ -630,6 +639,9 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				return prevState;
 			}
 			const nextHistory = prevState.history[nextIndex];
+
+			console.log("redo", nextHistory.lastHistoryEventId);
+
 			return {
 				...nextHistory,
 				history: prevState.history,
@@ -838,32 +850,44 @@ const addHistory = (
 ): SvgCanvasState => {
 	// 履歴データからは履歴データを削除
 	newState.history = [];
-	newState.historyIndex = 0;
+	newState.historyIndex = -1;
+	// newState.lastHistoryEventId = "";
 
 	// 前回の履歴追加時と同じイベントIDの場合、履歴を上書きする
-	if (prevState.lastUpdateEventId === newState.lastUpdateEventId) {
+	if (prevState.lastHistoryEventId === newState.lastHistoryEventId) {
+		console.log("overwrite history", newState.lastHistoryEventId);
+
 		// 履歴を上書き
-		prevState.history[prevState.history.length - 1] = newState;
-		return {
+		const newHistory = prevState.history.slice(0, prevState.historyIndex);
+		newHistory.push(deepCopy(newState));
+		const ret = {
 			...newState,
-			history: prevState.history,
+			history: newHistory,
 			historyIndex: prevState.historyIndex,
-			lastUpdateEventId: prevState.lastUpdateEventId,
+			lastHistoryEventId: prevState.lastHistoryEventId,
 		};
+
+		console.log("overwrite history", ret);
+
+		return ret;
 	}
 
 	// 履歴を追加
 	let newHistory = prevState.history.slice(0, prevState.historyIndex + 1);
-	newHistory.push(newState);
+	newHistory.push(deepCopy(newState));
 
 	// 履歴のサイズが最大値を超えた場合、古い履歴を削除
 	if (MAX_HISTORY_SIZE <= newHistory.length) {
 		newHistory = newHistory.slice(1);
 	}
 
-	return {
+	const ret = {
 		...newState,
 		history: newHistory,
-		historyIndex: newHistory.length - 1,
+		historyIndex: prevState.historyIndex + 1,
 	};
+
+	console.log("history", JSON.stringify(ret, null, 2));
+
+	return ret;
 };
