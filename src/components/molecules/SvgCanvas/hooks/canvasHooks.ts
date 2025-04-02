@@ -824,24 +824,28 @@ const removeGroupedRecursive = (items: Diagram[]) => {
  */
 const ungroupSelectedGroupsRecursive = (items: Diagram[]) => {
 	// Extract the diagrams from the selected groups.
-	let newItems: Diagram[] = [];
+	let extractedItems: Diagram[] = [];
 	for (const item of [...items]) {
-		if (isItemableData(item) && item.type === "Group") {
+		if (
+			item.type === "Group" &&
+			isItemableData(item) &&
+			item.items !== undefined
+		) {
 			if (item.isSelected) {
-				for (const groupItem of item.items ?? []) {
-					newItems.push(groupItem);
+				for (const groupItem of item.items) {
+					extractedItems.push(groupItem);
 				}
 			} else {
-				item.items = ungroupSelectedGroupsRecursive(item.items ?? []);
-				newItems.push(item);
+				item.items = ungroupSelectedGroupsRecursive(item.items);
+				extractedItems.push(item);
 			}
 		} else {
-			newItems.push(item);
+			extractedItems.push(item);
 		}
 	}
 
 	// Remove empty groups.
-	newItems = newItems.filter((item) => {
+	extractedItems = extractedItems.filter((item) => {
 		if (isItemableData(item) && item.type === "Group") {
 			if (item.items?.length === 0) {
 				return false;
@@ -850,7 +854,7 @@ const ungroupSelectedGroupsRecursive = (items: Diagram[]) => {
 		return true;
 	});
 
-	return newItems;
+	return extractedItems;
 };
 
 /**
