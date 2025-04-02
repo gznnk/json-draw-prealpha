@@ -5,6 +5,7 @@ import Input from "./components/atoms/Input";
 import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramTypes";
 import { createRectangleData } from "./components/molecules/SvgCanvas/components/diagram/Rectangle";
 import { createEllipseData } from "./components/molecules/SvgCanvas/components/diagram/Ellipse";
+import AIChat from "./components/organisms/AIChat";
 
 import { getLogger } from "./utils/Logger";
 import { Profiler } from "./utils/Profiler";
@@ -458,11 +459,17 @@ const testItems6 = [
 ] as Diagram[];
 
 function App() {
+	// const {
+	// 	state: [canvasState, _setCanvasState],
+	// 	canvasProps,
+	// 	canvasFunctions,
+	// } = useSvgCanvas(testItems4);
+
 	const {
-		state: [canvasState, _setCanvasState],
+		state: [canvasState, setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems4);
+	} = useSvgCanvas([]);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);
@@ -522,9 +529,9 @@ function App() {
 					top: 0,
 					right: 0,
 					bottom: 0,
-					width: "100px",
+					width: "300px",
 					backgroundColor: "lightgray",
-					overflow: "hidden",
+					overflow: "auto",
 				}}
 			>
 				<Button onClick={handleAddRectangle}>Add Rectangle</Button>
@@ -594,13 +601,26 @@ function App() {
 				>
 					Profile
 				</Button>
+				<AIChat
+					onResponse={(res) => {
+						try {
+							const item = makeDataFromAi(JSON.parse(res));
+							setCanvasState((prev) => ({
+								...prev,
+								items: [...prev.items, item],
+							}));
+						} catch (e) {
+							alert("Invalid JSON format. Please check the response.");
+						}
+					}}
+				/>
 			</div>
 			<div
 				style={{
 					position: "absolute",
 					top: "50px",
 					left: 0,
-					right: "100px",
+					right: "300px",
 					bottom: 0,
 				}}
 			>
@@ -611,3 +631,36 @@ function App() {
 }
 
 export default App;
+
+const makeDataFromAi = (data: Partial<Diagram>[]): Diagram => {
+	const newData = data.map((item) => {
+		const newItem = {
+			scaleX: 1,
+			scaleY: 1,
+			stroke: "black",
+			strokeWidth: "1px",
+			...item,
+			id: crypto.randomUUID(),
+			type: "Rectangle",
+			isSelected: false,
+			isMultiSelectSource: false,
+			keepProportion: false,
+		} as Diagram;
+
+		return newItem;
+	});
+	return {
+		id: crypto.randomUUID(),
+		type: "Group",
+		x: 100,
+		y: 100,
+		width: 100,
+		height: 100,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
+		isSelected: false,
+		isMultiSelectSource: false,
+		items: newData,
+	} as Diagram;
+};
