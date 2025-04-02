@@ -459,17 +459,17 @@ const testItems6 = [
 ] as Diagram[];
 
 function App() {
-	// const {
-	// 	state: [canvasState, _setCanvasState],
-	// 	canvasProps,
-	// 	canvasFunctions,
-	// } = useSvgCanvas(testItems4);
-
 	const {
-		state: [canvasState, setCanvasState],
+		state: [canvasState, _setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas([]);
+	} = useSvgCanvas(testItems4);
+
+	// const {
+	// 	state: [canvasState, setCanvasState],
+	// 	canvasProps,
+	// 	canvasFunctions,
+	// } = useSvgCanvas([]);
 
 	const handleAddRectangle = () => {
 		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);

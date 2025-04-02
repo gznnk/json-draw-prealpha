@@ -9,6 +9,7 @@ import {
 	getLineDirection,
 } from "../connector/ConnectPoint";
 import Path from "../diagram/Path";
+import ArrowHead from "../core/ArrowHead";
 
 // Import SvgCanvas related types.
 import type {
@@ -349,32 +350,50 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 		});
 	}, []);
 
+	// Properties of ArrowHead component.
+	const endPoint = items[items.length - 1];
+	const end2thPoint = items[items.length - 2];
+	const endArrowHeadRadians = calcRadians(
+		endPoint.x,
+		endPoint.y,
+		end2thPoint.x,
+		end2thPoint.y,
+	);
+
 	return (
-		<Path
-			id={id}
-			x={x}
-			y={y}
-			width={width}
-			height={height}
-			rotation={rotation}
-			scaleX={scaleX}
-			scaleY={scaleY}
-			keepProportion={false}
-			stroke={stroke}
-			strokeWidth={strokeWidth}
-			isSelected={isSelected}
-			isMultiSelectSource={false}
-			dragEnabled={false}
-			transformEnabled={false}
-			segmentDragEnabled={true}
-			rightAngleSegmentDrag={true}
-			newVertexEnabled={true}
-			fixBothEnds={true}
-			onClick={onClick}
-			onSelect={onSelect}
-			onDiagramChange={handlePathChange}
-			items={items}
-		/>
+		<>
+			<Path
+				id={id}
+				x={x}
+				y={y}
+				width={width}
+				height={height}
+				rotation={rotation}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				keepProportion={false}
+				stroke={stroke}
+				strokeWidth={strokeWidth}
+				isSelected={isSelected}
+				isMultiSelectSource={false}
+				dragEnabled={false}
+				transformEnabled={false}
+				segmentDragEnabled={true}
+				rightAngleSegmentDrag={true}
+				newVertexEnabled={true}
+				fixBothEnds={true}
+				onClick={onClick}
+				onSelect={onSelect}
+				onDiagramChange={handlePathChange}
+				items={items}
+			/>
+			<ArrowHead
+				color={stroke}
+				x={endPoint.x}
+				y={endPoint.y}
+				radians={endArrowHeadRadians}
+			/>
+		</>
 	);
 };
 

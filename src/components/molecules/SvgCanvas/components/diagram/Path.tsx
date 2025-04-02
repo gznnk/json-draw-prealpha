@@ -322,11 +322,11 @@ const Path: React.FC<PathProps> = ({
 	const d = createDValue(items);
 
 	// 頂点情報を生成
+	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;
 	const linePoints = items.map((item, idx) => ({
 		...item,
-		hidden: !isVerticesMode || isDragging,
-		pointerEventsDisabled:
-			fixBothEnds && (idx === 0 || idx === items.length - 1),
+		hidden: !isVerticesMode || isDragging || (fixBothEnds && isBothEnds(idx)),
+		pointerEventsDisabled: fixBothEnds && isBothEnds(idx),
 	}));
 
 	// ドラッグ線分の表示フラグ
