@@ -540,6 +540,20 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		});
 	}, []);
 
+	/**
+	 * Handle undo action.
+	 */
+	const onUndo = useCallback(() => {
+		undo();
+	}, []);
+
+	/**
+	 * Handle redo action.
+	 */
+	const onRedo = useCallback(() => {
+		redo();
+	}, []);
+
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -555,6 +569,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 		onTextChange,
 		onGroup,
 		onUngroup,
+		onUndo,
+		onRedo,
 	};
 
 	const getSelectedItem = useCallback(() => {

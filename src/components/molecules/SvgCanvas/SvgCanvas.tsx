@@ -17,6 +17,7 @@ import type { Diagram, GroupData } from "./types/DiagramTypes";
 import { DiagramTypeComponentMap } from "./types/DiagramTypes";
 import type {
 	ConnectPointsMoveEvent,
+	DiagramChangeEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
 	DiagramDragEvent,
@@ -24,7 +25,6 @@ import type {
 	DiagramTextChangeEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
-	DiagramChangeEvent,
 } from "./types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -107,6 +107,8 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	onTextChange,
 	onGroup,
 	onUngroup,
+	onUndo,
+	onRedo,
 }) => {
 	// SVG要素のコンテナの参照
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -185,20 +187,12 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	/**
 	 * SvgCanvasのキーダウンイベントハンドラ
 	 */
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent<SVGSVGElement>) => {
-			// Deleteキー押下の検知のみを行い、処理はHooksに委譲
-			if (e.key === "Delete") {
-				onDelete?.();
-			}
-
-			// キャンバスにフォーカスがない場合はイベントをキャンセルし、スクロールを無効化
-			if (e.target !== e.currentTarget) {
-				e.preventDefault();
-			}
-		},
-		[onDelete],
-	);
+	const handleKeyDown = useCallback((e: React.KeyboardEvent<SVGSVGElement>) => {
+		// キャンバスにフォーカスがない場合はイベントをキャンセルし、スクロールを無効化
+		if (e.target !== e.currentTarget) {
+			e.preventDefault();
+		}
+	}, []);
 
 	/**
 	 * 図形選択イベントハンドラ
@@ -260,18 +254,50 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 		[onTextChange],
 	);
 
-	// Ctrlキーの押下状態を監視
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		onDelete,
+		onAllSelectionClear,
+		onUndo,
+		onRedo,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
+	// Monitor keyboard events.
 	useEffect(() => {
 		const onDocumentKeyDown = (e: KeyboardEvent) => {
+			// Bypass references to avoid function creation in every render.
+			const { onDelete, onAllSelectionClear, onUndo, onRedo } = refBus.current;
+
 			if (e.key === "Control") {
 				isCtrlDown.current = true;
 			}
+			if (e.key === "Escape") {
+				// Clear selection when Escape key is pressed.
+				onAllSelectionClear?.();
+			}
+			if (e.key === "Delete") {
+				// Delete selected items when Delete key is pressed.
+				onDelete?.();
+			}
+			if (e.ctrlKey) {
+				if (e.key === "z") {
+					onUndo?.();
+				}
+				if (e.key === "y") {
+					onRedo?.();
+				}
+			}
 		};
+
 		const onDocumentKeyUp = (e: KeyboardEvent) => {
 			if (e.key === "Control") {
 				isCtrlDown.current = false;
 			}
 		};
+
+		// Add event listeners for keydown and keyup events.
 		document.addEventListener("keydown", onDocumentKeyDown);
 		document.addEventListener("keyup", onDocumentKeyUp);
 
