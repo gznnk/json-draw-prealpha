@@ -463,7 +463,7 @@ function App() {
 		state: [canvasState, setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(testItems4);
+	} = useSvgCanvas(testItems6);
 
 	// const {
 	// 	state: [canvasState, setCanvasState],
