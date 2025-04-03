@@ -11,16 +11,7 @@ const AIChat: React.FC<AIChatProps> = ({ onResponse }) => {
 	const [systemRole, setSystemRole] =
 		useState<string>(`作図アプリケーションのバックエンドで動く、ユーザーの入力を受けてそれに対応する図形データを生成するノード。
 データはJSON形式で、配列の中に複数の図形のデータをオブジェクトとして持つ。
-座標がマイナスになると画面からはみ出るので、座標がマイナスにならないようにする。
-四角形のデータは以下の構造。
-x: 中心X座標
-y: 中心y座標
-width: 幅
-height: 高さ
-rotation: 図形の中心を原点として回転（度単位）
-fill: 図形の塗りつぶしの色（HEX表記）
-stroke: 図形の枠線の色（HEX表記）
-回答はJSONデータのみを返す。コメントや説明文は不要。`);
+回答はJSONデータのみを返し、JSON内にコメントは記載しない。`);
 	const [userPrompt, setUserPrompt] = useState<string>("");
 	const [response, setResponse] = useState<string>("");
 
@@ -48,11 +39,46 @@ stroke: 図形の枠線の色（HEX表記）
 				dangerouslyAllowBrowser: true, // ブラウザで直接使用する場合に必要
 			});
 
+			const prompt = `
+以下の個々の図形のデータ構造を参考に、ユーザーの入力に基づいて図形データを生成してほしいです。
+
+１．四角形のデータ
+---------------------------------------
+type: Rectangle（固定値）
+x: 中心X座標
+y: 中心y座標
+width: 幅
+height: 高さ
+rotation: 図形の中心を原点として回転（度単位）
+fill: 図形の塗りつぶしの色（HEX表記）
+stroke: 図形の枠線の色（HEX表記）
+strokeWidth: 図形の枠線の太さ（px単位）
+---------------------------------------
+
+２．楕円のデータ
+---------------------------------------
+type: Ellipse（固定値）
+x: 中心X座標
+y: 中心y座標
+width: 幅
+height: 高さ
+rotation: 図形の中心を原点として回転（度単位）
+fill: 図形の塗りつぶしの色（HEX表記）
+stroke: 図形の枠線の色（HEX表記）
+strokeWidth: 図形の枠線の太さ（px単位）
+---------------------------------------
+
+回答はJSONデータのみを返すこと。JSON内にコメントは記載しないこと。
+
+上記のデータ構造を参考に、以下のユーザーの入力に基づいて図形データを生成してください。
+ユーザーの入力: ${userPrompt}
+			`;
+
 			const response = await openai.chat.completions.create({
 				model: "gpt-4o",
 				messages: [
 					{ role: "system", content: systemRole },
-					{ role: "user", content: userPrompt },
+					{ role: "user", content: prompt },
 					// { role: "assistant", content: "申し訳ありませんが、天気情報にはアクセスできません。" }
 				],
 			});

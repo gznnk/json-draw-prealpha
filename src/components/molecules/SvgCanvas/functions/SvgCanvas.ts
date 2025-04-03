@@ -73,39 +73,42 @@ export const applyRecursive = (
 };
 
 /**
- * 選択されている図形を取得する
+ * Get the selected items from a list of items.
  *
- * @param items 図形配列
- * @param selectedItems １つ前の再帰呼び出し時の選択されている図形の配列
- * @returns 選択されている図形の配列
+ * @param items - The list of items to search.
+ * @param selectedItems - The list populated with found selected items.
+ * @returns {Diagram[]} - The list of selected items.
  */
 export const getSelectedItems = (
 	items: Diagram[],
-	selectedItems?: Diagram[],
+	selectedItems: Diagram[] = [],
 ) => {
-	const _selectedItems = selectedItems ?? [];
 	for (const item of items) {
 		if (isSelectableData(item)) {
 			if (item.isSelected) {
-				_selectedItems.push(item);
+				selectedItems.push(item);
 			} else if (isItemableData(item)) {
-				getSelectedItems(item.items, _selectedItems);
+				getSelectedItems(item.items, selectedItems);
 			}
 		}
 	}
-	return _selectedItems;
+	return selectedItems;
 };
 
 /**
- * 複数選択時に、選択されている図形を選択元として設定する（非表示にする）
+ * Recursively apply the `isMultiSelectSource` property to the selected items.
  *
- * @param items 図形配列
- * @param isGroupMultiSelected 複数選択されたグループか
- * @returns 更新後の図形配列
+ * This function sets the `isMultiSelectSource` property to `true` for all selected items and their descendants.
+ * If a group is selected, it applies the property to all items within that group.
+ * Any item for which this function sets `isMultiSelectSource = true` will be hidden in the UI.
+ *
+ * @param items - The list of items to process.
+ * @param isGroupMultiSelected - Indicates if the item is a group that is multi-selected.
+ * @returns {Diagram[]} - The updated list of items with the `isMultiSelectSource` property applied.
  */
 export const applyMultiSelectSourceRecursive = (
 	items: Diagram[],
-	isGroupMultiSelected: boolean,
+	isGroupMultiSelected = false,
 ): Diagram[] => {
 	return items.map((item) => {
 		const newItem = { ...item };

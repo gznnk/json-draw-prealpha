@@ -314,8 +314,8 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 					}),
 				} as GroupData;
 
-				// 元の図形は非表示にする
-				items = applyMultiSelectSourceRecursive(items, false);
+				// Hide the original diagrams during multi-selection by setting `isMultiSelectSource` to true.
+				items = applyMultiSelectSourceRecursive(items);
 			} else {
 				// 複数選択でない場合は、全図形に対して複数選択の選択元ではないと設定
 				items = applyRecursive(items, (item) => {
@@ -389,7 +389,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 			let newState = {
 				...prevState,
 				items, // Apply new items after removing the selected items.
-				multiSelectGroup: undefined, // Hide the multi select group because the selected items were deleted.
+				multiSelectGroup: undefined, // Hide the multi-select group because the selected items were deleted.
 			} as SvgCanvasState;
 
 			// Add history.

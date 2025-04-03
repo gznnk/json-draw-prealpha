@@ -641,7 +641,7 @@ const makeDataFromAi = (data: Partial<Diagram>[]): Diagram => {
 			strokeWidth: "1px",
 			...item,
 			id: crypto.randomUUID(),
-			type: "Rectangle",
+			// type: "Rectangle",
 			isSelected: false,
 			isMultiSelectSource: false,
 			keepProportion: false,
