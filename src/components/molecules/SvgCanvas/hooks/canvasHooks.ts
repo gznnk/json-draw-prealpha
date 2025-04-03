@@ -350,10 +350,11 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 	}, []);
 
 	/**
-	 * 図形の削除イベントハンドラ
+	 * Handle delete action.
 	 */
 	const onDelete = useCallback(() => {
 		setCanvasState((prevState) => {
+			// Remove selected items.
 			const items = applyRecursive(prevState.items, (item) => {
 				if (!isSelectableData(item)) {
 					return item;
@@ -364,13 +365,14 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 				return item;
 			}).filter((item) => !isSelectableData(item) || !item.isSelected);
 
-			// 新しい状態を作成
+			// Create new state.
 			let newState = {
 				...prevState,
-				items,
-			};
+				items, // Apply new items after removing the selected items.
+				multiSelectGroup: undefined, // Hide the multi select group because the selected items were deleted.
+			} as SvgCanvasState;
 
-			// 履歴を追加
+			// Add history.
 			newState.lastHistoryEventId = newEventId();
 			newState = addHistory(prevState, newState);
 			// console.log("addHistory caused by Delete");
