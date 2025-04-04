@@ -45,6 +45,9 @@ export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
 	null,
 );
 
+// 増やす領域の幅
+const EXPAND_SIZE = 300;
+
 /**
  * SVG要素のコンテナのスタイル定義
  */
@@ -123,8 +126,15 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	onUndo,
 	onRedo,
 }) => {
+	const [minX, setMinX] = useState(0);
+	const [minY, setMinY] = useState(0);
+	const [width, setWidth] = useState(window.innerWidth);
+	const [height, setHeight] = useState(window.innerHeight);
+
 	// SVG要素のコンテナの参照
 	const containerRef = useRef<HTMLDivElement>(null);
+	// SVG要素の参照
+	const svgRef = useRef<SVGSVGElement>(null);
 
 	// Ctrlキーが押されているかどうかのフラグ
 	const isCtrlDown = useRef(false);
@@ -207,6 +217,48 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 		}
 	}, []);
 
+	const handleDrag = useCallback(
+		(e: DiagramDragEvent) => {
+			// ドラッグイベントをHooksに通知
+
+			// console.log(e.endX, e.endY);
+
+			if (e.endX < minX) {
+				setMinX(minX - EXPAND_SIZE);
+				setWidth(width - minX + EXPAND_SIZE);
+				if (containerRef.current && svgRef.current) {
+					svgRef.current.setAttribute("width", `${width - minX + EXPAND_SIZE}`);
+					svgRef.current.setAttribute(
+						"viewBox",
+						`${minX - EXPAND_SIZE} ${minY} ${width - minX + EXPAND_SIZE} ${height}`,
+					);
+					containerRef.current.scrollLeft = EXPAND_SIZE;
+				}
+			} else if (e.endY < minY) {
+				setMinY(minY - EXPAND_SIZE);
+				setHeight(height - minY + EXPAND_SIZE);
+				if (containerRef.current && svgRef.current) {
+					svgRef.current.setAttribute(
+						"height",
+						`${height - minY + EXPAND_SIZE}`,
+					);
+					svgRef.current.setAttribute(
+						"viewBox",
+						`${minX} ${minY - EXPAND_SIZE} ${width} ${height - minY + EXPAND_SIZE}`,
+					);
+					containerRef.current.scrollTop = EXPAND_SIZE;
+				}
+			} else if (e.endX > minX + width) {
+				setWidth(minX + width + EXPAND_SIZE);
+			} else if (e.endY > minY + height) {
+				setHeight(minY + height + EXPAND_SIZE);
+			} else {
+				onDrag?.(e);
+			}
+		},
+		[onDrag, minX, minY, width, height],
+	);
+
 	/**
 	 * 図形選択イベントハンドラ
 	 */
@@ -272,6 +324,11 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	 */
 	const handleScroll = useCallback(
 		(e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+			console.log(
+				"scroll",
+				e.currentTarget.scrollTop,
+				e.currentTarget.scrollLeft,
+			);
 			// Dispatch a custom event with scroll position.
 			document.dispatchEvent(
 				new CustomEvent(SVG_CANVAS_SCROLL_EVENT_NAME, {
@@ -347,7 +404,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 			key: item.id,
 			onTransform,
 			onDiagramChange,
-			onDrag,
+			onDrag: handleDrag,
 			onDrop,
 			onSelect: handleSelect,
 			onConnect,
@@ -401,9 +458,11 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 			<ContainerDiv ref={containerRef} onScroll={handleScroll}>
 				<SvgCanvasContext.Provider value={stateProvider.current}>
 					<Svg
-						width="120vw"
-						height="120vh"
+						width={width}
+						height={height}
+						viewBox={`${minX} ${minY} ${width} ${height}`}
 						tabIndex={0}
+						ref={svgRef}
 						onPointerDown={handlePointerDown}
 						onPointerMove={handlePointerMove}
 						onPointerUp={handlePointerUp}
