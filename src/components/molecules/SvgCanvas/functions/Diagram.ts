@@ -1,4 +1,9 @@
 import { calcGroupBoxOfNoRotation } from "../components/diagram/Group";
+import {
+	DEFAULT_ELLIPSE_DATA,
+	DEFAULT_PATH_DATA,
+	DEFAULT_RECTANGLE_DATA,
+} from "../constants/Diagram";
 import type {
 	Diagram,
 	EllipseData,
@@ -161,8 +166,8 @@ export const svgDataToDiagram = (data: string): GroupData => {
 	const ret = {
 		id: newId(),
 		type: "Group",
-		x: nanToZero(box.left + box.right) / 2,
-		y: nanToZero(box.top + box.bottom) / 2,
+		x: box.left + nanToZero(box.left + box.right) / 2,
+		y: box.top + nanToZero(box.top + box.bottom) / 2,
 		width: box.right - box.left,
 		height: box.bottom - box.top,
 		rotation: 0,
@@ -200,27 +205,16 @@ export const rectElementToDiagram = (
 		throw new Error("Unsupported SVGRectElement attribute was found.");
 	}
 	return {
+		...DEFAULT_RECTANGLE_DATA,
 		id: newId(),
 		type: "Rectangle",
 		x: x + width / 2,
 		y: y + height / 2,
 		width,
 		height,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
-		isSelected: false,
-		isMultiSelectSource: false,
-		text: "",
-		fontColor: "#000000",
-		fontSize: 16,
-		fontFamily: "Arial",
-		textAlign: "center",
-		verticalAlign: "center",
-		isTextEditing: false,
 	} as RectangleData;
 };
 
@@ -246,20 +240,15 @@ export const ellipseElementToDiagram = (
 		throw new Error("Unsupported SVGEllipseElement attribute was found.");
 	}
 	return {
+		...DEFAULT_ELLIPSE_DATA,
 		id: newId(),
-		type: "Ellipse",
 		x: cx,
 		y: cy,
 		width: rx * 2,
 		height: ry * 2,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
-		isSelected: false,
-		isMultiSelectSource: false,
 	} as EllipseData;
 };
 
@@ -279,20 +268,15 @@ export const circleElementToDiagram = (
 		throw new Error("Unsupported SVGCircleElement attribute was found.");
 	}
 	return {
+		...DEFAULT_ELLIPSE_DATA,
 		id: newId(),
-		type: "Ellipse",
 		x: cx,
 		y: cy,
 		width: r * 2,
 		height: r * 2,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
-		isSelected: false,
-		isMultiSelectSource: false,
 	} as EllipseData;
 };
 
@@ -316,16 +300,13 @@ export const lineElementToDiagram = (element: SVGLineElement): PathData => {
 		throw new Error("Unsupported SVGLineElement attribute was found.");
 	}
 	return {
+		...DEFAULT_PATH_DATA,
 		id: newId(),
 		type: "Path",
 		x: (x1 + x2) / 2,
 		y: (y1 + y2) / 2,
 		width: Math.abs(x2 - x1),
 		height: Math.abs(y2 - y1),
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
-		keepProportion: false,
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
 		items: [
@@ -346,7 +327,5 @@ export const lineElementToDiagram = (element: SVGLineElement): PathData => {
 				pointerEventsDisabled: false,
 			},
 		] as PathPointData[],
-		isSelected: false,
-		isMultiSelectSource: false,
 	} as PathData;
 };

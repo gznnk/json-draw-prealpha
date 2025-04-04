@@ -22,6 +22,7 @@ import type {
 
 // SvgCanvas関連コンポーネントをインポート
 import ConnectPoint from "../connector/ConnectPoint";
+import Textable from "../core/Textable";
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連カスタムフックをインポート
@@ -30,6 +31,7 @@ import { useDrag } from "../../hooks/dragHooks";
 // SvgCanvas関連関数をインポート
 import { createSvgTransform, newId } from "../../functions/Diagram";
 import { calcEllipseVertices, degreesToRadians } from "../../functions/Math";
+import { DEFAULT_ELLIPSE_DATA } from "../../constants/Diagram";
 
 /**
  * 楕円コンポーネントのプロパティ
@@ -40,6 +42,7 @@ export type EllipseProps = CreateDiagramProps<
 		selectable: true;
 		transformative: true;
 		connectable: true;
+		textable: true;
 	}
 >;
 
@@ -64,12 +67,20 @@ const Ellipse: React.FC<EllipseProps> = ({
 	items,
 	showConnectPoints = true,
 	syncWithSameId = false,
+	text,
+	fontColor,
+	fontSize,
+	fontFamily,
+	textAlign,
+	verticalAlign,
+	isTextEditing,
 	onDrag,
 	onClick,
 	onSelect,
 	onTransform,
 	onConnect,
 	onConnectPointsMove, // TODO: onDiagramChangeに変更すべきか？
+	onTextEdit,
 }) => {
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
@@ -140,6 +151,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 		onDrag,
 		onSelect,
 		onTransform,
+		onTextEdit,
 		// 内部変数・内部関数
 		updateConnectPoints,
 	};
@@ -209,6 +221,19 @@ const Ellipse: React.FC<EllipseProps> = ({
 		setIsHovered(e.isHovered);
 	}, []);
 
+	/**
+	 * ダブルクリックイベントハンドラ
+	 */
+	const handleDoubleClick = useCallback(() => {
+		const { id, isSelected, onTextEdit } = refBus.current;
+
+		// テキスト編集イベントを発火
+		if (!isSelected) return;
+		onTextEdit?.({
+			id,
+		});
+	}, []);
+
 	// ドラッグ用のプロパティを生成
 	const dragProps = useDrag({
 		id,
@@ -276,9 +301,24 @@ const Ellipse: React.FC<EllipseProps> = ({
 					transform={transform}
 					style={{ visibility: isMultiSelectSource ? "hidden" : "visible" }}
 					ref={svgRef}
+					onDoubleClick={handleDoubleClick}
 					{...dragProps}
 				/>
 			</g>
+			<Textable
+				x={-width / 2}
+				y={-height / 2}
+				width={width}
+				height={height}
+				transform={transform}
+				text={text}
+				fontColor={fontColor}
+				fontSize={fontSize}
+				fontFamily={fontFamily}
+				textAlign={textAlign}
+				verticalAlign={verticalAlign}
+				isTextEditing={isTextEditing}
+			/>
 			{showTransformative && (
 				<Transformative
 					id={id}
@@ -369,8 +409,8 @@ export const createEllipseData = ({
 	}
 
 	return {
+		...DEFAULT_ELLIPSE_DATA,
 		id: newId(),
-		type: "Ellipse",
 		x,
 		y,
 		width,
@@ -382,8 +422,6 @@ export const createEllipseData = ({
 		fill,
 		stroke,
 		strokeWidth,
-		isSelected: false,
-		isMultiSelectSource: false,
 		items,
 	} as EllipseData;
 };

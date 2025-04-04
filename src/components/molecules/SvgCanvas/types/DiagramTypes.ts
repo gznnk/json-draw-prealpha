@@ -160,6 +160,7 @@ export type EllipseData = CreateDiagramType<{
 	connectable: true;
 	strokable: true;
 	fillable: true;
+	textable: true;
 }>;
 
 /**

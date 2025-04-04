@@ -31,6 +31,7 @@ import { useDrag } from "../../hooks/dragHooks";
 // SvgCanvas関連関数をインポート
 import { createSvgTransform, newId } from "../../functions/Diagram";
 import { calcRectangleVertices, degreesToRadians } from "../../functions/Math";
+import { DEFAULT_RECTANGLE_DATA } from "../../constants/Diagram";
 
 /**
  * 四角形コンポーネントのプロパティ
@@ -407,8 +408,8 @@ export const createRectangleData = ({
 	}
 
 	return {
+		...DEFAULT_RECTANGLE_DATA,
 		id: newId(),
-		type: "Rectangle",
 		x,
 		y,
 		width,
@@ -420,15 +421,6 @@ export const createRectangleData = ({
 		fill,
 		stroke,
 		strokeWidth,
-		isSelected: false,
-		isMultiSelectSource: false,
 		items,
-		text: "",
-		fontColor: "#000000",
-		fontSize: 16,
-		fontFamily: "Arial",
-		textAlign: "center",
-		verticalAlign: "center",
-		isTextEditing: false,
 	} as RectangleData;
 };
