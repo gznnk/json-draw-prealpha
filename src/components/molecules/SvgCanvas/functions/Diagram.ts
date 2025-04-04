@@ -1,4 +1,6 @@
+import { createEllipseData } from "../components/diagram/Ellipse";
 import { calcGroupBoxOfNoRotation } from "../components/diagram/Group";
+import { createRectangleData } from "../components/diagram/Rectangle";
 import {
 	DEFAULT_ELLIPSE_DATA,
 	DEFAULT_PATH_DATA,
@@ -204,10 +206,8 @@ export const rectElementToDiagram = (
 	) {
 		throw new Error("Unsupported SVGRectElement attribute was found.");
 	}
-	return {
-		...DEFAULT_RECTANGLE_DATA,
-		id: newId(),
-		type: "Rectangle",
+
+	return createRectangleData({
 		x: x + width / 2,
 		y: y + height / 2,
 		width,
@@ -215,7 +215,7 @@ export const rectElementToDiagram = (
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
-	} as RectangleData;
+	});
 };
 
 /**
@@ -239,9 +239,8 @@ export const ellipseElementToDiagram = (
 	) {
 		throw new Error("Unsupported SVGEllipseElement attribute was found.");
 	}
-	return {
-		...DEFAULT_ELLIPSE_DATA,
-		id: newId(),
+
+	return createEllipseData({
 		x: cx,
 		y: cy,
 		width: rx * 2,
@@ -249,7 +248,7 @@ export const ellipseElementToDiagram = (
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
-	} as EllipseData;
+	});
 };
 
 /**
@@ -267,9 +266,8 @@ export const circleElementToDiagram = (
 	if (Number.isNaN(cx) || Number.isNaN(cy) || Number.isNaN(r)) {
 		throw new Error("Unsupported SVGCircleElement attribute was found.");
 	}
-	return {
-		...DEFAULT_ELLIPSE_DATA,
-		id: newId(),
+
+	return createEllipseData({
 		x: cx,
 		y: cy,
 		width: r * 2,
@@ -277,7 +275,7 @@ export const circleElementToDiagram = (
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
 		strokeWidth: element.getAttribute("stroke-width") || "0",
-	} as EllipseData;
+	});
 };
 
 /**
