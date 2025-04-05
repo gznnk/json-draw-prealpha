@@ -144,6 +144,8 @@ export const useDrag = (props: DragProps) => {
 			startScrollTop.current !== undefined
 		) {
 			// スクロール位置を考慮して座標を調整
+			console.log(currentScrollLeft.current - startScrollLeft.current);
+			console.log(currentScrollTop.current - startScrollTop.current);
 			newX += currentScrollLeft.current - startScrollLeft.current;
 			newY += currentScrollTop.current - startScrollTop.current;
 		}
@@ -636,9 +638,51 @@ export const useDrag = (props: DragProps) => {
 
 				// ドラッグ中にSVGCanvasがスクロールした場合、ドラッグ座標を更新する
 				const event = e as CustomEvent<SvgCanvasScrollEvent>;
+
+				console.log(
+					"handleSvgCanvasScroll",
+					event.detail.scrollLeft,
+					event.detail.scrollTop,
+					event.detail.isProgrammaticScroll,
+				);
+
 				if (startScrollTop.current === undefined) {
 					startScrollLeft.current = event.detail.scrollLeft;
 					startScrollTop.current = event.detail.scrollTop;
+					// console.log(
+					// 	"startScroll initialized",
+					// 	startScrollLeft.current,
+					// 	startScrollTop.current,
+					// );
+				}
+				if (event.detail.isProgrammaticScroll) {
+					// startScrollLeft.current = currentScrollLeft.current;
+					// startScrollTop.current = currentScrollTop.current;
+					// console.log(
+					// 	"startScroll updated",
+					// 	event.detail.scrollLeft,
+					// 	event.detail.scrollTop,
+					// );
+					//startScrollLeft.current = event.detail.scrollLeft;
+					//startScrollTop.current = event.detail.scrollTop;
+					// console.log(
+					// 	"startScroll updated",
+					// 	startScrollLeft.current,
+					// 	startScrollTop.current,
+					// );
+					// startScrollLeft.current =
+					// 	startScrollLeft.current + event.detail.scrollLeftIncrement;
+					// startScrollTop.current =
+					// 	startScrollTop.current + event.detail.scrollTopIncrement;
+					if (
+						startScrollTop.current === undefined ||
+						startScrollLeft.current === undefined
+					) {
+						startScrollLeft.current = 0;
+						startScrollTop.current = 0;
+					}
+					startScrollLeft.current += event.detail.scrollLeftIncrement;
+					startScrollTop.current += event.detail.scrollTopIncrement;
 				}
 				currentScrollLeft.current = event.detail.scrollLeft;
 				currentScrollTop.current = event.detail.scrollTop;

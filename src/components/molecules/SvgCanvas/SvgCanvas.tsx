@@ -130,6 +130,9 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	const [minY, setMinY] = useState(0);
 	const [width, setWidth] = useState(window.innerWidth);
 	const [height, setHeight] = useState(window.innerHeight);
+	const isProgrammaticScroll = useRef(false); // プログラムによるスクロールかどうかのフラグ
+	const scrollTopIncrement = useRef(0); // スクロールの増分
+	const scrollLeftIncrement = useRef(0); // スクロールの増分
 
 	// SVG要素のコンテナの参照
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -232,6 +235,8 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 						"viewBox",
 						`${minX - EXPAND_SIZE} ${minY} ${width - minX + EXPAND_SIZE} ${height}`,
 					);
+					isProgrammaticScroll.current = true;
+					scrollLeftIncrement.current = EXPAND_SIZE;
 					containerRef.current.scrollLeft = EXPAND_SIZE;
 				}
 			} else if (e.endY < minY) {
@@ -246,6 +251,8 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 						"viewBox",
 						`${minX} ${minY - EXPAND_SIZE} ${width} ${height - minY + EXPAND_SIZE}`,
 					);
+					isProgrammaticScroll.current = true;
+					scrollTopIncrement.current = EXPAND_SIZE;
 					containerRef.current.scrollTop = EXPAND_SIZE;
 				}
 			} else if (e.endX > minX + width) {
@@ -324,11 +331,10 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	 */
 	const handleScroll = useCallback(
 		(e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-			console.log(
-				"scroll",
-				e.currentTarget.scrollTop,
-				e.currentTarget.scrollLeft,
-			);
+			// if (isProgrammaticScroll.current) {
+			// 	isProgrammaticScroll.current = false;
+			// 	return;
+			// }
 			// Dispatch a custom event with scroll position.
 			document.dispatchEvent(
 				new CustomEvent(SVG_CANVAS_SCROLL_EVENT_NAME, {
@@ -336,9 +342,15 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 					detail: {
 						scrollTop: e.currentTarget.scrollTop,
 						scrollLeft: e.currentTarget.scrollLeft,
+						isProgrammaticScroll: isProgrammaticScroll.current,
+						scrollTopIncrement: scrollTopIncrement.current,
+						scrollLeftIncrement: scrollLeftIncrement.current,
 					} as SvgCanvasScrollEvent,
 				}),
 			);
+			scrollTopIncrement.current = 0;
+			scrollLeftIncrement.current = 0;
+			isProgrammaticScroll.current = false;
 		},
 		[],
 	);
