@@ -116,6 +116,27 @@ export const useDrag = (props: DragProps) => {
 	// ドラッグ中のブラウザウィンドウ上のポインタの座標
 	const currentClientX = useRef(0);
 	const currentClientY = useRef(0);
+	// The offset between the center and the pointer.
+	const offsetXBetweenCenterAndPointer = useRef(0);
+	const offsetYBetweenCenterAndPointer = useRef(0);
+
+	/**
+	 * Get the SVG point from the client coordinates.
+	 *
+	 * @param clientX - The X position of the cursor relative to the viewport (not the whole page).
+	 * @param clientY - The Y position of the cursor relative to the viewport (not the whole page).
+	 * @returns The SVG point
+	 */
+	const getSvgPoint = (clientX: number, clientY: number): Point => {
+		const ownerSVGElement = ref.current?.ownerSVGElement;
+		if (ownerSVGElement === null) throw new Error("ownerSVGElement is null."); // Unreachable — added to prevent type errors in the following code.
+
+		const point = ownerSVGElement.createSVGPoint();
+		point.x = clientX;
+		point.y = clientY;
+
+		return point.matrixTransform(ownerSVGElement.getScreenCTM()?.inverse());
+	};
 
 	/**
 	 * ドラッグ中のポインターの位置からドラッグ領域の座標を取得する
@@ -125,19 +146,14 @@ export const useDrag = (props: DragProps) => {
 	 * @returns {Point} ドラッグ領域の座標
 	 */
 	const getPointOnDrag = (clientX: number, clientY: number): Point => {
-		const ownerSVGElement = ref.current?.ownerSVGElement;
-		if (ownerSVGElement === null) throw new Error("ownerSVGElement is null."); // 到達し得ない。以降の型エラー抑止のためのチェック処理
-
-		const point = ownerSVGElement.createSVGPoint();
-		point.x = clientX;
-		point.y = clientY;
-
-		const svgPoint = point.matrixTransform(
-			ownerSVGElement.getScreenCTM()?.inverse(),
-		);
+		const svgPoint = getSvgPoint(clientX, clientY);
 
 		let newX = svgPoint.x;
 		let newY = svgPoint.y;
+
+		// Adjust the coordinates by the offset between the center and the pointer
+		newX -= offsetXBetweenCenterAndPointer.current;
+		newY -= offsetYBetweenCenterAndPointer.current;
 
 		if (dragPositioningFunction) {
 			// ドラッグ位置変換関数が指定されている場合は、その関数を適用
@@ -176,6 +192,11 @@ export const useDrag = (props: DragProps) => {
 			// 現在のブラウザウィンドウ上のポインタの座標を記憶
 			currentClientX.current = e.clientX;
 			currentClientY.current = e.clientY;
+
+			// Store the offset between the center and the pointer
+			const svgPoint = getSvgPoint(e.clientX, e.clientY);
+			offsetXBetweenCenterAndPointer.current = svgPoint.x - x;
+			offsetYBetweenCenterAndPointer.current = svgPoint.y - y;
 
 			// ポインター押下イベント発火
 			onPointerDown?.({
