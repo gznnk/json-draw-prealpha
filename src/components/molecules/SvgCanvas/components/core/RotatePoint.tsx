@@ -1,10 +1,11 @@
 // Reactのインポート
 import type React from "react";
-import { memo, useRef } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 
 // SvgCanvas関連カスタムフックをインポート
 import type { DragProps } from "../../hooks/dragHooks";
 import { useDrag } from "../../hooks/dragHooks";
+import type { DiagramDragEvent } from "../../types/EventTypes";
 
 /**
  * 回転ポイントコンポーネントのプロパティ
@@ -25,17 +26,31 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 	x,
 	y,
 	onDrag,
-	onDragOver,
-	onDragLeave,
-	onDrop,
-	onHover,
 	dragPositioningFunction,
 	rotation = 0,
 	color = "rgba(100, 149, 237, 0.8)",
 	isTransparent = false,
 	hidden = false,
 }) => {
+	const [isDragging, setIsDragging] = useState(false);
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
+
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		onDrag,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
+	/**
+	 * Handle drag event.
+	 */
+	const handleDrag = useCallback((e: DiagramDragEvent) => {
+		if (e.eventType === "Start") setIsDragging(true);
+		if (e.eventType === "End") setIsDragging(false);
+
+		refBus.current.onDrag?.(e);
+	}, []);
 
 	const dragProps = useDrag({
 		id,
@@ -43,11 +58,7 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 		x,
 		y,
 		ref: svgRef,
-		onDrag,
-		onDragOver,
-		onDragLeave,
-		onDrop,
-		onHover,
+		onDrag: handleDrag,
 		dragPositioningFunction,
 	});
 
@@ -88,6 +99,14 @@ const RotatePoint: React.FC<RotatePointProps> = ({
 				ref={svgRef}
 				{...dragProps}
 			/>
+			{isDragging && (
+				<text
+					x={x + 16}
+					y={y + 4}
+					fill="#555555"
+					fontSize="12px"
+				>{`${rotation}˚`}</text>
+			)}
 		</>
 	);
 };

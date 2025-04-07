@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point } from "../../types/CoordinateTypes";
+import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
 import type {
 	DiagramType,
 	SelectableData,
@@ -66,6 +66,8 @@ const Transformative: React.FC<Props> = ({
 	isMultiSelectSource,
 	onTransform,
 }) => {
+	const [isResizing, setIsResizing] = useState(false);
+	const [isRotating, setIsRotating] = useState(false);
 	const [isShiftKeyDown, setShiftKeyDown] = useState(false);
 
 	const doKeepProportion = keepProportion || isShiftKeyDown;
@@ -210,6 +212,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -236,6 +239,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionLeftTop = useCallback(
@@ -259,6 +264,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -285,6 +291,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionLeftBottom = useCallback(
@@ -308,6 +316,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -334,6 +343,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionRightTop = useCallback(
@@ -357,6 +368,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -383,6 +395,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionRightBottom = useCallback(
@@ -406,6 +420,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -432,6 +447,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionTopCenter = useCallback(
@@ -460,6 +477,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -486,6 +504,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionLeftCenter = useCallback(
@@ -514,6 +534,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -540,6 +561,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionRightCenter = useCallback(
@@ -568,6 +591,7 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -594,6 +618,8 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+
+		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionBottomCenter = useCallback(
@@ -666,14 +692,14 @@ const Transformative: React.FC<Props> = ({
 		} = refBus.current;
 
 		if (e.eventType === "Start") {
+			setIsRotating(true);
 			return triggerTransformStart(e.eventId);
 		}
 
 		const radian = calcRadians(x, y, e.endX, e.endY);
 		const rotatePointRadian = calcRadians(x, y, x + width, y - height);
-		const newRotation = Math.round(
-			(radiansToDegrees(radian - rotatePointRadian) + 360) % 360,
-		);
+		const newRotation =
+			Math.round(radiansToDegrees(radian - rotatePointRadian) + 360) % 360;
 		const event = {
 			eventId: e.eventId,
 			eventType: e.eventType,
@@ -693,6 +719,8 @@ const Transformative: React.FC<Props> = ({
 		};
 
 		onTransform?.(event);
+
+		if (e.eventType === "End") setIsRotating(false);
 	}, []);
 
 	const dragFunctionRotationPoint = useCallback((rx: number, ry: number) => {
@@ -707,6 +735,17 @@ const Transformative: React.FC<Props> = ({
 		);
 	}, []);
 
+	// Don't render if the component is not selected.
+	if (!isSelected) {
+		return null;
+	}
+
+	// Hide the transform outline when the component is the source of a multi-selection.
+	if (isMultiSelectSource) {
+		return null;
+	}
+
+	// Get the cursor for each drag point based on the rotation angle.
 	const cursors = {
 		topCenter: getCursorFromAngle(rotation),
 		rightTop: getCursorFromAngle(rotation + 45),
@@ -718,13 +757,23 @@ const Transformative: React.FC<Props> = ({
 		leftTop: getCursorFromAngle(rotation + 315),
 	};
 
-	if (!isSelected) {
-		return null;
-	}
+	// Calculate resize label position if the component is resizing.
+	// Otherwise, set it to 0.
+	let resizeLabelX = 0;
+	let resizeLabelY = 0;
+	if (isResizing) {
+		for (const key of Object.keys(vertices)) {
+			const vertex = vertices[key as keyof RectangleVertices];
+			if (resizeLabelY < vertex.y) {
+				resizeLabelY = vertex.y;
+				resizeLabelX = vertex.x;
+			}
+		}
 
-	// Hide the transform outline when the component is the source of a multi-selection.
-	if (isMultiSelectSource) {
-		return null;
+		resizeLabelY += 23; // Add some margin to the label position.
+		if (Math.abs(rotation % 90) === 0) {
+			resizeLabelX = x;
+		}
 	}
 
 	return (
@@ -744,147 +793,163 @@ const Transformative: React.FC<Props> = ({
 					transform={createSvgTransform(scaleX, scaleY, radians, x, y)}
 				/>
 			</g>
-			{/* 上辺 */}
-			<DragLine
-				id={`${id}-topCenter-line`}
-				x={vertices.topCenterPoint.x}
-				y={vertices.topCenterPoint.y}
-				startX={vertices.leftTopPoint.x}
-				startY={vertices.leftTopPoint.y}
-				endX={vertices.rightTopPoint.x}
-				endY={vertices.rightTopPoint.y}
-				cursor={cursors.topCenter}
-				onDrag={handleDragTopCenter}
-				dragPositioningFunction={linerDragFunctionTopCenter}
-			/>
-			{/* 左辺 */}
-			<DragLine
-				id={`${id}-leftCenter-line`}
-				x={vertices.leftCenterPoint.x}
-				y={vertices.leftCenterPoint.y}
-				startX={vertices.leftTopPoint.x}
-				startY={vertices.leftTopPoint.y}
-				endX={vertices.leftBottomPoint.x}
-				endY={vertices.leftBottomPoint.y}
-				cursor={cursors.leftCenter}
-				onDrag={handleDragLeftCenter}
-				dragPositioningFunction={linerDragFunctionLeftCenter}
-			/>
-			{/* 右辺 */}
-			<DragLine
-				id={`${id}-rightCenter-line`}
-				x={vertices.rightCenterPoint.x}
-				y={vertices.rightCenterPoint.y}
-				startX={vertices.rightTopPoint.x}
-				startY={vertices.rightTopPoint.y}
-				endX={vertices.rightBottomPoint.x}
-				endY={vertices.rightBottomPoint.y}
-				cursor={cursors.rightCenter}
-				onDrag={handleDragRightCenter}
-				dragPositioningFunction={linerDragFunctionRightCenter}
-			/>
-			{/* 下辺 */}
-			<DragLine
-				id={`${id}-bottomCenter-line`}
-				x={vertices.bottomCenterPoint.x}
-				y={vertices.bottomCenterPoint.y}
-				startX={vertices.leftBottomPoint.x}
-				startY={vertices.leftBottomPoint.y}
-				endX={vertices.rightBottomPoint.x}
-				endY={vertices.rightBottomPoint.y}
-				cursor={cursors.bottomCenter}
-				onDrag={handleDragBottomCenter}
-				dragPositioningFunction={linerDragFunctionBottomCenter}
-			/>
-			{/* 左上 */}
-			<DragPoint
-				id={`${id}-leftTop`}
-				x={vertices.leftTopPoint.x}
-				y={vertices.leftTopPoint.y}
-				cursor={cursors.leftTop}
-				onDrag={handleDragLeftTop}
-				dragPositioningFunction={
-					doKeepProportion ? linerDragFunctionLeftTop : undefined
-				}
-			/>
-			{/* 左下 */}
-			<DragPoint
-				id={`${id}-leftBottom`}
-				x={vertices.leftBottomPoint.x}
-				y={vertices.leftBottomPoint.y}
-				cursor={cursors.leftBottom}
-				onDrag={handleDragLeftBottom}
-				dragPositioningFunction={
-					doKeepProportion ? linerDragFunctionLeftBottom : undefined
-				}
-			/>
-			{/* 右上 */}
-			<DragPoint
-				id={`${id}-rightTop`}
-				x={vertices.rightTopPoint.x}
-				y={vertices.rightTopPoint.y}
-				cursor={cursors.rightTop}
-				onDrag={handleDragRightTop}
-				dragPositioningFunction={
-					doKeepProportion ? linerDragFunctionRightTop : undefined
-				}
-			/>
-			{/* 右下 */}
-			<DragPoint
-				id={`${id}-rightBottom`}
-				x={vertices.rightBottomPoint.x}
-				y={vertices.rightBottomPoint.y}
-				cursor={cursors.rightBottom}
-				onDrag={handleDragRightBottom}
-				dragPositioningFunction={
-					doKeepProportion ? linerDragFunctionRightBottom : undefined
-				}
-			/>
-			{/* 上中央 */}
-			<DragPoint
-				id={`${id}-topCenter`}
-				x={vertices.topCenterPoint.x}
-				y={vertices.topCenterPoint.y}
-				cursor={cursors.topCenter}
-				onDrag={handleDragTopCenter}
-				dragPositioningFunction={linerDragFunctionTopCenter}
-			/>
-			{/* 左中央 */}
-			<DragPoint
-				id={`${id}-leftCenter`}
-				x={vertices.leftCenterPoint.x}
-				y={vertices.leftCenterPoint.y}
-				cursor={cursors.leftCenter}
-				onDrag={handleDragLeftCenter}
-				dragPositioningFunction={linerDragFunctionLeftCenter}
-			/>
-			{/* 右中央 */}
-			<DragPoint
-				id={`${id}-rightCenter`}
-				x={vertices.rightCenterPoint.x}
-				y={vertices.rightCenterPoint.y}
-				cursor={cursors.rightCenter}
-				onDrag={handleDragRightCenter}
-				dragPositioningFunction={linerDragFunctionRightCenter}
-			/>
-			{/* 下中央 */}
-			<DragPoint
-				id={`${id}-bottomCenter`}
-				x={vertices.bottomCenterPoint.x}
-				y={vertices.bottomCenterPoint.y}
-				cursor={cursors.bottomCenter}
-				onDrag={handleDragBottomCenter}
-				dragPositioningFunction={linerDragFunctionBottomCenter}
-			/>
+			{!isRotating && (
+				<>
+					{/* 上辺 */}
+					<DragLine
+						id={`${id}-topCenter-line`}
+						x={vertices.topCenterPoint.x}
+						y={vertices.topCenterPoint.y}
+						startX={vertices.leftTopPoint.x}
+						startY={vertices.leftTopPoint.y}
+						endX={vertices.rightTopPoint.x}
+						endY={vertices.rightTopPoint.y}
+						cursor={cursors.topCenter}
+						onDrag={handleDragTopCenter}
+						dragPositioningFunction={linerDragFunctionTopCenter}
+					/>
+					{/* 左辺 */}
+					<DragLine
+						id={`${id}-leftCenter-line`}
+						x={vertices.leftCenterPoint.x}
+						y={vertices.leftCenterPoint.y}
+						startX={vertices.leftTopPoint.x}
+						startY={vertices.leftTopPoint.y}
+						endX={vertices.leftBottomPoint.x}
+						endY={vertices.leftBottomPoint.y}
+						cursor={cursors.leftCenter}
+						onDrag={handleDragLeftCenter}
+						dragPositioningFunction={linerDragFunctionLeftCenter}
+					/>
+					{/* 右辺 */}
+					<DragLine
+						id={`${id}-rightCenter-line`}
+						x={vertices.rightCenterPoint.x}
+						y={vertices.rightCenterPoint.y}
+						startX={vertices.rightTopPoint.x}
+						startY={vertices.rightTopPoint.y}
+						endX={vertices.rightBottomPoint.x}
+						endY={vertices.rightBottomPoint.y}
+						cursor={cursors.rightCenter}
+						onDrag={handleDragRightCenter}
+						dragPositioningFunction={linerDragFunctionRightCenter}
+					/>
+					{/* 下辺 */}
+					<DragLine
+						id={`${id}-bottomCenter-line`}
+						x={vertices.bottomCenterPoint.x}
+						y={vertices.bottomCenterPoint.y}
+						startX={vertices.leftBottomPoint.x}
+						startY={vertices.leftBottomPoint.y}
+						endX={vertices.rightBottomPoint.x}
+						endY={vertices.rightBottomPoint.y}
+						cursor={cursors.bottomCenter}
+						onDrag={handleDragBottomCenter}
+						dragPositioningFunction={linerDragFunctionBottomCenter}
+					/>
+					{/* 左上 */}
+					<DragPoint
+						id={`${id}-leftTop`}
+						x={vertices.leftTopPoint.x}
+						y={vertices.leftTopPoint.y}
+						cursor={cursors.leftTop}
+						onDrag={handleDragLeftTop}
+						dragPositioningFunction={
+							doKeepProportion ? linerDragFunctionLeftTop : undefined
+						}
+					/>
+					{/* 左下 */}
+					<DragPoint
+						id={`${id}-leftBottom`}
+						x={vertices.leftBottomPoint.x}
+						y={vertices.leftBottomPoint.y}
+						cursor={cursors.leftBottom}
+						onDrag={handleDragLeftBottom}
+						dragPositioningFunction={
+							doKeepProportion ? linerDragFunctionLeftBottom : undefined
+						}
+					/>
+					{/* 右上 */}
+					<DragPoint
+						id={`${id}-rightTop`}
+						x={vertices.rightTopPoint.x}
+						y={vertices.rightTopPoint.y}
+						cursor={cursors.rightTop}
+						onDrag={handleDragRightTop}
+						dragPositioningFunction={
+							doKeepProportion ? linerDragFunctionRightTop : undefined
+						}
+					/>
+					{/* 右下 */}
+					<DragPoint
+						id={`${id}-rightBottom`}
+						x={vertices.rightBottomPoint.x}
+						y={vertices.rightBottomPoint.y}
+						cursor={cursors.rightBottom}
+						onDrag={handleDragRightBottom}
+						dragPositioningFunction={
+							doKeepProportion ? linerDragFunctionRightBottom : undefined
+						}
+					/>
+					{/* 上中央 */}
+					<DragPoint
+						id={`${id}-topCenter`}
+						x={vertices.topCenterPoint.x}
+						y={vertices.topCenterPoint.y}
+						cursor={cursors.topCenter}
+						onDrag={handleDragTopCenter}
+						dragPositioningFunction={linerDragFunctionTopCenter}
+					/>
+					{/* 左中央 */}
+					<DragPoint
+						id={`${id}-leftCenter`}
+						x={vertices.leftCenterPoint.x}
+						y={vertices.leftCenterPoint.y}
+						cursor={cursors.leftCenter}
+						onDrag={handleDragLeftCenter}
+						dragPositioningFunction={linerDragFunctionLeftCenter}
+					/>
+					{/* 右中央 */}
+					<DragPoint
+						id={`${id}-rightCenter`}
+						x={vertices.rightCenterPoint.x}
+						y={vertices.rightCenterPoint.y}
+						cursor={cursors.rightCenter}
+						onDrag={handleDragRightCenter}
+						dragPositioningFunction={linerDragFunctionRightCenter}
+					/>
+					{/* 下中央 */}
+					<DragPoint
+						id={`${id}-bottomCenter`}
+						x={vertices.bottomCenterPoint.x}
+						y={vertices.bottomCenterPoint.y}
+						cursor={cursors.bottomCenter}
+						onDrag={handleDragBottomCenter}
+						dragPositioningFunction={linerDragFunctionBottomCenter}
+					/>
+				</>
+			)}
 			{/* 回転 */}
-			<RotatePoint
-				id={`rotation-${id}`}
-				x={rotationPoint.x}
-				y={rotationPoint.y}
-				rotation={rotation}
-				onDrag={handleDragRotationPoint}
-				dragPositioningFunction={dragFunctionRotationPoint}
-			/>
+			{!isResizing && (
+				<RotatePoint
+					id={`rotation-${id}`}
+					x={rotationPoint.x}
+					y={rotationPoint.y}
+					rotation={rotation}
+					onDrag={handleDragRotationPoint}
+					dragPositioningFunction={dragFunctionRotationPoint}
+				/>
+			)}
+			{/* Resizing label. */}
+			{isResizing && (
+				<text
+					x={resizeLabelX}
+					y={resizeLabelY}
+					fill="#555555"
+					fontSize="12px"
+					textAnchor="middle"
+				>{`${Math.round(width)} x ${Math.round(height)}`}</text>
+			)}
 		</>
 	);
 };
