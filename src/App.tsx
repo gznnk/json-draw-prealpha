@@ -510,20 +510,6 @@ function App() {
 
 	return (
 		<div className="App">
-			<header
-				className="App-header"
-				style={{
-					position: "absolute",
-					top: 0,
-					left: 0,
-					right: 0,
-					height: "50px",
-					backgroundColor: "black",
-					color: "white",
-				}}
-			>
-				<h1 style={{ margin: 0 }}>SVG Canvas</h1>
-			</header>
 			<div
 				style={{
 					position: "absolute",
@@ -630,7 +616,7 @@ function App() {
 			<div
 				style={{
 					position: "absolute",
-					top: "50px",
+					top: 0,
 					left: 0,
 					right: "300px",
 					bottom: 0,

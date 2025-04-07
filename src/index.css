@@ -1,0 +1,22 @@
+/* スクロールバー全体 */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+/* スクロールバーの軌道（背景） */
+::-webkit-scrollbar-track {
+	background: transparent; /* 透明で存在感を消す */
+}
+
+/* スクロールバーのつまみ */
+::-webkit-scrollbar-thumb {
+	background-color: rgba(100, 100, 100, 0.3); /* 半透明グレーで控えめ */
+	border-radius: 4px;
+	transition: background-color 0.3s;
+}
+
+/* ホバー時にちょっと濃くする */
+::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(100, 100, 100, 0.5);
+}

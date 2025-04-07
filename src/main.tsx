@@ -6,6 +6,6 @@ import App from "./App.tsx";
 // biome-ignore lint/style/noNonNullAssertion: Because we cannot ensure that the return type of getElementById() is non-null.
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<App />,
+		<App />
 	</StrictMode>,
 );

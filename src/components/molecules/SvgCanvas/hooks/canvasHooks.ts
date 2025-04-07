@@ -619,6 +619,7 @@ export const useSvgCanvas = (initialItems: Diagram[]) => {
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
+	// TODO: はいし？
 	const getSelectedItem = useCallback(() => {
 		let selectedItem: Diagram | undefined;
 		const findSelectedItem = (items: Diagram[]) => {

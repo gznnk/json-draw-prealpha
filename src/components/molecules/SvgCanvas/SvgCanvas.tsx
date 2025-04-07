@@ -50,7 +50,7 @@ export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
 const EXPAND_SIZE = 300;
 
 /**
- * SVG要素のコンテナのスタイル定義
+ * Style for the container of the SVG canvas.
  */
 const ContainerDiv = styled.div`
 	position: absolute;
@@ -62,11 +62,21 @@ const ContainerDiv = styled.div`
 `;
 
 /**
- * SVG要素のスタイル定義
+ * Style for the SVG element.
  */
 const Svg = styled.svg`
+	outline: none;
 	* {
 		outline: none;
+	}
+`;
+
+/**
+ * Style for the container of the multi-select group.
+ */
+const MultiSelectGroupContainer = styled.g`
+	.diagram {
+		opacity: 0;
 	}
 `;
 
@@ -93,12 +103,16 @@ const HTMLElementsContainer = styled.div<HTMLElementsContainerProps>`
 `;
 
 /**
- * Style for the container of the multi-select group.
+ * Styles for the viewport overlay.
  */
-const MultiSelectGroupContainer = styled.g`
-	.diagram {
-		opacity: 0;
-	}
+const ViewportOverlay = styled.div`
+	position: fixed;
+    top: 0;
+    left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: none;
+    pointer-events: none;
 `;
 
 /**
@@ -507,16 +521,26 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	const handleContextMenuClick = useCallback(
 		(menuType: ContextMenuType) => {
 			switch (menuType) {
+				case "Undo":
+					onUndo?.();
+					break;
+				case "Redo":
+					onRedo?.();
+					break;
 				case "Group":
 					onGroup?.();
 					break;
 				case "Ungroup":
 					onUngroup?.();
 					break;
+				case "Delete":
+					onDelete?.();
+					break;
+				default:
 			}
 			setContextMenu({ x: 0, y: 0, isVisible: false });
 		},
-		[onGroup, onUngroup],
+		[onUndo, onRedo, onGroup, onUngroup, onDelete],
 	);
 
 	return (
@@ -565,8 +589,10 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 				>
 					<TextEditor {...textEditorState} onTextChange={handleTextChange} />
 				</HTMLElementsContainer>
+				<ViewportOverlay>
+					<ContextMenu {...contextMenu} onMenuClick={handleContextMenuClick} />
+				</ViewportOverlay>
 			</ContainerDiv>
-			<ContextMenu {...contextMenu} onMenuClick={handleContextMenuClick} />
 		</>
 	);
 };
