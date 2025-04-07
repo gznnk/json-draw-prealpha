@@ -525,6 +525,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	const contextMenuStateMap = {
 		Undo: historyIndex > 0 ? "Enable" : "Disable",
 		Redo: historyIndex < history.length - 1 ? "Enable" : "Disable",
+		SelectAll: items.length > 0 ? "Enable" : "Disable",
 		Group: multiSelectGroup ? "Enable" : "Disable",
 		Ungroup: isGroupSelected ? "Enable" : "Disable",
 		Delete: isItemSelected ? "Enable" : "Disable",
