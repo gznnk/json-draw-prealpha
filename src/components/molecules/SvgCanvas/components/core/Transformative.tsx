@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point, RectangleVertices } from "../../types/CoordinateTypes";
+import type { Point } from "../../types/CoordinateTypes";
 import type {
 	DiagramType,
 	SelectableData,
@@ -16,6 +16,7 @@ import type { DiagramDragEvent, EventType } from "../../types/EventTypes";
 import DragLine from "./DragLine";
 import DragPoint from "./DragPoint";
 import RotatePoint from "./RotatePoint";
+import BottomLabel from "./BottomLabel";
 
 // SvgCanvas関連関数をインポート
 import {
@@ -757,25 +758,6 @@ const Transformative: React.FC<Props> = ({
 		leftTop: getCursorFromAngle(rotation + 315),
 	};
 
-	// Calculate resize label position if the component is resizing.
-	// Otherwise, set it to 0.
-	let resizeLabelX = 0;
-	let resizeLabelY = 0;
-	if (isResizing) {
-		for (const key of Object.keys(vertices)) {
-			const vertex = vertices[key as keyof RectangleVertices];
-			if (resizeLabelY < vertex.y) {
-				resizeLabelY = vertex.y;
-				resizeLabelX = vertex.x;
-			}
-		}
-
-		resizeLabelY += 23; // Add some margin to the label position.
-		if (Math.abs(rotation % 90) === 0) {
-			resizeLabelX = x;
-		}
-	}
-
 	return (
 		<>
 			{/* アウトライン */}
@@ -942,13 +924,15 @@ const Transformative: React.FC<Props> = ({
 			)}
 			{/* Resizing label. */}
 			{isResizing && (
-				<text
-					x={resizeLabelX}
-					y={resizeLabelY}
-					fill="#555555"
-					fontSize="12px"
-					textAnchor="middle"
-				>{`${Math.round(width)} x ${Math.round(height)}`}</text>
+				<BottomLabel
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+				>{`${Math.round(width)} x ${Math.round(height)}`}</BottomLabel>
 			)}
 		</>
 	);

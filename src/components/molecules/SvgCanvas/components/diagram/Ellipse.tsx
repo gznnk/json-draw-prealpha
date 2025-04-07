@@ -22,6 +22,7 @@ import type {
 
 // SvgCanvas関連コンポーネントをインポート
 import ConnectPoint from "../connector/ConnectPoint";
+import PositionLabel from "../core/PositionLabel";
 import Textable from "../core/Textable";
 import Transformative from "../core/Transformative";
 
@@ -29,9 +30,9 @@ import Transformative from "../core/Transformative";
 import { useDrag } from "../../hooks/dragHooks";
 
 // SvgCanvas関連関数をインポート
+import { DEFAULT_ELLIPSE_DATA } from "../../constants/Diagram";
 import { createSvgTransform, newId } from "../../functions/Diagram";
 import { calcEllipseVertices, degreesToRadians } from "../../functions/Math";
-import { DEFAULT_ELLIPSE_DATA } from "../../constants/Diagram";
 
 /**
  * 楕円コンポーネントのプロパティ
@@ -350,6 +351,17 @@ const Ellipse: React.FC<EllipseProps> = ({
 						onConnect={onConnect}
 					/>
 				))}
+			{isSelected && isDragging && (
+				<PositionLabel
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+				/>
+			)}
 		</>
 	);
 };

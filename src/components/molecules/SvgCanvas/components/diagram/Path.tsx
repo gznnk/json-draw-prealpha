@@ -6,6 +6,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import ArrowHead from "../core/ArrowHead";
 import DragLine from "../core/DragLine";
 import DragPoint from "../core/DragPoint";
+import PositionLabel from "../core/PositionLabel";
 import Group from "./Group";
 
 // Import SvgCanvas related types.
@@ -352,6 +353,9 @@ const Path: React.FC<PathProps> = ({
 	// 全体変形用グループの表示フラグ
 	const showTransformGroup = isSelected && !isMultiSelectSource;
 
+	// Flag to show the position label.
+	const showPositionLabel = isSelected && isDragging;
+
 	// ArrowHead.
 	let startArrowHeadComp = undefined;
 	let endArrowHeadComp = undefined;
@@ -462,6 +466,18 @@ const Path: React.FC<PathProps> = ({
 					onDrag={handlePathPointDrag}
 					onTransform={onTransform}
 					onDiagramChange={onDiagramChange}
+				/>
+			)}
+			{/* Position label. */}
+			{showPositionLabel && (
+				<PositionLabel
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
 				/>
 			)}
 		</>

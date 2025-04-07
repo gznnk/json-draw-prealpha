@@ -10,15 +10,16 @@ import type {
 import { DiagramTypeComponentMap } from "../../types/DiagramTypes";
 import type {
 	ConnectPointsMoveEvent,
+	DiagramChangeEvent,
 	DiagramConnectEvent,
 	DiagramDragEvent,
 	DiagramSelectEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
-	DiagramChangeEvent,
 } from "../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
+import PositionLabel from "../core/PositionLabel";
 import Transformative from "../core/Transformative";
 
 // SvgCanvas関連関数をインポート
@@ -593,6 +594,17 @@ const Group: React.FC<GroupProps> = ({
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
 					onTransform={handleTransform}
+				/>
+			)}
+			{isSelected && isGroupDragging && (
+				<PositionLabel
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
 				/>
 			)}
 		</>
