@@ -192,3 +192,12 @@ export type SvgCanvasResizeEvent = {
 	width: number;
 	height: number;
 };
+
+/**
+ * Event type for new diagram creation.
+ */
+export type NewDiagramEvent = {
+	diagramType: DiagramType;
+	x?: number;
+	y?: number;
+};

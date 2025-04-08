@@ -13,9 +13,10 @@ import styled from "@emotion/styled";
 
 // SvgCanvas関連型定義をインポート
 import type { SvgCanvasHistory, SvgCanvasState } from "./hooks/canvasHooks";
-import type { Diagram, GroupData } from "./types/DiagramTypes";
+import type { Diagram, DiagramType, GroupData } from "./types/DiagramTypes";
 import { DiagramTypeComponentMap } from "./types/DiagramTypes";
 import {
+	type NewDiagramEvent,
 	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type ConnectPointsMoveEvent,
 	type DiagramChangeEvent,
@@ -42,6 +43,7 @@ import ContextMenu, {
 import { getDiagramById, getSelectedItems } from "./functions/SvgCanvas";
 import { newEventId } from "./functions/Util";
 import UserMenu from "./components/operation/UserMenu";
+import CanvasMenu from "./components/operation/CanvasMenu";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -115,7 +117,7 @@ const ViewportOverlay = styled.div`
     left: 0;
 	right: 0;
 	bottom: 0;
-	overflow: none;
+	overflow: hidden;
     pointer-events: none;
 `;
 
@@ -150,6 +152,7 @@ type SvgCanvasProps = {
 	onUndo?: () => void;
 	onRedo?: () => void;
 	onCanvasResize?: (e: SvgCanvasResizeEvent) => void;
+	onNewDiagram?: (e: NewDiagramEvent) => void;
 };
 
 /**
@@ -182,6 +185,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	onUndo,
 	onRedo,
 	onCanvasResize,
+	onNewDiagram,
 }) => {
 	// In the SvgCanvas render function,
 	// we handle DOM events related to the SvgCanvas elements,
@@ -625,6 +629,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 					<TextEditor {...textEditorState} onTextChange={handleTextChange} />
 				</HTMLElementsContainer>
 				<ViewportOverlay>
+					<CanvasMenu onNewDiagram={onNewDiagram} />
 					<UserMenu />
 					<ContextMenu
 						{...contextMenu}

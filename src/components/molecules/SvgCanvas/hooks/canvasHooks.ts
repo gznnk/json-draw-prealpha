@@ -8,6 +8,7 @@ import type { PartiallyRequired } from "../../../../types/ParticallyRequired";
 import type {
 	ConnectLineData,
 	Diagram,
+	DiagramType,
 	GroupData,
 	PathPointData,
 } from "../types/DiagramTypes";
@@ -22,12 +23,15 @@ import type {
 	DiagramTextChangeEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
+	NewDiagramEvent,
 	SvgCanvasResizeEvent,
 } from "../types/EventTypes";
 
 // Import SvgCanvas related components.
 import { notifyConnectPointsMove } from "../components/connector/ConnectLine";
+import { createEllipseData } from "../components/diagram/Ellipse";
 import { calcGroupBoxOfNoRotation } from "../components/diagram/Group";
+import { createRectangleData } from "../components/diagram/Rectangle";
 
 // Import SvgCanvas related functions.
 import { isItemableData, isSelectableData, newId } from "../functions/Diagram";
@@ -654,6 +658,25 @@ export const useSvgCanvas = (
 		}));
 	}, []);
 
+	/**
+	 * Handle new diagram action.
+	 */
+	const onNewDiagram = useCallback(
+		(e: NewDiagramEvent) => {
+			const centerX = canvasState.minX + canvasState.width / 2;
+			const centerY = canvasState.minY + canvasState.height / 2;
+
+			const diagramType = e.diagramType as DiagramType;
+			if (diagramType === "Rectangle") {
+				addItem(createRectangleData({ x: centerX, y: centerY }) as Diagram);
+			}
+			if (diagramType === "Ellipse") {
+				addItem(createEllipseData({ x: centerX, y: centerY }) as Diagram);
+			}
+		},
+		[canvasState.minX, canvasState.minY, canvasState.width, canvasState.height],
+	);
+
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -673,6 +696,7 @@ export const useSvgCanvas = (
 		onUndo,
 		onRedo,
 		onCanvasResize,
+		onNewDiagram,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
