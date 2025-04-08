@@ -69,6 +69,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 	showConnectPoints = true,
 	syncWithSameId = false,
 	text,
+	textType,
 	fontColor,
 	fontSize,
 	fontFamily,
@@ -230,6 +231,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 
 		// テキスト編集イベントを発火
 		if (!isSelected) return;
+
 		onTextEdit?.({
 			id,
 		});
@@ -313,6 +315,7 @@ const Ellipse: React.FC<EllipseProps> = ({
 				height={height}
 				transform={transform}
 				text={text}
+				textType={textType}
 				fontColor={fontColor}
 				fontSize={fontSize}
 				fontFamily={fontFamily}

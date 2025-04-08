@@ -473,7 +473,11 @@ function App() {
 		state: [canvasState, setCanvasState],
 		canvasProps,
 		canvasFunctions,
-	} = useSvgCanvas(devData.item1);
+	} = useSvgCanvas(
+		document.documentElement.clientWidth,
+		document.documentElement.clientHeight,
+		devData.item1,
+	);
 
 	// const {
 	// 	state: [canvasState, setCanvasState],
@@ -519,6 +523,7 @@ function App() {
 
 	return (
 		<div className="App">
+			{/** */}
 			<div
 				style={{
 					position: "absolute",
@@ -528,6 +533,7 @@ function App() {
 					width: "300px",
 					backgroundColor: "lightgray",
 					overflow: "auto",
+					visibility: "hidden",
 				}}
 			>
 				<Button onClick={handleAddRectangle}>Add Rectangle</Button>
@@ -600,7 +606,7 @@ function App() {
 					position: "absolute",
 					top: 0,
 					left: 0,
-					right: "300px",
+					right: 0,
 					bottom: 0,
 				}}
 			>

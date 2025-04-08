@@ -74,20 +74,24 @@ type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
  * @param initialItems - The initial items to be displayed on the canvas.
  * @returns The state and functions of the SvgCanvas.
  */
-export const useSvgCanvas = (initialItems: Diagram[]) => {
+export const useSvgCanvas = (
+	initialWidth: number,
+	initialHeight: number,
+	initialItems: Diagram[],
+) => {
 	// The state of the canvas.
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
 		minX: 0,
 		minY: 0,
-		width: window.innerWidth,
-		height: window.innerHeight,
+		width: initialWidth,
+		height: initialHeight,
 		items: initialItems,
 		history: [
 			{
 				minX: 0,
 				minY: 0,
-				width: window.innerWidth,
-				height: window.innerHeight,
+				width: initialWidth,
+				height: initialHeight,
 				items: deepCopy(initialItems),
 				lastHistoryEventId: newEventId(),
 			},

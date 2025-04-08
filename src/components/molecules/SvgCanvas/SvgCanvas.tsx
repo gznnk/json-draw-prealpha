@@ -41,6 +41,7 @@ import ContextMenu, {
 // SvgCanvas関連関数をインポート
 import { getDiagramById, getSelectedItems } from "./functions/SvgCanvas";
 import { newEventId } from "./functions/Util";
+import UserMenu from "./components/operation/UserMenu";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -66,6 +67,8 @@ const ContainerDiv = styled.div`
  * Style for the SVG element.
  */
 const Svg = styled.svg`
+	display: block;
+	box-sizing: border-box;
 	outline: none;
 	* {
 		outline: none;
@@ -622,6 +625,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 					<TextEditor {...textEditorState} onTextChange={handleTextChange} />
 				</HTMLElementsContainer>
 				<ViewportOverlay>
+					<UserMenu />
 					<ContextMenu
 						{...contextMenu}
 						menuStateMap={contextMenuStateMap}

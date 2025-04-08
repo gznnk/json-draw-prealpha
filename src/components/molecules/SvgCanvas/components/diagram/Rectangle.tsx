@@ -69,6 +69,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 	showConnectPoints = true,
 	syncWithSameId = false,
 	text,
+	textType,
 	fontColor,
 	fontSize,
 	fontFamily,
@@ -228,6 +229,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 
 		// テキスト編集イベントを発火
 		if (!isSelected) return;
+
 		onTextEdit?.({
 			id,
 		});
@@ -311,6 +313,7 @@ const Rectangle: React.FC<RectangleProps> = ({
 				height={height}
 				transform={transform}
 				text={text}
+				textType={textType}
 				fontColor={fontColor}
 				fontSize={fontSize}
 				fontFamily={fontFamily}

@@ -72,6 +72,7 @@ export const DEFAULT_FILLABLE_DATA = {
  */
 export const DEFAULT_TEXTABLE_DATA = {
 	text: "",
+	textType: "textarea",
 	fontColor: "#000000",
 	fontSize: 16,
 	fontFamily: "Arial",

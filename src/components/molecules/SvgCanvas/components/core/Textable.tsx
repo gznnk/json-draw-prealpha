@@ -6,7 +6,12 @@ import { useState, memo, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 
 // SvgCanvas関連型定義をインポート
-import type { TextAlign, VerticalAlign } from "../../types/DiagramTypes";
+import type {
+	TextAlign,
+	VerticalAlign,
+	TextableData,
+	TextableType,
+} from "../../types/DiagramTypes";
 import type { DiagramTextChangeEvent } from "../../types/EventTypes";
 
 // SvgCanvas関連関数をインポート
@@ -60,6 +65,8 @@ type TextProps = {
 	color: string;
 	fontSize: number;
 	fontFamily: string;
+	wordBreak: string;
+	whiteSpace: string;
 };
 
 /**
@@ -77,8 +84,8 @@ const Text = styled.div<TextProps>`
 	pointer-events: none;
 	user-select: none;
 	overflow: hidden;
-	word-break: break-word;
-	white-space: pre-wrap;
+	word-break: ${(props) => props.wordBreak};
+	white-space: ${(props) => props.whiteSpace};
 	padding: 2px;
 	box-sizing: border-box;
 `;
@@ -86,19 +93,12 @@ const Text = styled.div<TextProps>`
 /**
  * テキストコンポーネントのプロパティ
  */
-type TextableProps = {
+type TextableProps = TextableData & {
 	x: number;
 	y: number;
 	width: number;
 	height: number;
 	transform: string;
-	text: string;
-	textAlign: TextAlign;
-	verticalAlign: VerticalAlign;
-	fontColor: string;
-	fontSize: number;
-	fontFamily: string;
-	isTextEditing: boolean;
 };
 
 /**
@@ -111,6 +111,7 @@ const Textable: React.FC<TextableProps> = ({
 	height,
 	transform,
 	text,
+	textType,
 	textAlign,
 	verticalAlign,
 	fontColor,
@@ -137,6 +138,8 @@ const Textable: React.FC<TextableProps> = ({
 					color={fontColor}
 					fontSize={fontSize}
 					fontFamily={fontFamily}
+					wordBreak={textType === "textarea" ? "break-word" : "normal"}
+					whiteSpace={textType === "textarea" ? "pre-wrap" : "nowrap"}
 				>
 					{text}
 				</Text>
@@ -162,6 +165,31 @@ type TextEditorTextAreaProps = {
 	fontSize: number;
 	fontFamily: string;
 };
+
+/**
+ * Style for TextEditorInput.
+ */
+const TextEditorInput = styled.input<TextEditorTextAreaProps>`
+	position: absolute;
+	left: ${(props) => props.left}px;
+	top: ${(props) => props.top}px;
+	transform: ${(props) => props.transform};
+	width: ${(props) => props.width}px;
+	height: ${(props) => props.height}px;
+	text-align: ${(props) => props.textAlign};
+	vertical-align: ${(props) => props.verticalAlign};
+	color: ${(props) => props.color};
+	font-size: ${(props) => props.fontSize}px;
+	font-family: ${(props) => props.fontFamily};
+	background: transparent;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	resize: none;
+	box-sizing: border-box;
+	padding: 2px;
+	pointer-events: auto;
+`;
 
 /**
  * テキストエディタ要素
@@ -201,6 +229,7 @@ export type TextEditorProps = {
 	scaleX: number;
 	scaleY: number;
 	rotation: number;
+	textType: TextableType;
 	textAlign: TextAlign;
 	verticalAlign: VerticalAlign;
 	fontColor: string;
@@ -224,6 +253,7 @@ export const TextEditor: React.FC<TextEditorProps> = memo(
 		scaleX,
 		scaleY,
 		rotation,
+		textType,
 		textAlign,
 		verticalAlign,
 		fontColor,
@@ -232,19 +262,25 @@ export const TextEditor: React.FC<TextEditorProps> = memo(
 		isActive,
 		onTextChange,
 	}) => {
-		const ref = useRef<HTMLTextAreaElement>(null);
+		const inputRef = useRef<HTMLInputElement>(null);
+		const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
 		const [inputText, setInputText] = useState(text);
 
 		useEffect(() => {
 			if (isActive) {
 				setInputText(text);
-				ref.current?.focus();
-				ref.current?.setSelectionRange(text.length, text.length);
+				if (textType === "textarea") {
+					textAreaRef.current?.focus();
+					textAreaRef.current?.setSelectionRange(text.length, text.length);
+				} else {
+					inputRef.current?.focus();
+					inputRef.current?.setSelectionRange(text.length, text.length);
+				}
 			} else {
 				setInputText("");
 			}
-		}, [isActive, text]);
+		}, [isActive, text, textType]);
 
 		if (!isActive) return null;
 
@@ -256,11 +292,13 @@ export const TextEditor: React.FC<TextEditorProps> = memo(
 			y,
 		);
 
-		const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		const handleTextAreaChange = (
+			e: React.ChangeEvent<HTMLTextAreaElement>,
+		) => {
 			setInputText(e.target.value);
 		};
 
-		const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+		const handleTextAreaBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
 			onTextChange?.({
 				eventId: newEventId(),
 				id,
@@ -268,7 +306,19 @@ export const TextEditor: React.FC<TextEditorProps> = memo(
 			});
 		};
 
-		return (
+		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+			setInputText(e.target.value);
+		};
+
+		const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+			onTextChange?.({
+				eventId: newEventId(),
+				id,
+				text: e.target.value,
+			});
+		};
+
+		return textType === "textarea" ? (
 			<TextEditorTextArea
 				value={inputText}
 				left={-width / 2}
@@ -281,9 +331,27 @@ export const TextEditor: React.FC<TextEditorProps> = memo(
 				color={fontColor}
 				fontSize={fontSize}
 				fontFamily={fontFamily}
-				ref={ref}
-				onChange={handleChange}
-				onBlur={handleBlur}
+				ref={textAreaRef}
+				onChange={handleTextAreaChange}
+				onBlur={handleTextAreaBlur}
+			/>
+		) : (
+			<TextEditorInput
+				type="text"
+				value={inputText}
+				left={-width / 2}
+				top={-height / 2}
+				transform={transform}
+				width={width}
+				height={height}
+				textAlign={textAlign}
+				verticalAlign={verticalAlign}
+				color={fontColor}
+				fontSize={fontSize}
+				fontFamily={fontFamily}
+				ref={inputRef}
+				onChange={handleInputChange}
+				onBlur={handleInputBlur}
 			/>
 		);
 	},

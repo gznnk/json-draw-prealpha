@@ -104,6 +104,11 @@ export type FillableData = {
 };
 
 /**
+ * Type of textable component.
+ */
+export type TextableType = "text" | "textarea";
+
+/**
  * テキストの水平位置揃え
  */
 export type TextAlign = "left" | "center" | "right";
@@ -118,6 +123,7 @@ export type VerticalAlign = "top" | "center" | "bottom";
  */
 export type TextableData = {
 	text: string;
+	textType: TextableType; // TODO: データにもたなくてもいいかも？
 	textAlign: TextAlign;
 	verticalAlign: VerticalAlign;
 	fontColor: string;
