@@ -52,32 +52,8 @@ import {
 } from "./functions";
 import { deepCopy, newEventId } from "../../../utils/Util";
 
-/**
- * Type for the data of the SvgCanvas.
- */
-export type SvgCanvasData = {
-	minX: number;
-	minY: number;
-	width: number;
-	height: number;
-	items: Diagram[];
-};
-
-/**
- * Type for the state of the SvgCanvas.
- */
-export type SvgCanvasState = {
-	multiSelectGroup?: GroupData;
-	isDiagramChanging: boolean;
-	history: SvgCanvasHistory[];
-	historyIndex: number;
-	lastHistoryEventId: string;
-} & SvgCanvasData;
-
-/**
- * Type for the history of the SvgCanvas state.
- */
-export type SvgCanvasHistory = SvgCanvasData;
+// Imports related to this component.
+import type { SvgCanvasState } from "./types";
 
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;

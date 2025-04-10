@@ -1,4 +1,4 @@
-// Reactのインポート
+// Import React.
 import React, {
 	createContext,
 	memo,
@@ -8,15 +8,10 @@ import React, {
 	useState,
 } from "react";
 
-// ライブラリのインポート
-import styled from "@emotion/styled";
-
 // SvgCanvas関連型定義をインポート
-import type { SvgCanvasHistory, SvgCanvasState } from "./hooks";
 import type { Diagram, GroupData } from "../../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../../types/DiagramTypes";
 import {
-	type NewDiagramEvent,
 	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type ConnectPointsMoveEvent,
 	type DiagramChangeEvent,
@@ -27,101 +22,42 @@ import {
 	type DiagramTextChangeEvent,
 	type DiagramTextEditEvent,
 	type DiagramTransformEvent,
+	type NewDiagramEvent,
 	type SvgCanvasResizeEvent,
 	type SvgCanvasScrollEvent,
 } from "../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor, type TextEditorProps } from "../../core/Textable";
-import Group from "../../shapes/Group/Group";
 import ContextMenu, {
 	type ContextMenuStateMap,
 	type ContextMenuType,
 } from "../../menus/ContextMenu/ContextMenu";
 import DiagramMenu from "../../menus/DiagramMenu/DiagramMenu";
+import Group from "../../shapes/Group/Group";
 
 // SvgCanvas関連関数をインポート
-import { getDiagramById, getSelectedItems } from "./functions";
-import { newEventId } from "../../../utils/Util";
-import UserMenu from "../../menus/UserMenu/UserMenu";
-import CanvasMenu from "../../menus/CanvasMenu/CanvasMenu";
 import { isTransformativeData } from "../../../utils/Diagram";
+import { newEventId } from "../../../utils/Util";
+import CanvasMenu from "../../menus/CanvasMenu/CanvasMenu";
+import UserMenu from "../../menus/UserMenu/UserMenu";
+import { getDiagramById, getSelectedItems } from "./functions";
+
+// Imports related to this component.
+import { CANVAS_EXPANSION_SIZE } from "./constants";
+import type { SvgCanvasHistory, SvgCanvasState } from "./types";
+import {
+	Container,
+	HTMLElementsContainer,
+	MultiSelectGroupContainer,
+	Svg,
+	ViewportOverlay,
+} from "./styled";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
 	null,
 );
-
-// 増やす領域の幅
-const EXPAND_SIZE = 300;
-
-/**
- * Style for the container of the SVG canvas.
- */
-const ContainerDiv = styled.div`
-	position: absolute;
-    top: 0;
-    left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: auto;
-`;
-
-/**
- * Style for the SVG element.
- */
-const Svg = styled.svg`
-	display: block;
-	box-sizing: border-box;
-	outline: none;
-	* {
-		outline: none;
-	}
-`;
-
-/**
- * Style for the container of the multi-select group.
- */
-const MultiSelectGroupContainer = styled.g`
-	.diagram {
-		opacity: 0;
-	}
-`;
-
-/**
- * Properties for the container of HTML elements.
- */
-type HTMLElementsContainerProps = {
-	left: number;
-	top: number;
-	width: number;
-	height: number;
-};
-
-/**
- * Style for the container of HTML elements.
- */
-const HTMLElementsContainer = styled.div<HTMLElementsContainerProps>`
-	position: absolute;
-	left: ${(props) => props.left}px;
-	top: ${(props) => props.top}px;
-	width: ${(props) => props.width}px;
-	height: ${(props) => props.height}px;
-	pointer-events: none;
-`;
-
-/**
- * Styles for the viewport overlay.
- */
-const ViewportOverlay = styled.div`
-	position: fixed;
-    top: 0;
-    left: 0;
-	right: 0;
-	bottom: 0;
-	overflow: hidden;
-    pointer-events: none;
-`;
 
 /**
  * SvgCanvasのプロパティの型定義
@@ -291,8 +227,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 			if (e.endX <= minX) {
 				if (containerRef.current && svgRef.current) {
 					// SVGの幅を増やす
-					const newMinX = minX - EXPAND_SIZE;
-					const newWidth = width - newMinX + EXPAND_SIZE;
+					const newMinX = minX - CANVAS_EXPANSION_SIZE;
+					const newWidth = width - newMinX + CANVAS_EXPANSION_SIZE;
 
 					// Notify the new minX and width to the canvasHooks.
 					onCanvasResize?.({
@@ -311,12 +247,12 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 					);
 
 					// Scroll position adjustment.
-					containerRef.current.scrollLeft = EXPAND_SIZE;
+					containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
 				}
 			} else if (e.endY <= minY) {
 				if (containerRef.current && svgRef.current) {
 					// SVGの高さを増やす
-					const newMinY = minY - EXPAND_SIZE;
+					const newMinY = minY - CANVAS_EXPANSION_SIZE;
 					const newHeight = height - newMinY;
 
 					// Notify the new minY and height to the hooks.
@@ -336,14 +272,14 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 					);
 
 					// Scroll position adjustment.
-					containerRef.current.scrollTop = EXPAND_SIZE;
+					containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
 				}
 			} else if (e.endX >= minX + width) {
 				// Notify the new width to the hooks.
 				onCanvasResize?.({
 					minX,
 					minY,
-					width: width - minX + EXPAND_SIZE,
+					width: width - minX + CANVAS_EXPANSION_SIZE,
 					height,
 				} as SvgCanvasResizeEvent);
 			} else if (e.endY >= minY + height) {
@@ -352,7 +288,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 					minX,
 					minY,
 					width,
-					height: height - minY + EXPAND_SIZE,
+					height: height - minY + CANVAS_EXPANSION_SIZE,
 				} as SvgCanvasResizeEvent);
 			} else {
 				// When the pointer is moved within the canvas, notify the drag event to the hooks.
@@ -634,7 +570,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 
 	return (
 		<>
-			<ContainerDiv ref={containerRef} onScroll={handleScroll}>
+			<Container ref={containerRef} onScroll={handleScroll}>
 				<SvgCanvasContext.Provider value={stateProvider.current}>
 					<Svg
 						width={width}
@@ -688,7 +624,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 						onMenuClick={handleContextMenuClick}
 					/>
 				</ViewportOverlay>
-			</ContainerDiv>
+			</Container>
 		</>
 	);
 };

@@ -1,15 +1,13 @@
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/DiagramTypes";
-import type { SvgCanvasHistory, SvgCanvasState } from "./hooks";
 
 // Import functions related to SvgCanvas.
 import { isItemableData, isSelectableData } from "../../../utils/Diagram";
 import { deepCopy } from "../../../utils/Util";
 
-/**
- * Max history size for the history stack.
- */
-const MAX_HISTORY_SIZE = 20;
+// Imports related to this component.
+import { MAX_HISTORY_SIZE } from "./constants";
+import type { SvgCanvasHistory, SvgCanvasState } from "./types";
 
 /**
  * Get the diagram by ID from the list of diagrams.
