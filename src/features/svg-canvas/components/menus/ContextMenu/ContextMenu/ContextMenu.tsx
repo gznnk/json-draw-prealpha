@@ -1,11 +1,9 @@
 // Import React.
 import type React from "react";
-import { memo, useCallback } from "react";
-
-// Import other libraries.
-import styled from "@emotion/styled";
+import { memo } from "react";
 
 // Imports related to this component.
+import { ContextMenuItem } from "../ContextMenuItem/ContextMenuItem";
 import { ContextMenuDiv, ContextMenuDivider } from "./ContextMenuStyled";
 import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 
@@ -65,47 +63,3 @@ const ContextMenuComponent: React.FC<ContextMenuProps> = ({
 };
 
 export const ContextMenu = memo(ContextMenuComponent);
-
-const ContextMenuItemDiv = styled.div`
-	font-size: 14px;
-	color: #333333;
-    padding: 3px 5px;
-    cursor: pointer;
-	&:hover {
-		background-color: #EEEEEE;
-	}
-	&.disabled {
-		color: #BDBDBD;
-		pointer-events: none;
-	}
-`;
-
-type ContextMenuItemProps = {
-	menuType: ContextMenuType;
-	menuStateMap: ContextMenuStateMap;
-	children: React.ReactNode;
-	onMenuClick: (menuType: ContextMenuType) => void;
-};
-
-const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
-	menuType,
-	menuStateMap,
-	onMenuClick,
-	children,
-}) => {
-	const handleMenuClick = useCallback(() => {
-		onMenuClick(menuType);
-	}, [menuType, onMenuClick]);
-
-	const menuState = menuStateMap[menuType];
-	if (menuState === "Hidden") return null;
-
-	return (
-		<ContextMenuItemDiv
-			className={menuState === "Disable" ? "disabled" : ""}
-			onClick={handleMenuClick}
-		>
-			{children}
-		</ContextMenuItemDiv>
-	);
-};
