@@ -44,10 +44,11 @@ const DiagramMenu: React.FC<DiagramMenuProps> = ({
 		scaleY,
 	});
 
-	const menuY = Object.keys(vertices).reduce((max, key) => {
-		const vertex = vertices[key as keyof RectangleVertices];
-		return Math.max(max, vertex.y);
-	}, Number.NEGATIVE_INFINITY);
+	const menuY =
+		Object.keys(vertices).reduce((max, key) => {
+			const vertex = vertices[key as keyof RectangleVertices];
+			return Math.max(max, vertex.y);
+		}, Number.NEGATIVE_INFINITY) + 20;
 
 	return <div style={{ position: "absolute", top: menuY, left: x }}>aaa</div>;
 };

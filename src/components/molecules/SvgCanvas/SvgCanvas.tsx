@@ -133,6 +133,7 @@ type SvgCanvasProps = {
 	width: number;
 	height: number;
 	items: Diagram[];
+	isDiagramChanging: boolean;
 	multiSelectGroup?: GroupData;
 	history: SvgCanvasHistory[];
 	historyIndex: number;
@@ -167,6 +168,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	width,
 	height,
 	items,
+	isDiagramChanging,
 	multiSelectGroup,
 	history,
 	historyIndex,
@@ -603,7 +605,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 	);
 
 	// --- Diagram Menu ---
-	const showDiagramMenu = selectedItems.length === 1;
+	const showDiagramMenu = selectedItems.length === 1 && !isDiagramChanging;
 	let diagramMenuProps = {
 		x: 0,
 		y: 0,

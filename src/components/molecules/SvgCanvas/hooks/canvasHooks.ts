@@ -121,6 +121,7 @@ export const useSvgCanvas = (
 				items: applyRecursive(prevState.items, (item) =>
 					item.id === e.id ? { ...item, x: e.endX, y: e.endY } : item,
 				),
+				isDiagramChanging: e.eventType !== "End",
 			};
 
 			if (e.eventType === "End") {
@@ -158,6 +159,7 @@ export const useSvgCanvas = (
 				items: applyRecursive(prevState.items, (item) =>
 					item.id === e.id ? { ...item, ...e.endShape } : item,
 				),
+				isDiagramChanging: e.eventType !== "End",
 			};
 
 			if (e.eventType === "End") {
@@ -256,6 +258,7 @@ export const useSvgCanvas = (
 			let newState = {
 				...prevState,
 				items,
+				isDiagramChanging: e.eventType !== "End",
 				multiSelectGroup,
 			} as SvgCanvasState;
 
