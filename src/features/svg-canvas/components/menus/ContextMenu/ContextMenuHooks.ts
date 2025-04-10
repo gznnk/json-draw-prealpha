@@ -8,7 +8,7 @@ import { getSelectedItems } from "../../diagrams/SvgCanvas/functions";
 import type { SvgCanvasProps } from "../../diagrams/SvgCanvas/types";
 
 // Imports related to this component.
-import type { ContextMenuStateMap, ContextMenuType } from "./types";
+import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 
 export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 	// Extract properties from canvasProps.

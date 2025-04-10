@@ -1,2 +1,2 @@
 export { ContextMenu } from "./ContextMenu";
-export { useContextMenu } from "./hooks";
+export { useContextMenu } from "./ContextMenuHooks";
