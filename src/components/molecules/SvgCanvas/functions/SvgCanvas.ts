@@ -1,6 +1,6 @@
 // Import SvgCanvas related types.
 import type { Diagram } from "../types/DiagramTypes";
-import type { SvgCanvasState } from "../hooks/canvasHooks";
+import type { SvgCanvasHistory, SvgCanvasState } from "../hooks/canvasHooks";
 
 // Import SvgCanvas related functions.
 import { isItemableData, isSelectableData } from "./Diagram";
@@ -221,15 +221,11 @@ export const addHistory = (
 	prevState: SvgCanvasState,
 	newState: SvgCanvasState,
 ): SvgCanvasState => {
-	// Clear the history stack and index from the history data.
-	newState.history = [];
-	newState.historyIndex = -1;
-
 	// When the last history event ID is the same as the new state, overwrite the history.
 	if (prevState.lastHistoryEventId === newState.lastHistoryEventId) {
 		// Overwrite the last history with the new state.
 		const newHistory = prevState.history.slice(0, prevState.historyIndex);
-		newHistory.push(deepCopy(newState));
+		newHistory.push(canvasStateToHistory(newState));
 		const ret = {
 			...newState,
 			history: newHistory,
@@ -242,12 +238,12 @@ export const addHistory = (
 		return ret;
 	}
 
-	// 履歴を追加
+	// Add a new history entry.
 	let newHistory = prevState.history.slice(0, prevState.historyIndex + 1);
-	newHistory.push(deepCopy(newState));
+	newHistory.push(canvasStateToHistory(newState));
 	let historyIndex = prevState.historyIndex + 1;
 
-	// 履歴のサイズが最大値を超えた場合、古い履歴を削除
+	// Remove the oldest history if the size exceeds the maximum limit.
 	if (MAX_HISTORY_SIZE <= newHistory.length) {
 		newHistory = newHistory.slice(1);
 		historyIndex = MAX_HISTORY_SIZE - 1;
@@ -263,4 +259,26 @@ export const addHistory = (
 	// console.log("history", ret);
 
 	return ret;
+};
+
+/**
+ * Convert the canvas state to history format.
+ *
+ * @param canvasState - The state of the canvas.
+ * @returns {SvgCanvasHistory} - The history format of the canvas state.
+ */
+const canvasStateToHistory = (
+	canvasState: SvgCanvasState,
+): SvgCanvasHistory => {
+	// Deep copy the canvas state to avoid mutating the original state
+	const copiedState = deepCopy(canvasState);
+
+	// Convert the canvas state to history format
+	return {
+		minX: copiedState.minX,
+		minY: copiedState.minY,
+		width: copiedState.width,
+		height: copiedState.height,
+		items: copiedState.items,
+	} as const satisfies SvgCanvasHistory;
 };

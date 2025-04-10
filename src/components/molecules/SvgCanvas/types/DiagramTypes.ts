@@ -181,7 +181,10 @@ export type RectangleData = CreateDiagramType<{
 	strokable: true;
 	fillable: true;
 	textable: true;
-}>;
+}> & {
+	rx: number;
+	ry: number;
+};
 
 /**
  * 折れ線の頂点のデータ
@@ -246,6 +249,8 @@ export type TextGeneratorData = CreateDiagramType<{
 	fillable: true;
 	textable: true;
 }> & {
+	rx: number;
+	ry: number;
 	text: string;
 	fontSize: number;
 	color: string;

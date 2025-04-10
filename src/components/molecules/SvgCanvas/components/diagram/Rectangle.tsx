@@ -56,6 +56,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 	y,
 	width,
 	height,
+	rx,
+	ry,
 	rotation,
 	scaleX,
 	scaleY,
@@ -295,6 +297,8 @@ const Rectangle: React.FC<RectangleProps> = ({
 					y={-height / 2}
 					width={width}
 					height={height}
+					rx={rx}
+					ry={ry}
 					fill={fill}
 					stroke={stroke}
 					strokeWidth={strokeWidth}
@@ -377,6 +381,8 @@ export const createRectangleData = ({
 	y,
 	width = 100,
 	height = 100,
+	rx = 0,
+	ry = 0,
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
@@ -389,6 +395,8 @@ export const createRectangleData = ({
 	y: number;
 	width?: number;
 	height?: number;
+	rx?: number;
+	ry?: number;
 	rotation?: number;
 	scaleX?: number;
 	scaleY?: number;
@@ -428,6 +436,8 @@ export const createRectangleData = ({
 		y,
 		width,
 		height,
+		rx,
+		ry,
 		rotation,
 		scaleX,
 		scaleY,

@@ -7,12 +7,12 @@ import { createRectangleData } from "./components/molecules/SvgCanvas/components
 import { createEllipseData } from "./components/molecules/SvgCanvas/components/diagram/Ellipse";
 import AIChat from "./components/organisms/AIChat";
 
-import { getLogger } from "./utils/Logger";
+// import { getLogger } from "./utils/Logger";
 import { Profiler } from "./utils/Profiler";
 
 import { radiansToDegrees } from "./components/molecules/SvgCanvas/functions/Math";
 import { svgDataToDiagram } from "./components/molecules/SvgCanvas/functions/Diagram";
-const logger = getLogger("App");
+// const logger = getLogger("App");
 declare global {
 	interface Window {
 		profiler: Profiler;
@@ -467,6 +467,8 @@ const testItems7 = [
 		y: 100,
 		width: 200,
 		height: 100,
+		rx: 4,
+		ry: 4,
 		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,
@@ -546,9 +548,6 @@ function App() {
 			isSelected: false,
 		} as Diagram);
 	};
-
-	logger.debug("selectedItemId:", canvasState.selectedItemId);
-	logger.debug("canvasState:", canvasState);
 
 	return (
 		<div className="App">

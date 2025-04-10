@@ -49,25 +49,31 @@ import {
 import { deepCopy, newEventId } from "../functions/Util";
 
 /**
- * Type for the state of the SvgCanvas.
+ * Type for the data of the SvgCanvas.
  */
-export type SvgCanvasState = {
+export type SvgCanvasData = {
 	minX: number;
 	minY: number;
 	width: number;
 	height: number;
 	items: Diagram[];
+};
+
+/**
+ * Type for the state of the SvgCanvas.
+ */
+export type SvgCanvasState = {
 	multiSelectGroup?: GroupData;
-	selectedItemId?: string; // TODO: いらないかも
+	isDiagramChanging: boolean;
 	history: SvgCanvasHistory[];
 	historyIndex: number;
 	lastHistoryEventId: string;
-};
+} & SvgCanvasData;
 
 /**
  * Type for the history of the SvgCanvas state.
  */
-export type SvgCanvasHistory = Omit<SvgCanvasState, "history" | "historyIndex">;
+export type SvgCanvasHistory = SvgCanvasData;
 
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
@@ -90,6 +96,7 @@ export const useSvgCanvas = (
 		width: initialWidth,
 		height: initialHeight,
 		items: initialItems,
+		isDiagramChanging: false,
 		history: [
 			{
 				minX: 0,
@@ -97,7 +104,6 @@ export const useSvgCanvas = (
 				width: initialWidth,
 				height: initialHeight,
 				items: deepCopy(initialItems),
-				lastHistoryEventId: newEventId(),
 			},
 		],
 		historyIndex: 0,
@@ -765,8 +771,8 @@ export const useSvgCanvas = (
 			// console.log("undo", prevHistory.lastHistoryEventId);
 
 			return {
-				...prevHistory,
-				history: prevState.history,
+				...prevState,
+				...prevHistory, // Overwrite the current state with the previous history.
 				historyIndex: prevIndex,
 			};
 		});
@@ -788,8 +794,8 @@ export const useSvgCanvas = (
 			// console.log("redo", nextHistory.lastHistoryEventId);
 
 			return {
-				...nextHistory,
-				history: prevState.history,
+				...prevState,
+				...nextHistory, // Overwrite the current state with the next history.
 				historyIndex: nextIndex,
 			};
 		});

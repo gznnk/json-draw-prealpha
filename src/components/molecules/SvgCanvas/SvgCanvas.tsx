@@ -38,12 +38,14 @@ import ContextMenu, {
 	type ContextMenuStateMap,
 	type ContextMenuType,
 } from "./components/operation/ContextMenu";
+import DiagramMenu from "./components/operation/DiagramMenu";
 
 // SvgCanvas関連関数をインポート
 import { getDiagramById, getSelectedItems } from "./functions/SvgCanvas";
 import { newEventId } from "./functions/Util";
 import UserMenu from "./components/operation/UserMenu";
 import CanvasMenu from "./components/operation/CanvasMenu";
+import { isTransformativeData } from "./functions/Diagram";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -534,6 +536,8 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 		return React.createElement(itemType, props);
 	});
 
+	// --- Context Menu ---
+
 	// コンテキストメニューの状態
 	const [contextMenu, setContextMenu] = useState({
 		x: 0,
@@ -598,6 +602,34 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 		[onUndo, onRedo, onSelectAll, onGroup, onUngroup, onDelete],
 	);
 
+	// --- Diagram Menu ---
+	const showDiagramMenu = selectedItems.length === 1;
+	let diagramMenuProps = {
+		x: 0,
+		y: 0,
+		width: 0,
+		height: 0,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
+		isVisible: false,
+	};
+	if (showDiagramMenu) {
+		const diagram = selectedItems[0];
+		if (isTransformativeData(diagram)) {
+			diagramMenuProps = {
+				x: diagram.x,
+				y: diagram.y,
+				width: diagram.width,
+				height: diagram.height,
+				rotation: diagram.rotation,
+				scaleX: diagram.scaleX,
+				scaleY: diagram.scaleY,
+				isVisible: true,
+			};
+		}
+	}
+
 	return (
 		<>
 			<ContainerDiv ref={containerRef} onScroll={handleScroll}>
@@ -647,6 +679,7 @@ const SvgCanvas: React.FC<SvgCanvasProps> = ({
 				<ViewportOverlay>
 					<CanvasMenu onNewDiagram={onNewDiagram} />
 					<UserMenu />
+					<DiagramMenu {...diagramMenuProps} />
 					<ContextMenu
 						{...contextMenu}
 						menuStateMap={contextMenuStateMap}
