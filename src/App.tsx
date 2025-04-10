@@ -1,17 +1,15 @@
-import SvgCanvas from "./components/molecules/SvgCanvas";
-import { useSvgCanvas } from "./components/molecules/SvgCanvas/hooks/canvasHooks";
+import { SvgCanvas, useSvgCanvas } from "./features/svg-canvas";
 import Button from "./components/atoms/Button";
 // import Input from "./components/atoms/Input";
-import type { Diagram } from "./components/molecules/SvgCanvas/types/DiagramTypes";
-import { createRectangleData } from "./components/molecules/SvgCanvas/components/diagram/Rectangle";
-import { createEllipseData } from "./components/molecules/SvgCanvas/components/diagram/Ellipse";
+import type { Diagram } from "./features/svg-canvas/types/DiagramTypes";
+import { createRectangleData } from "./features/svg-canvas/components/shapes/Rectangle/Rectangle";
+import { createEllipseData } from "./features/svg-canvas/components/shapes/Ellipse/Ellipse";
 import AIChat from "./components/organisms/AIChat";
 
 // import { getLogger } from "./utils/Logger";
 import { Profiler } from "./utils/Profiler";
 
-import { radiansToDegrees } from "./components/molecules/SvgCanvas/functions/Math";
-import { svgDataToDiagram } from "./components/molecules/SvgCanvas/functions/Diagram";
+import { svgDataToDiagram } from "./features/svg-canvas/utils/Diagram";
 // const logger = getLogger("App");
 declare global {
 	interface Window {
@@ -43,7 +41,7 @@ const testItems1 = [
 		y: 350,
 		width: 400,
 		height: 400,
-		rotation: radiansToDegrees(0),
+		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,
 		keepProportion: true,
@@ -73,7 +71,7 @@ const testItems1 = [
 				y: 450,
 				width: 200,
 				height: 200,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -104,7 +102,7 @@ const testItems1 = [
 				y: 250,
 				width: 200,
 				height: 200,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -234,7 +232,7 @@ const testItems3 = [
 		y: 250,
 		width: 300,
 		height: 300,
-		rotation: radiansToDegrees(0),
+		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,
 		keepProportion: true,
@@ -248,7 +246,7 @@ const testItems3 = [
 				y: 150,
 				width: 100,
 				height: 100,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -269,7 +267,7 @@ const testItems3 = [
 				y: 250,
 				width: 100,
 				height: 100,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				fill: "transparent",
@@ -286,7 +284,7 @@ const testItems3 = [
 				y: 350,
 				width: 100,
 				height: 100,
-				rotation: radiansToDegrees(0),
+				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
 				stroke: "black",
@@ -416,7 +414,7 @@ const testItems6 = [
 		y: 350,
 		width: 100,
 		height: 100,
-		rotation: radiansToDegrees(0),
+		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,
 		stroke: "black",
@@ -501,7 +499,7 @@ const devData = {
 
 function App() {
 	const {
-		state: [canvasState, setCanvasState],
+		state: [_canvasState, setCanvasState],
 		canvasProps,
 		canvasFunctions,
 	} = useSvgCanvas(
