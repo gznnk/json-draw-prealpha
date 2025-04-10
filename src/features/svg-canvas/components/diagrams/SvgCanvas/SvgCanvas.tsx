@@ -21,15 +21,14 @@ import {
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor, useTextEditor } from "../../core/Textable";
 import { ContextMenu, useContextMenu } from "../../menus/ContextMenu";
-import DiagramMenu from "../../menus/DiagramMenu/DiagramMenu";
+import { DiagramMenu, useDiagramMenu } from "../../menus/DiagramMenu";
 import Group from "../../shapes/Group/Group";
 
 // SvgCanvas関連関数をインポート
-import { isTransformativeData } from "../../../utils/Diagram";
 import { newEventId } from "../../../utils/Util";
 import CanvasMenu from "../../menus/CanvasMenu/CanvasMenu";
 import UserMenu from "../../menus/UserMenu/UserMenu";
-import { getDiagramById, getSelectedItems } from "./SvgCanvasFunctions";
+import { getDiagramById } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
 import { CANVAS_EXPANSION_SIZE } from "./SvgCanvasConstants";
@@ -64,7 +63,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		width,
 		height,
 		items,
-		isDiagramChanging,
 		multiSelectGroup,
 		onTransform,
 		onDiagramChange,
@@ -104,6 +102,9 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	// Use the context menu hook to handle context menu events.
 	const { contextMenuProps, contextMenuHandlers, contextMenuFunctions } =
 		useContextMenu(props);
+
+	// Use the diagram menu hook to handle diagram menu events.
+	const { diagramMenuProps } = useDiagramMenu(props);
 
 	/**
 	 * Handle the pointer down event on the SVG canvas.
@@ -341,35 +342,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		return React.createElement(itemType, props);
 	});
 
-	// --- Diagram Menu ---
-	const selectedItems = getSelectedItems(items);
-	const showDiagramMenu = selectedItems.length === 1 && !isDiagramChanging;
-	let diagramMenuProps = {
-		x: 0,
-		y: 0,
-		width: 0,
-		height: 0,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
-		isVisible: false,
-	};
-	if (showDiagramMenu) {
-		const diagram = selectedItems[0];
-		if (isTransformativeData(diagram)) {
-			diagramMenuProps = {
-				x: diagram.x,
-				y: diagram.y,
-				width: diagram.width,
-				height: diagram.height,
-				rotation: diagram.rotation,
-				scaleX: diagram.scaleX,
-				scaleY: diagram.scaleY,
-				isVisible: true,
-			};
-		}
-	}
-
 	return (
 		<>
 			<Container ref={containerRef} onScroll={handleScroll}>
@@ -405,7 +377,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 						)}
 					</Svg>
 				</SvgCanvasContext.Provider>
-				{/* The container of HTML elements that overlays the SVG canvas.*/}
+				{/* Container for HTML elements that follow the scroll of the SVG canvas. */}
 				<HTMLElementsContainer
 					left={-minX}
 					top={-minY}
@@ -413,11 +385,12 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 					height={height + minY}
 				>
 					<TextEditor {...textEditorProps} />
+					<DiagramMenu {...diagramMenuProps} />
 				</HTMLElementsContainer>
+				{/* Container for HTML elements fixed to the viewport. */}
 				<ViewportOverlay>
 					<CanvasMenu onNewDiagram={onNewDiagram} />
 					<UserMenu />
-					<DiagramMenu {...diagramMenuProps} />
 					<ContextMenu {...contextMenuProps} />
 				</ViewportOverlay>
 			</Container>
