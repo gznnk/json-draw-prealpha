@@ -5,30 +5,8 @@ import { memo, useCallback } from "react";
 // Import other libraries.
 import styled from "@emotion/styled";
 
-/**
- * Context menu types.
- */
-export type ContextMenuType =
-	| "Undo"
-	| "Redo"
-	| "Copy"
-	| "Paste"
-	| "SelectAll"
-	| "Group"
-	| "Ungroup"
-	| "Delete";
-
-/**
- * Context menu state.
- */
-export type ContextMenuState = "Enable" | "Disable" | "Hidden";
-
-/**
- * Context menu state map.
- */
-export type ContextMenuStateMap = {
-	[key in ContextMenuType]: ContextMenuState;
-};
+// Imports related to this component.
+import type { ContextMenuStateMap, ContextMenuType } from "./types";
 
 /**
  * Properties for the ContextMenuDiv.
@@ -69,7 +47,7 @@ type ContextMenuProps = {
 /**
  * ContextMenu component.
  */
-const ContextMenu: React.FC<ContextMenuProps> = ({
+const ContextMenuComponent: React.FC<ContextMenuProps> = ({
 	x,
 	y,
 	menuStateMap,
@@ -110,7 +88,7 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
 	);
 };
 
-export default memo(ContextMenu);
+export const ContextMenu = memo(ContextMenuComponent);
 
 const ContextMenuItemDiv = styled.div`
 	font-size: 14px;

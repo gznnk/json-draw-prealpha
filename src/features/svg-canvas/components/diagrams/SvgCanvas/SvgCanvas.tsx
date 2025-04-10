@@ -9,30 +9,21 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Diagram, GroupData } from "../../../types/DiagramTypes";
+import type { Diagram } from "../../../types/DiagramTypes";
 import { DiagramTypeComponentMap } from "../../../types/DiagramTypes";
 import {
 	SVG_CANVAS_SCROLL_EVENT_NAME,
-	type ConnectPointsMoveEvent,
-	type DiagramChangeEvent,
-	type DiagramConnectEvent,
-	type DiagramDragDropEvent,
 	type DiagramDragEvent,
 	type DiagramSelectEvent,
 	type DiagramTextChangeEvent,
 	type DiagramTextEditEvent,
-	type DiagramTransformEvent,
-	type NewDiagramEvent,
 	type SvgCanvasResizeEvent,
 	type SvgCanvasScrollEvent,
 } from "../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor, type TextEditorProps } from "../../core/Textable";
-import ContextMenu, {
-	type ContextMenuStateMap,
-	type ContextMenuType,
-} from "../../menus/ContextMenu/ContextMenu";
+import { ContextMenu, useContextMenu } from "../../menus/ContextMenu";
 import DiagramMenu from "../../menus/DiagramMenu/DiagramMenu";
 import Group from "../../shapes/Group/Group";
 
@@ -45,7 +36,6 @@ import { getDiagramById, getSelectedItems } from "./functions";
 
 // Imports related to this component.
 import { CANVAS_EXPANSION_SIZE } from "./constants";
-import type { SvgCanvasHistory, SvgCanvasState } from "./types";
 import {
 	Container,
 	HTMLElementsContainer,
@@ -53,6 +43,7 @@ import {
 	Svg,
 	ViewportOverlay,
 } from "./styled";
+import type { SvgCanvasProps, SvgCanvasState } from "./types";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -60,78 +51,45 @@ export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
 );
 
 /**
- * SvgCanvasのプロパティの型定義
- */
-type SvgCanvasProps = {
-	title?: string;
-	minX: number;
-	minY: number;
-	width: number;
-	height: number;
-	items: Diagram[];
-	isDiagramChanging: boolean;
-	multiSelectGroup?: GroupData;
-	history: SvgCanvasHistory[];
-	historyIndex: number;
-	onTransform?: (e: DiagramTransformEvent) => void;
-	onDiagramChange?: (e: DiagramChangeEvent) => void;
-	onDrag?: (e: DiagramDragEvent) => void;
-	onDragEnd?: (e: DiagramDragEvent) => void;
-	onDrop?: (e: DiagramDragDropEvent) => void;
-	onSelect?: (e: DiagramSelectEvent) => void;
-	onSelectAll?: () => void;
-	onAllSelectionClear?: () => void;
-	onDelete?: () => void;
-	onConnect?: (e: DiagramConnectEvent) => void;
-	onConnectPointsMove?: (e: ConnectPointsMoveEvent) => void;
-	onTextEdit?: (e: DiagramTextEditEvent) => void;
-	onTextChange?: (e: DiagramTextChangeEvent) => void;
-	onGroup?: () => void;
-	onUngroup?: () => void;
-	onUndo?: () => void;
-	onRedo?: () => void;
-	onCanvasResize?: (e: SvgCanvasResizeEvent) => void;
-	onNewDiagram?: (e: NewDiagramEvent) => void;
-};
-
-/**
  * SvgCanvasコンポーネント
  */
-const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
-	title,
-	minX,
-	minY,
-	width,
-	height,
-	items,
-	isDiagramChanging,
-	multiSelectGroup,
-	history,
-	historyIndex,
-	onTransform,
-	onDiagramChange,
-	onDrag,
-	onDrop,
-	onSelect,
-	onSelectAll,
-	onAllSelectionClear,
-	onDelete,
-	onConnect,
-	onConnectPointsMove,
-	onTextEdit,
-	onTextChange,
-	onGroup,
-	onUngroup,
-	onUndo,
-	onRedo,
-	onCanvasResize,
-	onNewDiagram,
-}) => {
+const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	// In the SvgCanvas render function,
 	// we handle DOM events related to the SvgCanvas elements,
 	// process tasks that require element references,
 	// directly manipulate the DOM when needed,
 	// and pass the events to the hooks.
+
+	const {
+		title,
+		minX,
+		minY,
+		width,
+		height,
+		items,
+		isDiagramChanging,
+		multiSelectGroup,
+		// history,
+		// historyIndex,
+		onTransform,
+		onDiagramChange,
+		onDrag,
+		onDrop,
+		onSelect,
+		onSelectAll,
+		onAllSelectionClear,
+		onDelete,
+		onConnect,
+		onConnectPointsMove,
+		onTextEdit,
+		onTextChange,
+		// onGroup,
+		// onUngroup,
+		onUndo,
+		onRedo,
+		onCanvasResize,
+		onNewDiagram,
+	} = props;
 
 	// SVG要素のコンテナの参照
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -159,6 +117,10 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 	);
 	stateProvider.current.setState({ items } as SvgCanvasState);
 
+	// Use the context menu hook to handle context menu events.
+	const { contextMenuProps, contextMenuHandlers, contextMenuFunctions } =
+		useContextMenu(props);
+
 	/**
 	 * SvgCanvasのポインターダウンイベントハンドラ
 	 */
@@ -178,9 +140,9 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 				};
 			}
 
-			setContextMenu({ x: 0, y: 0, isVisible: false });
+			contextMenuFunctions.closeContextMenu();
 		},
-		[onAllSelectionClear],
+		[contextMenuFunctions, onAllSelectionClear],
 	);
 
 	/**
@@ -474,73 +436,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 		return React.createElement(itemType, props);
 	});
 
-	// --- Context Menu ---
-
-	// コンテキストメニューの状態
-	const [contextMenu, setContextMenu] = useState({
-		x: 0,
-		y: 0,
-		isVisible: false,
-	});
-
-	// Create a map of context menu states.
-	const selectedItems = getSelectedItems(items);
-	const isItemSelected = selectedItems.length > 0;
-	const isGroupSelected = selectedItems.some((item) => item.type === "Group");
-	const contextMenuStateMap = {
-		Undo: historyIndex > 0 ? "Enable" : "Disable",
-		Redo: historyIndex < history.length - 1 ? "Enable" : "Disable",
-		SelectAll: items.length > 0 ? "Enable" : "Disable",
-		Group: multiSelectGroup ? "Enable" : "Disable",
-		Ungroup: isGroupSelected ? "Enable" : "Disable",
-		Delete: isItemSelected ? "Enable" : "Disable",
-	} as ContextMenuStateMap;
-
-	/**
-	 * コンテキストメニュー表示時イベントハンドラ
-	 */
-	const handleContextMenu = useCallback(
-		(e: React.MouseEvent<SVGSVGElement>) => {
-			e.preventDefault();
-			const x = e.clientX;
-			const y = e.clientY;
-			setContextMenu({ x, y, isVisible: true });
-		},
-		[],
-	);
-
-	/**
-	 * コンテキストメニュークリックイベントハンドラ
-	 */
-	const handleContextMenuClick = useCallback(
-		(menuType: ContextMenuType) => {
-			switch (menuType) {
-				case "Undo":
-					onUndo?.();
-					break;
-				case "Redo":
-					onRedo?.();
-					break;
-				case "SelectAll":
-					onSelectAll?.();
-					break;
-				case "Group":
-					onGroup?.();
-					break;
-				case "Ungroup":
-					onUngroup?.();
-					break;
-				case "Delete":
-					onDelete?.();
-					break;
-				default:
-			}
-			setContextMenu({ x: 0, y: 0, isVisible: false });
-		},
-		[onUndo, onRedo, onSelectAll, onGroup, onUngroup, onDelete],
-	);
-
 	// --- Diagram Menu ---
+	const selectedItems = getSelectedItems(items);
 	const showDiagramMenu = selectedItems.length === 1 && !isDiagramChanging;
 	let diagramMenuProps = {
 		x: 0,
@@ -582,7 +479,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 						onPointerMove={handlePointerMove}
 						onPointerUp={handlePointerUp}
 						onKeyDown={handleKeyDown}
-						onContextMenu={handleContextMenu}
+						onContextMenu={contextMenuHandlers.onContextMenu}
 					>
 						<title>{title}</title>
 						{/* Render the items in the SvgCanvas. */}
@@ -618,11 +515,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = ({
 					<CanvasMenu onNewDiagram={onNewDiagram} />
 					<UserMenu />
 					<DiagramMenu {...diagramMenuProps} />
-					<ContextMenu
-						{...contextMenu}
-						menuStateMap={contextMenuStateMap}
-						onMenuClick={handleContextMenuClick}
-					/>
+					<ContextMenu {...contextMenuProps} />
 				</ViewportOverlay>
 			</Container>
 		</>
