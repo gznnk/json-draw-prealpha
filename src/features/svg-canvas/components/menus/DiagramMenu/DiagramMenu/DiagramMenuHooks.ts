@@ -1,5 +1,5 @@
 // Import React.
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 // TODO: 場所
 import { getSelectedItems } from "../../../diagrams/SvgCanvas/SvgCanvasFunctions";
@@ -20,14 +20,7 @@ import type { DiagramMenuProps, DiagramMenuStateMap } from "./DiagramMenuTypes";
 
 export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	// Extract properties from canvasProps.
-	const {
-		items,
-		isDiagramChanging,
-		multiSelectGroup,
-		onDiagramChange,
-		onGroup,
-		onUngroup,
-	} = canvasProps;
+	const { items, isDiagramChanging, multiSelectGroup } = canvasProps;
 
 	// Default menu props (invisible).
 	let diagramMenuProps = {
@@ -138,96 +131,111 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		}
 	}
 
-	diagramMenuProps.onMenuClick = useCallback(
-		(menuType: string) => {
-			switch (menuType) {
-				case "BgColor":
-					// Handle background color change.
-					break;
-				case "BorderColor":
-					// Handle border color change.
-					break;
-				case "FontSize":
-					// Handle font size change.
-					break;
-				case "Bold":
-					// Handle bold text change.
-					break;
-				case "FontColor":
-					// Handle font color change.
-					break;
-				case "AlignLeft":
-					// TODO: Generalize this code to avoid duplication.
-					for (const item of selectedItems) {
-						if (isTextableData(item)) {
-							onDiagramChange?.({
-								eventId: newEventId(),
-								eventType: "Immediate",
-								id: item.id,
-								startDiagram: item,
-								endDiagram: {
-									...item,
-									textAlign: "left",
-								},
-							});
-						}
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		// Component properties
+		canvasProps,
+		// Internal variables and functions
+		selectedItems,
+		menuStateMap,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
+	diagramMenuProps.onMenuClick = useCallback((menuType: string) => {
+		// Bypass references to avoid function creation in every render.
+		const {
+			canvasProps: { onDiagramChange, onGroup, onUngroup },
+			selectedItems,
+			menuStateMap,
+		} = refBus.current;
+
+		switch (menuType) {
+			case "BgColor":
+				// Handle background color change.
+				break;
+			case "BorderColor":
+				// Handle border color change.
+				break;
+			case "FontSize":
+				// Handle font size change.
+				break;
+			case "Bold":
+				// Handle bold text change.
+				break;
+			case "FontColor":
+				// Handle font color change.
+				break;
+			case "AlignLeft":
+				// TODO: Generalize this code to avoid duplication.
+				for (const item of selectedItems) {
+					if (isTextableData(item)) {
+						onDiagramChange?.({
+							eventId: newEventId(),
+							eventType: "Immediate",
+							id: item.id,
+							startDiagram: item,
+							endDiagram: {
+								...item,
+								textAlign: "left",
+							},
+						});
 					}
-					break;
-				case "AlignCenter":
-					// TODO: Generalize this code to avoid duplication.
-					for (const item of selectedItems) {
-						if (isTextableData(item)) {
-							onDiagramChange?.({
-								eventId: newEventId(),
-								eventType: "Immediate",
-								id: item.id,
-								startDiagram: item,
-								endDiagram: {
-									...item,
-									textAlign: "center",
-								},
-							});
-						}
+				}
+				break;
+			case "AlignCenter":
+				// TODO: Generalize this code to avoid duplication.
+				for (const item of selectedItems) {
+					if (isTextableData(item)) {
+						onDiagramChange?.({
+							eventId: newEventId(),
+							eventType: "Immediate",
+							id: item.id,
+							startDiagram: item,
+							endDiagram: {
+								...item,
+								textAlign: "center",
+							},
+						});
 					}
-					break;
-				case "AlignRight":
-					// TODO: Generalize this code to avoid duplication.
-					for (const item of selectedItems) {
-						if (isTextableData(item)) {
-							onDiagramChange?.({
-								eventId: newEventId(),
-								eventType: "Immediate",
-								id: item.id,
-								startDiagram: item,
-								endDiagram: {
-									...item,
-									textAlign: "right",
-								},
-							});
-						}
+				}
+				break;
+			case "AlignRight":
+				// TODO: Generalize this code to avoid duplication.
+				for (const item of selectedItems) {
+					if (isTextableData(item)) {
+						onDiagramChange?.({
+							eventId: newEventId(),
+							eventType: "Immediate",
+							id: item.id,
+							startDiagram: item,
+							endDiagram: {
+								...item,
+								textAlign: "right",
+							},
+						});
 					}
-					break;
-				case "AlignTop":
-					// Handle top alignment change.
-					break;
-				case "AlignMiddle":
-					// Handle middle alignment change.
-					break;
-				case "AlignBottom":
-					// Handle bottom alignment change.
-					break;
-				case "Group":
-					if (menuStateMap.Group === "Show") {
-						onGroup?.();
-					}
-					if (menuStateMap.Group === "Active") {
-						onUngroup?.();
-					}
-					break;
-			}
-		},
-		[onDiagramChange, selectedItems, menuStateMap, onGroup, onUngroup], // TODO: refBus使う
-	);
+				}
+				break;
+			case "AlignTop":
+				// Handle top alignment change.
+				break;
+			case "AlignMiddle":
+				// Handle middle alignment change.
+				break;
+			case "AlignBottom":
+				// Handle bottom alignment change.
+				break;
+			case "Group":
+				if (menuStateMap.Group === "Show") {
+					onGroup?.();
+				}
+				if (menuStateMap.Group === "Active") {
+					onUngroup?.();
+				}
+				break;
+		}
+	}, []);
 
 	return {
 		diagramMenuProps,

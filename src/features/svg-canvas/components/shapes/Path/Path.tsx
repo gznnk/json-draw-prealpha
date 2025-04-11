@@ -28,7 +28,11 @@ import type {
 import { useDrag } from "../../../hooks/dragHooks";
 
 // Import functions related to SvgCanvas.
-import { getCursorFromAngle, newId } from "../../../utils/Diagram";
+import {
+	getCursorFromAngle,
+	isItemableData,
+	newId,
+} from "../../../utils/Diagram";
 import {
 	calcPointsOuterShape,
 	calcRadians,
@@ -280,6 +284,8 @@ const Path: React.FC<PathProps> = ({
 	 */
 	const handleDiagramChangeBySegumentAndNewVertex = useCallback(
 		(e: DiagramChangeEvent) => {
+			if (!isItemableData(e.endDiagram)) return; // Type guard
+
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 
 			if (e.eventType === "End") {
