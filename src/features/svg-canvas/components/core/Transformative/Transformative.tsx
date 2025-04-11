@@ -1,8 +1,8 @@
-// Reactのインポート
+// Import React.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// SvgCanvas関連型定義をインポート
+// Import types related to SvgCanvas.
 import type { Point } from "../../../types/CoordinateTypes";
 import type {
 	DiagramType,
@@ -12,13 +12,13 @@ import type {
 } from "../../../types/DiagramTypes";
 import type { DiagramDragEvent, EventType } from "../../../types/EventTypes";
 
-// SvgCanvas関連コンポーネントをインポート
+// Import components related to SvgCanvas.
+import { BottomLabel } from "../BottomLabel";
 import { DragLine } from "../DragLine";
 import { DragPoint } from "../DragPoint";
 import { RotatePoint } from "../RotatePoint";
-import { BottomLabel } from "../BottomLabel";
 
-// SvgCanvas関連関数をインポート
+// Import functions related to SvgCanvas.
 import { createSvgTransform, getCursorFromAngle } from "../../../utils/Diagram";
 import {
 	affineTransformation,
@@ -34,8 +34,8 @@ import {
 	signNonZero,
 } from "../../../utils/Math";
 
-/** 回転ポイントのマージン */
-const ROTATE_POINT_MARGIN = 15;
+// Imports related to this component.
+import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
 
 /**
  * 変形コンポーネントのプロパティ
@@ -50,7 +50,7 @@ type Props = TransformativeData &
 /**
  * 変形コンポーネント
  */
-const Transformative: React.FC<Props> = ({
+const TransformativeComponent: React.FC<Props> = ({
 	id,
 	x,
 	y,
@@ -175,9 +175,53 @@ const Transformative: React.FC<Props> = ({
 		onTransform?.(event);
 	};
 
-	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
+	const setResizingByEvent = (eventType: EventType) => {
+		if (eventType === "Start") {
+			setIsResizing(true);
+		} else if (eventType === "End") {
+			setIsResizing(false);
+		}
+	};
+
+	/**
+	 * Calculates the height that maintains the original aspect ratio.
+	 *
+	 * @param width - The new width (can be negative when flipped)
+	 * @param aspectRatio - The original aspect ratio (width / height)
+	 * @param scaleX - Horizontal scaling factor (can include flip)
+	 * @param scaleY - Vertical scaling factor (can include flip)
+	 * @returns The calculated height, preserving the aspect ratio
+	 */
+	const calcHeightWithAspectRatio = (
+		width: number,
+		aspectRatio: number,
+		scaleX: number,
+		scaleY: number,
+	) => {
+		return nanToZero(width / aspectRatio) * scaleX * scaleY;
+	};
+
+	/**
+	 * Calculates the width that maintains the original aspect ratio.
+	 *
+	 * @param height - The new height (can be negative when flipped)
+	 * @param aspectRatio - The original aspect ratio (width / height)
+	 * @param scaleX - Horizontal scaling factor (can include flip)
+	 * @param scaleY - Vertical scaling factor (can include flip)
+	 * @returns The calculated width, preserving the aspect ratio
+	 */
+	const calcWidthWithAspectRatio = (
+		height: number,
+		aspectRatio: number,
+		scaleX: number,
+		scaleY: number,
+	) => {
+		return nanToZero(height * aspectRatio) * scaleX * scaleY;
+	};
+
+	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
-		// プロパティ
+		// Component properties
 		id,
 		x,
 		y,
@@ -187,7 +231,7 @@ const Transformative: React.FC<Props> = ({
 		scaleX,
 		scaleY,
 		onTransform,
-		// 内部変数・内部関数
+		// Internal variables and functions
 		vertices,
 		doKeepProportion,
 		isSwapped,
@@ -195,6 +239,9 @@ const Transformative: React.FC<Props> = ({
 		inverseAffineTransformationOnDrag,
 		triggerTransformStart,
 		triggerTransform,
+		setResizingByEvent,
+		calcHeightWithAspectRatio,
+		calcWidthWithAspectRatio,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -207,10 +254,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcHeightWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -223,10 +273,12 @@ const Transformative: React.FC<Props> = ({
 		const newWidth = inversedRightBottom.x - inversedDragPoint.x;
 		let newHeight: number;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newHeight =
-				nanToZero(newWidth / startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newHeight = calcHeightWithAspectRatio(
+				newWidth,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newHeight = inversedRightBottom.y - inversedDragPoint.y;
 		}
@@ -237,8 +289,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionLeftTop = useCallback(
@@ -259,10 +309,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcHeightWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -275,10 +328,12 @@ const Transformative: React.FC<Props> = ({
 		const newWidth = inversedRightTop.x - inversedDragPoint.x;
 		let newHeight: number;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newHeight =
-				nanToZero(newWidth / startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newHeight = calcHeightWithAspectRatio(
+				newWidth,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newHeight = inversedDragPoint.y - inversedRightTop.y;
 		}
@@ -289,8 +344,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionLeftBottom = useCallback(
@@ -311,10 +364,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcHeightWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -327,10 +383,12 @@ const Transformative: React.FC<Props> = ({
 		const newWidth = inversedDragPoint.x - inversedLeftBottom.x;
 		let newHeight: number;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newHeight =
-				nanToZero(newWidth / startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newHeight = calcHeightWithAspectRatio(
+				newWidth,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newHeight = inversedLeftBottom.y - inversedDragPoint.y;
 		}
@@ -341,8 +399,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionRightTop = useCallback(
@@ -363,10 +419,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcHeightWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -379,10 +438,12 @@ const Transformative: React.FC<Props> = ({
 		const newWidth = inversedDragPoint.x - inversedLeftTop.x;
 		let newHeight: number;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newHeight =
-				nanToZero(newWidth / startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newHeight = calcHeightWithAspectRatio(
+				newWidth,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newHeight = inversedDragPoint.y - inversedLeftTop.y;
 		}
@@ -393,8 +454,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionRightBottom = useCallback(
@@ -415,10 +474,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcWidthWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -431,10 +493,12 @@ const Transformative: React.FC<Props> = ({
 		let newWidth: number;
 		const newHeight = inversedBottomCenter.y - inversedDragPoint.y;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newWidth =
-				nanToZero(newHeight * startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newWidth = calcWidthWithAspectRatio(
+				newHeight,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newWidth = startShape.current.width * startShape.current.scaleX;
 		}
@@ -445,8 +509,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionTopCenter = useCallback(
@@ -472,10 +534,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcHeightWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -488,10 +553,12 @@ const Transformative: React.FC<Props> = ({
 		const newWidth = inversedRightCenter.x - inversedDragPoint.x;
 		let newHeight: number;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newHeight =
-				nanToZero(newWidth / startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newHeight = calcHeightWithAspectRatio(
+				newWidth,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newHeight = startShape.current.height * startShape.current.scaleY;
 		}
@@ -502,8 +569,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionLeftCenter = useCallback(
@@ -529,10 +594,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcHeightWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -545,10 +613,12 @@ const Transformative: React.FC<Props> = ({
 		const newWidth = inversedDragPoint.x - inversedLeftCenter.x;
 		let newHeight: number;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newHeight =
-				nanToZero(newWidth / startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newHeight = calcHeightWithAspectRatio(
+				newWidth,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newHeight = startShape.current.height * startShape.current.scaleY;
 		}
@@ -559,8 +629,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionRightCenter = useCallback(
@@ -586,10 +654,13 @@ const Transformative: React.FC<Props> = ({
 			affineTransformationOnDrag,
 			triggerTransformStart,
 			triggerTransform,
+			setResizingByEvent,
+			calcWidthWithAspectRatio,
 		} = refBus.current;
 
+		setResizingByEvent(e.eventType);
+
 		if (e.eventType === "Start") {
-			setIsResizing(true);
 			return triggerTransformStart(e.eventId);
 		}
 
@@ -602,10 +673,12 @@ const Transformative: React.FC<Props> = ({
 		let newWidth: number;
 		const newHeight = inversedDragPoint.y - inversedTopCenter.y;
 		if (doKeepProportion && startShape.current.aspectRatio) {
-			newWidth =
-				nanToZero(newHeight * startShape.current.aspectRatio) *
-				startShape.current.scaleX *
-				startShape.current.scaleY;
+			newWidth = calcWidthWithAspectRatio(
+				newHeight,
+				startShape.current.aspectRatio,
+				startShape.current.scaleX,
+				startShape.current.scaleY,
+			);
 		} else {
 			newWidth = startShape.current.width * startShape.current.scaleX;
 		}
@@ -616,8 +689,6 @@ const Transformative: React.FC<Props> = ({
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
 		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
-
-		if (e.eventType === "End") setIsResizing(false);
 	}, []);
 
 	const linerDragFunctionBottomCenter = useCallback(
@@ -774,7 +845,7 @@ const Transformative: React.FC<Props> = ({
 			</g>
 			{!isRotating && (
 				<>
-					{/* 上辺 */}
+					{/* Top DragLine */}
 					<DragLine
 						id={`${id}-topCenter-line`}
 						x={vertices.topCenterPoint.x}
@@ -787,7 +858,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragTopCenter}
 						dragPositioningFunction={linerDragFunctionTopCenter}
 					/>
-					{/* 左辺 */}
+					{/* Left DragLine */}
 					<DragLine
 						id={`${id}-leftCenter-line`}
 						x={vertices.leftCenterPoint.x}
@@ -800,7 +871,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragLeftCenter}
 						dragPositioningFunction={linerDragFunctionLeftCenter}
 					/>
-					{/* 右辺 */}
+					{/* Right DragLine */}
 					<DragLine
 						id={`${id}-rightCenter-line`}
 						x={vertices.rightCenterPoint.x}
@@ -813,7 +884,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragRightCenter}
 						dragPositioningFunction={linerDragFunctionRightCenter}
 					/>
-					{/* 下辺 */}
+					{/* Bottom DragLine */}
 					<DragLine
 						id={`${id}-bottomCenter-line`}
 						x={vertices.bottomCenterPoint.x}
@@ -826,7 +897,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragBottomCenter}
 						dragPositioningFunction={linerDragFunctionBottomCenter}
 					/>
-					{/* 左上 */}
+					{/* Left top DragPoint */}
 					<DragPoint
 						id={`${id}-leftTop`}
 						x={vertices.leftTopPoint.x}
@@ -837,7 +908,7 @@ const Transformative: React.FC<Props> = ({
 							doKeepProportion ? linerDragFunctionLeftTop : undefined
 						}
 					/>
-					{/* 左下 */}
+					{/* Right bottom DragPoint */}
 					<DragPoint
 						id={`${id}-leftBottom`}
 						x={vertices.leftBottomPoint.x}
@@ -848,7 +919,7 @@ const Transformative: React.FC<Props> = ({
 							doKeepProportion ? linerDragFunctionLeftBottom : undefined
 						}
 					/>
-					{/* 右上 */}
+					{/* Right top DragPoint */}
 					<DragPoint
 						id={`${id}-rightTop`}
 						x={vertices.rightTopPoint.x}
@@ -859,7 +930,7 @@ const Transformative: React.FC<Props> = ({
 							doKeepProportion ? linerDragFunctionRightTop : undefined
 						}
 					/>
-					{/* 右下 */}
+					{/* Right bottom DragPoint */}
 					<DragPoint
 						id={`${id}-rightBottom`}
 						x={vertices.rightBottomPoint.x}
@@ -870,7 +941,7 @@ const Transformative: React.FC<Props> = ({
 							doKeepProportion ? linerDragFunctionRightBottom : undefined
 						}
 					/>
-					{/* 上中央 */}
+					{/* Top center DragPoint */}
 					<DragPoint
 						id={`${id}-topCenter`}
 						x={vertices.topCenterPoint.x}
@@ -879,7 +950,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragTopCenter}
 						dragPositioningFunction={linerDragFunctionTopCenter}
 					/>
-					{/* 左中央 */}
+					{/* Left center DragPoint */}
 					<DragPoint
 						id={`${id}-leftCenter`}
 						x={vertices.leftCenterPoint.x}
@@ -888,7 +959,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragLeftCenter}
 						dragPositioningFunction={linerDragFunctionLeftCenter}
 					/>
-					{/* 右中央 */}
+					{/* Right center DragPoint */}
 					<DragPoint
 						id={`${id}-rightCenter`}
 						x={vertices.rightCenterPoint.x}
@@ -897,7 +968,7 @@ const Transformative: React.FC<Props> = ({
 						onDrag={handleDragRightCenter}
 						dragPositioningFunction={linerDragFunctionRightCenter}
 					/>
-					{/* 下中央 */}
+					{/* Bottom center DragPoint */}
 					<DragPoint
 						id={`${id}-bottomCenter`}
 						x={vertices.bottomCenterPoint.x}
@@ -935,4 +1006,4 @@ const Transformative: React.FC<Props> = ({
 	);
 };
 
-export default memo(Transformative);
+export const Transformative = memo(TransformativeComponent);

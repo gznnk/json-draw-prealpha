@@ -24,7 +24,7 @@ import type {
 import ConnectPoint from "../ConnectPoint/ConnectPoint";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
-import Transformative from "../../core/Transformative/Transformative";
+import { Transformative } from "../../core/Transformative";
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDrag } from "../../../hooks/dragHooks";
