@@ -8,126 +8,138 @@ import { degreesToRadians } from "../../../../utils/Math";
 import { newEventId } from "../../../../utils/Util";
 
 // Imports related to this component.
-import { TextEditorInput, TextEditorTextArea } from "./TextEditorStyled";
+import { Input, TextArea } from "./TextEditorStyled";
 import type { TextEditorProps } from "./TextEditorTypes";
 
-// TODO: きれいにする
 /**
- * テキストエディタコンポーネント
+ * TextEditor component.
  */
-const TextEditorComponent: React.FC<TextEditorProps> = memo(
-	({
-		id,
-		text,
-		x,
-		y,
-		width,
-		height,
+const TextEditorComponent: React.FC<TextEditorProps> = ({
+	id,
+	text,
+	x,
+	y,
+	width,
+	height,
+	scaleX,
+	scaleY,
+	rotation,
+	textType,
+	textAlign,
+	verticalAlign,
+	fontColor,
+	fontSize,
+	fontFamily,
+	isActive,
+	onTextChange,
+}) => {
+	// State for input text.
+	const [inputText, setInputText] = useState(text);
+
+	// Refs for input and textarea elements.
+	// These refs are used to focus the input or textarea when the component is active.
+	const inputRef = useRef<HTMLInputElement>(null);
+	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+	// Focus the input or textarea when the component is active.
+	useEffect(() => {
+		if (isActive) {
+			setInputText(text);
+			if (textType === "textarea") {
+				textAreaRef.current?.focus();
+				// Set the selection range to the end of the text in the textarea.
+				textAreaRef.current?.setSelectionRange(text.length, text.length);
+			} else {
+				inputRef.current?.focus();
+				// Set the selection range to the end of the text in the input.
+				inputRef.current?.setSelectionRange(text.length, text.length);
+			}
+		} else {
+			setInputText("");
+		}
+	}, [isActive, text, textType]);
+
+	// Hide the thext editor when not active.
+	if (!isActive) return null;
+
+	/**
+	 * Handle text change event for textarea.
+	 */
+	const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setInputText(e.target.value);
+	};
+
+	/**
+	 * Handle blur event for textarea.
+	 */
+	const handleTextAreaBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+		onTextChange?.({
+			eventId: newEventId(),
+			id,
+			text: e.target.value,
+		});
+	};
+
+	/**
+	 * Handle text change event for input.
+	 */
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setInputText(e.target.value);
+	};
+
+	/**
+	 * Handle blur event for input.
+	 */
+	const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		onTextChange?.({
+			eventId: newEventId(),
+			id,
+			text: e.target.value,
+		});
+	};
+
+	// Transform for the element.
+	const transform = createSvgTransform(
 		scaleX,
 		scaleY,
-		rotation,
-		textType,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
+
+	// Commom properties for both input and textarea.
+	const commonProps = {
+		value: inputText,
+		left: -width / 2,
+		top: -height / 2,
+		transform,
+		width,
+		height,
 		textAlign,
 		verticalAlign,
-		fontColor,
+		color: fontColor,
 		fontSize,
 		fontFamily,
-		isActive,
-		onTextChange,
-	}) => {
-		const inputRef = useRef<HTMLInputElement>(null);
-		const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	};
 
-		const [inputText, setInputText] = useState(text);
-
-		useEffect(() => {
-			if (isActive) {
-				setInputText(text);
-				if (textType === "textarea") {
-					textAreaRef.current?.focus();
-					textAreaRef.current?.setSelectionRange(text.length, text.length);
-				} else {
-					inputRef.current?.focus();
-					inputRef.current?.setSelectionRange(text.length, text.length);
-				}
-			} else {
-				setInputText("");
-			}
-		}, [isActive, text, textType]);
-
-		if (!isActive) return null;
-
-		const transform = createSvgTransform(
-			scaleX,
-			scaleY,
-			degreesToRadians(rotation),
-			x,
-			y,
-		);
-
-		const handleTextAreaChange = (
-			e: React.ChangeEvent<HTMLTextAreaElement>,
-		) => {
-			setInputText(e.target.value);
-		};
-
-		const handleTextAreaBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
-			onTextChange?.({
-				eventId: newEventId(),
-				id,
-				text: e.target.value,
-			});
-		};
-
-		const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-			setInputText(e.target.value);
-		};
-
-		const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-			onTextChange?.({
-				eventId: newEventId(),
-				id,
-				text: e.target.value,
-			});
-		};
-
-		return textType === "textarea" ? (
-			<TextEditorTextArea
-				value={inputText}
-				left={-width / 2}
-				top={-height / 2}
-				transform={transform}
-				width={width}
-				height={height}
-				textAlign={textAlign}
-				verticalAlign={verticalAlign}
-				color={fontColor}
-				fontSize={fontSize}
-				fontFamily={fontFamily}
-				ref={textAreaRef}
-				onChange={handleTextAreaChange}
-				onBlur={handleTextAreaBlur}
-			/>
-		) : (
-			<TextEditorInput
-				type="text"
-				value={inputText}
-				left={-width / 2}
-				top={-height / 2}
-				transform={transform}
-				width={width}
-				height={height}
-				textAlign={textAlign}
-				verticalAlign={verticalAlign}
-				color={fontColor}
-				fontSize={fontSize}
-				fontFamily={fontFamily}
-				ref={inputRef}
-				onChange={handleInputChange}
-				onBlur={handleInputBlur}
-			/>
-		);
-	},
-);
+	return textType === "textarea" ? (
+		<TextArea
+			{...commonProps}
+			// Additional properties for textarea.
+			ref={textAreaRef}
+			onChange={handleTextAreaChange}
+			onBlur={handleTextAreaBlur}
+		/>
+	) : (
+		<Input
+			{...commonProps}
+			// Additional properties for input.
+			type="text"
+			ref={inputRef}
+			onChange={handleInputChange}
+			onBlur={handleInputBlur}
+		/>
+	);
+};
 
 export const TextEditor = memo(TextEditorComponent);

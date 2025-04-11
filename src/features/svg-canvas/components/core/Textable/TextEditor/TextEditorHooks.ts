@@ -24,7 +24,7 @@ export const useTextEditor = (canvasProps: SvgCanvasProps) => {
 	} as TextEditorProps);
 
 	/**
-	 * 図形のテキスト編集イベントハンドラ
+	 * Handle text edit event.
 	 */
 	const handleTextEdit = useCallback(
 		(e: DiagramTextEditEvent) => {
@@ -43,7 +43,7 @@ export const useTextEditor = (canvasProps: SvgCanvasProps) => {
 	);
 
 	/**
-	 * テキスト変更イベントハンドラ
+	 * Handle text change event.
 	 */
 	const handleTextChange = useCallback(
 		(e: DiagramTextChangeEvent) => {

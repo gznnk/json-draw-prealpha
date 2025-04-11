@@ -20,7 +20,7 @@ type TextEditorStyledProps = {
 /**
  * Styled input element for the text editor.
  */
-export const TextEditorInput = styled.input<TextEditorStyledProps>`
+export const Input = styled.input<TextEditorStyledProps>`
     position: absolute;
     left: ${(props) => props.left}px;
     top: ${(props) => props.top}px;
@@ -45,7 +45,7 @@ export const TextEditorInput = styled.input<TextEditorStyledProps>`
 /**
  * Styled textarea element for the text editor.
  */
-export const TextEditorTextArea = styled.textarea<TextEditorStyledProps>`
+export const TextArea = styled.textarea<TextEditorStyledProps>`
     position: absolute;
     left: ${(props) => props.left}px;
     top: ${(props) => props.top}px;
