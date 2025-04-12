@@ -40,6 +40,7 @@ import {
 	newId,
 } from "../../../utils/Diagram";
 import { calcPointsOuterShape } from "../../../utils/Math";
+import { deepCopy, newEventId } from "../../../utils/Util";
 import {
 	addHistory,
 	applyMultiSelectSourceRecursive,
@@ -50,9 +51,9 @@ import {
 	removeGroupedRecursive,
 	ungroupSelectedGroupsRecursive,
 } from "./SvgCanvasFunctions";
-import { deepCopy, newEventId } from "../../../utils/Util";
 
 // Imports related to this component.
+import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
 
 // TODO: 精査
@@ -197,7 +198,7 @@ export const useSvgCanvas = (
 			let items = prevState.items;
 			let multiSelectGroup: GroupData | undefined = prevState.multiSelectGroup;
 
-			if (e.id === "MultiSelectGroup") {
+			if (e.id === MULTI_SELECT_GROUP) {
 				// 複数選択グループの変更の場合、複数選択グループ内の図形を更新
 				multiSelectGroup = {
 					...multiSelectGroup,
@@ -262,7 +263,7 @@ export const useSvgCanvas = (
 	 */
 	const onSelect = useCallback((e: DiagramSelectEvent) => {
 		// 複数選択グループ自身の選択イベントは無視
-		if (e.id === "MultiSelectGroup") return;
+		if (e.id === MULTI_SELECT_GROUP) return;
 
 		setCanvasState((prevState) => {
 			let items = applyRecursive(prevState.items, (item) => {
@@ -306,6 +307,7 @@ export const useSvgCanvas = (
 				// 複数選択グループの初期値を作成
 				const box = calcGroupBoxOfNoRotation(selectedItems);
 				multiSelectGroup = {
+					id: MULTI_SELECT_GROUP,
 					x: box.left + (box.right - box.left) / 2,
 					y: box.top + (box.bottom - box.top) / 2,
 					width: box.right - box.left,
@@ -313,7 +315,7 @@ export const useSvgCanvas = (
 					rotation: 0,
 					scaleX: 1,
 					scaleY: 1,
-					keepProportion: false,
+					keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
 					isSelected: true, // 複数選択用のグループは常に選択状態にする
 					isMultiSelectSource: false, // 複数選択の選択元ではないと設定
 					items: applyRecursive(selectedItems, (item) => {
@@ -372,6 +374,7 @@ export const useSvgCanvas = (
 			const box = calcGroupBoxOfNoRotation(items);
 
 			const multiSelectGroup = {
+				id: MULTI_SELECT_GROUP,
 				x: box.left + (box.right - box.left) / 2,
 				y: box.top + (box.bottom - box.top) / 2,
 				width: box.right - box.left,
@@ -379,7 +382,7 @@ export const useSvgCanvas = (
 				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
-				keepProportion: false,
+				keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
 				isSelected: true, // 複数選択用のグループは常に選択状態にする
 				isMultiSelectSource: false, // 複数選択の選択元ではないと設定
 				items: applyRecursive(items, (item) => {
@@ -573,7 +576,8 @@ export const useSvgCanvas = (
 				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
-				keepProportion: false,
+				// Inherit the "Keep aspect ratio" setting when multiple items are selected.
+				keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
 				isSelected: true,
 				isMultiSelectSource: false,
 				items: selectedItems.map((item) => ({

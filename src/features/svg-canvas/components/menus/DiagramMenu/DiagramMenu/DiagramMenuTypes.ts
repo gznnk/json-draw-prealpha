@@ -29,6 +29,7 @@ export type DiagramMenuType =
 	| "AlignTop"
 	| "AlignMiddle"
 	| "AlignBottom"
+	| "KeepAspectRatio"
 	| "Group";
 
 /**

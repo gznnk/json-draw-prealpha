@@ -49,13 +49,14 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		AlignTop: "Hidden",
 		AlignMiddle: "Hidden",
 		AlignBottom: "Hidden",
+		KeepAspectRatio: "Hidden",
 		Group: "Hidden",
 	} as DiagramMenuStateMap;
 
 	// Get selected items and check if the diagram menu should be shown.
 	const selectedItems = getSelectedItems(items);
 	const showDiagramMenu = 0 < selectedItems.length && !isDiagramChanging;
-	const diagram = selectedItems[0];
+	const singleSelectedItem = selectedItems[0];
 
 	// If the diagram menu should be shown, set the properties for the menu.
 	if (showDiagramMenu) {
@@ -114,14 +115,31 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			}
 		}
 
+		// Set the keep aspect ratio state.
+		if (multiSelectGroup) {
+			// Indicates this the condition is for multiple selection.
+			// When multiple items are selected, use the multiSelectGroup properties.
+			menuStateMap.KeepAspectRatio = multiSelectGroup.keepProportion
+				? "Active"
+				: "Show";
+		} else if (isTransformativeData(singleSelectedItem)) {
+			menuStateMap.KeepAspectRatio = singleSelectedItem.keepProportion
+				? "Active"
+				: "Show";
+		}
+
 		// Set the group menu state.
 		if (multiSelectGroup) {
+			// Indicates this the condition is for multiple selection.
+			// When multiple items are selected, activate the group menu to group the selected items.
 			menuStateMap.Group = "Show";
-		} else if (diagram.type === "Group") {
+		} else if (singleSelectedItem.type === "Group") {
 			menuStateMap.Group = "Active";
 		}
 
 		if (multiSelectGroup) {
+			// Indicates this the condition is for multiple selection.
+			// When multiple items are selected, use the multiSelectGroup properties.
 			const { x, y, width, height, rotation, scaleX, scaleY } =
 				multiSelectGroup;
 			diagramMenuProps = {
@@ -137,15 +155,16 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				onMenuClick: (_menuType: string) => {}, // Temporarily empty.
 			};
 		} else {
-			if (isTransformativeData(diagram)) {
+			// When a single item is selected, use the properties of the selected item.
+			if (isTransformativeData(singleSelectedItem)) {
 				diagramMenuProps = {
-					x: diagram.x,
-					y: diagram.y,
-					width: diagram.width,
-					height: diagram.height,
-					rotation: diagram.rotation,
-					scaleX: diagram.scaleX,
-					scaleY: diagram.scaleY,
+					x: singleSelectedItem.x,
+					y: singleSelectedItem.y,
+					width: singleSelectedItem.width,
+					height: singleSelectedItem.height,
+					rotation: singleSelectedItem.rotation,
+					scaleX: singleSelectedItem.scaleX,
+					scaleY: singleSelectedItem.scaleY,
 					isVisible: true,
 					menuStateMap,
 					onMenuClick: (_menuType: string) => {}, // Temporarily empty.
@@ -154,9 +173,10 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		}
 	}
 
-	const changeRecursive = (
+	const changeItems = (
 		items: Diagram[],
 		data: Partial<Diagram>,
+		recursively = true,
 		eventId: string = newEventId(),
 	) => {
 		for (const item of items) {
@@ -177,9 +197,9 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				endDiagram: newItem,
 			});
 
-			if (isItemableData(newItem)) {
+			if (recursively && isItemableData(newItem)) {
 				// Check if the item has children and recursively change their properties.
-				changeRecursive(newItem.items, data, eventId);
+				changeItems(newItem.items, data, recursively, eventId);
 			}
 		}
 	};
@@ -191,7 +211,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		// Internal variables and functions
 		selectedItems,
 		menuStateMap,
-		changeRecursive,
+		changeItems,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -199,10 +219,10 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	diagramMenuProps.onMenuClick = useCallback((menuType: string) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			canvasProps: { onGroup, onUngroup },
+			canvasProps: { multiSelectGroup, onDiagramChange, onGroup, onUngroup },
 			selectedItems,
 			menuStateMap,
-			changeRecursive,
+			changeItems,
 		} = refBus.current;
 
 		switch (menuType) {
@@ -216,7 +236,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				// Handle font size change.
 				break;
 			case "Bold":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					fontWeight: menuStateMap.Bold === "Active" ? "normal" : "bold",
 				});
 				break;
@@ -224,34 +244,56 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				// Handle font color change.
 				break;
 			case "AlignLeft":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					textAlign: "left",
 				});
 				break;
 			case "AlignCenter":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					textAlign: "center",
 				});
 				break;
 			case "AlignRight":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					textAlign: "right",
 				});
 				break;
 			case "AlignTop":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					verticalAlign: "top",
 				});
 				break;
 			case "AlignMiddle":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					verticalAlign: "center",
 				});
 				break;
 			case "AlignBottom":
-				changeRecursive(selectedItems, {
+				changeItems(selectedItems, {
 					verticalAlign: "bottom",
 				});
+				break;
+			case "KeepAspectRatio":
+				if (multiSelectGroup) {
+					onDiagramChange?.({
+						eventId: newEventId(),
+						eventType: "Immediate",
+						id: multiSelectGroup.id,
+						startDiagram: multiSelectGroup,
+						endDiagram: {
+							...multiSelectGroup,
+							keepProportion: menuStateMap.KeepAspectRatio !== "Active",
+						},
+					});
+				} else {
+					changeItems(
+						selectedItems,
+						{
+							keepProportion: menuStateMap.KeepAspectRatio !== "Active",
+						},
+						false,
+					);
+				}
 				break;
 			case "Group":
 				if (menuStateMap.Group === "Show") {

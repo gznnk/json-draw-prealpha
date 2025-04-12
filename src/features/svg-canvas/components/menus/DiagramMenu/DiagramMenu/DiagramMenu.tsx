@@ -3,6 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import components related to SvgCanvas.
+import { AspectRatio } from "../../../icons/AspectRatio";
 import { AlignCenter } from "../../../icons/AlignCenter";
 import { AlignLeft } from "../../../icons/AlignLeft";
 import { AlignRight } from "../../../icons/AlignRight";
@@ -155,6 +156,20 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				>
 					<VerticalAlignBottom />
 				</DiagramMenuItem>
+				{menuStateMap.KeepAspectRatio !== "Hidden" && (
+					<>
+						<DiagramMenuDivider />
+						<DiagramMenuItem
+							menuType="KeepAspectRatio"
+							tooltip="アスペクト比維持"
+							viewBox="0 0 16 16"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<AspectRatio />
+						</DiagramMenuItem>
+					</>
+				)}
 				{menuStateMap.Group !== "Hidden" && (
 					<>
 						<DiagramMenuDivider />

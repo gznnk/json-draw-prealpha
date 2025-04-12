@@ -16,6 +16,7 @@ type DiagramMenuItemProps = {
 	menuType: DiagramMenuType;
 	menuStateMap: DiagramMenuStateMap;
 	tooltip: string;
+	viewBox?: string;
 	children: React.ReactNode;
 	onMenuClick: (menuType: DiagramMenuType) => void;
 };
@@ -27,6 +28,7 @@ const DiagramMenuItemComponent: React.FC<DiagramMenuItemProps> = ({
 	menuType,
 	menuStateMap,
 	tooltip,
+	viewBox = "0 0 1024 1024",
 	children,
 	onMenuClick,
 }) => {
@@ -42,7 +44,7 @@ const DiagramMenuItemComponent: React.FC<DiagramMenuItemProps> = ({
 			className={menuState === "Active" ? "active" : ""}
 			onClick={handleMenuClick}
 		>
-			<svg viewBox="0 0 1024 1024" width="100%" height="100%">
+			<svg viewBox={viewBox} width="100%" height="100%">
 				<title>{tooltip}</title>
 				{children}
 			</svg>

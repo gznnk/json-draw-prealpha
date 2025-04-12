@@ -31,7 +31,10 @@ import UserMenu from "../../menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
-import { CANVAS_EXPANSION_SIZE } from "./SvgCanvasConstants";
+import {
+	CANVAS_EXPANSION_SIZE,
+	MULTI_SELECT_GROUP,
+} from "./SvgCanvasConstants";
 import {
 	Container,
 	HTMLElementsContainer,
@@ -366,7 +369,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 							<MultiSelectGroupContainer>
 								<Group
 									{...multiSelectGroup}
-									id="MultiSelectGroup"
+									id={MULTI_SELECT_GROUP}
 									syncWithSameId
 									onSelect={handleSelect}
 									onTransform={onTransform}
