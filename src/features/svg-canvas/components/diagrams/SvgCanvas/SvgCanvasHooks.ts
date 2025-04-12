@@ -321,6 +321,11 @@ export const useSvgCanvas = (
 			// 複数選択の場合は、選択されている図形をグループ化
 			let multiSelectGroup: GroupData | undefined = undefined;
 			if (1 < selectedItems.length) {
+				if (selectedItems.some((item) => item.type === "ConnectLine")) {
+					// 複数選択の中に接続線が含まれている場合はグループ化させず、選択状態を変更しない
+					return prevState;
+				}
+
 				// 複数選択グループの初期値を作成
 				const box = calcGroupBoxOfNoRotation(selectedItems);
 				multiSelectGroup = {
@@ -376,19 +381,36 @@ export const useSvgCanvas = (
 	 */
 	const onSelectAll = useCallback(() => {
 		setCanvasState((prevState) => {
-			// TODO: グループの場合はグループ内の図形は選択状態にしない.してないことが原因で、グループ化後のドラッグ時エラーがでてると思われる
-			const items = applyRecursive(prevState.items, (item) => {
-				if (isSelectableData(item)) {
+			let items = prevState.items.map((item) => {
+				if (!isSelectableData(item)) {
+					// Ignore non-selectable items.
+					return item;
+				}
+				if (item.type === "ConnectLine") {
 					return {
 						...item,
-						isSelected: true,
-						isMultiSelectSource: true,
+						isSelected: false, // Deselect ConnectLine items.
 					};
 				}
-				return item;
+				return {
+					...item,
+					isSelected: true,
+				};
 			});
 
-			const box = calcGroupBoxOfNoRotation(items);
+			// Set `isMultiSelectSource` to true to hide the transform outline of the original diagrams during multi-selection.
+			items = applyMultiSelectSourceRecursive(items);
+
+			// Create a multi-select group's items.
+			const multiSelectGroupItems = items.filter(
+				(item) => item.type !== "ConnectLine",
+			) as Diagram[]; // Filter out ConnectLine items.
+			if (multiSelectGroupItems.length < 2) {
+				// If there are less than 2 items, do not create a multi-select group.
+				return prevState;
+			}
+
+			const box = calcGroupBoxOfNoRotation(multiSelectGroupItems);
 
 			const multiSelectGroup = {
 				id: MULTI_SELECT_GROUP,
@@ -402,7 +424,7 @@ export const useSvgCanvas = (
 				keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
 				isSelected: true, // 複数選択用のグループは常に選択状態にする
 				isMultiSelectSource: false, // 複数選択の選択元ではないと設定
-				items: applyRecursive(items, (item) => {
+				items: applyRecursive(multiSelectGroupItems, (item) => {
 					if (!isSelectableData(item)) {
 						return item;
 					}
