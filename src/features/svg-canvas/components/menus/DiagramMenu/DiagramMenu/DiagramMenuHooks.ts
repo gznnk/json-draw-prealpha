@@ -72,9 +72,11 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 	// If the diagram menu should be shown, set the properties for the menu.
 	if (showDiagramMenu) {
-		const firstTextableItem = findFirstTextableRecursive(
-			selectedItems,
-		) as TextableData;
+		// Find the first textable item in the selected items.
+		// This is used to determine the font size and other text-related properties.
+		const firstTextableItem = findFirstTextableRecursive(selectedItems) as
+			| TextableData
+			| undefined;
 
 		if (firstTextableItem) {
 			menuStateMap.FontSize = "Show";
@@ -171,9 +173,9 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 					scaleY: singleSelectedItem.scaleY,
 					isVisible: true,
 					menuStateMap,
-					fontSize: isTextableData(singleSelectedItem)
-						? singleSelectedItem.fontSize
-						: 0,
+					// Because the font size menu is not shown when no textable item is selected,
+					// the font size is set to 0 if no textable item is selected.
+					fontSize: firstTextableItem?.fontSize ?? 0,
 					// Temporarily empty.
 					onMenuClick: (_menuType: string) => {},
 					onFontSizeChange: (_fontSize: number) => {},
