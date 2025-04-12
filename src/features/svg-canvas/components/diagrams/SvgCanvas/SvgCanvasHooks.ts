@@ -564,20 +564,18 @@ export const useSvgCanvas = (
 				return prevState;
 			}
 
-			// 新しいグループを作成
-			const box = calcGroupBoxOfNoRotation(selectedItems);
+			if (!prevState.multiSelectGroup) {
+				// Type checking for multiSelectGroup.
+				// If this is the case, it means that the canvas state is invalid.
+				console.error("Invalid multiSelectGroup state.");
+				return prevState;
+			}
+
+			// Create a new group data.
 			const group: GroupData = {
+				...prevState.multiSelectGroup,
 				id: newId(),
 				type: "Group",
-				x: box.left + (box.right - box.left) / 2,
-				y: box.top + (box.bottom - box.top) / 2,
-				width: box.right - box.left,
-				height: box.bottom - box.top,
-				rotation: 0,
-				scaleX: 1,
-				scaleY: 1,
-				// Inherit the "Keep aspect ratio" setting when multiple items are selected.
-				keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
 				isSelected: true,
 				isMultiSelectSource: false,
 				items: selectedItems.map((item) => ({
