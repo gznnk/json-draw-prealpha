@@ -24,7 +24,6 @@ import Ellipse from "../components/shapes/Ellipse/Ellipse";
 import Group from "../components/shapes/Group/Group";
 import { Path, PathPoint } from "../components/shapes/Path";
 import Rectangle from "../components/shapes/Rectangle/Rectangle";
-import TextGenerator from "../components/diagrams/TextGenerator/TextGenerator";
 
 /**
  * 図形の形状
@@ -49,8 +48,7 @@ export type DiagramType =
 	| "Group"
 	| "Path"
 	| "PathPoint"
-	| "Rectangle"
-	| "TextGenerator";
+	| "Rectangle";
 
 /**
  * 図形の基本データ
@@ -375,5 +373,4 @@ export const DiagramTypeComponentMap: {
 	Path: Path,
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
-	TextGenerator: TextGenerator,
 };
