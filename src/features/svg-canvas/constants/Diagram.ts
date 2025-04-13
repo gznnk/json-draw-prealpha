@@ -9,7 +9,6 @@ import type {
 	TextableData,
 	RectangleData,
 	EllipseData,
-	PathData,
 } from "../types/DiagramTypes";
 
 /**
@@ -75,7 +74,7 @@ export const DEFAULT_TEXTABLE_DATA = {
 	textType: "textarea",
 	fontColor: "#000000",
 	fontSize: 16,
-	fontFamily: "Arial",
+	fontFamily: "Segoe UI",
 	fontWeight: "normal",
 	textAlign: "center",
 	verticalAlign: "center",
@@ -111,15 +110,3 @@ export const DEFAULT_ELLIPSE_DATA = {
 	...DEFAULT_TEXTABLE_DATA,
 	type: "Ellipse",
 } as const satisfies EllipseData;
-
-/**
- * Default path data.
- */
-export const DEFAULT_PATH_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_ITEMABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
-	type: "Path",
-} as const satisfies PathData;

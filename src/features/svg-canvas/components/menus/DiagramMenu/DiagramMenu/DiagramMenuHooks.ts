@@ -24,6 +24,7 @@ import { newEventId } from "../../../../utils/Util";
 // Imports related to this component.
 import {
 	findFirstFillableRecursive,
+	findFirstStrokableRecursive,
 	findFirstTextableRecursive,
 } from "./DiagramMenuFunctions";
 import type {
@@ -96,7 +97,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 		// Find the first strokable item in the selected items.
 		// This is used to determine the border color menu state.
-		const firstStrokableItem = findFirstFillableRecursive(selectedItems) as
+		const firstStrokableItem = findFirstStrokableRecursive(selectedItems) as
 			| StrokableData
 			| undefined;
 		if (firstStrokableItem) {

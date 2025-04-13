@@ -40,6 +40,23 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 					<ellipse cx="12" cy="12" rx="10" ry="10" fill="none" stroke="black" />
 				</svg>
 			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						diagramType: "Path",
+					})
+				}
+			>
+				<svg width="20" height="20" viewBox="0 0 24 24">
+					<title>線を追加</title>
+					<path
+						d="M22 22 L2 2 Z"
+						fill="none"
+						stroke="black"
+						strokeWidth="1px"
+					/>
+				</svg>
+			</CanvasMenuItem>
 		</CanvasMenuDiv>
 	);
 };

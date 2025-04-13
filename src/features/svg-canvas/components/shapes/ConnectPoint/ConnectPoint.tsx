@@ -20,7 +20,7 @@ import type {
 
 // SvgCanvas関連コンポーネントをインポート
 import { DragPoint } from "../../core/DragPoint";
-import Path from "../Path/Path";
+import { Path } from "../Path";
 
 // SvgCanvas関連関数をインポート
 import {

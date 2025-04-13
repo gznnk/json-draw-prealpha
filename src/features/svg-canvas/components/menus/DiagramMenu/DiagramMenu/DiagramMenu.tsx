@@ -9,7 +9,7 @@ import { AlignRight } from "../../../icons/AlignRight";
 import { AspectRatio } from "../../../icons/AspectRatio";
 import { BgColor } from "../../../icons/BgColor";
 import { Bold } from "../../../icons/Bold";
-import { Border } from "../../../icons/Border";
+import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { Group } from "../../../icons/Group";
@@ -32,7 +32,7 @@ import {
 	DiagramMenuPositioner,
 	DiagramMenuWrapper,
 } from "./DiagramMenuStyled";
-import type { DiagramMenuProps } from "./DiagramMenuTypes";
+import type { DiagramMenuProps, DiagramMenuType } from "./DiagramMenuTypes";
 import { ColorPicker } from "../ColorPicker";
 
 const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
@@ -73,127 +73,178 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			return Math.max(max, vertex.y);
 		}, Number.NEGATIVE_INFINITY) + 20;
 
+	const showSection = (...menuTypes: DiagramMenuType[]) => {
+		return menuTypes.some((menuType) => menuStateMap[menuType] !== "Hidden");
+	};
+
+	const showFillableAndStrokableSection = showSection("BgColor", "BorderColor");
+	const showTextAppearanceSection = showSection(
+		"FontSize",
+		"FontColor",
+		"Bold",
+	);
+	const showTextAlignmentSection = showSection(
+		"AlignLeft",
+		"AlignCenter",
+		"AlignRight",
+	);
+	const showTextVerticalAlignmentSection = showSection(
+		"AlignTop",
+		"AlignMiddle",
+		"AlignBottom",
+	);
+	const showKeepAspectRatioSection = showSection("KeepAspectRatio");
+	const showGroupSection = showSection("Group");
+
 	return (
 		<DiagramMenuWrapper x={x} y={menuY}>
 			<DiagramMenuDiv>
-				<DiagramMenuPositioner>
-					<DiagramMenuItem
-						menuType="BgColor"
-						tooltip="背景色"
-						menuStateMap={menuStateMap}
-						onMenuClick={onMenuClick}
-					>
-						<BgColor />
-					</DiagramMenuItem>
-					{menuStateMap.BgColor === "Active" && (
-						<ColorPicker color={bgColor} onColorChange={onBgColorChange} />
-					)}
-				</DiagramMenuPositioner>
-				<DiagramMenuPositioner>
-					<DiagramMenuItem
-						menuType="BorderColor"
-						tooltip="枠線の色"
-						menuStateMap={menuStateMap}
-						onMenuClick={onMenuClick}
-					>
-						<Border />
-					</DiagramMenuItem>
-					{menuStateMap.BorderColor === "Active" && (
-						<ColorPicker
-							color={borderColor}
-							onColorChange={onBorderColorChange}
-						/>
-					)}
-				</DiagramMenuPositioner>
-				<DiagramMenuDivider />
-				<DiagramMenuPositioner>
-					<DiagramMenuItem
-						menuType="FontSize"
-						tooltip="フォントサイズ"
-						menuStateMap={menuStateMap}
-						onMenuClick={onMenuClick}
-					>
-						<FontSize />
-					</DiagramMenuItem>
-					{menuStateMap.FontSize === "Active" && (
-						<FontSizeSelector
-							fontSize={fontSize}
-							onFontSizeChange={onFontSizeChange}
-						/>
-					)}
-				</DiagramMenuPositioner>
-				<DiagramMenuItem
-					menuType="Bold"
-					tooltip="太字"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<Bold />
-				</DiagramMenuItem>
-				<DiagramMenuPositioner>
-					<DiagramMenuItem
-						menuType="FontColor"
-						tooltip="フォントの色"
-						menuStateMap={menuStateMap}
-						onMenuClick={onMenuClick}
-					>
-						<FontColor />
-					</DiagramMenuItem>
-					{menuStateMap.FontColor === "Active" && (
-						<ColorPicker color={fontColor} onColorChange={onFontColorChange} />
-					)}
-				</DiagramMenuPositioner>
-				<DiagramMenuDivider />
-				<DiagramMenuItem
-					menuType="AlignLeft"
-					tooltip="左揃え"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<AlignLeft />
-				</DiagramMenuItem>
-				<DiagramMenuItem
-					menuType="AlignCenter"
-					tooltip="中央揃え"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<AlignCenter />
-				</DiagramMenuItem>
-				<DiagramMenuItem
-					menuType="AlignRight"
-					tooltip="右揃え"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<AlignRight />
-				</DiagramMenuItem>
-				<DiagramMenuDivider />
-				<DiagramMenuItem
-					menuType="AlignTop"
-					tooltip="上揃え"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<VerticalAlignTop />
-				</DiagramMenuItem>
-				<DiagramMenuItem
-					menuType="AlignMiddle"
-					tooltip="中央揃え"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<VerticalAlignMiddle />
-				</DiagramMenuItem>
-				<DiagramMenuItem
-					menuType="AlignBottom"
-					tooltip="下揃え"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<VerticalAlignBottom />
-				</DiagramMenuItem>
-				{menuStateMap.KeepAspectRatio !== "Hidden" && (
+				{/* Section for fillable and strokable */}
+				{showFillableAndStrokableSection && (
+					<>
+						<DiagramMenuPositioner>
+							<DiagramMenuItem
+								menuType="BgColor"
+								tooltip="背景色"
+								menuStateMap={menuStateMap}
+								onMenuClick={onMenuClick}
+							>
+								<BgColor />
+							</DiagramMenuItem>
+							{menuStateMap.BgColor === "Active" && (
+								<ColorPicker color={bgColor} onColorChange={onBgColorChange} />
+							)}
+						</DiagramMenuPositioner>
+						<DiagramMenuPositioner>
+							<DiagramMenuItem
+								menuType="BorderColor"
+								tooltip="枠線の色"
+								menuStateMap={menuStateMap}
+								onMenuClick={onMenuClick}
+							>
+								<Edit />
+							</DiagramMenuItem>
+							{menuStateMap.BorderColor === "Active" && (
+								<ColorPicker
+									color={borderColor}
+									onColorChange={onBorderColorChange}
+								/>
+							)}
+						</DiagramMenuPositioner>
+					</>
+				)}
+
+				{/* Section for text appearance */}
+				{showTextAppearanceSection && (
+					<>
+						<DiagramMenuDivider />
+						<DiagramMenuPositioner>
+							<DiagramMenuItem
+								menuType="FontSize"
+								tooltip="フォントサイズ"
+								menuStateMap={menuStateMap}
+								onMenuClick={onMenuClick}
+							>
+								<FontSize />
+							</DiagramMenuItem>
+							{menuStateMap.FontSize === "Active" && (
+								<FontSizeSelector
+									fontSize={fontSize}
+									onFontSizeChange={onFontSizeChange}
+								/>
+							)}
+						</DiagramMenuPositioner>
+						<DiagramMenuItem
+							menuType="Bold"
+							tooltip="太字"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<Bold />
+						</DiagramMenuItem>
+						<DiagramMenuPositioner>
+							<DiagramMenuItem
+								menuType="FontColor"
+								tooltip="フォントの色"
+								menuStateMap={menuStateMap}
+								onMenuClick={onMenuClick}
+							>
+								<FontColor />
+							</DiagramMenuItem>
+							{menuStateMap.FontColor === "Active" && (
+								<ColorPicker
+									color={fontColor}
+									onColorChange={onFontColorChange}
+								/>
+							)}
+						</DiagramMenuPositioner>
+					</>
+				)}
+
+				{/* Section for text allignment */}
+				{showTextAlignmentSection && (
+					<>
+						<DiagramMenuDivider />
+						<DiagramMenuItem
+							menuType="AlignLeft"
+							tooltip="左揃え"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<AlignLeft />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="AlignCenter"
+							tooltip="中央揃え"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<AlignCenter />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="AlignRight"
+							tooltip="右揃え"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<AlignRight />
+						</DiagramMenuItem>
+					</>
+				)}
+
+				{/* Section for text vertical allignment */}
+				{showTextVerticalAlignmentSection && (
+					<>
+						<DiagramMenuDivider />
+						<DiagramMenuItem
+							menuType="AlignTop"
+							tooltip="上揃え"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<VerticalAlignTop />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="AlignMiddle"
+							tooltip="中央揃え"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<VerticalAlignMiddle />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="AlignBottom"
+							tooltip="下揃え"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<VerticalAlignBottom />
+						</DiagramMenuItem>
+					</>
+				)}
+
+				{/* Section for keep aspect ratio */}
+				{showKeepAspectRatioSection && (
 					<>
 						<DiagramMenuDivider />
 						<DiagramMenuItem
@@ -207,7 +258,8 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 						</DiagramMenuItem>
 					</>
 				)}
-				{menuStateMap.Group !== "Hidden" && (
+				{/* Section for group and ungroup */}
+				{showGroupSection && (
 					<>
 						<DiagramMenuDivider />
 						<DiagramMenuItem

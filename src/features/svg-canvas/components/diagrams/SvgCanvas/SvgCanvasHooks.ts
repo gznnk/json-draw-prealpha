@@ -55,6 +55,7 @@ import {
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
+import { createPathData } from "../../shapes/Path";
 
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
@@ -707,6 +708,9 @@ export const useSvgCanvas = (
 			}
 			if (diagramType === "Ellipse") {
 				addItem(createEllipseData({ x: centerX, y: centerY }) as Diagram);
+			}
+			if (diagramType === "Path") {
+				addItem(createPathData({ x: centerX, y: centerY }) as Diagram);
 			}
 		},
 		[canvasState.minX, canvasState.minY, canvasState.width, canvasState.height],

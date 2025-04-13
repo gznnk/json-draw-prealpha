@@ -3,36 +3,36 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import components related to SvgCanvas.
-import { ArrowHead } from "../../core/ArrowHead";
-import { DragLine } from "../../core/DragLine";
-import { DragPoint } from "../../core/DragPoint";
-import { PositionLabel } from "../../core/PositionLabel";
-import Group from "../Group/Group";
+import { ArrowHead } from "../../../core/ArrowHead";
+import { DragLine } from "../../../core/DragLine";
+import { DragPoint } from "../../../core/DragPoint";
+import { PositionLabel } from "../../../core/PositionLabel";
+import Group from "../../Group/Group";
 
 // Import types related to SvgCanvas.
-import type { Point } from "../../../types/CoordinateTypes";
+import type { Point } from "../../../../types/CoordinateTypes";
 import type {
 	CreateDiagramProps,
 	Diagram,
 	PathData,
 	PathPointData,
-} from "../../../types/DiagramTypes";
+} from "../../../../types/DiagramTypes";
 import type {
 	DiagramChangeEvent,
 	DiagramClickEvent,
 	DiagramDragEvent,
 	DiagramPointerEvent,
-} from "../../../types/EventTypes";
+} from "../../../../types/EventTypes";
 
 // Import SvgCanvas related hooks.
-import { useDrag } from "../../../hooks/dragHooks";
+import { useDrag } from "../../../../hooks/dragHooks";
 
 // Import functions related to SvgCanvas.
 import {
 	getCursorFromAngle,
 	isItemableData,
 	newId,
-} from "../../../utils/Diagram";
+} from "../../../../utils/Diagram";
 import {
 	calcPointsOuterShape,
 	calcRadians,
@@ -40,7 +40,7 @@ import {
 	createLinerY2xFunction,
 	radiansToDegrees,
 	rotatePoint,
-} from "../../../utils/Math";
+} from "../../../../utils/Math";
 
 const createDValue = (items: Diagram[]) => {
 	let d = "";
@@ -81,7 +81,7 @@ export type PathProps = CreateDiagramProps<
  * - 折れ線の線分のドラッグ
  * - 折れ線の新規頂点の追加
  */
-const Path: React.FC<PathProps> = ({
+const PathComponent: React.FC<PathProps> = ({
 	id,
 	x,
 	y,
@@ -490,7 +490,7 @@ const Path: React.FC<PathProps> = ({
 	);
 };
 
-export default memo(Path);
+export const Path = memo(PathComponent);
 
 /**
  * 折れ線の頂点プロパティ

@@ -21,7 +21,7 @@ import {
 	createBestConnectPath,
 	getLineDirection,
 } from "../ConnectPoint/ConnectPoint";
-import Path from "../Path/Path";
+import { Path } from "../Path";
 
 // Import functions related to SvgCanvas.
 import { newId } from "../../../utils/Diagram";
