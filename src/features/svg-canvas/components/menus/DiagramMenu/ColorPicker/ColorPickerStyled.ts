@@ -17,7 +17,7 @@ export const ColorPickerContainer = styled.div`
 export const ColorGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(4, 24px);
-	grid-template-rows: repeat(3, 24px);
+	grid-template-rows: repeat(4, 24px);
 	gap: 6px;
 	margin-bottom: 6px;
 `;
