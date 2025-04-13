@@ -61,6 +61,10 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		AlignTop: "Hidden",
 		AlignMiddle: "Hidden",
 		AlignBottom: "Hidden",
+		BringToFront: "Hidden",
+		BringForward: "Hidden",
+		SendBackward: "Hidden",
+		SendToBack: "Hidden",
 		KeepAspectRatio: "Hidden",
 		Group: "Hidden",
 	} as DiagramMenuStateMap;
@@ -114,6 +118,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			| TextableData
 			| undefined;
 
+		// When a textable item is selected, show the text-related menu items.
 		if (firstTextableItem) {
 			menuStateMap.FontSize = "Show";
 			menuStateMap.Bold = "Show";
@@ -156,6 +161,15 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 					menuStateMap.AlignBottom = "Active";
 				}
 			}
+		}
+
+		// Set the bring to front and send to back menu states.
+		if (selectedItems.length === 1) {
+			// When a single item is selected, show the bring to front and send to back menu items.
+			menuStateMap.BringToFront = "Show";
+			menuStateMap.SendToBack = "Show";
+			menuStateMap.BringForward = "Show";
+			menuStateMap.SendBackward = "Show";
 		}
 
 		// Set the keep aspect ratio state.
@@ -277,6 +291,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		// Internal variables and functions
 		selectedItems,
 		menuStateMap,
+		singleSelectedItem,
 		changeItems,
 		openControl,
 	};
@@ -286,9 +301,16 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	diagramMenuProps.onMenuClick = useCallback((menuType: string) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			canvasProps: { multiSelectGroup, onDiagramChange, onGroup, onUngroup },
+			canvasProps: {
+				multiSelectGroup,
+				onDiagramChange,
+				onGroup,
+				onUngroup,
+				onStackOrderChange,
+			},
 			selectedItems,
 			menuStateMap,
+			singleSelectedItem,
 			changeItems,
 			openControl,
 		} = refBus.current;
@@ -339,6 +361,30 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			case "AlignBottom":
 				changeItems(selectedItems, {
 					verticalAlign: "bottom",
+				});
+				break;
+			case "BringToFront":
+				onStackOrderChange?.({
+					changeType: "bringToFront",
+					id: singleSelectedItem.id,
+				});
+				break;
+			case "BringForward":
+				onStackOrderChange?.({
+					changeType: "bringForward",
+					id: singleSelectedItem.id,
+				});
+				break;
+			case "SendBackward":
+				onStackOrderChange?.({
+					changeType: "sendBackward",
+					id: singleSelectedItem.id,
+				});
+				break;
+			case "SendToBack":
+				onStackOrderChange?.({
+					changeType: "sendToBack",
+					id: singleSelectedItem.id,
 				});
 				break;
 			case "KeepAspectRatio":

@@ -191,3 +191,14 @@ export type NewDiagramEvent = {
 	x?: number;
 	y?: number;
 };
+
+export type StackOrderChangeType =
+	| "bringToFront" // 最前面に移動
+	| "sendToBack" // 最背面に移動
+	| "bringForward" // 前面に移動（1つ前へ）
+	| "sendBackward"; // 背面に移動（1つ後ろへ）
+
+export type StackOrderChangeEvent = {
+	id: string;
+	changeType: StackOrderChangeType;
+};

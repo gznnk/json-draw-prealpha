@@ -9,13 +9,17 @@ import { AlignRight } from "../../../icons/AlignRight";
 import { AspectRatio } from "../../../icons/AspectRatio";
 import { BgColor } from "../../../icons/BgColor";
 import { Bold } from "../../../icons/Bold";
+import { BringToFront } from "../../../icons/BringToFront";
+import { BringForward } from "../../../icons/BringForward";
 import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { Group } from "../../../icons/Group";
+import { SendToBack } from "../../../icons/SendToBack";
 import { VerticalAlignBottom } from "../../../icons/VerticalAlignBottom";
 import { VerticalAlignMiddle } from "../../../icons/VerticalAlignMiddle";
 import { VerticalAlignTop } from "../../../icons/VerticalAlignTop";
+import { SendBackward } from "../../../icons/SendBackward";
 
 // Import types related to SvgCanvas.
 import type { RectangleVertices } from "../../../../types/CoordinateTypes";
@@ -24,6 +28,7 @@ import type { RectangleVertices } from "../../../../types/CoordinateTypes";
 import { calcRectangleVertices } from "../../../../utils/Math";
 
 // Imports related to this component.
+import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
 import { FontSizeSelector } from "../FontSizeSelector";
 import {
@@ -33,7 +38,6 @@ import {
 	DiagramMenuWrapper,
 } from "./DiagramMenuStyled";
 import type { DiagramMenuProps, DiagramMenuType } from "./DiagramMenuTypes";
-import { ColorPicker } from "../ColorPicker";
 
 const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	x,
@@ -92,6 +96,12 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		"AlignTop",
 		"AlignMiddle",
 		"AlignBottom",
+	);
+	const showBringToFrontSection = showSection(
+		"BringToFront",
+		"BringForward",
+		"SendBackward",
+		"SendToBack",
 	);
 	const showKeepAspectRatioSection = showSection("KeepAspectRatio");
 	const showGroupSection = showSection("Group");
@@ -239,6 +249,45 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 							onMenuClick={onMenuClick}
 						>
 							<VerticalAlignBottom />
+						</DiagramMenuItem>
+					</>
+				)}
+
+				{/* Section for bring to front and send to back */}
+				{showBringToFrontSection && (
+					<>
+						<DiagramMenuDivider />
+						<DiagramMenuItem
+							menuType="BringToFront"
+							tooltip="最前面に移動"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<BringToFront />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="BringForward"
+							tooltip="前面に移動"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<BringForward />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="SendBackward"
+							tooltip="背面に移動"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<SendBackward />
+						</DiagramMenuItem>
+						<DiagramMenuItem
+							menuType="SendToBack"
+							tooltip="最背面に移動"
+							menuStateMap={menuStateMap}
+							onMenuClick={onMenuClick}
+						>
+							<SendToBack />
 						</DiagramMenuItem>
 					</>
 				)}

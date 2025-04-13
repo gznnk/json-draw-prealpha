@@ -506,8 +506,8 @@ function App() {
 		canvasProps,
 		canvasFunctions,
 	} = useSvgCanvas(
-		document.documentElement.clientWidth,
-		document.documentElement.clientHeight,
+		window.screen.width,
+		window.screen.height,
 		loadedCanvasState?.items ?? devData.item4,
 	);
 

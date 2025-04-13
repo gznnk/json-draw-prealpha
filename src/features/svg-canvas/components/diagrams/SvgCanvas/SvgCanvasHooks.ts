@@ -24,6 +24,7 @@ import type {
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
 	NewDiagramEvent,
+	StackOrderChangeEvent,
 	SvgCanvasResizeEvent,
 } from "../../../types/EventTypes";
 
@@ -672,14 +673,14 @@ export const useSvgCanvas = (
 	 * Handle undo action.
 	 */
 	const onUndo = useCallback(() => {
-		undo();
+		undo(); // TODO: ここに直接関数の実装を記述する
 	}, []);
 
 	/**
 	 * Handle redo action.
 	 */
 	const onRedo = useCallback(() => {
-		redo();
+		redo(); // TODO: ここに直接関数の実装を記述する
 	}, []);
 
 	/**
@@ -714,6 +715,80 @@ export const useSvgCanvas = (
 		[canvasState.minX, canvasState.minY, canvasState.width, canvasState.height],
 	);
 
+	const onStackOrderChange = useCallback((e: StackOrderChangeEvent) => {
+		setCanvasState((prevState) => {
+			const moveInList = (items: Diagram[]): Diagram[] => {
+				const index = items.findIndex((item) => item.id === e.id);
+				if (index === -1) return items;
+
+				const newItems = [...items];
+				const [target] = newItems.splice(index, 1); // remove
+
+				switch (e.changeType) {
+					case "bringToFront":
+						newItems.push(target);
+						break;
+					case "sendToBack":
+						newItems.unshift(target);
+						break;
+					case "bringForward":
+						if (index < newItems.length - 1) {
+							newItems.splice(index + 1, 0, target);
+						} else {
+							newItems.push(target);
+						}
+						break;
+					case "sendBackward":
+						if (index > 0) {
+							newItems.splice(index - 1, 0, target);
+						} else {
+							newItems.unshift(target);
+						}
+						break;
+				}
+				return newItems;
+			};
+
+			// 再帰的に探し、idが一致する図形の属する親のitems配列を対象に並び替える
+			const updateOrderRecursive = (items: Diagram[]): Diagram[] => {
+				return items.map((item) => {
+					if (isItemableData(item)) {
+						// グループ内を再帰的に調査
+						if (item.items?.some((child) => child.id === e.id)) {
+							return {
+								...item,
+								items: moveInList(item.items),
+							};
+						}
+						return {
+							...item,
+							items: updateOrderRecursive(item.items ?? []),
+						};
+					}
+					return item;
+				});
+			};
+
+			// top-level にある場合の対応
+			let items = prevState.items;
+			if (items.some((item) => item.id === e.id)) {
+				items = moveInList(items);
+			} else {
+				items = updateOrderRecursive(items);
+			}
+
+			// 履歴に追加
+			let newState: SvgCanvasState = {
+				...prevState,
+				items,
+			};
+			newState.lastHistoryEventId = newEventId(); // TODO: Trigger側で設定するようにする
+			newState = addHistory(prevState, newState);
+
+			return newState;
+		});
+	}, []);
+
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -734,6 +809,7 @@ export const useSvgCanvas = (
 		onRedo,
 		onCanvasResize,
 		onNewDiagram,
+		onStackOrderChange,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //

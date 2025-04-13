@@ -11,6 +11,7 @@ import type {
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
 	NewDiagramEvent,
+	StackOrderChangeEvent,
 	SvgCanvasResizeEvent,
 } from "../../../types/EventTypes";
 
@@ -74,4 +75,5 @@ export type SvgCanvasProps = {
 	onRedo?: () => void;
 	onCanvasResize?: (e: SvgCanvasResizeEvent) => void;
 	onNewDiagram?: (e: NewDiagramEvent) => void;
+	onStackOrderChange?: (e: StackOrderChangeEvent) => void;
 };

@@ -37,6 +37,10 @@ export type DiagramMenuType =
 	| "AlignTop"
 	| "AlignMiddle"
 	| "AlignBottom"
+	| "BringToFront"
+	| "BringForward"
+	| "SendBackward"
+	| "SendToBack"
 	| "KeepAspectRatio"
 	| "Group";
 
