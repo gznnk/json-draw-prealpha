@@ -40,6 +40,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	const [isBgColorPickerOpen, setIsBgColorPickerOpen] = useState(false);
 	const [isBorderColorPickerOpen, setIsBorderColorPickerOpen] = useState(false);
 	const [isFontSizeSelectorOpen, setIsFontSizeSelectorOpen] = useState(false);
+	const [isFontColorPickerOpen, setIsFontColorPickerOpen] = useState(false);
 
 	// Default menu props (invisible).
 	let diagramMenuProps = {
@@ -74,6 +75,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			setIsBgColorPickerOpen(false);
 			setIsBorderColorPickerOpen(false);
 			setIsFontSizeSelectorOpen(false);
+			setIsFontColorPickerOpen(false);
 		}
 	}, [showDiagramMenu]);
 
@@ -124,6 +126,10 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 			if (isFontSizeSelectorOpen) {
 				menuStateMap.FontSize = "Active";
+			}
+
+			if (isFontColorPickerOpen) {
+				menuStateMap.FontColor = "Active";
 			}
 
 			if (isTextableData(firstTextableItem)) {
@@ -191,6 +197,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				bgColor: firstFillableItem?.fill || "transparent",
 				borderColor: firstStrokableItem?.stroke || "transparent",
 				fontSize: firstTextableItem?.fontSize || 0,
+				fontColor: firstTextableItem?.fontColor || "transparent",
 			} as DiagramMenuProps;
 		} else {
 			// When a single item is selected, use the properties of the selected item.
@@ -208,6 +215,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 					bgColor: firstFillableItem?.fill || "transparent",
 					borderColor: firstStrokableItem?.stroke || "transparent",
 					fontSize: firstTextableItem?.fontSize ?? 0,
+					fontColor: firstTextableItem?.fontColor || "transparent",
 				} as DiagramMenuProps;
 			}
 		}
@@ -249,6 +257,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			BgColor: false,
 			BorderColor: false,
 			FontSize: false,
+			FontColor: false,
 		} as {
 			[key in DiagramMenuType]: boolean;
 		};
@@ -257,6 +266,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		setIsBgColorPickerOpen(newControlsStateMap.BgColor);
 		setIsBorderColorPickerOpen(newControlsStateMap.BorderColor);
 		setIsFontSizeSelectorOpen(newControlsStateMap.FontSize);
+		setIsFontColorPickerOpen(newControlsStateMap.FontColor);
 	};
 
 	// Create references bypass to avoid function creation in every render.
@@ -298,7 +308,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				});
 				break;
 			case "FontColor":
-				// Handle font color change.
+				openControl("FontColor");
 				break;
 			case "AlignLeft":
 				changeItems(selectedItems, {
@@ -386,6 +396,15 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 		changeItems(selectedItems, {
 			fill: bgColor,
+		});
+	}, []);
+
+	diagramMenuProps.onFontColorChange = useCallback((fontColor: string) => {
+		// Bypass references to avoid function creation in every render.
+		const { selectedItems, changeItems } = refBus.current;
+
+		changeItems(selectedItems, {
+			fontColor,
 		});
 	}, []);
 

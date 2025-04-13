@@ -48,10 +48,12 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	bgColor,
 	borderColor,
 	fontSize,
+	fontColor,
 	onMenuClick,
 	onBgColorChange,
 	onBorderColorChange,
 	onFontSizeChange,
+	onFontColorChange,
 }) => {
 	if (!isVisible) return null;
 
@@ -128,14 +130,19 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				>
 					<Bold />
 				</DiagramMenuItem>
-				<DiagramMenuItem
-					menuType="FontColor"
-					tooltip="フォントの色"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<FontColor />
-				</DiagramMenuItem>
+				<DiagramMenuPositioner>
+					<DiagramMenuItem
+						menuType="FontColor"
+						tooltip="フォントの色"
+						menuStateMap={menuStateMap}
+						onMenuClick={onMenuClick}
+					>
+						<FontColor />
+					</DiagramMenuItem>
+					{menuStateMap.FontColor === "Active" && (
+						<ColorPicker color={fontColor} onColorChange={onFontColorChange} />
+					)}
+				</DiagramMenuPositioner>
 				<DiagramMenuDivider />
 				<DiagramMenuItem
 					menuType="AlignLeft"

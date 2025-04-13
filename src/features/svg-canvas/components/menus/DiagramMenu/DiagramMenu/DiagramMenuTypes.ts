@@ -14,10 +14,12 @@ export type DiagramMenuProps = {
 	bgColor: string;
 	borderColor: string;
 	fontSize: number;
+	fontColor: string;
 	onMenuClick: (menuType: DiagramMenuType) => void;
 	onBgColorChange: (bgColor: string) => void;
 	onBorderColorChange: (borderColor: string) => void;
 	onFontSizeChange: (fontSize: number) => void;
+	onFontColorChange: (fontColor: string) => void;
 };
 
 /**
