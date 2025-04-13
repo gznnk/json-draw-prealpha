@@ -5,7 +5,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getSelectedItems } from "../../../diagrams/SvgCanvas/SvgCanvasFunctions";
 
 // Import types related to SvgCanvas.
-import type { Diagram, TextableData } from "../../../../types/DiagramTypes";
+import type {
+	Diagram,
+	FillableData,
+	TextableData,
+} from "../../../../types/DiagramTypes";
 import type { SvgCanvasProps } from "../../../diagrams/SvgCanvas/SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
@@ -17,7 +21,10 @@ import {
 import { newEventId } from "../../../../utils/Util";
 
 // Imports related to this component.
-import { findFirstTextableRecursive } from "./DiagramMenuFunctions";
+import {
+	findFirstFillableRecursive,
+	findFirstTextableRecursive,
+} from "./DiagramMenuFunctions";
 import type { DiagramMenuProps, DiagramMenuStateMap } from "./DiagramMenuTypes";
 
 export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
@@ -25,26 +32,18 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	const { items, isDiagramChanging, multiSelectGroup } = canvasProps;
 
 	// Diagram menu controls open/close state.
+	const [isBgColorPickerOpen, setIsBgColorPickerOpen] = useState(false);
 	const [isFontSizeSelectorOpen, setIsFontSizeSelectorOpen] = useState(false);
 
 	// Default menu props (invisible).
 	let diagramMenuProps = {
-		x: 0,
-		y: 0,
-		width: 0,
-		height: 0,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
 		isVisible: false,
-		onMenuClick: (_menuType: string) => {},
-		onFontSizeChange: (_fontSize: number) => {},
 	} as DiagramMenuProps;
 
 	// Default menu state map.
 	const menuStateMap = {
-		BgColor: "Show",
-		BorderColor: "Show",
+		BgColor: "Hidden",
+		BorderColor: "Hidden",
 		FontSize: "Hidden",
 		Bold: "Hidden",
 		FontColor: "Hidden",
@@ -66,12 +65,26 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	// If the diagram menu is not shown, close controls.
 	useEffect(() => {
 		if (!showDiagramMenu) {
+			setIsBgColorPickerOpen(false);
 			setIsFontSizeSelectorOpen(false);
 		}
 	}, [showDiagramMenu]);
 
 	// If the diagram menu should be shown, set the properties for the menu.
 	if (showDiagramMenu) {
+		// Find the first fillable item in the selected items.
+		// This is used to determine the background color menu state.
+		const firstFillableItem = findFirstFillableRecursive(selectedItems) as
+			| FillableData
+			| undefined;
+		if (firstFillableItem) {
+			menuStateMap.BgColor = "Show";
+
+			if (isBgColorPickerOpen) {
+				menuStateMap.BgColor = "Active";
+			}
+		}
+
 		// Find the first textable item in the selected items.
 		// This is used to determine the font size and other text-related properties.
 		const firstTextableItem = findFirstTextableRecursive(selectedItems) as
@@ -155,9 +168,11 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				scaleY,
 				isVisible: true,
 				menuStateMap,
+				bgColor: firstFillableItem?.fill || "transparent",
 				fontSize: firstTextableItem?.fontSize || 0,
 				// Temporarily empty.
 				onMenuClick: (_menuType: string) => {},
+				onBgColorChange: (_bgColor: string) => {},
 				onFontSizeChange: (_fontSize: number) => {},
 			};
 		} else {
@@ -173,11 +188,13 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 					scaleY: singleSelectedItem.scaleY,
 					isVisible: true,
 					menuStateMap,
+					bgColor: firstFillableItem?.fill || "transparent",
 					// Because the font size menu is not shown when no textable item is selected,
 					// the font size is set to 0 if no textable item is selected.
 					fontSize: firstTextableItem?.fontSize ?? 0,
 					// Temporarily empty.
 					onMenuClick: (_menuType: string) => {},
+					onBgColorChange: (_bgColor: string) => {},
 					onFontSizeChange: (_fontSize: number) => {},
 				};
 			}
@@ -238,7 +255,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 		switch (menuType) {
 			case "BgColor":
-				// Handle background color change.
+				setIsBgColorPickerOpen((prev) => !prev);
 				break;
 			case "BorderColor":
 				// Handle border color change.
@@ -322,6 +339,15 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 		changeItems(selectedItems, {
 			fontSize,
+		});
+	}, []);
+
+	diagramMenuProps.onBgColorChange = useCallback((bgColor: string) => {
+		// Bypass references to avoid function creation in every render.
+		const { selectedItems, changeItems } = refBus.current;
+
+		changeItems(selectedItems, {
+			fill: bgColor,
 		});
 	}, []);
 

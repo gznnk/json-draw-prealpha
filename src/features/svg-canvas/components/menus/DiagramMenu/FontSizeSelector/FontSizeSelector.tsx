@@ -69,7 +69,11 @@ const FontSizeSelectorComponent: React.FC<FontSizeSelectorProps> = ({
 						<Minus />
 					</svg>
 				</FontSizeSelectorButton>
-				<FontSizeSelectorInput value={inputValue} onChange={handleChange} />
+				<FontSizeSelectorInput
+					value={inputValue}
+					maxLength={3}
+					onChange={handleChange}
+				/>
 				<FontSizeSelectorButton onClick={handlePlusClick}>
 					<svg viewBox="0 0 1024 1024" width="100%" height="100%">
 						<title>フォントサイズを縮小</title>

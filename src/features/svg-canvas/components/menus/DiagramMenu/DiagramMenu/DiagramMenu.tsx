@@ -33,6 +33,7 @@ import {
 	DiagramMenuWrapper,
 } from "./DiagramMenuStyled";
 import type { DiagramMenuProps } from "./DiagramMenuTypes";
+import { ColorPicker } from "../ColorPicker";
 
 const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	x,
@@ -44,8 +45,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	scaleY,
 	isVisible,
 	menuStateMap,
+	bgColor,
 	fontSize,
 	onMenuClick,
+	onBgColorChange,
 	onFontSizeChange,
 }) => {
 	if (!isVisible) return null;
@@ -69,14 +72,19 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	return (
 		<DiagramMenuWrapper x={x} y={menuY}>
 			<DiagramMenuDiv>
-				<DiagramMenuItem
-					menuType="BgColor"
-					tooltip="背景色"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<BgColor />
-				</DiagramMenuItem>
+				<DiagramMenuPositioner>
+					<DiagramMenuItem
+						menuType="BgColor"
+						tooltip="背景色"
+						menuStateMap={menuStateMap}
+						onMenuClick={onMenuClick}
+					>
+						<BgColor />
+					</DiagramMenuItem>
+					{menuStateMap.BgColor === "Active" && (
+						<ColorPicker color={bgColor} onColorChange={onBgColorChange} />
+					)}
+				</DiagramMenuPositioner>
 				<DiagramMenuItem
 					menuType="BorderColor"
 					tooltip="枠線の色"

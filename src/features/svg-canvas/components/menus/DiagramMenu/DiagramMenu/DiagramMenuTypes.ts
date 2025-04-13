@@ -11,8 +11,10 @@ export type DiagramMenuProps = {
 	scaleY: number;
 	isVisible: boolean;
 	menuStateMap: DiagramMenuStateMap;
+	bgColor: string;
 	fontSize: number;
 	onMenuClick: (menuType: DiagramMenuType) => void;
+	onBgColorChange: (bgColor: string) => void;
 	onFontSizeChange: (fontSize: number) => void;
 };
 
