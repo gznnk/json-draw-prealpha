@@ -270,7 +270,7 @@ export const addHistory = (
 	// console.log("history", JSON.stringify(ret, null, 2));
 	// console.log("history", ret);
 
-	saveCanvasDataToLocalStorage(ret);
+	// saveCanvasDataToLocalStorage(ret);
 
 	return ret;
 };
@@ -332,4 +332,27 @@ export const loadCanvasDataFromLocalStorage = ():
 		};
 	}
 	return undefined;
+};
+
+export const loadCanvasDataFromString = (
+	canvasData: object,
+): SvgCanvasState | undefined => {
+	// Load the canvas state from a JSON string
+	try {
+		const canvasState = canvasData as SvgCanvasState;
+		// Create a new history entry for the loaded state
+		const historyEntry = canvasStateToHistory(canvasState);
+		const newHistory = [historyEntry];
+		const historyIndex = 0; // Set the history index to the first entry
+		const lastHistoryEventId = newEventId(); // Generate a new event ID for the loaded state
+		return {
+			...canvasState,
+			history: newHistory,
+			historyIndex,
+			lastHistoryEventId,
+		};
+	} catch (error) {
+		console.error("Failed to parse canvas data:", error);
+		return undefined;
+	}
 };

@@ -27,7 +27,6 @@ import Group from "../../shapes/Group/Group";
 // SvgCanvas関連関数をインポート
 import { newEventId } from "../../../utils/Util";
 import { CanvasMenu } from "../../menus/CanvasMenu";
-import UserMenu from "../../menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
@@ -393,7 +392,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 				{/* Container for HTML elements fixed to the viewport. */}
 				<ViewportOverlay>
 					<CanvasMenu onNewDiagram={onNewDiagram} />
-					<UserMenu />
 					<ContextMenu {...contextMenuProps} />
 				</ViewportOverlay>
 			</Container>

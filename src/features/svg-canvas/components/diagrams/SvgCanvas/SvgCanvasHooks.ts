@@ -51,7 +51,7 @@ import {
 	getDiagramById,
 	getSelectedItems,
 	removeGroupedRecursive,
-	saveCanvasDataToLocalStorage,
+	//saveCanvasDataToLocalStorage,
 	ungroupSelectedGroupsRecursive,
 } from "./SvgCanvasFunctions";
 
@@ -883,7 +883,7 @@ export const useSvgCanvas = (
 				historyIndex: prevIndex,
 			};
 
-			saveCanvasDataToLocalStorage(ret); // Save the canvas data to local storage.
+			//saveCanvasDataToLocalStorage(ret); // Save the canvas data to local storage.
 
 			return ret;
 		});
@@ -910,7 +910,7 @@ export const useSvgCanvas = (
 				historyIndex: nextIndex,
 			};
 
-			saveCanvasDataToLocalStorage(ret); // Save the canvas data to local storage.
+			//saveCanvasDataToLocalStorage(ret); // Save the canvas data to local storage.
 
 			return ret;
 		});
