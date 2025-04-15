@@ -1,2 +1,1 @@
-export { DiagramMenu } from "./DiagramMenu/DiagramMenu";
-export { useDiagramMenu } from "./DiagramMenu/DiagramMenuHooks";
+export { DiagramMenu, useDiagramMenu } from "./DiagramMenu";
