@@ -1,11 +1,6 @@
-// イベント型定義
-
-import type {
-	Diagram,
-	DiagramType,
-	PathPointData,
-	Shape,
-} from "./DiagramTypes";
+import type { PathPointData } from "../components/shapes/Path";
+import type { Diagram, DiagramType } from "./DiagramCatalog";
+import type { Shape } from "./DiagramTypes";
 
 /**
  * イベントの種類

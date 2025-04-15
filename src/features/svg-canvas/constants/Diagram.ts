@@ -1,5 +1,5 @@
+import type { Diagram } from "../types/DiagramCatalog";
 import type {
-	Diagram,
 	DiagramBaseData,
 	SelectableData,
 	TransformativeData,
@@ -7,8 +7,6 @@ import type {
 	StrokableData,
 	FillableData,
 	TextableData,
-	RectangleData,
-	EllipseData,
 } from "../types/DiagramTypes";
 
 /**
@@ -80,32 +78,3 @@ export const DEFAULT_TEXTABLE_DATA = {
 	verticalAlign: "center",
 	isTextEditing: false,
 } as const satisfies TextableData;
-
-/**
- * Default rectangle data.
- */
-export const DEFAULT_RECTANGLE_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_ITEMABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
-	...DEFAULT_FILLABLE_DATA,
-	...DEFAULT_TEXTABLE_DATA,
-	type: "Rectangle",
-	radius: 0,
-} as const satisfies RectangleData;
-
-/**
- * Default ellipse data.
- */
-export const DEFAULT_ELLIPSE_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_ITEMABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
-	...DEFAULT_FILLABLE_DATA,
-	...DEFAULT_TEXTABLE_DATA,
-	type: "Ellipse",
-} as const satisfies EllipseData;

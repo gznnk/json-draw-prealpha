@@ -5,14 +5,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getSelectedItems } from "../../../diagrams/SvgCanvas/SvgCanvasFunctions";
 
 // Import types related to SvgCanvas.
+import type { Diagram } from "../../../../types/DiagramCatalog";
 import type {
-	Diagram,
 	FillableData,
-	RectangleData,
 	StrokableData,
 	TextableData,
 } from "../../../../types/DiagramTypes";
 import type { SvgCanvasProps } from "../../../diagrams/SvgCanvas/SvgCanvasTypes";
+import type { RectangleData } from "../../../shapes/Rectangle";
 
 // Import functions related to SvgCanvas.
 import {

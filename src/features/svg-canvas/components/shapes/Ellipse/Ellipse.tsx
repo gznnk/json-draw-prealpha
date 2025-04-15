@@ -4,13 +4,7 @@ import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { EllipseVertices } from "../../../types/CoordinateTypes";
-import type {
-	ConnectPointData,
-	CreateDiagramProps,
-	Diagram,
-	EllipseData,
-	Shape,
-} from "../../../types/DiagramTypes";
+import type { CreateDiagramProps, Shape } from "../../../types/DiagramTypes";
 import type {
 	ConnectPointMoveData,
 	DiagramDragEvent,
@@ -21,18 +15,20 @@ import type {
 } from "../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import ConnectPoint from "../ConnectPoint/ConnectPoint";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
+import { ConnectPoint, type ConnectPointData } from "../ConnectPoint";
 
 // SvgCanvas関連カスタムフックをインポート
-import { useDrag } from "../../../hooks/dragHooks";
+import { useDrag } from "../../../hooks/useDrag";
 
 // SvgCanvas関連関数をインポート
-import { DEFAULT_ELLIPSE_DATA } from "../../../constants/Diagram";
-import { createSvgTransform, newId } from "../../../utils/Diagram";
+import { createSvgTransform } from "../../../utils/Diagram";
 import { calcEllipseVertices, degreesToRadians } from "../../../utils/Math";
+
+// Imports related to this component.
+import type { EllipseData } from "./EllipseTypes";
 
 /**
  * 楕円コンポーネントのプロパティ
@@ -50,7 +46,7 @@ export type EllipseProps = CreateDiagramProps<
 /**
  * 楕円コンポーネント
  */
-const Ellipse: React.FC<EllipseProps> = ({
+const EllipseComponent: React.FC<EllipseProps> = ({
 	id,
 	x,
 	y,
@@ -371,74 +367,4 @@ const Ellipse: React.FC<EllipseProps> = ({
 	);
 };
 
-export default memo(Ellipse);
-
-/**
- * 楕円データ作成
- */
-export const createEllipseData = ({
-	x,
-	y,
-	width = 100,
-	height = 100,
-	rotation = 0,
-	scaleX = 1,
-	scaleY = 1,
-	keepProportion = false,
-	fill = "transparent",
-	stroke = "black",
-	strokeWidth = "1px",
-}: {
-	x: number;
-	y: number;
-	width?: number;
-	height?: number;
-	rotation?: number;
-	scaleX?: number;
-	scaleY?: number;
-	keepProportion?: boolean;
-	fill?: string;
-	stroke?: string;
-	strokeWidth?: string;
-}): EllipseData => {
-	// 接続ポイントを生成
-	const vertices = calcEllipseVertices({
-		x,
-		y,
-		width,
-		height,
-		rotation,
-		scaleX,
-		scaleY,
-	});
-
-	const items: Diagram[] = [];
-	for (const key of Object.keys(vertices)) {
-		const point = vertices[key as keyof EllipseVertices];
-		items.push({
-			id: newId(),
-			type: "ConnectPoint",
-			x: point.x,
-			y: point.y,
-			isSelected: false,
-			name: key,
-		});
-	}
-
-	return {
-		...DEFAULT_ELLIPSE_DATA,
-		id: newId(),
-		x,
-		y,
-		width,
-		height,
-		rotation,
-		scaleX,
-		scaleY,
-		keepProportion,
-		fill,
-		stroke,
-		strokeWidth,
-		items,
-	} as EllipseData;
-};
+export const Ellipse = memo(EllipseComponent);

@@ -1,0 +1,26 @@
+import type { RectangleData } from "./RectangleTypes";
+
+import {
+	DEFAULT_DIAGRAM_BASE_DATA,
+	DEFAULT_FILLABLE_DATA,
+	DEFAULT_ITEMABLE_DATA,
+	DEFAULT_SELECTABLE_DATA,
+	DEFAULT_STROKABLE_DATA,
+	DEFAULT_TEXTABLE_DATA,
+	DEFAULT_TRANSFORMATIVE_DATA,
+} from "../../../constants/Diagram";
+
+/**
+ * Default rectangle data.
+ */
+export const DEFAULT_RECTANGLE_DATA = {
+	...DEFAULT_DIAGRAM_BASE_DATA,
+	...DEFAULT_SELECTABLE_DATA,
+	...DEFAULT_TRANSFORMATIVE_DATA,
+	...DEFAULT_ITEMABLE_DATA,
+	...DEFAULT_STROKABLE_DATA,
+	...DEFAULT_FILLABLE_DATA,
+	...DEFAULT_TEXTABLE_DATA,
+	type: "Rectangle",
+	radius: 0,
+} as const satisfies RectangleData;

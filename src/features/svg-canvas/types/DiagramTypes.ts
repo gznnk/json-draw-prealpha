@@ -1,9 +1,5 @@
-// 図形に関する型定義
-
-// Reactのインポート
-import type React from "react";
-
 // SvgCanvas関連型定義をインポート
+import type { Diagram, DiagramType } from "./DiagramCatalog";
 import type {
 	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
@@ -17,14 +13,6 @@ import type {
 	DiagramTransformEvent,
 } from "./EventTypes";
 
-// SvgCanvas関連コンポーネントをインポート
-import ConnectLine from "../components/shapes/ConnectLine/ConnectLine";
-import type { ArrowHeadType } from "../components/core/ArrowHead";
-import Ellipse from "../components/shapes/Ellipse/Ellipse";
-import Group from "../components/shapes/Group/Group";
-import { Path, PathPoint } from "../components/shapes/Path";
-import Rectangle from "../components/shapes/Rectangle/Rectangle";
-
 /**
  * 図形の形状
  */
@@ -37,18 +25,6 @@ export type Shape = {
 	scaleX: number;
 	scaleY: number;
 };
-
-/**
- * 図形の種類
- */
-export type DiagramType =
-	| "ConnectLine"
-	| "ConnectPoint"
-	| "Ellipse"
-	| "Group"
-	| "Path"
-	| "PathPoint"
-	| "Rectangle";
 
 /**
  * 図形の基本データ
@@ -149,7 +125,7 @@ type DiagramDataOptions = {
 /**
  * 図形のデータ型を作成する型
  */
-type CreateDiagramType<T extends DiagramDataOptions> = DiagramBaseData &
+export type CreateDiagramType<T extends DiagramDataOptions> = DiagramBaseData &
 	(T["selectable"] extends true ? SelectableData : object) &
 	(T["transformative"] extends true ? TransformativeData : object) &
 	(T["itemable"] extends true ? ItemableData : object) &
@@ -157,127 +133,6 @@ type CreateDiagramType<T extends DiagramDataOptions> = DiagramBaseData &
 	(T["strokable"] extends true ? StrokableData : object) &
 	(T["fillable"] extends true ? FillableData : object) &
 	(T["textable"] extends true ? TextableData : object);
-
-/**
- * 楕円のデータ
- */
-export type EllipseData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	connectable: true;
-	strokable: true;
-	fillable: true;
-	textable: true;
-}>;
-
-/**
- * 矩形のデータ
- */
-export type RectangleData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	connectable: true;
-	strokable: true;
-	fillable: true;
-	textable: true;
-}> & {
-	radius: number;
-};
-
-/**
- * 折れ線の頂点のデータ
- */
-export type PathPointData = DiagramBaseData & {
-	hidden: boolean;
-};
-
-/**
- * 折れ線のデータ
- */
-export type PathData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	itemable: true;
-	strokable: true;
-}> & {
-	startArrowHead?: ArrowHeadType;
-	endArrowHead?: ArrowHeadType;
-};
-
-/**
- * 接続ポイントのデータ
- */
-export type ConnectPointData = DiagramBaseData & {
-	name: string;
-};
-
-/**
- * 接続線のデータ
- */
-export type ConnectLineData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	itemable: true;
-	strokable: true;
-}> & {
-	startOwnerId: string;
-	endOwnerId: string;
-	autoRouting: boolean;
-	startArrowHead?: ArrowHeadType;
-	endArrowHead?: ArrowHeadType;
-};
-
-/**
- * グループのデータ
- */
-export type GroupData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	itemable: true;
-}>;
-
-/**
- * Data for text generator component.
- */
-export type TextGeneratorData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	connectable: true;
-	strokable: true;
-	fillable: true;
-	textable: true;
-}> & {
-	rx: number;
-	ry: number;
-	text: string;
-	fontSize: number;
-	color: string;
-};
-
-/**
- * ダミー図形コンポーネント
- */
-const DummyComponent: React.FC<DiagramBaseData> = () => null;
-
-/**
- * 全図形のデータを統合した型
- */
-type DiagramCombined =
-	| ConnectLineData
-	| ConnectPointData
-	| EllipseData
-	| GroupData
-	| PathData
-	| PathPointData
-	| RectangleData
-	| TextGeneratorData;
-
-/**
- * 図形の型
- */
-export type Diagram = DiagramCombined & {
-	type: DiagramType;
-};
 
 /**
  * 図形の基本プロパティ
@@ -358,19 +213,3 @@ export type CreateDiagramProps<T, U extends DiagramPropsOptions> = Omit<
 	(U["itemable"] extends true ? ItemableProps : object) &
 	(U["connectable"] extends true ? ConnectableProps : object) &
 	(U["textable"] extends true ? TextableProps : object);
-
-/**
- * 図形の種類とコンポーネントのマッピング
- */
-export const DiagramTypeComponentMap: {
-	// biome-ignore lint/suspicious/noExplicitAny: 種々の図形の共通の型を作るのは困難なため
-	[key in DiagramType]: React.FC<any>;
-} = {
-	ConnectLine: ConnectLine,
-	ConnectPoint: DummyComponent,
-	Ellipse: Ellipse,
-	Group: Group,
-	Path: Path,
-	PathPoint: PathPoint,
-	Rectangle: Rectangle,
-};

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
 import type { Point } from "../types/CoordinateTypes";
-import type { DiagramType } from "../types/DiagramTypes";
+import type { DiagramType } from "../types/DiagramCatalog";
 import {
 	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type DiagramClickEvent,

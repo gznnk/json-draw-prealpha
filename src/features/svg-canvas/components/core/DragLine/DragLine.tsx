@@ -3,8 +3,8 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 // Import components related to SvgCanvas.
-import type { DragProps } from "../../../hooks/dragHooks";
-import { useDrag } from "../../../hooks/dragHooks";
+import type { DragProps } from "../../../hooks/useDrag";
+import { useDrag } from "../../../hooks/useDrag";
 
 /**
  * Props for the DragLine component.

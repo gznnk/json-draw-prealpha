@@ -1,9 +1,9 @@
 import { SvgCanvas, useSvgCanvas } from "./features/svg-canvas";
 import Button from "./components/atoms/Button";
 // import Input from "./components/atoms/Input";
-import type { Diagram } from "./features/svg-canvas/types/DiagramTypes";
-import { createRectangleData } from "./features/svg-canvas/components/shapes/Rectangle/Rectangle";
-import { createEllipseData } from "./features/svg-canvas/components/shapes/Ellipse/Ellipse";
+import type { Diagram } from "./features/svg-canvas/types/DiagramCatalog";
+import { createRectangleData } from "./features/svg-canvas/components/shapes/Rectangle";
+import { createEllipseData } from "./features/svg-canvas/components/shapes/Ellipse";
 import AIChat from "./components/organisms/AIChat";
 
 // import { getLogger } from "./utils/Logger";
@@ -458,36 +458,6 @@ const testItems6 = [
 	},
 ] as Diagram[];
 
-const testItems7 = [
-	{
-		id: "1",
-		type: "TextGenerator",
-		x: 100,
-		y: 100,
-		width: 200,
-		height: 100,
-		rx: 4,
-		ry: 4,
-		rotation: 0,
-		scaleX: 1,
-		scaleY: 1,
-		keepProportion: false,
-		stroke: "#dddddd",
-		strokeWidth: "1px",
-		fill: "#ffffff",
-		isSelected: false,
-		isMultiSelectSource: false,
-		text: "Hello World",
-		textType: "textarea",
-		fontColor: "#000000",
-		fontSize: 16,
-		fontFamily: "Arial",
-		textAlign: "left",
-		verticalAlign: "bottom",
-		isTextEditing: false,
-	},
-] as Diagram[];
-
 const devData = {
 	item1: testItems1,
 	item2: testItems2,
@@ -495,7 +465,6 @@ const devData = {
 	item4: testItems4,
 	item5: testItems5,
 	item6: testItems6,
-	item7: testItems7,
 };
 
 function App() {

@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramTypes";
+import type { Diagram } from "../../../types/DiagramCatalog";
 
 // Import functions related to SvgCanvas.
 import { isItemableData, isSelectableData } from "../../../utils/Diagram";

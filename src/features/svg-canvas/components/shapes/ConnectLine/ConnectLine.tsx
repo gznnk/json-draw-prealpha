@@ -3,12 +3,8 @@ import type React from "react";
 import { memo, useCallback, useContext, useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type {
-	ConnectLineData,
-	CreateDiagramProps,
-	Diagram,
-	Shape,
-} from "../../../types/DiagramTypes";
+import type { Diagram } from "../../../types/DiagramCatalog";
+import type { CreateDiagramProps, Shape } from "../../../types/DiagramTypes";
 import type {
 	ConnectPointMoveData,
 	ConnectPointsMoveEvent,
@@ -17,31 +13,16 @@ import type {
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../diagrams/SvgCanvas/SvgCanvas";
-import {
-	createBestConnectPath,
-	getLineDirection,
-} from "../ConnectPoint/ConnectPoint";
+import { createBestConnectPath, getLineDirection } from "../ConnectPoint";
 import { Path } from "../Path";
 
 // Import functions related to SvgCanvas.
 import { newId } from "../../../utils/Diagram";
 import { calcRadians, radiansToDegrees } from "../../../utils/Math";
 
-/** Event name of ConnectPoint component move. */
-export const EVENT_NAME_CONNECT_POINTS_MOVE = "ConnectPointMove";
-
-/**
- * Trigger the ConnectPoint components move event.
- *
- * @param e - ConnectPoint components move event data.
- */
-export const notifyConnectPointsMove = (e: ConnectPointsMoveEvent) => {
-	document.dispatchEvent(
-		new CustomEvent(EVENT_NAME_CONNECT_POINTS_MOVE, {
-			detail: e,
-		}),
-	);
-};
+// Imports related to this component.
+import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
+import type { ConnectLineData } from "./ConnectLineTypes";
 
 /**
  * Properties of ConnectLine component.
@@ -58,7 +39,7 @@ type ConnectLineProps = CreateDiagramProps<
 /**
  * ConnectLine component.
  */
-const ConnectLine: React.FC<ConnectLineProps> = ({
+const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 	id,
 	x,
 	y,
@@ -382,4 +363,4 @@ const ConnectLine: React.FC<ConnectLineProps> = ({
 	);
 };
 
-export default memo(ConnectLine);
+export const ConnectLine = memo(ConnectLineComponent);

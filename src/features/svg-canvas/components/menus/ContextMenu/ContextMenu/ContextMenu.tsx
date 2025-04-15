@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Imports related to this component.
-import { ContextMenuItem } from "../ContextMenuItem/ContextMenuItem";
+import { ContextMenuItem } from "../ContextMenuItem";
 import { ContextMenuDiv, ContextMenuDivider } from "./ContextMenuStyled";
 import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 

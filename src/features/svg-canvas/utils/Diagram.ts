@@ -1,14 +1,22 @@
-import { createEllipseData } from "../components/shapes/Ellipse/Ellipse";
-import { calcGroupBoxOfNoRotation } from "../components/shapes/Group/Group";
-import { createRectangleData } from "../components/shapes/Rectangle/Rectangle";
-import { DEFAULT_PATH_DATA } from "../components/shapes/Path";
+import {
+	createEllipseData,
+	type EllipseData,
+} from "../components/shapes/Ellipse";
+import {
+	calcGroupBoxOfNoRotation,
+	type GroupData,
+} from "../components/shapes/Group";
+import {
+	DEFAULT_PATH_DATA,
+	type PathData,
+	type PathPointData,
+} from "../components/shapes/Path";
+import {
+	createRectangleData,
+	type RectangleData,
+} from "../components/shapes/Rectangle";
+import type { Diagram } from "../types/DiagramCatalog";
 import type {
-	Diagram,
-	EllipseData,
-	GroupData,
-	PathData,
-	PathPointData,
-	RectangleData,
 	SelectableData,
 	Shape,
 	TextableData,

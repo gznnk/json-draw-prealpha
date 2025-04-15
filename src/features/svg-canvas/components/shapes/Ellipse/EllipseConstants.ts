@@ -1,0 +1,25 @@
+import type { EllipseData } from "./EllipseTypes";
+
+import {
+	DEFAULT_DIAGRAM_BASE_DATA,
+	DEFAULT_FILLABLE_DATA,
+	DEFAULT_ITEMABLE_DATA,
+	DEFAULT_SELECTABLE_DATA,
+	DEFAULT_STROKABLE_DATA,
+	DEFAULT_TEXTABLE_DATA,
+	DEFAULT_TRANSFORMATIVE_DATA,
+} from "../../../constants/Diagram";
+
+/**
+ * Default ellipse data.
+ */
+export const DEFAULT_ELLIPSE_DATA = {
+	...DEFAULT_DIAGRAM_BASE_DATA,
+	...DEFAULT_SELECTABLE_DATA,
+	...DEFAULT_TRANSFORMATIVE_DATA,
+	...DEFAULT_ITEMABLE_DATA,
+	...DEFAULT_STROKABLE_DATA,
+	...DEFAULT_FILLABLE_DATA,
+	...DEFAULT_TEXTABLE_DATA,
+	type: "Ellipse",
+} as const satisfies EllipseData;

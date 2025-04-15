@@ -1,4 +1,2 @@
-export { Path } from "./Path/Path";
-export { PathPoint } from "./Path/Path";
-export { DEFAULT_PATH_DATA } from "./Path/PathConstants";
-export { createPathData } from "./Path/PathFunctions";
+export { createPathData, DEFAULT_PATH_DATA, Path, type PathData } from "./Path";
+export { PathPoint, type PathPointData } from "./PathPoint";

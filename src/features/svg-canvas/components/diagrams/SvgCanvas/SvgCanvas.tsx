@@ -8,8 +8,10 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Diagram } from "../../../types/DiagramTypes";
-import { DiagramTypeComponentMap } from "../../../types/DiagramTypes";
+import {
+	type Diagram,
+	DiagramComponentCatalog,
+} from "../../../types/DiagramCatalog";
 import {
 	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type DiagramDragEvent,
@@ -22,7 +24,7 @@ import {
 import { TextEditor, useTextEditor } from "../../core/Textable";
 import { ContextMenu, useContextMenu } from "../../menus/ContextMenu";
 import { DiagramMenu, useDiagramMenu } from "../../menus/DiagramMenu";
-import Group from "../../shapes/Group/Group";
+import { Group } from "../../shapes/Group";
 
 // SvgCanvas関連関数をインポート
 import { newEventId } from "../../../utils/Util";
@@ -328,7 +330,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 
 	// 図形の描画
 	const renderedItems = items.map((item) => {
-		const itemType = DiagramTypeComponentMap[item.type];
+		const component = DiagramComponentCatalog[item.type];
 		const props = {
 			...item,
 			key: item.id,
@@ -342,7 +344,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			onTextEdit: textEditorHandlers.onTextEdit,
 		};
 
-		return React.createElement(itemType, props);
+		return React.createElement(component, props);
 	});
 
 	return (
