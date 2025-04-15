@@ -23,7 +23,7 @@ import type {
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
-import ConnectPoint from "../ConnectPoint/ConnectPoint";
+import { ConnectPoint } from "../ConnectPoint";
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDrag } from "../../../hooks/dragHooks";

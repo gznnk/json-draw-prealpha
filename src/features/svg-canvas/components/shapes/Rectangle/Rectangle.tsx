@@ -20,7 +20,7 @@ import type {
 } from "../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import ConnectPoint from "../ConnectPoint/ConnectPoint";
+import { ConnectPoint } from "../ConnectPoint";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";

@@ -17,10 +17,7 @@ import type {
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../diagrams/SvgCanvas/SvgCanvas";
-import {
-	createBestConnectPath,
-	getLineDirection,
-} from "../ConnectPoint/ConnectPoint";
+import { createBestConnectPath, getLineDirection } from "../ConnectPoint";
 import { Path } from "../Path";
 
 // Import functions related to SvgCanvas.
