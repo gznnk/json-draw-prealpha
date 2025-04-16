@@ -1,13 +1,29 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramCatalog";
+import {
+	DiagramConnectPointCalculators,
+	type Diagram,
+} from "../../../types/DiagramCatalog";
+import type {
+	EventType,
+	ConnectPointMoveData,
+} from "../../../types/EventTypes";
+
+// Import components related to SvgCanvas.
+import { notifyConnectPointsMove } from "../../shapes/ConnectLine";
+import type { ConnectPointData } from "../../shapes/ConnectPoint";
 
 // Import functions related to SvgCanvas.
-import { isItemableData, isSelectableData } from "../../../utils/Diagram";
+import {
+	isConnectableData,
+	isItemableData,
+	isSelectableData,
+} from "../../../utils/Diagram";
 import { deepCopy, newEventId } from "../../../utils/Util";
 
 // Imports related to this component.
 import { MAX_HISTORY_SIZE } from "./SvgCanvasConstants";
 import type { SvgCanvasHistory, SvgCanvasState } from "./SvgCanvasTypes";
+import type { ConnectableData } from "../../../types/DiagramTypes";
 
 /**
  * Get the diagram by ID from the list of diagrams.
@@ -332,4 +348,110 @@ export const loadCanvasDataFromLocalStorage = ():
 		};
 	}
 	return undefined;
+};
+
+/**
+ * Create connect point move data for the new item.
+ *
+ * @param newItem - The new item for which to create connect point move data.
+ * @returns {ConnectPointMoveData[]} - The connect point move data for the new item.
+ */
+export const createConnectPointMoveData = (
+	newItem: Diagram,
+): ConnectPointMoveData[] => {
+	if (isConnectableData(newItem) && !newItem.isMultiSelectSource) {
+		return DiagramConnectPointCalculators[newItem.type](newItem);
+	}
+
+	return [];
+};
+
+/**
+ * Apply the connect point move data to the new item.
+ *
+ * Note: This is an **impure** function — it mutates the `newItem` argument directly.
+ *
+ * @param newItem - The new item to which the connect point data will be applied.
+ * @param connectPoints - The connect point move data to be applied.
+ */
+export const applyConnectPointMoveData = (
+	newItem: ConnectableData,
+	connectPoints: ConnectPointMoveData[],
+) => {
+	newItem.connectPoints = connectPoints.map((c) => ({
+		...c,
+		type: "ConnectPoint",
+	})) as ConnectPointData[];
+};
+
+/**
+ * Update the connect points and notify the move event.
+ *
+ * Note: This is an **impure** function — it mutates the `newItem` argument directly.
+ *
+ * @param eventId - The ID of the event.
+ * @param eventType - The type of the event.
+ * @param newItem - The new item to be updated.
+ * @returns {Diagram} - The updated item.
+ */
+export const updateConnectPointsAndNotifyMove = (
+	eventId: string,
+	eventType: EventType,
+	newItem: Diagram,
+): Diagram => {
+	const connectPoints = createConnectPointMoveData(newItem);
+	if (connectPoints.length > 0) {
+		applyConnectPointMoveData(
+			newItem as ConnectableData, // newItem can be safely cast to ConnectableData when a connect point is created.
+			connectPoints,
+		);
+
+		// Notify the connection point move event to ConnectLine components.
+		notifyConnectPointsMove({
+			eventId,
+			eventType,
+			points: connectPoints,
+		});
+	}
+	return newItem;
+};
+
+export const updateConnectPointsAndCollect = (
+	newItem: Diagram,
+	connectPointMoveDataList: ConnectPointMoveData[],
+): void => {
+	if (isConnectableData(newItem)) {
+		const connectPoints = createConnectPointMoveData(newItem);
+		if (connectPoints.length > 0) {
+			applyConnectPointMoveData(newItem, connectPoints);
+
+			for (const connectPoint of newItem.connectPoints) {
+				connectPointMoveDataList.push({
+					id: connectPoint.id,
+					x: connectPoint.x,
+					y: connectPoint.y,
+					name: connectPoint.name,
+					ownerId: newItem.id,
+					ownerShape: {
+						...newItem,
+					},
+				});
+			}
+		}
+	}
+};
+
+export const updateConnectPointsAndCollectRecursive = (
+	item: Diagram,
+	connectPointMoveDataList: ConnectPointMoveData[],
+): void => {
+	updateConnectPointsAndCollect(item, connectPointMoveDataList);
+	if (isItemableData(item)) {
+		for (const childItem of item.items) {
+			updateConnectPointsAndCollectRecursive(
+				childItem,
+				connectPointMoveDataList,
+			);
+		}
+	}
 };

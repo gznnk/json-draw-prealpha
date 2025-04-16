@@ -17,6 +17,7 @@ import {
 } from "../components/shapes/Rectangle";
 import type { Diagram } from "../types/DiagramCatalog";
 import type {
+	ConnectableData,
 	SelectableData,
 	Shape,
 	TextableData,
@@ -120,6 +121,11 @@ export const isSelectableData = (obj: any): obj is SelectableData => {
 // biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
 export const isItemableData = (obj: any): obj is GroupData => {
 	return obj && Array.isArray(obj.items);
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
+export const isConnectableData = (obj: any): obj is ConnectableData => {
+	return obj && Array.isArray(obj.connectPoints);
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため

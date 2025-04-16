@@ -4,7 +4,11 @@ import {
 	type ConnectLineData,
 } from "../components/shapes/ConnectLine";
 import type { ConnectPointData } from "../components/shapes/ConnectPoint";
-import { Ellipse, type EllipseData } from "../components/shapes/Ellipse";
+import {
+	Ellipse,
+	type EllipseData,
+	calcEllipseConnectPointPosition,
+} from "../components/shapes/Ellipse";
 import { Group, type GroupData } from "../components/shapes/Group";
 import {
 	Path,
@@ -12,7 +16,12 @@ import {
 	type PathData,
 	type PathPointData,
 } from "../components/shapes/Path";
-import { Rectangle, type RectangleData } from "../components/shapes/Rectangle";
+import {
+	Rectangle,
+	type RectangleData,
+	calcRectangleConnectPointPosition,
+} from "../components/shapes/Rectangle";
+import type { ConnectPointMoveData } from "./EventTypes";
 
 /**
  * 図形の種類
@@ -57,4 +66,19 @@ export const DiagramComponentCatalog: {
 	Path: Path,
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
+};
+
+/**
+ * ConnectPoint position calculator for each diagram type.
+ */
+export const DiagramConnectPointCalculators: {
+	[key in DiagramType]: (diagram: Diagram) => ConnectPointMoveData[];
+} = {
+	ConnectLine: () => [],
+	ConnectPoint: () => [],
+	Ellipse: calcEllipseConnectPointPosition,
+	Group: () => [],
+	Path: () => [],
+	PathPoint: () => [],
+	Rectangle: calcRectangleConnectPointPosition,
 };

@@ -78,7 +78,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onAllSelectionClear,
 		onDelete,
 		onConnect,
-		onConnectPointsMove,
 		onUndo,
 		onRedo,
 		onCanvasResize,
@@ -340,7 +339,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			onDrop,
 			onSelect: handleSelect,
 			onConnect,
-			onConnectPointsMove,
 			onTextEdit: textEditorHandlers.onTextEdit,
 		};
 
@@ -376,7 +374,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 									onSelect={handleSelect}
 									onTransform={onTransform}
 									onDiagramChange={onDiagramChange}
-									onConnectPointsMove={onConnectPointsMove}
 								/>
 							</MultiSelectGroupContainer>
 						)}

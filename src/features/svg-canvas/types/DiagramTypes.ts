@@ -1,7 +1,7 @@
 // SvgCanvas関連型定義をインポート
+import type { ConnectPointData } from "../components/shapes/ConnectPoint";
 import type { Diagram, DiagramType } from "./DiagramCatalog";
 import type {
-	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
 	DiagramClickEvent,
 	DiagramConnectEvent,
@@ -62,7 +62,9 @@ export type ItemableData = {
 /**
  * 接続可能な図形のデータ
  */
-export type ConnectableData = ItemableData; // 接続ポイントを子図形としてもつ
+export type ConnectableData = {
+	connectPoints: ConnectPointData[];
+};
 
 /**
  * 枠線を持つ図形のデータ
@@ -179,7 +181,6 @@ export type ItemableProps = {
 export type ConnectableProps = {
 	showConnectPoints?: boolean;
 	onConnect?: (e: DiagramConnectEvent) => void;
-	onConnectPointsMove?: (e: ConnectPointsMoveEvent) => void;
 };
 
 /**
