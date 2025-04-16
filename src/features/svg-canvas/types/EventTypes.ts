@@ -114,6 +114,7 @@ export type DiagramConnectEvent = {
  * 接続ポイント移動データ
  *
  * @param id 移動した接続ポイントID
+ * @param name 接続ポイント名
  * @param x 移動先X座標
  * @param y 移動先Y座標
  * @param ownerId 接続ポイントの所有者ID
@@ -121,6 +122,7 @@ export type DiagramConnectEvent = {
  */
 export type ConnectPointMoveData = {
 	id: string;
+	name: string;
 	x: number;
 	y: number;
 	ownerId: string;

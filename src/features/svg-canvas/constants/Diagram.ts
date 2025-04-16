@@ -1,3 +1,4 @@
+import type { ConnectPointData } from "../components/shapes/ConnectPoint";
 import type { Diagram } from "../types/DiagramCatalog";
 import type {
 	DiagramBaseData,
@@ -7,6 +8,7 @@ import type {
 	StrokableData,
 	FillableData,
 	TextableData,
+	ConnectableData,
 } from "../types/DiagramTypes";
 
 /**
@@ -48,6 +50,13 @@ export const DEFAULT_TRANSFORMATIVE_DATA = {
 export const DEFAULT_ITEMABLE_DATA = {
 	items: [] as Diagram[],
 } as const satisfies ItemableData;
+
+/**
+ * Default connectable data.
+ */
+export const DEFAULT_CONNECTABLE_DATA = {
+	connectPoints: [] as ConnectPointData[],
+} as const satisfies ConnectableData;
 
 /**
  * Default strokable data.

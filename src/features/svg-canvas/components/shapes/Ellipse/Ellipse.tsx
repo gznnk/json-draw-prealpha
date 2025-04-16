@@ -3,29 +3,26 @@ import type React from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { EllipseVertices } from "../../../types/CoordinateTypes";
-import type { CreateDiagramProps, Shape } from "../../../types/DiagramTypes";
+import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 import type {
-	ConnectPointMoveData,
 	DiagramDragEvent,
 	DiagramHoverEvent,
 	DiagramPointerEvent,
 	DiagramTransformEvent,
-	EventType,
 } from "../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
-import { ConnectPoint, type ConnectPointData } from "../ConnectPoint";
+import { ConnectPoint } from "../ConnectPoint";
 
 // SvgCanvas関連カスタムフックをインポート
 import { useDrag } from "../../../hooks/useDrag";
 
 // SvgCanvas関連関数をインポート
 import { createSvgTransform } from "../../../utils/Diagram";
-import { calcEllipseVertices, degreesToRadians } from "../../../utils/Math";
+import { degreesToRadians } from "../../../utils/Math";
 
 // Imports related to this component.
 import type { EllipseData } from "./EllipseTypes";
@@ -61,7 +58,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	keepProportion,
 	isSelected,
 	isMultiSelectSource,
-	items,
+	connectPoints,
 	showConnectPoints = true,
 	syncWithSameId = false,
 	text,
@@ -78,7 +75,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	onSelect,
 	onTransform,
 	onConnect,
-	onConnectPointsMove, // TODO: onDiagramChangeに変更すべきか？
 	onTextEdit,
 }) => {
 	// ドラッグ中かのフラグ
@@ -90,58 +86,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	// 変形対象のSVG要素への参照
 	const svgRef = useRef<SVGEllipseElement>({} as SVGEllipseElement);
 
-	/**
-	 * 接続ポイントの位置を更新
-	 *
-	 * @param eventType イベントタイプ
-	 * @param rectShape 四角形の形状（差分）
-	 */
-	const updateConnectPoints = (
-		eventId: string,
-		eventType: EventType,
-		rectShape: Partial<Shape>,
-	) => {
-		// 複数選択時の選択元の場合、複数選択グループ側の処理と重複するためスキップ
-		if (isMultiSelectSource) return;
-
-		// 更新後の四角形の形状
-		const newRectShape = {
-			x,
-			y,
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
-			...rectShape,
-		};
-		// 更新後の楕円の頂点座標を計算
-		const vertices = calcEllipseVertices(newRectShape);
-
-		// 接続ポイントの移動データを生成
-		const newConnectPoints: ConnectPointMoveData[] = [];
-		for (const connectPointData of (items as ConnectPointData[]) ?? []) {
-			const vertex = (vertices as EllipseVertices)[
-				connectPointData.name as keyof EllipseVertices
-			];
-
-			newConnectPoints.push({
-				id: connectPointData.id,
-				x: vertex.x,
-				y: vertex.y,
-				ownerId: id,
-				ownerShape: newRectShape,
-			});
-		}
-
-		// 接続ポイント移動イベントを発火
-		onConnectPointsMove?.({
-			eventId,
-			eventType,
-			points: newConnectPoints,
-		});
-	};
-
 	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		// プロパティ
@@ -151,8 +95,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		onSelect,
 		onTransform,
 		onTextEdit,
-		// 内部変数・内部関数
-		updateConnectPoints,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -161,7 +103,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	 * 楕円のドラッグイベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { onDrag, updateConnectPoints } = refBus.current;
+		const { onDrag } = refBus.current;
 
 		if (e.eventType === "Start") {
 			setIsDragging(true);
@@ -169,11 +111,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 
 		// TODO: onDiagramChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onDrag?.(e);
-
-		updateConnectPoints(e.eventId, e.eventType, {
-			x: e.endX,
-			y: e.endY,
-		});
 
 		if (e.eventType === "End") {
 			setIsDragging(false);
@@ -184,7 +121,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	 * 楕円の変形イベントハンドラ
 	 */
 	const handleTransform = useCallback((e: DiagramTransformEvent) => {
-		const { onTransform, updateConnectPoints } = refBus.current;
+		const { onTransform } = refBus.current;
 
 		if (e.eventType === "Start") {
 			setIsTransforming(true);
@@ -192,8 +129,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 
 		// TODO: onDiagramChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onTransform?.(e);
-
-		updateConnectPoints(e.eventId, e.eventType, e.endShape);
 
 		if (e.eventType === "End") {
 			setIsTransforming(false);
@@ -339,7 +274,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 				/>
 			)}
 			{doShowConnectPoints &&
-				(items as ConnectPointData[])?.map((cp) => (
+				connectPoints.map((cp) => (
 					<ConnectPoint
 						key={cp.id}
 						id={cp.id}

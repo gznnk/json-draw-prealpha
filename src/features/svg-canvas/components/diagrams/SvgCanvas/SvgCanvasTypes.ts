@@ -1,7 +1,6 @@
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/DiagramCatalog";
 import type {
-	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
@@ -67,7 +66,6 @@ export type SvgCanvasProps = {
 	onAllSelectionClear?: () => void;
 	onDelete?: () => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
-	onConnectPointsMove?: (e: ConnectPointsMoveEvent) => void;
 	onTextEdit?: (e: DiagramTextEditEvent) => void;
 	onTextChange?: (e: DiagramTextChangeEvent) => void;
 	onGroup?: () => void;

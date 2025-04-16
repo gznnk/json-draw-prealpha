@@ -1,8 +1,20 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramCatalog";
+import {
+	DiagramConnectPointCalculators,
+	type Diagram,
+} from "../../../types/DiagramCatalog";
+import type { EventType } from "../../../types/EventTypes";
+
+// Import components related to SvgCanvas.
+import { notifyConnectPointsMove } from "../../shapes/ConnectLine";
+import type { ConnectPointData } from "../../shapes/ConnectPoint";
 
 // Import functions related to SvgCanvas.
-import { isItemableData, isSelectableData } from "../../../utils/Diagram";
+import {
+	isConnectableData,
+	isItemableData,
+	isSelectableData,
+} from "../../../utils/Diagram";
 import { deepCopy, newEventId } from "../../../utils/Util";
 
 // Imports related to this component.
@@ -332,4 +344,28 @@ export const loadCanvasDataFromLocalStorage = ():
 		};
 	}
 	return undefined;
+};
+
+export const updateConnectPoints = (
+	eventId: string,
+	eventType: EventType,
+	newItem: Diagram,
+): Diagram => {
+	if (isConnectableData(newItem) && !newItem.isMultiSelectSource) {
+		const connectPoints = DiagramConnectPointCalculators[newItem.type](newItem);
+		if (connectPoints.length > 0) {
+			newItem.connectPoints = connectPoints.map((c) => ({
+				...c,
+				type: "ConnectPoint",
+			})) as ConnectPointData[];
+
+			// Notify the connection point move event to ConnectLine components.
+			notifyConnectPointsMove({
+				eventId,
+				eventType,
+				points: connectPoints,
+			});
+		}
+	}
+	return newItem;
 };

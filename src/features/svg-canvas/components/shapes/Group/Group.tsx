@@ -6,7 +6,6 @@ import type { Diagram } from "../../../types/DiagramCatalog";
 import { DiagramComponentCatalog } from "../../../types/DiagramCatalog";
 import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 import type {
-	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
 	DiagramConnectEvent,
 	DiagramDragEvent,
@@ -69,7 +68,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 	onTransform,
 	onDiagramChange,
 	onConnect,
-	onConnectPointsMove,
 	onTextEdit,
 }) => {
 	// グループ全体のドラッグ中かどうかのフラグ（このグループが選択中でかつドラッグ中の場合のみtrueにする）
@@ -138,7 +136,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 		onTransform,
 		onDiagramChange,
 		onConnect,
-		onConnectPointsMove,
 		onTextEdit,
 		// 内部変数・内部関数
 		isGroupDragging,
@@ -284,7 +281,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			const dx = e.endX - e.startX;
 			const dy = e.endY - e.startY;
 
-			// グループ内の図形を再帰的に移動させる（接続ポイントも含む）
+			// グループ内の図形を再帰的に移動させる（接続ポイントは含まない）
 			const moveRecursive = (diagrams: Diagram[]) => {
 				const newItems: Diagram[] = [];
 				for (const item of diagrams) {
@@ -398,24 +395,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 		// 特にすることはないのでそのまま伝番する
 		onConnect?.(e);
 	}, []);
-
-	/**
-	 * グループ内の図形の接続ポイント移動イベントハンドラ
-	 */
-	const handleChildDiagramConnectPointsMove = useCallback(
-		(e: ConnectPointsMoveEvent) => {
-			const { isSelected, onConnectPointsMove } = refBus.current;
-			if (isSelected) {
-				// グループが選択されている場合は、ドラッグもしくは変形側のハンドリング内で
-				// グループ内の図形全ての接続ポイントの移動処理を行うので、ここでは何もしない
-				return;
-			}
-
-			// グループが選択されていない場合は、接続ポイントの移動イベントをそのまま伝番する
-			onConnectPointsMove?.(e);
-		},
-		[],
-	);
 
 	/**
 	 * グループ内の図形のテキスト編集イベントハンドラ
@@ -570,7 +549,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onTransform: handleChildDiagramTransfrom,
 			onDiagramChange: handleChildDiagramChange,
 			onConnect: handleChildDiagramConnect,
-			onConnectPointsMove: handleChildDiagramConnectPointsMove,
 			onTextEdit: handleChildDiagramTextEdit,
 		};
 

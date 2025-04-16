@@ -1,14 +1,63 @@
-// SvgCanvas関連型定義をインポート
+// Import types related to SvgCanvas.
 import type { RectangleVertices } from "../../../types/CoordinateTypes";
 import type { Diagram } from "../../../types/DiagramCatalog";
+import type { Shape } from "../../../types/DiagramTypes";
+import type { ConnectPointMoveData } from "../../../types/EventTypes";
 
-// SvgCanvas関連関数をインポート
-import { newId } from "../../../utils/Diagram";
+// Import components related to SvgCanvas.
+import type { ConnectPointData } from "../ConnectPoint";
+
+// Import functions related to SvgCanvas.
+import { isConnectableData, newId } from "../../../utils/Diagram";
 import { calcRectangleVertices } from "../../../utils/Math";
 
 // Imports related to this component.
 import { DEFAULT_RECTANGLE_DATA } from "./RectangleConstants";
 import type { RectangleData } from "./RectangleTypes";
+
+/**
+ * Calculate the position of the connection points of the ellipse.
+ *
+ * @param diagram - The diagram data of the ellipse.
+ * @returns An array of connection point move data.
+ */
+export const calcRectangleConnectPointPosition = (
+	diagram: Diagram,
+): ConnectPointMoveData[] => {
+	if (!isConnectableData(diagram)) return []; // Type guard.
+
+	const shape = {
+		x: diagram.x,
+		y: diagram.y,
+		width: diagram.width,
+		height: diagram.height,
+		rotation: diagram.rotation,
+		scaleX: diagram.scaleX,
+		scaleY: diagram.scaleY,
+	} as Shape;
+
+	// Calculate the vertices of the ellipse.
+	const vertices = calcRectangleVertices(diagram as Shape);
+
+	// Create connection point move data.
+	const newConnectPoints: ConnectPointMoveData[] = [];
+	for (const connectPointData of diagram.connectPoints) {
+		const vertex = (vertices as RectangleVertices)[
+			connectPointData.name as keyof RectangleVertices
+		];
+
+		newConnectPoints.push({
+			id: connectPointData.id,
+			name: connectPointData.name,
+			x: vertex.x,
+			y: vertex.y,
+			ownerId: diagram.id,
+			ownerShape: shape,
+		});
+	}
+
+	return newConnectPoints;
+};
 
 /**
  * 四角形データ作成
@@ -51,15 +100,14 @@ export const createRectangleData = ({
 		scaleY,
 	});
 
-	const items: Diagram[] = [];
+	const connectPoints: ConnectPointData[] = [];
 	for (const key of Object.keys(vertices)) {
 		const point = vertices[key as keyof RectangleVertices];
-		items.push({
+		connectPoints.push({
 			id: newId(),
 			type: "ConnectPoint",
 			x: point.x,
 			y: point.y,
-			isSelected: false,
 			name: key,
 		});
 	}
@@ -79,6 +127,6 @@ export const createRectangleData = ({
 		fill,
 		stroke,
 		strokeWidth,
-		items,
+		connectPoints,
 	} as RectangleData;
 };
