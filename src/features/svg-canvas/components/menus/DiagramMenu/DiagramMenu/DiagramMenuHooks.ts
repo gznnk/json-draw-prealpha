@@ -275,7 +275,8 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			// Trigger the change event.
 			canvasProps.onDiagramChange?.({
 				eventId,
-				eventType: "Immediate", // TODO: 履歴に保存されない
+				eventType: "Instant", // TODO: 履歴に保存されない
+				changeType: "Appearance",
 				id: item.id,
 				startDiagram: item,
 				endDiagram: newItem,
@@ -417,7 +418,8 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				if (multiSelectGroup) {
 					onDiagramChange?.({
 						eventId: newEventId(),
-						eventType: "Immediate",
+						eventType: "Instant",
+						changeType: "Appearance",
 						id: multiSelectGroup.id,
 						startDiagram: multiSelectGroup,
 						endDiagram: {

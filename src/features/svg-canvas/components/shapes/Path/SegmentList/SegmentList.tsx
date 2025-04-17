@@ -145,6 +145,7 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: e.eventType,
+					changeType: "Transform",
 					id,
 					startDiagram: {
 						items: startItems.current,
@@ -181,6 +182,7 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Transform",
 				id,
 				startDiagram: {
 					items: startItems.current,
@@ -203,6 +205,7 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Transform",
 				id,
 				startDiagram: {
 					items: startItems.current,

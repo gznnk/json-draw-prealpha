@@ -5,7 +5,7 @@ import type { Shape } from "./DiagramTypes";
 /**
  * イベントの種類
  */
-export type EventType = "Start" | "InProgress" | "End" | "Immediate";
+export type EventType = "Start" | "InProgress" | "End" | "Instant";
 
 /**
  * 図形のポインターダウンイベント
@@ -90,11 +90,17 @@ export type DiagramTransformEvent = {
 export type DiagramChangeData = Partial<Diagram>;
 
 /**
+ * The type of diagram change event.
+ */
+export type DiagramChangeEventType = "Drag" | "Transform" | "Appearance";
+
+/**
  * 図形の変更イベント
  */
 export type DiagramChangeEvent = {
 	eventId: string;
 	eventType: EventType;
+	changeType: DiagramChangeEventType;
 	id: string;
 	startDiagram: DiagramChangeData;
 	endDiagram: DiagramChangeData;

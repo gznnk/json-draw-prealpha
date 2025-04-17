@@ -97,7 +97,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 
 		onTransform?.({
 			eventId,
-			eventType: "Immediate",
+			eventType: "Instant",
 			id,
 			startShape: {
 				x,
@@ -242,6 +242,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 				onDiagramChange?.({
 					eventId: e.eventId,
 					eventType: "Start",
+					changeType: "Drag",
 					id,
 					startDiagram: {
 						x,
@@ -298,6 +299,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			const event: DiagramChangeEvent = {
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Drag",
 				id,
 				startDiagram: {
 					x: startBox.current.x,
@@ -422,6 +424,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: "Start",
+				changeType: "Transform",
 				id,
 				startDiagram: {
 					...e.startShape,
@@ -510,6 +513,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 		const event: DiagramChangeEvent = {
 			eventId: e.eventId,
 			eventType: e.eventType,
+			changeType: "Transform",
 			id,
 			startDiagram: {
 				...e.startShape,

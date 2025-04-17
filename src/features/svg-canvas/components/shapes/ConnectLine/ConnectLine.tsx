@@ -227,6 +227,7 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 				onDiagramChange?.({
 					eventId: event.eventId,
 					eventType: event.eventType,
+					changeType: "Transform",
 					id,
 					startDiagram: {
 						items: _startItems,
@@ -292,6 +293,7 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 				onDiagramChange?.({
 					eventId: event.eventId,
 					eventType: event.eventType,
+					changeType: "Transform",
 					id,
 					startDiagram: {
 						items: _startItems,

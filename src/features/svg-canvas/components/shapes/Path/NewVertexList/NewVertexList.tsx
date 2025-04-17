@@ -102,6 +102,7 @@ const NewVertexListComponent: React.FC<NewVertexListProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Transform",
 				id,
 				startDiagram: {
 					items: startItems.current,
@@ -121,6 +122,7 @@ const NewVertexListComponent: React.FC<NewVertexListProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Transform",
 				id,
 				startDiagram: {
 					items: startItems.current,
@@ -142,6 +144,7 @@ const NewVertexListComponent: React.FC<NewVertexListProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Transform",
 				id,
 				startDiagram: {
 					items: startItems.current,

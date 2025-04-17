@@ -109,6 +109,9 @@ export const useSvgCanvas = (
 							x: e.endX,
 							y: e.endY,
 						};
+
+						// Update the connect points of the diagram.
+						// And notify the connect points move event to ConnectLine.
 						return updateConnectPointsAndNotifyMove(
 							e.eventId,
 							e.eventType,
@@ -117,7 +120,7 @@ export const useSvgCanvas = (
 					}
 					return item;
 				}),
-				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Immediate",
+				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Instant",
 			};
 
 			if (e.eventType === "End") {
@@ -169,7 +172,7 @@ export const useSvgCanvas = (
 					}
 					return item;
 				}),
-				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Immediate",
+				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Instant",
 			};
 
 			if (e.eventType === "End") {
@@ -227,9 +230,10 @@ export const useSvgCanvas = (
 						};
 					}
 
-					// Update the connect points of the diagram.
-					// And collect the connect points move data.
-					updateConnectPointsAndCollect(newItem, connectPointMoveDataList);
+					if (e.changeType !== "Appearance") {
+						// Update the diagram's connect points and collect their move data.
+						updateConnectPointsAndCollect(newItem, connectPointMoveDataList);
+					}
 
 					return newItem;
 				});
@@ -242,11 +246,13 @@ export const useSvgCanvas = (
 					// If the id matches, update the item with the new properties.
 					const newItem = { ...item, ...e.endDiagram };
 
-					// Update the connect points of the diagram.
-					updateConnectPointsAndCollectRecursive(
-						newItem,
-						connectPointMoveDataList,
-					);
+					// Update the diagram's connect points and collect their move data.
+					if (e.changeType !== "Appearance") {
+						updateConnectPointsAndCollectRecursive(
+							newItem,
+							connectPointMoveDataList,
+						);
+					}
 
 					// Return the updated item.
 					return newItem;
@@ -274,7 +280,7 @@ export const useSvgCanvas = (
 			let newState = {
 				...prevState,
 				items,
-				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Immediate",
+				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Instant",
 				multiSelectGroup,
 			} as SvgCanvasState;
 
@@ -815,23 +821,6 @@ export const useSvgCanvas = (
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
-	// TODO: はいし？
-	const getSelectedItem = useCallback(() => {
-		let selectedItem: Diagram | undefined;
-		const findSelectedItem = (items: Diagram[]) => {
-			for (const item of items) {
-				if (isSelectableData(item) && item.isSelected) {
-					selectedItem = item;
-				}
-				if (isItemableData(item)) {
-					findSelectedItem(item.items ?? []);
-				}
-			}
-		};
-		findSelectedItem(canvasState.items);
-		return selectedItem;
-	}, [canvasState.items]);
-
 	const addItem = useCallback((item: Diagram) => {
 		setCanvasState((prevState) => {
 			let newState = {
@@ -918,7 +907,6 @@ export const useSvgCanvas = (
 	}, []);
 
 	const canvasFunctions = {
-		getSelectedItem,
 		addItem,
 		updateItem,
 		undo,

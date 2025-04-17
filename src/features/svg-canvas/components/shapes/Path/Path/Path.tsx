@@ -205,6 +205,7 @@ const PathComponent: React.FC<PathProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventType: e.eventType,
+				changeType: "Drag",
 				id,
 				startDiagram,
 				endDiagram: startDiagram,
@@ -225,6 +226,7 @@ const PathComponent: React.FC<PathProps> = ({
 		onDiagramChange?.({
 			eventId: e.eventId,
 			eventType: e.eventType,
+			changeType: "Drag",
 			id,
 			startDiagram: {
 				x: e.startX,
