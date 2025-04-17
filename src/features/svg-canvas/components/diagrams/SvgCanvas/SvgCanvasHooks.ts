@@ -49,7 +49,6 @@ import {
 	removeGroupedRecursive,
 	saveCanvasDataToLocalStorage,
 	ungroupSelectedGroupsRecursive,
-	updateConnectPointsAndCollect,
 	updateConnectPointsAndCollectRecursive,
 	updateConnectPointsAndNotifyMove,
 } from "./SvgCanvasFunctions";
@@ -203,7 +202,15 @@ export const useSvgCanvas = (
 					...multiSelectGroup,
 					...e.endDiagram,
 				} as GroupData;
+				// Update the connect points of the multi-select group.
+				if (e.changeType !== "Appearance") {
+					updateConnectPointsAndCollectRecursive(
+						multiSelectGroup,
+						connectPointMoveDataList,
+					);
+				}
 
+				// Propagate the multi-select group changes to the original diagrams.
 				items = applyRecursive(prevState.items, (item) => {
 					if (!isItemableData(e.endDiagram)) return item; // Type guard.
 
@@ -228,11 +235,6 @@ export const useSvgCanvas = (
 							...newItem,
 							...updateItem,
 						};
-					}
-
-					if (e.changeType !== "Appearance") {
-						// Update the diagram's connect points and collect their move data.
-						updateConnectPointsAndCollect(newItem, connectPointMoveDataList);
 					}
 
 					return newItem;
@@ -260,7 +262,7 @@ export const useSvgCanvas = (
 
 				if (multiSelectGroup) {
 					// TODO: 接続ポイントの更新（現時点では該当ルートで接続ポイントの移動はない）
-					// Propagate the original diagram changes to the items in the multi-select group.
+					// When a multi-select group is present, propagate the original diagram changes to its items.
 					multiSelectGroup.items = applyRecursive(
 						multiSelectGroup.items,
 						(item) =>

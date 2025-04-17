@@ -384,6 +384,24 @@ export const applyConnectPointMoveData = (
 	})) as ConnectPointData[];
 };
 
+export const updateConnectPoints = (newItem: Diagram): void => {
+	if (isConnectableData(newItem)) {
+		const connectPoints = createConnectPointMoveData(newItem);
+		if (connectPoints.length > 0) {
+			applyConnectPointMoveData(newItem, connectPoints);
+		}
+	}
+};
+
+export const updateConnectPointsRecursive = (newItem: Diagram): void => {
+	updateConnectPoints(newItem);
+	if (isItemableData(newItem)) {
+		for (const childItem of newItem.items) {
+			updateConnectPointsRecursive(childItem);
+		}
+	}
+};
+
 /**
  * Update the connect points and notify the move event.
  *
@@ -442,12 +460,12 @@ export const updateConnectPointsAndCollect = (
 };
 
 export const updateConnectPointsAndCollectRecursive = (
-	item: Diagram,
+	newItem: Diagram,
 	connectPointMoveDataList: ConnectPointMoveData[],
 ): void => {
-	updateConnectPointsAndCollect(item, connectPointMoveDataList);
-	if (isItemableData(item)) {
-		for (const childItem of item.items) {
+	updateConnectPointsAndCollect(newItem, connectPointMoveDataList);
+	if (isItemableData(newItem)) {
+		for (const childItem of newItem.items) {
 			updateConnectPointsAndCollectRecursive(
 				childItem,
 				connectPointMoveDataList,

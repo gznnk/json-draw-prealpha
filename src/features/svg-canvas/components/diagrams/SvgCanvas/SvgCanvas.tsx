@@ -234,7 +234,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	 */
 	const handleDiagramChange = useCallback(
 		(e: DiagramChangeEvent) => {
-			if (e.endDiagram.x && e.endDiagram.y) {
+			if (e.changeType === "Drag" && e.endDiagram.x && e.endDiagram.y) {
 				canvasResize({
 					x: e.endDiagram.x,
 					y: e.endDiagram.y,
