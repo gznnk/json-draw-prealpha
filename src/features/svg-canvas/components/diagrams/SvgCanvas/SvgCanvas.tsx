@@ -13,6 +13,7 @@ import {
 	DiagramComponentCatalog,
 } from "../../../types/DiagramCatalog";
 import {
+	type DiagramChangeEvent,
 	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type DiagramDragEvent,
 	type DiagramSelectEvent,
@@ -45,6 +46,7 @@ import {
 	ViewportOverlay,
 } from "./SvgCanvasStyled";
 import type { SvgCanvasProps, SvgCanvasState } from "./SvgCanvasTypes";
+import type { Point } from "../../../types/CoordinateTypes";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -111,6 +113,82 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	const { diagramMenuProps } = useDiagramMenu(props);
 
 	/**
+	 * Resize the canvas when the pointer is moved to the edges of the canvas.
+	 */
+	const canvasResize = useCallback(
+		(p: Point) => {
+			if (p.x <= minX) {
+				if (containerRef.current && svgRef.current) {
+					// SVGの幅を増やす
+					const newMinX = minX - CANVAS_EXPANSION_SIZE;
+					const newWidth = width - newMinX + CANVAS_EXPANSION_SIZE;
+
+					// Notify the new minX and width to the canvasHooks.
+					onCanvasResize?.({
+						minX: newMinX,
+						minY,
+						width: newWidth,
+						height,
+					} as SvgCanvasResizeEvent);
+
+					// スクロール位置の設定がDOMの直接更新である一方、state変更によるSVG要素の更新は次のReactの描画処理時であることにより、
+					// 描画タイミングのずれが発生してしまうので、一度SVGのviewBoxを直接更新し、ずれが発生しないようにする
+					svgRef.current.setAttribute("width", `${newWidth}`);
+					svgRef.current.setAttribute(
+						"viewBox",
+						`${newMinX} ${minY} ${newWidth} ${height}`,
+					);
+
+					// Scroll position adjustment.
+					containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
+				}
+			} else if (p.y <= minY) {
+				if (containerRef.current && svgRef.current) {
+					// SVGの高さを増やす
+					const newMinY = minY - CANVAS_EXPANSION_SIZE;
+					const newHeight = height - newMinY;
+
+					// Notify the new minY and height to the hooks.
+					onCanvasResize?.({
+						minX,
+						minY: newMinY,
+						width,
+						height: newHeight,
+					} as SvgCanvasResizeEvent);
+
+					// スクロール位置の設定がDOMの直接更新である一方、state変更によるSVG要素の更新は次のReactの描画処理時であることにより、
+					// 描画タイミングのずれが発生してしまうので、一度SVGのviewBoxを直接更新し、ずれが発生しないようにする
+					svgRef.current.setAttribute("height", `${newHeight}`);
+					svgRef.current.setAttribute(
+						"viewBox",
+						`${minX} ${newMinY} ${width} ${newHeight}`,
+					);
+
+					// Scroll position adjustment.
+					containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
+				}
+			} else if (p.x >= minX + width) {
+				// Notify the new width to the hooks.
+				onCanvasResize?.({
+					minX,
+					minY,
+					width: width - minX + CANVAS_EXPANSION_SIZE,
+					height,
+				} as SvgCanvasResizeEvent);
+			} else if (p.y >= minY + height) {
+				// Notify the new height to the hooks.
+				onCanvasResize?.({
+					minX,
+					minY,
+					width,
+					height: height - minY + CANVAS_EXPANSION_SIZE,
+				} as SvgCanvasResizeEvent);
+			}
+		},
+		[onCanvasResize, minX, minY, width, height],
+	);
+
+	/**
 	 * Handle the pointer down event on the SVG canvas.
 	 */
 	const handlePointerDown = useCallback(
@@ -141,78 +219,31 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	 */
 	const handleDrag = useCallback(
 		(e: DiagramDragEvent) => {
-			if (e.endX <= minX) {
-				if (containerRef.current && svgRef.current) {
-					// SVGの幅を増やす
-					const newMinX = minX - CANVAS_EXPANSION_SIZE;
-					const newWidth = width - newMinX + CANVAS_EXPANSION_SIZE;
+			canvasResize({
+				x: e.endX,
+				y: e.endY,
+			});
 
-					// Notify the new minX and width to the canvasHooks.
-					onCanvasResize?.({
-						minX: newMinX,
-						minY,
-						width: newWidth,
-						height,
-					} as SvgCanvasResizeEvent);
-
-					// スクロール位置の設定がDOMの直接更新である一方、state変更によるSVG要素の更新は次のReactの描画処理時であることにより、
-					// 描画タイミングのずれが発生してしまうので、一度SVGのviewBoxを直接更新し、ずれが発生しないようにする
-					svgRef.current.setAttribute("width", `${newWidth}`);
-					svgRef.current.setAttribute(
-						"viewBox",
-						`${newMinX} ${minY} ${newWidth} ${height}`,
-					);
-
-					// Scroll position adjustment.
-					containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
-				}
-			} else if (e.endY <= minY) {
-				if (containerRef.current && svgRef.current) {
-					// SVGの高さを増やす
-					const newMinY = minY - CANVAS_EXPANSION_SIZE;
-					const newHeight = height - newMinY;
-
-					// Notify the new minY and height to the hooks.
-					onCanvasResize?.({
-						minX,
-						minY: newMinY,
-						width,
-						height: newHeight,
-					} as SvgCanvasResizeEvent);
-
-					// スクロール位置の設定がDOMの直接更新である一方、state変更によるSVG要素の更新は次のReactの描画処理時であることにより、
-					// 描画タイミングのずれが発生してしまうので、一度SVGのviewBoxを直接更新し、ずれが発生しないようにする
-					svgRef.current.setAttribute("height", `${newHeight}`);
-					svgRef.current.setAttribute(
-						"viewBox",
-						`${minX} ${newMinY} ${width} ${newHeight}`,
-					);
-
-					// Scroll position adjustment.
-					containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
-				}
-			} else if (e.endX >= minX + width) {
-				// Notify the new width to the hooks.
-				onCanvasResize?.({
-					minX,
-					minY,
-					width: width - minX + CANVAS_EXPANSION_SIZE,
-					height,
-				} as SvgCanvasResizeEvent);
-			} else if (e.endY >= minY + height) {
-				// Notify the new height to the hooks.
-				onCanvasResize?.({
-					minX,
-					minY,
-					width,
-					height: height - minY + CANVAS_EXPANSION_SIZE,
-				} as SvgCanvasResizeEvent);
-			} else {
-				// When the pointer is moved within the canvas, notify the drag event to the hooks.
-				onDrag?.(e);
-			}
+			onDrag?.(e);
 		},
-		[onCanvasResize, height, minY, width, minX, onDrag],
+		[canvasResize, onDrag],
+	);
+
+	/**
+	 * Handle the diagram change event to resize the canvas.
+	 */
+	const handleDiagramChange = useCallback(
+		(e: DiagramChangeEvent) => {
+			if (e.endDiagram.x && e.endDiagram.y) {
+				canvasResize({
+					x: e.endDiagram.x,
+					y: e.endDiagram.y,
+				});
+			}
+
+			onDiagramChange?.(e);
+		},
+		[onDiagramChange, canvasResize],
 	);
 
 	/**
@@ -334,7 +365,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			...item,
 			key: item.id,
 			onTransform,
-			onDiagramChange,
+			onDiagramChange: handleDiagramChange,
 			onDrag: handleDrag,
 			onDrop,
 			onSelect: handleSelect,
