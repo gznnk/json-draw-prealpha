@@ -140,7 +140,9 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 
 			// 動いた接続ポイントの反対側の点を取得
 			const oppositeItem =
-				movedPointIdx === 0 ? items[items.length - 1] : items[0];
+				movedPointIdx === 0
+					? _startItems[_startItems.length - 1]
+					: _startItems[0];
 			let oppositePoint = {
 				x: oppositeItem.x,
 				y: oppositeItem.y,
