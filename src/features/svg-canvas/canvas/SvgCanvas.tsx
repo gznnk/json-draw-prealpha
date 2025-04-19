@@ -82,6 +82,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onRedo,
 		onCanvasResize,
 		onNewDiagram,
+		onNewItem,
 		onExecute,
 	} = props;
 
@@ -378,6 +379,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			onSelect: handleSelect,
 			onConnect,
 			onTextEdit: textEditorHandlers.onTextEdit,
+			onNewItem,
 			onExecute,
 		};
 

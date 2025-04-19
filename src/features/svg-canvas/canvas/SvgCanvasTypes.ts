@@ -11,6 +11,7 @@ import type {
 	DiagramTransformEvent,
 	ExecuteEvent,
 	NewDiagramEvent,
+	NewItemEvent,
 	StackOrderChangeEvent,
 	SvgCanvasResizeEvent,
 } from "../types/EventTypes";
@@ -44,6 +45,14 @@ export type SvgCanvasState = {
 export type SvgCanvasHistory = SvgCanvasData;
 
 /**
+ * Type for canvas custom hooks.
+ */
+export type CanvasHooksProps = {
+	canvasState: SvgCanvasState;
+	setCanvasState: React.Dispatch<React.SetStateAction<SvgCanvasState>>;
+};
+
+/**
  * Props for the SvgCanvas component.
  */
 export type SvgCanvasProps = {
@@ -75,6 +84,7 @@ export type SvgCanvasProps = {
 	onRedo?: () => void;
 	onCanvasResize?: (e: SvgCanvasResizeEvent) => void;
 	onNewDiagram?: (e: NewDiagramEvent) => void;
+	onNewItem?: (e: NewItemEvent) => void;
 	onStackOrderChange?: (e: StackOrderChangeEvent) => void;
 	onExecute?: (e: ExecuteEvent) => void;
 };

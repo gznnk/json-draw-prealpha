@@ -75,6 +75,15 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			>
 				AI
 			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						diagramType: "SvgToDiagramNode",
+					})
+				}
+			>
+				図
+			</CanvasMenuItem>
 		</CanvasMenuDiv>
 	);
 };

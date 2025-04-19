@@ -13,7 +13,6 @@ import {
 	type DiagramChangeEvent,
 	type DiagramConnectEvent,
 	type DiagramDragDropEvent,
-	type DiagramDragEvent,
 	type DiagramSelectEvent,
 	type DiagramTextChangeEvent,
 	type DiagramTextEditEvent,
@@ -22,6 +21,7 @@ import {
 	type NewDiagramEvent,
 	type StackOrderChangeEvent,
 	type SvgCanvasResizeEvent,
+	type NewItemEvent,
 } from "../types/EventTypes";
 import type { ConnectLineData } from "../components/shapes/ConnectLine";
 import type { GroupData } from "../components/shapes/Group";
@@ -61,6 +61,10 @@ import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
 import { createLLMNodeData } from "../components/nodes/LLMNode";
 
+// Import canvas custom hooks.
+import { useDrag } from "./hooks/useDrag";
+import { createSvgToDiagramNodeData } from "../components/nodes/SvgToDiagramNode";
+
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
 
@@ -96,54 +100,14 @@ export const useSvgCanvas = (
 		lastHistoryEventId: "",
 	});
 
-	/**
-	 * 図形のドラッグイベントハンドラ
-	 */
-	const onDrag = useCallback((e: DiagramDragEvent) => {
-		setCanvasState((prevState) => {
-			// 新しい状態を作成
-			let newState = {
-				...prevState,
-				items: applyRecursive(prevState.items, (item) => {
-					if (item.id === e.id) {
-						const newItem = {
-							...item,
-							x: e.endX,
-							y: e.endY,
-						};
+	// Create props for the canvas hooks.
+	const canvasHooksProps = {
+		canvasState,
+		setCanvasState,
+	};
 
-						// Update the connect points of the diagram.
-						// And notify the connect points move event to ConnectLine.
-						return updateConnectPointsAndNotifyMove(
-							e.eventId,
-							e.eventType,
-							newItem,
-						);
-					}
-					return item;
-				}),
-				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Instant",
-			};
-
-			// Update outline of all groups.
-			newState.items = updateOutlineOfAllGroups(newState.items);
-
-			if (isHistoryEvent(e.eventType)) {
-				// console.log(
-				// 	"onDrag",
-				// 	prevState.lastHistoryEventId,
-				// 	newState.lastHistoryEventId,
-				// );
-
-				// 終了時に履歴を追加
-				newState.lastHistoryEventId = e.eventId;
-				newState = addHistory(prevState, newState);
-				// console.log("addHistory caused by Drag", e.eventId);
-			}
-
-			return newState;
-		});
-	}, []);
+	// Handler for the drag event.
+	const onDrag = useDrag(canvasHooksProps);
 
 	/**
 	 * 図形のドロップイベントハンドラ
@@ -742,9 +706,18 @@ export const useSvgCanvas = (
 			if (diagramType === "LLMNode") {
 				addItem(createLLMNodeData({ x: centerX, y: centerY }) as Diagram);
 			}
+			if (diagramType === "SvgToDiagramNode") {
+				addItem(
+					createSvgToDiagramNodeData({ x: centerX, y: centerY }) as Diagram,
+				);
+			}
 		},
 		[canvasState.minX, canvasState.minY, canvasState.width, canvasState.height],
 	);
+
+	const onNewItem = useCallback((e: NewItemEvent) => {
+		addItem(e.item);
+	}, []);
 
 	const onStackOrderChange = useCallback((e: StackOrderChangeEvent) => {
 		setCanvasState((prevState) => {
@@ -862,6 +835,7 @@ export const useSvgCanvas = (
 		onRedo,
 		onCanvasResize,
 		onNewDiagram,
+		onNewItem,
 		onStackOrderChange,
 		onExecute,
 	};

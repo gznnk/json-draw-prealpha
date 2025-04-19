@@ -195,6 +195,12 @@ export type NewDiagramEvent = {
 	y?: number;
 };
 
+export type NewItemEvent = {
+	item: Diagram;
+	x?: number;
+	y?: number;
+};
+
 export type StackOrderChangeType =
 	| "bringToFront" // 最前面に移動
 	| "sendToBack" // 最背面に移動
