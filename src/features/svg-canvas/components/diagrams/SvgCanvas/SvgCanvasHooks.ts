@@ -63,6 +63,7 @@ import {
 import { createPathData } from "../../shapes/Path";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
+import { createLLMNodeData } from "../../nodes/LLMNode";
 
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
@@ -741,6 +742,9 @@ export const useSvgCanvas = (
 			}
 			if (diagramType === "TextAreaNode") {
 				addItem(createTextAreaNodeData({ x: centerX, y: centerY }) as Diagram);
+			}
+			if (diagramType === "LLMNode") {
+				addItem(createLLMNodeData({ x: centerX, y: centerY }) as Diagram);
 			}
 		},
 		[canvasState.minX, canvasState.minY, canvasState.width, canvasState.height],

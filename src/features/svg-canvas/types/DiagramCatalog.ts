@@ -25,6 +25,7 @@ import {
 	calcRectangleConnectPointPosition,
 } from "../components/shapes/Rectangle";
 import { TextAreaNode } from "../components/nodes/TextAreaNode";
+import { LLMNode } from "../components/nodes/LLMNode";
 
 /**
  * 図形の種類
@@ -39,6 +40,7 @@ export type DiagramType =
 	| "PathPoint"
 	| "Rectangle"
 	// Nodes
+	| "LLMNode"
 	| "TextAreaNode";
 
 /**
@@ -74,6 +76,7 @@ export const DiagramComponentCatalog: {
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
 	// Nodes
+	LLMNode: LLMNode,
 	TextAreaNode: TextAreaNode,
 };
 
@@ -92,5 +95,6 @@ export const DiagramConnectPointCalculators: {
 	PathPoint: () => [],
 	Rectangle: calcRectangleConnectPointPosition,
 	// Nodes
+	LLMNode: calcEllipseConnectPointPosition,
 	TextAreaNode: calcRectangleConnectPointPosition,
 };

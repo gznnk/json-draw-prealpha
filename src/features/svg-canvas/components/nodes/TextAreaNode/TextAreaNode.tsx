@@ -4,6 +4,7 @@ import { memo, useEffect, useRef } from "react";
 import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
 import type { ExecuteEvent } from "../../../types/EventTypes";
 import { usePropagation } from "../../../hooks/usePropagation";
+import { newEventId } from "../../../utils/Util";
 
 type TextAreaProps = RectangleProps & {
 	onExecute: (e: ExecuteEvent) => void;
@@ -16,6 +17,7 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 		if (props.text !== text.current) {
 			props.onExecute({
 				id: props.id,
+				eventId: newEventId(),
 				data: {
 					text: props.text,
 				},
@@ -27,20 +29,18 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 	usePropagation({
 		id: props.id,
 		onPropagation: (e) => {
-			if (e.data.text && typeof e.data.text === "string") {
-				props.onDiagramChange?.({
-					id: props.id,
-					eventId: "temp", // TOOD: ここは一時的なIDを使用しているが、後で適切なIDに変更する必要がある。
-					eventType: "Instant",
-					changeType: "Appearance",
-					startDiagram: {
-						text: props.text,
-					},
-					endDiagram: {
-						text: e.data.text,
-					},
-				});
-			}
+			props.onDiagramChange?.({
+				id: props.id,
+				eventId: e.eventId,
+				eventType: "Instant",
+				changeType: "Appearance",
+				startDiagram: {
+					text: props.text,
+				},
+				endDiagram: {
+					text: e.data.text,
+				},
+			});
 		},
 	});
 

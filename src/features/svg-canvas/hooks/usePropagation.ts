@@ -23,6 +23,10 @@ export const usePropagation = (props: PropagationProps) => {
 	useEffect(() => {
 		const handlePropagation = (e: Event) => {
 			const customEvent = e as CustomEvent<PropagationEvent>;
+			// If the event is triggered by itself, do nothing.
+			if (customEvent.detail.id === refBus.current.id) return;
+
+			// If this event is targeting the parent component, invoke its onPropagation callback.
 			const targetId = customEvent.detail.targetId;
 			if (targetId.includes(refBus.current.id)) {
 				// Call the onPropagation function passed from the parent component.

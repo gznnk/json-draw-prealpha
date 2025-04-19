@@ -66,6 +66,15 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			>
 				あ
 			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						diagramType: "LLMNode",
+					})
+				}
+			>
+				AI
+			</CanvasMenuItem>
 		</CanvasMenuDiv>
 	);
 };
