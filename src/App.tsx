@@ -10,7 +10,7 @@ import AIChat from "./components/organisms/AIChat";
 import { Profiler } from "./utils/Profiler";
 
 import { svgDataToDiagram } from "./features/svg-canvas/utils/Diagram";
-import { loadCanvasDataFromLocalStorage } from "./features/svg-canvas/components/diagrams/SvgCanvas/SvgCanvasFunctions";
+import { loadCanvasDataFromLocalStorage } from "./features/svg-canvas/canvas/SvgCanvasFunctions";
 // const logger = getLogger("App");
 declare global {
 	interface Window {

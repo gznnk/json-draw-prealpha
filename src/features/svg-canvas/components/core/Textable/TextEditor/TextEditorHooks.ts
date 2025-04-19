@@ -2,10 +2,10 @@
 import { useCallback, useState } from "react";
 
 // TODO: 場所
-import { getDiagramById } from "../../../diagrams/SvgCanvas/SvgCanvasFunctions";
+import { getDiagramById } from "../../../../canvas/SvgCanvasFunctions";
 
 // Import types related to SvgCanvas.
-import type { SvgCanvasProps } from "../../../diagrams/SvgCanvas/SvgCanvasTypes";
+import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
 import type {
 	DiagramTextEditEvent,
 	DiagramTextChangeEvent,

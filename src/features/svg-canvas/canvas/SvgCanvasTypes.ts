@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramCatalog";
+import type { Diagram } from "../types/DiagramCatalog";
 import type {
 	DiagramChangeEvent,
 	DiagramConnectEvent,
@@ -13,8 +13,8 @@ import type {
 	NewDiagramEvent,
 	StackOrderChangeEvent,
 	SvgCanvasResizeEvent,
-} from "../../../types/EventTypes";
-import type { GroupData } from "../../shapes/Group/GroupTypes";
+} from "../types/EventTypes";
+import type { GroupData } from "../components/shapes/Group/GroupTypes";
 
 /**
  * Type for the data of the SvgCanvas.

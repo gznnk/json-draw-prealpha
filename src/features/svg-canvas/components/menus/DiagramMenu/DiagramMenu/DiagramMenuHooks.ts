@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // TODO: 場所
-import { getSelectedItems } from "../../../diagrams/SvgCanvas/SvgCanvasFunctions";
+import { getSelectedItems } from "../../../../canvas/SvgCanvasFunctions";
 
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../../types/DiagramCatalog";
@@ -11,7 +11,7 @@ import type {
 	StrokableData,
 	TextableData,
 } from "../../../../types/DiagramTypes";
-import type { SvgCanvasProps } from "../../../diagrams/SvgCanvas/SvgCanvasTypes";
+import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
 import type { RectangleData } from "../../../shapes/Rectangle";
 
 // Import functions related to SvgCanvas.

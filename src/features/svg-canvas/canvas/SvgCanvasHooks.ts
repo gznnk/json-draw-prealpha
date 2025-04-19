@@ -2,10 +2,10 @@
 import { useCallback, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { PartiallyRequired } from "../../../../../types/ParticallyRequired";
+import type { PartiallyRequired } from "../../../types/ParticallyRequired";
 
 // Import types related to SvgCanvas.
-import type { Diagram, DiagramType } from "../../../types/DiagramCatalog";
+import type { Diagram, DiagramType } from "../types/DiagramCatalog";
 import {
 	PROPAGATION_EVENT_NAME,
 	type PropagationEvent,
@@ -22,26 +22,22 @@ import {
 	type NewDiagramEvent,
 	type StackOrderChangeEvent,
 	type SvgCanvasResizeEvent,
-} from "../../../types/EventTypes";
-import type { ConnectLineData } from "../../shapes/ConnectLine";
-import type { GroupData } from "../../shapes/Group";
-import type { PathPointData } from "../../shapes/Path";
+} from "../types/EventTypes";
+import type { ConnectLineData } from "../components/shapes/ConnectLine";
+import type { GroupData } from "../components/shapes/Group";
+import type { PathPointData } from "../components/shapes/Path";
 
 // Import components related to SvgCanvas.
-import { notifyConnectPointsMove } from "../../shapes/ConnectLine";
-import { createEllipseData } from "../../shapes/Ellipse";
-import { calcGroupBoxOfNoRotation } from "../../shapes/Group";
-import { createRectangleData } from "../../shapes/Rectangle";
-import { createTextAreaNodeData } from "../../nodes/TextAreaNode";
+import { notifyConnectPointsMove } from "../components/shapes/ConnectLine";
+import { createEllipseData } from "../components/shapes/Ellipse";
+import { calcGroupBoxOfNoRotation } from "../components/shapes/Group";
+import { createRectangleData } from "../components/shapes/Rectangle";
+import { createTextAreaNodeData } from "../components/nodes/TextAreaNode";
 
 // Import functions related to SvgCanvas.
-import {
-	isItemableData,
-	isSelectableData,
-	newId,
-} from "../../../utils/Diagram";
-import { calcPointsOuterShape } from "../../../utils/Math";
-import { deepCopy, newEventId } from "../../../utils/Util";
+import { isItemableData, isSelectableData, newId } from "../utils/Diagram";
+import { calcPointsOuterShape } from "../utils/Math";
+import { deepCopy, newEventId } from "../utils/Util";
 import {
 	addHistory,
 	applyMultiSelectSourceRecursive,
@@ -60,10 +56,10 @@ import {
 } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
-import { createPathData } from "../../shapes/Path";
+import { createPathData } from "../components/shapes/Path";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
-import { createLLMNodeData } from "../../nodes/LLMNode";
+import { createLLMNodeData } from "../components/nodes/LLMNode";
 
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;

@@ -1,2 +1,1 @@
-export { SvgCanvas } from "./components/diagrams/SvgCanvas/SvgCanvas";
-export { useSvgCanvas } from "./components/diagrams/SvgCanvas/SvgCanvasHooks";
+export { SvgCanvas, useSvgCanvas } from "./canvas";

@@ -2,10 +2,10 @@
 import { useCallback, useState } from "react";
 
 // TODO: 場所
-import { getSelectedItems } from "../../../diagrams/SvgCanvas/SvgCanvasFunctions";
+import { getSelectedItems } from "../../../../canvas/SvgCanvasFunctions";
 
 // Import types related to SvgCanvas.
-import type { SvgCanvasProps } from "../../../diagrams/SvgCanvas/SvgCanvasTypes";
+import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
 
 // Imports related to this component.
 import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
