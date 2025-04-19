@@ -1,1 +1,0 @@
-export { FontSizeSelector } from "./FontSizeSelector";

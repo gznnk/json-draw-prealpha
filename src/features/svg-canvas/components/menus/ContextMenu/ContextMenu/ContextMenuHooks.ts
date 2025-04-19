@@ -14,11 +14,14 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 	// Extract properties from canvasProps.
 	const {
 		items,
+		multiSelectGroup,
 		history,
 		historyIndex,
 		onUndo,
 		onRedo,
 		onSelectAll,
+		onGroup,
+		onUngroup,
 		onDelete,
 	} = canvasProps;
 
@@ -32,10 +35,13 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 	// Create a map of context menu states.
 	const selectedItems = getSelectedItems(items);
 	const isItemSelected = selectedItems.length > 0;
+	const isGroupSelected = selectedItems.some((item) => item.type === "Group");
 	const menuStateMap = {
 		Undo: historyIndex > 0 ? "Enable" : "Disable",
 		Redo: historyIndex < history.length - 1 ? "Enable" : "Disable",
 		SelectAll: items.length > 0 ? "Enable" : "Disable",
+		Group: multiSelectGroup ? "Enable" : "Disable",
+		Ungroup: isGroupSelected ? "Enable" : "Disable",
 		Delete: isItemSelected ? "Enable" : "Disable",
 	} as ContextMenuStateMap;
 
@@ -54,6 +60,12 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 				case "SelectAll":
 					onSelectAll?.();
 					break;
+				case "Group":
+					onGroup?.();
+					break;
+				case "Ungroup":
+					onUngroup?.();
+					break;
 				case "Delete":
 					onDelete?.();
 					break;
@@ -61,7 +73,7 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 			}
 			setContextMenuState({ x: 0, y: 0, isVisible: false });
 		},
-		[onUndo, onRedo, onSelectAll, onDelete], // TODO: refBus使う
+		[onUndo, onRedo, onSelectAll, onGroup, onUngroup, onDelete], // TODO: refBus使う
 	);
 
 	/**

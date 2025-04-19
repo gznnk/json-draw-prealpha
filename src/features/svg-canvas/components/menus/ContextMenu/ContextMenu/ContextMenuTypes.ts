@@ -7,6 +7,8 @@ export type ContextMenuType =
 	| "Copy"
 	| "Paste"
 	| "SelectAll"
+	| "Group"
+	| "Ungroup"
 	| "Delete";
 
 /**
