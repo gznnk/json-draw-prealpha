@@ -5,34 +5,29 @@ import { useCallback, useState } from "react";
 import type { PartiallyRequired } from "../../../types/ParticallyRequired";
 
 // Import types related to SvgCanvas.
-import type { Diagram, DiagramType } from "../types/DiagramCatalog";
-import {
-	PROPAGATION_EVENT_NAME,
-	type PropagationEvent,
-	type ConnectPointMoveData,
-	type DiagramChangeEvent,
-	type DiagramConnectEvent,
-	type DiagramDragDropEvent,
-	type DiagramSelectEvent,
-	type DiagramTextChangeEvent,
-	type DiagramTextEditEvent,
-	type DiagramTransformEvent,
-	type ExecuteEvent,
-	type NewDiagramEvent,
-	type StackOrderChangeEvent,
-	type SvgCanvasResizeEvent,
-	type NewItemEvent,
-} from "../types/EventTypes";
 import type { ConnectLineData } from "../components/shapes/ConnectLine";
 import type { GroupData } from "../components/shapes/Group";
 import type { PathPointData } from "../components/shapes/Path";
+import type { Diagram, DiagramType } from "../types/DiagramCatalog";
+import {
+	PROPAGATION_EVENT_NAME,
+	type DiagramConnectEvent,
+	type DiagramSelectEvent,
+	type DiagramTextChangeEvent,
+	type DiagramTextEditEvent,
+	type ExecuteEvent,
+	type NewDiagramEvent,
+	type NewItemEvent,
+	type PropagationEvent,
+	type StackOrderChangeEvent,
+	type SvgCanvasResizeEvent,
+} from "../types/EventTypes";
 
 // Import components related to SvgCanvas.
-import { notifyConnectPointsMove } from "../components/shapes/ConnectLine";
+import { createTextAreaNodeData } from "../components/nodes/TextAreaNode";
 import { createEllipseData } from "../components/shapes/Ellipse";
 import { calcGroupBoxOfNoRotation } from "../components/shapes/Group";
 import { createRectangleData } from "../components/shapes/Rectangle";
-import { createTextAreaNodeData } from "../components/nodes/TextAreaNode";
 
 // Import functions related to SvgCanvas.
 import { isItemableData, isSelectableData, newId } from "../utils/Diagram";
@@ -49,21 +44,19 @@ import {
 	removeGroupedRecursive,
 	saveCanvasDataToLocalStorage,
 	ungroupSelectedGroupsRecursive,
-	updateConnectPointsAndCollectRecursive,
-	updateConnectPointsAndNotifyMove,
-	isHistoryEvent,
-	updateOutlineOfAllGroups,
 } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
+import { createLLMNodeData } from "../components/nodes/LLMNode";
+import { createSvgToDiagramNodeData } from "../components/nodes/SvgToDiagramNode";
 import { createPathData } from "../components/shapes/Path";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
-import { createLLMNodeData } from "../components/nodes/LLMNode";
 
 // Import canvas custom hooks.
+import { useDiagramChange } from "./hooks/useDiagramChange";
 import { useDrag } from "./hooks/useDrag";
-import { createSvgToDiagramNodeData } from "../components/nodes/SvgToDiagramNode";
+import { useTransform } from "./hooks/useTransform";
 
 // TODO: 精査
 type UpdateItem = Omit<PartiallyRequired<Diagram, "id">, "type" | "isSelected">;
@@ -109,181 +102,11 @@ export const useSvgCanvas = (
 	// Handler for the drag event.
 	const onDrag = useDrag(canvasHooksProps);
 
-	/**
-	 * 図形のドロップイベントハンドラ
-	 */
-	const onDrop = useCallback((_e: DiagramDragDropEvent) => {
-		// NOP
-	}, []);
+	// Handler for the transfrom event.
+	const onTransform = useTransform(canvasHooksProps);
 
-	/**
-	 * 図形の変形イベントハンドラ
-	 */
-	const onTransform = useCallback((e: DiagramTransformEvent) => {
-		setCanvasState((prevState) => {
-			// 新しい状態を作成
-			let newState = {
-				...prevState,
-				items: applyRecursive(prevState.items, (item) => {
-					if (item.id === e.id) {
-						const newItem = {
-							...item,
-							...e.endShape,
-						};
-
-						// Update the connect points of the diagram.
-						// And notify the connect points move event to ConnectLine.
-						return updateConnectPointsAndNotifyMove(
-							e.eventId,
-							e.eventType,
-							newItem,
-						);
-					}
-					return item;
-				}),
-				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Instant",
-			};
-
-			// Update outline of all groups.
-			newState.items = updateOutlineOfAllGroups(newState.items);
-
-			if (isHistoryEvent(e.eventType)) {
-				// 終了時に履歴を追加
-				newState.lastHistoryEventId = e.eventId;
-				newState = addHistory(prevState, newState);
-				// console.log("addHistory caused by onTransform", e.eventId);
-			}
-
-			return newState;
-		});
-	}, []);
-
-	/**
-	 * 図形の変更イベントハンドラ
-	 */
-	const onDiagramChange = useCallback((e: DiagramChangeEvent) => {
-		// 図形の変更を反映
-		setCanvasState((prevState) => {
-			let items = prevState.items;
-			let multiSelectGroup: GroupData | undefined = prevState.multiSelectGroup;
-
-			const connectPointMoveDataList: ConnectPointMoveData[] = [];
-
-			if (e.id === MULTI_SELECT_GROUP) {
-				// The case of multi-select group change.
-
-				// Update the multi-select group with the new properties.
-				multiSelectGroup = {
-					...multiSelectGroup,
-					...e.endDiagram,
-				} as GroupData;
-
-				// Update the connect points of the multi-select group.
-				if (e.changeType !== "Appearance") {
-					updateConnectPointsAndCollectRecursive(
-						multiSelectGroup,
-						connectPointMoveDataList,
-					);
-				}
-
-				// Propagate the multi-select group changes to the original diagrams.
-				items = applyRecursive(prevState.items, (item) => {
-					if (!isItemableData(e.endDiagram)) return item; // Type guard.
-
-					// Find the corresponding change data in the multi-select group.
-					const changedItem = (e.endDiagram.items ?? []).find(
-						(i) => i.id === item.id,
-					);
-
-					// If there is no corresponding change data, return the original item.
-					if (!changedItem) return item;
-
-					// Prepare the new item with the original properties.
-					let newItem = { ...item };
-
-					if (isSelectableData(changedItem)) {
-						// Remove the properties that are not needed for the update.
-						const { isSelected, isMultiSelectSource, ...updateItem } =
-							changedItem;
-
-						// Apply updated properties to the original item.
-						newItem = {
-							...newItem,
-							...updateItem,
-						};
-					}
-
-					return newItem;
-				});
-			} else {
-				// 複数選択グループ以外の場合は、普通に更新
-				items = applyRecursive(prevState.items, (item) => {
-					// If the id does not match, return the original item.
-					if (item.id !== e.id) return item;
-
-					// If the id matches, update the item with the new properties.
-					const newItem = { ...item, ...e.endDiagram };
-
-					// Update the diagram's connect points and collect their move data.
-					if (e.changeType !== "Appearance") {
-						updateConnectPointsAndCollectRecursive(
-							newItem,
-							connectPointMoveDataList,
-						);
-					}
-
-					// Return the updated item.
-					return newItem;
-				});
-
-				if (multiSelectGroup) {
-					// TODO: 接続ポイントの更新（現時点では該当ルートで接続ポイントの移動はない）
-					// When a multi-select group is present, propagate the original diagram changes to its items.
-					multiSelectGroup.items = applyRecursive(
-						multiSelectGroup.items,
-						(item) =>
-							item.id === e.id
-								? {
-										...item,
-										...e.endDiagram,
-										isSelected: false,
-										isMultiSelectSource: false,
-									}
-								: item,
-					);
-				}
-			}
-
-			// Update outline of all groups.
-			items = updateOutlineOfAllGroups(items);
-
-			// 新しい状態を作成
-			let newState = {
-				...prevState,
-				items,
-				isDiagramChanging: e.eventType !== "End" && e.eventType !== "Instant",
-				multiSelectGroup,
-			} as SvgCanvasState;
-
-			if (isHistoryEvent(e.eventType)) {
-				// 終了時に履歴を追加
-				newState.lastHistoryEventId = e.eventId;
-				newState = addHistory(prevState, newState);
-				// console.log("addHistory caused by onDiagramChange", e.eventId);
-			}
-
-			if (0 < connectPointMoveDataList.length) {
-				// 接続ポイントの移動を通知
-				notifyConnectPointsMove({
-					eventId: e.eventId,
-					eventType: e.eventType,
-					points: connectPointMoveDataList,
-				});
-			}
-
-			return newState;
-		});
-	}, []);
+	// Handler for the diagram change event.
+	const onDiagramChange = useDiagramChange(canvasHooksProps);
 
 	/**
 	 * 図形の選択イベントハンドラ
@@ -819,7 +642,6 @@ export const useSvgCanvas = (
 	const canvasProps = {
 		...canvasState,
 		onDrag,
-		onDrop,
 		onSelect,
 		onSelectAll,
 		onAllSelectionClear,
@@ -878,15 +700,13 @@ export const useSvgCanvas = (
 	 */
 	const undo = useCallback(() => {
 		setCanvasState((prevState) => {
-			// 前の状態を取得
+			// Get the previous state.
 			const prevIndex = prevState.historyIndex - 1;
 			if (prevIndex < 0) {
-				// 履歴がない場合は何もしない
+				// If there is no history, do nothing.
 				return prevState;
 			}
 			const prevHistory = prevState.history[prevIndex];
-
-			// console.log("undo", prevHistory.lastHistoryEventId);
 
 			const ret = {
 				...prevState,
@@ -894,7 +714,8 @@ export const useSvgCanvas = (
 				historyIndex: prevIndex,
 			};
 
-			saveCanvasDataToLocalStorage(ret); // Save the canvas data to local storage.
+			// Save the canvas data to local storage.
+			saveCanvasDataToLocalStorage(ret);
 
 			return ret;
 		});

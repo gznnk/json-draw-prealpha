@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { DiagramDragEvent } from "../../types/EventTypes";
+import type { DiagramTransformEvent } from "../../types/EventTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
@@ -16,9 +16,9 @@ import {
 } from "../SvgCanvasFunctions";
 
 /**
- * Custom hook to handle drag events on the canvas.
+ * Custom hook to handle transform events on the canvas.
  */
-export const useDrag = (props: CanvasHooksProps) => {
+export const useTransform = (props: CanvasHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
@@ -26,7 +26,7 @@ export const useDrag = (props: CanvasHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	return useCallback((e: DiagramDragEvent) => {
+	return useCallback((e: DiagramTransformEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const { setCanvasState } = refBus.current.props;
 
@@ -35,11 +35,10 @@ export const useDrag = (props: CanvasHooksProps) => {
 				...prevState,
 				items: applyRecursive(prevState.items, (item) => {
 					if (item.id === e.id) {
-						// Apply the new position to the item.
+						// Apply the new shape to the item.
 						const newItem = {
 							...item,
-							x: e.endX,
-							y: e.endY,
+							...e.endShape,
 						};
 
 						// Update the connect points of the diagram.

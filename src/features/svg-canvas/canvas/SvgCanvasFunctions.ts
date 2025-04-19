@@ -483,6 +483,16 @@ export const isHistoryEvent = (eventType: EventType): boolean => {
 };
 
 /**
+ * Check if the event type is a diagram changing event.
+ *
+ * @param eventType - The type of the event to check.
+ * @returns	{boolean} - True if the event type is a diagram changing event, false otherwise.
+ */
+export const isDiagramChangingEvent = (eventType: EventType): boolean => {
+	return eventType !== "End" && eventType !== "Instant";
+};
+
+/**
  * Update the outline of all groups in the diagram.
  *
  * @param items - The list of diagrams to update.
@@ -491,8 +501,20 @@ export const isHistoryEvent = (eventType: EventType): boolean => {
 export const updateOutlineOfAllGroups = (items: Diagram[]): Diagram[] => {
 	return applyRecursive(items, (item) => {
 		if (isItemableData(item)) {
-			// Update the group bounds.
+			// Calculate the bounds of the group.
 			const box = calcBoundsOfGroup(item);
+			if (
+				item.x === box.x &&
+				item.y === box.y &&
+				item.width === box.width &&
+				item.height === box.height
+			) {
+				// If the bounds are the same, return the original object.
+				// This is important for React to detect no changes in the reference.
+				return item;
+			}
+
+			// Return the new object with updated bounds.
 			return {
 				...item,
 				x: box.x,
