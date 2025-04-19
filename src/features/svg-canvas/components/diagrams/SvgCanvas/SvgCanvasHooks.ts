@@ -6,19 +6,22 @@ import type { PartiallyRequired } from "../../../../../types/ParticallyRequired"
 
 // Import types related to SvgCanvas.
 import type { Diagram, DiagramType } from "../../../types/DiagramCatalog";
-import type {
-	ConnectPointMoveData,
-	DiagramChangeEvent,
-	DiagramConnectEvent,
-	DiagramDragDropEvent,
-	DiagramDragEvent,
-	DiagramSelectEvent,
-	DiagramTextChangeEvent,
-	DiagramTextEditEvent,
-	DiagramTransformEvent,
-	NewDiagramEvent,
-	StackOrderChangeEvent,
-	SvgCanvasResizeEvent,
+import {
+	PROPAGATION_EVENT_NAME,
+	type PropagationEvent,
+	type ConnectPointMoveData,
+	type DiagramChangeEvent,
+	type DiagramConnectEvent,
+	type DiagramDragDropEvent,
+	type DiagramDragEvent,
+	type DiagramSelectEvent,
+	type DiagramTextChangeEvent,
+	type DiagramTextEditEvent,
+	type DiagramTransformEvent,
+	type ExecuteEvent,
+	type NewDiagramEvent,
+	type StackOrderChangeEvent,
+	type SvgCanvasResizeEvent,
 } from "../../../types/EventTypes";
 import type { ConnectLineData } from "../../shapes/ConnectLine";
 import type { GroupData } from "../../shapes/Group";
@@ -29,6 +32,7 @@ import { notifyConnectPointsMove } from "../../shapes/ConnectLine";
 import { createEllipseData } from "../../shapes/Ellipse";
 import { calcGroupBoxOfNoRotation } from "../../shapes/Group";
 import { createRectangleData } from "../../shapes/Rectangle";
+import { createTextAreaNodeData } from "../../nodes/TextAreaNode";
 
 // Import functions related to SvgCanvas.
 import {
@@ -735,6 +739,9 @@ export const useSvgCanvas = (
 			if (diagramType === "Path") {
 				addItem(createPathData({ x: centerX, y: centerY }) as Diagram);
 			}
+			if (diagramType === "TextAreaNode") {
+				addItem(createTextAreaNodeData({ x: centerX, y: centerY }) as Diagram);
+			}
 		},
 		[canvasState.minX, canvasState.minY, canvasState.width, canvasState.height],
 	);
@@ -813,6 +820,29 @@ export const useSvgCanvas = (
 		});
 	}, []);
 
+	const onExecute = useCallback(
+		(e: ExecuteEvent) => {
+			const lines = canvasState.items.filter((i) => {
+				if (i.type !== "ConnectLine") return false;
+
+				const connectLine = i as ConnectLineData;
+				return connectLine.startOwnerId === e.id;
+			}) as ConnectLineData[];
+
+			const detail = {
+				...e,
+				targetId: lines.map((i) => i.endOwnerId),
+			} as PropagationEvent;
+
+			document.dispatchEvent(
+				new CustomEvent(PROPAGATION_EVENT_NAME, {
+					detail,
+				}),
+			);
+		},
+		[canvasState.items],
+	);
+
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -833,6 +863,7 @@ export const useSvgCanvas = (
 		onCanvasResize,
 		onNewDiagram,
 		onStackOrderChange,
+		onExecute,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //

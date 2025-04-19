@@ -84,6 +84,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onRedo,
 		onCanvasResize,
 		onNewDiagram,
+		onExecute,
 	} = props;
 
 	// SVG要素のコンテナの参照
@@ -371,6 +372,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			onSelect: handleSelect,
 			onConnect,
 			onTextEdit: textEditorHandlers.onTextEdit,
+			onExecute,
 		};
 
 		return React.createElement(component, props);

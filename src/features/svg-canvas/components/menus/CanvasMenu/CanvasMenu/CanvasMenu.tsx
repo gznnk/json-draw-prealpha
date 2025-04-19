@@ -57,6 +57,15 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 					/>
 				</svg>
 			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						diagramType: "TextAreaNode",
+					})
+				}
+			>
+				あ
+			</CanvasMenuItem>
 		</CanvasMenuDiv>
 	);
 };

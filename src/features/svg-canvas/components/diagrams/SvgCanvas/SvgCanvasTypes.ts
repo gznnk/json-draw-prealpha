@@ -9,6 +9,7 @@ import type {
 	DiagramTextChangeEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
+	ExecuteEvent,
 	NewDiagramEvent,
 	StackOrderChangeEvent,
 	SvgCanvasResizeEvent,
@@ -75,4 +76,5 @@ export type SvgCanvasProps = {
 	onCanvasResize?: (e: SvgCanvasResizeEvent) => void;
 	onNewDiagram?: (e: NewDiagramEvent) => void;
 	onStackOrderChange?: (e: StackOrderChangeEvent) => void;
+	onExecute?: (e: ExecuteEvent) => void;
 };

@@ -37,6 +37,7 @@ export type GroupProps = CreateDiagramProps<
 		itemable: true;
 		connectable: true;
 		textable: true;
+		executable: true;
 	}
 >;
 
@@ -65,6 +66,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 	onDiagramChange,
 	onConnect,
 	onTextEdit,
+	onExecute,
 }) => {
 	// Flag indicating whether the entire group is being dragged.
 	// Set to true only when this group is selected and currently being dragged.
@@ -477,6 +479,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onDiagramChange: handleChildDiagramChange,
 			onConnect: handleChildDiagramConnect,
 			onTextEdit: handleChildDiagramTextEdit,
+			onExecute,
 		};
 
 		return React.createElement(component, props);

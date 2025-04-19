@@ -205,3 +205,20 @@ export type StackOrderChangeEvent = {
 	id: string;
 	changeType: StackOrderChangeType;
 };
+
+export type ExecuteResult = {
+	text: string;
+};
+
+export type ExecuteEvent = {
+	id: string;
+	data: ExecuteResult;
+};
+
+export const PROPAGATION_EVENT_NAME = "PropagationEvent" as const;
+
+export type PropagationEvent = {
+	id: string;
+	targetId: string[];
+	data: ExecuteResult;
+};

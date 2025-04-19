@@ -1,4 +1,7 @@
-// SvgCanvas関連コンポーネントをインポート
+// Import types related to SvgCanvas.
+import type { ConnectPointMoveData } from "./EventTypes";
+
+// Import components related to SvgCanvas.
 import {
 	ConnectLine,
 	type ConnectLineData,
@@ -21,19 +24,22 @@ import {
 	type RectangleData,
 	calcRectangleConnectPointPosition,
 } from "../components/shapes/Rectangle";
-import type { ConnectPointMoveData } from "./EventTypes";
+import { TextAreaNode } from "../components/nodes/TextAreaNode";
 
 /**
  * 図形の種類
  */
 export type DiagramType =
+	// Shapes
 	| "ConnectLine"
 	| "ConnectPoint"
 	| "Ellipse"
 	| "Group"
 	| "Path"
 	| "PathPoint"
-	| "Rectangle";
+	| "Rectangle"
+	// Nodes
+	| "TextAreaNode";
 
 /**
  * 全図形のデータを統合した型
@@ -59,6 +65,7 @@ export const DiagramComponentCatalog: {
 	// biome-ignore lint/suspicious/noExplicitAny: 種々の図形の共通の型を作るのは困難なため
 	[key in DiagramType]: React.FC<any>;
 } = {
+	// Shapes
 	ConnectLine: ConnectLine,
 	ConnectPoint: DummyComponent,
 	Ellipse: Ellipse,
@@ -66,6 +73,8 @@ export const DiagramComponentCatalog: {
 	Path: Path,
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
+	// Nodes
+	TextAreaNode: TextAreaNode,
 };
 
 /**
@@ -74,6 +83,7 @@ export const DiagramComponentCatalog: {
 export const DiagramConnectPointCalculators: {
 	[key in DiagramType]: (diagram: Diagram) => ConnectPointMoveData[];
 } = {
+	// Shapes
 	ConnectLine: () => [],
 	ConnectPoint: () => [],
 	Ellipse: calcEllipseConnectPointPosition,
@@ -81,4 +91,6 @@ export const DiagramConnectPointCalculators: {
 	Path: () => [],
 	PathPoint: () => [],
 	Rectangle: calcRectangleConnectPointPosition,
+	// Nodes
+	TextAreaNode: calcRectangleConnectPointPosition,
 };

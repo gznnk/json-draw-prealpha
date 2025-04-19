@@ -1,5 +1,8 @@
 // Import types related to SvgCanvas.
-import type { CreateDiagramType } from "../../../types/DiagramTypes";
+import type {
+	CreateDiagramType,
+	CreateDiagramProps,
+} from "../../../types/DiagramTypes";
 
 /**
  * 矩形のデータ
@@ -14,3 +17,16 @@ export type RectangleData = CreateDiagramType<{
 }> & {
 	radius: number;
 };
+
+/**
+ * 四角形コンポーネントのプロパティ
+ */
+export type RectangleProps = CreateDiagramProps<
+	RectangleData,
+	{
+		selectable: true;
+		transformative: true;
+		connectable: true;
+		textable: true;
+	}
+>;
