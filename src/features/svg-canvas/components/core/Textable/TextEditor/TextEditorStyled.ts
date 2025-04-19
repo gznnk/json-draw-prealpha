@@ -62,7 +62,7 @@ export const TextArea = styled.textarea<TextEditorStyledProps>`
     background: transparent;
     border: none;
     outline: none;
-    overflow: hidden;
+    overflow-y: auto;
     resize: none;
     box-sizing: border-box;
     padding: 2px;
