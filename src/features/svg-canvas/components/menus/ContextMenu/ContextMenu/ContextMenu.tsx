@@ -55,6 +55,10 @@ const ContextMenuComponent: React.FC<ContextMenuProps> = ({
 				グループ解除
 			</ContextMenuItem>
 			<ContextMenuDivider />
+			<ContextMenuItem menuType="Export" {...menuItemProps}>
+				エクスポート
+			</ContextMenuItem>
+			<ContextMenuDivider />
 			<ContextMenuItem menuType="Delete" {...menuItemProps}>
 				削除
 			</ContextMenuItem>

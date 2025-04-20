@@ -9,6 +9,7 @@ export type ContextMenuType =
 	| "SelectAll"
 	| "Group"
 	| "Ungroup"
+	| "Export"
 	| "Delete";
 
 /**

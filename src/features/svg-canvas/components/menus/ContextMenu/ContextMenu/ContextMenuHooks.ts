@@ -22,6 +22,7 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 		onSelectAll,
 		onGroup,
 		onUngroup,
+		onExport,
 		onDelete,
 	} = canvasProps;
 
@@ -42,6 +43,7 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 		SelectAll: items.length > 0 ? "Enable" : "Disable",
 		Group: multiSelectGroup ? "Enable" : "Disable",
 		Ungroup: isGroupSelected ? "Enable" : "Disable",
+		Export: isItemSelected ? "Enable" : "Disable", // TODO: ちゃんと制御する
 		Delete: isItemSelected ? "Enable" : "Disable",
 	} as ContextMenuStateMap;
 
@@ -66,6 +68,9 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 				case "Ungroup":
 					onUngroup?.();
 					break;
+				case "Export":
+					onExport?.();
+					break;
 				case "Delete":
 					onDelete?.();
 					break;
@@ -73,7 +78,7 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 			}
 			setContextMenuState({ x: 0, y: 0, isVisible: false });
 		},
-		[onUndo, onRedo, onSelectAll, onGroup, onUngroup, onDelete], // TODO: refBus使う
+		[onUndo, onRedo, onSelectAll, onGroup, onUngroup, onExport, onDelete], // TODO: refBus使う
 	);
 
 	/**

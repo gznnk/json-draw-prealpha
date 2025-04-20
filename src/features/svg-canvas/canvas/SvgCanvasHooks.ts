@@ -32,6 +32,7 @@ import { useTransform } from "./hooks/useTransform";
 import { useUndo } from "./hooks/useUndo";
 import { useUngroup } from "./hooks/useUngroup";
 import { useExecute } from "./hooks/useExecute";
+import { useExport } from "./hooks/useExport";
 
 /**
  * Props for the useSvgCanvas hook.
@@ -140,6 +141,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the execute event.
 	const onExecute = useExecute(canvasHooksProps);
 
+	// Handler for the export event.
+	const onExport = useExport(canvasHooksProps);
+
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
 	const addItem = useAddItem(canvasHooksProps);
@@ -165,6 +169,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onNewItem,
 		onStackOrderChange,
 		onExecute,
+		onExport,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //

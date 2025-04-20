@@ -1,3 +1,3 @@
 export { Svg } from "./Svg";
-export { createSvgData } from "./SvgFunctions";
+export { createSvgData, isSvgData } from "./SvgFunctions";
 export type { SvgData } from "./SvgTypes";

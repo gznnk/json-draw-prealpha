@@ -60,9 +60,23 @@ export const createSvgDataFromText = (data: string) => {
 			svgText: innerText,
 			width: Number.parseFloat(width),
 			height: Number.parseFloat(height),
+			keepProportion: true,
 		});
 	} catch (e) {
 		console.error("Error parsing SVG data:", e);
 		return undefined;
 	}
+};
+
+export const isSvgData = (data: unknown): data is SvgData => {
+	return (
+		typeof data === "object" &&
+		data !== null &&
+		"svgText" in data &&
+		"width" in data &&
+		"height" in data &&
+		"initialWidth" in data &&
+		"initialHeight" in data &&
+		"svgText" in data
+	);
 };

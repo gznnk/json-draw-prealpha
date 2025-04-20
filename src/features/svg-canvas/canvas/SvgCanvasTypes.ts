@@ -87,4 +87,5 @@ export type SvgCanvasProps = {
 	onNewItem?: (e: NewItemEvent) => void;
 	onStackOrderChange?: (e: StackOrderChangeEvent) => void;
 	onExecute?: (e: ExecuteEvent) => void;
+	onExport?: () => void;
 };
