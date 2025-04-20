@@ -602,17 +602,11 @@ export const calcOptimalCanvasSize = (items: Diagram[]) => {
 	}
 
 	const widthMultiplier =
-		Math.floor(
-			(bounds.right - bounds.left + CANVAS_EXPANSION_SIZE) /
-				CANVAS_EXPANSION_SIZE,
-		) + 1;
+		Math.floor((bounds.right - bounds.left) / CANVAS_EXPANSION_SIZE) + 1;
 	let width = widthMultiplier * CANVAS_EXPANSION_SIZE;
 
 	const heightMultiplier =
-		Math.floor(
-			(bounds.bottom - bounds.top + CANVAS_EXPANSION_SIZE) /
-				CANVAS_EXPANSION_SIZE,
-		) + 1;
+		Math.floor((bounds.bottom - bounds.top) / CANVAS_EXPANSION_SIZE) + 1;
 	let height = heightMultiplier * CANVAS_EXPANSION_SIZE;
 
 	if (width < window.screen.width) {
