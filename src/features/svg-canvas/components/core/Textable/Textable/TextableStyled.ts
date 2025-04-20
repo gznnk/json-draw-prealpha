@@ -55,6 +55,6 @@ export const Text = styled.div<TextProps>`
     overflow: hidden;
     word-break: ${(props) => props.wordBreak};
     white-space: ${(props) => props.whiteSpace};
-    padding: 2px;
+    padding: 0px 6px;
     box-sizing: border-box;
 `;

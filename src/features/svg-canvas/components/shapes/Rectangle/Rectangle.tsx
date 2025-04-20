@@ -1,9 +1,8 @@
-// Reactのインポート
+// Import React.
 import type React from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
-// SvgCanvas関連型定義をインポート
-import type { CreateDiagramProps } from "../../../types/DiagramTypes";
+// Import types related to SvgCanvas.
 import type {
 	DiagramDragEvent,
 	DiagramHoverEvent,
@@ -11,34 +10,21 @@ import type {
 	DiagramTransformEvent,
 } from "../../../types/EventTypes";
 
-// SvgCanvas関連コンポーネントをインポート
+// Import components related to SvgCanvas.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
-// SvgCanvas関連カスタムフックをインポート
+// Import hooks related to SvgCanvas.
 import { useDrag } from "../../../hooks/useDrag";
 
-// SvgCanvas関連関数をインポート
+// Import functions related to SvgCanvas.
 import { createSvgTransform } from "../../../utils/Diagram";
 import { degreesToRadians } from "../../../utils/Math";
 
 // Imports related to this component.
-import type { RectangleData } from "./RectangleTypes";
-
-/**
- * 四角形コンポーネントのプロパティ
- */
-export type RectangleProps = CreateDiagramProps<
-	RectangleData,
-	{
-		selectable: true;
-		transformative: true;
-		connectable: true;
-		textable: true;
-	}
->;
+import type { RectangleProps } from "./RectangleTypes";
 
 /**
  * 四角形コンポーネント

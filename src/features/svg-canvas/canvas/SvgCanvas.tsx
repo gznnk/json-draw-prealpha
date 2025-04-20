@@ -8,10 +8,7 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import {
-	type Diagram,
-	DiagramComponentCatalog,
-} from "../../../types/DiagramCatalog";
+import { type Diagram, DiagramComponentCatalog } from "../types/DiagramCatalog";
 import {
 	type DiagramChangeEvent,
 	SVG_CANVAS_SCROLL_EVENT_NAME,
@@ -19,18 +16,19 @@ import {
 	type DiagramSelectEvent,
 	type SvgCanvasResizeEvent,
 	type SvgCanvasScrollEvent,
-} from "../../../types/EventTypes";
+} from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import { TextEditor, useTextEditor } from "../../core/Textable";
-import { ContextMenu, useContextMenu } from "../../menus/ContextMenu";
-import { DiagramMenu, useDiagramMenu } from "../../menus/DiagramMenu";
-import { Group } from "../../shapes/Group";
+import { TextEditor, useTextEditor } from "../components/core/Textable";
+import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
+import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
+import { CanvasMenu } from "../components/menus/CanvasMenu";
+import { Group } from "../components/shapes/Group";
 
 // SvgCanvas関連関数をインポート
-import { newEventId } from "../../../utils/Util";
-import { CanvasMenu } from "../../menus/CanvasMenu";
-import UserMenu from "../../menus/UserMenu/UserMenu";
+import { newEventId } from "../utils/Util";
+
+import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
@@ -46,7 +44,7 @@ import {
 	ViewportOverlay,
 } from "./SvgCanvasStyled";
 import type { SvgCanvasProps, SvgCanvasState } from "./SvgCanvasTypes";
-import type { Point } from "../../../types/CoordinateTypes";
+import type { Point } from "../types/CoordinateTypes";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -77,13 +75,15 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onDrop,
 		onSelect,
 		onSelectAll,
-		onAllSelectionClear,
+		onClearAllSelection,
 		onDelete,
 		onConnect,
 		onUndo,
 		onRedo,
 		onCanvasResize,
 		onNewDiagram,
+		onNewItem,
+		onExecute,
 	} = props;
 
 	// SVG要素のコンテナの参照
@@ -195,13 +195,13 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		(e: React.PointerEvent<SVGSVGElement>) => {
 			if (e.target === e.currentTarget) {
 				// Clear the selection when pointer is down on the canvas.
-				onAllSelectionClear?.();
+				onClearAllSelection?.();
 			}
 
 			// Close the context menu.
 			contextMenuFunctions.closeContextMenu();
 		},
-		[contextMenuFunctions, onAllSelectionClear],
+		[contextMenuFunctions, onClearAllSelection],
 	);
 
 	/**
@@ -282,9 +282,10 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
+		textEditorProps,
 		onDelete,
 		onSelectAll,
-		onAllSelectionClear,
+		onClearAllSelection,
 		onUndo,
 		onRedo,
 	};
@@ -295,15 +296,21 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	useEffect(() => {
 		const onDocumentKeyDown = (e: KeyboardEvent) => {
 			// Bypass references to avoid function creation in every render.
-			const { onDelete, onSelectAll, onAllSelectionClear, onUndo, onRedo } =
-				refBus.current;
+			const {
+				textEditorProps,
+				onDelete,
+				onSelectAll,
+				onClearAllSelection,
+				onUndo,
+				onRedo,
+			} = refBus.current;
 
 			if (e.key === "Control") {
 				isCtrlDown.current = true;
 			}
 			if (e.key === "Escape") {
 				// Clear selection when Escape key is pressed.
-				onAllSelectionClear?.();
+				onClearAllSelection?.();
 			}
 			if (e.key === "Delete") {
 				// Delete selected items when Delete key is pressed.
@@ -318,7 +325,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 					// Redo the last action when Ctrl+Y is pressed.
 					onRedo?.();
 				}
-				if (e.key === "a") {
+				console.log(textEditorProps.isActive);
+				if (e.key === "a" && !textEditorProps.isActive) {
 					// Select all items when Ctrl+A is pressed.
 					e.preventDefault();
 					onSelectAll?.();
@@ -371,6 +379,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			onSelect: handleSelect,
 			onConnect,
 			onTextEdit: textEditorHandlers.onTextEdit,
+			onNewItem,
+			onExecute,
 		};
 
 		return React.createElement(component, props);

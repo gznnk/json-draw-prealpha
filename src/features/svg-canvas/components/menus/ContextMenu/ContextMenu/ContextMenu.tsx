@@ -48,6 +48,13 @@ const ContextMenuComponent: React.FC<ContextMenuProps> = ({
 				すべて選択
 			</ContextMenuItem>
 			<ContextMenuDivider />
+			<ContextMenuItem menuType="Group" {...menuItemProps}>
+				グループ化
+			</ContextMenuItem>
+			<ContextMenuItem menuType="Ungroup" {...menuItemProps}>
+				グループ解除
+			</ContextMenuItem>
+			<ContextMenuDivider />
 			<ContextMenuItem menuType="Delete" {...menuItemProps}>
 				削除
 			</ContextMenuItem>

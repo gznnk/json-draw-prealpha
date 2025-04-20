@@ -1,4 +1,7 @@
-// SvgCanvas関連コンポーネントをインポート
+// Import types related to SvgCanvas.
+import type { ConnectPointMoveData } from "./EventTypes";
+
+// Import components related to SvgCanvas.
 import {
 	ConnectLine,
 	type ConnectLineData,
@@ -8,9 +11,11 @@ import {
 	Ellipse,
 	type EllipseData,
 	calcEllipseConnectPointPosition,
+	createEllipseData,
 } from "../components/shapes/Ellipse";
 import { Group, type GroupData } from "../components/shapes/Group";
 import {
+	createPathData,
 	Path,
 	PathPoint,
 	type PathData,
@@ -20,20 +25,34 @@ import {
 	Rectangle,
 	type RectangleData,
 	calcRectangleConnectPointPosition,
+	createRectangleData,
 } from "../components/shapes/Rectangle";
-import type { ConnectPointMoveData } from "./EventTypes";
+import {
+	createTextAreaNodeData,
+	TextAreaNode,
+} from "../components/nodes/TextAreaNode";
+import { createLLMNodeData, LLMNode } from "../components/nodes/LLMNode";
+import {
+	createSvgToDiagramNodeData,
+	SvgToDiagramNode,
+} from "../components/nodes/SvgToDiagramNode";
 
 /**
- * 図形の種類
+ * Types of diagram components.
  */
 export type DiagramType =
+	// Shapes
 	| "ConnectLine"
 	| "ConnectPoint"
 	| "Ellipse"
 	| "Group"
 	| "Path"
 	| "PathPoint"
-	| "Rectangle";
+	| "Rectangle"
+	// Nodes
+	| "SvgToDiagramNode"
+	| "LLMNode"
+	| "TextAreaNode";
 
 /**
  * 全図形のデータを統合した型
@@ -48,17 +67,18 @@ export type Diagram =
 	| RectangleData;
 
 /**
- * ダミー図形コンポーネント
+ * Dummy component. This is used by components that are always wrapped by another component.
  */
 const DummyComponent: React.FC = () => null;
 
 /**
- * 図形の種類とコンポーネントのマッピング
+ * The mapping of diagram types to their corresponding React components.
  */
 export const DiagramComponentCatalog: {
 	// biome-ignore lint/suspicious/noExplicitAny: 種々の図形の共通の型を作るのは困難なため
 	[key in DiagramType]: React.FC<any>;
 } = {
+	// Shapes
 	ConnectLine: ConnectLine,
 	ConnectPoint: DummyComponent,
 	Ellipse: Ellipse,
@@ -66,6 +86,10 @@ export const DiagramComponentCatalog: {
 	Path: Path,
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
+	// Nodes
+	SvgToDiagramNode: SvgToDiagramNode,
+	LLMNode: LLMNode,
+	TextAreaNode: TextAreaNode,
 };
 
 /**
@@ -74,6 +98,7 @@ export const DiagramComponentCatalog: {
 export const DiagramConnectPointCalculators: {
 	[key in DiagramType]: (diagram: Diagram) => ConnectPointMoveData[];
 } = {
+	// Shapes
 	ConnectLine: () => [],
 	ConnectPoint: () => [],
 	Ellipse: calcEllipseConnectPointPosition,
@@ -81,4 +106,31 @@ export const DiagramConnectPointCalculators: {
 	Path: () => [],
 	PathPoint: () => [],
 	Rectangle: calcRectangleConnectPointPosition,
+	// Nodes
+	SvgToDiagramNode: calcRectangleConnectPointPosition,
+	LLMNode: calcEllipseConnectPointPosition,
+	TextAreaNode: calcRectangleConnectPointPosition,
+};
+
+/**
+ * Mapping of diagram types to their corresponding data creation functions.
+ */
+export const DiagramCreateFunctions: {
+	[key in DiagramType]: (props: {
+		x: number;
+		y: number;
+	}) => Diagram | undefined;
+} = {
+	// Shapes
+	ConnectLine: () => undefined,
+	ConnectPoint: () => undefined,
+	Ellipse: (props) => createEllipseData(props),
+	Group: () => undefined,
+	Path: (props) => createPathData(props),
+	PathPoint: () => undefined,
+	Rectangle: (props) => createRectangleData(props),
+	// Nodes
+	SvgToDiagramNode: (props) => createSvgToDiagramNodeData(props),
+	LLMNode: (props) => createLLMNodeData(props),
+	TextAreaNode: (props) => createTextAreaNodeData(props),
 };

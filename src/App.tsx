@@ -1,16 +1,13 @@
 import { SvgCanvas, useSvgCanvas } from "./features/svg-canvas";
-import Button from "./components/atoms/Button";
 // import Input from "./components/atoms/Input";
 import type { Diagram } from "./features/svg-canvas/types/DiagramCatalog";
 import { createRectangleData } from "./features/svg-canvas/components/shapes/Rectangle";
 import { createEllipseData } from "./features/svg-canvas/components/shapes/Ellipse";
-import AIChat from "./components/organisms/AIChat";
 
 // import { getLogger } from "./utils/Logger";
 import { Profiler } from "./utils/Profiler";
 
-import { svgDataToDiagram } from "./features/svg-canvas/utils/Diagram";
-import { loadCanvasDataFromLocalStorage } from "./features/svg-canvas/components/diagrams/SvgCanvas/SvgCanvasFunctions";
+import { loadCanvasDataFromLocalStorage } from "./features/svg-canvas/canvas/SvgCanvasFunctions";
 // const logger = getLogger("App");
 declare global {
 	interface Window {
@@ -470,11 +467,7 @@ const devData = {
 function App() {
 	const loadedCanvasState = loadCanvasDataFromLocalStorage();
 
-	const {
-		state: [_canvasState, setCanvasState],
-		canvasProps,
-		canvasFunctions,
-	} = useSvgCanvas(
+	const { canvasProps } = useSvgCanvas(
 		window.screen.width,
 		window.screen.height,
 		loadedCanvasState?.items ?? devData.item4,
@@ -486,119 +479,8 @@ function App() {
 	// 	canvasFunctions,
 	// } = useSvgCanvas([]);
 
-	const handleAddRectangle = () => {
-		canvasFunctions.addItem(createRectangleData({ x: 50, y: 50 }) as Diagram);
-	};
-
-	const handleAddEllipse = () => {
-		canvasFunctions.addItem(
-			createEllipseData({ x: 50, y: 50, width: 100, height: 50 }) as Diagram,
-		);
-	};
-
-	const handleAddSquare = () => {
-		canvasFunctions.addItem(
-			createRectangleData({
-				x: 50,
-				y: 50,
-				keepProportion: true,
-			}) as Diagram,
-		);
-	};
-
-	const handleAddCircle = () => {
-		canvasFunctions.addItem({
-			id: crypto.randomUUID(),
-			type: "Ellipse",
-			x: 0,
-			y: 0,
-			width: 100,
-			height: 100,
-			keepProportion: true,
-			isSelected: false,
-		} as Diagram);
-	};
-
 	return (
 		<div className="App">
-			{/** */}
-			<div
-				style={{
-					position: "absolute",
-					top: 0,
-					right: 0,
-					bottom: 0,
-					width: "300px",
-					backgroundColor: "lightgray",
-					overflow: "auto",
-					visibility: "hidden",
-				}}
-			>
-				<Button onClick={handleAddRectangle}>Add Rectangle</Button>
-				<Button onClick={handleAddEllipse}>Add Ellipse</Button>
-				<Button onClick={handleAddSquare}>Add Square</Button>
-				<Button onClick={handleAddCircle}>Add Circle</Button>
-				{/* <Input
-					value={canvasFunctions.getSelectedItem()?.fill || ""}
-					onChange={(e) => {
-						if (!canvasState.selectedItemId) return;
-						canvasFunctions.updateItem({
-							id: canvasState.selectedItemId,
-							fill: e.target.value,
-						});
-					}}
-				/> */}
-				{/*
-				<div>
-					keepProportion:
-					<input
-						type="checkbox"
-						checked={canvasFunctions.getSelectedItem()?.keepProportion || false}
-						onChange={(e) => {
-							if (!canvasState.selectedItemId) return;
-							canvasFunctions.updateItem({
-								id: canvasState.selectedItemId,
-								keepProportion: e.target.checked,
-							});
-						}}
-					/>
-				</div>
-				*/}
-				<Button
-					onClick={() => {
-						window.profiler.summary();
-					}}
-				>
-					Profile
-				</Button>
-				<AIChat
-					onResponse={(res) => {
-						// try {
-						// 	const item = makeDataFromAi(JSON.parse(res));
-						// 	setCanvasState((prev) => ({
-						// 		...prev,
-						// 		items: [...prev.items, item],
-						// 	}));
-						// } catch (e) {
-						// 	alert("Invalid JSON format. Please check the response.");
-						// }
-						try {
-							const preview = document.getElementById("svg-preview");
-							if (preview) {
-								preview.innerHTML = res;
-							}
-							const item = svgDataToDiagram(res);
-							setCanvasState((prev) => ({
-								...prev,
-								items: [...prev.items, item],
-							}));
-						} catch (e) {
-							alert("Invalid SVG format. Please check the response.");
-						}
-					}}
-				/>
-				<div id="svg-preview" />
-			</div>
 			<div
 				style={{
 					position: "absolute",

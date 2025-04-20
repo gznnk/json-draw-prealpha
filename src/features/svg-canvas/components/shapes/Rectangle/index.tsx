@@ -3,4 +3,4 @@ export {
 	calcRectangleConnectPointPosition,
 	createRectangleData,
 } from "./RectangleFunctions";
-export type { RectangleData } from "./RectangleTypes";
+export type { RectangleData, RectangleProps } from "./RectangleTypes";

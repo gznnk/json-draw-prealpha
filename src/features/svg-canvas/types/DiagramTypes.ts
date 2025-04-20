@@ -11,6 +11,7 @@ import type {
 	DiagramSelectEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
+	ExecuteEvent,
 } from "./EventTypes";
 
 /**
@@ -111,7 +112,7 @@ export type VerticalAlign = "top" | "center" | "bottom";
  */
 export type TextableData = {
 	text: string;
-	textType: TextableType; // TODO: データにもたなくてもいいかも？
+	textType: TextableType;
 	textAlign: TextAlign;
 	verticalAlign: VerticalAlign;
 	fontColor: string;
@@ -198,6 +199,14 @@ export type ConnectableProps = {
  */
 export type TextableProps = {
 	onTextEdit?: (e: DiagramTextEditEvent) => void;
+	onDiagramChange?: (e: DiagramChangeEvent) => void;
+};
+
+/**
+ * Props for executable component.
+ */
+export type ExecutableProps = {
+	onExecute?: (e: ExecuteEvent) => void;
 };
 
 /**
@@ -209,6 +218,7 @@ type DiagramPropsOptions = {
 	itemable?: boolean;
 	connectable?: boolean;
 	textable?: boolean;
+	executable?: boolean;
 };
 
 /**
@@ -223,4 +233,5 @@ export type CreateDiagramProps<T, U extends DiagramPropsOptions> = Omit<
 	(U["transformative"] extends true ? TransformativeProps : object) &
 	(U["itemable"] extends true ? ItemableProps : object) &
 	(U["connectable"] extends true ? ConnectableProps : object) &
-	(U["textable"] extends true ? TextableProps : object);
+	(U["textable"] extends true ? TextableProps : object) &
+	(U["executable"] extends true ? ExecutableProps : object);

@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramCatalog";
+import type { Diagram } from "../types/DiagramCatalog";
 import type {
 	DiagramChangeEvent,
 	DiagramConnectEvent,
@@ -9,11 +9,13 @@ import type {
 	DiagramTextChangeEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
+	ExecuteEvent,
 	NewDiagramEvent,
+	NewItemEvent,
 	StackOrderChangeEvent,
 	SvgCanvasResizeEvent,
-} from "../../../types/EventTypes";
-import type { GroupData } from "../../shapes/Group/GroupTypes";
+} from "../types/EventTypes";
+import type { GroupData } from "../components/shapes/Group/GroupTypes";
 
 /**
  * Type for the data of the SvgCanvas.
@@ -43,6 +45,14 @@ export type SvgCanvasState = {
 export type SvgCanvasHistory = SvgCanvasData;
 
 /**
+ * Type for canvas custom hooks.
+ */
+export type CanvasHooksProps = {
+	canvasState: SvgCanvasState;
+	setCanvasState: React.Dispatch<React.SetStateAction<SvgCanvasState>>;
+};
+
+/**
  * Props for the SvgCanvas component.
  */
 export type SvgCanvasProps = {
@@ -63,7 +73,7 @@ export type SvgCanvasProps = {
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onSelect?: (e: DiagramSelectEvent) => void;
 	onSelectAll?: () => void;
-	onAllSelectionClear?: () => void;
+	onClearAllSelection?: () => void;
 	onDelete?: () => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
 	onTextEdit?: (e: DiagramTextEditEvent) => void;
@@ -74,5 +84,7 @@ export type SvgCanvasProps = {
 	onRedo?: () => void;
 	onCanvasResize?: (e: SvgCanvasResizeEvent) => void;
 	onNewDiagram?: (e: NewDiagramEvent) => void;
+	onNewItem?: (e: NewItemEvent) => void;
 	onStackOrderChange?: (e: StackOrderChangeEvent) => void;
+	onExecute?: (e: ExecuteEvent) => void;
 };

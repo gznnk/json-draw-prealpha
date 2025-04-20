@@ -109,7 +109,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			setIsDragging(true);
 		}
 
-		// TODO: onDiagramChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onDrag?.(e);
 
 		if (e.eventType === "End") {
@@ -127,7 +126,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			setIsTransforming(true);
 		}
 
-		// TODO: onDiagramChangeに変更し、接続ポイントの位置更新も同時におこなう？
 		onTransform?.(e);
 
 		if (e.eventType === "End") {

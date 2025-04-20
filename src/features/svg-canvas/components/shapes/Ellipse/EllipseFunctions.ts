@@ -1,7 +1,12 @@
 // Import types related to SvgCanvas.
 import type { EllipseVertices } from "../../../types/CoordinateTypes";
 import type { Diagram } from "../../../types/DiagramCatalog";
-import type { Shape } from "../../../types/DiagramTypes";
+import type {
+	Shape,
+	TextAlign,
+	TextableType,
+	VerticalAlign,
+} from "../../../types/DiagramTypes";
 import type { ConnectPointMoveData } from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.
@@ -74,6 +79,14 @@ export const createEllipseData = ({
 	fill = "transparent",
 	stroke = "black",
 	strokeWidth = "1px",
+	text = "",
+	textType = "textarea",
+	textAlign = "center",
+	verticalAlign = "center",
+	fontColor = "black",
+	fontSize = 16,
+	fontFamily = "Segoe UI",
+	fontWeight = "normal",
 }: {
 	x: number;
 	y: number;
@@ -86,6 +99,14 @@ export const createEllipseData = ({
 	fill?: string;
 	stroke?: string;
 	strokeWidth?: string;
+	text?: string;
+	textType?: TextableType;
+	textAlign?: TextAlign;
+	verticalAlign?: VerticalAlign;
+	fontColor?: string;
+	fontSize?: number;
+	fontFamily?: string;
+	fontWeight?: string;
 }): EllipseData => {
 	// 接続ポイントを生成
 	const vertices = calcEllipseVertices({
@@ -124,6 +145,14 @@ export const createEllipseData = ({
 		fill,
 		stroke,
 		strokeWidth,
+		text,
+		textType,
+		textAlign,
+		verticalAlign,
+		fontColor,
+		fontSize,
+		fontFamily,
+		fontWeight,
 		connectPoints,
 	} as EllipseData;
 };

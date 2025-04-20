@@ -195,6 +195,12 @@ export type NewDiagramEvent = {
 	y?: number;
 };
 
+export type NewItemEvent = {
+	item: Diagram;
+	x?: number;
+	y?: number;
+};
+
 export type StackOrderChangeType =
 	| "bringToFront" // 最前面に移動
 	| "sendToBack" // 最背面に移動
@@ -204,4 +210,24 @@ export type StackOrderChangeType =
 export type StackOrderChangeEvent = {
 	id: string;
 	changeType: StackOrderChangeType;
+};
+
+export type ExecuteResult = {
+	text: string;
+};
+
+export type ExecuteEvent = {
+	eventId: string;
+	id: string;
+	data: ExecuteResult;
+};
+
+export const EXECUTION_PROPAGATION_EVENT_NAME =
+	"ExecutionPropagationEvent" as const;
+
+export type ExecutionPropagationEvent = {
+	eventId: string;
+	id: string;
+	targetId: string[];
+	data: ExecuteResult;
 };
