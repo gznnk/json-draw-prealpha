@@ -11,9 +11,11 @@ import {
 	Ellipse,
 	type EllipseData,
 	calcEllipseConnectPointPosition,
+	createEllipseData,
 } from "../components/shapes/Ellipse";
 import { Group, type GroupData } from "../components/shapes/Group";
 import {
+	createPathData,
 	Path,
 	PathPoint,
 	type PathData,
@@ -23,13 +25,20 @@ import {
 	Rectangle,
 	type RectangleData,
 	calcRectangleConnectPointPosition,
+	createRectangleData,
 } from "../components/shapes/Rectangle";
-import { TextAreaNode } from "../components/nodes/TextAreaNode";
-import { LLMNode } from "../components/nodes/LLMNode";
-import { SvgToDiagramNode } from "../components/nodes/SvgToDiagramNode";
+import {
+	createTextAreaNodeData,
+	TextAreaNode,
+} from "../components/nodes/TextAreaNode";
+import { createLLMNodeData, LLMNode } from "../components/nodes/LLMNode";
+import {
+	createSvgToDiagramNodeData,
+	SvgToDiagramNode,
+} from "../components/nodes/SvgToDiagramNode";
 
 /**
- * 図形の種類
+ * Types of diagram components.
  */
 export type DiagramType =
 	// Shapes
@@ -58,12 +67,12 @@ export type Diagram =
 	| RectangleData;
 
 /**
- * ダミー図形コンポーネント
+ * Dummy component. This is used by components that are always wrapped by another component.
  */
 const DummyComponent: React.FC = () => null;
 
 /**
- * 図形の種類とコンポーネントのマッピング
+ * The mapping of diagram types to their corresponding React components.
  */
 export const DiagramComponentCatalog: {
 	// biome-ignore lint/suspicious/noExplicitAny: 種々の図形の共通の型を作るのは困難なため
@@ -101,4 +110,27 @@ export const DiagramConnectPointCalculators: {
 	SvgToDiagramNode: calcRectangleConnectPointPosition,
 	LLMNode: calcEllipseConnectPointPosition,
 	TextAreaNode: calcRectangleConnectPointPosition,
+};
+
+/**
+ * Mapping of diagram types to their corresponding data creation functions.
+ */
+export const DiagramCreateFunctions: {
+	[key in DiagramType]: (props: {
+		x: number;
+		y: number;
+	}) => Diagram | undefined;
+} = {
+	// Shapes
+	ConnectLine: () => undefined,
+	ConnectPoint: () => undefined,
+	Ellipse: (props) => createEllipseData(props),
+	Group: () => undefined,
+	Path: (props) => createPathData(props),
+	PathPoint: () => undefined,
+	Rectangle: (props) => createRectangleData(props),
+	// Nodes
+	SvgToDiagramNode: (props) => createSvgToDiagramNodeData(props),
+	LLMNode: (props) => createLLMNodeData(props),
+	TextAreaNode: (props) => createTextAreaNodeData(props),
 };

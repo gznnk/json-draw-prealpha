@@ -3,47 +3,39 @@ import { useCallback, useState } from "react";
 
 // Import types related to SvgCanvas.
 import type { ConnectLineData } from "../components/shapes/ConnectLine";
-import type { Diagram, DiagramType } from "../types/DiagramCatalog";
+import type { Diagram } from "../types/DiagramCatalog";
 import {
 	PROPAGATION_EVENT_NAME,
 	type ExecuteEvent,
-	type NewDiagramEvent,
 	type PropagationEvent,
 } from "../types/EventTypes";
-
-// Import components related to SvgCanvas.
-import { createTextAreaNodeData } from "../components/nodes/TextAreaNode";
-import { createEllipseData } from "../components/shapes/Ellipse";
-import { createRectangleData } from "../components/shapes/Rectangle";
 
 // Import functions related to SvgCanvas.
 import { deepCopy } from "../utils/Util";
 
 // Imports related to this component.
-import { createLLMNodeData } from "../components/nodes/LLMNode";
-import { createSvgToDiagramNodeData } from "../components/nodes/SvgToDiagramNode";
-import { createPathData } from "../components/shapes/Path";
 import type { SvgCanvasState } from "./SvgCanvasTypes";
 
 // Import canvas custom hooks.
+import { useAddItem } from "./hooks/useAddItem";
+import { useCanvasResize } from "./hooks/useCanvasResize";
+import { useClearAllSelection } from "./hooks/useClearAllSelection";
+import { useConnect } from "./hooks/useConnect";
+import { useDelete } from "./hooks/useDelete";
 import { useDiagramChange } from "./hooks/useDiagramChange";
 import { useDrag } from "./hooks/useDrag";
-import { useTransform } from "./hooks/useTransform";
+import { useGroup } from "./hooks/useGroup";
+import { useNewDiagram } from "./hooks/useNewDiagram";
+import { useNewItem } from "./hooks/useNewItem";
+import { useRedo } from "./hooks/useRedo";
 import { useSelect } from "./hooks/useSelect";
 import { useSelectAll } from "./hooks/useSelectAll";
-import { useClearAllSelection } from "./hooks/useClearAllSelection";
-import { useDelete } from "./hooks/useDelete";
-import { useAddItem } from "./hooks/useAddItem";
-import { useConnect } from "./hooks/useConnect";
-import { useTextEdit } from "./hooks/useTextEdit";
-import { useTextChange } from "./hooks/useTextChange";
-import { useGroup } from "./hooks/useGroup";
-import { useUngroup } from "./hooks/useUngroup";
-import { useUndo } from "./hooks/useUndo";
-import { useRedo } from "./hooks/useRedo";
-import { useCanvasResize } from "./hooks/useCanvasResize";
 import { useStackOrderChange } from "./hooks/useStackOrderChange";
-import { useNewItem } from "./hooks/useNewItem";
+import { useTextChange } from "./hooks/useTextChange";
+import { useTextEdit } from "./hooks/useTextEdit";
+import { useTransform } from "./hooks/useTransform";
+import { useUndo } from "./hooks/useUndo";
+import { useUngroup } from "./hooks/useUngroup";
 
 /**
  * The SvgCanvas state and functions.
@@ -134,48 +126,12 @@ export const useSvgCanvas = (
 	// Handler for the new item event.
 	const onNewItem = useNewItem(canvasHooksProps);
 
+	// Handler for the new diagram event.
+	const onNewDiagram = useNewDiagram(canvasHooksProps);
+
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
 	const addItem = useAddItem(canvasHooksProps);
-
-	/**
-	 * Handle new diagram action.
-	 */
-	const onNewDiagram = useCallback(
-		(e: NewDiagramEvent) => {
-			const centerX = canvasState.minX + canvasState.width / 2;
-			const centerY = canvasState.minY + canvasState.height / 2;
-
-			const diagramType = e.diagramType as DiagramType;
-			if (diagramType === "Rectangle") {
-				addItem(createRectangleData({ x: centerX, y: centerY }) as Diagram);
-			}
-			if (diagramType === "Ellipse") {
-				addItem(createEllipseData({ x: centerX, y: centerY }) as Diagram);
-			}
-			if (diagramType === "Path") {
-				addItem(createPathData({ x: centerX, y: centerY }) as Diagram);
-			}
-			if (diagramType === "TextAreaNode") {
-				addItem(createTextAreaNodeData({ x: centerX, y: centerY }) as Diagram);
-			}
-			if (diagramType === "LLMNode") {
-				addItem(createLLMNodeData({ x: centerX, y: centerY }) as Diagram);
-			}
-			if (diagramType === "SvgToDiagramNode") {
-				addItem(
-					createSvgToDiagramNodeData({ x: centerX, y: centerY }) as Diagram,
-				);
-			}
-		},
-		[
-			canvasState.minX,
-			canvasState.minY,
-			canvasState.width,
-			canvasState.height,
-			addItem,
-		],
-	);
 
 	const onExecute = useCallback(
 		(e: ExecuteEvent) => {

@@ -22,10 +22,10 @@ export const useNewItem = (props: CanvasHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	return useCallback(
-		(e: NewItemEvent) => {
-			addItem(e.item);
-		},
-		[addItem],
-	);
+	return useCallback((e: NewItemEvent) => {
+		// Bypass references to avoid function creation in every render.
+		const { addItem } = refBus.current;
+
+		addItem(e.item);
+	}, []);
 };
