@@ -117,21 +117,34 @@ const SvgComponent: React.FC<SvgProps> = ({
 		y,
 	);
 
-	// Cache the inner text and viewBox of the SVG element.
+	// Cache the inner text of the SVG element.
 	// This is done to avoid parsing the SVG text on every render.
-	const { innerText, viewBox } = useMemo(() => {
+	const innerText = useMemo(() => {
 		const parser = new DOMParser();
 		const sanitizedSvgText = DOMPurify.sanitize(svgText, {
 			NAMESPACE: "http://www.w3.org/2000/svg",
 		});
 		const svgDoc = parser.parseFromString(sanitizedSvgText, "image/svg+xml");
 		const svgElement = svgDoc.documentElement;
-		const innerText = svgElement.innerHTML;
-		const viewBox = svgElement.getAttribute("viewBox") || undefined;
-		return {
-			innerText,
-			viewBox,
-		};
+		const width = Number.parseFloat(svgElement.getAttribute("width") || "0");
+		const height = Number.parseFloat(svgElement.getAttribute("height") || "0");
+		// Convert child element percentage values to pixels.
+		for (const child of svgElement.children) {
+			if (child instanceof SVGElement) {
+				const widthAttr = child.getAttribute("width");
+				const heightAttr = child.getAttribute("height");
+				if (widthAttr?.endsWith("%")) {
+					const percentage = Number.parseFloat(widthAttr) / 100;
+					child.setAttribute("width", `${percentage * width}px`);
+				}
+				if (heightAttr?.endsWith("%")) {
+					const percentage = Number.parseFloat(heightAttr) / 100;
+					child.setAttribute("height", `${percentage * height}px`);
+				}
+			}
+		}
+
+		return svgElement.innerHTML;
 	}, [svgText]);
 
 	// Flag to show the transformative element.
@@ -146,7 +159,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 					dangerouslySetInnerHTML={{
 						__html: innerText,
 					}}
-					viewBox={viewBox}
 					transform={`translate(${-width / 2}, ${-height / 2}) scale(${(scaleX * width) / initialWidth}, ${(scaleY * height) / initialHeight})`}
 				/>
 				{/* Element for handle pointer events */}

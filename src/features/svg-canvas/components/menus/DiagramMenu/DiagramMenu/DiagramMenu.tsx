@@ -215,6 +215,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="Bold"
 				menuType="Bold"
 				tooltip="太字"
 				menuStateMap={menuStateMap}
@@ -237,6 +238,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	if (showTextAlignmentSection) {
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="AlignLeft"
 				menuType="AlignLeft"
 				tooltip="左揃え"
 				menuStateMap={menuStateMap}
@@ -247,6 +249,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="AlignCenter"
 				menuType="AlignCenter"
 				tooltip="中央揃え"
 				menuStateMap={menuStateMap}
@@ -257,6 +260,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="AlignRight"
 				menuType="AlignRight"
 				tooltip="右揃え"
 				menuStateMap={menuStateMap}
@@ -279,6 +283,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	if (showTextVerticalAlignmentSection) {
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="AlignTop"
 				menuType="AlignTop"
 				tooltip="上揃え"
 				menuStateMap={menuStateMap}
@@ -289,6 +294,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="AlignMiddle"
 				menuType="AlignMiddle"
 				tooltip="中央揃え"
 				menuStateMap={menuStateMap}
@@ -299,6 +305,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="AlignBottom"
 				menuType="AlignBottom"
 				tooltip="下揃え"
 				menuStateMap={menuStateMap}
@@ -322,6 +329,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	if (showBringToFrontSection) {
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="BringToFront"
 				menuType="BringToFront"
 				tooltip="最前面に移動"
 				menuStateMap={menuStateMap}
@@ -332,6 +340,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="BringForward"
 				menuType="BringForward"
 				tooltip="前面に移動"
 				menuStateMap={menuStateMap}
@@ -342,6 +351,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="SendBackward"
 				menuType="SendBackward"
 				tooltip="背面に移動"
 				menuStateMap={menuStateMap}
@@ -352,6 +362,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="SendToBack"
 				menuType="SendToBack"
 				tooltip="最背面に移動"
 				menuStateMap={menuStateMap}
@@ -370,6 +381,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	if (showKeepAspectRatioSection) {
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="KeepAspectRatio"
 				menuType="KeepAspectRatio"
 				tooltip="アスペクト比維持"
 				viewBox="0 0 16 16"
@@ -389,6 +401,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	if (showGroupSection) {
 		menuItemComponents.push(
 			<DiagramMenuItem
+				key="Group"
 				menuType="Group"
 				tooltip={
 					menuStateMap.Group === "Active" ? "グループ解除" : "グループ化"
