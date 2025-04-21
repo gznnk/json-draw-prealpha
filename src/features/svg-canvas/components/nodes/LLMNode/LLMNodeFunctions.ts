@@ -1,4 +1,4 @@
-import { createEllipseData } from "../../shapes/Ellipse";
+import { createRectangleData } from "../../shapes/Rectangle";
 
 export const createLLMNodeData = ({
 	x,
@@ -7,15 +7,17 @@ export const createLLMNodeData = ({
 	x: number;
 	y: number;
 }) => {
-	const data = createEllipseData({
+	const data = createRectangleData({
 		x,
 		y,
-		stroke: "#A9A9A9",
-		fill: "#ffffff",
+		stroke: "transparent",
+		fill: "#0A0A37",
 		textType: "textarea",
 		textAlign: "center",
 		verticalAlign: "center",
-		fontColor: "#333333",
+		fontColor: "white",
+		fontSize: 12,
+		keepProportion: true,
 	});
 
 	data.type = "LLMNode";

@@ -325,7 +325,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 					// Redo the last action when Ctrl+Y is pressed.
 					onRedo?.();
 				}
-				console.log(textEditorProps.isActive);
 				if (e.key === "a" && !textEditorProps.isActive) {
 					// Select all items when Ctrl+A is pressed.
 					e.preventDefault();

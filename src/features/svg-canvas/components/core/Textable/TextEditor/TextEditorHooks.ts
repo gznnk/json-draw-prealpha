@@ -15,6 +15,7 @@ import type {
 import type { TextEditorProps } from "./TextEditorTypes";
 
 export const useTextEditor = (canvasProps: SvgCanvasProps) => {
+	// TODO: stateを持たずにcanvasPropsからstateを直接生成する
 	// Extract properties from canvasProps.
 	const { items, onTextEdit, onTextChange } = canvasProps;
 

@@ -113,7 +113,7 @@ export const DiagramConnectPointCalculators: {
 	Svg: () => [],
 	// Nodes
 	SvgToDiagramNode: calcRectangleConnectPointPosition,
-	LLMNode: calcEllipseConnectPointPosition,
+	LLMNode: calcRectangleConnectPointPosition,
 	TextAreaNode: calcRectangleConnectPointPosition,
 };
 
