@@ -10,6 +10,9 @@ import {
 } from "../../types/EventTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
+// Import functions related to SvgCanvas.
+import { triggerFlashConnectLine } from "../../components/core/FlashConnectLine";
+
 /**
  * Custom hook to handle execute events on the canvas.
  */
@@ -33,6 +36,10 @@ export const useExecute = (props: CanvasHooksProps) => {
 			const connectLine = i as ConnectLineData;
 			return connectLine.startOwnerId === e.id;
 		}) as ConnectLineData[];
+
+		for (const line of lines) {
+			triggerFlashConnectLine(line);
+		}
 
 		const detail = {
 			...e,

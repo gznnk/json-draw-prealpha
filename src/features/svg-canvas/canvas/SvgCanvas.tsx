@@ -11,18 +11,19 @@ import React, {
 import { type Diagram, DiagramComponentCatalog } from "../types/DiagramCatalog";
 import {
 	type DiagramChangeEvent,
-	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type DiagramDragEvent,
 	type DiagramSelectEvent,
+	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type SvgCanvasResizeEvent,
 	type SvgCanvasScrollEvent,
 } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
+import { FlashConnectLine } from "../components/core/FlashConnectLine";
 import { TextEditor } from "../components/core/Textable";
+import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
 import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
-import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { Group } from "../components/shapes/Group";
 
 // SvgCanvas関連関数をインポート
@@ -32,6 +33,7 @@ import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";
 
 // Imports related to this component.
+import type { Point } from "../types/CoordinateTypes";
 import {
 	CANVAS_EXPANSION_SIZE,
 	MULTI_SELECT_GROUP,
@@ -44,7 +46,6 @@ import {
 	ViewportOverlay,
 } from "./SvgCanvasStyled";
 import type { SvgCanvasProps, SvgCanvasState } from "./SvgCanvasTypes";
-import type { Point } from "../types/CoordinateTypes";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -439,6 +440,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 								/>
 							</MultiSelectGroupContainer>
 						)}
+						{/* Render flash connect lines */}
+						<FlashConnectLine />
 					</Svg>
 				</SvgCanvasContext.Provider>
 				{/* Container for HTML elements that follow the scroll of the SVG canvas. */}
