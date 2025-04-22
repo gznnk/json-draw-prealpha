@@ -10,14 +10,8 @@ export const createSvgToDiagramNodeData = ({
 	const data = createRectangleData({
 		x,
 		y,
-		radius: 4,
-		stroke: "#A9A9A9",
-		fill: "#ffffff",
-		text: "図形作成",
-		textType: "textarea",
-		textAlign: "center",
-		verticalAlign: "center",
-		fontColor: "#333333",
+		stroke: "transparent",
+		fill: "transparent",
 	});
 
 	data.type = "SvgToDiagramNode";
