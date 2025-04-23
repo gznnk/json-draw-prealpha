@@ -75,7 +75,7 @@ const DragPointComponent: React.FC<DragPointProps> = ({
 			cursor={cursor}
 			outline={outline}
 			tabIndex={0}
-			style={{ opacity: isTransparent ? 0 : 1 }}
+			isTransparent={isTransparent}
 			ref={svgRef}
 			{...dragProps}
 		/>

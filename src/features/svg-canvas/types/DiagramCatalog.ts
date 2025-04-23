@@ -2,7 +2,11 @@
 import type { ConnectPointMoveData } from "./EventTypes";
 
 // Import components related to SvgCanvas.
-import { createHubNodeData, HubNode } from "../components/nodes/HubNode";
+import {
+	createHubNodeData,
+	HubNode,
+	type HubNodeData,
+} from "../components/nodes/HubNode";
 import { createLLMNodeData, LLMNode } from "../components/nodes/LLMNode";
 import {
 	createSvgToDiagramNodeData,
@@ -62,6 +66,7 @@ export type DiagramType =
  * 全図形のデータを統合した型
  */
 export type Diagram =
+	// Shapes
 	| ConnectLineData
 	| ConnectPointData
 	| EllipseData
@@ -69,7 +74,9 @@ export type Diagram =
 	| PathData
 	| PathPointData
 	| RectangleData
-	| SvgData;
+	| SvgData
+	// Nodes
+	| HubNodeData;
 
 /**
  * Dummy component. This is used by components that are always wrapped by another component.

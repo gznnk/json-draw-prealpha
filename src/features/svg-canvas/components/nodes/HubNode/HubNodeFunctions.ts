@@ -1,4 +1,5 @@
-import { createEllipseData } from "../../shapes/Ellipse";
+import { newId } from "../../../utils/Diagram";
+import { createEllipseConnectPoint } from "../../shapes/Ellipse";
 
 export const createHubNodeData = ({
 	x,
@@ -7,14 +8,27 @@ export const createHubNodeData = ({
 	x: number;
 	y: number;
 }) => {
-	const data = createEllipseData({
+	const connectPoints = createEllipseConnectPoint({
 		x,
 		y,
-		stroke: "transparent",
-		fill: "transparent",
+		width: 100,
+		height: 100,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
 	});
 
-	data.type = "HubNode";
-
-	return data;
+	return {
+		id: newId(),
+		type: "HubNode",
+		x,
+		y,
+		width: 100,
+		height: 100,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
+		keepProportion: true,
+		connectPoints,
+	};
 };

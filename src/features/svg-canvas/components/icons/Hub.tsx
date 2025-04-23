@@ -103,7 +103,7 @@ export const Hub = memo(({ flash = false }: HubProps) => {
 			<circle cx="80" cy="80" r="5" fill="#ffffff" />
 			<circle cx="20" cy="20" r="5" fill="#ffffff" />
 			<circle cx="20" cy="80" r="5" fill="#ffffff" />
-			<circle cx="50" cy="50" r="20" fill="#4682B4" />
+			<circle cx="50" cy="50" r="20" fill="#4AA6B6" />
 		</>
 	);
 });

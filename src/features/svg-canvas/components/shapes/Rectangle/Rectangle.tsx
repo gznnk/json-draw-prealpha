@@ -25,6 +25,7 @@ import { degreesToRadians } from "../../../utils/Math";
 
 // Imports related to this component.
 import type { RectangleProps } from "./RectangleTypes";
+import { RectangleElement } from "./RectangleStyled";
 
 /**
  * 四角形コンポーネント
@@ -57,6 +58,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	textAlign,
 	verticalAlign,
 	isTextEditing,
+	isTextEditEnabled = true,
+	isTransparent,
 	onDrag,
 	onClick,
 	onSelect,
@@ -78,6 +81,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		// プロパティ
 		id,
 		isSelected,
+		isTextEditEnabled,
 		onDrag,
 		onSelect,
 		onTransform,
@@ -144,7 +148,9 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	 * ダブルクリックイベントハンドラ
 	 */
 	const handleDoubleClick = useCallback(() => {
-		const { id, isSelected, onTextEdit } = refBus.current;
+		const { id, isSelected, isTextEditEnabled, onTextEdit } = refBus.current;
+
+		if (!isTextEditEnabled) return;
 
 		if (!isSelected) return;
 
@@ -207,7 +213,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	return (
 		<>
 			<g transform="translate(0.5,0.5)">
-				<rect
+				<RectangleElement
 					className="diagram"
 					id={id}
 					x={-width / 2}
@@ -221,28 +227,31 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					strokeWidth={strokeWidth}
 					tabIndex={0}
 					cursor="move"
+					isTransparent={isTransparent}
 					transform={transform}
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
 					{...dragProps}
 				/>
 			</g>
-			<Textable
-				x={-width / 2}
-				y={-height / 2}
-				width={width}
-				height={height}
-				transform={transform}
-				text={text}
-				textType={textType}
-				fontColor={fontColor}
-				fontSize={fontSize}
-				fontFamily={fontFamily}
-				fontWeight={fontWeight}
-				textAlign={textAlign}
-				verticalAlign={verticalAlign}
-				isTextEditing={isTextEditing}
-			/>
+			{isTextEditEnabled && (
+				<Textable
+					x={-width / 2}
+					y={-height / 2}
+					width={width}
+					height={height}
+					transform={transform}
+					text={text}
+					textType={textType}
+					fontColor={fontColor}
+					fontSize={fontSize}
+					fontFamily={fontFamily}
+					fontWeight={fontWeight}
+					textAlign={textAlign}
+					verticalAlign={verticalAlign}
+					isTextEditing={isTextEditing}
+				/>
+			)}
 			{showTransformative && (
 				<Transformative
 					id={id}

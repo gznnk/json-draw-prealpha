@@ -25,6 +25,7 @@ import { degreesToRadians } from "../../../utils/Math";
 
 // Imports related to this component.
 import type { EllipseProps } from "./EllipseTypes";
+import { EllipseElement } from "./EllipseStyled";
 
 /**
  * 楕円コンポーネント
@@ -56,6 +57,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	textAlign,
 	verticalAlign,
 	isTextEditing,
+	isTextEditEnabled = true,
+	isTransparent,
 	onDrag,
 	onClick,
 	onSelect,
@@ -77,6 +80,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		// プロパティ
 		id,
 		isSelected,
+		isTextEditEnabled,
 		onDrag,
 		onSelect,
 		onTransform,
@@ -143,11 +147,13 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	 * ダブルクリックイベントハンドラ
 	 */
 	const handleDoubleClick = useCallback(() => {
-		const { id, isSelected, onTextEdit } = refBus.current;
+		const { id, isSelected, isTextEditEnabled, onTextEdit } = refBus.current;
 
-		// テキスト編集イベントを発火
+		if (!isTextEditEnabled) return;
+
 		if (!isSelected) return;
 
+		// テキスト編集イベントを発火
 		onTextEdit?.({
 			id,
 		});
@@ -206,7 +212,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	return (
 		<>
 			<g transform="translate(0.5,0.5)">
-				<ellipse
+				<EllipseElement
 					className="diagram"
 					id={id}
 					cx={0}
@@ -218,28 +224,31 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					strokeWidth={strokeWidth}
 					tabIndex={0}
 					cursor="move"
+					isTransparent={isTransparent}
 					transform={transform}
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
 					{...dragProps}
 				/>
 			</g>
-			<Textable
-				x={-width / 2}
-				y={-height / 2}
-				width={width}
-				height={height}
-				transform={transform}
-				text={text}
-				textType={textType}
-				fontColor={fontColor}
-				fontSize={fontSize}
-				fontFamily={fontFamily}
-				fontWeight={fontWeight}
-				textAlign={textAlign}
-				verticalAlign={verticalAlign}
-				isTextEditing={isTextEditing}
-			/>
+			{isTextEditEnabled && (
+				<Textable
+					x={-width / 2}
+					y={-height / 2}
+					width={width}
+					height={height}
+					transform={transform}
+					text={text}
+					textType={textType}
+					fontColor={fontColor}
+					fontSize={fontSize}
+					fontFamily={fontFamily}
+					fontWeight={fontWeight}
+					textAlign={textAlign}
+					verticalAlign={verticalAlign}
+					isTextEditing={isTextEditing}
+				/>
+			)}
 			{showTransformative && (
 				<Transformative
 					id={id}

@@ -151,6 +151,7 @@ export type CreateDiagramType<T extends DiagramDataOptions> = DiagramBaseData &
  * 図形の基本プロパティ
  */
 export type DiagramBaseProps = {
+	isTransparent?: boolean;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
@@ -198,6 +199,7 @@ export type ConnectableProps = {
  * Props for textable component.
  */
 export type TextableProps = {
+	isTextEditEnabled?: boolean;
 	onTextEdit?: (e: DiagramTextEditEvent) => void;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;
 };

@@ -2,20 +2,16 @@
 import type React from "react";
 import { memo, useState } from "react";
 
-// Import types related to this component.
-import type { ExecuteEvent } from "../../../types/EventTypes";
-
 // Import components related to SvgCanvas.
-import { Ellipse, type EllipseProps } from "../../shapes/Ellipse";
+import { Ellipse, DEFAULT_ELLIPSE_DATA } from "../../shapes/Ellipse";
 import { Hub } from "../../icons/Hub";
 import { IconContainer } from "../../core/IconContainer";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
-type HubNodeProps = EllipseProps & {
-	onExecute: (e: ExecuteEvent) => void;
-};
+// Imports related to this component.
+import type { HubNodeProps } from "./HubNodeTypes";
 
 const HubNodeComponent: React.FC<HubNodeProps> = (props) => {
 	const [isFlashing, setIsFlashing] = useState(false);
@@ -52,7 +48,13 @@ const HubNodeComponent: React.FC<HubNodeProps> = (props) => {
 			>
 				<Hub flash={isFlashing} />
 			</IconContainer>
-			<Ellipse {...props} />
+			<Ellipse
+				{...DEFAULT_ELLIPSE_DATA}
+				{...props}
+				isTextEditing={false}
+				isTransparent
+				isTextEditEnabled={false}
+			/>
 		</>
 	);
 };

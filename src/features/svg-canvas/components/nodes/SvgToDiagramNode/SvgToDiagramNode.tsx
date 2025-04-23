@@ -7,7 +7,11 @@ import type { ExecuteEvent, NewItemEvent } from "../../../types/EventTypes";
 import type { Diagram } from "../../../types/DiagramCatalog";
 
 // Import components related to SvgCanvas.
-import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
+import {
+	DEFAULT_RECTANGLE_DATA,
+	Rectangle,
+	type RectangleProps,
+} from "../../shapes/Rectangle";
 import { Gachapon } from "../../icons/Gachapon";
 import { IconContainer } from "../../core/IconContainer";
 
@@ -59,7 +63,12 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 			>
 				<Gachapon />
 			</IconContainer>
-			<Rectangle {...props} />
+			<Rectangle
+				{...DEFAULT_RECTANGLE_DATA}
+				{...props}
+				isTransparent
+				isTextEditEnabled={false}
+			/>
 		</>
 	);
 };
