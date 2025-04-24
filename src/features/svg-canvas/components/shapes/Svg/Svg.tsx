@@ -159,7 +159,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 					dangerouslySetInnerHTML={{
 						__html: innerText,
 					}}
-					transform={`translate(${-width / 2}, ${-height / 2}) scale(${(scaleX * width) / initialWidth}, ${(scaleY * height) / initialHeight})`}
+					transform={`translate(${(-width / 2) * scaleX}, ${(-height / 2) * scaleY}) scale(${(scaleX * width) / initialWidth}, ${(scaleY * height) / initialHeight})`}
 				/>
 				{/* Element for handle pointer events */}
 				<rect

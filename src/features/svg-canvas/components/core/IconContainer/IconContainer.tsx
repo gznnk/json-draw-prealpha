@@ -43,8 +43,8 @@ const IconContainerComponent: React.FC<IconContainerProps> = ({
 		(width / iconWidth) * scaleX,
 		(height / iconHeight) * scaleY,
 		degreesToRadians(rotation),
-		x - width / 2,
-		y - height / 2,
+		x - (width / 2) * scaleX,
+		y - (height / 2) * scaleY,
 	);
 
 	return (
