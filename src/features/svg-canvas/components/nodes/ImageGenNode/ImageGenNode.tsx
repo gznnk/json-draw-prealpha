@@ -1,17 +1,17 @@
 // Import React.
 import type React from "react";
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 // Import other libraries.
 import { OpenAI } from "openai";
 
 // Import types related to SvgCanvas.
-import type { ExecuteEvent } from "../../../types/EventTypes";
+import type { ExecuteEvent, NewItemEvent } from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.
-import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
 import { IconContainer } from "../../core/IconContainer";
 import { CPU_1 } from "../../icons/CPU_1";
+import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -23,10 +23,12 @@ import { newEventId } from "../../../utils/Util";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
+import { createImageData } from "../../shapes/Image";
 import { ImageGenNodeWrapper } from "./ImageGenNodeStyled";
 
 type ImageGenProps = RectangleProps & {
 	onExecute: (e: ExecuteEvent) => void;
+	onNewItem: (e: NewItemEvent) => void;
 };
 
 const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
@@ -66,10 +68,18 @@ const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 
 				const base64Image = response.data[0].b64_json;
 				if (base64Image) {
+					const eventId = newEventId();
 					props.onExecute({
 						id: props.id,
-						eventId: newEventId(),
+						eventId: eventId,
 						data: { text: base64Image },
+					});
+					props.onNewItem({
+						item: createImageData({
+							x: props.x,
+							y: props.y,
+							base64Data: base64Image,
+						}),
 					});
 				} else {
 					alert("APIからの応答が空です。");

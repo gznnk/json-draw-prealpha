@@ -7,6 +7,10 @@ import {
 	HubNode,
 	type HubNodeData,
 } from "../components/nodes/HubNode";
+import {
+	createImageGenNodeData,
+	ImageGenNode,
+} from "../components/nodes/ImageGenNode";
 import { createLLMNodeData, LLMNode } from "../components/nodes/LLMNode";
 import {
 	createSvgToDiagramNodeData,
@@ -29,6 +33,11 @@ import {
 } from "../components/shapes/Ellipse";
 import { Group, type GroupData } from "../components/shapes/Group";
 import {
+	createImageData,
+	Image,
+	type ImageData,
+} from "../components/shapes/Image";
+import {
 	createPathData,
 	Path,
 	PathPoint,
@@ -42,10 +51,6 @@ import {
 	type RectangleData,
 } from "../components/shapes/Rectangle";
 import { Svg, type SvgData } from "../components/shapes/Svg";
-import {
-	createImageGenNodeData,
-	ImageGenNode,
-} from "../components/nodes/ImageGenNode";
 
 /**
  * Types of diagram components.
@@ -56,6 +61,7 @@ export type DiagramType =
 	| "ConnectPoint"
 	| "Ellipse"
 	| "Group"
+	| "Image"
 	| "Path"
 	| "PathPoint"
 	| "Rectangle"
@@ -76,6 +82,7 @@ export type Diagram =
 	| ConnectPointData
 	| EllipseData
 	| GroupData
+	| ImageData
 	| PathData
 	| PathPointData
 	| RectangleData
@@ -100,6 +107,7 @@ export const DiagramComponentCatalog: {
 	ConnectPoint: DummyComponent,
 	Ellipse: Ellipse,
 	Group: Group,
+	Image: Image,
 	Path: Path,
 	PathPoint: PathPoint,
 	Rectangle: Rectangle,
@@ -123,6 +131,7 @@ export const DiagramConnectPointCalculators: {
 	ConnectPoint: () => [],
 	Ellipse: calcEllipseConnectPointPosition,
 	Group: () => [],
+	Image: () => [],
 	Path: () => [],
 	PathPoint: () => [],
 	Rectangle: calcRectangleConnectPointPosition,
@@ -149,6 +158,7 @@ export const DiagramCreateFunctions: {
 	ConnectPoint: () => undefined,
 	Ellipse: (props) => createEllipseData(props),
 	Group: () => undefined,
+	Image: (props) => createImageData(props),
 	Path: (props) => createPathData(props),
 	PathPoint: () => undefined,
 	Rectangle: (props) => createRectangleData(props),
