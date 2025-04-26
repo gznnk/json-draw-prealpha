@@ -35,6 +35,7 @@ import { Group, type GroupData } from "../components/shapes/Group";
 import {
 	createImageData,
 	Image,
+	imageToBlob,
 	type ImageData,
 } from "../components/shapes/Image";
 import {
@@ -50,7 +51,7 @@ import {
 	Rectangle,
 	type RectangleData,
 } from "../components/shapes/Rectangle";
-import { Svg, type SvgData } from "../components/shapes/Svg";
+import { Svg, svgToBlob, type SvgData } from "../components/shapes/Svg";
 
 /**
  * Types of diagram components.
@@ -169,4 +170,25 @@ export const DiagramCreateFunctions: {
 	SvgToDiagramNode: (props) => createSvgToDiagramNodeData(props),
 	LLMNode: (props) => createLLMNodeData(props),
 	TextAreaNode: (props) => createTextAreaNodeData(props),
+};
+
+export const DiagramExportFunctions: {
+	[key in DiagramType]: (diagram: Diagram) => Blob | undefined;
+} = {
+	// Shapes
+	ConnectLine: () => undefined,
+	ConnectPoint: () => undefined,
+	Ellipse: () => undefined,
+	Group: () => undefined,
+	Image: imageToBlob,
+	Path: () => undefined,
+	PathPoint: () => undefined,
+	Rectangle: () => undefined,
+	Svg: svgToBlob,
+	// Nodes
+	HubNode: () => undefined,
+	ImageGenNode: () => undefined,
+	SvgToDiagramNode: () => undefined,
+	LLMNode: () => undefined,
+	TextAreaNode: () => undefined,
 };

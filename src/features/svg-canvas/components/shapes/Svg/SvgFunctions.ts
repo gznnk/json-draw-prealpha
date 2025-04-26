@@ -1,4 +1,5 @@
 // Import functions related to SvgCanvas.
+import type { Diagram } from "../../../types/DiagramCatalog";
 import { newId } from "../../../utils/Diagram";
 
 // Imports related to this component.
@@ -69,11 +70,21 @@ export const isSvgData = (data: unknown): data is SvgData => {
 	return (
 		typeof data === "object" &&
 		data !== null &&
+		"type" in data &&
+		data.type === "Svg" &&
 		"svgText" in data &&
 		"width" in data &&
 		"height" in data &&
 		"initialWidth" in data &&
-		"initialHeight" in data &&
-		"svgText" in data
+		"initialHeight" in data
 	);
+};
+
+export const svgToBlob = (data: Diagram): Blob | undefined => {
+	if (isSvgData(data)) {
+		return new Blob([data.svgText], {
+			type: "image/svg+xml",
+		});
+	}
+	return undefined;
 };

@@ -1,4 +1,5 @@
 // Import functions related to SvgCanvas.
+import type { Diagram } from "../../../types/DiagramCatalog";
 import { newId } from "../../../utils/Diagram";
 
 // Imports related to this component.
@@ -40,4 +41,29 @@ export const createImageData = ({
 		keepProportion,
 		base64Data,
 	} as ImageData;
+};
+
+export const isImageData = (data: Diagram): data is ImageData => {
+	return (
+		typeof data === "object" &&
+		data !== null &&
+		"type" in data &&
+		data.type === "Image" &&
+		"width" in data &&
+		"height" in data &&
+		"base64Data" in data
+	);
+};
+
+export const imageToBlob = (data: Diagram) => {
+	if (!isImageData(data)) return undefined;
+
+	// 1. base64 → バイナリ文字列
+	const binary = atob(data.base64Data.replace(/\s/g, ""));
+
+	// 2. バイナリ文字列 → Uint8Array
+	const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
+
+	// 3. Blob 化
+	return new Blob([bytes], { type: "image/png" });
 };

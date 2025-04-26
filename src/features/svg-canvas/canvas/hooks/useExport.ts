@@ -2,11 +2,11 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
+import { DiagramExportFunctions } from "../../types/DiagramCatalog";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { getSelectedItems } from "../SvgCanvasFunctions";
-import { isSvgData } from "../../components/shapes/Svg";
 
 /**
  * Custom hook to handle export events on the canvas.
@@ -28,18 +28,30 @@ export const useExport = (props: CanvasHooksProps) => {
 		const selectedItems = getSelectedItems(items);
 
 		if (selectedItems.length === 1) {
-			// Export the selected item as SVG.
+			// Export the selected item.
 			const selectedItem = selectedItems[0];
-			if (isSvgData(selectedItem)) {
-				const svgBlob = new Blob([selectedItem.svgText], {
-					type: "image/svg+xml",
-				});
-				const url = URL.createObjectURL(svgBlob);
+			const blob = DiagramExportFunctions[selectedItem.type]?.(selectedItem);
+			if (blob) {
+				const url = URL.createObjectURL(blob);
+
+				// TODO: 共通化
+				const mimeToExt: Record<string, string> = {
+					"image/png": "png",
+					"image/jpeg": "jpg",
+					"image/svg+xml": "svg",
+					"image/gif": "gif",
+					"image/webp": "webp",
+					"application/pdf": "pdf",
+					"text/plain": "txt",
+					// 必要に応じて追加
+				};
+
+				const ext = mimeToExt[blob.type] || "txt"; // Default to txt if type is unknown.
 
 				// Create a link element to download the SVG.
 				const link = document.createElement("a");
 				link.href = url;
-				link.download = `${selectedItem.id}.svg`;
+				link.download = `${selectedItem.id}.${ext}`;
 				document.body.appendChild(link);
 				link.click();
 				document.body.removeChild(link);
