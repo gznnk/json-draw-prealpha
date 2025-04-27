@@ -59,6 +59,7 @@ const LLMNodeComponent: React.FC<LLMProps> = (props) => {
 		id: props.id,
 		onPropagation: async (e) => {
 			if (e.data.text === "") return;
+			if (e.eventType !== "Instant" && e.eventType !== "End") return;
 
 			const processId = newEventId();
 			setProcessIdList((prev) => [...prev, processId]);
@@ -69,24 +70,48 @@ const LLMNodeComponent: React.FC<LLMProps> = (props) => {
 			});
 
 			try {
-				const response = await openai.responses.create({
+				const stream = await openai.responses.create({
 					model: "gpt-4o",
 					instructions: props.text,
 					input: e.data.text,
+					stream: true,
 				});
 
-				const responseText = response.output_text;
-				if (responseText) {
-					props.onExecute({
-						id: props.id,
-						eventId: newEventId(),
-						data: {
-							text: responseText,
-						},
-					});
-				} else {
-					alert("APIからの応答が空です。");
+				let fullOutput = "";
+
+				props.onExecute({
+					id: props.id,
+					eventId: newEventId(),
+					eventType: "Start",
+					data: {
+						text: "",
+					},
+				});
+
+				for await (const event of stream) {
+					if (event.type === "response.output_text.delta") {
+						const delta = event.delta;
+						fullOutput += delta;
+
+						props.onExecute({
+							id: props.id,
+							eventId: newEventId(),
+							eventType: "InProgress",
+							data: {
+								text: fullOutput,
+							},
+						});
+					}
 				}
+
+				props.onExecute({
+					id: props.id,
+					eventId: newEventId(),
+					eventType: "End",
+					data: {
+						text: fullOutput,
+					},
+				});
 			} catch (error) {
 				console.error("Error fetching data from OpenAI API:", error);
 				alert("APIリクエスト中にエラーが発生しました。");

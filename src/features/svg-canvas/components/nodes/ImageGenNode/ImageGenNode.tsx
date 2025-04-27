@@ -53,6 +53,7 @@ const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 		id: props.id,
 		onPropagation: async (e) => {
 			if (e.data.text === "") return;
+			if (e.eventType !== "Instant" && e.eventType !== "End") return;
 
 			const processId = newEventId();
 			setProcessIdList((prev) => [...prev, processId]);
@@ -75,6 +76,7 @@ const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 					props.onExecute({
 						id: props.id,
 						eventId: eventId,
+						eventType: e.eventType,
 						data: { text: base64Image },
 					});
 					props.onNewItem({

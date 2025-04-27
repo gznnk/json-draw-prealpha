@@ -218,6 +218,7 @@ export type ExecuteResult = {
 
 export type ExecuteEvent = {
 	eventId: string;
+	eventType: EventType;
 	id: string;
 	data: ExecuteResult;
 };
@@ -227,6 +228,7 @@ export const EXECUTION_PROPAGATION_EVENT_NAME =
 
 export type ExecutionPropagationEvent = {
 	eventId: string;
+	eventType: EventType;
 	id: string;
 	targetId: string[];
 	data: ExecuteResult;

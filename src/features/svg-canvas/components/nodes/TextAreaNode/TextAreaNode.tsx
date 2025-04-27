@@ -39,6 +39,7 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 		props.onExecute({
 			id: props.id,
 			eventId: newEventId(),
+			eventType: "Instant",
 			data: {
 				text: props.text,
 			},
@@ -52,7 +53,7 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 			props.onDiagramChange?.({
 				id: props.id,
 				eventId: e.eventId,
-				eventType: "Instant",
+				eventType: e.eventType,
 				changeType: "Appearance",
 				startDiagram: {
 					text: props.text,
@@ -61,13 +62,16 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 					text: e.data.text,
 				},
 			});
-			props.onExecute?.({
-				id: props.id,
-				eventId: e.eventId,
-				data: {
-					text: e.data.text,
-				},
-			});
+			if (e.eventType === "End" || e.eventType === "Instant") {
+				props.onExecute?.({
+					id: props.id,
+					eventId: e.eventId,
+					eventType: e.eventType,
+					data: {
+						text: e.data.text,
+					},
+				});
+			}
 		},
 	});
 
