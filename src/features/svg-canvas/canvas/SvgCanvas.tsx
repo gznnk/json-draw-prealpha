@@ -9,13 +9,11 @@ import React, {
 
 // SvgCanvas関連型定義をインポート
 import { type Diagram, DiagramComponentCatalog } from "../types/DiagramCatalog";
-import {
-	type DiagramChangeEvent,
-	type DiagramDragEvent,
-	type DiagramSelectEvent,
-	SVG_CANVAS_SCROLL_EVENT_NAME,
-	type SvgCanvasResizeEvent,
-	type SvgCanvasScrollEvent,
+import type {
+	DiagramChangeEvent,
+	DiagramDragEvent,
+	DiagramSelectEvent,
+	SvgCanvasResizeEvent,
 } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
@@ -69,6 +67,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		width,
 		height,
 		items,
+		scrollLeft,
+		scrollTop,
 		multiSelectGroup,
 		textEditorState,
 		onTransform,
@@ -88,6 +88,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onNewDiagram,
 		onNewItem,
 		onExecute,
+		onScroll,
 	} = props;
 
 	// SVG要素のコンテナの参照
@@ -204,6 +205,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		// Component properties
+		scrollLeft,
+		scrollTop,
 		textEditorState,
 		onDrag,
 		onDiagramChange,
@@ -213,6 +216,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onClearAllSelection,
 		onUndo,
 		onRedo,
+		onScroll,
 		// Internal variables and functions
 		contextMenuFunctions,
 		canvasResize,
@@ -296,25 +300,6 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		});
 	}, []);
 
-	/**
-	 * Handle scroll event to dispatch a custom event with scroll position.
-	 */
-	const handleScroll = useCallback(
-		(e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-			// Dispatch a custom event with scroll position.
-			document.dispatchEvent(
-				new CustomEvent(SVG_CANVAS_SCROLL_EVENT_NAME, {
-					bubbles: true,
-					detail: {
-						scrollTop: e.currentTarget.scrollTop,
-						scrollLeft: e.currentTarget.scrollLeft,
-					} as SvgCanvasScrollEvent,
-				}),
-			);
-		},
-		[],
-	);
-
 	// Monitor keyboard events.
 	useEffect(() => {
 		const onDocumentKeyDown = (e: KeyboardEvent) => {
@@ -373,6 +358,14 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	}, []);
 
 	useEffect(() => {
+		if (containerRef.current) {
+			const { scrollLeft, scrollTop } = refBus.current;
+			containerRef.current.scrollLeft = scrollLeft;
+			containerRef.current.scrollTop = scrollTop;
+		}
+	}, []);
+
+	useEffect(() => {
 		const el = containerRef.current;
 
 		const handleTouchMove = (e: TouchEvent) => {
@@ -410,7 +403,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 
 	return (
 		<>
-			<Container ref={containerRef} onScroll={handleScroll}>
+			<Container ref={containerRef} onScroll={onScroll}>
 				<SvgCanvasContext.Provider value={stateProvider.current}>
 					<Svg
 						width={width}

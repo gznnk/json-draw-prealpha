@@ -33,6 +33,8 @@ export type SvgCanvasData = {
  * Type for the state of the SvgCanvas.
  */
 export type SvgCanvasState = {
+	scrollTop: number;
+	scrollLeft: number;
 	multiSelectGroup?: GroupData;
 	isDiagramChanging: boolean;
 	history: SvgCanvasHistory[];
@@ -81,4 +83,5 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onStackOrderChange?: (e: StackOrderChangeEvent) => void;
 	onExecute?: (e: ExecuteEvent) => void;
 	onExport?: () => void;
+	onScroll?: (e: React.UIEvent<HTMLDivElement, UIEvent>) => void;
 };

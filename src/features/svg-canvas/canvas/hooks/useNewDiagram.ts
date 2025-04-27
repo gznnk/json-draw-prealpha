@@ -37,8 +37,10 @@ export const useNewDiagram = (props: CanvasHooksProps) => {
 			props: { canvasState },
 		} = refBus.current;
 
-		const centerX = canvasState.minX + canvasState.width / 2;
-		const centerY = canvasState.minY + canvasState.height / 2;
+		const centerX =
+			canvasState.minX + canvasState.scrollLeft + window.innerWidth / 2;
+		const centerY =
+			canvasState.minY + canvasState.scrollTop + window.innerHeight / 2;
 
 		const diagramType = e.diagramType as DiagramType;
 

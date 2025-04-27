@@ -473,6 +473,8 @@ function App() {
 		width: window.screen.width,
 		height: window.screen.height,
 		items: devData.item4,
+		scrollLeft: 0,
+		scrollTop: 0,
 	};
 
 	if (loadedCanvasState) {
@@ -481,6 +483,8 @@ function App() {
 		canvasInitialState.width = loadedCanvasState.width;
 		canvasInitialState.height = loadedCanvasState.height;
 		canvasInitialState.items = loadedCanvasState.items;
+		canvasInitialState.scrollLeft = loadedCanvasState.scrollLeft;
+		canvasInitialState.scrollTop = loadedCanvasState.scrollTop;
 	}
 
 	const { canvasProps } = useSvgCanvas(canvasInitialState);

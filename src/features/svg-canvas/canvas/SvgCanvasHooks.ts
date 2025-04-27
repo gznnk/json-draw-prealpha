@@ -34,6 +34,7 @@ import { useUndo } from "./hooks/useUndo";
 import { useUngroup } from "./hooks/useUngroup";
 import { useExecute } from "./hooks/useExecute";
 import { useExport } from "./hooks/useExport";
+import { useScroll } from "./hooks/useScroll";
 
 /**
  * Props for the useSvgCanvas hook.
@@ -44,6 +45,8 @@ type SvgCanvasHooksProps = {
 	width: number;
 	height: number;
 	items: Diagram[];
+	scrollLeft: number;
+	scrollTop: number;
 };
 
 /**
@@ -69,6 +72,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		...initialBounds,
 		items: props.items,
 		isDiagramChanging: false,
+		scrollLeft: props.scrollLeft,
+		scrollTop: props.scrollTop,
 		history: [
 			{
 				...initialBounds,
@@ -146,6 +151,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the export event.
 	const onExport = useExport(canvasHooksProps);
 
+	// Handler for the scroll event.
+	const onScroll = useScroll(canvasHooksProps);
+
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
 	const addItem = useAddItem(canvasHooksProps);
@@ -172,6 +180,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onStackOrderChange,
 		onExecute,
 		onExport,
+		onScroll,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
