@@ -47,17 +47,12 @@ export const createSvgData = ({
 
 export const createSvgDataFromText = (data: string) => {
 	try {
-		const parser = new DOMParser();
-		const svgDoc = parser.parseFromString(data, "image/svg+xml");
-		const svgElement = svgDoc.documentElement;
-		const width = svgElement.getAttribute("width") || "100";
-		const height = svgElement.getAttribute("height") || "100";
 		return createSvgData({
 			x: 0,
 			y: 0,
 			svgText: data,
-			width: Number.parseFloat(width),
-			height: Number.parseFloat(height),
+			width: 100,
+			height: 100,
 			keepProportion: true,
 		});
 	} catch (e) {

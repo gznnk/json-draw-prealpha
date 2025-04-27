@@ -193,12 +193,14 @@ export type NewDiagramEvent = {
 	diagramType: DiagramType;
 	x?: number;
 	y?: number;
+	isSelected?: boolean;
 };
 
 export type NewItemEvent = {
 	item: Diagram;
 	x?: number;
 	y?: number;
+	isSelected?: boolean;
 };
 
 export type StackOrderChangeType =

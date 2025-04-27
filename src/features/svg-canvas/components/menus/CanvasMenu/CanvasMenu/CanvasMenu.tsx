@@ -20,6 +20,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "Rectangle",
+						isSelected: true,
 					})
 				}
 			>
@@ -32,6 +33,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "Ellipse",
+						isSelected: true,
 					})
 				}
 			>
@@ -44,6 +46,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "Path",
+						isSelected: true,
 					})
 				}
 			>
@@ -61,6 +64,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "TextAreaNode",
+						isSelected: true,
 					})
 				}
 			>
@@ -70,6 +74,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "LLMNode",
+						isSelected: true,
 					})
 				}
 			>
@@ -79,6 +84,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "SvgToDiagramNode",
+						isSelected: true,
 					})
 				}
 			>
@@ -88,6 +94,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "HubNode",
+						isSelected: true,
 					})
 				}
 			>
@@ -97,6 +104,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						diagramType: "ImageGenNode",
+						isSelected: true,
 					})
 				}
 			>

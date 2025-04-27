@@ -12,6 +12,9 @@ import type { NewDiagramEvent } from "../../types/EventTypes";
 // Import components related to SvgCanvas.
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
+// Import functions related to SvgCanvas.
+import { isSelectableData } from "../../utils/TypeUtils";
+
 // Imports related to this component.
 import { useAddItem } from "./useAddItem";
 
@@ -49,6 +52,10 @@ export const useNewDiagram = (props: CanvasHooksProps) => {
 			x: centerX,
 			y: centerY,
 		}) as Diagram;
+
+		if (e.isSelected && isSelectableData(data)) {
+			data.isSelected = true;
+		}
 
 		if (data) {
 			addItem(data);

@@ -6,6 +6,7 @@ import type { Diagram } from "../../types/DiagramCatalog";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
+import { isSelectableData } from "../../utils/TypeUtils";
 import { newEventId } from "../../utils/Util";
 import { addHistory } from "../SvgCanvasFunctions";
 
@@ -28,10 +29,18 @@ export const useAddItem = (props: CanvasHooksProps) => {
 			let newState = {
 				...prevState,
 				items: [
-					...prevState.items.map((item) => ({ ...item, isSelected: false })),
+					...prevState.items.map((i) => {
+						if (isSelectableData(i) && isSelectableData(item)) {
+							return {
+								...i,
+								// If the new item is selected, unselect other items.
+								isSelected: item.isSelected ? false : i.isSelected,
+							};
+						}
+						return i;
+					}),
 					{
 						...item,
-						isSelected: true,
 					},
 				],
 			} as SvgCanvasState;
