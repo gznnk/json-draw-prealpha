@@ -3,6 +3,7 @@ import type { TextEditorState } from "../components/core/Textable";
 import type { GroupData } from "../components/shapes/Group/GroupTypes";
 import type { Diagram } from "../types/DiagramCatalog";
 import type {
+	ConnectNodesEvent,
 	DiagramChangeEvent,
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
@@ -84,4 +85,5 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onExecute?: (e: ExecuteEvent) => void;
 	onExport?: () => void;
 	onScroll?: (e: React.UIEvent<HTMLDivElement, UIEvent>) => void;
+	onConnectNodes?: (e: ConnectNodesEvent) => void;
 };

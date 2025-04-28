@@ -6,7 +6,11 @@ import { memo, useEffect, useState, useRef } from "react";
 import { OpenAI } from "openai";
 
 // Import types related to SvgCanvas.
-import type { ExecuteEvent, NewItemEvent } from "../../../types/EventTypes";
+import type {
+	ConnectNodesEvent,
+	ExecuteEvent,
+	NewItemEvent,
+} from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.
 import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
@@ -35,6 +39,7 @@ import { createTextAreaNodeData } from "../TextAreaNode";
 type AgentProps = RectangleProps & {
 	onExecute: (e: ExecuteEvent) => void;
 	onNewItem: (e: NewItemEvent) => void;
+	onConnectNodes: (e: ConnectNodesEvent) => void;
 };
 
 /**
@@ -145,6 +150,24 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									output: JSON.stringify({
 										id: textNode.id,
 										type: "TextNode",
+									}),
+								});
+							}
+							if (functionName === "connect_nodes") {
+								const sourceNodeId = functionCallArguments.sourceNodeId;
+								const targetNodeId = functionCallArguments.targetNodeId;
+								props.onConnectNodes({
+									eventId: newEventId(),
+									sourceNodeId,
+									targetNodeId,
+								});
+								input.push(event.item);
+								input.push({
+									type: "function_call_output",
+									call_id: event.item.call_id,
+									output: JSON.stringify({
+										sourceNodeId,
+										targetNodeId,
 									}),
 								});
 							}

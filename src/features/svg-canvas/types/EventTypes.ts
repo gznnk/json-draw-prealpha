@@ -235,3 +235,9 @@ export type ExecutionPropagationEvent = {
 	targetId: string[];
 	data: ExecuteResult;
 };
+
+export type ConnectNodesEvent = {
+	eventId: string;
+	sourceNodeId: string;
+	targetNodeId: string;
+};

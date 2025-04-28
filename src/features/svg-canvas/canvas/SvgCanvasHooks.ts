@@ -35,6 +35,7 @@ import { useUngroup } from "./hooks/useUngroup";
 import { useExecute } from "./hooks/useExecute";
 import { useExport } from "./hooks/useExport";
 import { useScroll } from "./hooks/useScroll";
+import { useConnectNodes } from "./hooks/useConnectNodes";
 
 /**
  * Props for the useSvgCanvas hook.
@@ -154,6 +155,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the scroll event.
 	const onScroll = useScroll(canvasHooksProps);
 
+	// Handler for the connect nodes event.
+	const onConnectNodes = useConnectNodes(canvasHooksProps);
+
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
 	const addItem = useAddItem(canvasHooksProps);
@@ -181,6 +185,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onExecute,
 		onExport,
 		onScroll,
+		onConnectNodes,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //

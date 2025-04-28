@@ -89,6 +89,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onNewItem,
 		onExecute,
 		onScroll,
+		onConnectNodes,
 	} = props;
 
 	// SVG要素のコンテナの参照
@@ -396,6 +397,7 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 			onTextEdit,
 			onNewItem,
 			onExecute,
+			onConnectNodes,
 		};
 
 		return React.createElement(component, props);
