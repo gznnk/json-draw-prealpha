@@ -25,6 +25,8 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 import { RectangleWrapper } from "./AgentNodeStyled";
 import { Agent } from "../../icons/Agent";
 import { createLLMNodeData } from "../LLMNode";
+import { AI_AGENT_TOOLS, AI_AGENT_INSTRUCTIONS } from "./AgentConstants";
+import { createTextAreaNodeData } from "../TextAreaNode";
 
 /**
  * Props for the AgentNode component.
@@ -73,52 +75,25 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 			});
 
 			try {
+				let currentY = refBus.current.props.y;
+
+				const input = [
+					{
+						role: "user",
+						content: e.data.text,
+					},
+				] as OpenAI.Responses.ResponseInput;
+
 				const stream = await openai.responses.create({
 					model: "gpt-4o",
-					// instructions: props.text,
-					instructions:
-						"You are a ai agent. You can call functions to perform tasks.",
-					input: e.data.text,
+					instructions: AI_AGENT_INSTRUCTIONS,
+					input,
 					stream: true, // 必須！
-					tools: [
-						{
-							type: "function",
-							name: "add_llm_node",
-							description: "Adds a new LLM node to the canvas.",
-							parameters: {
-								type: "object",
-								properties: {
-									instructions: {
-										type: "string",
-										description:
-											"Inserts a system message as the first item in the model's context.",
-									},
-								},
-								additionalProperties: false,
-								required: ["instructions"],
-							},
-							strict: true,
-						},
-					],
-				});
-
-				let fullOutput = "";
-
-				props.onExecute({
-					id: props.id,
-					eventId: newEventId(),
-					eventType: "Start",
-					data: {
-						text: "",
-					},
+					tools: AI_AGENT_TOOLS,
 				});
 
 				for await (const event of stream) {
 					console.log(event);
-					if (event.type === "response.function_call_arguments.delta") {
-						const delta = event.delta;
-						fullOutput += delta;
-					}
 					if (
 						event.type === "response.output_item.done" &&
 						event.item?.type === "function_call"
@@ -126,26 +101,53 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 						const functionName = event.item.name;
 						const functionCallArguments = JSON.parse(event.item.arguments);
 						if (functionName === "add_llm_node") {
+							currentY += 200; // Move down by 100 pixels for the new node
 							const llmNode = createLLMNodeData({
-								x: props.x + (Math.random() - 0.5) * 300,
-								y: props.y + (Math.random() - 0.5) * 300,
+								x: refBus.current.props.x,
+								y: currentY,
 								text: functionCallArguments.instructions,
 							});
 							props.onNewItem({
 								item: llmNode,
 							});
+							input.push(event.item);
+							input.push({
+								type: "function_call_output",
+								call_id: event.item.call_id,
+								output: llmNode.id,
+							});
+						}
+						if (functionName === "add_text_node") {
+							currentY += 200; // Move down by 100 pixels for the new node
+							const textNode = createTextAreaNodeData({
+								x: refBus.current.props.x,
+								y: currentY,
+							});
+							props.onNewItem({
+								item: textNode,
+							});
+							input.push(event.item);
+							input.push({
+								type: "function_call_output",
+								call_id: event.item.call_id,
+								output: textNode.id,
+							});
 						}
 					}
 				}
 
-				props.onExecute({
-					id: props.id,
-					eventId: newEventId(),
-					eventType: "End",
-					data: {
-						text: fullOutput,
-					},
+				console.log("--------------------");
+
+				const stream2 = await openai.responses.create({
+					model: "gpt-4o",
+					instructions: AI_AGENT_INSTRUCTIONS,
+					input,
+					stream: true, // 必須！
+					tools: AI_AGENT_TOOLS,
 				});
+				for await (const event of stream2) {
+					console.log(event);
+				}
 			} catch (error) {
 				console.error("Error fetching data from OpenAI API:", error);
 				alert("APIリクエスト中にエラーが発生しました。");
