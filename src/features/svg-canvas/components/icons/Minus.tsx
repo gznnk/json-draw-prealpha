@@ -1,13 +1,14 @@
 import { memo } from "react";
 
 type MinusProps = {
-	fill?: string;
 	width?: number;
 	height?: number;
+	fill?: string;
+	title?: string;
 };
 
 export const Minus = memo<MinusProps>(
-	({ fill = "#333333", width = 24, height = 24 }) => {
+	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (
 			<svg
 				width={width}
@@ -15,7 +16,7 @@ export const Minus = memo<MinusProps>(
 				viewBox="0 0 1024 1024"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<title>Minus</title>
+				<title>{title}</title>
 				<path
 					d="M872 474H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h720c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"
 					fill={fill}

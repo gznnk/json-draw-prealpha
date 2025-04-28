@@ -112,11 +112,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuPositioner key="BgColor">
 				<DiagramMenuItem
 					menuType="BgColor"
-					tooltip="背景色"
 					menuStateMap={menuStateMap}
 					onMenuClick={onMenuClick}
 				>
-					<BgColor />
+					<BgColor title="背景色" />
 				</DiagramMenuItem>
 				{menuStateMap.BgColor === "Active" && (
 					<ColorPicker color={bgColor} onColorChange={onBgColorChange} />
@@ -127,11 +126,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuPositioner key="BorderColor">
 				<DiagramMenuItem
 					menuType="BorderColor"
-					tooltip="枠線の色"
 					menuStateMap={menuStateMap}
 					onMenuClick={onMenuClick}
 				>
-					<Edit />
+					<Edit title="枠線の色" />
 				</DiagramMenuItem>
 				{menuStateMap.BorderColor === "Active" && (
 					<ColorPicker
@@ -145,12 +143,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuPositioner key="BorderRadius">
 				<DiagramMenuItem
 					menuType="BorderRadius"
-					tooltip="角丸"
-					viewBox="0 0 24 24"
 					menuStateMap={menuStateMap}
 					onMenuClick={onMenuClick}
 				>
-					<BorderRadius />
+					<BorderRadius title="角丸" />
 				</DiagramMenuItem>
 				{menuStateMap.BorderRadius === "Active" && (
 					<NumberStepper
@@ -180,11 +176,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuPositioner key="FontSize">
 				<DiagramMenuItem
 					menuType="FontSize"
-					tooltip="フォントサイズ"
 					menuStateMap={menuStateMap}
 					onMenuClick={onMenuClick}
 				>
-					<FontSize />
+					<FontSize title="フォントサイズ" />
 				</DiagramMenuItem>
 				{menuStateMap.FontSize === "Active" && (
 					<NumberStepper
@@ -202,11 +197,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuPositioner key="FontColor">
 				<DiagramMenuItem
 					menuType="FontColor"
-					tooltip="フォントの色"
 					menuStateMap={menuStateMap}
 					onMenuClick={onMenuClick}
 				>
-					<FontColor />
+					<FontColor title="フォントの色" />
 				</DiagramMenuItem>
 				{menuStateMap.FontColor === "Active" && (
 					<ColorPicker color={fontColor} onColorChange={onFontColorChange} />
@@ -217,11 +211,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuItem
 				key="Bold"
 				menuType="Bold"
-				tooltip="太字"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<Bold />
+				<Bold title="太字" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
@@ -240,33 +233,30 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuItem
 				key="AlignLeft"
 				menuType="AlignLeft"
-				tooltip="左揃え"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<AlignLeft />
+				<AlignLeft title="左揃え" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="AlignCenter"
 				menuType="AlignCenter"
-				tooltip="中央揃え"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<AlignCenter />
+				<AlignCenter title="中央揃え" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="AlignRight"
 				menuType="AlignRight"
-				tooltip="右揃え"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<AlignRight />
+				<AlignRight title="右揃え" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
@@ -285,33 +275,30 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuItem
 				key="AlignTop"
 				menuType="AlignTop"
-				tooltip="上揃え"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<VerticalAlignTop />
+				<VerticalAlignTop title="上揃え" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="AlignMiddle"
 				menuType="AlignMiddle"
-				tooltip="中央揃え"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<VerticalAlignMiddle />
+				<VerticalAlignMiddle title="中央揃え" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="AlignBottom"
 				menuType="AlignBottom"
-				tooltip="下揃え"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<VerticalAlignBottom />
+				<VerticalAlignBottom title="下揃え" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
@@ -331,44 +318,40 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuItem
 				key="BringToFront"
 				menuType="BringToFront"
-				tooltip="最前面に移動"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<BringToFront />
+				<BringToFront title="最前面に移動" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="BringForward"
 				menuType="BringForward"
-				tooltip="前面に移動"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<BringForward />
+				<BringForward title="前面に移動" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="SendBackward"
 				menuType="SendBackward"
-				tooltip="背面に移動"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<SendBackward />
+				<SendBackward title="背面に移動" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuItem
 				key="SendToBack"
 				menuType="SendToBack"
-				tooltip="最背面に移動"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<SendToBack />
+				<SendToBack title="最背面に移動" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
@@ -383,12 +366,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuItem
 				key="KeepAspectRatio"
 				menuType="KeepAspectRatio"
-				tooltip="アスペクト比維持"
-				viewBox="0 0 16 16"
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<AspectRatio />
+				<AspectRatio width={22} height={22} title="アスペクト比維持" />
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(
@@ -403,13 +384,14 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<DiagramMenuItem
 				key="Group"
 				menuType="Group"
-				tooltip={
-					menuStateMap.Group === "Active" ? "グループ解除" : "グループ化"
-				}
 				menuStateMap={menuStateMap}
 				onMenuClick={onMenuClick}
 			>
-				<Group />
+				<Group
+					title={
+						menuStateMap.Group === "Active" ? "グループ解除" : "グループ化"
+					}
+				/>
 			</DiagramMenuItem>,
 		);
 		menuItemComponents.push(<DiagramMenuDivider key="GroupSectionDivider" />);

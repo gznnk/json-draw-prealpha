@@ -1,21 +1,22 @@
 import { memo } from "react";
 
 type BorderRadiusProps = {
-	fill?: string;
 	width?: number;
 	height?: number;
+	fill?: string;
+	title?: string;
 };
 
 export const BorderRadius = memo<BorderRadiusProps>(
-	({ fill = "#333333", width = 24, height = 24 }) => {
+	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (
 			<svg
 				width={width}
 				height={height}
-				viewBox="0 0 1024 1024"
+				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<title>BorderRadius</title>
+				<title>{title}</title>
 				<path
 					clipRule="evenodd"
 					fillRule="evenodd"

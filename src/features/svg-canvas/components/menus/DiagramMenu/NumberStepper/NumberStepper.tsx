@@ -70,10 +70,7 @@ const NumberStepperComponent: React.FC<NumberStepperProps> = ({
 		<DiagramMenuControl>
 			<NumberStepperContainer>
 				<NumberStepperButton onClick={handleMinus}>
-					<svg viewBox="0 0 1024 1024" width="100%" height="100%">
-						<title>{minusTooltip}</title>
-						<Minus />
-					</svg>
+					<Minus title={minusTooltip} />
 				</NumberStepperButton>
 				<NumberStepperInput
 					value={inputValue}
@@ -81,10 +78,7 @@ const NumberStepperComponent: React.FC<NumberStepperProps> = ({
 					onChange={handleChange}
 				/>
 				<NumberStepperButton onClick={handlePlus}>
-					<svg viewBox="0 0 1024 1024" width="100%" height="100%">
-						<title>{plusTooltip}</title>
-						<Plus />
-					</svg>
+					<Plus title={plusTooltip} />
 				</NumberStepperButton>
 			</NumberStepperContainer>
 		</DiagramMenuControl>

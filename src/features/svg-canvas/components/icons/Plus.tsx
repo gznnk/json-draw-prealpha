@@ -1,13 +1,14 @@
 import { memo } from "react";
 
 type PlusProps = {
-	fill?: string;
 	width?: number;
 	height?: number;
+	fill?: string;
+	title?: string;
 };
 
 export const Plus = memo<PlusProps>(
-	({ fill = "#333333", width = 24, height = 24 }) => {
+	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (
 			<svg
 				width={width}
@@ -15,7 +16,7 @@ export const Plus = memo<PlusProps>(
 				viewBox="0 0 1024 1024"
 				xmlns="http://www.w3.org/2000/svg"
 			>
-				<title>Plus</title>
+				<title>{title}</title>
 				<path
 					d="M474 152m8 0l60 0q8 0 8 8l0 704q0 8-8 8l-60 0q-8 0-8-8l0-704q0-8 8-8Z"
 					fill={fill}
