@@ -3,7 +3,6 @@ import type React from "react";
 import { memo } from "react";
 
 // Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/Diagram";
 import { degreesToRadians } from "../../../utils/Math";
 
 /**
@@ -17,8 +16,6 @@ type IconContainerProps = {
 	rotation: number;
 	scaleX: number;
 	scaleY: number;
-	iconWidth: number;
-	iconHeight: number;
 	pointerEvents?: string;
 	children: React.ReactNode;
 };
@@ -34,21 +31,26 @@ const IconContainerComponent: React.FC<IconContainerProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	iconWidth,
-	iconHeight,
 	pointerEvents = "auto",
 	children,
 }) => {
-	const iconTransform = createSvgTransform(
-		(width / iconWidth) * scaleX,
-		(height / iconHeight) * scaleY,
-		degreesToRadians(rotation),
-		x - (width / 2) * scaleX,
-		y - (height / 2) * scaleY,
-	);
+	const rad = degreesToRadians(rotation);
+	const cos = Math.cos(rad);
+	const sin = Math.sin(rad);
+
+	const a = cos * scaleX;
+	const b = sin * scaleX;
+	const c = -sin * scaleY;
+	const d = cos * scaleY;
+
+	const e = x + a * (-width / 2) + c * (-height / 2);
+	const f = y + b * (-width / 2) + d * (-height / 2);
 
 	return (
-		<g transform={iconTransform} pointerEvents={pointerEvents}>
+		<g
+			transform={`matrix(${a}, ${b}, ${c}, ${d}, ${e}, ${f})`}
+			pointerEvents={pointerEvents}
+		>
 			{children}
 		</g>
 	);

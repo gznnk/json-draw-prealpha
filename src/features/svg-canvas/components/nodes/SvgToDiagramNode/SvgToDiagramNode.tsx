@@ -60,11 +60,9 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 				rotation={props.rotation}
 				scaleX={props.scaleX}
 				scaleY={props.scaleY}
-				iconWidth={80}
-				iconHeight={80}
 				pointerEvents="none"
 			>
-				<Gachapon />
+				<Gachapon width={props.width} height={props.height} />
 			</IconContainer>
 			<Rectangle
 				{...DEFAULT_RECTANGLE_DATA}

@@ -111,10 +111,12 @@ const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 					rotation={props.rotation}
 					scaleX={props.scaleX}
 					scaleY={props.scaleY}
-					iconWidth={60}
-					iconHeight={60}
 				>
-					<Picture animation={processIdList.length !== 0} />
+					<Picture
+						width={props.width}
+						height={props.height}
+						animation={processIdList.length !== 0}
+					/>
 				</IconContainer>
 			)}
 			<Rectangle

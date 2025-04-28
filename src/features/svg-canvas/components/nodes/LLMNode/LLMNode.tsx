@@ -137,10 +137,12 @@ const LLMNodeComponent: React.FC<LLMProps> = (props) => {
 					rotation={props.rotation}
 					scaleX={props.scaleX}
 					scaleY={props.scaleY}
-					iconWidth={80}
-					iconHeight={80}
 				>
-					<CPU_1 blink={processIdList.length !== 0} />
+					<CPU_1
+						width={props.width}
+						height={props.height}
+						animation={processIdList.length !== 0}
+					/>
 				</IconContainer>
 			)}
 			<RectangleWrapper visible={props.isTextEditing}>

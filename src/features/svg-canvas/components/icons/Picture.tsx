@@ -1,17 +1,24 @@
+// Import React.
 import { memo } from "react";
+
+// Import Emotion for styling.
 import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
 
-/* 太陽の昇降を表すキーフレーム */
+/**
+ * Animation for sunrise and sunset.
+ */
 const riseAndSet = keyframes`
   0%   { transform: rotate(0deg); }
   50%  { transform: rotate(180deg); }
   100% { transform: rotate(360deg); }
 `;
 
-/* 太陽を包む <g> 要素。animation が true のときだけ回転させる */
+/**
+ * Styled component for the group of sun elements that animate.
+ */
 const SunGroup = styled.g<{ $animate: boolean }>`
-    transform-origin: 32px 48px;  /* 稜線中心を支点に */
+    transform-origin: 32px 48px;  /* Pivot around the ridge line center */
     transform-box: view-box;
     ${({ $animate }) =>
 			$animate &&
@@ -20,6 +27,9 @@ const SunGroup = styled.g<{ $animate: boolean }>`
     `}
 `;
 
+/**
+ * Animation for the sky color change.
+ */
 const skyColor = keyframes`
     0%   { fill: #ffffff; }
     25%  { fill: #ffffff; }
@@ -28,7 +38,9 @@ const skyColor = keyframes`
     100% { fill: #ffffff; }
 `;
 
-/* 背景空 */
+/**
+ * Styled component for the sky rectangle that animates.
+ */
 const Sky = styled.rect<{ $animate: boolean }>`
   ${({ $animate }) =>
 		$animate &&
@@ -37,20 +49,29 @@ const Sky = styled.rect<{ $animate: boolean }>`
     `}
 `;
 
+/**
+ * Props for the Picture icon.
+ */
 type PictureProps = {
-	/** true で太陽が昇降アニメーション */
+	width?: number;
+	height?: number;
 	animation?: boolean;
 };
 
-export const Picture = memo<PictureProps>(({ animation = false }) => {
-	return (
-		<svg width={60} height={60} viewBox="0 0 60 60">
-			<title>Picture</title>
-			<Sky $animate={animation} width="60" height="60" fill="#ffffff" />
-			<polygon points="8,48 20,30 30,42 42,22 52,48" fill="#2196F3" />
-			<SunGroup $animate={animation}>
-				<circle cx="32" cy="18" r="4" fill="#FFC107" />
-			</SunGroup>
-		</svg>
-	);
-});
+/**
+ * Picture component that renders a picture icon with optional animation.
+ */
+export const Picture = memo<PictureProps>(
+	({ width = 60, height = 60, animation = false }) => {
+		return (
+			<svg width={width} height={height} viewBox="0 0 60 60">
+				<title>Picture</title>
+				<Sky $animate={animation} width="60" height="60" fill="#ffffff" />
+				<polygon points="8,48 20,30 30,42 42,22 52,48" fill="#2196F3" />
+				<SunGroup $animate={animation}>
+					<circle cx="32" cy="18" r="4" fill="#FFC107" />
+				</SunGroup>
+			</svg>
+		);
+	},
+);

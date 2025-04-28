@@ -241,10 +241,12 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 					rotation={props.rotation}
 					scaleX={props.scaleX}
 					scaleY={props.scaleY}
-					iconWidth={80}
-					iconHeight={80}
 				>
-					<Agent width={80} height={80} animate={processIdList.length !== 0} />
+					<Agent
+						width={props.width}
+						height={props.height}
+						animation={processIdList.length !== 0}
+					/>
 				</IconContainer>
 			)}
 			<RectangleWrapper visible={props.isTextEditing}>

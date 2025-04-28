@@ -43,11 +43,9 @@ const HubNodeComponent: React.FC<HubNodeProps> = (props) => {
 				rotation={props.rotation}
 				scaleX={props.scaleX}
 				scaleY={props.scaleY}
-				iconWidth={100}
-				iconHeight={100}
 				pointerEvents="none"
 			>
-				<Hub flash={isFlashing} />
+				<Hub width={props.width} height={props.height} animation={isFlashing} />
 			</IconContainer>
 			<Ellipse
 				{...DEFAULT_ELLIPSE_DATA}
