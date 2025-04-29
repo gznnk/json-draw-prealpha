@@ -161,20 +161,20 @@ export const DiagramCreateFunctions: {
 	// Shapes
 	ConnectLine: () => undefined,
 	ConnectPoint: () => undefined,
-	Ellipse: (props) => createEllipseData(props), // TODO: 関数をそのまま指定
+	Ellipse: createEllipseData,
 	Group: () => undefined,
-	Image: (props) => createImageData(props),
-	Path: (props) => createPathData(props),
+	Image: createImageData,
+	Path: createPathData,
 	PathPoint: () => undefined,
-	Rectangle: (props) => createRectangleData(props),
+	Rectangle: createRectangleData,
 	Svg: () => undefined,
 	// Nodes
-	AgentNode: (props) => createAgentNodeData(props),
-	HubNode: (props) => createHubNodeData(props),
-	ImageGenNode: (props) => createImageGenNodeData(props),
-	SvgToDiagramNode: (props) => createSvgToDiagramNodeData(props),
-	LLMNode: (props) => createLLMNodeData(props),
-	TextAreaNode: (props) => createTextAreaNodeData(props),
+	AgentNode: createAgentNodeData,
+	HubNode: createHubNodeData,
+	ImageGenNode: createImageGenNodeData,
+	SvgToDiagramNode: createSvgToDiagramNodeData,
+	LLMNode: createLLMNodeData,
+	TextAreaNode: createTextAreaNodeData,
 };
 
 export const DiagramExportFunctions: {

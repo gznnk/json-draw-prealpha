@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { ExecuteEvent } from "../../../types/EventTypes";
+import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 
 // Import components related to SvgCanvas.
 import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
@@ -17,11 +17,19 @@ import { newEventId } from "../../../utils/Util";
 // Imports related to this component.
 import { TextAreaButton, TextAreaButtonText } from "./TextAreaNodeStyled";
 
-// TODO: CreateDiagramPropsで生成
-type TextAreaProps = RectangleProps & {
-	onExecute: (e: ExecuteEvent) => void;
-};
+/**
+ * Props for the TextAreaNode component.
+ */
+type TextAreaProps = CreateDiagramProps<
+	RectangleProps,
+	{
+		executable: true;
+	}
+>;
 
+/**
+ * TextAreaNode component.
+ */
 const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 	// State to manage the text content of the TextArea node.
 	const [text, setText] = useState<string>(props.text);
@@ -45,7 +53,7 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 		// Bypass references to avoid function creation in every render.
 		const { props } = refBus.current;
 
-		props.onExecute({
+		props.onExecute?.({
 			id: props.id,
 			eventId: newEventId(),
 			eventType: "Instant",

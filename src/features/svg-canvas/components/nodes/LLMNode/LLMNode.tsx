@@ -6,7 +6,7 @@ import { memo, useEffect, useState, useRef } from "react";
 import { OpenAI } from "openai";
 
 // Import types related to SvgCanvas.
-import type { ExecuteEvent } from "../../../types/EventTypes";
+import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 
 // Import components related to SvgCanvas.
 import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
@@ -28,10 +28,12 @@ import { RectangleWrapper } from "./LLMNodeStyled";
 /**
  * Props for the LLMNode component.
  */
-// TODO: CreateDiagramPropsで生成
-type LLMProps = RectangleProps & {
-	onExecute: (e: ExecuteEvent) => void;
-};
+type LLMProps = CreateDiagramProps<
+	RectangleProps,
+	{
+		executable: true;
+	}
+>;
 
 /**
  * LLMNode component.
@@ -82,7 +84,7 @@ const LLMNodeComponent: React.FC<LLMProps> = (props) => {
 
 				const eventId = newEventId();
 
-				props.onExecute({
+				props.onExecute?.({
 					id: props.id,
 					eventId,
 					eventType: "Start",
@@ -96,7 +98,7 @@ const LLMNodeComponent: React.FC<LLMProps> = (props) => {
 						const delta = event.delta;
 						fullOutput += delta;
 
-						props.onExecute({
+						props.onExecute?.({
 							id: props.id,
 							eventId,
 							eventType: "InProgress",
@@ -107,7 +109,7 @@ const LLMNodeComponent: React.FC<LLMProps> = (props) => {
 					}
 
 					if (event.type === "response.output_text.done") {
-						props.onExecute({
+						props.onExecute?.({
 							id: props.id,
 							eventId,
 							eventType: "End",

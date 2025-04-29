@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to this component.
-import type { ExecuteEvent, NewItemEvent } from "../../../types/EventTypes";
+import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 import type { Diagram } from "../../../types/DiagramCatalog";
 
 // Import components related to SvgCanvas.
@@ -22,12 +22,20 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
 import { newEventId } from "../../../utils/Util";
 
-// TODO: CreateDiagramPropsで生成
-type SvgToDiagramNodeProps = RectangleProps & {
-	onExecute: (e: ExecuteEvent) => void;
-	onNewItem: (e: NewItemEvent) => void;
-};
+/**
+ * Props for the SvgToDiagramNode component.
+ */
+type SvgToDiagramNodeProps = CreateDiagramProps<
+	RectangleProps,
+	{
+		executable: true;
+		itemCreatable: true;
+	}
+>;
 
+/**
+ * SvgToDiagramNode component.
+ */
 const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
@@ -45,7 +53,7 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 			svgData.x = props.x + (Math.random() - 0.5) * 300;
 			svgData.y = props.y + (Math.random() - 0.5) * 300;
 
-			props.onNewItem({
+			props.onNewItem?.({
 				eventId: newEventId(),
 				item: svgData as Diagram,
 			});

@@ -6,11 +6,8 @@ import { memo, useContext, useEffect, useRef, useState } from "react";
 import { OpenAI } from "openai";
 
 // Import types related to SvgCanvas.
-import type {
-	ConnectNodesEvent,
-	ExecuteEvent,
-	NewItemEvent,
-} from "../../../types/EventTypes";
+import type { ConnectNodesEvent } from "../../../types/EventTypes";
+import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../../canvas";
@@ -38,10 +35,13 @@ import { RectangleWrapper } from "./AgentNodeStyled";
 /**
  * Props for the AgentNode component.
  */
-// TODO: CreateDiagramPropsで生成
-type AgentProps = RectangleProps & {
-	onExecute: (e: ExecuteEvent) => void;
-	onNewItem: (e: NewItemEvent) => void;
+type AgentProps = CreateDiagramProps<
+	RectangleProps,
+	{
+		executable: true;
+		itemCreatable: true;
+	}
+> & {
 	onConnectNodes: (e: ConnectNodesEvent) => void;
 };
 
@@ -116,7 +116,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 
 				const eventId = newEventId();
 
-				props.onExecute({
+				props.onExecute?.({
 					id: props.id,
 					eventId,
 					eventType: "Start",
@@ -143,7 +143,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 							const delta = event.delta;
 							fullOutput += delta;
 
-							props.onExecute({
+							props.onExecute?.({
 								id: props.id,
 								eventId,
 								eventType: "InProgress",
@@ -154,7 +154,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 						}
 
 						if (event.type === "response.output_text.done") {
-							props.onExecute({
+							props.onExecute?.({
 								id: props.id,
 								eventId,
 								eventType: "End",
@@ -177,7 +177,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									y: functionCallArguments.y,
 									text: functionCallArguments.instructions,
 								});
-								props.onNewItem({
+								props.onNewItem?.({
 									eventId,
 									item: llmNode,
 								});
@@ -199,7 +199,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 								});
-								props.onNewItem({
+								props.onNewItem?.({
 									eventId,
 									item: textNode,
 								});
@@ -220,7 +220,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 								});
-								props.onNewItem({
+								props.onNewItem?.({
 									eventId,
 									item: svgNode,
 								});
@@ -241,7 +241,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 								});
-								props.onNewItem({
+								props.onNewItem?.({
 									eventId,
 									item: node,
 								});

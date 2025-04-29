@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { OpenAI } from "openai";
 
 // Import types related to SvgCanvas.
-import type { ExecuteEvent, NewItemEvent } from "../../../types/EventTypes";
+import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 
 // Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
@@ -29,11 +29,20 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 // Import related to this component.
 import { createImageData } from "../../shapes/Image";
 
-type ImageGenProps = RectangleProps & {
-	onExecute: (e: ExecuteEvent) => void;
-	onNewItem: (e: NewItemEvent) => void;
-};
+/**
+ * Props for the ImageGenNode component.
+ */
+type ImageGenProps = CreateDiagramProps<
+	RectangleProps,
+	{
+		executable: true;
+		itemCreatable: true;
+	}
+>;
 
+/**
+ * ImageGenNode component.
+ */
 const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
@@ -73,13 +82,13 @@ const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 				const base64Image = response.data[0].b64_json;
 				if (base64Image) {
 					const eventId = newEventId();
-					props.onExecute({
+					props.onExecute?.({
 						id: props.id,
 						eventId,
 						eventType: e.eventType,
 						data: { text: base64Image },
 					});
-					props.onNewItem({
+					props.onNewItem?.({
 						eventId,
 						item: createImageData({
 							x: props.x,
