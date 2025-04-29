@@ -75,11 +75,12 @@ const ImageGenNodeComponent: React.FC<ImageGenProps> = (props) => {
 					const eventId = newEventId();
 					props.onExecute({
 						id: props.id,
-						eventId: eventId,
+						eventId,
 						eventType: e.eventType,
 						data: { text: base64Image },
 					});
 					props.onNewItem({
+						eventId,
 						item: createImageData({
 							x: props.x,
 							y: props.y,

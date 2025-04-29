@@ -197,6 +197,7 @@ export type NewDiagramEvent = {
 };
 
 export type NewItemEvent = {
+	eventId: string;
 	item: Diagram;
 	x?: number;
 	y?: number;

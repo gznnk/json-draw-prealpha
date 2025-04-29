@@ -35,6 +35,6 @@ export const useNewItem = (props: CanvasHooksProps) => {
 			item.isSelected = true;
 		}
 
-		addItem(e.item);
+		addItem(e.item, e.eventId);
 	}, []);
 };

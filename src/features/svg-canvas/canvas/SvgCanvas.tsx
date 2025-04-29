@@ -104,9 +104,17 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 	// 現時点ではシングルトン的に扱うため、useRefで保持し、以降再作成しない
 	// TODO: レンダリングの負荷が高くなければ、都度インスタンスを更新して再レンダリングさせたい
 	const stateProvider = useRef(
-		new SvgCanvasStateProvider({ items } as SvgCanvasState),
+		new SvgCanvasStateProvider({} as SvgCanvasState),
 	);
-	stateProvider.current.setState({ items } as SvgCanvasState);
+	stateProvider.current.setState({
+		minX,
+		minY,
+		width,
+		height,
+		items,
+		scrollLeft,
+		scrollTop,
+	} as SvgCanvasState);
 
 	// Use the context menu hook to handle context menu events.
 	const { contextMenuProps, contextMenuHandlers, contextMenuFunctions } =

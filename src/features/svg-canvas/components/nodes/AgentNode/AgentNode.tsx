@@ -1,6 +1,6 @@
 // Import React.
 import type React from "react";
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 
 // Import other libraries.
 import { OpenAI } from "openai";
@@ -13,8 +13,9 @@ import type {
 } from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.
-import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
+import { SvgCanvasContext } from "../../../canvas";
 import { IconContainer } from "../../core/IconContainer";
+import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -26,13 +27,13 @@ import { newEventId } from "../../../utils/Util";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
-import { RectangleWrapper } from "./AgentNodeStyled";
 import { Agent } from "../../icons/Agent";
-import { createLLMNodeData } from "../LLMNode";
-import { AI_AGENT_TOOLS, AI_AGENT_INSTRUCTIONS } from "./AgentConstants";
-import { createTextAreaNodeData } from "../TextAreaNode";
-import { createSvgToDiagramNodeData } from "../SvgToDiagramNode";
 import { createImageGenNodeData } from "../ImageGenNode";
+import { createLLMNodeData } from "../LLMNode";
+import { createSvgToDiagramNodeData } from "../SvgToDiagramNode";
+import { createTextAreaNodeData } from "../TextAreaNode";
+import { AI_AGENT_INSTRUCTIONS, AI_AGENT_TOOLS } from "./AgentConstants";
+import { RectangleWrapper } from "./AgentNodeStyled";
 
 /**
  * Props for the AgentNode component.
@@ -50,6 +51,9 @@ type AgentProps = RectangleProps & {
 const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
+
+	// SvgCanvas state provider.
+	const canvasStateProvider = useContext(SvgCanvasContext);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -81,19 +85,32 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 				dangerouslyAllowBrowser: true, // ブラウザで直接使用する場合に必要
 			});
 
-			try {
-				let currentY = refBus.current.props.y;
+			const input = [
+				{
+					role: "system",
+					content: AI_AGENT_INSTRUCTIONS,
+				},
+			] as OpenAI.Responses.ResponseInput;
 
-				const input = [
-					{
-						role: "system",
-						content: AI_AGENT_INSTRUCTIONS,
-					},
-					{
-						role: "user",
-						content: e.data.text,
-					},
-				] as OpenAI.Responses.ResponseInput;
+			const canvasState = canvasStateProvider?.state();
+
+			// Add the input to the first node position.
+			if (canvasState) {
+				const startX = canvasState.minX + canvasState.scrollLeft + 300;
+				const startY =
+					canvasState.minY + canvasState.scrollTop + window.innerHeight / 2;
+
+				input.push({
+					role: "user",
+					content: `Start placing the first node near (X: ${startX}, Y: ${startY}) on the canvas.`,
+				});
+			}
+
+			try {
+				input.push({
+					role: "user",
+					content: e.data.text,
+				});
 
 				let fullOutput = "";
 
@@ -155,13 +172,13 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 							const functionName = event.item.name;
 							const functionCallArguments = JSON.parse(event.item.arguments);
 							if (functionName === "add_llm_node") {
-								currentY += 250; // Move down by 100 pixels for the new node
 								const llmNode = createLLMNodeData({
-									x: refBus.current.props.x,
-									y: currentY,
+									x: functionCallArguments.x,
+									y: functionCallArguments.y,
 									text: functionCallArguments.instructions,
 								});
 								props.onNewItem({
+									eventId,
 									item: llmNode,
 								});
 								input.push(event.item);
@@ -172,16 +189,18 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 										id: llmNode.id,
 										type: "LLMNode",
 										instructions: functionCallArguments.instructions,
+										width: llmNode.width,
+										height: llmNode.height,
 									}),
 								});
 							}
 							if (functionName === "add_text_node") {
-								currentY += 250; // Move down by 100 pixels for the new node
 								const textNode = createTextAreaNodeData({
-									x: refBus.current.props.x,
-									y: currentY,
+									x: functionCallArguments.x,
+									y: functionCallArguments.y,
 								});
 								props.onNewItem({
+									eventId,
 									item: textNode,
 								});
 								input.push(event.item);
@@ -191,16 +210,18 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									output: JSON.stringify({
 										id: textNode.id,
 										type: "TextNode",
+										width: textNode.width,
+										height: textNode.height,
 									}),
 								});
 							}
 							if (functionName === "add_svg_to_canvas_node") {
-								currentY += 250; // Move down by 100 pixels for the new node
 								const svgNode = createSvgToDiagramNodeData({
-									x: refBus.current.props.x,
-									y: currentY,
+									x: functionCallArguments.x,
+									y: functionCallArguments.y,
 								});
 								props.onNewItem({
+									eventId,
 									item: svgNode,
 								});
 								input.push(event.item);
@@ -210,25 +231,29 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 									output: JSON.stringify({
 										id: svgNode.id,
 										type: "SvgToDiagramNode",
+										width: svgNode.width,
+										height: svgNode.height,
 									}),
 								});
 							}
 							if (functionName === "add_image_gen_node") {
-								currentY += 250; // Move down by 100 pixels for the new node
-								const imageGenNode = createImageGenNodeData({
-									x: refBus.current.props.x,
-									y: currentY,
+								const node = createImageGenNodeData({
+									x: functionCallArguments.x,
+									y: functionCallArguments.y,
 								});
 								props.onNewItem({
-									item: imageGenNode,
+									eventId,
+									item: node,
 								});
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
 									call_id: event.item.call_id,
 									output: JSON.stringify({
-										id: imageGenNode.id,
+										id: node.id,
 										type: "SvgToDiagramNode",
+										width: node.width,
+										height: node.height,
 									}),
 								});
 							}
@@ -236,7 +261,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 								const sourceNodeId = functionCallArguments.sourceNodeId;
 								const targetNodeId = functionCallArguments.targetNodeId;
 								props.onConnectNodes({
-									eventId: newEventId(),
+									eventId,
 									sourceNodeId,
 									targetNodeId,
 								});

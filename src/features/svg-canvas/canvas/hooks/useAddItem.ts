@@ -10,6 +10,7 @@ import { isSelectableData } from "../../utils/TypeUtils";
 import { newEventId } from "../../utils/Util";
 import { addHistory } from "../SvgCanvasFunctions";
 
+// TODO: onNewItemと統合
 /**
  * Custom hook to add a item to the canvas.
  */
@@ -21,7 +22,7 @@ export const useAddItem = (props: CanvasHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	return useCallback((item: Diagram) => {
+	return useCallback((item: Diagram, eventId?: string) => {
 		// Bypass references to avoid function creation in every render.
 		const { setCanvasState } = refBus.current.props;
 
@@ -46,7 +47,7 @@ export const useAddItem = (props: CanvasHooksProps) => {
 			} as SvgCanvasState;
 
 			// Add a new history entry.
-			newState.lastHistoryEventId = newEventId();
+			newState.lastHistoryEventId = eventId ?? newEventId();
 			newState = addHistory(prevState, newState);
 
 			return newState;

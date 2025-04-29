@@ -20,6 +20,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
 import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
+import { newEventId } from "../../../utils/Util";
 
 // TODO: CreateDiagramPropsで生成
 type SvgToDiagramNodeProps = RectangleProps & {
@@ -45,6 +46,7 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 			svgData.y = props.y + (Math.random() - 0.5) * 300;
 
 			props.onNewItem({
+				eventId: newEventId(),
 				item: svgData as Diagram,
 			});
 		},
