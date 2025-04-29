@@ -85,6 +85,7 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 				dangerouslyAllowBrowser: true, // ブラウザで直接使用する場合に必要
 			});
 
+			// Initialize the input for the OpenAI API.
 			const input = [
 				{
 					role: "system",
@@ -92,9 +93,8 @@ const AgentNodeComponent: React.FC<AgentProps> = (props) => {
 				},
 			] as OpenAI.Responses.ResponseInput;
 
-			const canvasState = canvasStateProvider?.state();
-
 			// Add the input to the first node position.
+			const canvasState = canvasStateProvider?.state();
 			if (canvasState) {
 				const startX = canvasState.minX + canvasState.scrollLeft + 300;
 				const startY =
