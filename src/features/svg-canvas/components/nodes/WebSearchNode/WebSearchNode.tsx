@@ -56,9 +56,10 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 
 			try {
 				const stream = await openai.responses.create({
-					model: "gpt-4o",
+					model: "gpt-4.1",
 					tools: [{ type: "web_search_preview" }],
 					input: e.data.text,
+					tool_choice: "required",
 					stream: true,
 				});
 
