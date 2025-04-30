@@ -72,10 +72,6 @@ marked.use({
 			}).value;
 			return `<pre><code class="hljs language-${validLang}">${highlighted}</code></pre>`;
 		},
-		link({ href, title, text }) {
-			const titleAttr = title ? ` title="${title}"` : "";
-			return `<a href="${href}" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
-		},
 	},
 	extensions: [
 		createMathExtension("math", "inline", /^\$([^$]+?)\$/),
@@ -114,6 +110,10 @@ const TextableComponent: React.FC<TextableProps> = ({
 					async: false,
 				}),
 			); // Set the new content
+			for (const link of textRef.current.querySelectorAll("a")) {
+				link.setAttribute("target", "_blank");
+				link.setAttribute("rel", "noopener noreferrer");
+			}
 		}
 	}, [text, isTextEditing]);
 
