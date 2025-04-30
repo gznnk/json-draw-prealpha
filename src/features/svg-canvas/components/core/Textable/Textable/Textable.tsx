@@ -4,6 +4,8 @@ import { memo, useEffect, useRef } from "react";
 
 // Import other libraries.
 import DOMPurify from "dompurify";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 import { marked } from "marked";
 
 // Import types related to SvgCanvas.
@@ -22,6 +24,26 @@ type TextableProps = TextableData & {
 	height: number;
 	transform: string;
 };
+
+marked.use({
+	renderer: {
+		code({ text, lang }) {
+			// If no language is specified, return the text as plaintext.
+			if (!lang) return `<pre><code>${text}</code></pre>`;
+
+			// If a language is specified, use highlight.js to highlight the code.
+			const validLang = hljs.getLanguage(lang ? lang : "plaintext");
+			const highlighted = hljs.highlight(text, {
+				language: lang ?? "plaintext",
+			}).value;
+			return `<pre><code class="hljs language-${validLang}">${highlighted}</code></pre>`;
+		},
+		link({ href, title, text }) {
+			const titleAttr = title ? ` title="${title}"` : "";
+			return `<a href="${href}" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
+		},
+	},
+});
 
 /**
  * React component for rendering editable text inside the SVG shape.
@@ -50,10 +72,6 @@ const TextableComponent: React.FC<TextableProps> = ({
 			textRef.current.innerHTML = marked(DOMPurify.sanitize(text), {
 				async: false,
 			}); // Set the new content
-			for (const link of textRef.current.querySelectorAll("a")) {
-				link.setAttribute("target", "_blank");
-				link.setAttribute("rel", "noopener noreferrer");
-			}
 		}
 	}, [text, isTextEditing]);
 

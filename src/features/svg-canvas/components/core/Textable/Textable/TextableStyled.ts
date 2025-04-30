@@ -91,4 +91,10 @@ export const Text = styled.div<TextProps>`
     & a {
         pointer-events: auto;
     }
+    pre code.hljs {
+        background: #f9f9f9;
+        border-radius: 6px;
+        border: 1px solid #d4d4d4;
+        overflow: hidden;
+    }
 `;
