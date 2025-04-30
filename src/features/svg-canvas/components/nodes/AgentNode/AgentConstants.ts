@@ -36,7 +36,9 @@ Returns a JSON object containing the node ID, node type, the instructions used, 
 `;
 
 export const LLM_NODE_INSTRACTIONS_PARAM_DESCRIPTION = `
-Defines the "instructions" parameter to provide a system prompt that ensures high-quality and appropriate responses from the model. The prompt is inserted as the first message in the context.
+Defines the "instructions" parameter to provide a clear, concise, and professional system prompt for the model.  
+The prompt should always be written in English and guide the model to produce high-quality, logical, and context-appropriate responses.  
+It will be inserted as the first message in the model's context.
 `;
 
 export const ADD_SVG_TO_CANVAS_NODE_DESCRIPTION = `

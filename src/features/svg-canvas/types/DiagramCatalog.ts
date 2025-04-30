@@ -53,6 +53,10 @@ import {
 	type RectangleData,
 } from "../components/shapes/Rectangle";
 import { Svg, svgToBlob, type SvgData } from "../components/shapes/Svg";
+import {
+	createWebSearchNodeData,
+	WebSearchNode,
+} from "../components/nodes/WebSearchNode";
 
 /**
  * Types of diagram components.
@@ -74,7 +78,8 @@ export type DiagramType =
 	| "ImageGenNode"
 	| "SvgToDiagramNode"
 	| "LLMNode"
-	| "TextAreaNode";
+	| "TextAreaNode"
+	| "WebSearchNode";
 
 /**
  * 全図形のデータを統合した型
@@ -122,6 +127,7 @@ export const DiagramComponentCatalog: {
 	SvgToDiagramNode: SvgToDiagramNode,
 	LLMNode: LLMNode,
 	TextAreaNode: TextAreaNode,
+	WebSearchNode: WebSearchNode,
 };
 
 /**
@@ -147,6 +153,7 @@ export const DiagramConnectPointCalculators: {
 	SvgToDiagramNode: calcRectangleConnectPointPosition,
 	LLMNode: calcRectangleConnectPointPosition,
 	TextAreaNode: calcRectangleConnectPointPosition,
+	WebSearchNode: calcRectangleConnectPointPosition,
 };
 
 /**
@@ -175,6 +182,7 @@ export const DiagramCreateFunctions: {
 	SvgToDiagramNode: createSvgToDiagramNodeData,
 	LLMNode: createLLMNodeData,
 	TextAreaNode: createTextAreaNodeData,
+	WebSearchNode: createWebSearchNodeData,
 };
 
 export const DiagramExportFunctions: {
@@ -197,4 +205,5 @@ export const DiagramExportFunctions: {
 	SvgToDiagramNode: undefined,
 	LLMNode: undefined,
 	TextAreaNode: undefined,
+	WebSearchNode: undefined,
 };

@@ -3,9 +3,9 @@ import { newId } from "../../../utils/Diagram";
 import { createRectangleConnectPoint } from "../../shapes/Rectangle";
 
 // Import related to this component.
-import type { SvgToDiagramNodeData } from "./SvgToDiagramNodeTypes";
+import type { WebSearchNodeData } from "./WebSearchNodeTypes";
 
-export const createSvgToDiagramNodeData = ({
+export const createWebSearchNodeData = ({
 	x,
 	y,
 }: {
@@ -24,7 +24,7 @@ export const createSvgToDiagramNodeData = ({
 
 	return {
 		id: newId(),
-		type: "SvgToDiagramNode",
+		type: "WebSearchNode",
 		x,
 		y,
 		width: 100,
@@ -36,5 +36,5 @@ export const createSvgToDiagramNodeData = ({
 		connectPoints,
 		isSelected: false,
 		isMultiSelectSource: false,
-	} as SvgToDiagramNodeData;
+	} as WebSearchNodeData;
 };
