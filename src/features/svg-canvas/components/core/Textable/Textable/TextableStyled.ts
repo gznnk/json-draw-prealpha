@@ -61,12 +61,14 @@ export const Text = styled.div<TextProps>`
         margin: 0;
     }
     & ul {
-        margin: 0;
         padding-inline-start: 1.8em;
     }
     & ol {
-        margin: 0;
         padding-inline-start: 1.8em;
+    }
+    & li {
+        margin: 0;
+        padding: 0;
     }
     & h1 {
         margin: 0;
