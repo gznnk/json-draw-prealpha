@@ -24,8 +24,8 @@ import { createSvgTransform } from "../../../utils/Diagram";
 import { degreesToRadians } from "../../../utils/Math";
 
 // Imports related to this component.
-import type { RectangleProps } from "./RectangleTypes";
 import { RectangleElement } from "./RectangleStyled";
+import type { RectangleProps } from "./RectangleTypes";
 
 /**
  * 四角形コンポーネント
@@ -145,6 +145,20 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	}, []);
 
 	/**
+	 * ドラッグオーバーイベントハンドラ
+	 */
+	const handleDragOver = useCallback(() => {
+		setIsHovered(true);
+	}, []);
+
+	/**
+	 * ドラッグリーブイベントハンドラ
+	 */
+	const handleDragLeave = useCallback(() => {
+		setIsHovered(false);
+	}, []);
+
+	/**
 	 * ダブルクリックイベントハンドラ
 	 */
 	const handleDoubleClick = useCallback(() => {
@@ -172,6 +186,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		onClick: onClick,
 		onDrag: handleDrag,
 		onHover: handleHover,
+		onDragOver: handleDragOver,
+		onDragLeave: handleDragLeave,
 	});
 
 	// memo化によりConnectPointの再描画を抑制
@@ -204,11 +220,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 
 	// 接続ポイントを表示するかのフラグ
 	const doShowConnectPoints =
-		showConnectPoints &&
-		!isSelected &&
-		!isMultiSelectSource &&
-		!isDragging &&
-		!isTransformimg;
+		showConnectPoints && !isMultiSelectSource && !isDragging && !isTransformimg;
 
 	return (
 		<>
