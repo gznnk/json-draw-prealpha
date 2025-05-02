@@ -22,6 +22,14 @@ import {
 	TextAreaNode,
 } from "../components/nodes/TextAreaNode";
 import {
+	createVectorStoreNodeData,
+	VectorStoreNode,
+} from "../components/nodes/VectorStoreNode";
+import {
+	createWebSearchNodeData,
+	WebSearchNode,
+} from "../components/nodes/WebSearchNode";
+import {
 	ConnectLine,
 	type ConnectLineData,
 } from "../components/shapes/ConnectLine";
@@ -53,10 +61,6 @@ import {
 	type RectangleData,
 } from "../components/shapes/Rectangle";
 import { Svg, svgToBlob, type SvgData } from "../components/shapes/Svg";
-import {
-	createWebSearchNodeData,
-	WebSearchNode,
-} from "../components/nodes/WebSearchNode";
 
 /**
  * Types of diagram components.
@@ -79,6 +83,7 @@ export type DiagramType =
 	| "SvgToDiagramNode"
 	| "LLMNode"
 	| "TextAreaNode"
+	| "VectorStoreNode"
 	| "WebSearchNode";
 
 /**
@@ -127,6 +132,7 @@ export const DiagramComponentCatalog: {
 	SvgToDiagramNode: SvgToDiagramNode,
 	LLMNode: LLMNode,
 	TextAreaNode: TextAreaNode,
+	VectorStoreNode: VectorStoreNode,
 	WebSearchNode: WebSearchNode,
 };
 
@@ -153,6 +159,7 @@ export const DiagramConnectPointCalculators: {
 	SvgToDiagramNode: calcRectangleConnectPointPosition,
 	LLMNode: calcRectangleConnectPointPosition,
 	TextAreaNode: calcRectangleConnectPointPosition,
+	VectorStoreNode: calcRectangleConnectPointPosition,
 	WebSearchNode: calcRectangleConnectPointPosition,
 };
 
@@ -182,6 +189,7 @@ export const DiagramCreateFunctions: {
 	SvgToDiagramNode: createSvgToDiagramNodeData,
 	LLMNode: createLLMNodeData,
 	TextAreaNode: createTextAreaNodeData,
+	VectorStoreNode: createVectorStoreNodeData,
 	WebSearchNode: createWebSearchNodeData,
 };
 
@@ -205,5 +213,6 @@ export const DiagramExportFunctions: {
 	SvgToDiagramNode: undefined,
 	LLMNode: undefined,
 	TextAreaNode: undefined,
+	VectorStoreNode: undefined,
 	WebSearchNode: undefined,
 };
