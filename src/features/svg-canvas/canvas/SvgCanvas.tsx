@@ -17,7 +17,7 @@ import type {
 } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import { FlashConnectLine } from "../components/core/FlashConnectLine";
+import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { TextEditor } from "../components/core/Textable";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";

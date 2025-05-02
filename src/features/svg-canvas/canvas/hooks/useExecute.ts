@@ -11,7 +11,7 @@ import {
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { triggerFlashConnectLine } from "../../components/core/FlashConnectLine";
+import { triggerFlashConnectLine } from "../../components/shapes/ConnectLine";
 
 /**
  * Custom hook to handle execute events on the canvas.

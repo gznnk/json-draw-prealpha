@@ -1,4 +1,9 @@
-export { ConnectLine } from "./ConnectLine";
-export { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
-export { notifyConnectPointsMove } from "./ConnectLineFunctions";
-export type { ConnectLineData } from "./ConnectLineTypes";
+export {
+	ConnectLine,
+	EVENT_NAME_CONNECT_POINTS_MOVE,
+	notifyConnectPointsMove,
+	type ConnectLineData,
+} from "./ConnectLine";
+
+// Export FlashConnectLine module
+export { FlashConnectLine, triggerFlashConnectLine } from "./FlashConnectLine";

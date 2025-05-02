@@ -7,7 +7,7 @@ import {
 	createEndPointArrowHead,
 	createStartPointArrowHead,
 	type PathData,
-} from "../../shapes/Path";
+} from "../../Path";
 
 // Import related to this component.
 import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";

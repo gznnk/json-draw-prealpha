@@ -3,22 +3,22 @@ import type React from "react";
 import { memo, useCallback, useContext, useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramCatalog";
-import type { CreateDiagramProps, Shape } from "../../../types/DiagramTypes";
+import type { Diagram } from "../../../../types/DiagramCatalog";
+import type { CreateDiagramProps, Shape } from "../../../../types/DiagramTypes";
 import type {
 	ConnectPointMoveData,
 	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
-} from "../../../types/EventTypes";
+} from "../../../../types/EventTypes";
 
 // Import components related to SvgCanvas.
-import { SvgCanvasContext } from "../../../canvas";
-import { createBestConnectPath } from "../ConnectPoint";
-import { Path } from "../Path";
+import { SvgCanvasContext } from "../../../../canvas";
+import { createBestConnectPath } from "../../ConnectPoint";
+import { Path } from "../../Path";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../utils/Diagram";
-import { calcRadians, radiansToDegrees } from "../../../utils/Math";
+import { newId } from "../../../../utils/Diagram";
+import { calcRadians, radiansToDegrees } from "../../../../utils/Math";
 
 // Imports related to this component.
 import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
