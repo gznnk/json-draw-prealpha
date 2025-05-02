@@ -2,21 +2,29 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../types/DiagramCatalog";
-import type { GroupData } from "../../components/shapes/Group";
+import type { ConnectLineData } from "../../components/shapes/ConnectLine";
 import type { ConnectPointData } from "../../components/shapes/ConnectPoint";
+import type { GroupData } from "../../components/shapes/Group";
+import type { PathPointData } from "../../components/shapes/Path";
+import type { Diagram } from "../../types/DiagramCatalog";
+import type { Shape } from "../../types/DiagramTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { deepCopy } from "../../utils/Util";
+import {
+	createBestConnectPath,
+	getLineDirection,
+} from "../../components/shapes/ConnectPoint";
+import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
 import { newId } from "../../utils/Diagram";
 import {
+	isConnectableData,
 	isItemableData,
 	isSelectableData,
-	isConnectableData,
 } from "../../utils/TypeUtils";
-import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
+import { deepCopy } from "../../utils/Util";
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
+import { getDiagramById } from "../SvgCanvasFunctions";
 
 /**
  * 図形をペーストする際の移動量を計算
@@ -29,6 +37,11 @@ const applyOffset = (x: number, offset: number): number => {
 };
 
 /**
+ * 旧IDと新IDのマッピングを追跡するためのマップを作成する型
+ */
+type IdMap = { [oldId: string]: string };
+
+/**
  * 図形とその子要素に対して再帰的に新しいIDを割り当てる
  * グループ階層を考慮して選択状態を設定する
  *
@@ -37,6 +50,7 @@ const applyOffset = (x: number, offset: number): number => {
  * @param isMultiSelect 複数選択モードかどうか
  * @param offsetX X座標の移動量
  * @param offsetY Y座標の移動量
+ * @param idMap 旧IDと新IDのマッピング (オプション)
  * @returns 新しいIDが割り当てられた図形
  */
 const assignNewIdsRecursively = (
@@ -45,10 +59,18 @@ const assignNewIdsRecursively = (
 	isMultiSelect: boolean,
 	offsetX: number,
 	offsetY: number,
+	idMap?: IdMap,
 ): Diagram => {
+	const newItemId = newId();
+
+	// IDのマッピングを記録
+	if (idMap) {
+		idMap[item.id] = newItemId;
+	}
+
 	const newItem = {
 		...item,
-		id: newId(),
+		id: newItemId,
 	};
 
 	// 座標を移動
@@ -74,12 +96,21 @@ const assignNewIdsRecursively = (
 	// 接続ポイントを持つ場合は接続ポイントも移動
 	if (isConnectableData(newItem)) {
 		if (newItem.connectPoints) {
-			newItem.connectPoints = newItem.connectPoints.map((connectPoint) => ({
-				...connectPoint,
-				id: newId(), // 接続ポイントにも新しいIDを割り当てる
-				x: applyOffset(connectPoint.x, offsetX),
-				y: applyOffset(connectPoint.y, offsetY),
-			})) as ConnectPointData[];
+			newItem.connectPoints = newItem.connectPoints.map((connectPoint) => {
+				const connectPointNewId = newId();
+
+				// 接続ポイントのIDもマッピングに追加
+				if (idMap) {
+					idMap[connectPoint.id] = connectPointNewId;
+				}
+
+				return {
+					...connectPoint,
+					id: connectPointNewId, // 接続ポイントにも新しいIDを割り当てる
+					x: applyOffset(connectPoint.x, offsetX),
+					y: applyOffset(connectPoint.y, offsetY),
+				};
+			}) as ConnectPointData[];
 		}
 	}
 
@@ -93,11 +124,113 @@ const assignNewIdsRecursively = (
 				isMultiSelect,
 				offsetX,
 				offsetY,
+				idMap,
 			),
 		);
 	}
 
 	return newItem;
+};
+
+/**
+ * 接続線のペースト処理
+ * 接続元・接続先のIDを新しいIDに更新し、パスポイントを適切に再計算する
+ *
+ * @param connectLine ペーストする接続線
+ * @param idMap 旧IDと新IDのマッピング
+ * @param offsetX X座標の移動量
+ * @param offsetY Y座標の移動量
+ * @param items ペースト後のアイテム全体
+ * @returns 更新後の接続線
+ */
+const processConnectLineForPaste = (
+	connectLine: ConnectLineData,
+	idMap: IdMap,
+	offsetX: number,
+	offsetY: number,
+	items: Diagram[],
+): ConnectLineData | null => {
+	// 両端の接続先が含まれているか確認
+	const newStartOwnerId = idMap[connectLine.startOwnerId];
+	const newEndOwnerId = idMap[connectLine.endOwnerId];
+
+	// 両端が含まれていない場合はnullを返す
+	if (!newStartOwnerId || !newEndOwnerId) {
+		return null;
+	}
+
+	// 新しい接続先図形を取得
+	const startOwner = getDiagramById(items, newStartOwnerId) as Shape;
+	const endOwner = getDiagramById(items, newEndOwnerId) as Shape;
+
+	// 接続先が見つからない場合はnullを返す
+	if (!startOwner || !endOwner) {
+		return null;
+	}
+
+	// 接続線の両端のポイントを特定
+	const startPoint = connectLine.items[0];
+	const endPoint = connectLine.items[connectLine.items.length - 1];
+
+	// 新しい座標を計算（単純にオフセットを適用）
+	const newStartX = applyOffset(startPoint.x, offsetX);
+	const newStartY = applyOffset(startPoint.y, offsetY);
+	const newEndX = applyOffset(endPoint.x, offsetX);
+	const newEndY = applyOffset(endPoint.y, offsetY);
+
+	// 接続方向を計算
+	const startDirection = getLineDirection(
+		startOwner.x,
+		startOwner.y,
+		newStartX,
+		newStartY,
+	);
+
+	// 最適な接続経路を再計算
+	const pathPoints = createBestConnectPath(
+		newStartX,
+		newStartY,
+		startDirection,
+		startOwner,
+		newEndX,
+		newEndY,
+		endOwner,
+	);
+
+	// 接続線の新しいIDを生成
+	const newConnectLineId = newId();
+
+	// 新しい接続線オブジェクトを作成
+	const newConnectLine: ConnectLineData = {
+		...connectLine,
+		id: newConnectLineId,
+		x: applyOffset(connectLine.x, offsetX),
+		y: applyOffset(connectLine.y, offsetY),
+		startOwnerId: newStartOwnerId,
+		endOwnerId: newEndOwnerId,
+		isSelected: false, // ペーストした接続線は非選択状態に
+		// パスポイントを更新
+		items: pathPoints.map((point, index) => {
+			// 両端のポイントは元の接続ポイントのIDを保持
+			let pointId: string;
+			if (index === 0) {
+				pointId = idMap[startPoint.id] || newId();
+			} else if (index === pathPoints.length - 1) {
+				pointId = idMap[endPoint.id] || newId();
+			} else {
+				pointId = newId();
+			}
+
+			return {
+				id: pointId,
+				type: "PathPoint",
+				x: point.x,
+				y: point.y,
+			} as PathPointData;
+		}),
+	};
+
+	return newConnectLine;
 };
 
 /**
@@ -131,15 +264,26 @@ export const usePaste = (props: CanvasHooksProps) => {
 					// Deep copy the clipboard items to avoid reference issues
 					const newItems = deepCopy(clipboardData);
 
-					// 複数選択モードかどうか判定
-					const isMultiSelect = newItems.length > 1;
+					// 接続線と通常の図形を分離
+					const connectLines = newItems.filter(
+						(item) => item.type === "ConnectLine",
+					) as ConnectLineData[];
+					const normalItems = newItems.filter(
+						(item) => item.type !== "ConnectLine",
+					);
+
+					// 複数選択モードかどうか判定（接続線を除く）
+					const isMultiSelect = normalItems.length > 1;
 
 					// ペーストする際の移動量
 					const offsetX = 20;
 					const offsetY = 20;
 
+					// 古いIDと新しいIDのマッピングを保持
+					const idMap: IdMap = {};
+
 					// Assign new IDs to the pasted items and slightly offset their position
-					const pastedItems = newItems.map((item) => {
+					const pastedNormalItems = normalItems.map((item) => {
 						// 再帰的にIDを割り当て、アイテムが最上位であることを指定
 						// 同時に座標を少しずらす
 						return assignNewIdsRecursively(
@@ -148,6 +292,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 							isMultiSelect,
 							offsetX,
 							offsetY,
+							idMap,
 						);
 					});
 
@@ -165,14 +310,33 @@ export const usePaste = (props: CanvasHooksProps) => {
 							return item;
 						});
 
-						// 全ペーストアイテムを追加した後の状態
-						const allItems = [...updatedItems, ...pastedItems];
+						// 全ペーストアイテムを追加
+						let allItems = [...updatedItems, ...pastedNormalItems];
+
+						// 接続線のペースト処理
+						if (connectLines.length > 0) {
+							// 接続線を処理（接続元と接続先の更新・座標の再計算）
+							const pastedConnectLines = connectLines
+								.map((connectLine) =>
+									processConnectLineForPaste(
+										connectLine,
+										idMap,
+										offsetX,
+										offsetY,
+										[...updatedItems, ...pastedNormalItems],
+									),
+								)
+								.filter((line): line is ConnectLineData => line !== null);
+
+							// 処理された接続線を追加
+							allItems = [...allItems, ...pastedConnectLines];
+						}
 
 						// 複数選択時のmultiSelectGroupの設定
 						let multiSelectGroup: GroupData | undefined = undefined;
 						if (isMultiSelect) {
 							// マルチセレクトグループの作成
-							const box = calcGroupBoxOfNoRotation(pastedItems);
+							const box = calcGroupBoxOfNoRotation(pastedNormalItems);
 							multiSelectGroup = {
 								id: MULTI_SELECT_GROUP,
 								type: "Group",
@@ -187,7 +351,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 									prevState.multiSelectGroup?.keepProportion ?? true,
 								isSelected: true,
 								isMultiSelectSource: false,
-								items: pastedItems.map((item) => ({
+								items: pastedNormalItems.map((item) => ({
 									...item,
 									isSelected: false, // マルチセレクトグループ内ではfalse
 								})),
