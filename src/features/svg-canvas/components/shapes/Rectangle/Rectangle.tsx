@@ -18,7 +18,7 @@ import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks related to SvgCanvas.
 import { useDrag } from "../../../hooks/useDrag";
-import useFileDrop from "../../../hooks/useFileDrop";
+import { useFileDrop } from "../../../hooks/useFileDrop";
 
 // Import functions related to SvgCanvas.
 import { createSvgTransform } from "../../../utils/Diagram";

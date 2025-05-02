@@ -18,7 +18,7 @@ export type UseFileDropOptions = {
  * @param options.id - 対象要素のID
  * @param options.onFileDrop - ファイルがドロップされたときに呼び出されるコールバック関数
  */
-const useFileDrop = ({ id, onFileDrop }: UseFileDropOptions) => {
+export const useFileDrop = ({ id, onFileDrop }: UseFileDropOptions) => {
 	// すべての参照値をオブジェクトとしてまとめてuseRefに保持
 	const refBusVal = {
 		id,
@@ -55,5 +55,3 @@ const useFileDrop = ({ id, onFileDrop }: UseFileDropOptions) => {
 
 	return { onDragOver, onDrop };
 };
-
-export default useFileDrop;

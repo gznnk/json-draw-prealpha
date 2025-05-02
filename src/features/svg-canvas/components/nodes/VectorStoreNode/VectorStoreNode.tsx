@@ -1,6 +1,6 @@
 // Import React.
 import type React from "react";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import other libraries.
 import { OpenAI, toFile } from "openai";
@@ -12,6 +12,9 @@ import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
+
+// Import types related to SvgCanvas.
+import type { FileDropEvent } from "../../../types/EventTypes";
 
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../../utils/Util";
@@ -32,6 +35,7 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		apiKey,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -43,6 +47,56 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 			setApiKey(storedApiKey);
 		}
 	}, []);
+
+	/**
+	 * ファイルをベクトルストアにアップロードする処理
+	 */
+	const uploadFileToVectorStore = useCallback(async (file: File) => {
+		const processId = newEventId();
+		setProcessIdList((prev) => [...prev, processId]);
+
+		try {
+			const openai = new OpenAI({
+				apiKey: refBus.current.apiKey,
+				dangerouslyAllowBrowser: true,
+			});
+
+			const result = await openai.vectorStores.files.uploadAndPoll(
+				"vs_6813749d20a88191805111391c452b34",
+				file,
+			);
+
+			console.log("File uploaded to vector store:", result);
+		} catch (error) {
+			console.error("Error uploading file to vector store:", error);
+		} finally {
+			setProcessIdList((prev) => prev.filter((id) => id !== processId));
+		}
+	}, []);
+
+	/**
+	 * ファイルドロップのハンドラ
+	 */
+	const handleFileDrop = useCallback(
+		(e: FileDropEvent) => {
+			if (!refBus.current.apiKey) {
+				console.error("No API key available");
+				return;
+			}
+
+			const { files } = e;
+
+			for (let i = 0; i < files.length; i++) {
+				const file = files[i];
+				// .txtまたは.mdファイルのみ処理
+				const extension = file.name.split(".").pop()?.toLowerCase();
+				if (extension === "txt" || extension === "md") {
+					uploadFileToVectorStore(file);
+				}
+			}
+		},
+		[uploadFileToVectorStore],
+	);
 
 	// Handle execution events for the VectorStore node.
 	useExecutionChain({
@@ -61,9 +115,6 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 
 			const fileContent = new Blob([e.data.text], { type: "text/plain" });
 			const file = await toFile(fileContent, `${new Date().getTime()}.txt`);
-
-			// console.log(file.size);
-			//console.log(await file.text());
 
 			const result = openai.vectorStores.files.uploadAndPoll(
 				"vs_6813749d20a88191805111391c452b34",
@@ -99,6 +150,7 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 				isTransparent
 				isTextEditing={false}
 				isTextEditEnabled={false}
+				onFileDrop={handleFileDrop}
 			/>
 		</>
 	);
