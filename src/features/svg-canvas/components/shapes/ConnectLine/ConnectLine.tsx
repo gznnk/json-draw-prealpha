@@ -13,7 +13,7 @@ import type {
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../../canvas";
-import { createBestConnectPath, getLineDirection } from "../ConnectPoint";
+import { createBestConnectPath } from "../ConnectPoint";
 import { Path } from "../Path";
 
 // Import functions related to SvgCanvas.
@@ -257,19 +257,10 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 					) as Shape;
 				}
 
-				// Calculate the direction of the segment starting from the moved ConnectPoint.
-				const startDirection = getLineDirection(
-					movedPoint.ownerShape.x,
-					movedPoint.ownerShape.y,
-					movedPoint.x,
-					movedPoint.y,
-				);
-
 				// 最適な接続線を再計算
 				const newPath = createBestConnectPath(
 					movedPoint.x,
 					movedPoint.y,
-					startDirection,
 					movedPoint.ownerShape,
 					oppositePoint.x,
 					oppositePoint.y,

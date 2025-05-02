@@ -68,7 +68,6 @@ export const useConnectNodes = (props: CanvasHooksProps) => {
 		const points = createBestConnectPath(
 			sourceConnectPoint.x,
 			sourceConnectPoint.y,
-			"down",
 			sourceNode as Shape,
 			targetConnectPoint.x,
 			targetConnectPoint.y,

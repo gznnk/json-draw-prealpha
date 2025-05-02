@@ -270,15 +270,33 @@ export const createConnectPathOnDrag = (
 	return newPoints;
 };
 
+/**
+ * 2点間の最適な接続線のパスを生成する
+ *
+ * @param startX 開始点のX座標
+ * @param startY 開始点のY座標
+ * @param startOwnerShape 開始点の所有図形
+ * @param endX 終了点のX座標
+ * @param endY 終了点のY座標
+ * @param endOwnerShape 終了点の所有図形
+ * @returns 接続線のパス
+ */
 export const createBestConnectPath = (
 	startX: number,
 	startY: number,
-	startDirection: Direction,
 	startOwnerShape: Shape,
 	endX: number,
 	endY: number,
 	endOwnerShape: Shape,
 ): Point[] => {
+	// 開始方向を計算
+	const startDirection = getLineDirection(
+		startOwnerShape.x,
+		startOwnerShape.y,
+		startX,
+		startY,
+	);
+
 	const startOuterBox = calcRectangleOuterBox(startOwnerShape);
 	const endOuterBox = calcRectangleOuterBox(endOwnerShape);
 
@@ -319,11 +337,19 @@ export const createBestConnectPath = (
 			p.y,
 		);
 
+		// 終了点の方向を計算
+		const endDirection = getLineDirection(
+			endOwnerShape.x,
+			endOwnerShape.y,
+			endX,
+			endY,
+		);
+
 		// 接続先から中心候補までのルート
 		const endToCenter = createConnectPathOnDrag(
 			endX,
 			endY,
-			getLineDirection(endOwnerShape.x, endOwnerShape.y, endX, endY),
+			endDirection,
 			calcRectangleOuterBox(endOwnerShape),
 			p.x,
 			p.y,

@@ -11,10 +11,7 @@ import type { Shape } from "../../types/DiagramTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import {
-	createBestConnectPath,
-	getLineDirection,
-} from "../../components/shapes/ConnectPoint";
+import { createBestConnectPath } from "../../components/shapes/ConnectPoint";
 import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
 import { newId } from "../../utils/Diagram";
 import {
@@ -178,19 +175,10 @@ const processConnectLineForPaste = (
 	const newEndX = applyOffset(endPoint.x, offsetX);
 	const newEndY = applyOffset(endPoint.y, offsetY);
 
-	// 接続方向を計算
-	const startDirection = getLineDirection(
-		startOwner.x,
-		startOwner.y,
-		newStartX,
-		newStartY,
-	);
-
 	// 最適な接続経路を再計算
 	const pathPoints = createBestConnectPath(
 		newStartX,
 		newStartY,
-		startDirection,
 		startOwner,
 		newEndX,
 		newEndY,

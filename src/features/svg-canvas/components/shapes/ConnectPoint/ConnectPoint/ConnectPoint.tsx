@@ -91,7 +91,6 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			newPoints = createBestConnectPath(
 				x,
 				y,
-				direction,
 				ownerShape,
 				connectingPoint.current.x, // 接続先のX座標
 				connectingPoint.current.y, // 接続先のY座標
