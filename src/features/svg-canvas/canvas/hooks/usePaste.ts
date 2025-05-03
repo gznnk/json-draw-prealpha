@@ -21,39 +21,41 @@ import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
 import { getDiagramById } from "../SvgCanvasFunctions";
 
 /**
- * 図形をペーストする際の移動量
+ * Offset amount when pasting shapes
  */
 const PASTE_OFFSET = 20;
 
 /**
- * 図形をペーストする際の座標を計算
- * @param x 元の座標
- * @returns 移動後の座標
+ * Calculates new coordinate with offset when pasting shapes
+ *
+ * @param x - Original coordinate
+ * @returns Coordinate with applied offset
  */
 const applyOffset = (x: number): number => {
 	return x + PASTE_OFFSET;
 };
 
 /**
- * 旧IDと新IDのマッピングを追跡するためのマップを作成する型
+ * Type for mapping between old and new IDs
  */
 type IdMap = { [oldId: string]: string };
 
 /**
- * 図形の座標を移動する
- * @param item 移動する図形
- * @returns 移動後の図形
+ * Applies offset to a diagram item's coordinates
+ *
+ * @param item - The diagram item to move
+ * @returns The diagram item with updated coordinates
  */
 const applyOffsetToItem = (item: Diagram): Diagram => {
 	const newItem = { ...item };
 
-	// 座標を持つ要素の場合は移動
+	// Apply offset to items with coordinates
 	if ("x" in newItem && "y" in newItem) {
 		newItem.x = applyOffset(newItem.x as number);
 		newItem.y = applyOffset(newItem.y as number);
 	}
 
-	// 接続ポイントを持つ場合は接続ポイントも移動
+	// Also apply offset to connection points if present
 	if (isConnectableData(newItem) && newItem.connectPoints) {
 		newItem.connectPoints = newItem.connectPoints.map((connectPoint) => ({
 			...connectPoint,
@@ -66,11 +68,12 @@ const applyOffsetToItem = (item: Diagram): Diagram => {
 };
 
 /**
- * 図形の選択状態を設定する
- * @param item 対象の図形
- * @param isTopLevel この図形が最上位かどうか
- * @param isMultiSelect 複数選択モードかどうか
- * @returns 選択状態が設定された図形
+ * Sets the selection state for diagram items
+ *
+ * @param item - Target diagram item
+ * @param isTopLevel - Whether this item is at the top level
+ * @param isMultiSelect - Whether multiple selection mode is active
+ * @returns Diagram item with updated selection state
  */
 const setSelectionState = (
 	item: Diagram,
@@ -81,20 +84,20 @@ const setSelectionState = (
 
 	if (isSelectableData(newItem)) {
 		if (isMultiSelect) {
-			// 複数選択モードの場合
+			// For multiple selection mode
 			if (isTopLevel) {
-				// 最上位のアイテムのみisSelectedをtrueにする
-				// これにより、複数選択時でも最上位のグループのみが選択状態になる
+				// Only set isSelected to true for top-level items
+				// This ensures only top-level groups are selected in multi-select mode
 				newItem.isSelected = true;
 				newItem.isMultiSelectSource = true;
 			} else {
-				// 子要素は非選択状態にする
+				// Child elements are not selected
 				newItem.isSelected = false;
 				newItem.isMultiSelectSource = true;
 			}
 		} else {
-			// 単一選択モード
-			// 最上位の場合のみisSelectedをtrueにする
+			// For single selection mode
+			// Only set isSelected to true if it's a top-level item
 			newItem.isSelected = isTopLevel;
 			newItem.isMultiSelectSource = false;
 		}
@@ -104,15 +107,16 @@ const setSelectionState = (
 };
 
 /**
- * 図形と接続ポイントに新しいIDを割り当てる
- * @param item 対象の図形
- * @param idMap 旧IDと新IDのマッピング (オプション)
- * @returns 新しいIDが割り当てられた図形
+ * Assigns new IDs to diagram items and connection points
+ *
+ * @param item - Target diagram item
+ * @param idMap - Mapping between old and new IDs (optional)
+ * @returns Diagram item with new IDs assigned
  */
 const assignNewIds = (item: Diagram, idMap?: IdMap): Diagram => {
 	const newItemId = newId();
 
-	// IDのマッピングを記録
+	// Record the ID mapping
 	if (idMap) {
 		idMap[item.id] = newItemId;
 	}
@@ -122,12 +126,12 @@ const assignNewIds = (item: Diagram, idMap?: IdMap): Diagram => {
 		id: newItemId,
 	};
 
-	// 接続ポイントを持つ場合は接続ポイントにも新しいIDを割り当てる
+	// Assign new IDs to connection points if present
 	if (isConnectableData(newItem) && newItem.connectPoints) {
 		newItem.connectPoints = newItem.connectPoints.map((connectPoint) => {
 			const connectPointNewId = newId();
 
-			// 接続ポイントのIDもマッピングに追加
+			// Add connection point ID to mapping
 			if (idMap) {
 				idMap[connectPoint.id] = connectPointNewId;
 			}
@@ -143,16 +147,17 @@ const assignNewIds = (item: Diagram, idMap?: IdMap): Diagram => {
 };
 
 /**
- * 図形とその子要素に対して再帰的に処理を行う
- * - 新しいIDの割り当て
- * - 座標の移動
- * - 選択状態の設定
+ * Recursively processes diagram items and their children
+ * Applies the following operations:
+ * - Assigns new IDs
+ * - Applies position offset
+ * - Sets selection states
  *
- * @param item ペーストする図形
- * @param isTopLevel この図形が最上位かどうか
- * @param isMultiSelect 複数選択モードかどうか
- * @param idMap 旧IDと新IDのマッピング (オプション)
- * @returns 処理後の図形
+ * @param item - Diagram item to process
+ * @param isTopLevel - Whether this item is at the top level
+ * @param isMultiSelect - Whether multiple selection mode is active
+ * @param idMap - Mapping between old and new IDs (optional)
+ * @returns Processed diagram item
  */
 const processDiagramForPasteRecursively = (
 	item: Diagram,
@@ -160,15 +165,15 @@ const processDiagramForPasteRecursively = (
 	isMultiSelect: boolean,
 	idMap?: IdMap,
 ): Diagram => {
-	// 各機能を順番に適用
+	// Apply each operation in sequence
 	let newItem = assignNewIds(item, idMap);
 	newItem = applyOffsetToItem(newItem);
 	newItem = setSelectionState(newItem, isTopLevel, isMultiSelect);
 
-	// グループやPath等の子アイテムを持つ要素の場合、子要素にも再帰的に処理を適用
+	// For groups and other container items, recursively process children
 	if (isItemableData(newItem)) {
 		newItem.items = newItem.items.map((childItem) =>
-			// 子要素は常に最上位ではない
+			// Child items are never top level
 			processDiagramForPasteRecursively(childItem, false, isMultiSelect, idMap),
 		);
 	}
@@ -177,41 +182,41 @@ const processDiagramForPasteRecursively = (
 };
 
 /**
- * 接続線のペースト処理
- * 接続元・接続先のIDを新しいIDに更新し、パスポイントにはオフセットを適用する
+ * Processes connection lines for pasting
+ * Updates source and target connection IDs and applies offset to path points
  *
- * @param connectLine ペーストする接続線
- * @param idMap 旧IDと新IDのマッピング
- * @param items ペースト後のアイテム全体
- * @returns 更新後の接続線
+ * @param connectLine - Connection line to be pasted
+ * @param idMap - Mapping between old and new IDs
+ * @param items - All diagram items after pasting
+ * @returns Updated connection line or null if invalid connections
  */
 const processConnectLineForPaste = (
 	connectLine: ConnectLineData,
 	idMap: IdMap,
 	items: Diagram[],
 ): ConnectLineData | null => {
-	// 両端の接続先が含まれているか確認
+	// Check if both connection endpoints are included in pasted items
 	const newStartOwnerId = idMap[connectLine.startOwnerId];
 	const newEndOwnerId = idMap[connectLine.endOwnerId];
 
-	// 両端が含まれていない場合はnullを返す
+	// Return null if either endpoint is missing
 	if (!newStartOwnerId || !newEndOwnerId) {
 		return null;
 	}
 
-	// 新しい接続先図形を取得
+	// Get the new connection target shapes
 	const startOwner = getDiagramById(items, newStartOwnerId) as Shape;
 	const endOwner = getDiagramById(items, newEndOwnerId) as Shape;
 
-	// 接続先が見つからない場合はnullを返す
+	// Return null if either shape is not found
 	if (!startOwner || !endOwner) {
 		return null;
 	}
 
-	// 接続線の新しいIDを生成
+	// Generate new ID for the connection line
 	const newConnectLineId = newId();
 
-	// 新しい接続線オブジェクトを作成
+	// Create new connection line object
 	const newConnectLine: ConnectLineData = {
 		...connectLine,
 		id: newConnectLineId,
@@ -219,13 +224,13 @@ const processConnectLineForPaste = (
 		y: applyOffset(connectLine.y),
 		startOwnerId: newStartOwnerId,
 		endOwnerId: newEndOwnerId,
-		isSelected: false, // ペーストした接続線は非選択状態に
-		// パスポイントを更新（単純にオフセットを適用）
+		isSelected: false, // Pasted connection lines are not selected
+		// Update path points (simply apply offset)
 		items: connectLine.items.map((point, index) => {
-			// 新しいIDを割り当てる
+			// Assign new IDs
 			let pointId: string;
 			if (index === 0 || index === connectLine.items.length - 1) {
-				// 両端のポイントの場合、IDのマッピングがあれば使用
+				// For endpoint points, use ID mapping if available
 				pointId = idMap[point.id] || newId();
 			} else {
 				pointId = newId();
@@ -244,7 +249,16 @@ const processConnectLineForPaste = (
 };
 
 /**
- * Custom hook to handle paste events on the canvas.
+ * Custom hook for handling paste operations on the canvas.
+ * Processes clipboard data by performing the following operations:
+ * - Assigns new IDs to pasted items
+ * - Applies position offset to avoid exact overlap
+ * - Sets appropriate selection states
+ * - Reconnects connection lines
+ * - Groups multiple items when needed
+ *
+ * @param props - Canvas hook properties containing setCanvasState and other context
+ * @returns A callback function that executes the paste operation
  */
 export const usePaste = (props: CanvasHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
@@ -271,7 +285,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 						return;
 					}
 
-					// 接続線と通常の図形を分離
+					// Separate connection lines from normal shapes
 					const connectLines = newItems.filter(
 						(item) => item.type === "ConnectLine",
 					) as ConnectLineData[];
@@ -279,16 +293,16 @@ export const usePaste = (props: CanvasHooksProps) => {
 						(item) => item.type !== "ConnectLine",
 					);
 
-					// 複数選択モードかどうか判定（接続線を除く）
+					// Determine if multi-select mode is active (excluding connection lines)
 					const isMultiSelect = normalItems.length > 1;
 
-					// 古いIDと新しいIDのマッピングを保持
+					// Store mapping between old IDs and new IDs
 					const idMap: IdMap = {};
 
 					// Assign new IDs to the pasted items and slightly offset their position
 					const pastedNormalItems = normalItems.map((item) => {
-						// 再帰的にIDを割り当て、アイテムが最上位であることを指定
-						// 同時に座標を少しずらす
+						// Recursively assign IDs and specify that the item is top-level
+						// Also slightly offset the coordinates
 						return processDiagramForPasteRecursively(
 							item,
 							true,
@@ -311,12 +325,12 @@ export const usePaste = (props: CanvasHooksProps) => {
 							return item;
 						});
 
-						// 全ペーストアイテムを追加
+						// Add all pasted items
 						let allItems = [...updatedItems, ...pastedNormalItems];
 
-						// 接続線のペースト処理
+						// Process connection lines for pasting
 						if (connectLines.length > 0) {
-							// 接続線を処理（接続元と接続先の更新・座標の再計算）
+							// Process connection lines (update source and target, recalculate coordinates)
 							const pastedConnectLines = connectLines
 								.map((connectLine) =>
 									processConnectLineForPaste(connectLine, idMap, [
@@ -326,14 +340,14 @@ export const usePaste = (props: CanvasHooksProps) => {
 								)
 								.filter((line): line is ConnectLineData => line !== null);
 
-							// 処理された接続線を追加
+							// Add processed connection lines
 							allItems = [...allItems, ...pastedConnectLines];
 						}
 
-						// 複数選択時のmultiSelectGroupの設定
+						// Set multiSelectGroup for multi-select mode
 						let multiSelectGroup: GroupData | undefined = undefined;
 						if (isMultiSelect) {
-							// マルチセレクトグループの作成
+							// Create multi-select group
 							const box = calcGroupBoxOfNoRotation(pastedNormalItems);
 							multiSelectGroup = {
 								id: MULTI_SELECT_GROUP,
@@ -351,8 +365,8 @@ export const usePaste = (props: CanvasHooksProps) => {
 								isMultiSelectSource: false,
 								items: pastedNormalItems.map((item) => ({
 									...item,
-									isSelected: false, // マルチセレクトグループ内ではfalse
-									isMultiSelectSource: false, // useSelectAll.tsと同様に設定する
+									isSelected: false, // Set to false within multi-select group
+									isMultiSelectSource: false, // Set to false within multi-select group
 								})),
 							} as GroupData;
 						}
