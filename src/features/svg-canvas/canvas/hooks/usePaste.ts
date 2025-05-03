@@ -5,13 +5,11 @@ import { useCallback, useRef } from "react";
 import type { ConnectLineData } from "../../components/shapes/ConnectLine";
 import type { ConnectPointData } from "../../components/shapes/ConnectPoint";
 import type { GroupData } from "../../components/shapes/Group";
-import type { PathPointData } from "../../components/shapes/Path";
 import type { Diagram } from "../../types/DiagramCatalog";
 import type { Shape } from "../../types/DiagramTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { createBestConnectPath } from "../../components/shapes/ConnectPoint";
 import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
 import { newId } from "../../utils/Diagram";
 import {
@@ -19,7 +17,6 @@ import {
 	isItemableData,
 	isSelectableData,
 } from "../../utils/TypeUtils";
-import { deepCopy } from "../../utils/Util";
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
 import { getDiagramById } from "../SvgCanvasFunctions";
 
@@ -131,7 +128,7 @@ const assignNewIdsRecursively = (
 
 /**
  * 接続線のペースト処理
- * 接続元・接続先のIDを新しいIDに更新し、パスポイントを適切に再計算する
+ * 接続元・接続先のIDを新しいIDに更新し、パスポイントにはオフセットを適用する
  *
  * @param connectLine ペーストする接続線
  * @param idMap 旧IDと新IDのマッピング
@@ -165,26 +162,6 @@ const processConnectLineForPaste = (
 		return null;
 	}
 
-	// 接続線の両端のポイントを特定
-	const startPoint = connectLine.items[0];
-	const endPoint = connectLine.items[connectLine.items.length - 1];
-
-	// 新しい座標を計算（単純にオフセットを適用）
-	const newStartX = applyOffset(startPoint.x, offsetX);
-	const newStartY = applyOffset(startPoint.y, offsetY);
-	const newEndX = applyOffset(endPoint.x, offsetX);
-	const newEndY = applyOffset(endPoint.y, offsetY);
-
-	// 最適な接続経路を再計算
-	const pathPoints = createBestConnectPath(
-		newStartX,
-		newStartY,
-		startOwner,
-		newEndX,
-		newEndY,
-		endOwner,
-	);
-
 	// 接続線の新しいIDを生成
 	const newConnectLineId = newId();
 
@@ -197,24 +174,23 @@ const processConnectLineForPaste = (
 		startOwnerId: newStartOwnerId,
 		endOwnerId: newEndOwnerId,
 		isSelected: false, // ペーストした接続線は非選択状態に
-		// パスポイントを更新
-		items: pathPoints.map((point, index) => {
-			// 両端のポイントは元の接続ポイントのIDを保持
+		// パスポイントを更新（単純にオフセットを適用）
+		items: connectLine.items.map((point, index) => {
+			// 新しいIDを割り当てる
 			let pointId: string;
-			if (index === 0) {
-				pointId = idMap[startPoint.id] || newId();
-			} else if (index === pathPoints.length - 1) {
-				pointId = idMap[endPoint.id] || newId();
+			if (index === 0 || index === connectLine.items.length - 1) {
+				// 両端のポイントの場合、IDのマッピングがあれば使用
+				pointId = idMap[point.id] || newId();
 			} else {
 				pointId = newId();
 			}
 
 			return {
+				...point,
 				id: pointId,
-				type: "PathPoint",
-				x: point.x,
-				y: point.y,
-			} as PathPointData;
+				x: applyOffset(point.x, offsetX),
+				y: applyOffset(point.y, offsetY),
+			};
 		}),
 	};
 
@@ -242,15 +218,12 @@ export const usePaste = (props: CanvasHooksProps) => {
 			.then((clipboardText) => {
 				try {
 					// Parse the clipboard data
-					const clipboardData = JSON.parse(clipboardText) as Diagram[];
+					const newItems = JSON.parse(clipboardText) as Diagram[];
 
-					if (!Array.isArray(clipboardData) || clipboardData.length === 0) {
+					if (!Array.isArray(newItems) || newItems.length === 0) {
 						console.error("Invalid clipboard data format");
 						return;
 					}
-
-					// Deep copy the clipboard items to avoid reference issues
-					const newItems = deepCopy(clipboardData);
 
 					// 接続線と通常の図形を分離
 					const connectLines = newItems.filter(
