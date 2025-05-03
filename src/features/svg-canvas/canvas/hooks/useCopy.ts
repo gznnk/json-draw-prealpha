@@ -12,7 +12,7 @@ import { isItemableData } from "../../utils/TypeUtils";
 import { getSelectedItems } from "../SvgCanvasFunctions";
 
 /**
- * クリップボードデータの型定義
+ * Type definition for clipboard data structure
  */
 type ClipboardData = {
 	items: Diagram[];

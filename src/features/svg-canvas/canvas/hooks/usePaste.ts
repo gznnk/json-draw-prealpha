@@ -18,39 +18,40 @@ import {
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
 
 /**
- * 図形をペーストする際の移動量
+ * Offset amount when pasting shapes
  */
 const PASTE_OFFSET = 20;
 
 /**
- * 旧IDと新IDのマッピングを追跡するためのマップ
+ * Type definition for mapping between old IDs and new IDs
  */
 type IdMap = { [oldId: string]: string };
 
 /**
- * IDを再採番し、座標をオフセットするための再帰的処理
- * @param item 処理する図形
- * @param idMap IDのマッピング
- * @returns 処理後の図形
+ * Recursively processes an item to reassign IDs and apply position offsets
+ *
+ * @param item - The diagram item to process
+ * @param idMap - Mapping of old IDs to new IDs
+ * @returns Processed diagram item with new IDs and offset positions
  */
 const processItemRecursively = (item: Diagram, idMap: IdMap): Diagram => {
-	// 新しいID生成
+	// Generate new ID
 	const newItemId = newId();
 	idMap[item.id] = newItemId;
 
-	// 図形の基本情報をコピー
+	// Copy basic item information
 	const newItem = {
 		...item,
 		id: newItemId,
 	};
 
-	// 座標を持つ要素の場合はオフセット
+	// Apply offset to positioned elements
 	if ("x" in newItem && "y" in newItem) {
 		newItem.x = (newItem.x as number) + PASTE_OFFSET;
 		newItem.y = (newItem.y as number) + PASTE_OFFSET;
 	}
 
-	// 接続ポイントを持つ場合は接続ポイントも処理
+	// Process connection points if present
 	if (isConnectableData(newItem) && newItem.connectPoints) {
 		newItem.connectPoints = newItem.connectPoints.map((point) => {
 			const newPointId = newId();
@@ -65,7 +66,7 @@ const processItemRecursively = (item: Diagram, idMap: IdMap): Diagram => {
 		});
 	}
 
-	// 子アイテムがある場合は再帰的に処理
+	// Process child items recursively
 	if (isItemableData(newItem) && newItem.items) {
 		newItem.items = newItem.items.map((childItem) =>
 			processItemRecursively(childItem, idMap),
@@ -76,21 +77,22 @@ const processItemRecursively = (item: Diagram, idMap: IdMap): Diagram => {
 };
 
 /**
- * 接続線の更新
- * @param line 接続線
- * @param idMap IDマッピング
- * @returns 更新された接続線、または無効な場合はnull
+ * Updates connection lines with new IDs and positions
+ *
+ * @param line - Connection line to process
+ * @param idMap - Mapping of old IDs to new IDs
+ * @returns Updated connection line or null if invalid
  */
 const processConnectLine = (
 	line: ConnectLineData,
 	idMap: IdMap,
 ): ConnectLineData | null => {
-	// 両端が含まれているか確認
+	// Verify both endpoints are included
 	if (!idMap[line.startOwnerId] || !idMap[line.endOwnerId]) {
 		return null;
 	}
 
-	// 接続線を更新
+	// Update connection line
 	return {
 		...line,
 		id: newId(),
@@ -118,9 +120,13 @@ const processConnectLine = (
 
 /**
  * Custom hook to handle paste events on the canvas.
+ * Processes clipboard data to create new shapes with new IDs and offset positions.
+ *
+ * @param props - Canvas hook properties
+ * @returns Callback function for paste operation
  */
 export const usePaste = (props: CanvasHooksProps) => {
-	// Create references bypass to avoid function creation in every render.
+	// Create references bypass to avoid function creation in every render
 	const refBusVal = {
 		props,
 	};
@@ -128,7 +134,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 	refBus.current = refBusVal;
 
 	return useCallback(() => {
-		// Bypass references to avoid function creation in every render.
+		// Bypass references to avoid function creation in every render
 		const { setCanvasState } = refBus.current.props;
 
 		// Read data from clipboard
@@ -136,7 +142,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 			.readText()
 			.then((clipboardText) => {
 				try {
-					// クリップボードデータをパース
+					// Parse clipboard data
 					const clipboardData = JSON.parse(clipboardText) as Diagram[];
 
 					if (!Array.isArray(clipboardData) || clipboardData.length === 0) {
@@ -144,10 +150,10 @@ export const usePaste = (props: CanvasHooksProps) => {
 						return;
 					}
 
-					// IDのマッピングを保持
+					// Store ID mappings
 					const idMap: IdMap = {};
 
-					// 図形と接続線を分離
+					// Separate connection lines from other shapes
 					const connectLines = clipboardData.filter(
 						(item) => item.type === "ConnectLine",
 					) as ConnectLineData[];
@@ -155,17 +161,17 @@ export const usePaste = (props: CanvasHooksProps) => {
 						(item) => item.type !== "ConnectLine",
 					);
 
-					// 複数選択モードかどうか判定
+					// Determine if multi-select mode
 					const isMultiSelect = normalItems.length > 1;
 
-					// 通常の図形を処理（IDの再採番とオフセット）
+					// Process regular shapes (reassign IDs and apply offset)
 					const processedNormalItems = normalItems.map((item) =>
 						processItemRecursively(item, idMap),
 					);
 
-					// キャンバスの状態を更新
+					// Update canvas state
 					setCanvasState((prevState) => {
-						// すべての既存アイテムの選択を解除
+						// Deselect all existing items
 						const deselectedItems = prevState.items.map((item) => {
 							if (isSelectableData(item)) {
 								return {
@@ -177,10 +183,10 @@ export const usePaste = (props: CanvasHooksProps) => {
 							return item;
 						});
 
-						// 処理済みの通常アイテムをキャンバスに追加
+						// Add processed regular items to canvas
 						let allItems = [...deselectedItems, ...processedNormalItems];
 
-						// 接続線を処理して追加
+						// Process and add connection lines
 						if (connectLines.length > 0) {
 							const processedConnectLines = connectLines
 								.map((line) => processConnectLine(line, idMap))
@@ -189,10 +195,10 @@ export const usePaste = (props: CanvasHooksProps) => {
 							allItems = [...allItems, ...processedConnectLines];
 						}
 
-						// 複数選択の場合はマルチセレクトグループを設定
+						// Setup multi-select group if needed
 						let multiSelectGroup = undefined;
 						if (isMultiSelect) {
-							// グループの位置とサイズを計算（既存のcalcGroupBoxOfNoRotation関数を使用）
+							// Calculate group position and size
 							const box = calcGroupBoxOfNoRotation(processedNormalItems);
 
 							multiSelectGroup = {
