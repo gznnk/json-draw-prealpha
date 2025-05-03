@@ -82,8 +82,16 @@ const setSelectionState = (
 	if (isSelectableData(newItem)) {
 		if (isMultiSelect) {
 			// 複数選択モードの場合
-			newItem.isSelected = true;
-			newItem.isMultiSelectSource = true;
+			if (isTopLevel) {
+				// 最上位のアイテムのみisSelectedをtrueにする
+				// これにより、複数選択時でも最上位のグループのみが選択状態になる
+				newItem.isSelected = true;
+				newItem.isMultiSelectSource = true;
+			} else {
+				// 子要素は非選択状態にする
+				newItem.isSelected = false;
+				newItem.isMultiSelectSource = true;
+			}
 		} else {
 			// 単一選択モード
 			// 最上位の場合のみisSelectedをtrueにする
