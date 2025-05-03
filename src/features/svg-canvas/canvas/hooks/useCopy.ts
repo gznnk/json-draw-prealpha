@@ -11,17 +11,17 @@ import { isItemableData } from "../../utils/TypeUtils";
 import { getSelectedItems } from "../SvgCanvasFunctions";
 
 /**
- * 指定されたIDのリストに含まれる図形IDを全て集める
- * (グループ内の図形も含む)
+ * Collects all shape IDs contained in the specified list
+ * (including shapes within groups)
  *
- * @param items 図形のリスト
- * @param idSet 集めるIDのセット
+ * @param items - List of shapes
+ * @param idSet - Set to collect IDs
  */
 const collectAllShapeIds = (items: Diagram[], idSet: Set<string>) => {
 	for (const item of items) {
 		idSet.add(item.id);
 
-		// 子要素を持つ場合は再帰的に処理
+		// Process children recursively if they exist
 		if (isItemableData(item) && item.items) {
 			collectAllShapeIds(item.items, idSet);
 		}
@@ -29,11 +29,11 @@ const collectAllShapeIds = (items: Diagram[], idSet: Set<string>) => {
 };
 
 /**
- * 選択した図形に接続された接続線のうち、両端が選択されているものを取得する
+ * Gets connection lines where both ends are selected shapes
  *
- * @param allItems キャンバス上の全アイテム
- * @param selectedIds 選択された図形のID集合
- * @returns 両端が選択されている接続線のリスト
+ * @param allItems - All items on canvas
+ * @param selectedIds - Set of selected shape IDs
+ * @returns List of connection lines with both ends selected
  */
 const findConnectLinesWithBothEndsSelected = (
 	allItems: Diagram[],
@@ -53,7 +53,7 @@ const findConnectLinesWithBothEndsSelected = (
  * Custom hook to handle copy events on the canvas.
  */
 export const useCopy = (props: CanvasHooksProps) => {
-	// Create references bypass to avoid function creation in every render.
+	// Create references bypass to avoid function creation in every render
 	const refBusVal = {
 		props,
 	};
@@ -61,41 +61,41 @@ export const useCopy = (props: CanvasHooksProps) => {
 	refBus.current = refBusVal;
 
 	return useCallback(() => {
-		// Bypass references to avoid function creation in every render.
+		// Bypass references to avoid function creation in every render
 		const {
 			canvasState: { items, multiSelectGroup },
 		} = refBus.current.props;
 
-		// マルチセレクトグループが存在する場合はその中のアイテムをコピー
+		// Copy items from multi-select group if it exists
 		let selectedItems: Diagram[];
 		if (multiSelectGroup) {
-			// multiSelectGroupのitemsプロパティを使用
+			// Use items property from multiSelectGroup
 			selectedItems = multiSelectGroup.items;
 		} else {
-			// 通常の選択アイテムを取得
+			// Get normally selected items
 			selectedItems = getSelectedItems(items);
 		}
 
-		// If no items are selected, do nothing.
+		// If no items are selected, do nothing
 		if (selectedItems.length === 0) return;
 
 		try {
-			// 選択された図形のIDを収集
+			// Collect IDs of selected shapes
 			const selectedIds = new Set<string>();
 			collectAllShapeIds(selectedItems, selectedIds);
 
-			// 両端が選択されている接続線を取得
+			// Get connection lines where both ends are selected
 			const connectLines = findConnectLinesWithBothEndsSelected(
 				items,
 				selectedIds,
 			);
 
-			// コピー対象に接続線を追加
+			// Add connection lines to copy targets
 			const itemsToCopy = [...selectedItems, ...connectLines];
 
 			const clipboardData = JSON.stringify(itemsToCopy);
 
-			// Copy the data to the clipboard.
+			// Copy the data to the clipboard
 			navigator.clipboard
 				.writeText(clipboardData)
 				.then(() => {
