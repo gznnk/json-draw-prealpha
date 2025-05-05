@@ -9,10 +9,10 @@ import {
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 /**
- * Custom hook to handle canvas resize events on the canvas.
+ * Custom hook to risze the canvas when cursor approaches boundaries.
  *
  * @param props - Canvas hook props including canvas state and setter
- * @returns Function to process canvas resize events and directly resize canvas
+ * @returns Function to resize canvas and directly modify canvas DOM attributes
  */
 export const useCanvasResize = (props: CanvasHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
@@ -40,73 +40,73 @@ export const useCanvasResize = (props: CanvasHooksProps) => {
 
 			const { containerRef, svgRef } = canvasRef;
 
-			// Calculate distance from each edge in SVG coordinates
+			// Calculate distances from each edge in SVG coordinates
 			const distFromLeft = cursorX - minX;
 			const distFromTop = cursorY - minY;
 			const distFromRight = minX + width - cursorX;
 			const distFromBottom = minY + height - cursorY;
 
-			// Check if cursor is near the left edge
+			// Left edge expansion
 			if (distFromLeft < CANVAS_EXPANSION_THRESHOLD) {
 				if (containerRef.current && svgRef.current) {
-					// Expand canvas to the left
+					// Calculate new dimensions
 					const newMinX = minX - CANVAS_EXPANSION_SIZE;
 					const newWidth = width + (minX - newMinX);
 
-					// Execute the resize function to update the canvas state
+					// Update state for component re-renders
 					setCanvasState((prevState) => ({
 						...prevState,
 						minX: newMinX,
 						width: newWidth,
 					}));
 
-					// Update SVG viewBox directly to prevent rendering issues
+					// Direct DOM manipulation for immediate visual feedback
 					svgRef.current.setAttribute("width", `${newWidth}`);
 					svgRef.current.setAttribute(
 						"viewBox",
 						`${newMinX} ${minY} ${newWidth} ${height}`,
 					);
 
-					// Adjust scroll position to keep cursor at the same visual position
+					// Maintain scroll position relative to content
 					containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
 				}
 			}
-			// Check if cursor is near the top edge
+			// Top edge expansion
 			else if (distFromTop < CANVAS_EXPANSION_THRESHOLD) {
 				if (containerRef.current && svgRef.current) {
-					// Expand canvas upward
+					// Calculate new dimensions
 					const newMinY = minY - CANVAS_EXPANSION_SIZE;
 					const newHeight = height + (minY - newMinY);
 
-					// Execute the resize function to update the canvas state
+					// Update state for component re-renders
 					setCanvasState((prevState) => ({
 						...prevState,
 						minY: newMinY,
 						height: newHeight,
 					}));
 
-					// Update SVG viewBox directly to prevent rendering issues
+					// Direct DOM manipulation for immediate visual feedback
 					svgRef.current.setAttribute("height", `${newHeight}`);
 					svgRef.current.setAttribute(
 						"viewBox",
 						`${minX} ${newMinY} ${width} ${newHeight}`,
 					);
 
-					// Adjust scroll position to keep cursor at the same visual position
+					// Maintain scroll position relative to content
 					containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
 				}
 			}
-			// Check if cursor is near the right edge
+			// Right edge expansion
 			else if (distFromRight < CANVAS_EXPANSION_THRESHOLD) {
-				// Expand canvas to the right
+				// Simple width increase without scroll adjustment needed
 				setCanvasState((prevState) => ({
 					...prevState,
 					width: width + CANVAS_EXPANSION_SIZE,
 				}));
 			}
-			// Check if cursor is near the bottom edge
+			// Bottom edge expansion
 			else if (distFromBottom < CANVAS_EXPANSION_THRESHOLD) {
-				// Expand canvas downward
+				// Simple height increase without scroll adjustment needed
 				setCanvasState((prevState) => ({
 					...prevState,
 					height: height + CANVAS_EXPANSION_SIZE,
