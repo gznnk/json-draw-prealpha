@@ -49,12 +49,6 @@ const TextableComponent: React.FC<TextableProps> = ({
 			textRef.current.innerHTML = "";
 			// Set the new content with sanitized HTML
 			textRef.current.innerHTML = renderMarkdown(text);
-
-			// Manage the links to open in a new tab and prevent security issues with rel attribute
-			// for (const link of textRef.current.querySelectorAll("a")) {
-			// 	link.setAttribute("target", "_blank");
-			// 	link.setAttribute("rel", "noopener noreferrer");
-			// }
 		}
 	}, [text, isTextEditing]);
 
