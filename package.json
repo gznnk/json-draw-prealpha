@@ -19,6 +19,7 @@
 		"highlight.js": "^11.11.1",
 		"katex": "^0.16.22",
 		"markdown-it": "^14.1.0",
+		"markdown-it-link-attributes": "^4.0.1",
 		"openai": "^4.91.1",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0"
@@ -33,6 +34,7 @@
 		"@types/jest": "^29.5.14",
 		"@types/katex": "^0.16.7",
 		"@types/markdown-it": "^14.1.2",
+		"@types/markdown-it-link-attributes": "^3.0.5",
 		"@types/react": "^19.0.10",
 		"@types/react-dom": "^19.0.4",
 		"@vitejs/plugin-react-swc": "^3.5.0",
