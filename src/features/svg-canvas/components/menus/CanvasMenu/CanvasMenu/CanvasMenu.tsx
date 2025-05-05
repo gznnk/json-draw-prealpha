@@ -120,6 +120,26 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			>
 				AG
 			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						diagramType: "WebSearchNode",
+						isSelected: true,
+					})
+				}
+			>
+				WB
+			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						diagramType: "VectorStoreNode",
+						isSelected: true,
+					})
+				}
+			>
+				VS
+			</CanvasMenuItem>
 		</CanvasMenuDiv>
 	);
 };

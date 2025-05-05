@@ -153,6 +153,8 @@ const TransformativeComponent: React.FC<Props> = ({
 		newWidth: number,
 		newHeight: number,
 		eventType: EventType,
+		cursorX?: number,
+		cursorY?: number,
 	) => {
 		const event = {
 			eventId,
@@ -170,6 +172,8 @@ const TransformativeComponent: React.FC<Props> = ({
 				scaleY: signNonZero(newHeight),
 				rotation,
 			},
+			cursorX: cursorX ?? centerPoint.x, // カーソル位置が提供されない場合は中心点を使用
+			cursorY: cursorY ?? centerPoint.y, // カーソル位置が提供されない場合は中心点を使用
 		};
 
 		onTransform?.(event);
@@ -288,7 +292,16 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		// カーソル位置を渡して自動スクロールを有効にする
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionLeftTop = useCallback(
@@ -343,7 +356,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionLeftBottom = useCallback(
@@ -398,7 +419,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionRightTop = useCallback(
@@ -453,7 +482,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionRightBottom = useCallback(
@@ -508,7 +545,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionTopCenter = useCallback(
@@ -568,7 +613,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionLeftCenter = useCallback(
@@ -628,7 +681,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionRightCenter = useCallback(
@@ -688,7 +749,15 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const center = affineTransformationOnDrag(inversedCenterX, inversedCenterY);
 
-		triggerTransform(e.eventId, center, newWidth, newHeight, e.eventType);
+		triggerTransform(
+			e.eventId,
+			center,
+			newWidth,
+			newHeight,
+			e.eventType,
+			e.cursorX,
+			e.cursorY,
+		);
 	}, []);
 
 	const linerDragFunctionBottomCenter = useCallback(
@@ -785,6 +854,8 @@ const TransformativeComponent: React.FC<Props> = ({
 				scaleY,
 				rotation: newRotation,
 			},
+			cursorX: e.cursorX ?? e.endX, // カーソル位置情報を追加
+			cursorY: e.cursorY ?? e.endY, // カーソル位置情報を追加
 		};
 
 		onTransform?.(event);

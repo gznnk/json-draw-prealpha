@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for BringToFront icon
+ */
 type BringToFrontProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type BringToFrontProps = {
 	title?: string;
 };
 
+/**
+ * Bring to front icon component
+ */
 export const BringToFront = memo<BringToFrontProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

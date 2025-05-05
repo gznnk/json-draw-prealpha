@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for BorderRadius icon
+ */
 type BorderRadiusProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type BorderRadiusProps = {
 	title?: string;
 };
 
+/**
+ * Border radius icon component
+ */
 export const BorderRadius = memo<BorderRadiusProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for FontColor icon
+ */
 type FontColorProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type FontColorProps = {
 	title?: string;
 };
 
+/**
+ * Font color icon component
+ */
 export const FontColor = memo<FontColorProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for SendBackward icon
+ */
 type SendBackwardProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type SendBackwardProps = {
 	title?: string;
 };
 
+/**
+ * Send backward icon component
+ */
 export const SendBackward = memo<SendBackwardProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

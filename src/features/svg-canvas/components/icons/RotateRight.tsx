@@ -1,9 +1,16 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for RotateRight icon
+ */
 type RotateRightProps = {
 	fill?: string;
 };
 
+/**
+ * Rotate right icon component
+ */
 export const RotateRight = memo<RotateRightProps>(({ fill = "#333333" }) => {
 	return (
 		<path

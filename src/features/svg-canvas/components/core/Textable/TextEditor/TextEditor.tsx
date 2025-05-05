@@ -46,14 +46,14 @@ const TextEditorComponent: React.FC<TextEditorProps> = ({
 	useEffect(() => {
 		if (isActive) {
 			setInputText(text);
-			if (textType === "textarea") {
-				textAreaRef.current?.focus();
-				// Set the selection range to the end of the text in the textarea.
-				textAreaRef.current?.setSelectionRange(text.length, text.length);
-			} else {
+			if (textType === "text") {
 				inputRef.current?.focus();
 				// Set the selection range to the end of the text in the input.
 				inputRef.current?.setSelectionRange(text.length, text.length);
+			} else {
+				textAreaRef.current?.focus();
+				// Set the selection range to the end of the text in the textarea.
+				textAreaRef.current?.setSelectionRange(text.length, text.length);
 			}
 		} else {
 			setInputText("");
@@ -124,15 +124,7 @@ const TextEditorComponent: React.FC<TextEditorProps> = ({
 		fontWeight,
 	};
 
-	return textType === "textarea" ? (
-		<TextArea
-			{...commonProps}
-			// Additional properties for textarea.
-			ref={textAreaRef}
-			onChange={handleTextAreaChange}
-			onBlur={handleTextAreaBlur}
-		/>
-	) : (
+	return textType === "text" ? (
 		<Input
 			{...commonProps}
 			// Additional properties for input.
@@ -140,6 +132,14 @@ const TextEditorComponent: React.FC<TextEditorProps> = ({
 			ref={inputRef}
 			onChange={handleInputChange}
 			onBlur={handleInputBlur}
+		/>
+	) : (
+		<TextArea
+			{...commonProps}
+			// Additional properties for textarea.
+			ref={textAreaRef}
+			onChange={handleTextAreaChange}
+			onBlur={handleTextAreaBlur}
 		/>
 	);
 };

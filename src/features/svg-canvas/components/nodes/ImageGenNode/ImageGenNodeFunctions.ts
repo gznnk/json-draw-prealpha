@@ -1,5 +1,8 @@
+// Import functions related to SvgCanvas.
 import { newId } from "../../../utils/Diagram";
 import { createRectangleConnectPoint } from "../../shapes/Rectangle";
+
+// Import related to this component.
 import type { ImageGenNodeData } from "./ImageGenNodeTypes";
 
 export const createImageGenNodeData = ({

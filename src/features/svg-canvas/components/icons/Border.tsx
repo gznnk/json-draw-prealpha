@@ -1,11 +1,18 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for Border icon
+ */
 type BorderProps = {
 	fill?: string;
 	width?: number;
 	height?: number;
 };
 
+/**
+ * Border icon component
+ */
 export const Border = memo<BorderProps>(
 	({ fill = "#333333", width = 24, height = 24 }) => {
 		return (

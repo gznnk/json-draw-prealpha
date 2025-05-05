@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for Group icon
+ */
 type GroupProps = {
 	fill?: string;
 	width?: number;
@@ -7,6 +11,9 @@ type GroupProps = {
 	title?: string;
 };
 
+/**
+ * Group icon component
+ */
 export const Group = memo<GroupProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

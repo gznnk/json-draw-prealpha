@@ -1,6 +1,6 @@
-import { newEventId } from "../../../utils/Util";
-import type { ConnectLineData } from "../../shapes/ConnectLine";
-import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectConstants";
+import { newEventId } from "../../../../utils/Util";
+import type { ConnectLineData } from "../ConnectLine/ConnectLineTypes";
+import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";
 
 export const triggerFlashConnectLine = (connectLine: ConnectLineData) => {
 	document.dispatchEvent(

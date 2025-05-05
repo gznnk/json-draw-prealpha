@@ -86,4 +86,6 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onExport?: () => void;
 	onScroll?: (e: React.UIEvent<HTMLDivElement, UIEvent>) => void;
 	onConnectNodes?: (e: ConnectNodesEvent) => void;
+	onCopy?: () => void;
+	onPaste?: () => void;
 };

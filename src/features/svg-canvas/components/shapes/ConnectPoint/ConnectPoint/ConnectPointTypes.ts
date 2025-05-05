@@ -1,6 +1,6 @@
 // Import types related to SvgCanvas.
-import type { Point } from "../../../types/CoordinateTypes";
-import type { DiagramBaseData, Shape } from "../../../types/DiagramTypes";
+import type { Point } from "../../../../types/CoordinateTypes";
+import type { DiagramBaseData, Shape } from "../../../../types/DiagramTypes";
 
 /**
  * 接続ポイントのデータ

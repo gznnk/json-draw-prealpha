@@ -17,11 +17,12 @@ import type {
 } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import { FlashConnectLine } from "../components/core/FlashConnectLine";
+import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { TextEditor } from "../components/core/Textable";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
 import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
+import { NewConnectLine } from "../components/shapes/ConnectPoint";
 import { Group } from "../components/shapes/Group";
 
 // SvgCanvas関連関数をインポート
@@ -35,6 +36,7 @@ import type { Point } from "../types/CoordinateTypes";
 import {
 	CANVAS_EXPANSION_SIZE,
 	MULTI_SELECT_GROUP,
+	CANVAS_EXPANSION_THRESHOLD,
 } from "./SvgCanvasConstants";
 import {
 	Container,
@@ -90,6 +92,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onExecute,
 		onScroll,
 		onConnectNodes,
+		onCopy,
+		onPaste,
 	} = props;
 
 	// SVG要素のコンテナの参照
@@ -136,80 +140,103 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 
 	/**
 	 * Resize the canvas when the pointer is moved to the edges of the canvas.
+	 * Uses SVG coordinates to determine when to expand the canvas based on cursor position.
+	 *
+	 * @param p - The point to check (shape position)
+	 * @param cursorX - Optional explicit cursor X position in SVG coordinates
+	 * @param cursorY - Optional explicit cursor Y position in SVG coordinates
 	 */
-	const canvasResize = useCallback((p: Point) => {
-		// Bypass references to avoid function creation in every render.
-		const { onCanvasResize, minX, minY, width, height } =
-			refBusForCanvasResize.current;
+	const canvasResize = useCallback(
+		(p: Point, cursorX?: number, cursorY?: number) => {
+			// Bypass references to avoid function creation in every render.
+			const { onCanvasResize, minX, minY, width, height } =
+				refBusForCanvasResize.current;
 
-		if (p.x <= minX) {
-			if (containerRef.current && svgRef.current) {
-				// SVGの幅を増やす
-				const newMinX = minX - CANVAS_EXPANSION_SIZE;
-				const newWidth = width - newMinX + CANVAS_EXPANSION_SIZE;
+			// Use cursor coordinates if provided, otherwise use shape position
+			const checkX = cursorX ?? p.x;
+			const checkY = cursorY ?? p.y;
 
-				// Notify the new minX and width to the canvasHooks.
-				onCanvasResize?.({
-					minX: newMinX,
-					minY,
-					width: newWidth,
-					height,
-				} as SvgCanvasResizeEvent);
+			// Calculate distance from each edge in SVG coordinates
+			const distFromLeft = checkX - minX;
+			const distFromTop = checkY - minY;
+			const distFromRight = minX + width - checkX;
+			const distFromBottom = minY + height - checkY;
 
-				// スクロール位置の設定がDOMの直接更新である一方、state変更によるSVG要素の更新は次のReactの描画処理時であることにより、
-				// 描画タイミングのずれが発生してしまうので、一度SVGのviewBoxを直接更新し、ずれが発生しないようにする
-				svgRef.current.setAttribute("width", `${newWidth}`);
-				svgRef.current.setAttribute(
-					"viewBox",
-					`${newMinX} ${minY} ${newWidth} ${height}`,
-				);
+			// Check if cursor is near the left edge
+			if (distFromLeft < CANVAS_EXPANSION_THRESHOLD) {
+				if (containerRef.current && svgRef.current) {
+					// Expand canvas to the left
+					const newMinX = minX - CANVAS_EXPANSION_SIZE;
+					const newWidth = width - newMinX + CANVAS_EXPANSION_SIZE;
 
-				// Scroll position adjustment.
-				containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
+					// Notify the new minX and width to the canvasHooks
+					onCanvasResize?.({
+						minX: newMinX,
+						minY,
+						width: newWidth,
+						height,
+					} as SvgCanvasResizeEvent);
+
+					// Update SVG viewBox directly to prevent rendering issues
+					svgRef.current.setAttribute("width", `${newWidth}`);
+					svgRef.current.setAttribute(
+						"viewBox",
+						`${newMinX} ${minY} ${newWidth} ${height}`,
+					);
+
+					// Adjust scroll position to keep cursor at the same visual position
+					containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
+				}
 			}
-		} else if (p.y <= minY) {
-			if (containerRef.current && svgRef.current) {
-				// SVGの高さを増やす
-				const newMinY = minY - CANVAS_EXPANSION_SIZE;
-				const newHeight = height - newMinY;
+			// Check if cursor is near the top edge
+			else if (distFromTop < CANVAS_EXPANSION_THRESHOLD) {
+				if (containerRef.current && svgRef.current) {
+					// Expand canvas upward
+					const newMinY = minY - CANVAS_EXPANSION_SIZE;
+					const newHeight = height - newMinY;
 
-				// Notify the new minY and height to the hooks.
+					// Notify the new minY and height to the hooks
+					onCanvasResize?.({
+						minX,
+						minY: newMinY,
+						width,
+						height: newHeight,
+					} as SvgCanvasResizeEvent);
+
+					// Update SVG viewBox directly to prevent rendering issues
+					svgRef.current.setAttribute("height", `${newHeight}`);
+					svgRef.current.setAttribute(
+						"viewBox",
+						`${minX} ${newMinY} ${width} ${newHeight}`,
+					);
+
+					// Adjust scroll position to keep cursor at the same visual position
+					containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
+				}
+			}
+			// Check if cursor is near the right edge
+			else if (distFromRight < CANVAS_EXPANSION_THRESHOLD) {
+				// Expand canvas to the right
 				onCanvasResize?.({
 					minX,
-					minY: newMinY,
-					width,
-					height: newHeight,
+					minY,
+					width: width + CANVAS_EXPANSION_SIZE,
+					height,
 				} as SvgCanvasResizeEvent);
-
-				// スクロール位置の設定がDOMの直接更新である一方、state変更によるSVG要素の更新は次のReactの描画処理時であることにより、
-				// 描画タイミングのずれが発生してしまうので、一度SVGのviewBoxを直接更新し、ずれが発生しないようにする
-				svgRef.current.setAttribute("height", `${newHeight}`);
-				svgRef.current.setAttribute(
-					"viewBox",
-					`${minX} ${newMinY} ${width} ${newHeight}`,
-				);
-
-				// Scroll position adjustment.
-				containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
 			}
-		} else if (p.x >= minX + width) {
-			// Notify the new width to the hooks.
-			onCanvasResize?.({
-				minX,
-				minY,
-				width: width - minX + CANVAS_EXPANSION_SIZE,
-				height,
-			} as SvgCanvasResizeEvent);
-		} else if (p.y >= minY + height) {
-			// Notify the new height to the hooks.
-			onCanvasResize?.({
-				minX,
-				minY,
-				width,
-				height: height - minY + CANVAS_EXPANSION_SIZE,
-			} as SvgCanvasResizeEvent);
-		}
-	}, []);
+			// Check if cursor is near the bottom edge
+			else if (distFromBottom < CANVAS_EXPANSION_THRESHOLD) {
+				// Expand canvas downward
+				onCanvasResize?.({
+					minX,
+					minY,
+					width,
+					height: height + CANVAS_EXPANSION_SIZE,
+				} as SvgCanvasResizeEvent);
+			}
+		},
+		[],
+	);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -226,6 +253,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		onUndo,
 		onRedo,
 		onScroll,
+		onCopy,
+		onPaste,
 		// Internal variables and functions
 		contextMenuFunctions,
 		canvasResize,
@@ -269,10 +298,12 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		// Bypass references to avoid function creation in every render.
 		const { canvasResize, onDrag } = refBus.current;
 
-		canvasResize({
-			x: e.endX,
-			y: e.endY,
-		});
+		// Pass both shape position and cursor position to canvasResize
+		canvasResize(
+			{ x: e.endX, y: e.endY },
+			e.cursorX, // New property for cursor X position
+			e.cursorY, // New property for cursor Y position
+		);
 
 		onDrag?.(e);
 	}, []);
@@ -285,10 +316,22 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 		const { canvasResize, onDiagramChange } = refBus.current;
 
 		if (e.changeType === "Drag" && e.endDiagram.x && e.endDiagram.y) {
-			canvasResize({
-				x: e.endDiagram.x,
-				y: e.endDiagram.y,
-			});
+			canvasResize(
+				{ x: e.endDiagram.x, y: e.endDiagram.y },
+				e.cursorX,
+				e.cursorY,
+			);
+		} else if (
+			e.changeType === "Transform" &&
+			e.endDiagram.x &&
+			e.endDiagram.y
+		) {
+			// Also check for transform events to handle resize operations
+			canvasResize(
+				{ x: e.endDiagram.x, y: e.endDiagram.y },
+				e.cursorX,
+				e.cursorY,
+			);
 		}
 
 		onDiagramChange?.(e);
@@ -320,6 +363,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 				onClearAllSelection,
 				onUndo,
 				onRedo,
+				onCopy,
+				onPaste,
 			} = refBus.current;
 
 			if (e.key === "Control") {
@@ -346,6 +391,16 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 					// Select all items when Ctrl+A is pressed.
 					e.preventDefault();
 					onSelectAll?.();
+				}
+				if (e.key === "c" && !textEditorState.isActive) {
+					// Copy selected items when Ctrl+C is pressed.
+					e.preventDefault();
+					onCopy?.();
+				}
+				if (e.key === "v" && !textEditorState.isActive) {
+					// Paste items from clipboard when Ctrl+V is pressed.
+					e.preventDefault();
+					onPaste?.();
 				}
 			}
 		};
@@ -443,6 +498,8 @@ const SvgCanvasComponent: React.FC<SvgCanvasProps> = (props) => {
 								/>
 							</MultiSelectGroupContainer>
 						)}
+						{/* Render new connect line. */}
+						<NewConnectLine />
 						{/* Render flash connect lines */}
 						<FlashConnectLine />
 					</Svg>

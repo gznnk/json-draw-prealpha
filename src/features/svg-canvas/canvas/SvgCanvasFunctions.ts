@@ -358,7 +358,8 @@ export const loadCanvasDataFromLocalStorage = ():
 export const createConnectPointMoveData = (
 	newItem: Diagram,
 ): ConnectPointMoveData[] => {
-	if (isConnectableData(newItem) && !newItem.isMultiSelectSource) {
+	if (isConnectableData(newItem)) {
+		// 複数選択の選択元かどうかに関わらず、全ての接続可能な図形の接続ポイントを処理する
 		return DiagramConnectPointCalculators[newItem.type](newItem);
 	}
 

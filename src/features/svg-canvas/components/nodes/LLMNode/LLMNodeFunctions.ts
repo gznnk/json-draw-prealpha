@@ -1,3 +1,4 @@
+// Import functions related to SvgCanvas.
 import { createRectangleData } from "../../shapes/Rectangle";
 
 export const createLLMNodeData = ({

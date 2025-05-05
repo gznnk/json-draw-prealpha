@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for BgColor icon
+ */
 type BgColorProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type BgColorProps = {
 	title?: string;
 };
 
+/**
+ * Background color icon component
+ */
 export const BgColor = memo<BgColorProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

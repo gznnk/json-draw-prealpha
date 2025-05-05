@@ -28,5 +28,6 @@ export type RectangleProps = CreateDiagramProps<
 		transformative: true;
 		connectable: true;
 		textable: true;
+		fileDroppable: true;
 	}
 >;

@@ -17,12 +17,14 @@ import { useAddItem } from "./hooks/useAddItem";
 import { useCanvasResize } from "./hooks/useCanvasResize";
 import { useClearAllSelection } from "./hooks/useClearAllSelection";
 import { useConnect } from "./hooks/useConnect";
+import { useCopy } from "./hooks/useCopy";
 import { useDelete } from "./hooks/useDelete";
 import { useDiagramChange } from "./hooks/useDiagramChange";
 import { useDrag } from "./hooks/useDrag";
 import { useGroup } from "./hooks/useGroup";
 import { useNewDiagram } from "./hooks/useNewDiagram";
 import { useNewItem } from "./hooks/useNewItem";
+import { usePaste } from "./hooks/usePaste";
 import { useRedo } from "./hooks/useRedo";
 import { useSelect } from "./hooks/useSelect";
 import { useSelectAll } from "./hooks/useSelectAll";
@@ -158,6 +160,12 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the connect nodes event.
 	const onConnectNodes = useConnectNodes(canvasHooksProps);
 
+	// Handler for the copy event.
+	const onCopy = useCopy(canvasHooksProps);
+
+	// Handler for the paste event.
+	const onPaste = usePaste(canvasHooksProps);
+
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //
 
 	const addItem = useAddItem(canvasHooksProps);
@@ -186,6 +194,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onExport,
 		onScroll,
 		onConnectNodes,
+		onCopy,
+		onPaste,
 	};
 
 	// --- Functions for accessing the canvas state and modifying the canvas. --- //

@@ -99,7 +99,7 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 
 	return (
 		<>
-			<Rectangle {...props} text={text} />
+			<Rectangle {...props} text={text} textType="markdown" />
 			{!props.isTextEditing && (
 				<>
 					<TextAreaButton

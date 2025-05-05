@@ -1,12 +1,12 @@
-// Import React.
+// Import React
 import { memo } from "react";
 
-// Import Emotion for styling.
+// Import Emotion for styling
 import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
 
 /**
- * Animation for moving up and down.
+ * Animation for up and down movement
  */
 const moveUpDown = keyframes`
     0% { transform: translateY(0); }
@@ -16,7 +16,7 @@ const moveUpDown = keyframes`
 `;
 
 /**
- * Styled component for the animated group.
+ * Styled component for animated group
  */
 const AnimatedGroup = styled.g<{ $animation: boolean }>`
     ${({ $animation }) =>
@@ -27,7 +27,7 @@ const AnimatedGroup = styled.g<{ $animation: boolean }>`
 `;
 
 /**
- * Props for the Agent icon.
+ * Props for Agent icon
  */
 type AgentProps = {
 	width?: number;
@@ -36,7 +36,7 @@ type AgentProps = {
 };
 
 /**
- * Agent component that renders an agent icon with optional animation.
+ * Agent icon component
  */
 export const Agent = memo<AgentProps>(
 	({ width = 80, height = 80, animation = false }) => {

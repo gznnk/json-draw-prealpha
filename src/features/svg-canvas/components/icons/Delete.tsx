@@ -1,11 +1,18 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for Delete icon
+ */
 type DeleteProps = {
 	fill?: string;
 	width?: number;
 	height?: number;
 };
 
+/**
+ * Delete icon component
+ */
 export const Delete = memo<DeleteProps>(
 	({ fill = "#E53935", width = 24, height = 24 }) => {
 		return (

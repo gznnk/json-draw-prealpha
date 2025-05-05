@@ -1,6 +1,9 @@
 // Import React.
 import type React from "react";
-import { memo } from "react";
+import { memo, useEffect, useRef } from "react";
+
+// import markdown feature.
+import { renderMarkdown } from "../../../../../markdown";
 
 // Import types related to SvgCanvas.
 import type { TextableData } from "../../../../types/DiagramTypes";
@@ -38,6 +41,17 @@ const TextableComponent: React.FC<TextableProps> = ({
 	fontWeight,
 	isTextEditing,
 }) => {
+	const textRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (textRef.current && !isTextEditing) {
+			// Clear the previous content
+			textRef.current.innerHTML = "";
+			// Set the new content with sanitized HTML
+			textRef.current.innerHTML = renderMarkdown(text);
+		}
+	}, [text, isTextEditing]);
+
 	if (!text) return null;
 	if (isTextEditing) return null;
 
@@ -52,17 +66,30 @@ const TextableComponent: React.FC<TextableProps> = ({
 			pointerEvents="none"
 		>
 			<TextWrapper verticalAlign={verticalAlign}>
-				<Text
-					textAlign={textAlign}
-					color={fontColor}
-					fontSize={fontSize}
-					fontFamily={fontFamily}
-					fontWeight={fontWeight}
-					wordBreak={textType === "textarea" ? "break-word" : "normal"}
-					whiteSpace={textType === "textarea" ? "pre-wrap" : "nowrap"}
-				>
-					{text}
-				</Text>
+				{textType === "markdown" ? (
+					<Text
+						textAlign={textAlign}
+						color={fontColor}
+						fontSize={fontSize}
+						fontFamily={fontFamily}
+						fontWeight={fontWeight}
+						wordBreak="break-word"
+						whiteSpace="pre-wrap"
+						ref={textRef}
+					/>
+				) : (
+					<Text
+						textAlign={textAlign}
+						color={fontColor}
+						fontSize={fontSize}
+						fontFamily={fontFamily}
+						fontWeight={fontWeight}
+						wordBreak={textType === "text" ? "normal" : "break-word"}
+						whiteSpace={textType === "text" ? "nowrap" : "pre-wrap"}
+					>
+						{text}
+					</Text>
+				)}
 			</TextWrapper>
 		</foreignObject>
 	);

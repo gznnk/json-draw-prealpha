@@ -18,14 +18,15 @@ import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks related to SvgCanvas.
 import { useDrag } from "../../../hooks/useDrag";
+import { useFileDrop } from "../../../hooks/useFileDrop";
 
 // Import functions related to SvgCanvas.
 import { createSvgTransform } from "../../../utils/Diagram";
 import { degreesToRadians } from "../../../utils/Math";
 
 // Imports related to this component.
-import type { RectangleProps } from "./RectangleTypes";
 import { RectangleElement } from "./RectangleStyled";
+import type { RectangleProps } from "./RectangleTypes";
 
 /**
  * 四角形コンポーネント
@@ -66,6 +67,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	onTransform,
 	onConnect,
 	onTextEdit,
+	onFileDrop,
 }) => {
 	// ドラッグ中かのフラグ
 	const [isDragging, setIsDragging] = useState(false);
@@ -145,6 +147,20 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	}, []);
 
 	/**
+	 * ドラッグオーバーイベントハンドラ
+	 */
+	const handleDragOver = useCallback(() => {
+		setIsHovered(true);
+	}, []);
+
+	/**
+	 * ドラッグリーブイベントハンドラ
+	 */
+	const handleDragLeave = useCallback(() => {
+		setIsHovered(false);
+	}, []);
+
+	/**
 	 * ダブルクリックイベントハンドラ
 	 */
 	const handleDoubleClick = useCallback(() => {
@@ -172,7 +188,12 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		onClick: onClick,
 		onDrag: handleDrag,
 		onHover: handleHover,
+		onDragOver: handleDragOver,
+		onDragLeave: handleDragLeave,
 	});
+
+	// ファイルドロップ用のプロパティを生成
+	const fileDropProps = useFileDrop({ id, onFileDrop });
 
 	// memo化によりConnectPointの再描画を抑制
 	// keyで分解してばらばらにpropsで渡すと、各ConnectPoint側それぞれで各keyに対して
@@ -232,6 +253,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
 					{...dragProps}
+					{...fileDropProps}
 				/>
 			</g>
 			{isTextEditEnabled && (

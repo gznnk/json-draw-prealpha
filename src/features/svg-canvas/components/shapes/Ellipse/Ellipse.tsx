@@ -144,6 +144,20 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	}, []);
 
 	/**
+	 * ドラッグオーバーイベントハンドラ
+	 */
+	const handleDragOver = useCallback(() => {
+		setIsHovered(true);
+	}, []);
+
+	/**
+	 * ドラッグリーブイベントハンドラ
+	 */
+	const handleDragLeave = useCallback(() => {
+		setIsHovered(false);
+	}, []);
+
+	/**
 	 * ダブルクリックイベントハンドラ
 	 */
 	const handleDoubleClick = useCallback(() => {
@@ -171,6 +185,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		onClick: onClick,
 		onDrag: handleDrag,
 		onHover: handleHover,
+		onDragOver: handleDragOver,
+		onDragLeave: handleDragLeave,
 	});
 
 	// memo化によりConnectPointの再描画を抑制

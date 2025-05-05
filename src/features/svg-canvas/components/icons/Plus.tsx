@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for Plus icon
+ */
 type PlusProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type PlusProps = {
 	title?: string;
 };
 
+/**
+ * Plus icon component
+ */
 export const Plus = memo<PlusProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

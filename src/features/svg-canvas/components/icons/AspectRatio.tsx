@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for AspectRatio icon
+ */
 type AspectRatioProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type AspectRatioProps = {
 	title?: string;
 };
 
+/**
+ * Aspect ratio icon component
+ */
 export const AspectRatio = memo<AspectRatioProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

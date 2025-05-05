@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for BringForward icon
+ */
 type BringForwardProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type BringForwardProps = {
 	title?: string;
 };
 
+/**
+ * Bring forward icon component
+ */
 export const BringForward = memo<BringForwardProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

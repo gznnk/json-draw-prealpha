@@ -222,6 +222,9 @@ export const useDrag = (props: DragProps) => {
 		// ドラッグ座標を取得
 		const dragPoint = getPointOnDrag(e.clientX, e.clientY);
 
+		// SVG座標系でのカーソル位置を取得
+		const svgCursorPoint = getSvgPoint(e.clientX, e.clientY);
+
 		// イベントIDを生成
 		const eventId = newEventId();
 
@@ -234,6 +237,8 @@ export const useDrag = (props: DragProps) => {
 			startY: startY.current,
 			endX: dragPoint.x,
 			endY: dragPoint.y,
+			cursorX: svgCursorPoint.x,
+			cursorY: svgCursorPoint.y,
 		} as DiagramDragEvent;
 
 		// 全体通知用ドラッグイベント情報を作成
@@ -307,6 +312,9 @@ export const useDrag = (props: DragProps) => {
 			// ドラッグ座標を取得
 			const dragPoint = getPointOnDrag(e.clientX, e.clientY);
 
+			// SVG座標系でのカーソル位置を取得
+			const svgCursorPoint = getSvgPoint(e.clientX, e.clientY);
+
 			// ドラッグ中だった場合はドラッグ終了イベントを発火
 			onDrag?.({
 				eventId,
@@ -316,6 +324,8 @@ export const useDrag = (props: DragProps) => {
 				startY: startY.current,
 				endX: dragPoint.x,
 				endY: dragPoint.y,
+				cursorX: svgCursorPoint.x,
+				cursorY: svgCursorPoint.y,
 			});
 
 			// 親子関係にない図形でハンドリングする用のドラッグ終了イベント発火
@@ -385,6 +395,7 @@ export const useDrag = (props: DragProps) => {
 				newPoint = dragPositioningFunction(newPoint.x, newPoint.y);
 			}
 
+			// キーボード操作時は、図形の中心をカーソル位置として扱う
 			const dragEvent = {
 				eventId,
 				eventType: "InProgress",
@@ -393,6 +404,8 @@ export const useDrag = (props: DragProps) => {
 				startY: startY.current,
 				endX: newPoint.x,
 				endY: newPoint.y,
+				cursorX: newPoint.x, // 図形中心をカーソル位置として使用
+				cursorY: newPoint.y, // 図形中心をカーソル位置として使用
 			} as DiagramDragEvent;
 
 			if (!isArrowDragging.current) {
@@ -437,6 +450,8 @@ export const useDrag = (props: DragProps) => {
 						startY: y,
 						endX: x,
 						endY: y,
+						cursorX: x, // 図形中心をカーソル位置として使用
+						cursorY: y, // 図形中心をカーソル位置として使用
 					});
 
 					// 矢印キーによるドラッグ終了とマーク
@@ -466,6 +481,8 @@ export const useDrag = (props: DragProps) => {
 			startY: startY.current,
 			endX: x,
 			endY: y,
+			cursorX: x, // 図形中心をカーソル位置として使用
+			cursorY: y, // 図形中心をカーソル位置として使用
 		} as DiagramDragEvent;
 
 		if (isArrowDragging.current) {
@@ -532,6 +549,7 @@ export const useDrag = (props: DragProps) => {
 		onDragLeave,
 		onDrop,
 		// 内部変数・内部関数
+		getSvgPoint,
 		getPointOnDrag,
 	};
 	const refBus = useRef(refBusVal);
@@ -592,11 +610,17 @@ export const useDrag = (props: DragProps) => {
 		if (syncWithSameId && onDrag) {
 			handleBroadcastDragForSync = (e: Event) => {
 				// refBusを介して参照値を取得
-				const { id, onDrag } = refBus.current;
+				const { id, onDrag, getSvgPoint } = refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
 
 				// 同じIDでかつ自身以外の図形のドラッグイベントの場合、同期のためのドラッグイベントを発火する
 				if (customEvent.detail.id === id && e.target !== ref.current) {
+					// SVG座標系でのカーソル位置を取得
+					const svgCursorPoint = getSvgPoint(
+						customEvent.detail.clientX,
+						customEvent.detail.clientY,
+					);
+
 					const dragEvent = {
 						eventId: customEvent.detail.eventId,
 						eventType: customEvent.detail.eventType,
@@ -605,6 +629,8 @@ export const useDrag = (props: DragProps) => {
 						startY: customEvent.detail.startY,
 						endX: customEvent.detail.endX,
 						endY: customEvent.detail.endY,
+						cursorX: svgCursorPoint.x, // カーソル位置も同期させる
+						cursorY: svgCursorPoint.y, // カーソル位置も同期させる
 					};
 
 					onDrag?.(dragEvent);
@@ -640,9 +666,15 @@ export const useDrag = (props: DragProps) => {
 		let handleSvgCanvasScroll: () => void;
 		if (isDragging) {
 			handleSvgCanvasScroll = () => {
-				const { id, getPointOnDrag, onDrag } = refBus.current;
+				const { id, getPointOnDrag, onDrag, getSvgPoint } = refBus.current;
 
 				const dragPoint = getPointOnDrag(
+					currentClientX.current,
+					currentClientY.current,
+				);
+
+				// SVG座標系でのカーソル位置を取得
+				const svgCursorPoint = getSvgPoint(
 					currentClientX.current,
 					currentClientY.current,
 				);
@@ -655,6 +687,8 @@ export const useDrag = (props: DragProps) => {
 					startY: startY.current,
 					endX: dragPoint.x,
 					endY: dragPoint.y,
+					cursorX: svgCursorPoint.x,
+					cursorY: svgCursorPoint.y,
 				});
 			};
 			document.addEventListener(

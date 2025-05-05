@@ -1,12 +1,12 @@
-// Import React.
+// Import React
 import { memo } from "react";
 
-// Import Emotion for styling.
+// Import Emotion for styling
 import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
 
 /**
- * Animation for the flashing effect.
+ * Animation for flash brightness effect
  */
 const flashBrightness = keyframes`
     0%   { filter: brightness(1); }
@@ -15,7 +15,7 @@ const flashBrightness = keyframes`
 `;
 
 /**
- * Styled component for the group of lines and circles that flash.
+ * Styled component for flash effect group
  */
 export const FlashGroup = styled.g<{ $flash: boolean }>`
     ${({ $flash }) =>
@@ -26,7 +26,7 @@ export const FlashGroup = styled.g<{ $flash: boolean }>`
 `;
 
 /**
- * Props for the Hub icon.
+ * Props for Hub icon
  */
 type HubProps = {
 	width?: number;
@@ -35,7 +35,7 @@ type HubProps = {
 };
 
 /**
- * Hub component that renders a hub icon with optional flashing effect.
+ * Hub icon component with optional flash animation
  */
 export const Hub = memo(
 	({ width = 100, height = 100, animation = false }: HubProps) => {

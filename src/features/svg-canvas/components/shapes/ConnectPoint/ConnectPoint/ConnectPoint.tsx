@@ -3,25 +3,25 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point } from "../../../types/CoordinateTypes";
-import type { Diagram } from "../../../types/DiagramCatalog";
-import type { CreateDiagramProps, Shape } from "../../../types/DiagramTypes";
+import type { Point } from "../../../../types/CoordinateTypes";
+import type { CreateDiagramProps, Shape } from "../../../../types/DiagramTypes";
 import type {
 	DiagramConnectEvent,
 	DiagramDragDropEvent,
 	DiagramDragEvent,
 	DiagramHoverEvent,
-} from "../../../types/EventTypes";
+} from "../../../../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import { DragPoint } from "../../core/DragPoint";
-import { Path, type PathPointData } from "../Path";
+import { DragPoint } from "../../../core/DragPoint";
+import type { PathPointData } from "../../Path";
 
 // SvgCanvas関連関数をインポート
-import { newId } from "../../../utils/Diagram";
-import { calcRectangleOuterBox } from "../../../utils/Math";
+import { newId } from "../../../../utils/Diagram";
+import { calcRectangleOuterBox } from "../../../../utils/Math";
 
 // Imports related to this component.
+import { triggerNewConnectLine } from "../NewConnectLine";
 import { EVENT_NAME_CONNECTTION } from "./ConnectPointConstants";
 import {
 	createBestConnectPath,
@@ -61,8 +61,6 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 }) => {
 	// ホバー状態の管理
 	const [isHovered, setIsHovered] = useState(false);
-	// ドラッグ状態の管理
-	const [isDragging, setIsDragging] = useState(false);
 	// 接続線の座標
 	const [pathPoints, setPathPoints] = useState<PathPointData[]>([]);
 	// 接続中のポイント
@@ -93,7 +91,6 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			newPoints = createBestConnectPath(
 				x,
 				y,
-				direction,
 				ownerShape,
 				connectingPoint.current.x, // 接続先のX座標
 				connectingPoint.current.y, // 接続先のY座標
@@ -111,6 +108,26 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		);
 
 		setPathPoints(newPathPoints);
+
+		// Notify the path data for the new connection line rendering.
+		triggerNewConnectLine({
+			id: `${id}-connecting-path`,
+			type: "Path",
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0,
+			rotation: 0,
+			scaleX: 1,
+			scaleY: 1,
+			stroke: "#fed579",
+			strokeWidth: "3px",
+			keepProportion: false,
+			isSelected: false,
+			isMultiSelectSource: false,
+			endArrowHead: "Circle",
+			items: newPathPoints,
+		});
 	};
 
 	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
@@ -133,10 +150,6 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	 * 接続ポイントのドラッグイベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		if (e.eventType === "Start") {
-			setIsDragging(true);
-		}
-
 		if (connectingPoint.current) {
 			// 接続中のポイントがある場合は、そのポイントを終点とする
 			return;
@@ -147,7 +160,9 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 		if (e.eventType === "End") {
 			setPathPoints([]);
-			setIsDragging(false);
+
+			// Clear the path data for the new connection line rendering.
+			triggerNewConnectLine();
 		}
 	}, []);
 
@@ -296,6 +311,9 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 					});
 
 					setPathPoints([]);
+
+					// Clear the path data for the new connection line rendering.
+					triggerNewConnectLine();
 				}
 			}
 		};
@@ -310,49 +328,25 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	}, []);
 
 	return (
-		<>
-			<DragPoint
-				id={id}
-				x={x}
-				y={y}
-				type="ConnectPoint"
-				radius={6}
-				stroke="rgba(255, 204, 0, 0.8)"
-				fill="rgba(255, 204, 0, 0.8)"
-				cursor="pointer"
-				outline="none"
-				// Show when hovered, even if isTransparent is true.
-				// If you want to hide when hovered, do not render this component.
-				isTransparent={isTransparent && !isHovered}
-				onDrag={handleDrag}
-				onDragOver={handleDragOver}
-				onDragLeave={handleDragLeave}
-				onDrop={handleDrop}
-				onHover={handleHover}
-			/>
-			{isDragging && (
-				<Path
-					id={`${id}-connecting-path`}
-					x={0}
-					y={0}
-					width={0}
-					height={0}
-					rotation={0}
-					scaleX={1}
-					scaleY={1}
-					stroke="#fed579"
-					strokeWidth="3px"
-					keepProportion={false}
-					isSelected={false}
-					isMultiSelectSource={false}
-					dragEnabled={false}
-					segmentDragEnabled={false}
-					newVertexEnabled={false}
-					endArrowHead="Circle"
-					items={pathPoints as Diagram[]}
-				/>
-			)}
-		</>
+		<DragPoint
+			id={id}
+			x={x}
+			y={y}
+			type="ConnectPoint"
+			radius={6}
+			stroke="rgba(255, 204, 0, 0.8)"
+			fill="rgba(255, 204, 0, 0.8)"
+			cursor="pointer"
+			outline="none"
+			// Show when hovered, even if isTransparent is true.
+			// If you want to hide when hovered, do not render this component.
+			isTransparent={isTransparent && !isHovered}
+			onDrag={handleDrag}
+			onDragOver={handleDragOver}
+			onDragLeave={handleDragLeave}
+			onDrop={handleDrop}
+			onHover={handleHover}
+		/>
 	);
 };
 

@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for Bold icon
+ */
 type BoldProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type BoldProps = {
 	fill?: string;
 };
 
+/**
+ * Bold text formatting icon component
+ */
 export const Bold = memo<BoldProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

@@ -3,12 +3,12 @@ import type { Diagram, DiagramType } from "./DiagramCatalog";
 import type { Shape } from "./DiagramTypes";
 
 /**
- * イベントの種類
+ * Types of events in the diagram interaction lifecycle
  */
 export type EventType = "Start" | "InProgress" | "End" | "Instant";
 
 /**
- * 図形のポインターダウンイベント
+ * Event fired when a pointer is pressed down on a diagram
  */
 export type DiagramPointerEvent = {
 	eventId: string;
@@ -16,7 +16,7 @@ export type DiagramPointerEvent = {
 };
 
 /**
- * 図形のドラッグイベント
+ * Event fired during diagram dragging operations
  */
 export type DiagramDragEvent = {
 	eventId: string;
@@ -26,10 +26,12 @@ export type DiagramDragEvent = {
 	startY: number;
 	endX: number;
 	endY: number;
+	cursorX?: number;
+	cursorY?: number;
 };
 
 /**
- * 図形のドラッグドロップイベント
+ * Event fired when a diagram is dragged and dropped onto another element
  */
 export type DiagramDragDropEvent = {
 	eventId: string;
@@ -48,7 +50,16 @@ export type DiagramDragDropEvent = {
 };
 
 /**
- * 図形のクリックイベント
+ * Event fired when files are dropped onto a diagram
+ */
+export type FileDropEvent = {
+	eventId: string;
+	id: string;
+	files: FileList;
+};
+
+/**
+ * Event fired when a diagram is clicked
  */
 export type DiagramClickEvent = {
 	eventId: string;
@@ -56,7 +67,7 @@ export type DiagramClickEvent = {
 };
 
 /**
- * 図形のホバーイベント
+ * Event fired when hovering over a diagram
  */
 export type DiagramHoverEvent = {
 	eventId: string;
@@ -65,7 +76,7 @@ export type DiagramHoverEvent = {
 };
 
 /**
- * 図形の選択イベント
+ * Event fired when a diagram is selected
  */
 export type DiagramSelectEvent = {
 	eventId: string;
@@ -74,7 +85,7 @@ export type DiagramSelectEvent = {
 };
 
 /**
- * 図形の変形イベント
+ * Event fired during diagram transformation operations
  */
 export type DiagramTransformEvent = {
 	eventId: string;
@@ -82,10 +93,12 @@ export type DiagramTransformEvent = {
 	eventType: EventType;
 	startShape: Shape;
 	endShape: Shape;
+	cursorX?: number;
+	cursorY?: number;
 };
 
 /**
- * 図形の変更イベントデータ
+ * Data structure for diagram change events
  */
 export type DiagramChangeData = Partial<Diagram>;
 
@@ -95,7 +108,7 @@ export type DiagramChangeData = Partial<Diagram>;
 export type DiagramChangeEventType = "Drag" | "Transform" | "Appearance";
 
 /**
- * 図形の変更イベント
+ * Event fired when a diagram's properties are changed
  */
 export type DiagramChangeEvent = {
 	eventId: string;
@@ -104,10 +117,12 @@ export type DiagramChangeEvent = {
 	id: string;
 	startDiagram: DiagramChangeData;
 	endDiagram: DiagramChangeData;
+	cursorX?: number;
+	cursorY?: number;
 };
 
 /**
- * 図形の接続イベント
+ * Event fired when connecting two diagrams
  */
 export type DiagramConnectEvent = {
 	eventId: string;
@@ -117,14 +132,15 @@ export type DiagramConnectEvent = {
 };
 
 /**
- * 接続ポイント移動データ
+ * Data structure for connection point movement
  *
- * @param id 移動した接続ポイントID
- * @param name 接続ポイント名
- * @param x 移動先X座標
- * @param y 移動先Y座標
- * @param ownerId 接続ポイントの所有者ID
- * @param ownerShape 接続ポイントの所有者の形状（接続線の再描画時に利用、接続先側の所有者の形状は接続線コンポーネント内で取得する）
+ * @property id - ID of the moved connection point
+ * @property name - Name of the connection point
+ * @property x - Destination X coordinate
+ * @property y - Destination Y coordinate
+ * @property ownerId - ID of the owner of the connection point
+ * @property ownerShape - Shape of the owner (used for redrawing connections; the shape of the
+ *                       connection target's owner is retrieved within the connection line component)
  */
 export type ConnectPointMoveData = {
 	id: string;
@@ -136,10 +152,10 @@ export type ConnectPointMoveData = {
 };
 
 /**
- * 接続ポイント移動イベント
+ * Event fired when connection points are moved
  *
- * @param type イベントタイプ
- * @param points 移動した接続ポイントのデータ
+ * @property eventType - Type of the event
+ * @property points - Data of the moved connection points
  */
 export type ConnectPointsMoveEvent = {
 	eventId: string;
@@ -148,14 +164,14 @@ export type ConnectPointsMoveEvent = {
 };
 
 /**
- * 図形のテキスト編集イベント
+ * Event fired when text editing is initiated on a diagram
  */
 export type DiagramTextEditEvent = {
 	id: string;
 };
 
 /**
- * 図形のテキスト変更イベント
+ * Event fired when text content is changed on a diagram
  */
 export type DiagramTextChangeEvent = {
 	eventId: string;
@@ -196,6 +212,9 @@ export type NewDiagramEvent = {
 	isSelected?: boolean;
 };
 
+/**
+ * Event for creating a new diagram item with complete details
+ */
 export type NewItemEvent = {
 	eventId: string;
 	item: Diagram;
@@ -204,21 +223,33 @@ export type NewItemEvent = {
 	isSelected?: boolean;
 };
 
+/**
+ * Types of stack order changes for diagrams
+ */
 export type StackOrderChangeType =
-	| "bringToFront" // 最前面に移動
-	| "sendToBack" // 最背面に移動
-	| "bringForward" // 前面に移動（1つ前へ）
-	| "sendBackward"; // 背面に移動（1つ後ろへ）
+	| "bringToFront" // Move to the very front
+	| "sendToBack" // Move to the very back
+	| "bringForward" // Move one step forward
+	| "sendBackward"; // Move one step backward
 
+/**
+ * Event for changing the z-index (stack order) of a diagram
+ */
 export type StackOrderChangeEvent = {
 	id: string;
 	changeType: StackOrderChangeType;
 };
 
+/**
+ * Result data from an execution operation
+ */
 export type ExecuteResult = {
 	text: string;
 };
 
+/**
+ * Event fired when a diagram executes an operation
+ */
 export type ExecuteEvent = {
 	eventId: string;
 	eventType: EventType;
@@ -226,9 +257,15 @@ export type ExecuteEvent = {
 	data: ExecuteResult;
 };
 
+/**
+ * Constant for the execution propagation event name
+ */
 export const EXECUTION_PROPAGATION_EVENT_NAME =
 	"ExecutionPropagationEvent" as const;
 
+/**
+ * Event for propagating execution results between connected nodes
+ */
 export type ExecutionPropagationEvent = {
 	eventId: string;
 	eventType: EventType;
@@ -237,6 +274,9 @@ export type ExecutionPropagationEvent = {
 	data: ExecuteResult;
 };
 
+/**
+ * Event fired when connecting two nodes in a diagram
+ */
 export type ConnectNodesEvent = {
 	eventId: string;
 	sourceNodeId: string;

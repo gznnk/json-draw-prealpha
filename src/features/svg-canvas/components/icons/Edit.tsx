@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for Edit icon
+ */
 type EditProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type EditProps = {
 	title?: string;
 };
 
+/**
+ * Edit icon component
+ */
 export const Edit = memo<EditProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

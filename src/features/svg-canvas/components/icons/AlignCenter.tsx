@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for AlignCenter icon
+ */
 type AlignCenterProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type AlignCenterProps = {
 	title?: string;
 };
 
+/**
+ * Center alignment icon component
+ */
 export const AlignCenter = memo<AlignCenterProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

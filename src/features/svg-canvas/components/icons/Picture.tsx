@@ -1,12 +1,12 @@
-// Import React.
+// Import React
 import { memo } from "react";
 
-// Import Emotion for styling.
+// Import Emotion for styling
 import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
 
 /**
- * Animation for sunrise and sunset.
+ * Animation for sun rise and set
  */
 const riseAndSet = keyframes`
   0%   { transform: rotate(0deg); }
@@ -15,10 +15,10 @@ const riseAndSet = keyframes`
 `;
 
 /**
- * Styled component for the group of sun elements that animate.
+ * Styled component for sun animation group
  */
 const SunGroup = styled.g<{ $animate: boolean }>`
-    transform-origin: 32px 48px;  /* Pivot around the ridge line center */
+    transform-origin: 32px 48px;  /* Center at ridge line */
     transform-box: view-box;
     ${({ $animate }) =>
 			$animate &&
@@ -28,7 +28,7 @@ const SunGroup = styled.g<{ $animate: boolean }>`
 `;
 
 /**
- * Animation for the sky color change.
+ * Animation for sky color change
  */
 const skyColor = keyframes`
     0%   { fill: #ffffff; }
@@ -39,7 +39,7 @@ const skyColor = keyframes`
 `;
 
 /**
- * Styled component for the sky rectangle that animates.
+ * Styled component for sky animation
  */
 const Sky = styled.rect<{ $animate: boolean }>`
   ${({ $animate }) =>
@@ -50,7 +50,7 @@ const Sky = styled.rect<{ $animate: boolean }>`
 `;
 
 /**
- * Props for the Picture icon.
+ * Props for Picture icon
  */
 type PictureProps = {
 	width?: number;
@@ -59,7 +59,7 @@ type PictureProps = {
 };
 
 /**
- * Picture component that renders a picture icon with optional animation.
+ * Picture icon component
  */
 export const Picture = memo<PictureProps>(
 	({ width = 60, height = 60, animation = false }) => {

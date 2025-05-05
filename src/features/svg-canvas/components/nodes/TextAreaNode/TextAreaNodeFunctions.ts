@@ -16,7 +16,7 @@ export const createTextAreaNodeData = ({
 		stroke: "transparent",
 		strokeWidth: "1px",
 		fill: "#ffffff",
-		textType: "textarea",
+		textType: "markdown",
 		textAlign: "left",
 		verticalAlign: "top",
 		fontSize: 12,

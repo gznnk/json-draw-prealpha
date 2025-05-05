@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for AlignRight icon
+ */
 type AlignRightProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type AlignRightProps = {
 	title?: string;
 };
 
+/**
+ * Right alignment icon component
+ */
 export const AlignRight = memo<AlignRightProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

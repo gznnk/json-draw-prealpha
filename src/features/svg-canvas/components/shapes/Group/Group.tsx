@@ -366,6 +366,8 @@ const GroupComponent: React.FC<GroupProps> = ({
 					...e.endShape,
 					items,
 				},
+				cursorX: e.cursorX,
+				cursorY: e.cursorY,
 			});
 
 			setIsGroupTransforming(true);
@@ -455,6 +457,8 @@ const GroupComponent: React.FC<GroupProps> = ({
 				...e.endShape,
 				items: transformRecursive(startItems.current),
 			},
+			cursorX: e.cursorX,
+			cursorY: e.cursorY,
 		};
 
 		// グループ内の全ての図形の変形をまとめて通知

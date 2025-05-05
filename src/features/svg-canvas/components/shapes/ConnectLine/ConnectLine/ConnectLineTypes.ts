@@ -1,8 +1,8 @@
 // Import types related to SvgCanvas.
-import type { CreateDiagramType } from "../../../types/DiagramTypes";
+import type { CreateDiagramType } from "../../../../types/DiagramTypes";
 
 // Import components related to SvgCanvas.
-import type { ArrowHeadType } from "../../core/ArrowHead";
+import type { ArrowHeadType } from "../../../core/ArrowHead";
 
 /**
  * 接続線のデータ

@@ -1,8 +1,8 @@
-// Import React.
+// Import React
 import { memo } from "react";
 
 /**
- * Props for the Gachapon component.
+ * Props for Gachapon icon
  */
 type GachaponProps = {
 	width?: number;
@@ -10,7 +10,7 @@ type GachaponProps = {
 };
 
 /**
- * Gachapon component that renders a gachapon machine icon.
+ * Gachapon machine icon component
  */
 export const Gachapon = memo<GachaponProps>(({ width = 80, height = 80 }) => {
 	return (

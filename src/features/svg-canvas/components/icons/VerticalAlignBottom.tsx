@@ -1,5 +1,9 @@
+// Import React
 import { memo } from "react";
 
+/**
+ * Props for VerticalAlignBottom icon
+ */
 type VerticalAlignBottomProps = {
 	width?: number;
 	height?: number;
@@ -7,6 +11,9 @@ type VerticalAlignBottomProps = {
 	title?: string;
 };
 
+/**
+ * Vertical align bottom icon component
+ */
 export const VerticalAlignBottom = memo<VerticalAlignBottomProps>(
 	({ width = 24, height = 24, fill = "#333333", title }) => {
 		return (

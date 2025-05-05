@@ -27,6 +27,8 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 		onUngroup,
 		onExport,
 		onDelete,
+		onCopy,
+		onPaste,
 	} = canvasProps;
 
 	// State to manage the context menu position and visibility
@@ -44,6 +46,8 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 	const menuStateMap = {
 		Undo: historyIndex > 0 ? "Enable" : "Disable",
 		Redo: historyIndex < history.length - 1 ? "Enable" : "Disable",
+		Copy: isItemSelected ? "Enable" : "Disable",
+		Paste: "Enable", // ペースト機能は常に有効
 		SelectAll: items.length > 0 ? "Enable" : "Disable",
 		Group: multiSelectGroup ? "Enable" : "Disable",
 		Ungroup: isGroupSelected ? "Enable" : "Disable",
@@ -62,6 +66,12 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 					break;
 				case "Redo":
 					onRedo?.();
+					break;
+				case "Copy":
+					onCopy?.();
+					break;
+				case "Paste":
+					onPaste?.();
 					break;
 				case "SelectAll":
 					onSelectAll?.();
@@ -82,7 +92,17 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 			}
 			setContextMenuState({ x: 0, y: 0, isVisible: false });
 		},
-		[onUndo, onRedo, onSelectAll, onGroup, onUngroup, onExport, onDelete], // TODO: refBus使う
+		[
+			onUndo,
+			onRedo,
+			onCopy,
+			onPaste,
+			onSelectAll,
+			onGroup,
+			onUngroup,
+			onExport,
+			onDelete,
+		],
 	);
 
 	/**

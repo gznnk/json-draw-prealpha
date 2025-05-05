@@ -10,75 +10,125 @@ import type {
 	TransformativeData,
 	TextableData,
 	ItemableData,
+	FillableData,
+	StrokableData,
 } from "../types/DiagramTypes";
 
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isShape = (obj: any): obj is Shape => {
+export const isShape = (obj: unknown): obj is Shape => {
 	return (
-		obj &&
-		typeof obj.x === "number" &&
-		typeof obj.y === "number" &&
-		typeof obj.width === "number" &&
-		typeof obj.height === "number" &&
-		typeof obj.rotation === "number" &&
-		typeof obj.scaleX === "number" &&
-		typeof obj.scaleY === "number"
+		obj !== null &&
+		typeof obj === "object" &&
+		"x" in obj &&
+		"y" in obj &&
+		"width" in obj &&
+		"height" in obj &&
+		"rotation" in obj &&
+		"scaleX" in obj &&
+		"scaleY" in obj &&
+		typeof (obj as Shape).x === "number" &&
+		typeof (obj as Shape).y === "number" &&
+		typeof (obj as Shape).width === "number" &&
+		typeof (obj as Shape).height === "number" &&
+		typeof (obj as Shape).rotation === "number" &&
+		typeof (obj as Shape).scaleX === "number" &&
+		typeof (obj as Shape).scaleY === "number"
 	);
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isSelectableData = (obj: any): obj is SelectableData => {
-	return obj && typeof obj.isSelected === "boolean";
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isItemableData = (obj: any): obj is ItemableData => {
-	return obj && Array.isArray(obj.items);
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isConnectableData = (obj: any): obj is ConnectableData => {
-	return obj && Array.isArray(obj.connectPoints);
-};
-
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isTransformativeData = (obj: any): obj is TransformativeData => {
+export const isSelectableData = (obj: unknown): obj is SelectableData => {
 	return (
-		obj &&
-		typeof obj.x === "number" &&
-		typeof obj.y === "number" &&
-		typeof obj.width === "number" &&
-		typeof obj.height === "number" &&
-		typeof obj.rotation === "number" &&
-		typeof obj.scaleX === "number" &&
-		typeof obj.scaleY === "number" &&
-		typeof obj.keepProportion === "boolean"
+		obj !== null &&
+		typeof obj === "object" &&
+		"isSelected" in obj &&
+		"isMultiSelectSource" in obj &&
+		typeof (obj as SelectableData).isSelected === "boolean" &&
+		typeof (obj as SelectableData).isMultiSelectSource === "boolean"
 	);
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isTextableData = (obj: any): obj is TextableData => {
+export const isItemableData = (obj: unknown): obj is ItemableData => {
 	return (
-		obj &&
-		typeof obj.text === "string" &&
-		typeof obj.fontSize === "number" &&
-		typeof obj.fontColor === "string" &&
-		typeof obj.fontFamily === "string" &&
-		typeof obj.fontWeight === "string" &&
-		typeof obj.isTextEditing === "boolean"
+		obj !== null &&
+		typeof obj === "object" &&
+		"items" in obj &&
+		Array.isArray((obj as ItemableData).items)
 	);
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isStrokableData = (obj: any): obj is Shape => {
+export const isConnectableData = (obj: unknown): obj is ConnectableData => {
 	return (
-		obj && typeof obj.stroke === "string" && typeof obj.strokeWidth === "string"
+		obj !== null &&
+		typeof obj === "object" &&
+		"connectPoints" in obj &&
+		Array.isArray((obj as ConnectableData).connectPoints)
 	);
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: 型チェック関数のため
-export const isFillableData = (obj: any): obj is Shape => {
-	return obj && typeof obj.fill === "string";
+export const isTransformativeData = (
+	obj: unknown,
+): obj is TransformativeData => {
+	return (
+		obj !== null &&
+		typeof obj === "object" &&
+		"x" in obj &&
+		"y" in obj &&
+		"width" in obj &&
+		"height" in obj &&
+		"rotation" in obj &&
+		"scaleX" in obj &&
+		"scaleY" in obj &&
+		"keepProportion" in obj &&
+		typeof (obj as TransformativeData).x === "number" &&
+		typeof (obj as TransformativeData).y === "number" &&
+		typeof (obj as TransformativeData).width === "number" &&
+		typeof (obj as TransformativeData).height === "number" &&
+		typeof (obj as TransformativeData).rotation === "number" &&
+		typeof (obj as TransformativeData).scaleX === "number" &&
+		typeof (obj as TransformativeData).scaleY === "number" &&
+		typeof (obj as TransformativeData).keepProportion === "boolean"
+	);
+};
+
+export const isTextableData = (obj: unknown): obj is TextableData => {
+	return (
+		obj !== null &&
+		typeof obj === "object" &&
+		"text" in obj &&
+		"textType" in obj &&
+		"textAlign" in obj &&
+		"verticalAlign" in obj &&
+		"fontColor" in obj &&
+		"fontSize" in obj &&
+		"fontFamily" in obj &&
+		"fontWeight" in obj &&
+		"isTextEditing" in obj &&
+		typeof (obj as TextableData).text === "string" &&
+		typeof (obj as TextableData).fontColor === "string" &&
+		typeof (obj as TextableData).fontSize === "number" &&
+		typeof (obj as TextableData).fontFamily === "string" &&
+		typeof (obj as TextableData).fontWeight === "string" &&
+		typeof (obj as TextableData).isTextEditing === "boolean"
+	);
+};
+
+export const isStrokableData = (obj: unknown): obj is StrokableData => {
+	return (
+		obj !== null &&
+		typeof obj === "object" &&
+		"stroke" in obj &&
+		"strokeWidth" in obj &&
+		typeof (obj as StrokableData).stroke === "string" &&
+		typeof (obj as StrokableData).strokeWidth === "string"
+	);
+};
+
+export const isFillableData = (obj: unknown): obj is FillableData => {
+	return (
+		obj !== null &&
+		typeof obj === "object" &&
+		"fill" in obj &&
+		typeof (obj as FillableData).fill === "string"
+	);
 };
 
 export const isExportable = (obj: unknown): boolean => {

@@ -1,6 +1,8 @@
-export { ConnectPoint } from "./ConnectPoint";
 export {
+	ConnectPoint,
 	createBestConnectPath,
 	getLineDirection,
-} from "./ConnectPointFunctions";
-export type { ConnectPointData, Direction } from "./ConnectPointTypes";
+	type ConnectPointData,
+	type Direction,
+} from "./ConnectPoint";
+export { NewConnectLine } from "./NewConnectLine";

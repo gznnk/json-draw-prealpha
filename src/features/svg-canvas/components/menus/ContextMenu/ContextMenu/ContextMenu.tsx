@@ -44,6 +44,13 @@ const ContextMenuComponent: React.FC<ContextMenuProps> = ({
 				やり直し
 			</ContextMenuItem>
 			<ContextMenuDivider />
+			<ContextMenuItem menuType="Copy" {...menuItemProps}>
+				コピー
+			</ContextMenuItem>
+			<ContextMenuItem menuType="Paste" {...menuItemProps}>
+				ペースト
+			</ContextMenuItem>
+			<ContextMenuDivider />
 			<ContextMenuItem menuType="SelectAll" {...menuItemProps}>
 				すべて選択
 			</ContextMenuItem>
