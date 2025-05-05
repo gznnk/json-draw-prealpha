@@ -1,4 +1,8 @@
-import { SvgCanvas, useSvgCanvas } from "./features/svg-canvas";
+import {
+	SvgCanvas,
+	useSvgCanvas,
+	type SvgCanvasRef,
+} from "./features/svg-canvas";
 // import Input from "./components/atoms/Input";
 import type { Diagram } from "./features/svg-canvas/types/DiagramCatalog";
 import { createRectangleData } from "./features/svg-canvas/components/shapes/Rectangle";
@@ -8,6 +12,7 @@ import { createEllipseData } from "./features/svg-canvas/components/shapes/Ellip
 import { Profiler } from "./utils/Profiler";
 
 import { loadCanvasDataFromLocalStorage } from "./features/svg-canvas/canvas/SvgCanvasFunctions";
+import { useRef } from "react";
 // const logger = getLogger("App");
 declare global {
 	interface Window {
@@ -467,6 +472,8 @@ const devData = {
 function App() {
 	const loadedCanvasState = loadCanvasDataFromLocalStorage();
 
+	const canvasRef = useRef<SvgCanvasRef | null>(null);
+
 	const canvasInitialState = {
 		minX: 0,
 		minY: 0,
@@ -475,6 +482,7 @@ function App() {
 		items: devData.item4,
 		scrollLeft: 0,
 		scrollTop: 0,
+		canvasRef,
 	};
 
 	if (loadedCanvasState) {
@@ -507,7 +515,7 @@ function App() {
 					backgroundColor: "#eeeeee",
 				}}
 			>
-				<SvgCanvas {...canvasProps} />
+				<SvgCanvas {...canvasProps} ref={canvasRef} />
 			</div>
 		</div>
 	);

@@ -1,5 +1,5 @@
 // Import React.
-import { useRef, useState } from "react";
+import { useState, type RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { Diagram } from "../types/DiagramCatalog";
@@ -14,7 +14,6 @@ import type { SvgCanvasState, SvgCanvasRef } from "./SvgCanvasTypes";
 
 // Import canvas custom hooks.
 import { useAddItem } from "./hooks/useAddItem";
-import { useCanvasResize } from "./hooks/useCanvasResize";
 import { useClearAllSelection } from "./hooks/useClearAllSelection";
 import { useConnect } from "./hooks/useConnect";
 import { useCopy } from "./hooks/useCopy";
@@ -50,6 +49,7 @@ type SvgCanvasHooksProps = {
 	items: Diagram[];
 	scrollLeft: number;
 	scrollTop: number;
+	canvasRef: RefObject<SvgCanvasRef | null>;
 };
 
 /**
@@ -69,9 +69,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	if (props.items.length > 0) {
 		initialBounds = calcOptimalCanvasSize(props.items);
 	}
-
-	// Create ref to store canvas DOM references forwarded from SvgCanvas component
-	const canvasRefObject = useRef<SvgCanvasRef | null>(null);
 
 	// The state of the canvas.
 	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
@@ -95,7 +92,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const canvasHooksProps = {
 		canvasState,
 		setCanvasState,
-		canvasRef: canvasRefObject.current,
+		canvasRef: props.canvasRef.current,
 	};
 
 	// Handler for the drag event.
@@ -140,9 +137,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the redo event.
 	const onRedo = useRedo(canvasHooksProps);
 
-	// Handler for the canvas resize event.
-	const onCanvasResize = useCanvasResize(canvasHooksProps);
-
 	// Handler for the stack order change event.
 	const onStackOrderChange = useStackOrderChange(canvasHooksProps);
 
@@ -174,14 +168,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	const addItem = useAddItem(canvasHooksProps);
 
-	// Need to modify onCanvasResize to be compatible with expected SvgCanvasProps
-	const compatibleOnCanvasResize =
-		onCanvasResize &&
-		typeof onCanvasResize === "object" &&
-		"processCanvasResize" in onCanvasResize
-			? onCanvasResize.processCanvasResize
-			: onCanvasResize;
-
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -198,7 +184,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onUngroup,
 		onUndo,
 		onRedo,
-		onCanvasResize: compatibleOnCanvasResize,
 		onNewDiagram,
 		onNewItem,
 		onStackOrderChange,
@@ -220,13 +205,5 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		state: [canvasState, setCanvasState] as const,
 		canvasProps,
 		canvasFunctions,
-		// Function to get the ref from the SvgCanvas component
-		setCanvasRef: (ref: SvgCanvasRef) => {
-			canvasRefObject.current = ref;
-		},
-		// The ref object itself in case direct access is needed
-		canvasRefObject,
-		// Expose the original canvas resize hook result for direct access
-		canvasResize: onCanvasResize,
 	};
 };

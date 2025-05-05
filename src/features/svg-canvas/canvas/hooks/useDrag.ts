@@ -5,6 +5,9 @@ import { useCallback, useRef } from "react";
 import type { DiagramDragEvent } from "../../types/EventTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
+// Import hooks related to SvgCanvas.
+import { useCanvasResize } from "./useCanvasResize";
+
 // Import functions related to SvgCanvas.
 import {
 	addHistory,
@@ -19,16 +22,23 @@ import {
  * Custom hook to handle drag events on the canvas.
  */
 export const useDrag = (props: CanvasHooksProps) => {
+	// Get the canvas resize function to handle canvas resizing.
+	const canvasResize = useCanvasResize(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		canvasResize,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	return useCallback((e: DiagramDragEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
+		const {
+			props: { setCanvasState },
+			canvasResize,
+		} = refBus.current;
 
 		setCanvasState((prevState) => {
 			let newState = {
@@ -65,6 +75,12 @@ export const useDrag = (props: CanvasHooksProps) => {
 			}
 
 			return newState;
+		});
+
+		// Resize the canvas if the cursor is near the edges.
+		canvasResize({
+			cursorX: e.cursorX ?? e.endX,
+			cursorY: e.cursorY ?? e.endY,
 		});
 	}, []);
 };

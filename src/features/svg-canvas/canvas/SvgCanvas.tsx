@@ -11,18 +11,14 @@ import React, {
 
 // SvgCanvas関連型定義をインポート
 import { type Diagram, DiagramComponentCatalog } from "../types/DiagramCatalog";
-import type {
-	DiagramChangeEvent,
-	DiagramDragEvent,
-	DiagramSelectEvent,
-} from "../types/EventTypes";
+import type { DiagramSelectEvent } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
-import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { TextEditor } from "../components/core/Textable";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
 import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
+import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { NewConnectLine } from "../components/shapes/ConnectPoint";
 import { Group } from "../components/shapes/Group";
 
@@ -31,10 +27,8 @@ import { newEventId } from "../utils/Util";
 
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";
-import { canvasResize as canvasResizeUtil } from "./utils/canvasResize";
 
 // Imports related to this component.
-import type { Point } from "../types/CoordinateTypes";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import {
 	Container,
@@ -45,8 +39,8 @@ import {
 } from "./SvgCanvasStyled";
 import type {
 	SvgCanvasProps,
-	SvgCanvasState,
 	SvgCanvasRef,
+	SvgCanvasState,
 } from "./SvgCanvasTypes";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
@@ -87,7 +81,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onConnect,
 			onUndo,
 			onRedo,
-			onCanvasResize,
 			onTextEdit,
 			onTextChange,
 			onNewDiagram,
@@ -137,49 +130,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		const { diagramMenuProps } = useDiagramMenu(props);
 
 		// Create references bypass to avoid function creation in every render.
-		const refBusValForCanvasResize = {
-			onCanvasResize,
-			minX,
-			minY,
-			width,
-			height,
-		};
-		const refBusForCanvasResize = useRef(refBusValForCanvasResize);
-		refBusForCanvasResize.current = refBusValForCanvasResize;
-
-		/**
-		 * Resize the canvas when the pointer is moved to the edges of the canvas.
-		 * Uses SVG coordinates to determine when to expand the canvas based on cursor position.
-		 *
-		 * @param p - The point to check (shape position)
-		 * @param cursorX - Optional explicit cursor X position in SVG coordinates
-		 * @param cursorY - Optional explicit cursor Y position in SVG coordinates
-		 */
-		const canvasResize = useCallback(
-			(p: Point, cursorX?: number, cursorY?: number) => {
-				// Get current values from refs to avoid stale closures
-				const { onCanvasResize, minX, minY, width, height } =
-					refBusForCanvasResize.current;
-
-				// Use the extracted canvasResize utility function
-				canvasResizeUtil(
-					p,
-					{
-						minX,
-						minY,
-						width,
-						height,
-						canvasRef: { containerRef, svgRef },
-						onCanvasResize,
-					},
-					cursorX,
-					cursorY,
-				);
-			},
-			[],
-		);
-
-		// Create references bypass to avoid function creation in every render.
 		const refBusVal = {
 			// Component properties
 			scrollLeft,
@@ -198,7 +148,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onPaste,
 			// Internal variables and functions
 			contextMenuFunctions,
-			canvasResize,
 		};
 		const refBus = useRef(refBusVal);
 		refBus.current = refBusVal;
@@ -234,52 +183,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			},
 			[],
 		);
-
-		/**
-		 * Handle the drag event to resize the canvas.
-		 */
-		const handleDrag = useCallback((e: DiagramDragEvent) => {
-			// Bypass references to avoid function creation in every render.
-			const { canvasResize, onDrag } = refBus.current;
-
-			// Pass both shape position and cursor position to canvasResize
-			canvasResize(
-				{ x: e.endX, y: e.endY },
-				e.cursorX, // New property for cursor X position
-				e.cursorY, // New property for cursor Y position
-			);
-
-			onDrag?.(e);
-		}, []);
-
-		/**
-		 * Handle the diagram change event to resize the canvas.
-		 */
-		const handleDiagramChange = useCallback((e: DiagramChangeEvent) => {
-			// Bypass references to avoid function creation in every render.
-			const { canvasResize, onDiagramChange } = refBus.current;
-
-			if (e.changeType === "Drag" && e.endDiagram.x && e.endDiagram.y) {
-				canvasResize(
-					{ x: e.endDiagram.x, y: e.endDiagram.y },
-					e.cursorX,
-					e.cursorY,
-				);
-			} else if (
-				e.changeType === "Transform" &&
-				e.endDiagram.x &&
-				e.endDiagram.y
-			) {
-				// Also check for transform events to handle resize operations
-				canvasResize(
-					{ x: e.endDiagram.x, y: e.endDiagram.y },
-					e.cursorX,
-					e.cursorY,
-				);
-			}
-
-			onDiagramChange?.(e);
-		}, []);
 
 		/**
 		 * 図形選択イベントハンドラ
@@ -396,8 +299,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				...item,
 				key: item.id,
 				onTransform,
-				onDiagramChange: handleDiagramChange,
-				onDrag: handleDrag,
+				onDiagramChange,
+				onDrag,
 				onDrop,
 				onSelect: handleSelect,
 				onConnect,
