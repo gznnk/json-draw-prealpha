@@ -524,7 +524,7 @@ function App() {
 		<div className="App">
 			<div
 				style={{
-					position: "absolute",
+					position: "fixed",
 					top: 0,
 					left: 0,
 					right: "33.33%",
@@ -540,7 +540,7 @@ function App() {
 			{/* チャットエリア (1/3) */}
 			<div
 				style={{
-					position: "absolute",
+					position: "fixed",
 					top: 0,
 					left: "66.67%",
 					right: 0,
@@ -549,7 +549,11 @@ function App() {
 					boxSizing: "border-box",
 				}}
 			>
-				<ChatUI {...chatConfig} onApiKeyChange={handleSaveApiKey} />
+				<ChatUI
+					{...chatConfig}
+					apiKey={apiKey || undefined}
+					onApiKeyChange={handleSaveApiKey}
+				/>
 			</div>
 		</div>
 	);

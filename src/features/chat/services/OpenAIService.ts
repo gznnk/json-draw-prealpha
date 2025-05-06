@@ -18,7 +18,7 @@ export class OpenAIService {
 	constructor(apiKey: string, config: OpenAIConfig) {
 		this.client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 		this.config = {
-			model: config.model || "gpt-3.5-turbo",
+			model: config.model || "gpt-4o",
 			temperature: config.temperature ?? 0.7,
 			maxTokens: config.maxTokens,
 		};
@@ -40,11 +40,12 @@ export class OpenAIService {
 		}
 
 		try {
-			const stream = await this.client.chat.completions.create({
+			const stream = await this.client.responses.create({
 				model: this.config.model,
 				temperature: this.config.temperature,
-				max_tokens: this.config.maxTokens,
-				messages: messages.map((msg) => ({
+				instructions:
+					"You are a assistant on chat window. When output Latex, do not use code block.",
+				input: messages.map((msg) => ({
 					role: msg.role,
 					content: msg.content,
 				})),
@@ -52,9 +53,12 @@ export class OpenAIService {
 			});
 
 			for await (const chunk of stream) {
-				const content = chunk.choices[0]?.delta?.content || "";
-				if (content) {
-					onChunk(content);
+				if (chunk.type === "response.output_text.delta") {
+					const delta = chunk.delta;
+
+					if (delta) {
+						onChunk(delta);
+					}
 				}
 			}
 		} catch (error) {

@@ -16,12 +16,12 @@ export const UserMessageContainer = styled.div`
  * Styled container for assistant messages
  */
 export const AssistantMessageContainer = styled.div`
-  background-color: #f8f8f8;
+  /* background-color: #f8f8f8; */
   padding: 12px 18px;
   border-radius: 8px;
   margin: 8px 0;
   align-self: flex-start;
-  max-width: 80%;
+  /* max-width: 80%; */
 `;
 
 /**

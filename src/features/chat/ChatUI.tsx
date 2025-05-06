@@ -136,6 +136,10 @@ export const ChatUI = React.memo(
 								};
 								return updated;
 							});
+
+							if (messagesEndRef.current) {
+								messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+							}
 						},
 					);
 				} catch (error) {
