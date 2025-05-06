@@ -13,10 +13,6 @@ export interface ChatUIProps {
 	apiKey?: string;
 	/** Configuration for OpenAI API requests */
 	openAIConfig?: OpenAIConfig;
-	/** Optional callback when messages change */
-	onMessagesChange?: (messages: Message[]) => void;
 	/** Optional initial messages to populate the chat */
 	initialMessages?: Message[];
-	/** Callback for when the send button is clicked */
-	onSendMessage?: (message: string) => void;
 }

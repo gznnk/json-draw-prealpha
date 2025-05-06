@@ -31,15 +31,22 @@ export const MessageContent = styled.div`
     padding: 0;
     border-radius: 4px;
     overflow-x: auto;
+
+    & > code {
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      margin: 0;
+    }
   }
 
   code {
     font-family: "Courier New", monospace;
     font-size: 0.9em;
-    background-color: #f9f9f9;
+    background-color: #ececec;
     padding: 2px 4px;
-    border-radius: 6px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    margin: 0 0.2em;
   }
 
   p {

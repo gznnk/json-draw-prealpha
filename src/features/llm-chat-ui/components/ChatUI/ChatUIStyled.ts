@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
 
 /**
  * Container for the entire chat interface
@@ -83,43 +82,5 @@ export const SendButton = styled.button<{ isDisabled: boolean }>`
   svg {
     width: 18px;
     height: 18px;
-  }
-`;
-
-/**
- * Loading indicator animation
- */
-export const loadingAnimation = css`
-  @keyframes pulse {
-    0% {
-      opacity: 0.6;
-    }
-    50% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0.6;
-    }
-  }
-`;
-
-/**
- * Loading indicator component
- */
-export const LoadingIndicator = styled.div`
-  ${loadingAnimation}
-  display: flex;
-  align-items: center;
-  padding: 12px 18px;
-  border-radius: 8px;
-  margin: 8px 0;
-  align-self: flex-start;
-  font-style: italic;
-  color: #666;
-  animation: pulse 1.5s infinite;
-
-  &::after {
-    content: "...";
-    font-weight: bold;
   }
 `;
