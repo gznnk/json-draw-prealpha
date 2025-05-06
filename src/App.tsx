@@ -514,12 +514,6 @@ function App() {
 		inputPlaceholder: "質問を入力してください...",
 	};
 
-	// Handle saving new API key
-	const handleSaveApiKey = (newKey: string) => {
-		OpenAiKeyManager.saveKey(newKey);
-		setApiKey(newKey);
-	};
-
 	return (
 		<div className="App">
 			<div
@@ -549,11 +543,7 @@ function App() {
 					boxSizing: "border-box",
 				}}
 			>
-				<ChatUI
-					{...chatConfig}
-					apiKey={apiKey || undefined}
-					onApiKeyChange={handleSaveApiKey}
-				/>
+				<ChatUI {...chatConfig} apiKey={apiKey || undefined} />
 			</div>
 		</div>
 	);

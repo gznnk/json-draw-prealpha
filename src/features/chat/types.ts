@@ -20,8 +20,6 @@ export interface OpenAIConfig {
 	model: string;
 	/** Controls randomness: 0 = deterministic, 1 = maximum randomness */
 	temperature?: number;
-	/** Maximum number of tokens to generate in the response */
-	maxTokens?: number;
 }
 
 /**
@@ -47,6 +45,4 @@ export interface ChatUIProps {
 	isLoading?: boolean;
 	/** Callback for when the send button is clicked */
 	onSendMessage?: (message: string) => void;
-	/** Callback for when the API key is changed */
-	onApiKeyChange?: (apiKey: string) => void;
 }

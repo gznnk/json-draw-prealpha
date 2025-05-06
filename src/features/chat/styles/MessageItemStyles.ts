@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
  * Styled container for user messages
  */
 export const UserMessageContainer = styled.div`
-  background-color: #e9f5ff;
+  background-color: #f4f4f4;
   padding: 12px 18px;
   border-radius: 8px;
   margin: 8px 0;
@@ -16,12 +16,10 @@ export const UserMessageContainer = styled.div`
  * Styled container for assistant messages
  */
 export const AssistantMessageContainer = styled.div`
-  /* background-color: #f8f8f8; */
-  padding: 12px 18px;
-  border-radius: 8px;
   margin: 8px 0;
   align-self: flex-start;
-  /* max-width: 80%; */
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 /**
@@ -29,8 +27,8 @@ export const AssistantMessageContainer = styled.div`
  */
 export const MessageContent = styled.div`
   pre {
-    background-color: #f0f0f0;
-    padding: 8px;
+    background-color: #f9f9f9;
+    padding: 0;
     border-radius: 4px;
     overflow-x: auto;
   }
@@ -38,9 +36,10 @@ export const MessageContent = styled.div`
   code {
     font-family: "Courier New", monospace;
     font-size: 0.9em;
-    background-color: #f0f0f0;
+    background-color: #f9f9f9;
     padding: 2px 4px;
-    border-radius: 3px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
   }
 
   p {
@@ -62,5 +61,7 @@ export const MessageContent = styled.div`
   .math-block {
     overflow-x: auto;
     margin: 1em 0;
+    padding: 0 1em;
+    box-sizing: border-box;
   }
 `;

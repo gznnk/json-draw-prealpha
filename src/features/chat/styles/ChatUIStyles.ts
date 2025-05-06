@@ -7,50 +7,11 @@ import { css } from "@emotion/react";
 export const ChatContainer = styled.div<{ width?: string; height?: string }>`
   display: flex;
   flex-direction: column;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
   overflow: hidden;
   width: ${({ width }) => width || "600px"};
   height: ${({ height }) => height || "500px"};
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-/**
- * Header area for the chat
- */
-export const ChatHeader = styled.div`
-  padding: 12px 16px;
-  border-bottom: 1px solid #e1e1e1;
-  background-color: #f7f7f7;
-  display: flex;
-  align-items: center;
-`;
-
-/**
- * Avatar for the AI assistant
- */
-export const AssistantAvatar = styled.div`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: #10a37f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-`;
-
-/**
- * Title for the chat header
- */
-export const HeaderTitle = styled.h3`
-  margin: 0;
-  font-size: 16px;
-  color: #333;
 `;
 
 /**
@@ -161,70 +122,4 @@ export const LoadingIndicator = styled.div`
     content: "...";
     font-weight: bold;
   }
-`;
-
-/**
- * API Key form container
- */
-export const ApiKeyFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-  height: 100%;
-`;
-
-/**
- * Form title
- */
-export const FormTitle = styled.h2`
-  margin-bottom: 16px;
-  color: #333;
-`;
-
-/**
- * Input field for API key
- */
-export const ApiKeyInput = styled.input`
-  width: 100%;
-  max-width: 400px;
-  padding: 10px 14px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 16px;
-
-  &:focus {
-    border-color: #10a37f;
-    outline: none;
-  }
-`;
-
-/**
- * Submit button for API key form
- */
-export const SubmitButton = styled.button`
-  background-color: #10a37f;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #0d8c6d;
-  }
-`;
-
-/**
- * Form description text
- */
-export const FormDescription = styled.p`
-  color: #666;
-  max-width: 400px;
-  text-align: center;
-  margin-bottom: 24px;
 `;

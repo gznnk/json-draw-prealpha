@@ -20,7 +20,6 @@ export class OpenAIService {
 		this.config = {
 			model: config.model || "gpt-4o",
 			temperature: config.temperature ?? 0.7,
-			maxTokens: config.maxTokens,
 		};
 	}
 
@@ -44,7 +43,7 @@ export class OpenAIService {
 				model: this.config.model,
 				temperature: this.config.temperature,
 				instructions:
-					"You are a assistant on chat window. When output Latex, do not use code block.",
+					"You are a general-purpose assistant that outputs responses in Markdown format. When including LaTeX expressions, do not use code blocks (e.g., triple backticks or indentation). Instead, use inline LaTeX syntax like $...$ for inline math and $$...$$ for block math.",
 				input: messages.map((msg) => ({
 					role: msg.role,
 					content: msg.content,

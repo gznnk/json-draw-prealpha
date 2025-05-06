@@ -4,19 +4,11 @@ import { MessageItem } from "./components/MessageItem";
 import type { Message, ChatUIProps } from "./types";
 import {
 	ChatContainer,
-	ChatHeader,
-	AssistantAvatar,
-	HeaderTitle,
 	MessagesContainer,
 	InputContainer,
 	MessageInput,
 	SendButton,
 	LoadingIndicator,
-	ApiKeyFormContainer,
-	FormTitle,
-	ApiKeyInput,
-	SubmitButton,
-	FormDescription,
 } from "./styles/ChatUIStyles";
 
 /**
@@ -42,7 +34,6 @@ export const ChatUI = React.memo(
 		onMessagesChange,
 		isLoading: externalIsLoading,
 		onSendMessage,
-		onApiKeyChange,
 	}: ChatUIProps) => {
 		// State for managing messages and UI state
 		const [messages, setMessages] = useState<Message[]>(initialMessages);
@@ -51,7 +42,6 @@ export const ChatUI = React.memo(
 		const [openAIService, setOpenAIService] = useState<OpenAIService | null>(
 			null,
 		);
-		const [apiKeyInput, setApiKeyInput] = useState("");
 
 		// References for DOM elements
 		const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -168,15 +158,6 @@ export const ChatUI = React.memo(
 		]);
 
 		/**
-		 * Handles the submission of API key
-		 */
-		const handleApiKeySubmit = useCallback(() => {
-			if (apiKeyInput.trim() && onApiKeyChange) {
-				onApiKeyChange(apiKeyInput.trim());
-			}
-		}, [apiKeyInput, onApiKeyChange]);
-
-		/**
 		 * Handles keyboard events in the textarea.
 		 * Submits on Ctrl+Enter or Cmd+Enter.
 		 */
@@ -188,19 +169,6 @@ export const ChatUI = React.memo(
 				}
 			},
 			[handleSendMessage],
-		);
-
-		/**
-		 * Handle API key input keydown for Enter key
-		 */
-		const handleApiKeyInputKeyDown = useCallback(
-			(e: React.KeyboardEvent) => {
-				if (e.key === "Enter") {
-					e.preventDefault();
-					handleApiKeySubmit();
-				}
-			},
-			[handleApiKeySubmit],
 		);
 
 		/**
@@ -224,43 +192,8 @@ export const ChatUI = React.memo(
 			[adjustTextareaHeight],
 		);
 
-		// Render API key form if API key is not provided
-		if (!apiKey) {
-			return (
-				<ChatContainer width={width} height={height}>
-					<ChatHeader>
-						<AssistantAvatar>AI</AssistantAvatar>
-						<HeaderTitle>AI Assistant</HeaderTitle>
-					</ChatHeader>
-
-					<ApiKeyFormContainer>
-						<FormTitle>OpenAI API設定</FormTitle>
-						<FormDescription>
-							チャット機能を使用するには、OpenAI
-							APIキーを入力してください。APIキーはブラウザのローカルストレージに保存され、サーバーには送信されません。
-						</FormDescription>
-						<ApiKeyInput
-							type="password"
-							placeholder="OpenAI APIキーを入力"
-							value={apiKeyInput}
-							onChange={(e) => setApiKeyInput(e.target.value)}
-							onKeyDown={handleApiKeyInputKeyDown}
-						/>
-						<SubmitButton onClick={handleApiKeySubmit}>
-							保存して続行
-						</SubmitButton>
-					</ApiKeyFormContainer>
-				</ChatContainer>
-			);
-		}
-
 		return (
 			<ChatContainer width={width} height={height}>
-				<ChatHeader>
-					<AssistantAvatar>AI</AssistantAvatar>
-					<HeaderTitle>AI Assistant</HeaderTitle>
-				</ChatHeader>
-
 				<MessagesContainer>
 					{messages.map((message, index) => (
 						<MessageItem
