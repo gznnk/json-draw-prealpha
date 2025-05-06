@@ -54,10 +54,7 @@ export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
 const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 	(props, ref) => {
 		// In the SvgCanvas render function,
-		// we handle DOM events related to the SvgCanvas elements,
-		// process tasks that require element references,
-		// directly manipulate the DOM when needed,
-		// and pass the events to the hooks.
+		// we handle DOM events related to the SvgCanvas elements.
 
 		const {
 			title,
@@ -105,10 +102,11 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// Ctrlキーが押されているかどうかのフラグ
 		const isCtrlDown = useRef(false);
+		// SVG要素にフォーカスがあるかどうかのフラグ
+		const hasFocus = useRef(false);
 
 		// SvgCanvasStateProviderのインスタンスを生成
 		// 現時点ではシングルトン的に扱うため、useRefで保持し、以降再作成しない
-		// TODO: レンダリングの負荷が高くなければ、都度インスタンスを更新して再レンダリングさせたい
 		const stateProvider = useRef(
 			new SvgCanvasStateProvider({} as SvgCanvasState),
 		);
@@ -131,9 +129,9 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// Create references bypass to avoid function creation in every render.
 		const refBusVal = {
-			// Component properties
 			scrollLeft,
 			scrollTop,
+			hasFocus,
 			textEditorState,
 			onDrag,
 			onDiagramChange,
@@ -146,11 +144,24 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onScroll,
 			onCopy,
 			onPaste,
-			// Internal variables and functions
 			contextMenuFunctions,
 		};
 		const refBus = useRef(refBusVal);
 		refBus.current = refBusVal;
+
+		/**
+		 * SVG要素のフォーカスイベントハンドラ
+		 */
+		const handleFocus = useCallback(() => {
+			hasFocus.current = true;
+		}, []);
+
+		/**
+		 * SVG要素のブラーイベントハンドラ
+		 */
+		const handleBlur = useCallback(() => {
+			hasFocus.current = false;
+		}, []);
 
 		/**
 		 * Handle the pointer down event on the SVG canvas.
@@ -204,6 +215,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			const onDocumentKeyDown = (e: KeyboardEvent) => {
 				// Bypass references to avoid function creation in every render.
 				const {
+					hasFocus,
 					textEditorState,
 					onDelete,
 					onSelectAll,
@@ -217,6 +229,12 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				if (e.key === "Control") {
 					isCtrlDown.current = true;
 				}
+
+				// SVG要素にフォーカスがない場合は、以降の処理をスキップ
+				if (!hasFocus.current && !textEditorState.isActive) {
+					return;
+				}
+
 				if (e.key === "Escape") {
 					// Clear selection when Escape key is pressed.
 					onClearAllSelection?.();
@@ -325,6 +343,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							ref={svgRef}
 							onPointerDown={handlePointerDown}
 							onKeyDown={handleKeyDown}
+							onFocus={handleFocus}
+							onBlur={handleBlur}
 							onContextMenu={contextMenuHandlers.onContextMenu}
 						>
 							<title>{title}</title>
