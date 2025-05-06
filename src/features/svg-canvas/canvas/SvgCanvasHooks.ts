@@ -13,7 +13,6 @@ import { calcOptimalCanvasSize } from "./SvgCanvasFunctions";
 import type { SvgCanvasState, SvgCanvasRef } from "./SvgCanvasTypes";
 
 // Import canvas custom hooks.
-import { useAddItem } from "./hooks/useAddItem";
 import { useClearAllSelection } from "./hooks/useClearAllSelection";
 import { useConnect } from "./hooks/useConnect";
 import { useCopy } from "./hooks/useCopy";
@@ -164,10 +163,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the paste event.
 	const onPaste = usePaste(canvasHooksProps);
 
-	// --- Functions for accessing the canvas state and modifying the canvas. --- //
-
-	const addItem = useAddItem(canvasHooksProps);
-
 	const canvasProps = {
 		...canvasState,
 		onDrag,
@@ -195,15 +190,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onPaste,
 	};
 
-	// --- Functions for accessing the canvas state and modifying the canvas. --- //
-
-	const canvasFunctions = {
-		addItem,
-	};
-
 	return {
 		state: [canvasState, setCanvasState] as const,
 		canvasProps,
-		canvasFunctions,
 	};
 };

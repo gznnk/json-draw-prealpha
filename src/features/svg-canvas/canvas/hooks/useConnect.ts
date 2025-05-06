@@ -11,51 +11,54 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 import { newId } from "../../utils/Diagram";
 import { calcPointsOuterShape } from "../../utils/Math";
 
-// Imports related to this component.
-import { useAddItem } from "./useAddItem";
+// Import hooks related to SvgCanvas.
+import { useNewItem } from "./useNewItem";
 
 /**
  * Custom hook to handle connect events on the canvas.
  */
 export const useConnect = (props: CanvasHooksProps) => {
 	// Get the function to add items to the canvas.
-	const addItem = useAddItem(props);
+	const onNewItem = useNewItem(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
-		addItem,
+		onNewItem,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	return useCallback((e: DiagramConnectEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { addItem } = refBus.current;
+		const { onNewItem } = refBus.current;
 
 		const shape = calcPointsOuterShape(
 			e.points.map((p) => ({ x: p.x, y: p.y })),
 		);
 
-		addItem({
-			id: newId(),
-			type: "ConnectLine",
-			x: shape.x,
-			y: shape.y,
-			width: shape.width,
-			height: shape.height,
-			stroke: "#fed579",
-			strokeWidth: "3px",
-			isSelected: false,
-			isMultiSelectSource: false,
-			keepProportion: false,
-			items: e.points.map((p) => ({
-				...p,
-				type: "PathPoint",
-			})) as PathPointData[],
-			startOwnerId: e.startOwnerId,
-			endOwnerId: e.endOwnerId,
-			autoRouting: true,
-			endArrowHead: "Circle",
-		} as ConnectLineData);
+		onNewItem({
+			eventId: e.eventId,
+			item: {
+				id: newId(),
+				type: "ConnectLine",
+				x: shape.x,
+				y: shape.y,
+				width: shape.width,
+				height: shape.height,
+				stroke: "#fed579",
+				strokeWidth: "3px",
+				isSelected: false,
+				isMultiSelectSource: false,
+				keepProportion: false,
+				items: e.points.map((p) => ({
+					...p,
+					type: "PathPoint",
+				})) as PathPointData[],
+				startOwnerId: e.startOwnerId,
+				endOwnerId: e.endOwnerId,
+				autoRouting: true,
+				endArrowHead: "Circle",
+			} as ConnectLineData,
+		});
 	}, []);
 };

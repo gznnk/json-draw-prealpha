@@ -206,6 +206,7 @@ export type SvgCanvasResizeEvent = {
  * Event type for new diagram creation.
  */
 export type NewDiagramEvent = {
+	eventId: string;
 	diagramType: DiagramType;
 	x?: number;
 	y?: number;
@@ -218,9 +219,6 @@ export type NewDiagramEvent = {
 export type NewItemEvent = {
 	eventId: string;
 	item: Diagram;
-	x?: number;
-	y?: number;
-	isSelected?: boolean;
 };
 
 /**

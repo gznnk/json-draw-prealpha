@@ -14,28 +14,30 @@ import { createBestConnectPath } from "../../components/shapes/ConnectPoint";
 import { newId } from "../../utils/Diagram";
 import { calcPointsOuterShape } from "../../utils/Math";
 
+// Import hooks related to SvgCanvas.
+import { useNewItem } from "./useNewItem";
+
 // Imports related to this component.
 import { getDiagramById } from "../SvgCanvasFunctions";
-import { useAddItem } from "./useAddItem";
 
 /**
  * Custom hook to handle connect nodes events on the canvas.
  */
 export const useConnectNodes = (props: CanvasHooksProps) => {
 	// Get the function to add items to the canvas.
-	const addItem = useAddItem(props);
+	const onNewItem = useNewItem(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
-		addItem,
+		onNewItem,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	return useCallback((e: ConnectNodesEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { addItem, props } = refBus.current;
+		const { onNewItem, props } = refBus.current;
 
 		// Get the source and target nodes data from canvas state.
 		const { canvasState } = props;
@@ -92,8 +94,9 @@ export const useConnectNodes = (props: CanvasHooksProps) => {
 			type: "PathPoint",
 		})) as PathPointData[];
 
-		addItem(
-			{
+		onNewItem({
+			eventId: e.eventId,
+			item: {
 				id: newId(),
 				type: "ConnectLine",
 				x: shape.x,
@@ -110,7 +113,6 @@ export const useConnectNodes = (props: CanvasHooksProps) => {
 				autoRouting: true,
 				endArrowHead: "Circle",
 			} as ConnectLineData,
-			e.eventId,
-		);
+		});
 	}, []);
 };
