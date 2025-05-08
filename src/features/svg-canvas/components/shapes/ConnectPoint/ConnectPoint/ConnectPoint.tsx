@@ -17,7 +17,7 @@ import { DragPoint } from "../../../core/DragPoint";
 import type { PathPointData } from "../../Path";
 
 // SvgCanvas関連関数をインポート
-import { newId } from "../../../../utils/diagram_t";
+import { newId } from "../../../../utils/diagram";
 import { calcRectangleOuterBox } from "../../../../utils";
 
 // Imports related to this component.

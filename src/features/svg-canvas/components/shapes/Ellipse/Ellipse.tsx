@@ -20,7 +20,7 @@ import { ConnectPoint } from "../ConnectPoint";
 import { useDrag } from "../../../hooks/useDrag";
 
 // SvgCanvas関連関数をインポート
-import { createSvgTransform } from "../../../utils/diagram_t";
+import { createSvgTransform } from "../../../utils/diagram";
 import { degreesToRadians } from "../../../utils";
 
 // Imports related to this component.

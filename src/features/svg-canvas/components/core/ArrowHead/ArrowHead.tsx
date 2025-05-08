@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/diagram_t";
+import { createSvgTransform } from "../../../utils/diagram";
 
 // Imports related to this component.
 import { ARROW_HEAD_SIZE } from "./ArrowHeadConstants";

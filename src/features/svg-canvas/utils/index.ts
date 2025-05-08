@@ -7,10 +7,10 @@
 export * from "./common";
 
 // 数学関連ユーティリティ
-export * from "./math_t";
+export * from "./math";
 
 // ダイアグラム関連ユーティリティ
-export * from "./diagram_t";
+export * from "./diagram";
 
 // バリデーション関連ユーティリティ
 export * from "./validation";

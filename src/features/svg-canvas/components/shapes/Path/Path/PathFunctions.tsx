@@ -5,7 +5,7 @@ import type { Diagram } from "../../../../types/DiagramCatalog";
 import { ArrowHead } from "../../../core/ArrowHead";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../../utils/diagram_t";
+import { newId } from "../../../../utils/diagram";
 import { calcRadians } from "../../../../utils";
 
 // Imports related to this component.

@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
 // Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../../utils/diagram_t";
+import { createSvgTransform } from "../../../../utils/diagram";
 import { degreesToRadians } from "../../../../utils";
 import { newEventId } from "../../../../utils";
 

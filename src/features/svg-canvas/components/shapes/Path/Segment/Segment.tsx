@@ -14,7 +14,7 @@ import type {
 } from "../../../../types/EventTypes";
 
 // Import functions related to SvgCanvas.
-import { getCursorFromAngle } from "../../../../utils/diagram_t";
+import { getCursorFromAngle } from "../../../../utils/diagram";
 import {
 	calcRadians,
 	createLinerX2yFunction,
