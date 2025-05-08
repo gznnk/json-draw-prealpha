@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import type { Message, OpenAIConfig } from "../types";
+import type { Message } from "../types";
 import { AI_AGENT_INSTRUCTIONS } from "../../svg-canvas/components/nodes/AgentNode/AgentConstants";
 import { AI_TOOLS, handleChunk } from "../../../ai-tools";
 
@@ -9,7 +9,6 @@ import { AI_TOOLS, handleChunk } from "../../../ai-tools";
  */
 export class OpenAIService {
 	private client: OpenAI | null = null;
-	private config: OpenAIConfig;
 
 	/**
 	 * Creates a new OpenAI service instance.
@@ -17,12 +16,8 @@ export class OpenAIService {
 	 * @param apiKey - The OpenAI API key for authentication
 	 * @param config - Configuration options for API requests
 	 */
-	constructor(apiKey: string, config: OpenAIConfig) {
+	constructor(apiKey: string) {
 		this.client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
-		this.config = {
-			model: config.model || "gpt-4o",
-			temperature: config.temperature ?? 0.7,
-		};
 	}
 
 	/**

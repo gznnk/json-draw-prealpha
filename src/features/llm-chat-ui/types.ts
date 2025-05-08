@@ -10,14 +10,3 @@ export interface Message {
 	/** Optional timestamp when the message was created */
 	timestamp?: Date;
 }
-
-/**
- * Configuration for the OpenAI API request.
- * Includes model selection, temperature, and other parameters.
- */
-export interface OpenAIConfig {
-	/** The model to use for completion */
-	model: string;
-	/** Controls randomness: 0 = deterministic, 1 = maximum randomness */
-	temperature?: number;
-}

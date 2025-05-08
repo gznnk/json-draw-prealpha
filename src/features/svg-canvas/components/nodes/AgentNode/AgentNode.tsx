@@ -27,6 +27,7 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 // Import related to this component.
 import { AI_AGENT_INSTRUCTIONS, AI_AGENT_TOOLS } from "./AgentConstants";
 import type { AgentNodeProps } from "./AgentNodeTypes";
+import { triggerConnectNodesEvent } from "../../../canvas/hooks/useConnectNodes";
 
 /**
  * AgentNode component.
@@ -243,11 +244,12 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 							if (functionName === "connect_nodes") {
 								const sourceNodeId = functionCallArguments.sourceNodeId;
 								const targetNodeId = functionCallArguments.targetNodeId;
-								props.onConnectNodes({
+								triggerConnectNodesEvent({
 									eventId,
 									sourceNodeId,
 									targetNodeId,
 								});
+
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",

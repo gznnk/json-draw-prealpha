@@ -3,7 +3,6 @@ import type {
 	CreateDiagramProps,
 	CreateDiagramType,
 } from "../../../types/DiagramTypes";
-import type { ConnectNodesEvent } from "../../../types/EventTypes";
 
 /**
  * Type of the AgentNode data.
@@ -26,6 +25,4 @@ export type AgentNodeProps = CreateDiagramProps<
 		executable: true;
 		itemCreatable: true;
 	}
-> & {
-	onConnectNodes: (e: ConnectNodesEvent) => void;
-};
+>;

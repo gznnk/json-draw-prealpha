@@ -11,11 +11,7 @@ import React, {
 
 // SvgCanvas関連型定義をインポート
 import { type Diagram, DiagramComponentCatalog } from "../types/DiagramCatalog";
-import type {
-	ConnectNodesEvent,
-	DiagramSelectEvent,
-	NewItemEvent,
-} from "../types/EventTypes";
+import type { DiagramSelectEvent, NewItemEvent } from "../types/EventTypes";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor } from "../components/core/Textable";
@@ -47,7 +43,6 @@ import type {
 	SvgCanvasState,
 } from "./SvgCanvasTypes";
 import { ADD_NEW_ITEM_EVENT_NAME } from "./hooks/useNewItem";
-import { CONNECT_NODES_EVENT_NAME } from "./hooks/useConnectNodes";
 
 // SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
@@ -90,7 +85,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onNewItem,
 			onExecute,
 			onScroll,
-			onConnectNodes,
 			onCopy,
 			onPaste,
 		} = props;
@@ -151,7 +145,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onCopy,
 			onPaste,
 			onNewItem,
-			onConnectNodes,
 			contextMenuFunctions,
 		};
 		const refBus = useRef(refBusVal);
@@ -311,26 +304,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			};
 		}, []);
 
-		// Use the useEffect hook to add an event listener for the connect nodes event.
-		useEffect(() => {
-			// Bypass references to avoid function creation in every render.
-			const { onConnectNodes } = refBus.current;
-
-			// Add an event listener for the connect nodes event.
-			const connectNodesListener = (e: Event) => {
-				onConnectNodes?.((e as CustomEvent<ConnectNodesEvent>).detail);
-			};
-			window.addEventListener(CONNECT_NODES_EVENT_NAME, connectNodesListener);
-
-			// Cleanup the event listener on component unmount.
-			return () => {
-				window.removeEventListener(
-					CONNECT_NODES_EVENT_NAME,
-					connectNodesListener,
-				);
-			};
-		}, []);
-
 		useEffect(() => {
 			if (containerRef.current) {
 				const { scrollLeft, scrollTop } = refBus.current;
@@ -370,7 +343,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				onTextEdit,
 				onNewItem,
 				onExecute,
-				onConnectNodes,
 			};
 
 			return React.createElement(component, props);

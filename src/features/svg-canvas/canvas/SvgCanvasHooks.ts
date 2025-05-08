@@ -155,7 +155,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onScroll = useScroll(canvasHooksProps);
 
 	// Handler for the connect nodes event.
-	const onConnectNodes = useConnectNodes(canvasHooksProps);
+	useConnectNodes(canvasHooksProps);
 
 	// Handler for the copy event.
 	const onCopy = useCopy(canvasHooksProps);
@@ -185,7 +185,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onExecute,
 		onExport,
 		onScroll,
-		onConnectNodes,
 		onCopy,
 		onPaste,
 	};

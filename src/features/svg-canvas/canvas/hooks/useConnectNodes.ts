@@ -1,5 +1,5 @@
 // Import React.
-import { useCallback, useRef } from "react";
+import { useRef, useEffect } from "react";
 
 // Import types related to SvgCanvas.
 import type { ConnectLineData } from "../../components/shapes/ConnectLine";
@@ -51,84 +51,101 @@ export const useConnectNodes = (props: CanvasHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	return useCallback((e: ConnectNodesEvent) => {
-		// Bypass references to avoid function creation in every render.
-		const { onNewItem, props } = refBus.current;
+	useEffect(() => {
+		// Add an event listener for the connect nodes event.
+		const connectNodesListener = (e: Event) => {
+			// Convert the event to a CustomEvent with the correct type.
+			const event = (e as CustomEvent<ConnectNodesEvent>).detail;
 
-		// Get the source and target nodes data from canvas state.
-		const { canvasState } = props;
-		const sourceNode = getDiagramById(
-			canvasState.items,
-			e.sourceNodeId,
-		) as Diagram;
-		const targetNode = getDiagramById(
-			canvasState.items,
-			e.targetNodeId,
-		) as Diagram;
+			// Bypass references to avoid function creation in every render.
+			const { onNewItem, props } = refBus.current;
 
-		if (!sourceNode || !targetNode) {
-			console.error("Source or target node not found.");
-			return;
-		}
+			// Get the source and target nodes data from canvas state.
+			const { canvasState } = props;
+			const sourceNode = getDiagramById(
+				canvasState.items,
+				event.sourceNodeId,
+			) as Diagram;
+			const targetNode = getDiagramById(
+				canvasState.items,
+				event.targetNodeId,
+			) as Diagram;
 
-		const sourceConnectPoint = (
-			sourceNode as ConnectableData
-		).connectPoints.find((p) => p.name === "bottomCenterPoint");
-		const targetConnectPoint = (
-			targetNode as ConnectableData
-		).connectPoints.find((p) => p.name === "topCenterPoint");
-
-		if (!sourceConnectPoint || !targetConnectPoint) {
-			console.error("Source or target connect point not found.");
-			return;
-		}
-
-		const points = createBestConnectPath(
-			sourceConnectPoint.x,
-			sourceConnectPoint.y,
-			sourceNode as Shape,
-			targetConnectPoint.x,
-			targetConnectPoint.y,
-			targetNode as Shape,
-		);
-
-		const shape = calcPointsOuterShape(points.map((p) => ({ x: p.x, y: p.y })));
-
-		const newPathPointId = (i: number) => {
-			if (i === 0) {
-				return sourceConnectPoint.id;
+			if (!sourceNode || !targetNode) {
+				console.error("Source or target node not found.");
+				return;
 			}
-			if (i === points.length - 1) {
-				return targetConnectPoint.id;
+
+			const sourceConnectPoint = (
+				sourceNode as ConnectableData
+			).connectPoints.find((p) => p.name === "bottomCenterPoint");
+			const targetConnectPoint = (
+				targetNode as ConnectableData
+			).connectPoints.find((p) => p.name === "topCenterPoint");
+
+			if (!sourceConnectPoint || !targetConnectPoint) {
+				console.error("Source or target connect point not found.");
+				return;
 			}
-			return newId();
+
+			const points = createBestConnectPath(
+				sourceConnectPoint.x,
+				sourceConnectPoint.y,
+				sourceNode as Shape,
+				targetConnectPoint.x,
+				targetConnectPoint.y,
+				targetNode as Shape,
+			);
+
+			const shape = calcPointsOuterShape(
+				points.map((p) => ({ x: p.x, y: p.y })),
+			);
+
+			const newPathPointId = (i: number) => {
+				if (i === 0) {
+					return sourceConnectPoint.id;
+				}
+				if (i === points.length - 1) {
+					return targetConnectPoint.id;
+				}
+				return newId();
+			};
+
+			const pathPoints = points.map((p, i) => ({
+				...p,
+				id: newPathPointId(i),
+				type: "PathPoint",
+			})) as PathPointData[];
+
+			onNewItem({
+				eventId: event.eventId,
+				item: {
+					id: newId(),
+					type: "ConnectLine",
+					x: shape.x,
+					y: shape.y,
+					width: shape.width,
+					height: shape.height,
+					stroke: "#fed579",
+					strokeWidth: "3px",
+					isSelected: false,
+					keepProportion: false,
+					items: pathPoints,
+					startOwnerId: sourceNode.id,
+					endOwnerId: targetNode.id,
+					autoRouting: true,
+					endArrowHead: "Circle",
+				} as ConnectLineData,
+			});
 		};
+		window.addEventListener(CONNECT_NODES_EVENT_NAME, connectNodesListener);
 
-		const pathPoints = points.map((p, i) => ({
-			...p,
-			id: newPathPointId(i),
-			type: "PathPoint",
-		})) as PathPointData[];
-
-		onNewItem({
-			eventId: e.eventId,
-			item: {
-				id: newId(),
-				type: "ConnectLine",
-				x: shape.x,
-				y: shape.y,
-				width: shape.width,
-				height: shape.height,
-				stroke: "#fed579",
-				strokeWidth: "3px",
-				isSelected: false,
-				keepProportion: false,
-				items: pathPoints,
-				startOwnerId: sourceNode.id,
-				endOwnerId: targetNode.id,
-				autoRouting: true,
-				endArrowHead: "Circle",
-			} as ConnectLineData,
-		});
+		// Cleanup the event listener on component unmount.
+		return () => {
+			window.removeEventListener(
+				CONNECT_NODES_EVENT_NAME,
+				connectNodesListener,
+			);
+		};
 	}, []);
 };

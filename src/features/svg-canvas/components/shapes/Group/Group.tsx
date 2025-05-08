@@ -6,7 +6,6 @@ import type { Diagram } from "../../../types/DiagramCatalog";
 import { DiagramComponentCatalog } from "../../../types/DiagramCatalog";
 import type { CreateDiagramProps } from "../../../types/DiagramTypes";
 import type {
-	ConnectNodesEvent,
 	DiagramChangeEvent,
 	DiagramConnectEvent,
 	DiagramDragEvent,
@@ -43,7 +42,6 @@ export type GroupProps = CreateDiagramProps<
 	}
 > & {
 	onNewItem?: (e: NewItemEvent) => void;
-	onConnectNodes?: (e: ConnectNodesEvent) => void;
 };
 
 /**
@@ -73,7 +71,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 	onTextEdit,
 	onNewItem,
 	onExecute,
-	onConnectNodes,
 }) => {
 	// Flag indicating whether the entire group is being dragged.
 	// Set to true only when this group is selected and currently being dragged.
@@ -496,7 +493,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onTextEdit: handleChildDiagramTextEdit,
 			onNewItem,
 			onExecute,
-			onConnectNodes,
 		};
 
 		return React.createElement(component, props);
