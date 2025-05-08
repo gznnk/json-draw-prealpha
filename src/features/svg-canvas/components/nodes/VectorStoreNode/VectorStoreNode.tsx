@@ -17,7 +17,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { FileDropEvent } from "../../../types/EventTypes";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

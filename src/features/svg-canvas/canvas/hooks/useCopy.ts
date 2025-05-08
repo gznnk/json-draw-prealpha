@@ -7,7 +7,7 @@ import type { Diagram } from "../../types/DiagramCatalog";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isItemableData } from "../../utils/TypeUtils";
+import { isItemableData } from "../../utils";
 import { getSelectedItems } from "../SvgCanvasFunctions";
 
 /**

@@ -26,7 +26,7 @@ import { VerticalAlignTop } from "../../../icons/VerticalAlignTop";
 import type { RectangleVertices } from "../../../../types/CoordinateTypes";
 
 // Import functions related to SvgCanvas.
-import { calcRectangleVertices } from "../../../../utils/Math";
+import { calcRectangleVertices } from "../../../../utils";
 
 // Imports related to this component.
 import { ColorPicker } from "../ColorPicker";

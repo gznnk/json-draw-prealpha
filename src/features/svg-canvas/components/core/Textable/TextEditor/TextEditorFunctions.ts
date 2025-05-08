@@ -2,7 +2,7 @@
 import type { Diagram } from "../../../../types/DiagramCatalog";
 
 // Import functions related to SvgCanvas.
-import { isItemableData, isTextableData } from "../../../../utils/TypeUtils";
+import { isItemableData, isTextableData } from "../../../../utils";
 
 export const getTextEditingItem = (items: Diagram[]): Diagram | undefined => {
 	for (const item of items) {

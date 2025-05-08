@@ -14,14 +14,14 @@ import type {
 } from "../../../../types/EventTypes";
 
 // Import functions related to SvgCanvas.
-import { getCursorFromAngle } from "../../../../utils/Diagram";
+import { getCursorFromAngle } from "../../../../utils/diagram_t";
 import {
 	calcRadians,
 	createLinerX2yFunction,
 	createLinerY2xFunction,
 	radiansToDegrees,
 	rotatePoint,
-} from "../../../../utils/Math";
+} from "../../../../utils";
 
 // Imports related to this component.
 import type { SegmentData } from "./SegmentTypes";

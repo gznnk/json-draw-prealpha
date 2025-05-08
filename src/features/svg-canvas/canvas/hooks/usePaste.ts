@@ -11,12 +11,12 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
-import { newId } from "../../utils/Diagram";
+import { newId } from "../../utils/diagram_t";
 import {
 	isConnectableData,
 	isItemableData,
 	isSelectableData,
-} from "../../utils/TypeUtils";
+} from "../../utils";
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
 import { getDiagramById } from "../SvgCanvasFunctions";
 

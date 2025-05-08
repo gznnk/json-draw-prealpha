@@ -1,6 +1,6 @@
 // Reactをインポート
 import { useCallback, useRef } from "react";
-import { newEventId } from "../utils/Util";
+import { newEventId } from "../utils";
 import type { FileDropEvent } from "../types/EventTypes";
 
 /**

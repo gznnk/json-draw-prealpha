@@ -8,7 +8,7 @@ import { getSelectedItems } from "../../../../canvas/SvgCanvasFunctions";
 import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isExportable } from "../../../../utils/TypeUtils";
+import { isExportable } from "../../../../utils";
 
 // Imports related to this component.
 import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";

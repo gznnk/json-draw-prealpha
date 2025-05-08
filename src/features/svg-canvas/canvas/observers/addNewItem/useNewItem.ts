@@ -6,7 +6,7 @@ import type { NewItemEvent } from "../../../types/EventTypes";
 import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isSelectableData } from "../../../utils/TypeUtils";
+import { isSelectableData } from "../../../utils";
 import { addHistory } from "../../SvgCanvasFunctions";
 
 // Import related to this component.

@@ -1,4 +1,4 @@
-import { newEventId } from "../../../../utils/Util";
+import { newEventId } from "../../../../utils";
 import type { ConnectLineData } from "../ConnectLine/ConnectLineTypes";
 import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";
 

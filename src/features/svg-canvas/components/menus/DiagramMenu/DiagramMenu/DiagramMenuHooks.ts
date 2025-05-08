@@ -19,8 +19,8 @@ import {
 	isItemableData,
 	isTextableData,
 	isTransformativeData,
-} from "../../../../utils/TypeUtils";
-import { newEventId } from "../../../../utils/Util";
+} from "../../../../utils";
+import { newEventId } from "../../../../utils";
 
 // Imports related to this component.
 import {

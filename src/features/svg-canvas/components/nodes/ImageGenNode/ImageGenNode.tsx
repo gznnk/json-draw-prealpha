@@ -15,7 +15,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

@@ -13,7 +13,7 @@ import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

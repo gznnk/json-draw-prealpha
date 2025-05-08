@@ -3,7 +3,7 @@ import {
 	calcGroupBoxOfNoRotation,
 	type GroupData,
 } from "../../../components/shapes/Group";
-import { nanToZero } from "../../math/common/nanToZero";
+import { nanToZero } from "../../math_t";
 import { newId } from "../common/newId";
 import { rectElementToDiagram } from "./rectElementToDiagram";
 import { ellipseElementToDiagram } from "./ellipseElementToDiagram";

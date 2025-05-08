@@ -10,7 +10,7 @@ import type {
 } from "../../../../types/EventTypes";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../../utils/Diagram";
+import { newId } from "../../../../utils/diagram_t";
 
 // Imports related to this component.
 import { NewVertex, type NewVertexData } from "../NewVertex";

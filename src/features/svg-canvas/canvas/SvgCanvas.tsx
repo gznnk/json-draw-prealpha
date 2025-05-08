@@ -23,7 +23,7 @@ import { NewConnectLine } from "../components/shapes/ConnectPoint";
 import { Group } from "../components/shapes/Group";
 
 // SvgCanvas関連関数をインポート
-import { newEventId } from "../utils/Util";
+import { newEventId } from "../utils";
 
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";

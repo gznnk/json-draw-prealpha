@@ -6,8 +6,8 @@ import type { GroupData } from "../../components/shapes/Group";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../utils/Diagram";
-import { newEventId } from "../../utils/Util";
+import { newId } from "../../utils/diagram_t";
+import { newEventId } from "../../utils";
 import {
 	addHistory,
 	clearMultiSelectSourceRecursive,

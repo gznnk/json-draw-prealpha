@@ -17,7 +17,7 @@ import { CPU_1 } from "../../icons/CPU_1";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

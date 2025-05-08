@@ -11,7 +11,7 @@ import {
 	isLineIntersectingBox,
 	lineIntersects,
 	radiansToDegrees,
-} from "../../../../utils/Math";
+} from "../../../../utils";
 
 // Imports related to this component.
 import { CONNECT_LINE_MARGIN } from "./ConnectPointConstants";

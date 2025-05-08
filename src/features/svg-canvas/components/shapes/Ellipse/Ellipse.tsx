@@ -20,8 +20,8 @@ import { ConnectPoint } from "../ConnectPoint";
 import { useDrag } from "../../../hooks/useDrag";
 
 // SvgCanvas関連関数をインポート
-import { createSvgTransform } from "../../../utils/Diagram";
-import { degreesToRadians } from "../../../utils/Math";
+import { createSvgTransform } from "../../../utils/diagram_t";
+import { degreesToRadians } from "../../../utils";
 
 // Imports related to this component.
 import type { EllipseProps } from "./EllipseTypes";

@@ -6,8 +6,8 @@ import type { ConnectLineData } from "../../components/shapes/ConnectLine";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isItemableData, isSelectableData } from "../../utils/TypeUtils";
-import { newEventId } from "../../utils/Util";
+import { isItemableData, isSelectableData } from "../../utils";
+import { newEventId } from "../../utils";
 import {
 	addHistory,
 	applyRecursive,

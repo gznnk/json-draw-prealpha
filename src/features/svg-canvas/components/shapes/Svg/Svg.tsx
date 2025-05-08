@@ -19,8 +19,8 @@ import { Transformative } from "../../core/Transformative";
 import { useDrag } from "../../../hooks/useDrag";
 
 // Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/Diagram";
-import { degreesToRadians } from "../../../utils/Math";
+import { createSvgTransform } from "../../../utils/diagram_t";
+import { degreesToRadians } from "../../../utils";
 
 // Imports related to this component.
 import type { SvgProps } from "./SvgTypes";

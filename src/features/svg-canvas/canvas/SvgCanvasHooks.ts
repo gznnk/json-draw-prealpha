@@ -6,7 +6,7 @@ import type { Diagram } from "../types/DiagramCatalog";
 import type { TextEditorState } from "../components/core/Textable";
 
 // Import functions related to SvgCanvas.
-import { deepCopy } from "../utils/Util";
+import { deepCopy } from "../utils";
 import { calcOptimalCanvasSize } from "./SvgCanvasFunctions";
 
 // Imports related to this component.

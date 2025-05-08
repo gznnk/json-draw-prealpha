@@ -17,7 +17,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 // Import functions related to SvgCanvas.
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
 import { dispatchConnectNodesEvent } from "../../../canvas/observers/connectNodes";
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 import { createImageGenNodeData } from "../ImageGenNode";
 import { createLLMNodeData } from "../LLMNode";
 import { createSvgToDiagramNodeData } from "../SvgToDiagramNode";

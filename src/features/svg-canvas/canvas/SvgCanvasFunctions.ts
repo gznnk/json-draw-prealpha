@@ -17,12 +17,12 @@ import {
 	isItemableData,
 	isSelectableData,
 	isTransformativeData,
-} from "../utils/TypeUtils";
-import { deepCopy, newEventId } from "../utils/Util";
+} from "../utils";
+import { deepCopy, newEventId } from "../utils";
 
 // Imports related to this component.
 import type { ConnectableData } from "../types/DiagramTypes";
-import { degreesToRadians, rotatePoint } from "../utils/Math";
+import { degreesToRadians, rotatePoint } from "../utils";
 import { CANVAS_EXPANSION_SIZE, MAX_HISTORY_SIZE } from "./SvgCanvasConstants";
 import type { SvgCanvasHistory, SvgCanvasState } from "./SvgCanvasTypes";
 

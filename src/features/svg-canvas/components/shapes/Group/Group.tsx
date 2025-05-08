@@ -19,8 +19,8 @@ import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
 // Import functions related to SvgCanvas.
-import { degreesToRadians, rotatePoint } from "../../../utils/Math";
-import { isItemableData, isTransformativeData } from "../../../utils/TypeUtils";
+import { degreesToRadians, rotatePoint } from "../../../utils";
+import { isItemableData, isTransformativeData } from "../../../utils";
 
 // Imports related to this component.
 import { getSelectedChildDiagram } from "./GroupFunctions";

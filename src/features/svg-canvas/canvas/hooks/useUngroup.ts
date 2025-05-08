@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../utils/Util";
+import { newEventId } from "../../utils";
 import {
 	addHistory,
 	clearMultiSelectSourceRecursive,

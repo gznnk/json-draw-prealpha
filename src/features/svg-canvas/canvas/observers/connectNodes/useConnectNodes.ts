@@ -11,8 +11,8 @@ import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { createBestConnectPath } from "../../../components/shapes/ConnectPoint";
-import { newId } from "../../../utils/Diagram";
-import { calcPointsOuterShape } from "../../../utils/Math";
+import { newId } from "../../../utils/diagram_t";
+import { calcPointsOuterShape } from "../../../utils";
 import { getDiagramById } from "../../SvgCanvasFunctions";
 import { dispatchNewItemEvent } from "../addNewItem";
 

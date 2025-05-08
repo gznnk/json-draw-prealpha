@@ -21,8 +21,8 @@ import { useDrag } from "../../../hooks/useDrag";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 
 // Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/Diagram";
-import { degreesToRadians } from "../../../utils/Math";
+import { createSvgTransform } from "../../../utils/diagram_t";
+import { degreesToRadians } from "../../../utils";
 
 // Imports related to this component.
 import { RectangleElement } from "./RectangleStyled";

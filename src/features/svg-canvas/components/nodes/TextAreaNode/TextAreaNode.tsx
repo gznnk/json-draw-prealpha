@@ -12,7 +12,7 @@ import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 
 // Imports related to this component.
 import { TextAreaButton, TextAreaButtonText } from "./TextAreaNodeStyled";

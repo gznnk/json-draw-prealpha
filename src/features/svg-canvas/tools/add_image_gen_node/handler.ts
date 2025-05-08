@@ -1,7 +1,7 @@
 // Import functions related to SvgCanvas.
 import { dispatchNewItemEvent } from "../../canvas/observers/addNewItem";
 import { createImageGenNodeData } from "../../components/nodes/ImageGenNode";
-import { newEventId } from "../../utils/Util";
+import { newEventId } from "../../utils";
 
 /**
  * Function to handle the addition of an image generation node.

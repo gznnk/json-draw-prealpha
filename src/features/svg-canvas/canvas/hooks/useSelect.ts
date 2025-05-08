@@ -9,7 +9,7 @@ import type { DiagramSelectEvent } from "../../types/EventTypes";
 import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
 
 // Import functions related to SvgCanvas.
-import { isSelectableData } from "../../utils/TypeUtils";
+import { isSelectableData } from "../../utils";
 import {
 	applyMultiSelectSourceRecursive,
 	applyRecursive,

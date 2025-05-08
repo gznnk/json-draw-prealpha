@@ -20,7 +20,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
 import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
-import { newEventId } from "../../../utils/Util";
+import { newEventId } from "../../../utils";
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
 
 /**

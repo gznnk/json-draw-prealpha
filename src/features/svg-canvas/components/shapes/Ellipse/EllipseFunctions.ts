@@ -13,9 +13,9 @@ import type { ConnectPointMoveData } from "../../../types/EventTypes";
 import type { ConnectPointData } from "../ConnectPoint";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../utils/Diagram";
-import { calcEllipseVertices } from "../../../utils/Math";
-import { isConnectableData } from "../../../utils/TypeUtils";
+import { newId } from "../../../utils/diagram_t";
+import { calcEllipseVertices } from "../../../utils";
+import { isConnectableData } from "../../../utils";
 
 // Imports related to this component.
 import { DEFAULT_ELLIPSE_DATA } from "./EllipseConstants";

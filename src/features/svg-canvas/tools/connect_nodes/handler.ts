@@ -1,5 +1,5 @@
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../utils/Util";
+import { newEventId } from "../../utils";
 import { dispatchConnectNodesEvent } from "../../canvas/observers/connectNodes";
 
 /**

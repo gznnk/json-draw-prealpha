@@ -19,7 +19,10 @@ import { DragPoint } from "../DragPoint";
 import { RotatePoint } from "../RotatePoint";
 
 // Import functions related to SvgCanvas.
-import { createSvgTransform, getCursorFromAngle } from "../../../utils/Diagram";
+import {
+	createSvgTransform,
+	getCursorFromAngle,
+} from "../../../utils/diagram_t";
 import {
 	affineTransformation,
 	calcNearestCircleIntersectionPoint,
@@ -32,7 +35,7 @@ import {
 	nanToZero,
 	radiansToDegrees,
 	signNonZero,
-} from "../../../utils/Math";
+} from "../../../utils";
 
 // Imports related to this component.
 import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";

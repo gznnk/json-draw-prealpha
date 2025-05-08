@@ -1,7 +1,7 @@
 // Import functions related to SvgCanvas.
 import { dispatchNewItemEvent } from "../../canvas/observers/addNewItem";
 import { createSvgToDiagramNodeData } from "../../components/nodes/SvgToDiagramNode";
-import { newEventId } from "../../utils/Util";
+import { newEventId } from "../../utils";
 
 /**
  * Function to handle the addition of an SVG Diagram node.

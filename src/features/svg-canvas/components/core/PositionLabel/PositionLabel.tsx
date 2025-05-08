@@ -9,7 +9,7 @@ import type { RectangleVertices } from "../../../types/CoordinateTypes";
 import { calcBottomLabelPosition } from "../BottomLabel";
 
 // Import functions related to SvgCanvas.
-import { calcRectangleVertices } from "../../../utils/Math";
+import { calcRectangleVertices } from "../../../utils";
 
 /**
  * Props for PositionLabel component.

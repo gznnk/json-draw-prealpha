@@ -1,5 +1,5 @@
 // Import functions related to SvgCanvas.
-import { newId } from "../../../utils/Diagram";
+import { newId } from "../../../utils/diagram_t";
 import { createRectangleConnectPoint } from "../../shapes/Rectangle";
 
 // Import related to this component.

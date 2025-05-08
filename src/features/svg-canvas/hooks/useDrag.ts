@@ -16,7 +16,7 @@ import {
 } from "../types/EventTypes";
 
 // SvgCanvas関連関数をインポート
-import { newEventId } from "../utils/Util";
+import { newEventId } from "../utils";
 
 /** 全体通知用ドラッグイベントの名前 */
 const EVENT_NAME_BROADCAST_DRAG = "BroadcastDrag";

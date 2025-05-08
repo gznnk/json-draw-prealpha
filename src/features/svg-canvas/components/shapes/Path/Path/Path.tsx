@@ -20,8 +20,8 @@ import type {
 import { useDrag } from "../../../../hooks/useDrag";
 
 // Import functions related to SvgCanvas.
-import { calcPointsOuterShape } from "../../../../utils/Math";
-import { isItemableData } from "../../../../utils/TypeUtils";
+import { calcPointsOuterShape } from "../../../../utils";
+import { isItemableData } from "../../../../utils";
 
 // Imports related to this component.
 import { NewVertexList } from "../NewVertexList";

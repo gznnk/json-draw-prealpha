@@ -17,8 +17,8 @@ import { DragPoint } from "../../../core/DragPoint";
 import type { PathPointData } from "../../Path";
 
 // SvgCanvas関連関数をインポート
-import { newId } from "../../../../utils/Diagram";
-import { calcRectangleOuterBox } from "../../../../utils/Math";
+import { newId } from "../../../../utils/diagram_t";
+import { calcRectangleOuterBox } from "../../../../utils";
 
 // Imports related to this component.
 import { triggerNewConnectLine } from "../NewConnectLine";

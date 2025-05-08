@@ -17,8 +17,8 @@ import { createBestConnectPath } from "../../ConnectPoint";
 import { Path } from "../../Path";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../../utils/Diagram";
-import { calcRadians, radiansToDegrees } from "../../../../utils/Math";
+import { newId } from "../../../../utils/diagram_t";
+import { calcRadians, radiansToDegrees } from "../../../../utils";
 
 // Imports related to this component.
 import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
