@@ -1,6 +1,6 @@
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../utils/Util";
-import { triggerConnectNodesEvent } from "../../canvas/hooks/useConnectNodes";
+import { dispatchConnectNodesEvent } from "../../canvas/observers/connectNodes";
 
 /**
  * Function to handle the connection between two nodes.
@@ -12,7 +12,7 @@ import { triggerConnectNodesEvent } from "../../canvas/hooks/useConnectNodes";
 export const handler = (args: any) => {
 	if ("sourceNodeId" in args && "targetNodeId" in args) {
 		// Trigger connect nodes event using the global trigger function
-		triggerConnectNodesEvent({
+		dispatchConnectNodesEvent({
 			eventId: newEventId(),
 			sourceNodeId: args.sourceNodeId,
 			targetNodeId: args.targetNodeId,

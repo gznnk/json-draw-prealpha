@@ -3,4 +3,4 @@
  * This file serves as the public API for the chat feature.
  */
 export { ChatUI } from "./components/ChatUI/ChatUI.tsx";
-export type { Message, OpenAIConfig } from "./types.ts";
+export type { Message } from "./types.ts";

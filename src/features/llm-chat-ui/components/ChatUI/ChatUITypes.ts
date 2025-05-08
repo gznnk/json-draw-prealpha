@@ -1,4 +1,4 @@
-import type { Message, OpenAIConfig } from "../../types.ts";
+import type { Message } from "../../types.ts";
 
 /**
  * Props for the ChatUI component.
@@ -11,8 +11,6 @@ export interface ChatUIProps {
 	width?: string;
 	/** Optional API key for OpenAI */
 	apiKey?: string;
-	/** Configuration for OpenAI API requests */
-	openAIConfig?: OpenAIConfig;
 	/** Optional initial messages to populate the chat */
 	initialMessages?: Message[];
 }

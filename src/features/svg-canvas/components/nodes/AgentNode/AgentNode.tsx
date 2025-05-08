@@ -20,6 +20,7 @@ import { createImageGenNodeData } from "../ImageGenNode";
 import { createLLMNodeData } from "../LLMNode";
 import { createSvgToDiagramNodeData } from "../SvgToDiagramNode";
 import { createTextAreaNodeData } from "../TextAreaNode";
+import { dispatchConnectNodesEvent } from "../../../canvas/observers/connectNodes";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
@@ -27,7 +28,6 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 // Import related to this component.
 import { AI_AGENT_INSTRUCTIONS, AI_AGENT_TOOLS } from "./AgentConstants";
 import type { AgentNodeProps } from "./AgentNodeTypes";
-import { triggerConnectNodesEvent } from "../../../canvas/hooks/useConnectNodes";
 
 /**
  * AgentNode component.
@@ -244,7 +244,7 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 							if (functionName === "connect_nodes") {
 								const sourceNodeId = functionCallArguments.sourceNodeId;
 								const targetNodeId = functionCallArguments.targetNodeId;
-								triggerConnectNodesEvent({
+								dispatchConnectNodesEvent({
 									eventId,
 									sourceNodeId,
 									targetNodeId,

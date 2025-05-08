@@ -26,13 +26,7 @@ import type { ChatUIProps } from "./ChatUITypes";
  * @returns React component
  */
 export const ChatUI = React.memo(
-	({
-		height,
-		width,
-		apiKey,
-		openAIConfig,
-		initialMessages = [],
-	}: ChatUIProps) => {
+	({ height, width, apiKey, initialMessages = [] }: ChatUIProps) => {
 		// State for managing messages and UI state
 		const [messages, setMessages] = useState<Message[]>(initialMessages);
 		const [input, setInput] = useState("");
@@ -78,12 +72,12 @@ export const ChatUI = React.memo(
 
 		// Initialize OpenAI service if API key provided
 		useEffect(() => {
-			if (apiKey && openAIConfig) {
-				setOpenAIService(new OpenAIService(apiKey, openAIConfig));
+			if (apiKey) {
+				setOpenAIService(new OpenAIService(apiKey));
 			} else {
 				setOpenAIService(null);
 			}
-		}, [apiKey, openAIConfig]);
+		}, [apiKey]);
 
 		// Scroll to the bottom of the chat when messages change
 		// biome-ignore lint/correctness/useExhaustiveDependencies: To scroll to the bottom when messages change
