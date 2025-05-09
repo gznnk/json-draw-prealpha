@@ -52,3 +52,25 @@ export const TabButton = styled.button<{ isActive: boolean }>`
     border-left: none;
   }
 `;
+
+/**
+ * Add tab button that appears at the end of tab bar
+ */
+export const AddTabButton = styled.button`
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border: none;
+  border-left: 1px solid #ccc;
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+  color: #0078d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;

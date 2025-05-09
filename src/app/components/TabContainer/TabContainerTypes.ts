@@ -20,4 +20,6 @@ export interface TabContainerProps {
 	activeTabId: string;
 	/** Callback when a tab is selected */
 	onTabSelect?: (tabId: string) => void;
+	/** Callback when the add tab button is clicked */
+	onAddTab?: () => void;
 }

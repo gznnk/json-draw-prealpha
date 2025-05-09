@@ -6,6 +6,7 @@ import {
 	TabContentContainer,
 	TabBar,
 	TabButton,
+	AddTabButton,
 } from "./TabContainerStyled";
 
 /**
@@ -17,6 +18,7 @@ import {
  * - Only renders content of the active tab
  * - Supports absolute positioning for tab content
  * - Allows switching between tabs by clicking on tab buttons
+ * - Includes an "Add Tab" button at the end of the tab bar (Excel-like)
  *
  * @example
  * ```tsx
@@ -45,12 +47,18 @@ import {
  *     },
  *   ];
  *
+ *   // Handle adding a new tab
+ *   const handleAddTab = () => {
+ *     // Logic to add a new tab
+ *   };
+ *
  *   return (
  *     <div style={{ width: "100%", height: "500px" }}>
  *       <TabContainer
  *         tabs={tabs}
  *         activeTabId={activeTabId}
  *         onTabSelect={setActiveTabId}
+ *         onAddTab={handleAddTab}
  *       />
  *     </div>
  *   );
@@ -61,7 +69,7 @@ import {
  * @returns Tab container component with Excel-like bottom tabs
  */
 export const TabContainer: FC<TabContainerProps> = memo(
-	({ tabs, activeTabId, onTabSelect }) => {
+	({ tabs, activeTabId, onTabSelect, onAddTab }) => {
 		// Handle tab selection
 		const handleTabClick = (tabId: string) => {
 			if (onTabSelect) {
@@ -91,6 +99,17 @@ export const TabContainer: FC<TabContainerProps> = memo(
 							{tab.title}
 						</TabButton>
 					))}
+
+					{/* Excel-like Add Tab button */}
+					{onAddTab && (
+						<AddTabButton
+							onClick={onAddTab}
+							aria-label="Add new tab"
+							title="Add new tab"
+						>
+							+
+						</AddTabButton>
+					)}
 				</TabBar>
 			</TabContainerWrapper>
 		);

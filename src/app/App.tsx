@@ -503,18 +503,7 @@ function App() {
 
 	const { canvasProps } = useSvgCanvas(canvasInitialState);
 
-	// チャットUIの設定
-	const chatConfig = {
-		height: "100%",
-		width: "100%",
-		apiKey: apiKey,
-		openAIConfig: {
-			model: "gpt-4",
-		},
-	};
-
-	// Define tabs with their content
-	const tabs: TabItem[] = [
+	const [tabs, setTabs] = useState<TabItem[]>([
 		{
 			id: "dashboard",
 			title: "Dashboard",
@@ -538,7 +527,38 @@ function App() {
 				</div>
 			),
 		},
-	];
+	]);
+
+	// チャットUIの設定
+	const chatConfig = {
+		height: "100%",
+		width: "100%",
+		apiKey: apiKey,
+		openAIConfig: {
+			model: "gpt-4",
+		},
+	};
+
+	/**
+	 * Handles adding a new tab to the tab container.
+	 * Generates a unique ID and title based on the current tab count.
+	 */
+	const handleAddTab = () => {
+		const tabCount = tabs.length + 1;
+		const newTabId = `tab-${Date.now()}`;
+		const newTab: TabItem = {
+			id: newTabId,
+			title: `Sheet ${tabCount}`,
+			content: (
+				<div style={{ position: "absolute", top: 0, left: 0 }}>
+					Content for new sheet {tabCount}
+				</div>
+			),
+		};
+
+		setTabs([...tabs, newTab]);
+		setActiveTabId(newTabId); // 新しいタブを自動的に選択
+	};
 
 	return (
 		<div className="App">
@@ -558,6 +578,7 @@ function App() {
 						tabs={tabs}
 						activeTabId={activeTabId}
 						onTabSelect={setActiveTabId}
+						onAddTab={handleAddTab}
 					/>
 				</div>
 			</div>
