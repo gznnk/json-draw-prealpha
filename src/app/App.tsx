@@ -29,7 +29,7 @@ if (!window.profiler) {
 function App() {
 	const [apiKey, setApiKey] = useState<string | null>(null);
 
-	const [activeTabId, setActiveTabId] = useState<string>("dashboard");
+	const [activeTabId, setActiveTabId] = useState<string>("default");
 
 	// Load OpenAI API key from KeyManager on component mount
 	useEffect(() => {
