@@ -13,6 +13,7 @@ import { OpenAiKeyManager } from "../utils/KeyManager";
 
 import { loadCanvasDataFromLocalStorage } from "../features/svg-canvas/canvas/SvgCanvasFunctions";
 import { useRef, useState, useEffect } from "react";
+import { TabContainer, type TabItem } from "./components/TabContainer";
 
 declare global {
 	interface Window {
@@ -469,6 +470,8 @@ function App() {
 	const loadedCanvasState = loadCanvasDataFromLocalStorage();
 	const [apiKey, setApiKey] = useState<string | null>(null);
 
+	const [activeTabId, setActiveTabId] = useState<string>("dashboard");
+
 	// Load OpenAI API key from KeyManager on component mount
 	useEffect(() => {
 		const savedApiKey = OpenAiKeyManager.loadKey();
@@ -500,9 +503,6 @@ function App() {
 
 	const { canvasProps } = useSvgCanvas(canvasInitialState);
 
-	// SVGキャンバスの表示領域を2/3に設定
-	const canvasWidth = "66.67%";
-
 	// チャットUIの設定
 	const chatConfig = {
 		height: "100%",
@@ -512,6 +512,33 @@ function App() {
 			model: "gpt-4",
 		},
 	};
+
+	// Define tabs with their content
+	const tabs: TabItem[] = [
+		{
+			id: "dashboard",
+			title: "Dashboard",
+			content: <SvgCanvas {...canvasProps} ref={canvasRef} />,
+		},
+		{
+			id: "analytics",
+			title: "Analytics",
+			content: (
+				<div style={{ position: "absolute", top: 0, left: 0 }}>
+					Analytics Content
+				</div>
+			),
+		},
+		{
+			id: "settings",
+			title: "Settings",
+			content: (
+				<div style={{ position: "absolute", top: 0, left: 0 }}>
+					Settings Content
+				</div>
+			),
+		},
+	];
 
 	return (
 		<div className="App">
@@ -526,8 +553,12 @@ function App() {
 				}}
 			>
 				{/* SVGキャンバスエリア (2/3) */}
-				<div style={{ width: canvasWidth, height: "100%" }}>
-					<SvgCanvas {...canvasProps} ref={canvasRef} />
+				<div style={{ width: "100%", height: "100%" }}>
+					<TabContainer
+						tabs={tabs}
+						activeTabId={activeTabId}
+						onTabSelect={setActiveTabId}
+					/>
 				</div>
 			</div>
 			{/* チャットエリア (1/3) */}

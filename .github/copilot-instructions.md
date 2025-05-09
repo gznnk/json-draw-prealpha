@@ -54,6 +54,10 @@ function generateUniqueId(): string {
 - Use explicit typing instead of relying on inference when intent needs to be clear
 - Prefer interfaces for public APIs and type aliases for complex types
 - Use descriptive type names that explain the purpose
+- Avoid using default exports, prefer named exports for all modules
+  - This improves maintainability, refactoring, and static analysis
+  - Named exports make import statements consistent and self-documenting
+  - Named exports support better tree-shaking in the final bundle
 
 ## File Organization
 
@@ -74,6 +78,15 @@ function generateUniqueId(): string {
 - Prefer template literals over string concatenation when variables are involved
 - Sort import statements alphabetically
 - Avoid console statements in production code (except for proper logging utilities)
+
+## YAGNI (You Aren't Gonna Need It) Principle
+
+- Do not implement functionality solely on the speculation that it might be needed in the future
+- Write the minimum amount of code necessary to meet the current requirements
+- Avoid over-engineering with excessive generalization or abstraction
+- Do not create extension points or interfaces without concrete use cases
+- Embrace refactoring to accommodate changing requirements when they actually arise
+- Prioritize simple, readable, and maintainable code over speculative features
 
 ## Git Operations and Workflow
 
