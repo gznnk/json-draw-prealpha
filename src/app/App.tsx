@@ -2,16 +2,16 @@ import {
 	SvgCanvas,
 	useSvgCanvas,
 	type SvgCanvasRef,
-} from "./features/svg-canvas";
-import { ChatUI } from "./features/llm-chat-ui";
-import type { Diagram } from "./features/svg-canvas/types/DiagramCatalog";
-import { createRectangleData } from "./features/svg-canvas/components/shapes/Rectangle";
-import { createEllipseData } from "./features/svg-canvas/components/shapes/Ellipse";
+} from "../features/svg-canvas";
+import { ChatUI } from "../features/llm-chat-ui";
+import type { Diagram } from "../features/svg-canvas/types/DiagramCatalog";
+import { createRectangleData } from "../features/svg-canvas/components/shapes/Rectangle";
+import { createEllipseData } from "../features/svg-canvas/components/shapes/Ellipse";
 
-import { Profiler } from "./utils/Profiler";
-import { OpenAiKeyManager } from "./utils/KeyManager";
+import { Profiler } from "../utils/Profiler";
+import { OpenAiKeyManager } from "../utils/KeyManager";
 
-import { loadCanvasDataFromLocalStorage } from "./features/svg-canvas/canvas/SvgCanvasFunctions";
+import { loadCanvasDataFromLocalStorage } from "../features/svg-canvas/canvas/SvgCanvasFunctions";
 import { useRef, useState, useEffect } from "react";
 
 declare global {
