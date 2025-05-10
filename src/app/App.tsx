@@ -26,6 +26,9 @@ if (!window.profiler) {
 	window.profiler = new Profiler();
 }
 
+const sheetItemsStr = localStorage.getItem("sheets") || "[]";
+const sheetItems: SheetItem[] = JSON.parse(sheetItemsStr) || [];
+
 function App() {
 	const [apiKey, setApiKey] = useState<string | null>(null);
 
@@ -38,25 +41,19 @@ function App() {
 	}, []);
 
 	// タブ情報の管理
-	const [tabs, setTabs] = useState<SheetItem[]>([
-		{
-			id: "default",
-			title: "canvas",
-		},
-	]);
+	const [tabs, setTabs] = useState<SheetItem[]>(sheetItems);
 
 	/**
 	 * Generate content items for the sheets component.
-	 * This memoizes the content items array, but each content element
-	 * will be freshly rendered when accessed.
+	 * This creates a new component instance for each tab to ensure proper state isolation.
+	 * The key prop ensures React creates a new instance when tabs change.
 	 */
 	const contentItems: SheetContentItem[] = useMemo(
 		() =>
 			tabs.map((tab) => ({
 				id: tab.id,
-				content: <CanvasSheet id={tab.id} />,
+				content: <CanvasSheet key={tab.id} id={tab.id} />,
 			})),
-
 		[tabs],
 	);
 
@@ -74,6 +71,8 @@ function App() {
 
 		setTabs([...tabs, newTab]);
 		setActiveTabId(newTabId); // 新しいタブを自動的に選択
+
+		localStorage.setItem("sheets", JSON.stringify([...tabs, newTab]));
 	};
 
 	// チャットUIの設定
