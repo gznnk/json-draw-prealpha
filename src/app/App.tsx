@@ -51,25 +51,12 @@ function App() {
 	 * will be freshly rendered when accessed.
 	 */
 	const contentItems: SheetContentItem[] = useMemo(
-		() => [
-			{
-				id: "default",
-				content: <CanvasSheet id="default" />,
-			},
-			// 動的に追加されたタブのためのコンテンツ
-			...tabs
-				.filter(
-					(tab) => !["dashboard", "analytics", "settings"].includes(tab.id),
-				)
-				.map((tab) => ({
-					id: tab.id,
-					content: (
-						<div style={{ position: "absolute", top: 0, left: 0 }}>
-							Content for sheet {tab.title}
-						</div>
-					),
-				})),
-		],
+		() =>
+			tabs.map((tab) => ({
+				id: tab.id,
+				content: <CanvasSheet id={tab.id} />,
+			})),
+
 		[tabs],
 	);
 
