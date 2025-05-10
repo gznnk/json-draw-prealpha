@@ -120,7 +120,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			rotation: 0,
 			scaleX: 1,
 			scaleY: 1,
-			stroke: "#fed579",
+			stroke: "#3A415C",
 			strokeWidth: "3px",
 			keepProportion: false,
 			isSelected: false,

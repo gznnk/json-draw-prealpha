@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
-import { ViewBackground } from "../../../../app/styled/common";
 
 /**
  * Container for the entire chat interface
  */
 export const ChatContainer = styled.div<{ width?: string; height?: string }>`
-  ${ViewBackground};
+  background-color: #0C0F1C;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -30,10 +29,9 @@ export const MessagesContainer = styled.div`
  * Input form area
  */
 export const InputContainer = styled.div`
-  border-top: 1px solid #e1e1e1;
   padding: 12px;
   display: flex;
-  background-color: #f7f7f7;
+  background-color: #0C0F1C;
 `;
 
 /**
@@ -41,7 +39,8 @@ export const InputContainer = styled.div`
  */
 export const MessageInput = styled.textarea`
   flex-grow: 1;
-  border: 1px solid #ddd;
+  background-color: #0C0F1C;
+  border: 3px solid #2A2F4C;
   border-radius: 6px;
   padding: 10px 14px;
   resize: none;
@@ -51,8 +50,13 @@ export const MessageInput = styled.textarea`
   max-height: 120px;
   outline: none;
   transition: border-color 0.2s;
+  color: #B0B0B0;
+  caret-color: #B0B0B0;
 
   &:focus {
-    border-color: #15d1a3;
+    border-color: #3A4160;
+  }
+  &::placeholder {
+    color: #666B82;
   }
 `;

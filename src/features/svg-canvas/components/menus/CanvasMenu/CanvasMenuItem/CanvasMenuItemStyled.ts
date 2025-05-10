@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 export const CanvasMenuItemDiv = styled.div`
     width: 30px;
     height: 30px;
+    color: #D0D4E0;
 	box-sizing: border-box;
     border: none;
     padding: 3px;
@@ -14,6 +15,6 @@ export const CanvasMenuItemDiv = styled.div`
     pointer-events: auto;
 	transition: background-color 0.2s ease-in-out;
     &:hover {
-        background-color: #EEEEEE;
+        background-color: #1F2433;
     }
 `;

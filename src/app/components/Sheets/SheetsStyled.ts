@@ -25,8 +25,8 @@ export const SheetContentContainer = styled.div`
  */
 export const SheetBar = styled.div`
   display: flex;
-  background-color: #f0f0f0;
-  border-top: 1px solid #ccc;
+  background-color: #121624;
+  border-top: 1px solid #3A415C;
 `;
 
 /**
@@ -34,18 +34,18 @@ export const SheetBar = styled.div`
  */
 export const SheetButton = styled.button<{ isActive: boolean }>`
   padding: 8px 16px;
-  background-color: ${(props) => (props.isActive ? "#fff" : "#f0f0f0")};
+  background-color: ${(props) => (props.isActive ? "#1A1E2F" : "#121624")};
   border: none;
-  border-right: 1px solid #ccc;
-  border-top: ${(props) => (props.isActive ? "2px solid #0078d4" : "2px solid transparent")};
+  border-right: 1px solid #3A415C;
+  border-top: ${(props) => (props.isActive ? "3px solid #3A415C" : "2px solid transparent")};
   cursor: pointer;
   outline: none;
   font-size: 13px;
-  color: ${(props) => (props.isActive ? "#0078d4" : "#333")};
+  color: ${(props) => (props.isActive ? "#E0E4F0" : "#C0C4D2")};
   transition: background-color 0.2s, color 0.2s;
   
   &:hover {
-    background-color: ${(props) => (props.isActive ? "#fff" : "#e0e0e0")};
+    background-color: ${(props) => (props.isActive ? "#222638" : "#1F2433")};
   }
   
   &:first-of-type {
@@ -58,19 +58,18 @@ export const SheetButton = styled.button<{ isActive: boolean }>`
  */
 export const AddSheetButton = styled.button`
   padding: 8px 12px;
-  background-color: #f0f0f0;
+  background-color: #121624;
   border: none;
-  border-left: 1px solid #ccc;
   cursor: pointer;
   outline: none;
   font-size: 14px;
-  color: #0078d4;
+  color: #C0C4D2;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
   
   &:hover {
-    background-color: #e0e0e0;
+    background-color: #1F2433;
   }
 `;

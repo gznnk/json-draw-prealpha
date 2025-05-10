@@ -94,7 +94,7 @@ export const useConnectNodes = (props: CanvasHooksProps) => {
 					y: shape.y,
 					width: shape.width,
 					height: shape.height,
-					stroke: "#fed579",
+					stroke: "#3A415C",
 					strokeWidth: "3px",
 					isSelected: false,
 					keepProportion: false,

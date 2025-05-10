@@ -4,7 +4,9 @@ import styled from "@emotion/styled";
  * Styled container for user messages
  */
 export const UserMessageContainer = styled.div`
-  background-color: #f4f4f4;
+  font-size: 0.9em;
+  color: #C0C4D2;
+  background-color: #2A2F4C;
   padding: 12px 18px;
   border-radius: 8px;
   margin: 8px 0;
@@ -16,6 +18,8 @@ export const UserMessageContainer = styled.div`
  * Styled container for assistant messages
  */
 export const AssistantMessageContainer = styled.div`
+  font-size: 0.9em;
+  color: #B0B0B0;
   margin: 8px 0;
   align-self: flex-start;
   width: 100%;
@@ -27,13 +31,13 @@ export const AssistantMessageContainer = styled.div`
  */
 export const MessageContent = styled.div`
   pre {
-    background-color: #f9f9f9;
+    background-color: #1a1f33;
     padding: 0;
     border-radius: 4px;
     overflow-x: auto;
 
     & > code {
-      background-color: #f9f9f9;
+      background-color: #1a1f33;
       border-radius: 6px;
       border: 1px solid rgba(0, 0, 0, 0.15);
       margin: 0;
@@ -42,9 +46,8 @@ export const MessageContent = styled.div`
 
   code {
     font-family: "Courier New", monospace;
-    font-size: 0.9em;
-    background-color: #ececec;
-    padding: 2px 4px;
+    background-color: #2A2F4C;
+    padding: 1px 4px 1px 4px;
     border-radius: 3px;
     margin: 0 0.2em;
   }

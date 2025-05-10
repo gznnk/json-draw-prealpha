@@ -131,7 +131,7 @@ function App() {
 					left: 0,
 					right: "33.33%",
 					bottom: 0,
-					backgroundColor: "#eeeeee",
+					backgroundColor: "#0C0F1C",
 				}}
 			>
 				{/* SVGキャンバスエリア (2/3) */}
@@ -153,7 +153,7 @@ function App() {
 					left: "66.67%",
 					right: 0,
 					bottom: 0,
-					borderLeft: "1px solid #ccc",
+					borderLeft: "1px solid #3A415C",
 					boxSizing: "border-box",
 				}}
 			>
