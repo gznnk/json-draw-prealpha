@@ -1,11 +1,13 @@
 // Import libraries.
 import { OpenAI } from "openai";
 
+// Import shared.
+import type { aiToolHander } from "../../../../shared/ai-tools";
+
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../utils/KeyManager";
 
 // Import ai tools.
-import type { aiToolHander } from "../../../../shared/ai-tools";
 import { addImageGenNode } from "../add_image_gen_node";
 import { addLLMNode } from "../add_llm_node";
 import { addSvgToCanvasNode } from "../add_svg_to_canvas_node";
