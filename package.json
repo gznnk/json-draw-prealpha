@@ -9,6 +9,12 @@
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"deploy": "vite build && gh-pages -d dist",
+		"dep:clean": "rimraf dependency-graph",
+		"dep:graph": "npm run dep:clean && mkdir dependency-graph && madge --extensions ts,tsx,js,jsx --image dependency-graph/dependency-graph.svg src",
+		"dep:list": "madge --extensions ts,tsx,js,jsx src > dependency-graph/dependency-list.txt",
+		"dep:circle": "madge --extensions ts,tsx,js,jsx --circular src > dependency-graph/circular-dependencies.txt",
+		"dep": "npm run dep:graph && npm run dep:list && npm run dep:circle",
+		"dep:check": "madge --extensions ts,tsx,js,jsx --circular src",
 		"test": "jest"
 	},
 	"dependencies": {
@@ -45,6 +51,8 @@
 		"globals": "^15.14.0",
 		"jest": "^29.7.0",
 		"jest-environment-jsdom": "^29.7.0",
+		"madge": "^8.0.0",
+		"rimraf": "^6.0.1",
 		"rollup-plugin-license": "^3.6.0",
 		"ts-jest": "^29.2.6",
 		"ts-node": "^10.9.2",
