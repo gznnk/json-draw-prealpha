@@ -1,5 +1,6 @@
 /**
- * 図形の形状
+ * Defines the geometric properties of a shape.
+ * Includes position, dimensions, rotation, and scaling factors.
  */
 export type Shape = {
 	x: number;

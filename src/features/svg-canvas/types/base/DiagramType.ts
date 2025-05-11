@@ -1,5 +1,6 @@
 /**
- * Types of diagram components.
+ * Enum-like type defining all available diagram component types.
+ * Categorized into basic shapes and specialized node types.
  */
 export type DiagramType =
 	// Shapes

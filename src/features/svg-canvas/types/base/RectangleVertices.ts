@@ -1,7 +1,8 @@
 import type { Point } from "./Point";
 
 /**
- * 矩形の頂点の型定義
+ * Defines the coordinates for key points of a rectangle.
+ * Includes corner points and mid-points for each side to support manipulation and connection.
  */
 export type RectangleVertices = {
 	leftTopPoint: Point;

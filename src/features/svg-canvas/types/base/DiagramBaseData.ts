@@ -1,12 +1,13 @@
 import type { DiagramType } from "./DiagramType";
 
 /**
- * 図形の基本データ
+ * Base data structure for all diagram elements.
+ * Provides common properties that all diagram types must implement.
  */
 export type DiagramBaseData = {
 	id: string;
 	type: DiagramType;
 	x: number;
 	y: number;
-	syncWithSameId?: boolean; // 永続化されないプロパティ TODO: 永続化されるプロパティと分ける
+	syncWithSameId?: boolean; // Non-persistent property. TODO: Separate persistent and non-persistent properties
 };

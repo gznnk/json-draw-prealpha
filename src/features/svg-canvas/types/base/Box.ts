@@ -1,7 +1,8 @@
 import type { Point } from "./Point";
 
 /**
- * 矩形の枠の型定義
+ * Defines a rectangular box with edge coordinates and corner points.
+ * Used for determining boundaries and calculating intersection points with other elements.
  */
 export type Box = {
 	top: number;

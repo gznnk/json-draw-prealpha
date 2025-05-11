@@ -1,5 +1,6 @@
 /**
- * Type for positions of each side.
+ * Defines the coordinates for the four sides of a rectangular frame.
+ * Used for positioning and layout calculations.
  */
 export type Frame = {
 	top: number;
