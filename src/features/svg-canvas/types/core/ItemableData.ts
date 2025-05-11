@@ -1,7 +1,8 @@
-import type { Diagram } from "../DiagramCatalog"; // TODO: 依存関係を解消する
+import type { Diagram } from "../DiagramCatalog"; // TODO: Resolve dependency cycle
 
 /**
- * 子図形をもつ図形のデータ
+ * Interface for diagram elements that can contain child elements.
+ * Used for composite elements like groups that can hold other diagrams.
  */
 export type ItemableData = {
 	items: Diagram[];

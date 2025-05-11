@@ -1,7 +1,8 @@
 /**
- * 選択可能な図形のデータ
+ * Interface for diagram elements that can be selected by the user.
+ * Provides properties to track selection state and multi-selection behavior.
  */
 export type SelectableData = {
 	isSelected: boolean;
-	isMultiSelectSource: boolean; // 複数選択時の選択元かどうか
+	isMultiSelectSource: boolean; // Indicates if this is the source element in a multi-selection
 };

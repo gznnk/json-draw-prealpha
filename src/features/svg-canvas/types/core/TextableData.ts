@@ -1,7 +1,8 @@
 import type { TextableType, TextAlign, VerticalAlign } from "../base";
 
 /**
- * テキストを持つ図形のデータ
+ * Interface for diagram elements that can display and edit text.
+ * Provides properties to control text content, appearance, and editing state.
  */
 export type TextableData = {
 	text: string;
@@ -12,5 +13,5 @@ export type TextableData = {
 	fontSize: number;
 	fontFamily: string;
 	fontWeight: string;
-	isTextEditing: boolean; // 永続化されないプロパティ TODO: 永続化されるプロパティと分ける
+	isTextEditing: boolean; // Non-persistent property. TODO: Separate persistent and non-persistent properties
 };

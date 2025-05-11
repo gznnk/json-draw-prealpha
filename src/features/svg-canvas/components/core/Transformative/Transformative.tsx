@@ -35,7 +35,8 @@ import {
 import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
 
 /**
- * 変形コンポーネントのプロパティ
+ * Props for the Transformative component.
+ * Combines transformation data, selection state, and transformation event handlers.
  */
 type Props = TransformativeData &
 	SelectableData &
@@ -45,7 +46,8 @@ type Props = TransformativeData &
 	};
 
 /**
- * 変形コンポーネント
+ * Component that handles transformation of diagram elements.
+ * Provides handles for resizing, rotating, and moving elements on the canvas.
  */
 const TransformativeComponent: React.FC<Props> = ({
 	id,
