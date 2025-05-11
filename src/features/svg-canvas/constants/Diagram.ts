@@ -1,5 +1,5 @@
 import type { ConnectPointData, ConnectableData } from "../types/data";
-import type { Diagram } from "../types/DiagramCatalog";
+import type { Diagram } from "../catalog";
 import type { DiagramBaseData } from "../types/base";
 import type {
 	FillableData,

@@ -2,8 +2,8 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../types/DiagramCatalog";
-import { DiagramComponentCatalog } from "../../../types/DiagramCatalog";
+import type { Diagram } from "../../../catalog";
+import { DiagramComponentCatalog } from "../../../catalog";
 import type { CreateDiagramProps } from "../../../types/props/CreateDiagramProps";
 import type {
 	DiagramChangeEvent,
@@ -474,7 +474,16 @@ const GroupComponent: React.FC<GroupProps> = ({
 
 	// グループ内の図形の作成
 	const children = items.map((item) => {
-		const component = DiagramComponentCatalog[item.type];
+		// item.typeがDiagramType型であることを確認
+		if (!item.type) {
+			console.error("Item has no type", item);
+			return null;
+		}
+
+		const component =
+			DiagramComponentCatalog[
+				item.type as keyof typeof DiagramComponentCatalog
+			];
 		const props = {
 			...item,
 			key: item.id,

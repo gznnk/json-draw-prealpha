@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../types/DiagramCatalog";
+import type { Diagram } from "../../catalog";
 import type { DiagramTextEditEvent } from "../../types/events";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 import type { TextEditorState } from "../../components/core/Textable";

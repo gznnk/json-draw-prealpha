@@ -1,4 +1,4 @@
-import type { Diagram } from "../../../types/DiagramCatalog";
+import type { Diagram } from "../../../catalog";
 import {
 	calcGroupBoxOfNoRotation,
 	type GroupData,

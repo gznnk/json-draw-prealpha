@@ -1,4 +1,4 @@
-import type { Diagram } from "../DiagramCatalog"; // TODO: Resolve dependency cycle
+import type { Diagram } from "../../catalog/DiagramTypes"; // Imported from catalog instead of types
 
 /**
  * Interface for diagram elements that can contain child elements.

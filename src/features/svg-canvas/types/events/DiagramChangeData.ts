@@ -1,4 +1,4 @@
-import type { Diagram } from "../DiagramCatalog";
+import type { Diagram } from "../../catalog/DiagramTypes";
 
 /**
  * Data structure for diagram change events

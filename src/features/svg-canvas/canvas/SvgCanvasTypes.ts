@@ -4,7 +4,7 @@ import type { RefObject } from "react";
 // Import types related to SvgCanvas.
 import type { TextEditorState } from "../components/core/Textable";
 import type { GroupData } from "../types/data";
-import type { Diagram } from "../types/DiagramCatalog";
+import type { Diagram } from "../catalog";
 import type {
 	DiagramChangeEvent,
 	DiagramConnectEvent,

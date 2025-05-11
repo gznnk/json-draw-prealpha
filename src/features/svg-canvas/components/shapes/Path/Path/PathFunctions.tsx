@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../types/DiagramCatalog";
+import type { Diagram } from "../../../../catalog";
 
 // Import components related to SvgCanvas.
 import { ArrowHead } from "../../../core/ArrowHead";

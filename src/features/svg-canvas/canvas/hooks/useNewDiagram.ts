@@ -2,13 +2,12 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../types/DiagramCatalog";
-import type { DiagramType } from "../../types/base";
+import type { Diagram, DiagramType } from "../../catalog";
 import type { NewDiagramEvent } from "../../types/events";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { DiagramCreateFunctions } from "../../types/DiagramCatalog";
+import { DiagramCreateFunctions } from "../../catalog";
 import { isSelectableData } from "../../utils";
 import { dispatchNewItemEvent } from "../observers/addNewItem";
 

@@ -1,9 +1,6 @@
 // Import types related to SvgCanvas.
 import type { Frame } from "../types/base";
-import {
-	DiagramConnectPointCalculators,
-	type Diagram,
-} from "../types/DiagramCatalog";
+import { DiagramConnectPointCalculators, type Diagram } from "../catalog";
 import type { ConnectPointMoveData, EventType } from "../types/events";
 
 // Import components related to SvgCanvas.

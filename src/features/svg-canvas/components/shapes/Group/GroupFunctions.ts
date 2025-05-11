@@ -1,6 +1,6 @@
 // SvgCanvas関連型定義をインポート
 import type { Bounds } from "../../../types/base";
-import type { Diagram } from "../../../types/DiagramCatalog";
+import type { Diagram } from "../../../catalog";
 import type { GroupData } from "../../../types/data";
 
 // SvgCanvas関連関数をインポート

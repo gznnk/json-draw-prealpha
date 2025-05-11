@@ -6,7 +6,7 @@ import { getSelectedItems } from "../../../../canvas/SvgCanvasFunctions";
 
 // Import types related to SvgCanvas.
 import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
-import type { Diagram } from "../../../../types/DiagramCatalog";
+import type { Diagram } from "../../../../catalog";
 import type { FillableData, StrokableData } from "../../../../types/core";
 import type { TextableData } from "../../../../types/core";
 import type { RectangleData } from "../../../shapes/Rectangle";

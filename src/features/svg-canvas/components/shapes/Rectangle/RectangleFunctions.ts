@@ -5,7 +5,7 @@ import type {
 	TextableType,
 	VerticalAlign,
 } from "../../../types/base";
-import type { Diagram } from "../../../types/DiagramCatalog";
+import type { Diagram } from "../../../catalog";
 import type { Shape } from "../../../types";
 import type { ConnectPointMoveData } from "../../../types/events";
 

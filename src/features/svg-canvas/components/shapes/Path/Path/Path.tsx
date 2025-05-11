@@ -7,7 +7,7 @@ import { PositionLabel } from "../../../core/PositionLabel";
 import { Group } from "../../Group";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../types/DiagramCatalog";
+import type { Diagram } from "../../../../catalog";
 import type { CreateDiagramProps } from "../../../../types/props/CreateDiagramProps";
 import type {
 	DiagramChangeEvent,

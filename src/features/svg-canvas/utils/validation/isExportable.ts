@@ -1,4 +1,4 @@
-import { DiagramExportFunctions } from "../../types/DiagramCatalog";
+import { DiagramExportFunctions } from "../../catalog";
 import type { DiagramType } from "../../types/base";
 
 /**

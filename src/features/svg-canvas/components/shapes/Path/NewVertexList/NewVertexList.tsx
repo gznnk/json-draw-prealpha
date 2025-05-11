@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../types/DiagramCatalog";
+import type { Diagram } from "../../../../catalog";
 import type {
 	DiagramChangeEvent,
 	DiagramDragEvent,

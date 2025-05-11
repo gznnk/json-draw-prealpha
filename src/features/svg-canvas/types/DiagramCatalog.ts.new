@@ -1,0 +1,7 @@
+/**
+ * @deprecated This file has been moved to the catalog folder.
+ * Please import from "../catalog" instead.
+ */
+
+// Re-export everything from the catalog
+export * from "../catalog";

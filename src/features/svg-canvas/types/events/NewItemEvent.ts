@@ -1,4 +1,4 @@
-import type { Diagram } from "../DiagramCatalog";
+import type { Diagram } from "../../catalog/DiagramTypes";
 
 /**
  * Event for creating a new diagram item with complete details

@@ -10,7 +10,7 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import { type Diagram, DiagramComponentCatalog } from "../types/DiagramCatalog";
+import { type Diagram, DiagramComponentCatalog } from "../catalog";
 import type { DiagramSelectEvent } from "../types/events";
 
 // SvgCanvas関連コンポーネントをインポート
