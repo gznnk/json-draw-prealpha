@@ -1,5 +1,8 @@
+// TODO: 依存関係を整理する
 import { DiagramExportFunctions } from "../../catalog";
-import type { DiagramType } from "../../types/base";
+
+// Import types.
+import type { DiagramType } from "../../types";
 
 /**
  * Check if an object is exportable.

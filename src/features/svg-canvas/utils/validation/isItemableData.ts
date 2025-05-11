@@ -1,4 +1,5 @@
-import type { ItemableData } from "../../types/core";
+// Import types.
+import type { ItemableData } from "../../types";
 
 /**
  * Check if an object is ItemableData.

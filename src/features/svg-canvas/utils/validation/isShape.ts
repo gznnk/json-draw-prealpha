@@ -1,3 +1,4 @@
+// Import types.
 import type { Shape } from "../../types";
 
 /**

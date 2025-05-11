@@ -1,4 +1,5 @@
-import type { Point } from "../../../types/base";
+// Import types.
+import type { Point } from "../../../types";
 
 /**
  * 点に対してアフィン変換の逆変換を適用する

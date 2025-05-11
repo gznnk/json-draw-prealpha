@@ -1,3 +1,4 @@
+// Import base types.
 import type { Point } from "./Point";
 
 /**

@@ -1,7 +1,9 @@
-import type { EllipseVertices } from "../../../types/base";
-import type { Shape } from "../../../types";
-import { degreesToRadians } from "../common/degreesToRadians";
-import { affineTransformation } from "../transform/affineTransformation";
+// Import types.
+import type { EllipseVertices, Shape } from "../../../types";
+
+// Import utils.
+import { degreesToRadians } from "../common";
+import { affineTransformation } from "../transform";
 
 /**
  * 楕円の頂点を計算する

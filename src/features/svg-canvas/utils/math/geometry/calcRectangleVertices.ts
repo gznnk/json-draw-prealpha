@@ -1,8 +1,9 @@
-import type { RectangleVertices } from "../../../types/base";
-import type { Shape } from "../../../types";
-import { degreesToRadians } from "../common/degreesToRadians";
-import { nanToZero } from "../common/nanToZero";
-import { affineTransformation } from "../transform/affineTransformation";
+// Import types.
+import type { RectangleVertices, Shape } from "../../../types";
+
+// Import utils.
+import { degreesToRadians, nanToZero } from "../common";
+import { affineTransformation } from "../transform";
 
 /**
  * 四角形の頂点を計算する

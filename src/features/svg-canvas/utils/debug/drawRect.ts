@@ -1,4 +1,5 @@
-import type { Point } from "../../types/base";
+// Import types.
+import type { Point } from "../../types";
 
 /**
  * 四角形を描画する（開発用）

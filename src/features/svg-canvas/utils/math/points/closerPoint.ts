@@ -1,4 +1,7 @@
-import type { Point } from "../../../types/base";
+// Import types.
+import type { Point } from "../../../types";
+
+// Import utils.
 import { calcDistance } from "./calcDistance";
 
 /**

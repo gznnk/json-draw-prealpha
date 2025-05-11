@@ -1,3 +1,4 @@
+// TODO: 依存関係
 import type { Diagram } from "../../../catalog";
 import {
 	calcGroupBoxOfNoRotation,

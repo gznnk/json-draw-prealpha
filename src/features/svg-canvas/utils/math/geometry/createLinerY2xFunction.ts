@@ -1,4 +1,5 @@
-import type { Point } from "../../../types/base";
+// Import types.
+import type { Point } from "../../../types";
 
 /**
  * 2点間の直線の方程式を基に、Y座標からX座標を計算する関数を生成します。

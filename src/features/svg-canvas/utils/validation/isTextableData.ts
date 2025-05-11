@@ -1,4 +1,5 @@
-import type { TextableData } from "../../types/core";
+// Import types.
+import type { TextableData } from "../../types";
 
 /**
  * Check if an object is TextableData.

@@ -1,10 +1,8 @@
-// Reactのインポート
+// Import React.
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 
-// SvgCanvas関連型定義をインポート
-import type { Point } from "../types/base";
-import type { DiagramType } from "../types/base";
+// Import types.
 import {
 	SVG_CANVAS_SCROLL_EVENT_NAME,
 	type DiagramClickEvent,
@@ -12,10 +10,12 @@ import {
 	type DiagramDragEvent,
 	type DiagramHoverEvent,
 	type DiagramPointerEvent,
+	type DiagramType,
 	type EventType,
-} from "../types/events";
+	type Point,
+} from "../types";
 
-// SvgCanvas関連関数をインポート
+// Import utils.
 import { newEventId } from "../utils";
 
 /** 全体通知用ドラッグイベントの名前 */

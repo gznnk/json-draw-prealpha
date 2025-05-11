@@ -1,4 +1,5 @@
-import type { Point } from "../../../types/base";
+// Import types.
+import type { Point } from "../../../types";
 
 /**
  * 座標を中心点の周りに回転させる

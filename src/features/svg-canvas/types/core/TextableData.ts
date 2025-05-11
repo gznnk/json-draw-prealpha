@@ -1,3 +1,4 @@
+// Import base types.
 import type { TextableType, TextAlign, VerticalAlign } from "../base";
 
 /**

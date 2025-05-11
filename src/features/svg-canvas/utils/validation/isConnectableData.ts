@@ -1,4 +1,5 @@
-import type { ConnectableData } from "../../types/data";
+// Import types.
+import type { ConnectableData } from "../../types";
 
 /**
  * Check if an object is ConnectableData.

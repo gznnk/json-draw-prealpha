@@ -1,9 +1,12 @@
-import type { Point } from "../../../types/base";
-import type { Shape } from "../../../types";
-import { degreesToRadians } from "../common/degreesToRadians";
-import { nanToZero } from "../common/nanToZero";
-import { affineTransformation } from "../transform/affineTransformation";
-import { inverseAffineTransformation } from "../transform/inverseAffineTransformation";
+// Import types.
+import type { Point, Shape } from "../../../types";
+
+// Import utils.
+import { degreesToRadians, nanToZero } from "../common";
+import {
+	affineTransformation,
+	inverseAffineTransformation,
+} from "../transform";
 
 /**
  * 座標集合の外接枠を計算する

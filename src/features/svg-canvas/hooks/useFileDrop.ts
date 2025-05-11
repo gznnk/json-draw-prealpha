@@ -1,7 +1,11 @@
-// Reactをインポート
+// Import React.
 import { useCallback, useRef } from "react";
+
+// Import types.
+import type { FileDropEvent } from "../types";
+
+// Import utils.
 import { newEventId } from "../utils";
-import type { FileDropEvent } from "../types/events";
 
 /**
  * useFileDropフックの引数型定義
