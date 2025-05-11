@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { CreateDiagramProps } from "../../../types/DiagramTypes";
+import type { CreateDiagramProps } from "../../../types/props/CreateDiagramProps";
 
 // Import components related to SvgCanvas.
 import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";

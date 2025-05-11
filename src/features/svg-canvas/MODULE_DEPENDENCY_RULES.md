@@ -16,9 +16,12 @@ graph TD
     events --> base
     events --> core
     events --> data
+    props --> data
+    props --> events
 ```
 
 - `base`: Fundamental types with no dependencies on other types.
 - `core`: Core types that optionally depend only on `base` types.
 - `data`: Diagram data types that optionally depend on `base` and `core` types.
 - `events`: Event-related types that may depend on all of the above.
+- `props`: Diagram props types that optionally depend on `data` and `events` types.
