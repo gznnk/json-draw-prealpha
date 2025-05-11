@@ -1,4 +1,4 @@
-import type { Point } from "../../../types/CoordinateTypes";
+import type { Point } from "../../../types/base";
 
 /**
  * 座標を中心点の周りに回転させる

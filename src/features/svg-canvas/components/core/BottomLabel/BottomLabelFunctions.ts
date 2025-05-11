@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { RectangleVertices } from "../../../types/CoordinateTypes";
+import type { RectangleVertices } from "../../../types/base";
 
 /**
  * Calculate the position of the bottom label.

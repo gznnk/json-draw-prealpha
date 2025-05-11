@@ -69,12 +69,6 @@ export const Button = memo(ButtonComponent);
   - Named exports make import statements consistent and self-documenting
   - Named exports support better tree-shaking in the final bundle
 
-## File Organization
-
-- Group related components, hooks, and utilities in feature folders
-- Keep shared utilities in the utils folder
-- Place shared types in the types folder
-
 ## Biome Linting and Formatting Rules
 
 - Import Node.js built-in modules using the `node:` protocol prefix (e.g., `import fs from "node:fs"`)
@@ -97,6 +91,13 @@ export const Button = memo(ButtonComponent);
 - Do not create extension points or interfaces without concrete use cases
 - Embrace refactoring to accommodate changing requirements when they actually arise
 - Prioritize simple, readable, and maintainable code over speculative features
+
+## Refactoring Policy
+
+- Do not leave temporary proxy or alias files to preserve backward compatibility during refactoring
+- Always update all import paths and references immediately as part of the refactoring process
+- Avoid deferring cleanup by leaving fallback entry points or legacy references in place
+- Strive for consistency and integrity across the entire codebase after any structural changes
 
 ## After Copilot Task
 

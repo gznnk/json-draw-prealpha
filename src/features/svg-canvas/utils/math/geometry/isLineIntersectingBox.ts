@@ -1,4 +1,4 @@
-import type { Box, Point } from "../../../types/CoordinateTypes";
+import type { Box, Point } from "../../../types/base";
 import { lineIntersects } from "./lineIntersects";
 
 /**

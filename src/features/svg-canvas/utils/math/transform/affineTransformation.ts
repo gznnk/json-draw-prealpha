@@ -1,4 +1,4 @@
-import type { Point } from "../../../types/CoordinateTypes";
+import type { Point } from "../../../types/base";
 
 /**
  * 点にアフィン変換を適用する

@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { RectangleVertices } from "../../../types/CoordinateTypes";
+import type { RectangleVertices } from "../../../types/base";
 import type { Diagram } from "../../../types/DiagramCatalog";
 import type {
 	TextAlign,

@@ -1,4 +1,4 @@
-import type { EllipseVertices } from "../../../types/CoordinateTypes";
+import type { EllipseVertices } from "../../../types/base";
 import type { Shape } from "../../../types";
 import { degreesToRadians } from "../common/degreesToRadians";
 import { affineTransformation } from "../transform/affineTransformation";

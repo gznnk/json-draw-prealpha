@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Frame } from "../types/CoordinateTypes";
+import type { Frame } from "../types/base";
 import {
 	DiagramConnectPointCalculators,
 	type Diagram,

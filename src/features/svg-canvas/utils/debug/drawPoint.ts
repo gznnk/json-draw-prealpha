@@ -1,4 +1,4 @@
-import type { Point } from "../../types/CoordinateTypes";
+import type { Point } from "../../types/base";
 
 /**
  * 点を描画する（開発用）

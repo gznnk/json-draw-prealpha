@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // SvgCanvas関連型定義をインポート
-import type { Point } from "../../../../types/CoordinateTypes";
+import type { Point } from "../../../../types/base";
 import type { CreateDiagramProps } from "../../../../types/DiagramTypes";
 import type { Shape } from "../../../../types";
 import type {

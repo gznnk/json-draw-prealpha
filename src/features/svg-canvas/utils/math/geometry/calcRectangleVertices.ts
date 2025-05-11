@@ -1,4 +1,4 @@
-import type { RectangleVertices } from "../../../types/CoordinateTypes";
+import type { RectangleVertices } from "../../../types/base";
 import type { Shape } from "../../../types";
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";

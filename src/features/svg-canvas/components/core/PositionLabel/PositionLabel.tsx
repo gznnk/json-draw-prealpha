@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to SvgCanvas.
-import type { RectangleVertices } from "../../../types/CoordinateTypes";
+import type { RectangleVertices } from "../../../types/base";
 
 // Import components related to SvgCanvas.
 import { calcBottomLabelPosition } from "../BottomLabel";

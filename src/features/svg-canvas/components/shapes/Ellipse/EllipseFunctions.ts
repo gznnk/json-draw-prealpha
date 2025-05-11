@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { EllipseVertices } from "../../../types/CoordinateTypes";
+import type { EllipseVertices } from "../../../types/base";
 import type { Diagram } from "../../../types/DiagramCatalog";
 import type {
 	TextAlign,

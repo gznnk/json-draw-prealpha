@@ -1,4 +1,4 @@
-import type { Point } from "../../../types/CoordinateTypes";
+import type { Point } from "../../../types/base";
 import type { Shape } from "../../../types";
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";

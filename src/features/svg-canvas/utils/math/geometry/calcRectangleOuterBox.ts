@@ -1,4 +1,4 @@
-import type { Box } from "../../../types/CoordinateTypes";
+import type { Box } from "../../../types/base";
 import type { Shape } from "../../../types";
 import { calcRectangleVertices } from "./calcRectangleVertices";
 

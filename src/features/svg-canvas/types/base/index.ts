@@ -2,3 +2,8 @@ export type { Bounds } from "./Bounds";
 export type { DiagramBaseData } from "./DiagramBaseData";
 export type { Shape } from "./Shape";
 export type { DiagramType } from "./DiagramType";
+export type { Point } from "./Point";
+export type { Frame } from "./Frame";
+export type { Box } from "./Box";
+export type { RectangleVertices } from "./RectangleVertices";
+export type { EllipseVertices } from "./EllipseVertices";

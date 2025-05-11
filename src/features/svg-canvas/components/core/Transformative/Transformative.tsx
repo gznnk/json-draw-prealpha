@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { Point } from "../../../types/CoordinateTypes";
+import type { Point } from "../../../types/base";
 import type { DiagramType } from "../../../types/base";
 import type { SelectableData, TransformativeData } from "../../../types/core";
 import type { TransformativeProps } from "../../../types/DiagramTypes";
