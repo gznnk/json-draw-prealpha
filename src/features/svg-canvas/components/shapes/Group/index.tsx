@@ -1,3 +1,3 @@
 export { Group } from "./Group";
 export { calcBoundsOfGroup, calcGroupBoxOfNoRotation } from "./GroupFunctions";
-export type { GroupData } from "./GroupTypes";
+export type { GroupData } from "../../../types/shape";

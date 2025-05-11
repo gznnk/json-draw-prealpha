@@ -10,7 +10,7 @@ import type { Shape } from "../../../types";
 import type { ConnectPointMoveData } from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.
-import type { ConnectPointData } from "../ConnectPoint";
+import type { ConnectPointData } from "../../../types/shape";
 
 // Import functions related to SvgCanvas.
 import { newId } from "../../../utils/diagram";

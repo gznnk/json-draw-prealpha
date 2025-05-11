@@ -8,7 +8,7 @@ import type { ConnectPointMoveData, EventType } from "../types/EventTypes";
 
 // Import components related to SvgCanvas.
 import { notifyConnectPointsMove } from "../components/shapes/ConnectLine";
-import type { ConnectPointData } from "../components/shapes/ConnectPoint";
+import type { ConnectPointData } from "../types/shape";
 import { calcBoundsOfGroup } from "../components/shapes/Group";
 
 // Import functions related to SvgCanvas.

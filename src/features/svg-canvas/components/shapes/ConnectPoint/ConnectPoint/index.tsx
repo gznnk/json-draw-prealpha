@@ -3,7 +3,5 @@ export {
 	createBestConnectPath,
 	getLineDirection,
 } from "./ConnectPointFunctions";
-export type {
-	ConnectPointData,
-	Direction,
-} from "./ConnectPointTypes";
+export type { ConnectPointData } from "../../../../types/shape";
+export type { Direction } from "./ConnectPointTypes";

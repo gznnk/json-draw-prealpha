@@ -11,6 +11,7 @@ import type {
 	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
 } from "../../../../types/EventTypes";
+import type { ConnectLineData } from "../../../../types/shape";
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../../../canvas";
@@ -23,7 +24,6 @@ import { calcRadians, radiansToDegrees } from "../../../../utils";
 
 // Imports related to this component.
 import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
-import type { ConnectLineData } from "./ConnectLineTypes";
 
 /**
  * Props for ConnectLine component.

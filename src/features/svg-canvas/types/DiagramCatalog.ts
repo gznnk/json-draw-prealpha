@@ -1,5 +1,16 @@
 // Import types related to SvgCanvas.
 import type { ConnectPointMoveData } from "./EventTypes";
+import type {
+	ConnectLineData,
+	ConnectPointData,
+	EllipseData,
+	GroupData,
+	ImageData,
+	PathData,
+	PathPointData,
+	RectangleData,
+	SvgData,
+} from "./shape";
 
 // Import components related to SvgCanvas.
 import { AgentNode, createAgentNodeData } from "../components/nodes/AgentNode";
@@ -29,38 +40,29 @@ import {
 	createWebSearchNodeData,
 	WebSearchNode,
 } from "../components/nodes/WebSearchNode";
-import {
-	ConnectLine,
-	type ConnectLineData,
-} from "../components/shapes/ConnectLine";
-import type { ConnectPointData } from "../components/shapes/ConnectPoint";
+import { ConnectLine } from "../components/shapes/ConnectLine";
 import {
 	calcEllipseConnectPointPosition,
 	createEllipseData,
 	Ellipse,
-	type EllipseData,
 } from "../components/shapes/Ellipse";
-import { Group, type GroupData } from "../components/shapes/Group";
+import { Group } from "../components/shapes/Group";
 import {
 	createImageData,
 	Image,
 	imageToBlob,
-	type ImageData,
 } from "../components/shapes/Image";
 import {
 	createPathData,
 	Path,
 	PathPoint,
-	type PathData,
-	type PathPointData,
 } from "../components/shapes/Path";
 import {
 	calcRectangleConnectPointPosition,
 	createRectangleData,
 	Rectangle,
-	type RectangleData,
 } from "../components/shapes/Rectangle";
-import { Svg, svgToBlob, type SvgData } from "../components/shapes/Svg";
+import { Svg, svgToBlob } from "../components/shapes/Svg";
 import type { DiagramType } from "./base/DiagramType";
 
 /**

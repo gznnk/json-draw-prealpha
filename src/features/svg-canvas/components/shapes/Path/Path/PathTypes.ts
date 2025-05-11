@@ -1,18 +1,6 @@
-// Import types related to SvgCanvas.
-import type { CreateDiagramType } from "../../../../types/DiagramTypes";
-
 // Import components related to SvgCanvas.
 import type { ArrowHeadType } from "../../../core/ArrowHead";
 
-/**
- * 折れ線のデータ
- */
-export type PathData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	itemable: true;
-	strokable: true;
-}> & {
-	startArrowHead?: ArrowHeadType;
-	endArrowHead?: ArrowHeadType;
-};
+// Re-export from central type definitions
+export type { PathData } from "../../../../types/shape";
+export type { ArrowHeadType };

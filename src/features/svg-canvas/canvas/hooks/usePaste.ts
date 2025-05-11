@@ -2,9 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { ConnectLineData } from "../../components/shapes/ConnectLine";
-import type { ConnectPointData } from "../../components/shapes/ConnectPoint";
-import type { GroupData } from "../../components/shapes/Group";
+import type { ConnectLineData, ConnectPointData, GroupData } from "../../types/shape";
 import type { Diagram } from "../../types/DiagramCatalog";
 import type { Shape } from "../../types";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";

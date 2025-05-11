@@ -1,11 +1,2 @@
-// Import types related to SvgCanvas.
-import type { CreateDiagramType } from "../../../types/DiagramTypes";
-
-/**
- * グループのデータ
- */
-export type GroupData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	itemable: true;
-}>;
+// Re-export from central type definitions
+export type { GroupData } from "../../../types/shape";

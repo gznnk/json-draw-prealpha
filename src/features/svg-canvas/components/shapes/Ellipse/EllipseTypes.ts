@@ -1,20 +1,11 @@
 // Import types related to SvgCanvas.
 import type {
 	CreateDiagramProps,
-	CreateDiagramType,
 } from "../../../types/DiagramTypes";
+import type { EllipseData } from "../../../types/shape";
 
-/**
- * 楕円のデータ
- */
-export type EllipseData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-	connectable: true;
-	strokable: true;
-	fillable: true;
-	textable: true;
-}>;
+// Re-export from central type definitions
+export type { EllipseData } from "../../../types/shape";
 
 /**
  * 楕円コンポーネントのプロパティ

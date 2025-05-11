@@ -1,5 +1,5 @@
 // SvgCanvas関連型定義をインポート
-import type { ConnectPointData } from "../components/shapes/ConnectPoint";
+import type { ConnectPointData } from "./shape";
 import type {
 	DiagramChangeEvent,
 	DiagramClickEvent,

@@ -1,18 +1,11 @@
 // Import types related to SvgCanvas.
 import type {
-	CreateDiagramType,
 	CreateDiagramProps,
 } from "../../../types/DiagramTypes";
+import type { ImageData } from "../../../types/shape";
 
-/**
- * Type for the data of the Image component.
- */
-export type ImageData = CreateDiagramType<{
-	selectable: true;
-	transformative: true;
-}> & {
-	base64Data: string;
-};
+// Re-export from central type definitions
+export type { ImageData } from "../../../types/shape";
 
 /**
  * Props for the Image component.
