@@ -28,7 +28,8 @@ import { NewVertexList } from "../NewVertexList";
 import { SegmentList } from "../SegmentList";
 import {
 	createDValue,
-	createEndPointArrowHead,	createStartPointArrowHead,
+	createEndPointArrowHead,
+	createStartPointArrowHead,
 } from "./PathFunctions";
 import type { PathData } from "../../../../types/shape";
 

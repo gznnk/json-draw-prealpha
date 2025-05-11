@@ -29,10 +29,7 @@ import {
 	createConnectPathOnDrag,
 	getLineDirection,
 } from "./ConnectPointFunctions";
-import type {
-	ConnectingPoint,
-	ConnectionEvent,
-} from "./ConnectPointTypes";
+import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
 import type { ConnectPointData } from "../../../../types/shape";
 
 /**
