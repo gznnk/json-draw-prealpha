@@ -1,4 +1,4 @@
-import type { SelectableData } from "../../types/base";
+import type { SelectableData } from "../../types/core";
 
 /**
  * Check if an object is SelectableData.

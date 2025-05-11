@@ -13,33 +13,15 @@ import type {
 	ExecuteEvent,
 	FileDropEvent,
 } from "./EventTypes";
-import type {
-	DiagramBaseData,
-	ItemableData,
-	SelectableData,
-	TransformativeData,
-} from "./base";
+import type { DiagramBaseData } from "./base";
+import type { FillableData, StrokableData } from "./core";
+import type { ItemableData, SelectableData, TransformativeData } from "./core";
 
 /**
  * 接続可能な図形のデータ
  */
 export type ConnectableData = {
 	connectPoints: ConnectPointData[];
-};
-
-/**
- * 枠線を持つ図形のデータ
- */
-export type StrokableData = {
-	stroke: string;
-	strokeWidth: string;
-};
-
-/**
- * 塗り潰しできる図形のデータ
- */
-export type FillableData = {
-	fill: string;
 };
 
 /**

@@ -1,4 +1,4 @@
-import type { StrokableData } from "../../types/DiagramTypes";
+import type { StrokableData } from "../../types/core";
 
 /**
  * Check if an object is StrokableData.

@@ -1,17 +1,14 @@
 import type { ConnectPointData } from "../components/shapes/ConnectPoint";
 import type { Diagram } from "../types/DiagramCatalog";
+import type { DiagramBaseData } from "../types/base";
 import type {
-	DiagramBaseData,
+	FillableData,
+	StrokableData,
 	ItemableData,
 	SelectableData,
 	TransformativeData,
-} from "../types/base";
-import type {
-	StrokableData,
-	FillableData,
-	TextableData,
-	ConnectableData,
-} from "../types/DiagramTypes";
+} from "../types/core";
+import type { TextableData, ConnectableData } from "../types/DiagramTypes";
 
 /**
  * Default diagram base data.

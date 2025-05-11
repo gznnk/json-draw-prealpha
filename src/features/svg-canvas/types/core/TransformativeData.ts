@@ -1,4 +1,4 @@
-import type { Shape } from "./Shape";
+import type { Shape } from "../base/Shape";
 
 /**
  * 変形可能な図形のデータ

@@ -1,4 +1,4 @@
-import type { FillableData } from "../../types/DiagramTypes";
+import type { FillableData } from "../../types/core";
 
 /**
  * Check if an object is FillableData.

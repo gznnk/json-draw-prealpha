@@ -2,7 +2,7 @@
 
 ## Comment Style Guidelines
 
-- Write all code comments in English to ensure LLM comprehension and international collaboration.
+- Write all code comments in English to ensure LLM comprehension.
 - Use JSDoc style comments for functions, methods, classes, and interfaces.
 - For single-line comments, don't use periods at the end.
 - For multi-line comments, use periods at the end of each sentence.
@@ -28,6 +28,24 @@ function processDiagramEvent(event: DiagramEvent, canvasState: CanvasState): Can
 function generateUniqueId(): string {
   // Implementation
 }
+```
+
+## React Component Coding Style
+
+- Define all React components using arrow function syntax
+- Do not use default exports
+- Declare the component as a `const` with a `*Component` suffix, e.g. `const ButtonComponent`
+- Export components as `memo(Component)` to enable memoization by default
+
+```tsx
+// Example
+import { memo } from "react";
+
+const ButtonComponent = (): JSX.Element => {
+  return <button>Click</button>;
+};
+
+export const Button = memo(ButtonComponent);
 ```
 
 ## React Component Folder Structure
@@ -79,6 +97,18 @@ function generateUniqueId(): string {
 - Do not create extension points or interfaces without concrete use cases
 - Embrace refactoring to accommodate changing requirements when they actually arise
 - Prioritize simple, readable, and maintainable code over speculative features
+
+## After Copilot Task
+
+- After Copilot finishes generating or modifying code, always run `npm run build` to verify that no build errors were introduced
+- If any errors occur, manually fix them before continuing to the next task or committing the code
+- This check ensures the codebase remains in a compilable state
+- Do not rely solely on Copilot's output—manual validation and correction are required
+
+## Terminal Environment Assumptions
+
+- Assume that available terminal is PowerShell when generating command-line instructions or scripts
+- Ensure generated commands are compatible with PowerShell syntax (not Bash or Unix-specific)
 
 ## Git Operations and Workflow
 
