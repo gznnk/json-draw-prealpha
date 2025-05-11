@@ -11,7 +11,7 @@ import type {
 	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
 } from "../../../../types/events";
-import type { ConnectLineData } from "../../../../types/shape";
+import type { ConnectLineData } from "../../../../types/shapes";
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../../../canvas";

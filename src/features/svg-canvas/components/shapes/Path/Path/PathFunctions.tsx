@@ -11,7 +11,7 @@ import { calcRadians } from "../../../../utils";
 // Imports related to this component.
 import type { PathPointData } from "../PathPoint";
 import { DEFAULT_PATH_DATA } from "./PathConstants";
-import type { PathData } from "../../../../types/shape";
+import type { PathData } from "../../../../types/shapes";
 
 export const createDValue = (items: Diagram[]) => {
 	let d = "";

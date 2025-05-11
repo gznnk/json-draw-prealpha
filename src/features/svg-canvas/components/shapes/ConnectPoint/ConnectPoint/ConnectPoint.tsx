@@ -30,7 +30,7 @@ import {
 	getLineDirection,
 } from "./ConnectPointFunctions";
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
-import type { ConnectPointData } from "../../../../types/shape";
+import type { ConnectPointData } from "../../../../types/shapes";
 
 /**
  * 接続ポイントプロパティ

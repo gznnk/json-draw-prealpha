@@ -1,4 +1,4 @@
-import type { RectangleData } from "../../../types/shape";
+import type { RectangleData } from "../../../types/shapes";
 
 import {
 	DEFAULT_CONNECTABLE_DATA,

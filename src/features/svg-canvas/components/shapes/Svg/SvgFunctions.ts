@@ -4,7 +4,7 @@ import { newId } from "../../../utils/diagram";
 
 // Imports related to this component.
 import { DEFAULT_SVG_DATA } from "./SvgConstants";
-import type { SvgData } from "../../../types/shape";
+import type { SvgData } from "../../../types/shapes";
 
 export const createSvgData = ({
 	x,

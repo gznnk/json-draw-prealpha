@@ -6,7 +6,7 @@ import type {
 	ConnectLineData,
 	ConnectPointData,
 	GroupData,
-} from "../../types/shape";
+} from "../../types/shapes";
 import type { Diagram } from "../../types/DiagramCatalog";
 import type { Shape } from "../../types";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";

@@ -1,4 +1,4 @@
-import type { SvgData } from "../../../types/shape";
+import type { SvgData } from "../../../types/shapes";
 
 import {
 	DEFAULT_DIAGRAM_BASE_DATA,
