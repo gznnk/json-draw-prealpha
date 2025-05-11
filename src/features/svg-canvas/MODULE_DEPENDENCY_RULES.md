@@ -20,5 +20,5 @@ graph TD
 
 - `base`: Fundamental types with no dependencies on other types.
 - `core`: Core types that optionally depend only on `base` types.
-- `data`: Types representing the structure and properties of diagram shapes. May depend on `base` and `core` types.
+- `data`: Diagram data types that optionally depend on `base` and `core` types.
 - `events`: Event-related types that may depend on all of the above.
