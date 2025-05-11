@@ -61,30 +61,7 @@ import {
 	type RectangleData,
 } from "../components/shapes/Rectangle";
 import { Svg, svgToBlob, type SvgData } from "../components/shapes/Svg";
-
-/**
- * Types of diagram components.
- */
-export type DiagramType =
-	// Shapes
-	| "ConnectLine"
-	| "ConnectPoint"
-	| "Ellipse"
-	| "Group"
-	| "Image"
-	| "Path"
-	| "PathPoint"
-	| "Rectangle"
-	| "Svg"
-	// Nodes
-	| "AgentNode"
-	| "HubNode"
-	| "ImageGenNode"
-	| "SvgToDiagramNode"
-	| "LLMNode"
-	| "TextAreaNode"
-	| "VectorStoreNode"
-	| "WebSearchNode";
+import type { DiagramType } from "./base/DiagramType";
 
 /**
  * Union type representing all diagram data types.

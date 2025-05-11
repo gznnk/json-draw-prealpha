@@ -5,9 +5,10 @@ import { useEffect, useRef } from "react";
 import type { ConnectLineData } from "../../../components/shapes/ConnectLine";
 import type { PathPointData } from "../../../components/shapes/Path";
 import type { Diagram } from "../../../types/DiagramCatalog";
-import type { ConnectableData, Shape } from "../../../types/DiagramTypes";
+import type { ConnectableData } from "../../../types/DiagramTypes";
 import type { ConnectNodesEvent } from "../../../types/EventTypes";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { Shape } from "../../../types";
 
 // Import functions related to SvgCanvas.
 import { createBestConnectPath } from "../../../components/shapes/ConnectPoint";

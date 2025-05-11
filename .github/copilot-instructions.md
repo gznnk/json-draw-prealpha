@@ -30,14 +30,6 @@ function generateUniqueId(): string {
 }
 ```
 
-## React Component Structure
-
-- Place React components in folders named after the component
-- Use [ComponentName].tsx for the implementation file
-- Create an index.tsx file for re-exporting the component and related types
-- Define components as arrow functions assigned to constants, then export them
-- Use React.memo for performance optimization where appropriate
-
 ## React Component Folder Structure
 
 - Folder name should match the component name exactly

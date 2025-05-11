@@ -2,11 +2,11 @@
 import type { EllipseVertices } from "../../../types/CoordinateTypes";
 import type { Diagram } from "../../../types/DiagramCatalog";
 import type {
-	Shape,
 	TextAlign,
 	TextableType,
 	VerticalAlign,
 } from "../../../types/DiagramTypes";
+import type { Shape } from "../../../types";
 import type { ConnectPointMoveData } from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.

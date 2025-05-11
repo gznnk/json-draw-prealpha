@@ -1,6 +1,5 @@
 // SvgCanvas関連型定義をインポート
 import type { ConnectPointData } from "../components/shapes/ConnectPoint";
-import type { Diagram, DiagramType } from "./DiagramCatalog";
 import type {
 	DiagramChangeEvent,
 	DiagramClickEvent,
@@ -14,62 +13,12 @@ import type {
 	ExecuteEvent,
 	FileDropEvent,
 } from "./EventTypes";
-
-/**
- * 図形の形状
- */
-export type Shape = {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	rotation: number;
-	scaleX: number;
-	scaleY: number;
-};
-
-/**
- * Bounds of a diagram.
- */
-export type Bounds = {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-};
-
-/**
- * 図形の基本データ
- */
-export type DiagramBaseData = {
-	id: string;
-	type: DiagramType;
-	x: number;
-	y: number;
-	syncWithSameId?: boolean; // 永続化されないプロパティ TODO: 永続化されるプロパティと分ける
-};
-
-/**
- * 選択可能な図形のデータ
- */
-export type SelectableData = {
-	isSelected: boolean;
-	isMultiSelectSource: boolean; // 複数選択時の選択元かどうか
-};
-
-/**
- * 変形可能な図形のデータ
- */
-export type TransformativeData = Shape & {
-	keepProportion: boolean;
-};
-
-/**
- * 子図形をもつ図形のデータ
- */
-export type ItemableData = {
-	items: Diagram[];
-};
+import type {
+	DiagramBaseData,
+	ItemableData,
+	SelectableData,
+	TransformativeData,
+} from "./base";
 
 /**
  * 接続可能な図形のデータ

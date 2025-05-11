@@ -1,4 +1,5 @@
 // SvgCanvas関連型定義をインポート
+import type { Bounds } from "../../../types/base";
 import type { Diagram } from "../../../types/DiagramCatalog";
 import type { GroupData } from "./GroupTypes";
 
@@ -196,7 +197,7 @@ export const calcGroupBoxOfNoRotation = (
 	};
 };
 
-export const calcBoundsOfGroup = (group: GroupData) => {
+export const calcBoundsOfGroup = (group: GroupData): Bounds => {
 	const { items, x, y, rotation } = group;
 	const radians = degreesToRadians(rotation);
 	const box = calcGroupBoxOfNoRotation(items, x, y, rotation);

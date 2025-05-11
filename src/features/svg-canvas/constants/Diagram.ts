@@ -2,9 +2,11 @@ import type { ConnectPointData } from "../components/shapes/ConnectPoint";
 import type { Diagram } from "../types/DiagramCatalog";
 import type {
 	DiagramBaseData,
+	ItemableData,
 	SelectableData,
 	TransformativeData,
-	ItemableData,
+} from "../types/base";
+import type {
 	StrokableData,
 	FillableData,
 	TextableData,

@@ -1,5 +1,5 @@
 import type { EllipseVertices } from "../../../types/CoordinateTypes";
-import type { Shape } from "../../../types/DiagramTypes";
+import type { Shape } from "../../../types";
 import { degreesToRadians } from "../common/degreesToRadians";
 import { affineTransformation } from "../transform/affineTransformation";
 

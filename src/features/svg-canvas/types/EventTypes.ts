@@ -1,6 +1,6 @@
 import type { PathPointData } from "../components/shapes/Path";
-import type { Diagram, DiagramType } from "./DiagramCatalog";
-import type { Shape } from "./DiagramTypes";
+import type { Diagram } from "./DiagramCatalog";
+import type { DiagramType, Shape } from "./base";
 
 /**
  * Types of events in the diagram interaction lifecycle

@@ -1,5 +1,5 @@
 import type { Point } from "../../../types/CoordinateTypes";
-import type { Shape } from "../../../types/DiagramTypes";
+import type { Shape } from "../../../types";
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";
 import { affineTransformation } from "../transform/affineTransformation";

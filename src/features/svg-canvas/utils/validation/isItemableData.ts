@@ -1,4 +1,4 @@
-import type { ItemableData } from "../../types/DiagramTypes";
+import type { ItemableData } from "../../types/base";
 
 /**
  * Check if an object is ItemableData.

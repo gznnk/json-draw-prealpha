@@ -1,4 +1,4 @@
-import type { TransformativeData } from "../../types/DiagramTypes";
+import type { TransformativeData } from "../../types/base";
 
 /**
  * Check if an object is TransformativeData.

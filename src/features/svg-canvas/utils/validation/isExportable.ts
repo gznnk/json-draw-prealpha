@@ -1,7 +1,5 @@
-import {
-	DiagramExportFunctions,
-	type DiagramType,
-} from "../../types/DiagramCatalog";
+import { DiagramExportFunctions } from "../../types/DiagramCatalog";
+import type { DiagramType } from "../../types/base";
 
 /**
  * Check if an object is exportable.

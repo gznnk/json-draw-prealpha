@@ -1,11 +1,12 @@
-# 依存関係ルール
+# App Dependency Rules
 
-## 全体
+## Architecture
 ```mermaid
 graph TD
     app --> features
     app --> shared
     features --> shared
+    shared -. NG .-> others
 ```
 
 ## Feature
@@ -18,7 +19,7 @@ graph TD
     features/svg-canvas --> shared/ai-tools
 ```
 
-## 要修正
+## FIXME
 ```mermaid
 graph TD
     features/llm-chat-ui -. 避けたい .-> features/svg-canvas

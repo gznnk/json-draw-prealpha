@@ -4,12 +4,12 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
 import type { Point } from "../../../types/CoordinateTypes";
-import type { DiagramType } from "../../../types/DiagramCatalog";
 import type {
+	DiagramType,
 	SelectableData,
 	TransformativeData,
-	TransformativeProps,
-} from "../../../types/DiagramTypes";
+} from "../../../types/base";
+import type { TransformativeProps } from "../../../types/DiagramTypes";
 import type { DiagramDragEvent, EventType } from "../../../types/EventTypes";
 
 // Import components related to SvgCanvas.

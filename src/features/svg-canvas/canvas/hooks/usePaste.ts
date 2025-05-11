@@ -6,7 +6,7 @@ import type { ConnectLineData } from "../../components/shapes/ConnectLine";
 import type { ConnectPointData } from "../../components/shapes/ConnectPoint";
 import type { GroupData } from "../../components/shapes/Group";
 import type { Diagram } from "../../types/DiagramCatalog";
-import type { Shape } from "../../types/DiagramTypes";
+import type { Shape } from "../../types";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.

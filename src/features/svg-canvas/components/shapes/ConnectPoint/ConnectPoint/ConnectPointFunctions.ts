@@ -1,6 +1,6 @@
 // SvgCanvas関連型定義をインポート
 import type { Box, Point } from "../../../../types/CoordinateTypes";
-import type { Shape } from "../../../../types/DiagramTypes";
+import type { Shape } from "../../../../types";
 
 // SvgCanvas関連関数をインポート
 import {
