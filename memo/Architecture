@@ -1,0 +1,8 @@
+```mermaid
+graph TD
+    UI --> AI
+    AI --> TOOLS
+    TOOLS --> UI
+
+    UI2[UI] --> AI2[AI]
+```

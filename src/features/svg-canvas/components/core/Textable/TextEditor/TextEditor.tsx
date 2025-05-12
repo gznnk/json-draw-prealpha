@@ -2,12 +2,14 @@
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
-// Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../../utils/diagram";
-import { degreesToRadians } from "../../../../utils";
-import { newEventId } from "../../../../utils";
+// Import utils.
+import {
+	createSvgTransform,
+	degreesToRadians,
+	newEventId,
+} from "../../../../utils";
 
-// Imports related to this component.
+// Import local module files.
 import { Input, TextArea } from "./TextEditorStyled";
 import type { TextEditorProps } from "./TextEditorTypes";
 

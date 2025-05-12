@@ -2,10 +2,8 @@
 import { useEffect, useRef } from "react";
 
 // Import types.
-import {
-	EXECUTION_PROPAGATION_EVENT_NAME,
-	type ExecutionPropagationEvent,
-} from "../types";
+import type { ExecutionPropagationEvent } from "../types";
+import { EXECUTION_PROPAGATION_EVENT_NAME } from "../types";
 
 type ExecutionChainProps = {
 	id: string;

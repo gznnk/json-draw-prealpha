@@ -3,17 +3,17 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 
 // Import types.
-import {
-	SVG_CANVAS_SCROLL_EVENT_NAME,
-	type DiagramClickEvent,
-	type DiagramDragDropEvent,
-	type DiagramDragEvent,
-	type DiagramHoverEvent,
-	type DiagramPointerEvent,
-	type DiagramType,
-	type EventType,
-	type Point,
+import type {
+	DiagramClickEvent,
+	DiagramDragDropEvent,
+	DiagramDragEvent,
+	DiagramHoverEvent,
+	DiagramPointerEvent,
+	DiagramType,
+	EventType,
+	Point,
 } from "../types";
+import { SVG_CANVAS_SCROLL_EVENT_NAME } from "../types";
 
 // Import utils.
 import { newEventId } from "../utils";

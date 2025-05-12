@@ -2,7 +2,7 @@
 import type React from "react";
 import { memo } from "react";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { degreesToRadians } from "../../../utils";
 
 /**

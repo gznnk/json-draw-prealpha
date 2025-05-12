@@ -2,13 +2,13 @@
 import type React from "react";
 import { memo } from "react";
 
-// Import types related to SvgCanvas.
-import type { RectangleVertices } from "../../../types/base";
+// Import types.
+import type { RectangleVertices } from "../../../types";
 
-// Import components related to SvgCanvas.
+// Import components.
 import { calcBottomLabelPosition } from "../BottomLabel";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { calcRectangleVertices } from "../../../utils";
 
 /**

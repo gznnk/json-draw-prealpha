@@ -2,21 +2,24 @@
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import types related to SvgCanvas.
-import type { Point } from "../../../types/base";
-import type { DiagramType } from "../../../types/base";
-import type { SelectableData, TransformativeData } from "../../../types/core";
-import type { TransformativeProps } from "../../../types/props/TransformativeProps";
-import type { DiagramDragEvent, EventType } from "../../../types/events";
+// Import types.
+import type {
+	DiagramDragEvent,
+	DiagramType,
+	EventType,
+	Point,
+	SelectableData,
+	TransformativeData,
+	TransformativeProps,
+} from "../../../types";
 
-// Import components related to SvgCanvas.
+// Import components.
 import { BottomLabel } from "../BottomLabel";
 import { DragLine } from "../DragLine";
 import { DragPoint } from "../DragPoint";
 import { RotatePoint } from "../RotatePoint";
 
-// Import functions related to SvgCanvas.
-import { createSvgTransform, getCursorFromAngle } from "../../../utils/diagram";
+// Import utils.
 import {
 	affineTransformation,
 	calcNearestCircleIntersectionPoint,
@@ -24,14 +27,16 @@ import {
 	calcRectangleVertices,
 	createLinerX2yFunction,
 	createLinerY2xFunction,
+	createSvgTransform,
 	degreesToRadians,
+	getCursorFromAngle,
 	inverseAffineTransformation,
 	nanToZero,
 	radiansToDegrees,
 	signNonZero,
 } from "../../../utils";
 
-// Imports related to this component.
+// Import local module files.
 import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
 
 /**

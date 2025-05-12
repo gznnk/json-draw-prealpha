@@ -1,4 +1,4 @@
-// Import Emotion for styling.
+// Import Emotion.
 import styled from "@emotion/styled";
 
 /**

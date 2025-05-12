@@ -1,4 +1,4 @@
-// Import React
+// Import React.
 import { memo } from "react";
 
 /**

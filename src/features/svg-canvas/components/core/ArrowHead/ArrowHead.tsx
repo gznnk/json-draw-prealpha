@@ -2,12 +2,14 @@
 import type React from "react";
 import { memo } from "react";
 
-// Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/diagram";
+// Import types.
+import type { ArrowHeadType } from "../../../types";
 
-// Imports related to this component.
+// Import utils.
+import { createSvgTransform } from "../../../utils";
+
+// Import local module files.
 import { ARROW_HEAD_SIZE } from "./ArrowHeadConstants";
-import type { ArrowHeadType } from "../../../types/base";
 
 /**
  * Props for ArrowHead component.

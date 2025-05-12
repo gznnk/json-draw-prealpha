@@ -2,12 +2,14 @@
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
-// Import hooks related to SvgCanvas.
-import type { DragProps } from "../../../hooks/useDrag";
-import { useDrag } from "../../../hooks/useDrag";
-import type { DiagramDragEvent } from "../../../types/events";
+// Import types.
+import type { DiagramDragEvent } from "../../../types";
 
-// Import components related to SvgCanvas.
+// Import hooks.
+import type { DragProps } from "../../../hooks";
+import { useDrag } from "../../../hooks";
+
+// Import components.
 import { RotateRight } from "../../icons/RotateRight";
 
 /**

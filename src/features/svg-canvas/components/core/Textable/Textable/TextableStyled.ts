@@ -1,10 +1,10 @@
-// Import Emotion for styling.
+// Import Emotion
 import styled from "@emotion/styled";
 
-// Import types related to SvgCanvas.
-import type { TextAlign, VerticalAlign } from "../../../../types/base";
+// Import types.
+import type { TextAlign, VerticalAlign } from "../../../../types";
 
-// Imports related to this component.
+// Import local module files.
 import { TextAlignMap, VerticalAlignMap } from "./TextableConstants";
 
 /**

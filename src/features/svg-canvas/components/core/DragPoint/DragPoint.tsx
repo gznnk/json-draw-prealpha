@@ -2,11 +2,11 @@
 import type React from "react";
 import { memo, useRef } from "react";
 
-// Import hooks related to SvgCanvas.
-import type { DragProps } from "../../../hooks/useDrag";
-import { useDrag } from "../../../hooks/useDrag";
+// Import hooks
+import type { DragProps } from "../../../hooks";
+import { useDrag } from "../../../hooks";
 
-// Imports related to this component.
+// Import local module files.
 import { Circle } from "./DragPointStyled";
 
 /**

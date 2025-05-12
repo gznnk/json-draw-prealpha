@@ -7,6 +7,8 @@ graph TD
     hooks --> types
     hooks --> utils
     components --> types
+    components --> utils
+    components --> hooks
     canvas --> types
     canvas --> utils
     canvas --> hooks
@@ -39,3 +41,12 @@ graph TD
 - `data`: Diagram data types that optionally depend on `base` and `core` types.
 - `events`: Event-related types that optionally depend on `base`, `core`, and `data` types.
 - `props`: Diagram props types that optionally depend on `data` and `events` types.
+
+## `components` Module
+```mermaid
+graph TD
+    core --> icons
+    shapes --> core
+    nodes --> shapes
+    menus --> icons
+```

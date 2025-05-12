@@ -1,10 +1,10 @@
-// Import types related to SvgCanvas.
+// Import types.
 import type {
+	DiagramTextChangeEvent,
 	TextableType,
 	TextAlign,
 	VerticalAlign,
-} from "../../../../types/base";
-import type { DiagramTextChangeEvent } from "../../../../types/events";
+} from "../../../../types";
 
 /**
  * Type for the state of the TextEditor.

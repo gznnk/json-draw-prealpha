@@ -2,13 +2,13 @@
 import type React from "react";
 import { memo, useEffect, useRef } from "react";
 
-// import markdown feature.
+// import features.
 import { renderMarkdown } from "../../../../../markdown";
 
-// Import types related to SvgCanvas.
-import type { TextableData } from "../../../../types/core";
+// Import types.
+import type { TextableData } from "../../../../types";
 
-// Imports related to this component.
+// Import local module files.
 import { Text, TextWrapper } from "./TextableStyled";
 
 /**

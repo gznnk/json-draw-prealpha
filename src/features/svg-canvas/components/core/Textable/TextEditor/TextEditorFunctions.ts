@@ -1,7 +1,7 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../catalog";
+import type { Diagram } from "../../../../catalog"; // TODO: 依存関係を見直す
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { isItemableData, isTextableData } from "../../../../utils";
 
 /**

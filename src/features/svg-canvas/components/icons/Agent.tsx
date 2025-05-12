@@ -1,9 +1,9 @@
-// Import React
+// Import React.
 import { memo } from "react";
 
-// Import Emotion for styling
+// Import Emotion.
+import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import { keyframes, css } from "@emotion/react";
 
 /**
  * Animation for up and down movement

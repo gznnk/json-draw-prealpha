@@ -1,8 +1,8 @@
 // TODO: 依存関係
-import {
-	createRectangleData,
-	type RectangleData,
-} from "../../../components/shapes/Rectangle";
+import { createRectangleData } from "../../../components/shapes/Rectangle";
+
+// Import types.
+import type { RectangleData } from "../../../types";
 
 /**
  * Converts an SVG Rectangle element to a Rectangle diagram data structure.
