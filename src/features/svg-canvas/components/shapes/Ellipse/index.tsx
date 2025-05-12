@@ -5,5 +5,3 @@ export {
 	createEllipseConnectPoint,
 	createEllipseData,
 } from "./EllipseFunctions";
-export type { EllipseData } from "../../../types/data";
-export type { EllipseProps } from "./EllipseTypes";

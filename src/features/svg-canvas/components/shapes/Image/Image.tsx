@@ -2,25 +2,22 @@
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
-// Import types related to ImageCanvas.
+// Import types.
 import type {
 	DiagramDragEvent,
 	DiagramPointerEvent,
-} from "../../../types/events";
+	ImageProps,
+} from "../../../types";
 
-// Import components related to ImageCanvas.
+// Import components.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
-// Import hooks related to ImageCanvas.
-import { useDrag } from "../../../hooks/useDrag";
+// Import hooks.
+import { useDrag } from "../../../hooks";
 
-// Import functions related to ImageCanvas.
-import { createSvgTransform } from "../../../utils/diagram";
-import { degreesToRadians } from "../../../utils";
-
-// Imports related to this component.
-import type { ImageProps } from "./ImageTypes";
+// Import utils.
+import { createSvgTransform, degreesToRadians } from "../../../utils";
 
 /**
  * Image component.

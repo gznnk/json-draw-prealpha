@@ -1,14 +1,15 @@
-// Reactのインポート
+// Import React.
 import type React from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
-// SvgCanvas関連型定義をインポート
+// Import types.
 import type {
 	DiagramDragEvent,
 	DiagramHoverEvent,
 	DiagramPointerEvent,
 	DiagramTransformEvent,
-} from "../../../types/events";
+	EllipseProps,
+} from "../../../types";
 
 // SvgCanvas関連コンポーネントをインポート
 import { PositionLabel } from "../../core/PositionLabel";
@@ -16,15 +17,13 @@ import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
-// SvgCanvas関連カスタムフックをインポート
+// Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
 
-// SvgCanvas関連関数をインポート
-import { createSvgTransform } from "../../../utils/diagram";
-import { degreesToRadians } from "../../../utils";
+// Import utils.
+import { degreesToRadians, createSvgTransform } from "../../../utils";
 
-// Imports related to this component.
-import type { EllipseProps } from "./EllipseTypes";
+// Import local module files.
 import { EllipseElement } from "./EllipseStyled";
 
 /**

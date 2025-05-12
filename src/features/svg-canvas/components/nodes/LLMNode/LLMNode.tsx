@@ -1,17 +1,17 @@
 // Import React.
 import type React from "react";
-import { memo, useEffect, useState, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 // Import other libraries.
 import { OpenAI } from "openai";
 
-// Import types related to SvgCanvas.
-import type { CreateDiagramProps } from "../../../types/props/core/CreateDiagramProps";
+// Import types.
+import type { CreateDiagramProps, RectangleProps } from "../../../types/";
 
 // Import components related to SvgCanvas.
-import { Rectangle, type RectangleProps } from "../../shapes/Rectangle";
 import { IconContainer } from "../../core/IconContainer";
 import { CPU_1 } from "../../icons/CPU_1";
+import { Rectangle } from "../../shapes/Rectangle";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";

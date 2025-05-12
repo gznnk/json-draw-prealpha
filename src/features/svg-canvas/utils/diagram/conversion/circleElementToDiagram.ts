@@ -1,8 +1,8 @@
 // TODO: 依存関係
-import {
-	createEllipseData,
-	type EllipseData,
-} from "../../../components/shapes/Ellipse";
+import { createEllipseData } from "../../../components/shapes/Ellipse";
+
+// Import types.
+import type { EllipseData } from "../../../types";
 
 /**
  * Converts an SVG Circle element to an Ellipse diagram data structure.

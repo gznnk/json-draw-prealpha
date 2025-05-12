@@ -2,13 +2,14 @@
 import type React from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
-// Import types related to SvgCanvas.
+// Import types.
 import type {
 	DiagramDragEvent,
 	DiagramHoverEvent,
 	DiagramPointerEvent,
 	DiagramTransformEvent,
-} from "../../../types/events";
+	RectangleProps,
+} from "../../../types";
 
 // Import components related to SvgCanvas.
 import { PositionLabel } from "../../core/PositionLabel";
@@ -16,17 +17,14 @@ import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
-// Import hooks related to SvgCanvas.
-import { useDrag } from "../../../hooks/useDrag";
-import { useFileDrop } from "../../../hooks/useFileDrop";
+// Import hooks.
+import { useDrag, useFileDrop } from "../../../hooks";
 
-// Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/diagram";
-import { degreesToRadians } from "../../../utils";
+// Import utils.
+import { createSvgTransform, degreesToRadians } from "../../../utils";
 
-// Imports related to this component.
+// Import local module files.
 import { RectangleElement } from "./RectangleStyled";
-import type { RectangleProps } from "./RectangleTypes";
 
 /**
  * 四角形コンポーネント

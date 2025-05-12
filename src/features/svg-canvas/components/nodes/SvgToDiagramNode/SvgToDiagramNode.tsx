@@ -3,15 +3,11 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to this component.
-import type { CreateDiagramProps } from "../../../types/props/core/CreateDiagramProps";
+import type { CreateDiagramProps, RectangleProps } from "../../../types";
 import type { Diagram } from "../../../catalog";
 
 // Import components related to SvgCanvas.
-import {
-	DEFAULT_RECTANGLE_DATA,
-	Rectangle,
-	type RectangleProps,
-} from "../../shapes/Rectangle";
+import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 import { Gachapon } from "../../icons/Gachapon";
 import { IconContainer } from "../../core/IconContainer";
 

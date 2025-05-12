@@ -5,4 +5,3 @@ export {
 	createRectangleConnectPoint,
 	createRectangleData,
 } from "./RectangleFunctions";
-export type { RectangleProps } from "./RectangleTypes";

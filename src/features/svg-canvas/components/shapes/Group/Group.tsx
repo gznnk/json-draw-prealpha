@@ -1,10 +1,9 @@
 // Import React.
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import types related to SvgCanvas.
+// Import types.
 import type { Diagram } from "../../../catalog";
 import { DiagramComponentCatalog } from "../../../catalog";
-import type { CreateDiagramProps } from "../../../types/props/core/CreateDiagramProps";
 import type {
 	DiagramChangeEvent,
 	DiagramConnectEvent,
@@ -12,34 +11,23 @@ import type {
 	DiagramSelectEvent,
 	DiagramTextEditEvent,
 	DiagramTransformEvent,
-} from "../../../types/events";
+	GroupProps,
+} from "../../../types";
 
 // Import components related to SvgCanvas.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
-// Import functions related to SvgCanvas.
-import { degreesToRadians, rotatePoint } from "../../../utils";
-import { isItemableData, isTransformativeData } from "../../../utils";
+// Import utils.
+import {
+	degreesToRadians,
+	isItemableData,
+	isTransformativeData,
+	rotatePoint,
+} from "../../../utils";
 
 // Imports related to this component.
 import { getSelectedChildDiagram } from "./GroupFunctions";
-import type { GroupData } from "../../../types/data";
-
-/**
- * Props for Group component.
- */
-export type GroupProps = CreateDiagramProps<
-	GroupData,
-	{
-		selectable: true;
-		transformative: true;
-		itemable: true;
-		connectable: true;
-		textable: true;
-		executable: true;
-	}
->;
 
 /**
  * Group component.

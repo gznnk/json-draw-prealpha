@@ -1,6 +1,6 @@
 // Import types.
-import type { CreateDiagramProps } from "../../../types";
-import type { RectangleData } from "../../../types/data";
+import type { CreateDiagramProps } from "../core/CreateDiagramProps";
+import type { RectangleData } from "../../data";
 
 /**
  * 四角形コンポーネントのプロパティ

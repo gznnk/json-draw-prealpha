@@ -2,40 +2,26 @@
 import type React from "react";
 import { memo, useCallback, useContext, useEffect, useRef } from "react";
 
-// Import types related to SvgCanvas.
+// Import types.
 import type { Diagram } from "../../../../catalog";
-import type { CreateDiagramProps } from "../../../../types/props/core/CreateDiagramProps";
-import type { Shape } from "../../../../types";
 import type {
+	ConnectLineProps,
 	ConnectPointMoveData,
 	ConnectPointsMoveEvent,
 	DiagramChangeEvent,
-} from "../../../../types/events";
-import type { ConnectLineData } from "../../../../types/data";
+	Shape,
+} from "../../../../types";
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../../../canvas";
 import { createBestConnectPath } from "../../ConnectPoint";
 import { Path } from "../../Path";
 
-// Import functions related to SvgCanvas.
-import { newId } from "../../../../utils/diagram";
-import { calcRadians, radiansToDegrees } from "../../../../utils";
+// Import utils.
+import { calcRadians, newId, radiansToDegrees } from "../../../../utils";
 
 // Imports related to this component.
 import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
-
-/**
- * Props for ConnectLine component.
- */
-type ConnectLineProps = CreateDiagramProps<
-	ConnectLineData,
-	{
-		selectable: true;
-		transformative: true;
-		itemable: true;
-	}
->;
 
 /**
  * ConnectLine component.

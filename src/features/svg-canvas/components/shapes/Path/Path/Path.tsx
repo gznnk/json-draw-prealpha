@@ -8,7 +8,6 @@ import { Group } from "../../Group";
 
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../../catalog";
-import type { CreateDiagramProps } from "../../../../types/props/core/CreateDiagramProps";
 import type {
 	DiagramChangeEvent,
 	DiagramClickEvent,
@@ -31,26 +30,10 @@ import {
 	createEndPointArrowHead,
 	createStartPointArrowHead,
 } from "./PathFunctions";
-import type { PathData } from "../../../../types/data";
 
-/**
- * 折れ線コンポーネントのプロパティ
- */
-export type PathProps = CreateDiagramProps<
-	PathData,
-	{
-		selectable: true;
-		transformative: true;
-		itemable: true;
-	}
-> & {
-	dragEnabled?: boolean;
-	transformEnabled?: boolean;
-	segmentDragEnabled?: boolean;
-	rightAngleSegmentDrag?: boolean;
-	newVertexEnabled?: boolean;
-	fixBothEnds?: boolean;
-};
+// Import the PathProps from the central types folder
+import type { PathProps } from "../../../../types/props/shapes";
+import type { PathData } from "../../../../types/data";
 
 // TODO: 枠線と重なっていると頂点編集モードにできない
 /**

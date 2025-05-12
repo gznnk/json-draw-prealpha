@@ -1,25 +1,22 @@
-// Reactのインポート
+// Import React.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// SvgCanvas関連型定義をインポート
-import type { Point } from "../../../../types/base";
-import type { CreateDiagramProps } from "../../../../types/props/core/CreateDiagramProps";
-import type { Shape } from "../../../../types";
+// Import types.
 import type {
-	DiagramConnectEvent,
+	ConnectPointProps,
 	DiagramDragDropEvent,
 	DiagramDragEvent,
 	DiagramHoverEvent,
-} from "../../../../types/events";
+	Point,
+} from "../../../../types";
 
 // SvgCanvas関連コンポーネントをインポート
 import { DragPoint } from "../../../core/DragPoint";
 import type { PathPointData } from "../../Path";
 
-// SvgCanvas関連関数をインポート
-import { newId } from "../../../../utils/diagram";
-import { calcRectangleOuterBox } from "../../../../utils";
+// Import utils.
+import { calcRectangleOuterBox, newId } from "../../../../utils";
 
 // Imports related to this component.
 import { triggerNewConnectLine } from "../NewConnectLine";
@@ -30,20 +27,6 @@ import {
 	getLineDirection,
 } from "./ConnectPointFunctions";
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
-import type { ConnectPointData } from "../../../../types/data";
-
-/**
- * 接続ポイントプロパティ
- */
-type ConnectPointProps = CreateDiagramProps<
-	ConnectPointData,
-	{ connectable: true }
-> & {
-	ownerId: string;
-	ownerShape: Shape; // memo化して渡すこと
-	isTransparent: boolean;
-	onConnect?: (e: DiagramConnectEvent) => void;
-};
 
 /**
  * 接続ポイントコンポーネント

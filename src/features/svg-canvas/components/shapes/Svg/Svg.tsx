@@ -1,29 +1,26 @@
 // Import React.
 import type React from "react";
-import { memo, useCallback, useRef, useState, useEffect } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import other libraries.
 import DOMPurify from "dompurify";
 
-// Import types related to SvgCanvas.
+// Import types.
 import type {
 	DiagramDragEvent,
 	DiagramPointerEvent,
-} from "../../../types/events";
+	SvgProps,
+} from "../../../types";
 
-// Import components related to SvgCanvas.
+// Import components.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
-// Import hooks related to SvgCanvas.
-import { useDrag } from "../../../hooks/useDrag";
+// Import hooks.
+import { useDrag } from "../../../hooks";
 
-// Import functions related to SvgCanvas.
-import { createSvgTransform } from "../../../utils/diagram";
-import { degreesToRadians } from "../../../utils";
-
-// Imports related to this component.
-import type { SvgProps } from "./SvgTypes";
+// Import utils.
+import { createSvgTransform, degreesToRadians } from "../../../utils";
 
 /**
  * Svg component.
