@@ -1,11 +1,11 @@
 /**
- * ２点間のユークリッド距離を算出する
+ * Calculates the Euclidean distance between two points.
  *
- * @param x1 - 1つ目の点のX座標
- * @param y1 - 1つ目の点のY座標
- * @param x2 - 2つ目の点のX座標
- * @param y2 - 2つ目の点のY座標
- * @returns ２点間の距離
+ * @param x1 - X-coordinate of the first point
+ * @param y1 - Y-coordinate of the first point
+ * @param x2 - X-coordinate of the second point
+ * @param y2 - Y-coordinate of the second point
+ * @returns The distance between the two points
  */
 export const calcDistance = (
 	x1: number,

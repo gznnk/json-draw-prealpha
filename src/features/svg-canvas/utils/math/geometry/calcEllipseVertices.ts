@@ -6,10 +6,10 @@ import { degreesToRadians } from "../common";
 import { affineTransformation } from "../transform";
 
 /**
- * 楕円の頂点を計算する
+ * Calculates the vertices of an ellipse.
  *
- * @param shape - 形状
- * @returns 頂点座標
+ * @param shape - The shape parameters (position, dimensions, rotation, scale)
+ * @returns The coordinates of the ellipse vertices
  */
 export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
 	const { x, y, width, height, rotation, scaleX, scaleY } = shape;

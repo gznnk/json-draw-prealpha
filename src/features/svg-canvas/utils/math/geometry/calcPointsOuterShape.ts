@@ -9,13 +9,13 @@ import {
 } from "../transform";
 
 /**
- * 座標集合の外接枠を計算する
+ * Calculates the bounding box for a set of points.
  *
- * @param points - 座標集合
- * @param rotation - 回転角度（デフォルト: 0）
- * @param scaleX - X方向のスケール（デフォルト: 1）
- * @param scaleY - Y方向のスケール（デフォルト: 1）
- * @returns 外接枠
+ * @param points - Array of points
+ * @param rotation - Rotation angle in degrees (default: 0)
+ * @param scaleX - Scale factor in x-direction (default: 1)
+ * @param scaleY - Scale factor in y-direction (default: 1)
+ * @returns The bounding box shape
  */
 export const calcPointsOuterShape = (
 	points: Point[],

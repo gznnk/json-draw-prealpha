@@ -2,13 +2,14 @@
 import type { Point } from "../../../types";
 
 /**
- * 2つの線分が交差しているか判定する
+ * Determines if two line segments intersect.
+ * Uses the cross product method to check for intersection.
  *
- * @param p1 - 1つ目の線分の始点
- * @param p2 - 1つ目の線分の終点
- * @param q1 - 2つ目の線分の始点
- * @param q2 - 2つ目の線分の終点
- * @returns 交差していれば true, そうでなければ false
+ * @param p1 - Starting point of the first line segment
+ * @param p2 - Ending point of the first line segment
+ * @param q1 - Starting point of the second line segment
+ * @param q2 - Ending point of the second line segment
+ * @returns True if the line segments intersect, false otherwise
  */
 export const lineIntersects = (
 	p1: Point,

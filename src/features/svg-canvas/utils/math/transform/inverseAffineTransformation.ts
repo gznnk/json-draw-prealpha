@@ -2,16 +2,17 @@
 import type { Point } from "../../../types";
 
 /**
- * 点に対してアフィン変換の逆変換を適用する
+ * Applies an inverse affine transformation to a point.
+ * Used to convert transformed coordinates back to original coordinates.
  *
- * @param px - 逆変換対象のX座標
- * @param py - 逆変換対象のY座標
- * @param sx - x方向の拡大縮小率
- * @param sy - y方向の拡大縮小率
- * @param theta - 回転角度（ラジアン）
- * @param tx - x方向の平行移動量
- * @param ty - y方向の平行移動量
- * @returns 逆変換後の元の点
+ * @param px - X-coordinate of the transformed point
+ * @param py - Y-coordinate of the transformed point
+ * @param sx - Scale factor in x-direction from the original transformation
+ * @param sy - Scale factor in y-direction from the original transformation
+ * @param theta - Rotation angle in radians from the original transformation
+ * @param tx - Translation distance in x-direction from the original transformation
+ * @param ty - Translation distance in y-direction from the original transformation
+ * @returns The original point before transformation
  */
 export const inverseAffineTransformation = (
 	px: number,

@@ -1,6 +1,6 @@
 /**
- * 新規IDを生成する
+ * Generates a new unique identifier.
  *
- * @returns 新規ID
+ * @returns A newly generated UUID
  */
 export const newId = (): string => crypto.randomUUID();

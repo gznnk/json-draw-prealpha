@@ -1,8 +1,9 @@
 /**
- * 角度に対応するカーソルを取得する
+ * Gets the appropriate cursor style based on an angle.
+ * Maps angles to directional resize cursors (n-resize, ne-resize, etc.).
  *
- * @param angle - 角度
- * @returns カーソルスタイル
+ * @param angle - The angle in degrees
+ * @returns The CSS cursor style name
  */
 export const getCursorFromAngle = (angle: number): string => {
 	// angleに360度を加算して0度以上にする

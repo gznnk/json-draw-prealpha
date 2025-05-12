@@ -1,12 +1,12 @@
 /**
- * 指定されたパラメータからSVGのtransform属性を作成する
+ * Creates an SVG transform attribute string from specified parameters.
  *
- * @param sx - x方向の拡大縮小率
- * @param sy - y方向の拡大縮小率
- * @param theta - 回転角度（ラジアン）
- * @param tx - x方向の平行移動量
- * @param ty - y方向の平行移動量
- * @returns SVGのtransform属性
+ * @param sx - Scale factor in x-direction
+ * @param sy - Scale factor in y-direction
+ * @param theta - Rotation angle in radians
+ * @param tx - Translation distance in x-direction
+ * @param ty - Translation distance in y-direction
+ * @returns SVG transform attribute string in matrix format
  */
 export const createSvgTransform = (
 	sx: number,

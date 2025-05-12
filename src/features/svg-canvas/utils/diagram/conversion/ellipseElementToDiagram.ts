@@ -5,10 +5,10 @@ import {
 } from "../../../components/shapes/Ellipse";
 
 /**
- * SVGEllipseElementをEllipseDataに変換する
+ * Converts an SVG Ellipse element to an Ellipse diagram data structure.
  *
- * @param element - 変換対象のSVGEllipseElement
- * @returns 変換後のEllipseData
+ * @param element - The SVG Ellipse element to convert
+ * @returns The converted Ellipse diagram data
  */
 export const ellipseElementToDiagram = (
 	element: SVGEllipseElement,

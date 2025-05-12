@@ -1,4 +1,7 @@
+/**
+ * Diagram-specific utilities for managing diagram data structures and operations.
+ */
 export * from "./common";
 export * from "./conversion";
-// 今後 diagram/creation フォルダが追加されたときのために
+// Reserved for future diagram/creation folder
 // export * from "./creation";

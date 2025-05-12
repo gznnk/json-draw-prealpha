@@ -1,8 +1,8 @@
 /**
- * 度をラジアンに変換する
+ * Converts degrees to radians.
  *
- * @param degrees - 度
- * @returns ラジアン
+ * @param degrees - Angle in degrees
+ * @returns Angle in radians
  */
 export const degreesToRadians = (degrees: number): number => {
 	return degrees * (Math.PI / 180);

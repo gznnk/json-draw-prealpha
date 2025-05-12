@@ -2,11 +2,12 @@
 import type { Point } from "../../../types";
 
 /**
- * 2点間の直線の方程式を基に、X座標からY座標を計算する関数を生成します。
+ * Creates a function that calculates Y coordinate from X using a line equation defined by two points.
+ * Uses the standard line equation y = ax + b.
  *
- * @param p1 - 直線上の最初の点
- * @param p2 - 直線上の2番目の点
- * @returns X座標を入力としてY座標を計算する関数
+ * @param p1 - First point on the line
+ * @param p2 - Second point on the line
+ * @returns A function that takes X (and ignores Y) and returns a point with calculated Y
  */
 export const createLinerX2yFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);

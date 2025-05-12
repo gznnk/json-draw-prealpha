@@ -1,12 +1,12 @@
 /**
- * ２点間の角度を算出する.
- * 時計の12時を0度とし、時計回りに角度を算出する.
+ * Calculates the angle between two points in radians.
+ * Uses 12 o'clock as 0 radians and proceeds clockwise.
  *
- * @param ox - 原点のX座標
- * @param oy - 原点のY座標
- * @param px - 動点のX座標
- * @param py - 動点のY座標
- * @returns ２点間の角度（ラジアン）
+ * @param ox - X-coordinate of the origin point
+ * @param oy - Y-coordinate of the origin point
+ * @param px - X-coordinate of the target point
+ * @param py - Y-coordinate of the target point
+ * @returns The angle in radians (0 to 2π)
  */
 export const calcRadians = (
 	ox: number,

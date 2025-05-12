@@ -5,12 +5,12 @@ import type { Box, Point } from "../../../types";
 import { lineIntersects } from "./lineIntersects";
 
 /**
- * 線分がボックスと交差しているか判定する
+ * Determines if a line segment intersects with a box.
  *
- * @param p1 - 線分の始点
- * @param p2 - 線分の終点
- * @param box - 判定対象のボックス
- * @returns 交差していれば true, そうでなければ false
+ * @param p1 - Starting point of the line segment
+ * @param p2 - Ending point of the line segment
+ * @param box - The box to check for intersection
+ * @returns True if the line segment intersects the box, false otherwise
  */
 export const isLineIntersectingBox = (
 	p1: Point,

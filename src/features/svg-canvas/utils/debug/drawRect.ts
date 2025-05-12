@@ -2,14 +2,15 @@
 import type { Point } from "../../types";
 
 /**
- * 四角形を描画する（開発用）
+ * Draws a rectangle for debugging purposes.
+ * Creates or updates an SVG polygon element to visually represent a rectangle.
  *
- * @param id - ID
- * @param p1 - 点1
- * @param p2 - 点2
- * @param p3 - 点3
- * @param p4 - 点4
- * @param color - 色
+ * @param id - Unique identifier for the rectangle element
+ * @param p1 - First corner point
+ * @param p2 - Second corner point
+ * @param p3 - Third corner point
+ * @param p4 - Fourth corner point
+ * @param color - Color of the rectangle outline (defaults to red)
  */
 export const drawRect = (
 	id: string,
@@ -18,7 +19,7 @@ export const drawRect = (
 	p3: Point,
 	p4: Point,
 	color = "red",
-) => {
+): void => {
 	const svg = document.getElementsByTagName("svg")[0];
 	const elm = svg.getElementById(id);
 	if (elm) {

@@ -2,14 +2,14 @@
 import type { Point } from "../../../types";
 
 /**
- * 座標を中心点の周りに回転させる
+ * Rotates a point around a center point by a given angle.
  *
- * @param px - 回転させるX座標
- * @param py - 回転させるY座標
- * @param cx - 回転の中心となるX座標
- * @param cy - 回転の中心となるY座標
- * @param theta - 回転角度（ラジアン）
- * @returns 回転後の座標
+ * @param px - X-coordinate of the point to rotate
+ * @param py - Y-coordinate of the point to rotate
+ * @param cx - X-coordinate of the rotation center
+ * @param cy - Y-coordinate of the rotation center
+ * @param theta - Angle of rotation in radians
+ * @returns The rotated point
  */
 export const rotatePoint = (
 	px: number,

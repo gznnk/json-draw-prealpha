@@ -5,14 +5,16 @@ import type { Point } from "../../../types";
 import { closerPoint } from "./closerPoint";
 
 /**
- * 半径rの円があり、また任意の座標(x,y)があるときに、円の中心(x,y)と任意の座標を結ぶ直線と円周が交わる点のうち、任意の座標に近い方の座標を算出する
+ * Calculates the nearest intersection point between a circle and a line.
+ * Given a circle and a point, finds the intersection point of the circle with the line
+ * connecting the circle's center and the point, that is closest to the given point.
  *
- * @param cx - 円の中心のX座標
- * @param cy - 円の中心のY座標
- * @param r - 円の半径
- * @param px - 任意のX座標
- * @param py - 任意のY座標
- * @returns 円周と直線が交わる点のうち、任意の座標に近い方の座標
+ * @param cx - X-coordinate of the circle center
+ * @param cy - Y-coordinate of the circle center
+ * @param r - Radius of the circle
+ * @param px - X-coordinate of the reference point
+ * @param py - Y-coordinate of the reference point
+ * @returns The intersection point closest to the reference point
  */
 export const calcNearestCircleIntersectionPoint = (
 	cx: number,

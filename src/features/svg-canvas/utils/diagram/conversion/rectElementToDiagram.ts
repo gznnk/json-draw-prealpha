@@ -5,10 +5,10 @@ import {
 } from "../../../components/shapes/Rectangle";
 
 /**
- * SVGRectElement をRectangleDataに変換する
+ * Converts an SVG Rectangle element to a Rectangle diagram data structure.
  *
- * @param element - 変換対象のSVGRectElement
- * @returns 変換後のRectangleData
+ * @param element - The SVG Rectangle element to convert
+ * @returns The converted Rectangle diagram data
  */
 export const rectElementToDiagram = (
 	element: SVGRectElement,

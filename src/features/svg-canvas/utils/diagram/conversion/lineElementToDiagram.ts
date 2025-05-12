@@ -7,10 +7,10 @@ import {
 import { newId } from "../common/newId";
 
 /**
- * SVGLineElementをPathDataに変換する
+ * Converts an SVG Line element to a Path diagram data structure.
  *
- * @param element - 変換対象のSVGLineElement
- * @returns 変換後のPathData
+ * @param element - The SVG Line element to convert
+ * @returns The converted Path diagram data
  */
 export const lineElementToDiagram = (element: SVGLineElement): PathData => {
 	const x1 = Number(element.getAttribute("x1"));

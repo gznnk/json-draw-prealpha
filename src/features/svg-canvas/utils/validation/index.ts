@@ -1,3 +1,7 @@
+/**
+ * Type validation functions for SVG canvas elements.
+ * Each function validates a specific aspect of diagram data types.
+ */
 export * from "./isConnectableData";
 export * from "./isExportable";
 export * from "./isFillableData";

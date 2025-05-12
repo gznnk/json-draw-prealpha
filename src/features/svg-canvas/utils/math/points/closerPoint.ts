@@ -5,15 +5,15 @@ import type { Point } from "../../../types";
 import { calcDistance } from "./calcDistance";
 
 /**
- * ２点のうち、指定した点に近い方の点を返す
+ * Returns the point (from two options) that is closer to a reference point.
  *
- * @param px - 指定した点のX座標
- * @param py - 指定した点のY座標
- * @param ax - 1つ目の点のX座標
- * @param ay - 1つ目の点のY座標
- * @param bx - 2つ目の点のX座標
- * @param by - 2つ目の点のY座標
- * @returns 近い方の点
+ * @param px - X-coordinate of the reference point
+ * @param py - Y-coordinate of the reference point
+ * @param ax - X-coordinate of the first comparison point
+ * @param ay - Y-coordinate of the first comparison point
+ * @param bx - X-coordinate of the second comparison point
+ * @param by - Y-coordinate of the second comparison point
+ * @returns The point (either A or B) that is closer to the reference point
  */
 export const closerPoint = (
 	px: number,

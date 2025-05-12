@@ -2,13 +2,14 @@
 import type { Point } from "../../types";
 
 /**
- * 点を描画する（開発用）
+ * Draws a point for debugging purposes.
+ * Creates or updates an SVG circle element to visually represent a point.
  *
- * @param id - ID
- * @param point - 座標
- * @param color - 色
+ * @param id - Unique identifier for the point element
+ * @param point - Coordinates of the point to draw
+ * @param color - Color of the point (defaults to red)
  */
-export const drawPoint = (id: string, point: Point, color = "red") => {
+export const drawPoint = (id: string, point: Point, color = "red"): void => {
 	const svg = document.getElementsByTagName("svg")[0];
 	const elm = svg.getElementById(id);
 	if (elm) {

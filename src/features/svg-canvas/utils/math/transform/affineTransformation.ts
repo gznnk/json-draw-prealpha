@@ -2,16 +2,16 @@
 import type { Point } from "../../../types";
 
 /**
- * 点にアフィン変換を適用する
+ * Applies an affine transformation to a point.
  *
- * @param px - 変換対象のX座標
- * @param py - 変換対象のY座標
- * @param sx - x方向の拡大縮小率
- * @param sy - y方向の拡大縮小率
- * @param theta - 回転角度（ラジアン）
- * @param tx - x方向の平行移動量
- * @param ty - y方向の平行移動量
- * @returns 変換後の点
+ * @param px - X-coordinate of the point to transform
+ * @param py - Y-coordinate of the point to transform
+ * @param sx - Scale factor in x-direction
+ * @param sy - Scale factor in y-direction
+ * @param theta - Rotation angle in radians
+ * @param tx - Translation distance in x-direction
+ * @param ty - Translation distance in y-direction
+ * @returns The transformed point
  */
 export const affineTransformation = (
 	px: number,
