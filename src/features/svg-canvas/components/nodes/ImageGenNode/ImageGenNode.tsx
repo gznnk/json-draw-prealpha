@@ -21,7 +21,7 @@ import { newEventId } from "../../../utils";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
-import { createImageData } from "../../shapes/Image";
+import { createImageData } from "../../../utils/shapes/image";
 import type { ImageGenNodeProps } from "./ImageGenNodeTypes";
 
 /**

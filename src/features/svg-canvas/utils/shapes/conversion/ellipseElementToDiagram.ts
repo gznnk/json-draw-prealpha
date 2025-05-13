@@ -1,5 +1,4 @@
-// TODO: 依存関係
-import { createEllipseData } from "../../../components/shapes/Ellipse";
+import { createEllipseData } from "../ellipse";
 
 // Import types.
 import type { EllipseData } from "../../../types";

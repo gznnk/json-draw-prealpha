@@ -1,5 +1,4 @@
-// TODO: 依存関係
-import { createRectangleData } from "../../../components/shapes/Rectangle";
+import { createRectangleData } from "../rectangle";
 
 // Import types.
 import type { RectangleData } from "../../../types";

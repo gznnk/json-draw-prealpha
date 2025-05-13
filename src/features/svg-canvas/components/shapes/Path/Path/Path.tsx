@@ -29,7 +29,7 @@ import {
 	createDValue,
 	createEndPointArrowHead,
 	createStartPointArrowHead,
-} from "./PathFunctions";
+} from "../../../../utils/shapes/path";
 
 // Import the PathProps from the central types folder
 import type { PathProps } from "../../../../types/props/shapes";

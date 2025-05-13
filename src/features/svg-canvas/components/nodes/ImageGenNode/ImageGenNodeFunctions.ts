@@ -1,6 +1,6 @@
 // Import functions related to SvgCanvas.
 import { newId } from "../../../utils/shapes";
-import { createRectangleConnectPoint } from "../../shapes/Rectangle";
+import { createRectangleConnectPoint } from "../../../utils/shapes/rectangle";
 
 // Import related to this component.
 import type { ImageGenNodeData } from "./ImageGenNodeTypes";

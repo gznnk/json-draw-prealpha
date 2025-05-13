@@ -1,7 +1,7 @@
 import type { ConnectPointMoveData } from "../types/events";
 import type { Diagram, DiagramType } from "./DiagramTypes";
-import { calcEllipseConnectPointPosition } from "../components/shapes/Ellipse";
-import { calcRectangleConnectPointPosition } from "../components/shapes/Rectangle";
+import { calcEllipseConnectPointPosition } from "../utils/shapes/ellipse";
+import { calcRectangleConnectPointPosition } from "../utils/shapes/rectangle";
 
 /**
  * Maps diagram types to their corresponding connect point calculation functions.

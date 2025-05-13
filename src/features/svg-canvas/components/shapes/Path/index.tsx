@@ -1,8 +1,4 @@
 export {
-	createDValue,
-	createEndPointArrowHead,
-	createPathData,
-	createStartPointArrowHead,
 	DEFAULT_PATH_DATA,
 	Path,
 } from "./Path";

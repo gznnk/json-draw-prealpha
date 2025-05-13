@@ -1,5 +1,5 @@
 import type { Diagram, DiagramType } from "./DiagramTypes";
-import { imageToBlob } from "../components/shapes/Image";
+import { imageToBlob } from "../utils/shapes/image";
 import { svgToBlob } from "../components/shapes/Svg";
 
 /**

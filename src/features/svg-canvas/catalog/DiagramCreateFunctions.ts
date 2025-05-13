@@ -7,10 +7,10 @@ import { createSvgToDiagramNodeData } from "../components/nodes/SvgToDiagramNode
 import { createTextAreaNodeData } from "../components/nodes/TextAreaNode";
 import { createVectorStoreNodeData } from "../components/nodes/VectorStoreNode";
 import { createWebSearchNodeData } from "../components/nodes/WebSearchNode";
-import { createEllipseData } from "../components/shapes/Ellipse";
-import { createImageData } from "../components/shapes/Image";
-import { createPathData } from "../components/shapes/Path";
-import { createRectangleData } from "../components/shapes/Rectangle";
+import { createEllipseData } from "../utils/shapes/ellipse";
+import { createImageData } from "../utils/shapes/image";
+import { createPathData } from "../utils/shapes/path";
+import { createRectangleData } from "../utils/shapes/rectangle";
 
 /**
  * Maps diagram types to their corresponding data creation functions.

@@ -1,7 +1,9 @@
 /**
- * Diagram-specific utilities for managing diagram data structures and operations.
+ * Shapes-specific utilities for managing shape data structures and operations.
  */
 export * from "./common";
 export * from "./conversion";
-// Reserved for future diagram/creation folder
-// export * from "./creation";
+export * from "./rectangle";
+export * from "./ellipse";
+export * from "./path";
+export * from "./image";

@@ -1,4 +1,4 @@
-import { createRectangleData } from "../../shapes/Rectangle";
+import { createRectangleData } from "../../../utils/shapes/rectangle";
 
 export const createTextAreaNodeData = ({
 	x,
