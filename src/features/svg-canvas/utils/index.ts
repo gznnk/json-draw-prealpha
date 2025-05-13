@@ -4,6 +4,6 @@
  */
 export * from "./common";
 export * from "./math";
-export * from "./diagram";
+export * from "./shapes";
 export * from "./validation";
 export * from "./debug";

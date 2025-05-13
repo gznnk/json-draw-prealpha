@@ -6,7 +6,7 @@ import type { GroupData } from "../../components/shapes/Group";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../utils/diagram";
+import { newId } from "../../utils/shapes";
 import { newEventId } from "../../utils";
 import {
 	addHistory,

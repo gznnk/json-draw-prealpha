@@ -12,7 +12,7 @@ import type {
 } from "../../../../types/events";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../../utils/diagram";
+import { newId } from "../../../../utils/shapes";
 
 // Imports related to this component.
 import { Segment, type SegmentData } from "../Segment";

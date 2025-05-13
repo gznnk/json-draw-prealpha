@@ -13,7 +13,7 @@ import type { ConnectPointMoveData } from "../../../types/events";
 import type { ConnectPointData } from "../../../types/data";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../../utils/diagram";
+import { newId } from "../../../utils/shapes";
 import { calcEllipseVertices } from "../../../utils";
 import { isConnectableData } from "../../../utils";
 

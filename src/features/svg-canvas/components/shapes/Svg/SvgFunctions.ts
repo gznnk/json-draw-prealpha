@@ -1,6 +1,6 @@
 // Import functions related to SvgCanvas.
 import type { Diagram } from "../../../catalog";
-import { newId } from "../../../utils/diagram";
+import { newId } from "../../../utils/shapes";
 
 // Imports related to this component.
 import { DEFAULT_SVG_DATA } from "./SvgConstants";

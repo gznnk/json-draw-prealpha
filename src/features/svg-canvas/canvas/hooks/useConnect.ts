@@ -8,7 +8,7 @@ import type { DiagramConnectEvent } from "../../types/events";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../utils/diagram";
+import { newId } from "../../utils/shapes";
 import { calcPointsOuterShape } from "../../utils";
 import { dispatchNewItemEvent } from "../observers/addNewItem";
 
