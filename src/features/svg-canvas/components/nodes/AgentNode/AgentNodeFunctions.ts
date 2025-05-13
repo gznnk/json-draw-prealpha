@@ -1,9 +1,9 @@
-// Import functions related to SvgCanvas.
+// Import types.
+import type { AgentNodeData } from "./AgentNodeTypes";
+
+// Import utils.
 import { newId } from "../../../utils/shapes";
 import { createRectangleConnectPoint } from "../../../utils/shapes/rectangle";
-
-// Import related to this component.
-import type { AgentNodeData } from "./AgentNodeTypes";
 
 export const createAgentNodeData = ({
 	x,

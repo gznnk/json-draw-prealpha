@@ -1,3 +1,4 @@
+// Import utils.
 import { createRectangleData } from "../../../utils/shapes/rectangle";
 
 export const createTextAreaNodeData = ({

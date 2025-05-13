@@ -5,24 +5,22 @@ import { memo, useEffect, useRef, useState } from "react";
 // Import other libraries.
 import { OpenAI } from "openai";
 
-// Import components related to SvgCanvas.
+// Import types.
+import type { ImageGenNodeProps } from "./ImageGenNodeTypes";
+
+// Import components.
 import { IconContainer } from "../../core/IconContainer";
 import { Picture } from "../../icons/Picture";
 import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 
-// Import hooks related to SvgCanvas.
+// Import hooks.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
 import { newEventId } from "../../../utils";
-
-// Import utilities.
-import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
-
-// Import related to this component.
 import { createImageData } from "../../../utils/shapes/image";
-import type { ImageGenNodeProps } from "./ImageGenNodeTypes";
+import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 /**
  * ImageGenNode component.

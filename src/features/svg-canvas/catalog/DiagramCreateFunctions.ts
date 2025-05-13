@@ -1,4 +1,7 @@
+// Import types.
 import type { Diagram, DiagramType } from "./DiagramTypes";
+
+// Import node creation functions.
 import { createAgentNodeData } from "../components/nodes/AgentNode";
 import { createHubNodeData } from "../components/nodes/HubNode";
 import { createImageGenNodeData } from "../components/nodes/ImageGenNode";
@@ -7,6 +10,8 @@ import { createSvgToDiagramNodeData } from "../components/nodes/SvgToDiagramNode
 import { createTextAreaNodeData } from "../components/nodes/TextAreaNode";
 import { createVectorStoreNodeData } from "../components/nodes/VectorStoreNode";
 import { createWebSearchNodeData } from "../components/nodes/WebSearchNode";
+
+// Import shape creation functions.
 import { createEllipseData } from "../utils/shapes/ellipse";
 import { createImageData } from "../utils/shapes/image";
 import { createPathData } from "../utils/shapes/path";

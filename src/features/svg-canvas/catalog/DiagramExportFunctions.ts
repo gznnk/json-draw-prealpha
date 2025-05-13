@@ -1,4 +1,7 @@
+// Import types.
 import type { Diagram, DiagramType } from "./DiagramTypes";
+
+// Import utils.
 import { imageToBlob } from "../utils/shapes/image";
 import { svgToBlob } from "../components/shapes/Svg";
 

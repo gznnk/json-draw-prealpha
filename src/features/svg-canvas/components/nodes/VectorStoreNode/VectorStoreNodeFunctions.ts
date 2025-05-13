@@ -1,9 +1,9 @@
-// Import functions related to SvgCanvas.
+// Import types.
+import type { VectorStoreNodeData } from "./VectorStoreNodeTypes";
+
+// Import utils.
 import { newId } from "../../../utils/shapes";
 import { createRectangleConnectPoint } from "../../../utils/shapes/rectangle";
-
-// Import related to this component.
-import type { VectorStoreNodeData } from "./VectorStoreNodeTypes";
 
 export const createVectorStoreNodeData = ({
 	x,

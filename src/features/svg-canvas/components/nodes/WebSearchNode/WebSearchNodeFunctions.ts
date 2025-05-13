@@ -1,9 +1,9 @@
-// Import functions related to SvgCanvas.
+// Import types.
+import type { WebSearchNodeData } from "./WebSearchNodeTypes";
+
+// Import utils.
 import { newId } from "../../../utils/shapes";
 import { createRectangleConnectPoint } from "../../../utils/shapes/rectangle";
-
-// Import related to this component.
-import type { WebSearchNodeData } from "./WebSearchNodeTypes";
 
 export const createWebSearchNodeData = ({
 	x,

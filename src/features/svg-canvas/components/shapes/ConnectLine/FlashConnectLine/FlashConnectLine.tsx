@@ -1,18 +1,20 @@
 // Import React.
 import { memo, useEffect, useState } from "react";
 
-// Import functions related to SvgCanvas.
+// Import types.
+import type { PathData } from "../../../../types";
+import type { FlashConnectLineEvent } from "./FlashConnectLineTypes";
+
+// Import utils.
 import {
 	createDValue,
 	createEndPointArrowHead,
 	createStartPointArrowHead,
 } from "../../../../utils/shapes/path";
-import type { PathData } from "../../../../types/data";
 
-// Import related to this component.
+// Import constants and styled components.
 import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";
 import { FlashGroup } from "./FlashConnectLineStyled";
-import type { FlashConnectLineEvent } from "./FlashConnectLineTypes";
 
 export const FlashConnectLineComponent = () => {
 	const [connectLineList, setConnectLineList] = useState<

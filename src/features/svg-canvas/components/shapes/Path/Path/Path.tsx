@@ -2,38 +2,36 @@
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import components related to SvgCanvas.
-import { PositionLabel } from "../../../core/PositionLabel";
-import { Group } from "../../Group";
-
-// Import types related to SvgCanvas.
+// Import types.
 import type { Diagram } from "../../../../catalog";
 import type {
 	DiagramChangeEvent,
 	DiagramClickEvent,
 	DiagramDragEvent,
 	DiagramPointerEvent,
-} from "../../../../types/events";
+	PathData,
+	PathProps
+} from "../../../../types";
 
-// Import SvgCanvas related hooks.
-import { useDrag } from "../../../../hooks/useDrag";
-
-// Import functions related to SvgCanvas.
-import { calcPointsOuterShape } from "../../../../utils";
-import { isItemableData } from "../../../../utils";
-
-// Imports related to this component.
+// Import components.
+import { PositionLabel } from "../../../core/PositionLabel";
+import { Group } from "../../Group";
 import { NewVertexList } from "../NewVertexList";
 import { SegmentList } from "../SegmentList";
+
+// Import hooks.
+import { useDrag } from "../../../../hooks/useDrag";
+
+// Import utils.
+import { 
+	calcPointsOuterShape, 
+	isItemableData 
+} from "../../../../utils";
 import {
 	createDValue,
 	createEndPointArrowHead,
 	createStartPointArrowHead,
 } from "../../../../utils/shapes/path";
-
-// Import the PathProps from the central types folder
-import type { PathProps } from "../../../../types/props/shapes";
-import type { PathData } from "../../../../types/data";
 
 // TODO: 枠線と重なっていると頂点編集モードにできない
 /**
