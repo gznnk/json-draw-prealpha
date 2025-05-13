@@ -1,17 +1,33 @@
-import type OpenAI from "openai";
-import type { ToolDefinition } from "./types";
+/**
+ * チャット送信時のパラメータ型定義.
+ * 自然言語チャンクを処理するためのコールバック関数を含みます.
+ */
+export type ChatParams = {
+	/**
+	 * ユーザーの入力メッセージ.
+	 */
+	message: string;
 
-export type MessageParam = {
-	role: "system" | "user" | "assistant";
-	content: string;
+	/**
+	 * 自然言語チャンクを受け取るコールバック関数.
+	 * @param textChunk - 受信したテキストチャンク
+	 */
+	onTextChunk: (textChunk: string) => void;
 };
 
-export type LLMParams = {
-	messages: OpenAI.Responses.ResponseInput;
-	tools?: ToolDefinition[];
-	onChunk: (delta: OpenAI.Responses.ResponseStreamEvent) => void;
-};
-
+/**
+ * LLMクライアントのインタフェース.
+ * LLMとの通信を行うためのメソッドを定義します.
+ */
 export interface LLMClient {
-	chat(params: LLMParams): Promise<void>;
+	/**
+	 * ユーザーメッセージを送信し、応答を非同期に処理します.
+	 * @param params - チャットパラメータ
+	 */
+	chat(params: ChatParams): Promise<void>;
+
+	/**
+	 * 現在の会話履歴を削除します.
+	 */
+	clearConversation(): void;
 }
