@@ -1,14 +1,14 @@
 // Import React.
 import type React from "react";
 
-// Import components related to SvgCanvas.
+// Import types.
+import type { PathData } from "../../../types";
+
+// Import components.
 import { ArrowHead } from "../../../components/core/ArrowHead";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { calcRadians } from "../../../utils";
-
-// Import types
-import type { PathData } from "../../../types/data";
 
 /**
  * Creates an arrow head at the start point of a path.

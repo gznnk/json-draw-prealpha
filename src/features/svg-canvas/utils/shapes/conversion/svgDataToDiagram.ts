@@ -1,11 +1,13 @@
-// TODO: 依存関係
+// Import types.
 import type { Diagram } from "../../../catalog";
-import {
-	calcGroupBoxOfNoRotation,
-	type GroupData,
-} from "../../../components/shapes/Group";
+import type { GroupData } from "../../../types";
+
+// Import utils.
+import { calcGroupBoxOfNoRotation } from "../../../components/shapes/Group";
 import { nanToZero } from "../../math";
 import { newId } from "../common/newId";
+
+// Import conversion functions.
 import { rectElementToDiagram } from "./rectElementToDiagram";
 import { ellipseElementToDiagram } from "./ellipseElementToDiagram";
 import { circleElementToDiagram } from "./circleElementToDiagram";

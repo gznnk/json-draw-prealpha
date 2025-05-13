@@ -1,4 +1,4 @@
-// Import types related to SvgCanvas.
+// Import types.
 import type { Diagram } from "../../../catalog";
 
 /**

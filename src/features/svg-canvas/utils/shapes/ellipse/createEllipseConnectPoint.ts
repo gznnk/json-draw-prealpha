@@ -1,9 +1,8 @@
-// Import types related to SvgCanvas.
-import type { EllipseVertices } from "../../../types/base";
-import type { ConnectPointData } from "../../../types/data";
+// Import types.
+import type { ConnectPointData, EllipseVertices } from "../../../types";
 
-// Import functions related to SvgCanvas.
-import { newId, calcEllipseVertices } from "../../../utils";
+// Import utils.
+import { calcEllipseVertices, newId } from "../../../utils";
 
 /**
  * Create connection points for the ellipse.

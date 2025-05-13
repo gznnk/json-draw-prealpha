@@ -1,8 +1,8 @@
-// Import functions related to SvgCanvas.
-import { newId } from "../../../utils";
+// Import types.
+import type { ImageData } from "../../../types";
 
-// Import types
-import type { ImageData } from "../../../types/data";
+// Import utils.
+import { newId } from "../../../utils";
 
 // Import constants from Image component.
 import { DEFAULT_IMAGE_DATA } from "../../../components/shapes/Image/ImageConstants";

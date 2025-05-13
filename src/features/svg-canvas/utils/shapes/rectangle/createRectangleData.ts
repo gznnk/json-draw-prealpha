@@ -1,12 +1,12 @@
-// Import types related to SvgCanvas.
+// Import types.
 import type {
+	RectangleData,
 	TextAlign,
 	TextableType,
 	VerticalAlign,
-} from "../../../types/base";
-import type { RectangleData } from "../../../types/data";
+} from "../../../types";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { newId } from "../../../utils";
 
 // Import related functions.

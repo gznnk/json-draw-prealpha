@@ -1,9 +1,8 @@
-// Import types related to SvgCanvas.
-import type { RectangleVertices } from "../../../types/base";
-import type { ConnectPointData } from "../../../types/data";
+// Import types.
+import type { ConnectPointData, RectangleVertices } from "../../../types";
 
-// Import functions related to SvgCanvas.
-import { newId, calcRectangleVertices } from "../../../utils";
+// Import utils.
+import { calcRectangleVertices, newId } from "../../../utils";
 
 /**
  * Create connection points for a rectangle.

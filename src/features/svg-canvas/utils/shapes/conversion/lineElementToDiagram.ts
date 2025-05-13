@@ -1,10 +1,11 @@
-// TODO: 依存関係
-import {
-	DEFAULT_PATH_DATA,
-	type PathData,
-	type PathPointData,
-} from "../../../components/shapes/Path";
+// Import types.
+import type { PathData, PathPointData } from "../../../types";
+
+// Import utils.
 import { newId } from "../common/newId";
+
+// Import constants.
+import { DEFAULT_PATH_DATA } from "../../../components/shapes/Path/Path/PathConstants";
 
 /**
  * Converts an SVG Line element to a Path diagram data structure.

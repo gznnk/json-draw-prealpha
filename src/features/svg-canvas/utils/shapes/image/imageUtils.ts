@@ -1,6 +1,6 @@
-// Import types
+// Import types.
 import type { Diagram } from "../../../catalog";
-import type { ImageData } from "../../../types/data";
+import type { ImageData } from "../../../types";
 
 /**
  * Type guard to check if a diagram is an image data object.

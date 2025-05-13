@@ -1,10 +1,12 @@
-// Import types related to SvgCanvas.
-import type { EllipseVertices } from "../../../types/base";
+// Import types.
 import type { Diagram } from "../../../catalog";
-import type { Shape } from "../../../types";
-import type { ConnectPointMoveData } from "../../../types/events";
+import type {
+	ConnectPointMoveData,
+	EllipseVertices,
+	Shape,
+} from "../../../types";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { calcEllipseVertices, isConnectableData } from "../../../utils";
 
 /**

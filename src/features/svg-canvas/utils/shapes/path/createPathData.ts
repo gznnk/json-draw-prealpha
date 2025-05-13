@@ -1,8 +1,8 @@
-// Import functions related to SvgCanvas.
-import { newId } from "../../../utils";
+// Import types.
+import type { PathData, PathPointData } from "../../../types";
 
-// Import types
-import type { PathData, PathPointData } from "../../../types/data";
+// Import utils.
+import { newId } from "../../../utils";
 
 // Import constants from Path component.
 import { DEFAULT_PATH_DATA } from "../../../components/shapes/Path/Path/PathConstants";
