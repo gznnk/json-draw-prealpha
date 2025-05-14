@@ -1,9 +1,9 @@
+// filepath: c:\Users\maver\Project\react-vite-project\src\features\llm-client\openai\client.ts
 import OpenAI from "openai";
 import type { LLMClient, ChatParams } from "../interface";
 import type {
-	MessageParam,
 	ToolDefinition,
-	FunctionCallHandler,
+	FunctionHandlerMap,
 	FunctionCallInfo,
 } from "../types";
 
@@ -14,8 +14,8 @@ import type {
 export class OpenAIClient implements LLMClient {
 	private readonly openai: OpenAI;
 	private readonly tools?: ToolDefinition[];
-	private readonly functionCallHandler?: FunctionCallHandler;
-	private messages: MessageParam[] = [];
+	private readonly functionHandlers: FunctionHandlerMap = {};
+	private messages: OpenAI.Responses.ResponseInput = [];
 
 	/**
 	 * OpenAIクライアントを初期化します.
@@ -24,19 +24,23 @@ export class OpenAIClient implements LLMClient {
 	 * @param options - 初期化オプション
 	 * @param options.tools - 利用可能なツール定義のリスト
 	 * @param options.systemPrompt - システムプロンプト
-	 * @param options.functionCallHandler - 関数コールを処理するハンドラ
+	 * @param options.functionHandlers - 関数名とハンドラのマッピング
 	 */
 	constructor(
 		apiKey: string,
 		options?: {
 			tools?: ToolDefinition[];
 			systemPrompt?: string;
-			functionCallHandler?: FunctionCallHandler;
+			functionHandlers?: FunctionHandlerMap;
 		},
 	) {
 		this.openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 		this.tools = options?.tools;
-		this.functionCallHandler = options?.functionCallHandler;
+
+		// 関数ハンドラが指定されていれば登録
+		if (options?.functionHandlers) {
+			this.functionHandlers = { ...options.functionHandlers };
+		}
 
 		// システムプロンプトが指定されていれば初期メッセージとして追加
 		if (options?.systemPrompt) {
@@ -80,7 +84,8 @@ export class OpenAIClient implements LLMClient {
 				required: this.tools?.map((t) => t.name) || [],
 			},
 			strict: true,
-		})) as OpenAI.Responses.Tool[] | undefined; // メッセージ履歴はそのまま使用
+		})) as OpenAI.Responses.Tool[];
+
 		let assistantMessage = "";
 		const maxAttempts = 10; // 最大ループ回数を制限
 
@@ -89,7 +94,7 @@ export class OpenAIClient implements LLMClient {
 			// ストリーミングレスポンスの作成
 			const stream = await this.openai.responses.create({
 				model: "gpt-4o",
-				input: this.messages as unknown as OpenAI.Responses.ResponseInput,
+				input: this.messages,
 				tools: openaiTools,
 				stream: true,
 			});
@@ -105,62 +110,60 @@ export class OpenAIClient implements LLMClient {
 					onTextChunk(delta);
 				}
 
-				// 関数呼び出しイベント - 関数コールハンドラがあれば処理
+				// 関数呼び出しイベント - 関数ハンドラマップを使って処理
 				if (
 					event.type === "response.output_item.done" &&
-					event.item?.type === "function_call" &&
-					this.functionCallHandler
+					event.item?.type === "function_call"
 				) {
 					foundFunctionCall = true;
 
 					const functionCall: FunctionCallInfo = {
 						name: event.item.name,
-						arguments: event.item.arguments,
+						arguments: JSON.parse(event.item.arguments),
 						callId: event.item.call_id,
 					};
 
-					try {
-						// 関数コールを処理
-						const result = await this.functionCallHandler(functionCall);
+					const handler = this.functionHandlers[functionCall.name];
 
-						if (result !== null) {
-							// 関数コール情報をコンソールに出力
-							console.log(`Function called: ${functionCall.name}`);
+					if (handler) {
+						try {
+							// 登録されているハンドラで関数コールを処理
+							const result = await handler(functionCall);
 
-							// 関数呼び出しメッセージ（OpenAI APIは特殊な形式を要求）
+							if (result !== null) {
+								// 関数コール情報をコンソールに出力
+								console.log(`Function called: ${functionCall.name}`);
+
+								// 関数呼び出しメッセージ
+								this.messages.push(event.item);
+
+								// 関数の結果メッセージ（OpenAI APIは特殊な形式を要求）
+								this.messages.push({
+									type: "function_call_output",
+									call_id: event.item.call_id,
+									output: JSON.stringify(result),
+								});
+							}
+						} catch (error) {
+							console.error(
+								`Error handling function call ${functionCall.name}:`,
+								error,
+							);
+
+							// 関数呼び出しメッセージ
+							this.messages.push(event.item);
+
+							// エラーメッセージを会話履歴に追加
 							this.messages.push({
-								role: "assistant",
-								content: null,
-								function_call: {
-									name: functionCall.name,
-									arguments: functionCall.arguments,
-								},
-							} as unknown as MessageParam);
-
-							// 関数の結果メッセージ（OpenAI APIは特殊な形式を要求）
-							this.messages.push({
-								role: "function",
-								name: functionCall.name,
-								content: JSON.stringify(result),
-							} as unknown as MessageParam);
+								type: "function_call_output",
+								call_id: event.item.call_id,
+								output: JSON.stringify({ error: "Function execution failed" }),
+							});
 						}
-					} catch (error) {
-						console.error("Error handling function call:", error); // 関数呼び出しメッセージ（エラーがあっても記録）
-						this.messages.push({
-							role: "assistant",
-							content: null,
-							function_call: {
-								name: functionCall.name,
-								arguments: functionCall.arguments,
-							},
-						} as unknown as MessageParam);
-
-						// エラーメッセージを会話履歴に追加
-						this.messages.push({
-							role: "function",
-							name: functionCall.name,
-							content: JSON.stringify({ error: "Function execution failed" }),
-						} as unknown as MessageParam);
+					} else {
+						console.warn(
+							`No handler registered for function: ${functionCall.name}`,
+						);
 					}
 				}
 			}
@@ -185,7 +188,9 @@ export class OpenAIClient implements LLMClient {
 	 */
 	clearConversation(): void {
 		// システムプロンプトを保持する場合は最初のメッセージだけ残す
-		const systemMessage = this.messages.find((msg) => msg.role === "system");
+		const systemMessage = this.messages.find(
+			(msg) => "role" in msg && msg.role === "system",
+		);
 		this.messages = systemMessage ? [systemMessage] : [];
 	}
 }

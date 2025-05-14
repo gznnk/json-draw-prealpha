@@ -1,13 +1,4 @@
 /**
- * 単一のメッセージを表す型定義.
- * AIとのインタラクションにおける各メッセージを定義します.
- */
-export type MessageParam = {
-	role: "system" | "user" | "assistant";
-	content: string;
-};
-
-/**
  * 関数コールの情報を表す型定義.
  * AIによる関数呼び出し要求を定義します.
  */
@@ -18,9 +9,9 @@ export type FunctionCallInfo = {
 	name: string;
 
 	/**
-	 * 関数に渡される引数（JSON文字列）.
+	 * 関数に渡される引数.
 	 */
-	arguments: string;
+	arguments: unknown;
 
 	/**
 	 * 関数呼び出しの一意識別子.
@@ -36,6 +27,12 @@ export type FunctionCallInfo = {
 export type FunctionCallHandler = (
 	functionCall: FunctionCallInfo,
 ) => Promise<Record<string, unknown> | null> | Record<string, unknown> | null;
+
+/**
+ * 関数名とハンドラのマップ型定義.
+ * 関数名をキーとして、対応するハンドラ関数を値として持ちます.
+ */
+export type FunctionHandlerMap = Record<string, FunctionCallHandler>;
 
 /**
  * ツールパラメータの定義.
