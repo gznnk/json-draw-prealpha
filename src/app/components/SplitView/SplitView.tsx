@@ -1,6 +1,6 @@
 // SplitView.tsx
 import type React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, memo } from "react";
 
 import { Container, Pane, Divider } from "./SplitViewStyled";
 
@@ -10,41 +10,61 @@ type SplitViewProps = {
 	right: React.ReactNode;
 };
 
-export const SplitView: React.FC<SplitViewProps> = ({
+/**
+ * 左右に分割可能なビューを提供するコンポーネント。
+ * 真ん中のドラッグできるディバイダーで分割比率を調整できる。
+ *
+ * @param initialRatio - 初期の分割比率 (0〜1)
+ * @param left - 左側に表示するコンテンツ
+ * @param right - 右側に表示するコンテンツ
+ */
+const SplitViewComponent = ({
 	initialRatio = 0.5,
 	left,
 	right,
-}) => {
+}: SplitViewProps) => {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const dividerRef = useRef<HTMLDivElement>(null);
 	const [ratio, setRatio] = useState(initialRatio);
 
-	const handleMouseDown = (e: React.MouseEvent) => {
+	const handlePointerDown = (e: React.PointerEvent) => {
 		e.preventDefault();
 		const startX = e.clientX;
 		const container = containerRef.current;
-		if (!container) return;
+		const divider = dividerRef.current;
 
-		const handleMouseMove = (moveEvent: MouseEvent) => {
+		if (!container || !divider) return;
+
+		// ポインタキャプチャを設定
+		divider.setPointerCapture(e.pointerId);
+
+		const handlePointerMove = (moveEvent: PointerEvent) => {
 			const dx = moveEvent.clientX - startX;
 			const newRatio =
 				(container.offsetWidth * ratio + dx) / container.offsetWidth;
 			setRatio(Math.max(0.1, Math.min(0.9, newRatio))); // 最小0.1、最大0.9に制限
 		};
 
-		const handleMouseUp = () => {
-			window.removeEventListener("mousemove", handleMouseMove);
-			window.removeEventListener("mouseup", handleMouseUp);
+		const handlePointerUp = (upEvent: PointerEvent) => {
+			// ポインタキャプチャを解除
+			divider.releasePointerCapture(upEvent.pointerId);
+			divider.removeEventListener("pointermove", handlePointerMove);
+			divider.removeEventListener("pointerup", handlePointerUp);
+			divider.removeEventListener("pointercancel", handlePointerUp);
 		};
 
-		window.addEventListener("mousemove", handleMouseMove);
-		window.addEventListener("mouseup", handleMouseUp);
+		divider.addEventListener("pointermove", handlePointerMove);
+		divider.addEventListener("pointerup", handlePointerUp);
+		divider.addEventListener("pointercancel", handlePointerUp);
 	};
 
 	return (
 		<Container ref={containerRef}>
 			<Pane style={{ flex: ratio }}>{left}</Pane>
-			<Divider onMouseDown={handleMouseDown} />
+			<Divider ref={dividerRef} onPointerDown={handlePointerDown} />
 			<Pane style={{ flex: 1 - ratio }}>{right}</Pane>
 		</Container>
 	);
 };
+
+export const SplitView = memo(SplitViewComponent);
