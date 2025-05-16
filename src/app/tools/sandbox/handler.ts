@@ -6,17 +6,31 @@
 import { newId } from "../../../features/svg-canvas/utils";
 import { dispatchAddNewSheetEvent } from "../../App";
 import { dispatchUpdateSandboxContentEvent } from "../../components/SandboxSheet";
+import type {
+	FunctionCallHandler,
+	FunctionCallInfo,
+} from "../../../features/llm-client/types";
 
 /**
  * Handles the creation of a new sandbox with custom HTML content.
+ * Creates a sandbox sheet and injects the provided HTML content with a small delay to ensure proper initialization.
  *
- * @param args - The arguments for the function, including sandbox_name and html_content
- * @returns - An object containing the ID and name of the created sandbox
+ * @param functionCall - The function call information containing sandbox_name and html_content
+ * @returns Object containing the ID, name and status of the created sandbox or error information
  */
-// biome-ignore lint/suspicious/noExplicitAny: argument type is not known
-export const handler = (args: any) => {
+export const handler: FunctionCallHandler = (
+	functionCall: FunctionCallInfo,
+) => {
+	const args = functionCall.arguments as {
+		sandbox_name: string;
+		html_content: string;
+	};
+
 	// Check if required arguments are present
-	if ("sandbox_name" in args && "html_content" in args) {
+	if (
+		typeof args.sandbox_name === "string" &&
+		typeof args.html_content === "string"
+	) {
 		// Generate a unique ID for the new sandbox
 		const id = newId();
 		// Create a new sheet for the sandbox

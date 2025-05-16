@@ -73,7 +73,7 @@ export class OpenAIClient implements LLMClient {
 				properties: tool.parameters.reduce(
 					(acc, param) => {
 						acc[param.name] = {
-							type: "string",
+							type: param.type,
 							description: param.description,
 						};
 						return acc;
@@ -81,7 +81,10 @@ export class OpenAIClient implements LLMClient {
 					{} as Record<string, unknown>,
 				),
 				additionalProperties: false,
-				required: this.tools?.map((t) => t.name) || [],
+				required: tool.parameters.reduce((acc, param) => {
+					acc.push(param.name);
+					return acc;
+				}, [] as string[]),
 			},
 			strict: true,
 		})) as OpenAI.Responses.Tool[];

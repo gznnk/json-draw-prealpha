@@ -2,29 +2,37 @@
 import { dispatchNewItemEvent } from "../../canvas/observers/addNewItem";
 import { createImageGenNodeData } from "../../components/nodes/ImageGenNode";
 import { newEventId } from "../../utils";
+import type {
+	FunctionCallHandler,
+	FunctionCallInfo,
+} from "../../../llm-client/types";
 
 /**
- * Function to handle the addition of an image generation node.
+ * Handles the addition of an image generation node to the canvas.
+ * Creates a new node at the specified coordinates and dispatches a new item event.
  *
- * @param args - The arguments for the function, including x and y coordinates.
- * @returns - An object containing the ID, type, width, and height of the created node.
+ * @param functionCall - The function call information containing x and y coordinates
+ * @returns Object containing the ID, type, width, and height of the created node or null if coordinates are missing
  */
-// biome-ignore lint/suspicious/noExplicitAny: argument type is not known
-export const handler = (args: any) => {
-	if ("x" in args && "y" in args) {
-		// Create a new Image Generation node with the specified x and y coordinates.
+export const handler: FunctionCallHandler = (
+	functionCall: FunctionCallInfo,
+) => {
+	const args = functionCall.arguments as { x: number; y: number };
+
+	if (typeof args.x === "number" && typeof args.y === "number") {
+		// Create a new Image Generation node with the specified x and y coordinates
 		const data = createImageGenNodeData({
 			x: args.x,
 			y: args.y,
 		});
 
-		// Trigger a new item event with the created node data.
+		// Trigger a new item event with the created node data
 		dispatchNewItemEvent({
 			eventId: newEventId(),
 			item: data,
 		});
 
-		// Return the created node data.
+		// Return the created node data
 		return {
 			id: data.id,
 			type: "SvgToDiagramNode",
@@ -32,4 +40,6 @@ export const handler = (args: any) => {
 			height: data.height,
 		};
 	}
+
+	return null;
 };

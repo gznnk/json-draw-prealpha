@@ -1,6 +1,6 @@
 // filepath: c:\Users\maver\Project\react-vite-project-2\src\app\tools\sandbox\definition.ts
 // Import libraries.
-import type { OpenAI } from "openai";
+import type { ToolDefinition } from "../../../features/llm-client/types";
 
 /**
  * Description for the sandbox tool that creates an interactive HTML sandbox.
@@ -61,25 +61,24 @@ When asked to "create a Tetris game", implement a complete, self-contained solut
 /**
  * Tool definition for creating sandbox environments with custom HTML content.
  */
-export const definition = {
-	type: "function",
+/**
+ * Tool definition for creating sandbox environments with custom HTML content.
+ * Conforms to the llm-client ToolDefinition interface.
+ */
+export const definition: ToolDefinition = {
 	name: "create_sandbox",
 	description: TOOL_DESCRIPTION,
-	parameters: {
-		type: "object",
-		properties: {
-			sandbox_name: {
-				type: "string",
-				description: "A descriptive name for the sandbox sheet.",
-			},
-			html_content: {
-				type: "string",
-				description:
-					"Complete, fully self-contained HTML document to display in the sandbox (including DOCTYPE, html, head, body tags). All resources, scripts, styles, and assets must be included inline. External resources will not work. The implementation must work entirely within the sandbox with no external dependencies.",
-			},
+	parameters: [
+		{
+			name: "sandbox_name",
+			type: "string",
+			description: "A descriptive name for the sandbox sheet.",
 		},
-		additionalProperties: false,
-		required: ["sandbox_name", "html_content"],
-	},
-	strict: true,
-} as const satisfies OpenAI.Responses.Tool;
+		{
+			name: "html_content",
+			type: "string",
+			description:
+				"Complete, fully self-contained HTML document to display in the sandbox (including DOCTYPE, html, head, body tags). All resources, scripts, styles, and assets must be included inline. External resources will not work. The implementation must work entirely within the sandbox with no external dependencies.",
+		},
+	],
+};

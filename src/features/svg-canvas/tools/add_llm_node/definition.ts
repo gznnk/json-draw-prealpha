@@ -1,5 +1,5 @@
 // Import libraries.
-import type { OpenAI } from "openai";
+import type { ToolDefinition } from "../../../llm-client/types";
 
 // Import shared descriptions.
 import {
@@ -7,6 +7,10 @@ import {
 	Y_PARAM_DESCRIPTION,
 } from "../shared/descriptions";
 
+/**
+ * Description text for the add_llm_node tool.
+ * Explains the purpose and behavior of the LLM node.
+ */
 const TOOL_DESCRIPTION = `
 Adds an LLM (Large Language Model) node to the canvas.  
 The node can receive input from connected text nodes or other nodes.  
@@ -15,29 +19,29 @@ The LLM node can be configured with specific instructions to control its behavio
 Returns a JSON object containing the node ID, node type and the size (width and height).
 `;
 
-export const definition = {
-	type: "function",
+/**
+ * Tool definition for adding an LLM node to the canvas.
+ * Conforms to the llm-client ToolDefinition interface.
+ */
+export const definition: ToolDefinition = {
 	name: "add_llm_node",
 	description: TOOL_DESCRIPTION,
-	parameters: {
-		type: "object",
-		properties: {
-			x: {
-				type: "number",
-				description: X_PARAM_DESCRIPTION,
-			},
-			y: {
-				type: "number",
-				description: Y_PARAM_DESCRIPTION,
-			},
-			instructions: {
-				type: "string",
-				description:
-					"The instructions to guide the LLM node's processing behavior.",
-			},
+	parameters: [
+		{
+			name: "x",
+			type: "number",
+			description: X_PARAM_DESCRIPTION,
 		},
-		additionalProperties: false,
-		required: ["x", "y", "instructions"],
-	},
-	strict: true,
-} as const satisfies OpenAI.Responses.Tool;
+		{
+			name: "y",
+			type: "number",
+			description: Y_PARAM_DESCRIPTION,
+		},
+		{
+			name: "instructions",
+			type: "string",
+			description:
+				"The instructions to guide the LLM node's processing behavior.",
+		},
+	],
+};

@@ -1,16 +1,30 @@
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../utils";
 import { dispatchConnectNodesEvent } from "../../canvas/observers/connectNodes";
+import type {
+	FunctionCallHandler,
+	FunctionCallInfo,
+} from "../../../llm-client/types";
 
 /**
- * Function to handle the connection between two nodes.
+ * Handles the connection between two nodes.
+ * Creates a connection and dispatches the connect nodes event.
  *
- * @param args - The arguments for the function, including sourceNodeId and targetNodeId.
- * @returns - An object containing the sourceNodeId and targetNodeId of the connected nodes.
+ * @param functionCall - The function call information containing sourceNodeId and targetNodeId.
+ * @returns Object containing the sourceNodeId and targetNodeId or null if required arguments are missing.
  */
-// biome-ignore lint/suspicious/noExplicitAny: argument type is not known
-export const handler = (args: any) => {
-	if ("sourceNodeId" in args && "targetNodeId" in args) {
+export const handler: FunctionCallHandler = (
+	functionCall: FunctionCallInfo,
+) => {
+	const args = functionCall.arguments as {
+		sourceNodeId: string;
+		targetNodeId: string;
+	};
+
+	if (
+		typeof args.sourceNodeId === "string" &&
+		typeof args.targetNodeId === "string"
+	) {
 		// Trigger connect nodes event using the global trigger function
 		dispatchConnectNodesEvent({
 			eventId: newEventId(),
@@ -18,10 +32,12 @@ export const handler = (args: any) => {
 			targetNodeId: args.targetNodeId,
 		});
 
-		// Return the connection data.
+		// Return the connection data
 		return {
 			sourceNodeId: args.sourceNodeId,
 			targetNodeId: args.targetNodeId,
 		};
 	}
+
+	return null;
 };

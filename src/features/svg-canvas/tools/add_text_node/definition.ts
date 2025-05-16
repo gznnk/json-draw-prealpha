@@ -1,5 +1,5 @@
 // Import libraries.
-import type { OpenAI } from "openai";
+import type { ToolDefinition } from "../../../llm-client/types";
 
 // Import shared descriptions.
 import {
@@ -7,6 +7,10 @@ import {
 	Y_PARAM_DESCRIPTION,
 } from "../shared/descriptions";
 
+/**
+ * Description text for the add_text_node tool.
+ * Explains the purpose and behavior of the Text node.
+ */
 const TOOL_DESCRIPTION = `
 Adds a Text node to the canvas.  
 The Text node can be used for entering and displaying text content.  
@@ -15,24 +19,23 @@ The Text node is editable by the user and can be used for both input and output 
 Returns a JSON object containing the node ID, node type and the size (width and height).
 `;
 
-export const definition = {
-	type: "function",
+/**
+ * Tool definition for adding a Text node to the canvas.
+ * Conforms to the llm-client ToolDefinition interface.
+ */
+export const definition: ToolDefinition = {
 	name: "add_text_node",
 	description: TOOL_DESCRIPTION,
-	parameters: {
-		type: "object",
-		properties: {
-			x: {
-				type: "number",
-				description: X_PARAM_DESCRIPTION,
-			},
-			y: {
-				type: "number",
-				description: Y_PARAM_DESCRIPTION,
-			},
+	parameters: [
+		{
+			name: "x",
+			type: "number",
+			description: X_PARAM_DESCRIPTION,
 		},
-		additionalProperties: false,
-		required: ["x", "y"],
-	},
-	strict: true,
-} as const satisfies OpenAI.Responses.Tool;
+		{
+			name: "y",
+			type: "number",
+			description: Y_PARAM_DESCRIPTION,
+		},
+	],
+};

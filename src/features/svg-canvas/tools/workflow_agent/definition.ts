@@ -1,24 +1,22 @@
 // Import libraries.
-import type { OpenAI } from "openai";
+import type { ToolDefinition } from "../../../llm-client/types";
 
 // Import prompt.
 import TOOL_DESCRIPTION from "./prompts/tool-description.md?raw";
 
-export const definition = {
-	type: "function",
+/**
+ * Tool definition for the workflow agent that helps users create workflows.
+ * Conforms to the llm-client ToolDefinition interface.
+ */
+export const definition: ToolDefinition = {
 	name: "workflow_agent",
 	description: TOOL_DESCRIPTION,
-	parameters: {
-		type: "object",
-		properties: {
-			user_goal: {
-				type: "string",
-				description:
-					"A natural language description of the user's intended workflow (e.g., 'Summarize an uploaded PDF and send it via email.')",
-			},
+	parameters: [
+		{
+			name: "user_goal",
+			type: "string",
+			description:
+				"A natural language description of the user's intended workflow (e.g., 'Summarize an uploaded PDF and send it via email.')",
 		},
-		required: ["user_goal"],
-		additionalProperties: false,
-	},
-	strict: true,
-} as const satisfies OpenAI.Responses.Tool;
+	],
+};

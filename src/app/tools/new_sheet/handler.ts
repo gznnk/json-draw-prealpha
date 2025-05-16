@@ -1,16 +1,24 @@
 /**
- * Function to handle the addition of an LLM node.
+ * Handles the creation of a new sheet.
+ * Creates a sheet with the specified name and dispatches the corresponding event.
  *
- * @param args - The arguments for the function, including x, y coordinates and instructions.
- * @returns - An object containing the ID, type, width, and height of the created node.
+ * @param functionCall - The function call information containing sheet_name
+ * @returns Object containing the ID and sheet name or null if required arguments are missing
  */
 
 import { newId } from "../../../features/svg-canvas/utils";
 import { dispatchAddNewSheetEvent } from "../../App";
+import type {
+	FunctionCallHandler,
+	FunctionCallInfo,
+} from "../../../features/llm-client/types";
 
-// biome-ignore lint/suspicious/noExplicitAny: argument type is not known
-export const handler = (args: any) => {
-	if ("sheet_name" in args) {
+export const handler: FunctionCallHandler = (
+	functionCall: FunctionCallInfo,
+) => {
+	const args = functionCall.arguments as { sheet_name: string };
+
+	if (typeof args.sheet_name === "string") {
 		const id = newId();
 		dispatchAddNewSheetEvent({
 			id,
@@ -22,4 +30,6 @@ export const handler = (args: any) => {
 			sheet_name: args.sheet_name,
 		};
 	}
+
+	return null;
 };

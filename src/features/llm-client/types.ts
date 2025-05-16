@@ -39,6 +39,7 @@ export type FunctionHandlerMap = Record<string, FunctionCallHandler>;
  */
 export type ToolParameter = {
 	name: string;
+	type: string;
 	description: string;
 };
 
