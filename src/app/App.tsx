@@ -12,7 +12,7 @@ import {
 } from "./components/Sheets";
 import { CanvasSheet } from "./components/CanvasSheet";
 import { SandboxSheet } from "./components/SandboxSheet";
-import { Header } from "./components/Header";
+import { Page } from "./components/Page";
 
 // Import utils.
 import { Profiler } from "../utils/Profiler";
@@ -136,45 +136,47 @@ function App() {
 			);
 		};
 	}, []);
-
 	return (
 		<div className="App">
-			<Header />
-			<div
-				style={{
-					position: "fixed",
-					top: "30px",
-					left: 0,
-					right: "33.33%",
-					bottom: 0,
-					backgroundColor: "#0C0F1C",
-				}}
-			>
-				{/* SVGキャンバスエリア (2/3) */}
-				<div style={{ width: "100%", height: "100%" }}>
-					<Sheets
-						tabs={tabs}
-						contentItems={contentItems}
-						activeTabId={activeTabId}
-						onTabSelect={setActiveTabId}
-						onAddTab={handleAddTab}
-					/>
+			<Page>
+				<div
+					style={{
+						display: "flex",
+						width: "100%",
+						height: "100%",
+					}}
+				>
+					<div
+						style={{
+							width: "66.67%",
+							height: "100%",
+							backgroundColor: "#0C0F1C",
+						}}
+					>
+						{/* SVGキャンバスエリア (2/3) */}
+						<div style={{ width: "100%", height: "100%" }}>
+							<Sheets
+								tabs={tabs}
+								contentItems={contentItems}
+								activeTabId={activeTabId}
+								onTabSelect={setActiveTabId}
+								onAddTab={handleAddTab}
+							/>
+						</div>
+					</div>
+					{/* チャットエリア (1/3) */}
+					<div
+						style={{
+							width: "33.33%",
+							height: "100%",
+							borderLeft: "1px solid #3A415C",
+							boxSizing: "border-box",
+						}}
+					>
+						<ChatUI {...chatConfig} apiKey={apiKey || undefined} />
+					</div>
 				</div>
-			</div>
-			{/* チャットエリア (1/3) */}
-			<div
-				style={{
-					position: "fixed",
-					top: "30px",
-					left: "66.67%",
-					right: 0,
-					bottom: 0,
-					borderLeft: "1px solid #3A415C",
-					boxSizing: "border-box",
-				}}
-			>
-				<ChatUI {...chatConfig} apiKey={apiKey || undefined} />
-			</div>
+			</Page>
 		</div>
 	);
 }

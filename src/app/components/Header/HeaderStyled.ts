@@ -4,10 +4,10 @@ import styled from "@emotion/styled";
  * Container component for the header.
  * Defines the styling and layout for the header section.
  */
-export const HeaderContainer = styled.header`
-  height: 30px;
+export const HeaderContainer = styled.header<{ height?: number }>`
+  height: ${(props) => `${props.height || 30}px`};
   width: 100%;
-  background-color: #0C0F1C;
+  background-color: #121624;
   border-bottom: 1px solid #3A415C;
   display: flex;
   align-items: center;
