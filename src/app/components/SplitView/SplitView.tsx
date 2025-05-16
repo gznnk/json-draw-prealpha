@@ -2,7 +2,7 @@
 import type React from "react";
 import { useRef, useState, memo } from "react";
 
-import { Container, Pane, Divider } from "./SplitViewStyled";
+import { Container, Pane, Divider, DividerHitArea } from "./SplitViewStyled";
 
 type SplitViewProps = {
 	initialRatio?: number; // 左右の幅比率（0〜1）
@@ -57,11 +57,12 @@ const SplitViewComponent = ({
 		divider.addEventListener("pointerup", handlePointerUp);
 		divider.addEventListener("pointercancel", handlePointerUp);
 	};
-
 	return (
 		<Container ref={containerRef}>
 			<Pane style={{ flex: ratio }}>{left}</Pane>
-			<Divider ref={dividerRef} onPointerDown={handlePointerDown} />
+			<Divider>
+				<DividerHitArea ref={dividerRef} onPointerDown={handlePointerDown} />
+			</Divider>
 			<Pane style={{ flex: 1 - ratio }}>{right}</Pane>
 		</Container>
 	);
