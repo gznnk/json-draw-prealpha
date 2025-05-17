@@ -6,7 +6,7 @@ import {
 	type ReactElement,
 } from "react";
 import { renderMarkdown } from "../../markdown";
-import { type MarkdownEditorProps, MarkdownViewMode } from "../types";
+import type { MarkdownEditorProps } from "../types";
 import {
 	DEFAULT_MIN_HEIGHT,
 	DEFAULT_PLACEHOLDER,
@@ -24,16 +24,16 @@ import { SafeHtmlPreview } from "./SafeHtmlPreview";
 const MarkdownEditorComponent = ({
 	initialMarkdown = "",
 	onChange,
-	defaultViewMode = MarkdownViewMode.SPLIT,
 	placeholder = DEFAULT_PLACEHOLDER,
 	minHeight = DEFAULT_MIN_HEIGHT,
 }: MarkdownEditorProps): ReactElement => {
 	// マークダウンコンテンツの状態管理
 	const [markdown, setMarkdown] = useState(initialMarkdown);
-	// 表示モードの状態管理
-	const [viewMode, setViewMode] = useState(defaultViewMode);
 	// レンダリングされたHTMLの状態管理
 	const [renderedHtml, setRenderedHtml] = useState("");
+	// 表示状態の管理
+	const [showEditor, setShowEditor] = useState(true);
+	const [showPreview, setShowPreview] = useState(true);
 
 	// マークダウンが変更されたときにHTMLをレンダリングし直す
 	useEffect(() => {
@@ -53,11 +53,6 @@ const MarkdownEditorComponent = ({
 		[onChange],
 	);
 
-	// 表示モード切り替えハンドラ
-	const handleViewModeChange = useCallback((mode: MarkdownViewMode) => {
-		setViewMode(mode);
-	}, []);
-
 	return (
 		<div
 			style={{
@@ -70,20 +65,29 @@ const MarkdownEditorComponent = ({
 			{/* ツールバー */}
 			<Toolbar>
 				<ToolbarButton
-					active={viewMode === MarkdownViewMode.SPLIT}
-					onClick={() => handleViewModeChange(MarkdownViewMode.SPLIT)}
+					active={showEditor && showPreview}
+					onClick={() => {
+						setShowEditor(true);
+						setShowPreview(true);
+					}}
 				>
 					{VIEW_MODE_LABELS.split}
 				</ToolbarButton>
 				<ToolbarButton
-					active={viewMode === MarkdownViewMode.EDITOR_ONLY}
-					onClick={() => handleViewModeChange(MarkdownViewMode.EDITOR_ONLY)}
+					active={showEditor && !showPreview}
+					onClick={() => {
+						setShowEditor(true);
+						setShowPreview(false);
+					}}
 				>
 					{VIEW_MODE_LABELS.editorOnly}
 				</ToolbarButton>
 				<ToolbarButton
-					active={viewMode === MarkdownViewMode.PREVIEW_ONLY}
-					onClick={() => handleViewModeChange(MarkdownViewMode.PREVIEW_ONLY)}
+					active={!showEditor && showPreview}
+					onClick={() => {
+						setShowEditor(false);
+						setShowPreview(true);
+					}}
 				>
 					{VIEW_MODE_LABELS.previewOnly}
 				</ToolbarButton>
@@ -92,17 +96,21 @@ const MarkdownEditorComponent = ({
 			{/* エディタとプレビューのコンテナ */}
 			<EditorContainer>
 				{/* マークダウン入力エリア */}
-				<EditorSection viewMode={viewMode} isEditor={true}>
-					<MarkdownTextarea
-						value={markdown}
-						onChange={handleChange}
-						placeholder={placeholder}
-					/>
-				</EditorSection>
+				{showEditor && (
+					<EditorSection isEditor={true}>
+						<MarkdownTextarea
+							value={markdown}
+							onChange={handleChange}
+							placeholder={placeholder}
+						/>
+					</EditorSection>
+				)}
 				{/* プレビュー表示エリア */}
-				<EditorSection viewMode={viewMode} isEditor={false}>
-					<SafeHtmlPreview html={renderedHtml} />
-				</EditorSection>
+				{showPreview && (
+					<EditorSection isEditor={false}>
+						<SafeHtmlPreview html={renderedHtml} />
+					</EditorSection>
+				)}
 			</EditorContainer>
 		</div>
 	);

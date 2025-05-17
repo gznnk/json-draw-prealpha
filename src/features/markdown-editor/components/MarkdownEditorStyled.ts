@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import type { MarkdownViewMode } from "../types";
 
 /**
  * マークダウンエディタのメインコンテナスタイル
@@ -21,10 +20,7 @@ export const EditorContainer = styled.div`
  * エディタとプレビューの各セクションのスタイル
  * ChatUIStyled.tsと合わせたダークテーマスタイル
  */
-export const EditorSection = styled.div<{
-	viewMode: MarkdownViewMode;
-	isEditor: boolean;
-}>`
+export const EditorSection = styled.div<{ isEditor: boolean }>`
   flex: 1;
   height: 100%;
   overflow: auto;
@@ -140,7 +136,7 @@ export const PreviewArea = styled.div`
     border-top: 1px solid #2A2F4C;
   }
 
-  table tr:nth-child(2n) {
+  table tr:nth-of-type(2n) {
     background-color: #151825;
   }
 
