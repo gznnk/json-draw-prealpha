@@ -1,5 +1,5 @@
 // Import types.
-import type { HubNodeData } from "./HubNodeTypes";
+import type { HubNodeData } from "../../../types/data/nodes/HubNodeData";
 
 // Import utils.
 import { newId } from "../../../utils/shapes";

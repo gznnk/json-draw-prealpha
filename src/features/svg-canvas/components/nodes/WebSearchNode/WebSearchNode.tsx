@@ -19,7 +19,7 @@ import { newEventId } from "../../../utils";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
-import type { WebSearchNodeProps } from "./WebSearchNodeTypes";
+import type { WebSearchNodeProps } from "../../../types/props/nodes";
 import { WebSearch } from "../../icons/WebSearch";
 
 /**

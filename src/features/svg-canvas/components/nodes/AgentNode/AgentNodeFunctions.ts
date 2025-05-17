@@ -1,5 +1,5 @@
 // Import types.
-import type { AgentNodeData } from "./AgentNodeTypes";
+import type { AgentNodeData } from "../../../types/data/nodes";
 
 // Import utils.
 import { newId } from "../../../utils/shapes";

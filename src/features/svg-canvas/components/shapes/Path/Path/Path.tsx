@@ -3,6 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
+import type { DiagramBaseData } from "../../../../types/base";
 import type { Diagram } from "../../../../catalog";
 import type {
 	DiagramChangeEvent,
@@ -243,10 +244,9 @@ const PathComponent: React.FC<PathProps> = ({
 
 	/**
 	 * 線分および新規頂点の変更イベントハンドラ
-	 */
-	const handleDiagramChangeBySegumentAndNewVertex = useCallback(
+	 */ const handleDiagramChangeBySegumentAndNewVertex = useCallback(
 		(e: DiagramChangeEvent) => {
-			if (!isItemableData(e.endDiagram)) return; // Type guard
+			if (!isItemableData<DiagramBaseData>(e.endDiagram)) return; // Type guard with DiagramBaseData
 
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 

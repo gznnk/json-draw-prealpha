@@ -23,7 +23,7 @@ import { newEventId } from "../../../utils";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
-import type { VectorStoreNodeProps } from "./VectorStoreNodeTypes";
+import type { VectorStoreNodeProps } from "../../../types/props/nodes";
 
 /**
  * VectorStoreNode component.

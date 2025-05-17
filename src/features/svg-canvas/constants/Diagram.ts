@@ -48,7 +48,7 @@ export const DEFAULT_TRANSFORMATIVE_DATA = {
  */
 export const DEFAULT_ITEMABLE_DATA = {
 	items: [] as Diagram[],
-} as const satisfies ItemableData;
+} as const satisfies ItemableData<Diagram>;
 
 /**
  * Default connectable data.

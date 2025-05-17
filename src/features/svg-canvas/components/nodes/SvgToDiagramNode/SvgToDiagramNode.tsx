@@ -3,8 +3,8 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to this component.
-import type { CreateDiagramProps, RectangleProps } from "../../../types";
 import type { Diagram } from "../../../catalog";
+import type { SvgToDiagramNodeProps } from "../../../types/props/nodes";
 
 // Import components related to SvgCanvas.
 import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
@@ -18,16 +18,6 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
 import { newEventId } from "../../../utils";
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
-
-/**
- * Props for the SvgToDiagramNode component.
- */
-type SvgToDiagramNodeProps = CreateDiagramProps<
-	RectangleProps,
-	{
-		executable: true;
-	}
->;
 
 /**
  * SvgToDiagramNode component.

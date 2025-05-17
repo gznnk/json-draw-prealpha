@@ -2,6 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
+import type { Diagram } from "../../catalog";
 import type { GroupData } from "../../components/shapes/Group";
 import type {
 	ConnectPointMoveData,
@@ -73,11 +74,9 @@ export const useDiagramChange = (props: CanvasHooksProps) => {
 						multiSelectGroup,
 						connectPointMoveDataList,
 					);
-				}
-
-				// Propagate the multi-select group changes to the original diagrams.
+				} // Propagate the multi-select group changes to the original diagrams.
 				items = applyRecursive(prevState.items, (item) => {
-					if (!isItemableData(e.endDiagram)) return item; // Type guard.
+					if (!isItemableData<Diagram>(e.endDiagram)) return item; // Type guard with Diagram type
 
 					// Find the corresponding change data in the multi-select group.
 					const changedItem = (e.endDiagram.items ?? []).find(

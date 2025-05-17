@@ -19,12 +19,13 @@ graph TD
 ## `types` Module
 ```mermaid
 graph TD
-    data --> base
     data --> data/core
     data --> data/shapes
+    data --> data/nodes
     data/core --> base
     data/shapes --> data/core
     data/shapes --> base
+    data/nodes --> data/shapes
     events --> base
     events --> data
     props --> data

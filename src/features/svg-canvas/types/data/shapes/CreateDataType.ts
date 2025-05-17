@@ -30,7 +30,7 @@ export type DiagramDataOptions = {
 export type CreateDataType<T extends DiagramDataOptions> = DiagramBaseData &
 	(T["selectable"] extends true ? SelectableData : object) &
 	(T["transformative"] extends true ? TransformativeData : object) &
-	(T["itemable"] extends true ? ItemableData : object) &
+	(T["itemable"] extends true ? ItemableData<DiagramBaseData> : object) &
 	(T["connectable"] extends true ? ConnectableData : object) &
 	(T["strokable"] extends true ? StrokableData : object) &
 	(T["fillable"] extends true ? FillableData : object) &

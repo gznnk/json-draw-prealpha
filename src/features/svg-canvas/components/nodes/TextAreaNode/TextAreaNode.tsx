@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { CreateDiagramProps, RectangleProps } from "../../../types";
+import type { TextAreaNodeProps } from "../../../types/props/nodes";
 
 // Import components related to SvgCanvas.
 import { Rectangle } from "../../shapes/Rectangle";
@@ -18,19 +18,9 @@ import { newEventId } from "../../../utils";
 import { TextAreaButton, TextAreaButtonText } from "./TextAreaNodeStyled";
 
 /**
- * Props for the TextAreaNode component.
- */
-type TextAreaProps = CreateDiagramProps<
-	RectangleProps,
-	{
-		executable: true;
-	}
->;
-
-/**
  * TextAreaNode component.
  */
-const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
+const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	// State to manage the text content of the TextArea node.
 	const [text, setText] = useState<string>(props.text);
 
@@ -52,7 +42,6 @@ const TextAreaNodeComponent: React.FC<TextAreaProps> = (props) => {
 	const handleButtonClick = useCallback(() => {
 		// Bypass references to avoid function creation in every render.
 		const { props } = refBus.current;
-
 		props.onExecute?.({
 			id: props.id,
 			eventId: newEventId(),

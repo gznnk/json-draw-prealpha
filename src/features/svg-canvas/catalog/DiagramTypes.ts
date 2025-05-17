@@ -4,13 +4,13 @@ import type {
 	ConnectPointData,
 	EllipseData,
 	GroupData,
+	HubNodeData,
 	ImageData,
 	PathData,
 	PathPointData,
 	RectangleData,
 	SvgData,
 } from "../types/data";
-import type { HubNodeData } from "../components/nodes/HubNode";
 
 /**
  * Union type representing all diagram data types.

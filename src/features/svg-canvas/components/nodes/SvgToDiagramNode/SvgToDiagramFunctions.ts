@@ -1,5 +1,5 @@
 // Import types.
-import type { SvgToDiagramNodeData } from "./SvgToDiagramNodeTypes";
+import type { SvgToDiagramNodeData } from "../../../types/data/nodes";
 
 // Import utils.
 import { newId } from "../../../utils/shapes";

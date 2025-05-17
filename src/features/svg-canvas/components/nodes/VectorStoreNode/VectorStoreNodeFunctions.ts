@@ -1,5 +1,5 @@
 // Import types.
-import type { VectorStoreNodeData } from "./VectorStoreNodeTypes";
+import type { VectorStoreNodeData } from "../../../types/data/nodes";
 
 // Import utils.
 import { newId } from "../../../utils/shapes";

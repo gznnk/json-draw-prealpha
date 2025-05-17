@@ -1,5 +1,5 @@
 // Import types.
-import type { ImageGenNodeData } from "./ImageGenNodeTypes";
+import type { ImageGenNodeData } from "../../../types/data/nodes";
 
 // Import utils.
 import { newId } from "../../../utils/shapes";

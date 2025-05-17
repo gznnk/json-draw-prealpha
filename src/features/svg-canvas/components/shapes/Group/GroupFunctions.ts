@@ -24,13 +24,14 @@ export const getSelectedChildDiagram = (
 		if (isSelectableData(diagram) && diagram.isSelected) {
 			return diagram;
 		}
-		if (isItemableData(diagram)) {
+		if (isItemableData<Diagram>(diagram)) {
 			const ret = getSelectedChildDiagram(diagram.items || []);
 			if (ret) {
 				return ret;
 			}
 		}
 	}
+	return undefined;
 };
 
 /**
@@ -48,13 +49,14 @@ export const getChildDiagramById = (
 		if (diagram.id === id) {
 			return diagram;
 		}
-		if (isItemableData(diagram)) {
+		if (isItemableData<Diagram>(diagram)) {
 			const ret = getChildDiagramById(diagram.items || [], id);
 			if (ret) {
 				return ret;
 			}
 		}
 	}
+	return undefined;
 };
 
 /**
@@ -157,10 +159,9 @@ export const calcGroupBoxOfNoRotation = (
 	let left = Number.POSITIVE_INFINITY;
 	let bottom = Number.NEGATIVE_INFINITY;
 	let right = Number.NEGATIVE_INFINITY;
-
 	for (const item of items) {
 		// ConnectPointは形状の計算に含めない
-		const itemItems = isItemableData(item)
+		const itemItems = isItemableData<Diagram>(item)
 			? (item.items ?? []).filter((i) => i.type !== "ConnectPoint")
 			: [];
 		if (itemItems.length > 0) {

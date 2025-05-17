@@ -28,7 +28,7 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
 import { AI_AGENT_INSTRUCTIONS, AI_AGENT_TOOLS } from "./AgentConstants";
-import type { AgentNodeProps } from "./AgentNodeTypes";
+import type { AgentNodeProps } from "../../../types/props/nodes";
 
 /**
  * AgentNode component.

@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { OpenAI } from "openai";
 
 // Import types.
-import type { CreateDiagramProps, RectangleProps } from "../../../types/";
+import type { LLMNodeProps } from "../../../types/props/nodes";
 
 // Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
@@ -26,19 +26,9 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 import { RectangleWrapper } from "./LLMNodeStyled";
 
 /**
- * Props for the LLMNode component.
- */
-type LLMProps = CreateDiagramProps<
-	RectangleProps,
-	{
-		executable: true;
-	}
->;
-
-/**
  * LLMNode component.
  */
-const LLMNodeComponent: React.FC<LLMProps> = (props) => {
+const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
 
