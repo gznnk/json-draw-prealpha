@@ -1,9 +1,9 @@
 // Import types.
-import type { WebSearchNodeData } from "../../types/data/nodes/WebSearchNodeData";
+import type { WebSearchNodeData } from "../../../types/data/nodes/WebSearchNodeData";
 
 // Import utils.
-import { newId } from "../shapes";
-import { createRectangleConnectPoint } from "../shapes/rectangle";
+import { newId } from "../../shapes";
+import { createRectangleConnectPoint } from "../../shapes/rectangle";
 
 /**
  * Creates data for a WebSearch node with specified properties.

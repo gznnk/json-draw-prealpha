@@ -1,9 +1,9 @@
 // Import types.
-import type { ImageGenNodeData } from "../../types/data/nodes/ImageGenNodeData";
+import type { ImageGenNodeData } from "../../../types/data/nodes/ImageGenNodeData";
 
 // Import utils.
-import { newId } from "../shapes";
-import { createRectangleConnectPoint } from "../shapes/rectangle";
+import { newId } from "../../shapes";
+import { createRectangleConnectPoint } from "../../shapes/rectangle";
 
 /**
  * Creates data for an ImageGen node with specified properties.

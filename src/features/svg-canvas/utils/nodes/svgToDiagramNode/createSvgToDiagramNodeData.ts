@@ -1,18 +1,17 @@
 // Import types.
-import type { VectorStoreNodeData } from "../../types/data/nodes/VectorStoreNodeData";
+import type { SvgToDiagramNodeData } from "../../../types";
 
 // Import utils.
-import { newId } from "../shapes";
-import { createRectangleConnectPoint } from "../shapes/rectangle";
+import { createRectangleConnectPoint, newId } from "../../shapes";
 
 /**
- * Creates data for a VectorStore node with specified properties.
+ * Creates data for a SvgToDiagram node with specified properties.
  *
  * @param x - The x coordinate of the node
  * @param y - The y coordinate of the node
- * @returns VectorStore node data object
+ * @returns SvgToDiagram node data object
  */
-export const createVectorStoreNodeData = ({
+export const createSvgToDiagramNodeData = ({
 	x,
 	y,
 }: {
@@ -31,7 +30,7 @@ export const createVectorStoreNodeData = ({
 
 	return {
 		id: newId(),
-		type: "VectorStoreNode",
+		type: "SvgToDiagramNode",
 		x,
 		y,
 		width: 100,
@@ -43,5 +42,5 @@ export const createVectorStoreNodeData = ({
 		connectPoints,
 		isSelected: false,
 		isMultiSelectSource: false,
-	} as VectorStoreNodeData;
+	} as SvgToDiagramNodeData;
 };
