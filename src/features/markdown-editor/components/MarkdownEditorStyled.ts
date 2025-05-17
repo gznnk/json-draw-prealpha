@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { MarkdownViewMode } from "../types";
+import type { MarkdownViewMode } from "../types";
 
 /**
  * マークダウンエディタのメインコンテナスタイル
@@ -26,15 +26,8 @@ export const EditorSection = styled.div<{
 	isEditor: boolean;
 }>`
   flex: 1;
-  display: ${({ viewMode, isEditor }) => {
-		if (viewMode === MarkdownViewMode.SPLIT) return "block";
-		if (viewMode === MarkdownViewMode.EDITOR_ONLY && isEditor) return "block";
-		if (viewMode === MarkdownViewMode.PREVIEW_ONLY && !isEditor) return "block";
-		return "none";
-	}};
   height: 100%;
-  overflow: auto; /* hiddenからautoに変更してスクロールを有効化 */
-  padding: 16px;
+  overflow: auto;
   background-color: #0C0F1C;
   ${({ isEditor }) =>
 		isEditor
@@ -62,7 +55,6 @@ export const MarkdownTextarea = styled.textarea`
   background-color: #0C0F1C;
   color: #B0B0B0;
   caret-color: #B0B0B0;
-  overflow: auto;
 
   &::placeholder {
     color: #666B82;
@@ -75,7 +67,6 @@ export const MarkdownTextarea = styled.textarea`
  */
 export const PreviewArea = styled.div`
   width: 100%;
-  height: 100%;
   font-size: 14px;
   line-height: 1.6;
   overflow-wrap: break-word;
@@ -188,7 +179,6 @@ export const Toolbar = styled.div`
   display: flex;
   padding: 8px;
   background-color: #0C0F1C;
-  border-bottom: 1px solid #2A2F4C;
 `;
 
 /**
