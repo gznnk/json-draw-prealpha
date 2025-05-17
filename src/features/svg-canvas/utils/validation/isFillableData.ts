@@ -1,5 +1,5 @@
 // Import types.
-import type { FillableData } from "../../types";
+import type { FillableData } from "../../types/data/core/FillableData";
 
 /**
  * Check if an object is FillableData.

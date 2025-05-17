@@ -1,8 +1,10 @@
 // Import types.
-import type { ConnectPointData, RectangleVertices } from "../../../types";
+import type { RectangleVertices } from "../../../types/base/RectangleVertices";
+import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
 
 // Import utils.
-import { calcRectangleVertices, newId } from "../../../utils";
+import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
+import { newId } from "../../../utils/shapes/common/newId";
 
 /**
  * Create connection points for a rectangle.

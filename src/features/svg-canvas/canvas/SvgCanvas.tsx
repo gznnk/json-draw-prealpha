@@ -10,8 +10,9 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import { type Diagram, DiagramComponentCatalog } from "../catalog";
-import type { DiagramSelectEvent } from "../types/events";
+import { DiagramComponentCatalog } from "../catalog/DiagramComponentCatalog";
+import type { Diagram } from "../catalog/DiagramTypes";
+import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor } from "../components/core/Textable";
@@ -23,7 +24,7 @@ import { NewConnectLine } from "../components/shapes/ConnectPoint";
 import { Group } from "../components/shapes/Group";
 
 // SvgCanvas関連関数をインポート
-import { newEventId } from "../utils";
+import { newEventId } from "../utils/common/newEventId";
 
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { getDiagramById } from "./SvgCanvasFunctions";

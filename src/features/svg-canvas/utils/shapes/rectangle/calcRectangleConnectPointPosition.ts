@@ -1,13 +1,12 @@
 // Import types.
-import type { Diagram } from "../../../catalog";
-import type {
-	ConnectPointMoveData,
-	RectangleVertices,
-	Shape,
-} from "../../../types";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { RectangleVertices } from "../../../types/base/RectangleVertices";
+import type { Shape } from "../../../types/base/Shape";
+import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";
 
 // Import utils.
-import { calcRectangleVertices, isConnectableData } from "../../../utils";
+import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
+import { isConnectableData } from "../../../utils/validation/isConnectableData";
 
 /**
  * Calculate the position of the connection points of the rectangle.

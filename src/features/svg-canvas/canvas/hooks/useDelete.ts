@@ -2,12 +2,13 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { ConnectLineData } from "../../components/shapes/ConnectLine";
+import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isItemableData, isSelectableData } from "../../utils";
-import { newEventId } from "../../utils";
+import { newEventId } from "../../utils/common/newEventId";
+import { isItemableData } from "../../utils/validation/isItemableData";
+import { isSelectableData } from "../../utils/validation/isSelectableData";
 import {
 	addHistory,
 	applyRecursive,

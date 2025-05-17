@@ -1,5 +1,5 @@
 // Import utils.
-import { createRectangleData } from "../../shapes/rectangle";
+import { createRectangleData } from "../../shapes/rectangle/createRectangleData";
 
 /**
  * Creates data for an LLM node with specified properties.

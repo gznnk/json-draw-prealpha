@@ -13,13 +13,13 @@ import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils";
+import { newEventId } from "../../../utils/common/newEventId";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
-import type { WebSearchNodeProps } from "../../../types/props/nodes";
+import type { WebSearchNodeProps } from "../../../types/props/nodes/WebSearchNodeProps";
 import { WebSearch } from "../../icons/WebSearch";
 
 /**

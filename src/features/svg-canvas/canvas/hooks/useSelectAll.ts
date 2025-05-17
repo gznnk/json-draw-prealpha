@@ -2,15 +2,15 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { GroupData } from "../../components/shapes/Group";
-import type { Diagram } from "../../catalog";
+import type { GroupData } from "../../types/data/shapes/GroupData";
+import type { Diagram } from "../../catalog/DiagramTypes";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import components related to SvgCanvas.
 import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
 
 // Import functions related to SvgCanvas.
-import { isSelectableData } from "../../utils";
+import { isSelectableData } from "../../utils/validation/isSelectableData";
 import {
 	applyMultiSelectSourceRecursive,
 	applyRecursive,

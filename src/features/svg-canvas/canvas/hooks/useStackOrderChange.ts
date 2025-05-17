@@ -2,13 +2,13 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../catalog";
-import type { StackOrderChangeEvent } from "../../types/events";
+import type { Diagram } from "../../catalog/DiagramTypes";
+import type { StackOrderChangeEvent } from "../../types/events/StackOrderChangeEvent";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isItemableData } from "../../utils";
-import { newEventId } from "../../utils";
+import { isItemableData } from "../../utils/validation/isItemableData";
+import { newEventId } from "../../utils/common/newEventId";
 import { addHistory } from "../SvgCanvasFunctions";
 
 /**

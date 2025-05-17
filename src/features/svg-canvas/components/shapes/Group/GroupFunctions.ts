@@ -1,15 +1,15 @@
 // SvgCanvas関連型定義をインポート
-import type { Bounds } from "../../../types/base";
-import type { Diagram } from "../../../catalog";
-import type { GroupData } from "../../../types/data";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { Bounds } from "../../../types/base/Bounds";
+import type { GroupData } from "../../../types/data/shapes/GroupData";
 
 // SvgCanvas関連関数をインポート
-import { degreesToRadians, nanToZero, rotatePoint } from "../../../utils";
-import {
-	isItemableData,
-	isSelectableData,
-	isTransformativeData,
-} from "../../../utils";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { nanToZero } from "../../../utils/math/common/nanToZero";
+import { rotatePoint } from "../../../utils/math/points/rotatePoint";
+import { isItemableData } from "../../../utils/validation/isItemableData";
+import { isSelectableData } from "../../../utils/validation/isSelectableData";
+import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
 
 /**
  * 選択されたグループ内の図形を、配下のグループも含めて再帰的に取得する

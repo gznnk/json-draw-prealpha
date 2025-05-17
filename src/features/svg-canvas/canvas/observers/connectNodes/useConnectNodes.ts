@@ -2,18 +2,18 @@
 import { useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { ConnectLineData } from "../../../components/shapes/ConnectLine";
-import type { PathPointData } from "../../../components/shapes/Path";
-import type { Diagram } from "../../../catalog";
-import type { ConnectableData } from "../../../types/data";
-import type { ConnectNodesEvent } from "../../../types/events";
+import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+import type { PathPointData } from "../../../types/data/shapes/PathPointData";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { ConnectableData } from "../../../types/data/shapes/ConnectableData";
+import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
-import type { Shape } from "../../../types";
+import type { Shape } from "../../../types/base/Shape";
 
 // Import functions related to SvgCanvas.
 import { createBestConnectPath } from "../../../components/shapes/ConnectPoint";
-import { newId } from "../../../utils/shapes";
-import { calcPointsOuterShape } from "../../../utils";
+import { newId } from "../../../utils/shapes/common/newId";
+import { calcPointsOuterShape } from "../../../utils/math/geometry/calcPointsOuterShape";
 import { getDiagramById } from "../../SvgCanvasFunctions";
 import { dispatchNewItemEvent } from "../addNewItem";
 

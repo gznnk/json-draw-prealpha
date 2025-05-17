@@ -3,4 +3,3 @@ export {
 	Path,
 } from "./Path";
 export { PathPoint } from "./PathPoint";
-export type { PathData, PathPointData } from "../../../types/data";

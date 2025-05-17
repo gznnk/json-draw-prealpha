@@ -2,23 +2,19 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type {
-	ConnectLineData,
-	ConnectPointData,
-	GroupData,
-} from "../../types/data";
-import type { Diagram } from "../../catalog";
-import type { Shape } from "../../types";
+import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
+import type { ConnectPointData } from "../../types/data/shapes/ConnectPointData";
+import type { GroupData } from "../../types/data/shapes/GroupData";
+import type { Diagram } from "../../catalog/DiagramTypes";
+import type { Shape } from "../../types/base/Shape";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
-import { newId } from "../../utils/shapes";
-import {
-	isConnectableData,
-	isItemableData,
-	isSelectableData,
-} from "../../utils";
+import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group/GroupFunctions";
+import { newId } from "../../utils/shapes/common/newId";
+import { isConnectableData } from "../../utils/validation/isConnectableData";
+import { isItemableData } from "../../utils/validation/isItemableData";
+import { isSelectableData } from "../../utils/validation/isSelectableData";
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
 import { getDiagramById } from "../SvgCanvasFunctions";
 

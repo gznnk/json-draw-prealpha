@@ -1,13 +1,11 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../catalog";
+import type { Diagram } from "../../../../catalog/DiagramTypes";
 
 // Import functions related to SvgCanvas.
-import {
-	isFillableData,
-	isItemableData,
-	isStrokableData,
-	isTextableData,
-} from "../../../../utils";
+import { isFillableData } from "../../../../utils/validation/isFillableData";
+import { isItemableData } from "../../../../utils/validation/isItemableData";
+import { isStrokableData } from "../../../../utils/validation/isStrokableData";
+import { isTextableData } from "../../../../utils/validation/isTextableData";
 
 export const findFirstFillableRecursive = (
 	items: Diagram[],

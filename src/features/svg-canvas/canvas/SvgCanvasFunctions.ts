@@ -1,25 +1,27 @@
 // Import types related to SvgCanvas.
-import type { Frame } from "../types/base";
-import { DiagramConnectPointCalculators, type Diagram } from "../catalog";
-import type { ConnectPointMoveData, EventType } from "../types/events";
+import { DiagramConnectPointCalculators } from "../catalog/DiagramConnectPointCalculators";
+import type { Diagram } from "../catalog/DiagramTypes";
+import type { Frame } from "../types/base/Frame";
+import type { ConnectPointMoveData } from "../types/events/ConnectPointMoveData";
+import type { EventType } from "../types/events/EventType";
 
 // Import components related to SvgCanvas.
 import { notifyConnectPointsMove } from "../components/shapes/ConnectLine";
-import type { ConnectPointData } from "../types/data";
 import { calcBoundsOfGroup } from "../components/shapes/Group";
+import type { ConnectPointData } from "../types/data/shapes/ConnectPointData";
 
 // Import functions related to SvgCanvas.
-import {
-	isConnectableData,
-	isItemableData,
-	isSelectableData,
-	isTransformativeData,
-} from "../utils";
-import { deepCopy, newEventId } from "../utils";
+import { deepCopy } from "../utils/common/deepCopy";
+import { newEventId } from "../utils/common/newEventId";
+import { isConnectableData } from "../utils/validation/isConnectableData";
+import { isItemableData } from "../utils/validation/isItemableData";
+import { isSelectableData } from "../utils/validation/isSelectableData";
+import { isTransformativeData } from "../utils/validation/isTransformativeData";
 
 // Imports related to this component.
-import type { ConnectableData } from "../types/data";
-import { degreesToRadians, rotatePoint } from "../utils";
+import type { ConnectableData } from "../types/data/shapes/ConnectableData";
+import { degreesToRadians } from "../utils/math/common/degreesToRadians";
+import { rotatePoint } from "../utils/math/points/rotatePoint";
 import { CANVAS_EXPANSION_SIZE, MAX_HISTORY_SIZE } from "./SvgCanvasConstants";
 import type { SvgCanvasHistory, SvgCanvasState } from "./SvgCanvasTypes";
 

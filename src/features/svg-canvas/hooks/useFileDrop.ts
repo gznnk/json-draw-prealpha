@@ -2,10 +2,10 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { FileDropEvent } from "../types";
+import type { FileDropEvent } from "../types/events/FileDropEvent";
 
 // Import utils.
-import { newEventId } from "../utils";
+import { newEventId } from "../utils/common/newEventId";
 
 /**
  * useFileDropフックの引数型定義

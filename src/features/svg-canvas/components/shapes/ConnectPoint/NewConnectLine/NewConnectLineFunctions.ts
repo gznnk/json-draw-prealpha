@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { PathData } from "../../Path";
+import type { PathData } from "../../../../types/data/shapes/PathData";
 
 // Imports related to this component.
 import { NEW_CONNECT_LINE_EVENT_NAME } from "./NewConnectLineConstants";

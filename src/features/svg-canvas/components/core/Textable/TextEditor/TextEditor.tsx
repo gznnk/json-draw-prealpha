@@ -3,11 +3,9 @@ import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
 // Import utils.
-import {
-	createSvgTransform,
-	degreesToRadians,
-	newEventId,
-} from "../../../../utils";
+import { createSvgTransform } from "../../../../utils/shapes/common/createSvgTransform";
+import { degreesToRadians } from "../../../../utils/math/common/degreesToRadians";
+import { newEventId } from "../../../../utils/common/newEventId";
 
 // Import local module files.
 import { Input, TextArea } from "./TextEditorStyled";

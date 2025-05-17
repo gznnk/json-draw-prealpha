@@ -3,21 +3,20 @@ import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
 // Import types.
-import type {
-	DiagramDragEvent,
-	DiagramPointerEvent,
-	ImageProps,
-} from "../../../types";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEvent";
+import type { ImageProps } from "../../../types/props/shapes/ImageProps";
 
 // Import components.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
 // Import hooks.
-import { useDrag } from "../../../hooks";
+import { useDrag } from "../../../hooks/useDrag";
 
 // Import utils.
-import { createSvgTransform, degreesToRadians } from "../../../utils";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
  * Image component.

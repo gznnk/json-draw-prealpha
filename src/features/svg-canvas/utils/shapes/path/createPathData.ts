@@ -1,8 +1,9 @@
 // Import types.
-import type { PathData, PathPointData } from "../../../types";
+import type { PathData } from "../../../types/data/shapes/PathData";
+import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 
 // Import utils.
-import { newId } from "../../../utils";
+import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Path component.
 import { DEFAULT_PATH_DATA } from "../../../components/shapes/Path/Path/PathConstants";

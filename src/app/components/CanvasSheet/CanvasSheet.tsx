@@ -11,7 +11,7 @@ import { loadCanvasDataFromLocalStorage } from "../../../features/svg-canvas/can
 
 // Import types related to this component.
 import type { CanvasSheetProps } from "./CanvasSheetTypes";
-import type { Diagram } from "../../../features/svg-canvas/catalog";
+import type { Diagram } from "../../../features/svg-canvas/catalog/DiagramTypes";
 
 const CanvasSheetComponent: React.FC<CanvasSheetProps> = ({ id }) => {
 	const canvasRef = useRef<SvgCanvasRef | null>(null);

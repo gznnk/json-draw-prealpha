@@ -1,4 +1,4 @@
-import type { Shape } from "../base";
+import type { Shape } from "../base/Shape";
 
 /**
  * Data structure for connection point movement

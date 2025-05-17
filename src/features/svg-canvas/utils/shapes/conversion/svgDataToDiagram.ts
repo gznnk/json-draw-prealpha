@@ -1,10 +1,10 @@
 // Import types.
-import type { Diagram } from "../../../catalog";
-import type { GroupData } from "../../../types";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { GroupData } from "../../../types/data/shapes/GroupData";
 
 // Import utils.
 import { calcGroupBoxOfNoRotation } from "../../../components/shapes/Group";
-import { nanToZero } from "../../math";
+import { nanToZero } from "../../math/common/nanToZero";
 import { newId } from "../common/newId";
 
 // Import conversion functions.

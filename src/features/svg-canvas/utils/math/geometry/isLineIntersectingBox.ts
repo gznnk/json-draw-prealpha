@@ -1,5 +1,6 @@
 // Import types.
-import type { Box, Point } from "../../../types";
+import type { Box } from "../../../types/base/Box";
+import type { Point } from "../../../types/base/Point";
 
 // Import utils.
 import { lineIntersects } from "./lineIntersects";

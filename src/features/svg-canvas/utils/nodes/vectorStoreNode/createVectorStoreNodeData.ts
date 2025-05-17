@@ -2,8 +2,8 @@
 import type { VectorStoreNodeData } from "../../../types/data/nodes/VectorStoreNodeData";
 
 // Import utils.
-import { newId } from "../../shapes";
-import { createRectangleConnectPoint } from "../../shapes/rectangle";
+import { newId } from "../../shapes/common/newId";
+import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 /**
  * Creates data for a VectorStore node with specified properties.

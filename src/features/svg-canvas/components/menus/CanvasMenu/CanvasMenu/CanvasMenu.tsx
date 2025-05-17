@@ -3,10 +3,10 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to SvgCanvas.
-import type { NewDiagramEvent } from "../../../../types/events";
+import type { NewDiagramEvent } from "../../../../types/events/NewDiagramEvent";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../../utils";
+import { newEventId } from "../../../../utils/common/newEventId";
 
 // Imports related to this component.
 import { CanvasMenuDiv } from "./CanvasMenuStyled";

@@ -1,13 +1,11 @@
 // Import types.
-import type {
-	EllipseData,
-	TextAlign,
-	TextableType,
-	VerticalAlign,
-} from "../../../types";
+import type { TextableType } from "../../../types/base/TextableType";
+import type { TextAlign } from "../../../types/base/TextAlign";
+import type { VerticalAlign } from "../../../types/base/VerticalAlign";
+import type { EllipseData } from "../../../types/data/shapes/EllipseData";
 
 // Import utils.
-import { newId } from "../../../utils";
+import { newId } from "../../../utils/shapes/common/newId";
 
 // Import related functions.
 import { createEllipseConnectPoint } from "./createEllipseConnectPoint";

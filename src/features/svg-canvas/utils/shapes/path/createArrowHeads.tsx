@@ -2,13 +2,13 @@
 import type React from "react";
 
 // Import types.
-import type { PathData } from "../../../types";
+import type { PathData } from "../../../types/data/shapes/PathData";
 
 // Import components.
 import { ArrowHead } from "../../../components/core/ArrowHead";
 
 // Import utils.
-import { calcRadians } from "../../../utils";
+import { calcRadians } from "../../../utils/math/points/calcRadians";
 
 /**
  * Creates an arrow head at the start point of a path.

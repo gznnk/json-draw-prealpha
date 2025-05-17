@@ -3,14 +3,12 @@ import type React from "react";
 import { memo, useCallback, useContext, useEffect, useRef } from "react";
 
 // Import types.
-import type { Diagram } from "../../../../catalog";
-import type {
-	ConnectLineProps,
-	ConnectPointMoveData,
-	ConnectPointsMoveEvent,
-	DiagramChangeEvent,
-	Shape,
-} from "../../../../types";
+import type { Diagram } from "../../../../catalog/DiagramTypes";
+import type { ConnectLineProps } from "../../../../types/props/shapes/ConnectLineProps";
+import type { ConnectPointMoveData } from "../../../../types/events/ConnectPointMoveData";
+import type { ConnectPointsMoveEvent } from "../../../../types/events/ConnectPointsMoveEvent";
+import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
+import type { Shape } from "../../../../types/base/Shape";
 
 // Import components related to SvgCanvas.
 import { SvgCanvasContext } from "../../../../canvas";
@@ -18,7 +16,9 @@ import { createBestConnectPath } from "../../ConnectPoint";
 import { Path } from "../../Path";
 
 // Import utils.
-import { calcRadians, newId, radiansToDegrees } from "../../../../utils";
+import { calcRadians } from "../../../../utils/math/points/calcRadians";
+import { newId } from "../../../../utils/shapes/common/newId";
+import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
 
 // Imports related to this component.
 import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";

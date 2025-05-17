@@ -2,10 +2,8 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import {
-	SVG_CANVAS_SCROLL_EVENT_NAME,
-	type SvgCanvasScrollEvent,
-} from "../../types/events";
+import { SVG_CANVAS_SCROLL_EVENT_NAME } from "../../types/events/Constants";
+import type { SvgCanvasScrollEvent } from "../../types/events/SvgCanvasScrollEvent";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 /**

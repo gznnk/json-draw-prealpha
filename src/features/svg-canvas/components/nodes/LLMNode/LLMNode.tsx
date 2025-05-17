@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { OpenAI } from "openai";
 
 // Import types.
-import type { LLMNodeProps } from "../../../types/props/nodes";
+import type { LLMNodeProps } from "../../../types/props/nodes/LLMNodeProps";
 
 // Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
@@ -17,7 +17,7 @@ import { Rectangle } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils";
+import { newEventId } from "../../../utils/common/newEventId";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

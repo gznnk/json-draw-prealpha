@@ -2,12 +2,10 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../catalog";
-import type { GroupData } from "../../components/shapes/Group";
-import type {
-	ConnectPointMoveData,
-	DiagramChangeEvent,
-} from "../../types/events";
+import type { Diagram } from "../../catalog/DiagramTypes";
+import type { GroupData } from "../../types/data/shapes/GroupData";
+import type { ConnectPointMoveData } from "../../types/events/ConnectPointMoveData";
+import type { DiagramChangeEvent } from "../../types/events/DiagramChangeEvent";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import components related to SvgCanvas.
@@ -17,7 +15,8 @@ import { notifyConnectPointsMove } from "../../components/shapes/ConnectLine";
 import { useCanvasResize } from "./useCanvasResize";
 
 // Import functions related to SvgCanvas.
-import { isItemableData, isSelectableData } from "../../utils";
+import { isItemableData } from "../../utils/validation/isItemableData";
+import { isSelectableData } from "../../utils/validation/isSelectableData";
 import {
 	addHistory,
 	applyRecursive,

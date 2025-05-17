@@ -1,7 +1,7 @@
 // Import functions related to SvgCanvas.
 import { dispatchNewItemEvent } from "../../canvas/observers/addNewItem";
-import { createSvgToDiagramNodeData } from "../../utils/nodes";
-import { newEventId } from "../../utils";
+import { createSvgToDiagramNodeData } from "../../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeData";
+import { newEventId } from "../../utils/common/newEventId";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,

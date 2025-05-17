@@ -2,12 +2,10 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { ConnectLineData } from "../../components/shapes/ConnectLine";
-import {
-	EXECUTION_PROPAGATION_EVENT_NAME,
-	type ExecuteEvent,
-	type ExecutionPropagationEvent,
-} from "../../types/events";
+import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
+import { EXECUTION_PROPAGATION_EVENT_NAME } from "../../types/events/Constants";
+import type { ExecuteEvent } from "../../types/events/ExecuteEvent";
+import type { ExecutionPropagationEvent } from "../../types/events/ExecutionPropagationEvent";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.

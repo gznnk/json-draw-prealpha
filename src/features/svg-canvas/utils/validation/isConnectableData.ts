@@ -1,5 +1,5 @@
 // Import types.
-import type { ConnectableData } from "../../types";
+import type { ConnectableData } from "../../types/data/shapes/ConnectableData";
 
 /**
  * Check if an object is ConnectableData.

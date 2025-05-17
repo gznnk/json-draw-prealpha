@@ -1,4 +1,4 @@
-import type { PathData } from "../../../../types/data";
+import type { PathData } from "../../../../types/data/shapes/PathData";
 
 import {
 	DEFAULT_DIAGRAM_BASE_DATA,

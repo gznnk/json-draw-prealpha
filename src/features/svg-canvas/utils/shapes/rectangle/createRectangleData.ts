@@ -1,13 +1,11 @@
 // Import types.
-import type {
-	RectangleData,
-	TextAlign,
-	TextableType,
-	VerticalAlign,
-} from "../../../types";
+import type { TextAlign } from "../../../types/base/TextAlign";
+import type { TextableType } from "../../../types/base/TextableType";
+import type { VerticalAlign } from "../../../types/base/VerticalAlign";
+import type { RectangleData } from "../../../types/data/shapes/RectangleData";
 
 // Import utils.
-import { newId } from "../../../utils";
+import { newId } from "../../../utils/shapes/common/newId";
 
 // Import related functions.
 import { createRectangleConnectPoint } from "./createRectangleConnectPoint";

@@ -3,10 +3,10 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types.
-import type { ArrowHeadType } from "../../../types";
+import type { ArrowHeadType } from "../../../types/base/ArrowHeadType";
 
 // Import utils.
-import { createSvgTransform } from "../../../utils";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 // Import local module files.
 import { ARROW_HEAD_SIZE } from "./ArrowHeadConstants";

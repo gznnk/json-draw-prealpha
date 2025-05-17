@@ -3,7 +3,7 @@
  * Creates a new sandbox sheet and injects the provided HTML content.
  */
 
-import { newId } from "../../../features/svg-canvas/utils";
+import { newId } from "../../../features/svg-canvas/utils/shapes/common/newId";
 import { dispatchAddNewSheetEvent } from "../../App";
 import { dispatchUpdateSandboxContentEvent } from "../../components/SandboxSheet";
 import type {

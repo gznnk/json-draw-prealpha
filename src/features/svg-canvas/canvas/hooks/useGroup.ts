@@ -2,18 +2,16 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { GroupData } from "../../components/shapes/Group";
+import type { GroupData } from "../../types/data/shapes/GroupData";
 import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { newId } from "../../utils/shapes";
-import { newEventId } from "../../utils";
-import {
-	addHistory,
-	clearMultiSelectSourceRecursive,
-	getSelectedItems,
-	removeGroupedRecursive,
-} from "../SvgCanvasFunctions";
+import { newId } from "../../utils/shapes/common/newId";
+import { newEventId } from "../../utils/common/newEventId";
+import { addHistory } from "../SvgCanvasFunctions";
+import { clearMultiSelectSourceRecursive } from "../SvgCanvasFunctions";
+import { getSelectedItems } from "../SvgCanvasFunctions";
+import { removeGroupedRecursive } from "../SvgCanvasFunctions";
 
 /**
  * Custom hook to handle group events on the canvas.

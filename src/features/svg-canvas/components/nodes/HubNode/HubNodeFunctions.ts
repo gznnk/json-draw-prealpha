@@ -2,8 +2,8 @@
 import type { HubNodeData } from "../../../types/data/nodes/HubNodeData";
 
 // Import utils.
-import { newId } from "../../../utils/shapes";
-import { createEllipseConnectPoint } from "../../../utils/shapes/ellipse";
+import { newId } from "../../../utils/shapes/common/newId";
+import { createEllipseConnectPoint } from "../../../utils/shapes/ellipse/createEllipseConnectPoint";
 
 export const createHubNodeData = ({
 	x,

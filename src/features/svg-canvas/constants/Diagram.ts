@@ -1,14 +1,13 @@
-import type { ConnectPointData, ConnectableData } from "../types/data";
-import type { Diagram } from "../catalog";
-import type { DiagramBaseData } from "../types/base";
-import type {
-	FillableData,
-	StrokableData,
-	ItemableData,
-	SelectableData,
-	TransformativeData,
-	TextableData,
-} from "../types/data/core";
+import type { ConnectPointData } from "../types/data/shapes/ConnectPointData";
+import type { ConnectableData } from "../types/data/shapes/ConnectableData";
+import type { Diagram } from "../catalog/DiagramTypes";
+import type { DiagramBaseData } from "../types/base/DiagramBaseData";
+import type { FillableData } from "../types/data/core/FillableData";
+import type { StrokableData } from "../types/data/core/StrokableData";
+import type { ItemableData } from "../types/data/core/ItemableData";
+import type { SelectableData } from "../types/data/core/SelectableData";
+import type { TransformativeData } from "../types/data/core/TransformativeData";
+import type { TextableData } from "../types/data/core/TextableData";
 
 /**
  * Default diagram base data.

@@ -1,5 +1,5 @@
-import { newEventId } from "../../../../utils";
-import type { ConnectLineData } from "../../../../types/data";
+import { newEventId } from "../../../../utils/common/newEventId";
+import type { ConnectLineData } from "../../../../types/data/shapes/ConnectLineData";
 import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";
 
 export const triggerFlashConnectLine = (connectLine: ConnectLineData) => {

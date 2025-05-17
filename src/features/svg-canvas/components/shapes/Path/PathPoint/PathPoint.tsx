@@ -6,7 +6,7 @@ import { memo } from "react";
 import { DragPoint } from "../../../core/DragPoint";
 
 // Import types related to SvgCanvas.
-import type { PathPointProps } from "../../../../types/props/shapes";
+import type { PathPointProps } from "../../../../types/props/shapes/PathPointProps";
 
 /**
  * 折れ線の頂点コンポーネント

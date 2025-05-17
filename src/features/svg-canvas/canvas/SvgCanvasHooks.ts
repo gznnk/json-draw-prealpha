@@ -2,11 +2,11 @@
 import { useState, type RefObject } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../catalog";
+import type { Diagram } from "../catalog/DiagramTypes";
 import type { TextEditorState } from "../components/core/Textable";
 
 // Import functions related to SvgCanvas.
-import { deepCopy } from "../utils";
+import { deepCopy } from "../utils/common/deepCopy";
 import { calcOptimalCanvasSize } from "./SvgCanvasFunctions";
 
 // Imports related to this component.

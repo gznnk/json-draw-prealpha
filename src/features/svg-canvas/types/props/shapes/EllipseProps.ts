@@ -1,6 +1,6 @@
 // Import types related to SvgCanvas.
 import type { CreateDiagramProps } from "../core/CreateDiagramProps";
-import type { EllipseData } from "../../data";
+import type { EllipseData } from "../../data/shapes/EllipseData";
 
 /**
  * 楕円コンポーネントのプロパティ

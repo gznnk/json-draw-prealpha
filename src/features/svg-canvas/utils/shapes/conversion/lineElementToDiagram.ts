@@ -1,5 +1,6 @@
 // Import types.
-import type { PathData, PathPointData } from "../../../types";
+import type { PathData } from "../../../types/data/shapes/PathData";
+import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 
 // Import utils.
 import { newId } from "../common/newId";

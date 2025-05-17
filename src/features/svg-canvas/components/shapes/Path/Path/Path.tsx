@@ -3,16 +3,14 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { DiagramBaseData } from "../../../../types/base";
-import type { Diagram } from "../../../../catalog";
-import type {
-	DiagramChangeEvent,
-	DiagramClickEvent,
-	DiagramDragEvent,
-	DiagramPointerEvent,
-	PathData,
-	PathProps,
-} from "../../../../types";
+import type { Diagram } from "../../../../catalog/DiagramTypes";
+import type { DiagramBaseData } from "../../../../types/base/DiagramBaseData";
+import type { PathData } from "../../../../types/data/shapes/PathData";
+import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
+import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
+import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
+import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
+import type { PathProps } from "../../../../types/props/shapes/PathProps";
 
 // Import components.
 import { PositionLabel } from "../../../core/PositionLabel";
@@ -24,12 +22,13 @@ import { SegmentList } from "../SegmentList";
 import { useDrag } from "../../../../hooks/useDrag";
 
 // Import utils.
-import { calcPointsOuterShape, isItemableData } from "../../../../utils";
+import { calcPointsOuterShape } from "../../../../utils/math/geometry/calcPointsOuterShape";
 import {
-	createDValue,
 	createEndPointArrowHead,
 	createStartPointArrowHead,
-} from "../../../../utils/shapes/path";
+} from "../../../../utils/shapes/path/createArrowHeads";
+import { createDValue } from "../../../../utils/shapes/path/createDValue";
+import { isItemableData } from "../../../../utils/validation/isItemableData";
 
 // TODO: 枠線と重なっていると頂点編集モードにできない
 /**

@@ -1,24 +1,22 @@
 // Import types.
-import type { DiagramType } from "../types";
+import type { DiagramType } from "../types/base/DiagramType";
 import type { Diagram } from "./DiagramTypes";
 
 // Import node creation functions.
 import { createAgentNodeData } from "../components/nodes/AgentNode";
 import { createHubNodeData } from "../components/nodes/HubNode";
-import {
-	createImageGenNodeData,
-	createLLMNodeData,
-	createSvgToDiagramNodeData,
-	createTextAreaNodeData,
-	createVectorStoreNodeData,
-	createWebSearchNodeData,
-} from "../utils/nodes";
+import { createImageGenNodeData } from "../utils/nodes/imageGenNode/createImageGenNodeData";
+import { createLLMNodeData } from "../utils/nodes/llmNodeData/createLLMNodeData";
+import { createSvgToDiagramNodeData } from "../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeData";
+import { createTextAreaNodeData } from "../utils/nodes/textAreaNode/createTextAreaNodeData";
+import { createVectorStoreNodeData } from "../utils/nodes/vectorStoreNode/createVectorStoreNodeData";
+import { createWebSearchNodeData } from "../utils/nodes/webSearchNode/createWebSearchNodeData";
 
 // Import shape creation functions.
-import { createEllipseData } from "../utils/shapes/ellipse";
-import { createImageData } from "../utils/shapes/image";
-import { createPathData } from "../utils/shapes/path";
-import { createRectangleData } from "../utils/shapes/rectangle";
+import { createEllipseData } from "../utils/shapes/ellipse/createEllipseData";
+import { createImageData } from "../utils/shapes/image/createImageData";
+import { createPathData } from "../utils/shapes/path/createPathData";
+import { createRectangleData } from "../utils/shapes/rectangle/createRectangleData";
 
 /**
  * Maps diagram types to their corresponding data creation functions.

@@ -3,20 +3,19 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type {
-	ConnectPointProps,
-	DiagramDragDropEvent,
-	DiagramDragEvent,
-	DiagramHoverEvent,
-	Point,
-} from "../../../../types";
+import type { Point } from "../../../../types/base/Point";
+import type { DiagramDragDropEvent } from "../../../../types/events/DiagramDragDropEvent";
+import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
+import type { DiagramHoverEvent } from "../../../../types/events/DiagramHoverEvent";
+import type { ConnectPointProps } from "../../../../types/props/shapes/ConnectPointProps";
+import type { PathPointData } from "../../../../types/data/shapes/PathPointData";
 
 // SvgCanvas関連コンポーネントをインポート
 import { DragPoint } from "../../../core/DragPoint";
-import type { PathPointData } from "../../Path";
 
 // Import utils.
-import { calcRectangleOuterBox, newId } from "../../../../utils";
+import { calcRectangleOuterBox } from "../../../../utils/math/geometry/calcRectangleOuterBox";
+import { newId } from "../../../../utils/shapes/common/newId";
 
 // Imports related to this component.
 import { triggerNewConnectLine } from "../NewConnectLine";

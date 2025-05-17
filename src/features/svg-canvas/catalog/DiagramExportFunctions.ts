@@ -1,9 +1,9 @@
 // Import types.
-import type { DiagramType } from "../types";
+import type { DiagramType } from "../types/base/DiagramType";
 import type { Diagram } from "./DiagramTypes";
 
 // Import utils.
-import { imageToBlob } from "../utils/shapes/image";
+import { imageToBlob } from "../utils/shapes/image/imageUtils";
 import { svgToBlob } from "../components/shapes/Svg";
 
 /**

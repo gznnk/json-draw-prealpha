@@ -17,20 +17,18 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 // Import functions related to SvgCanvas.
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
 import { dispatchConnectNodesEvent } from "../../../canvas/observers/connectNodes";
-import { newEventId } from "../../../utils";
-import {
-	createImageGenNodeData,
-	createLLMNodeData,
-	createSvgToDiagramNodeData,
-	createTextAreaNodeData,
-} from "../../../utils";
+import { newEventId } from "../../../utils/common/newEventId";
+import { createImageGenNodeData } from "../../../utils/nodes/imageGenNode/createImageGenNodeData";
+import { createLLMNodeData } from "../../../utils/nodes/llmNodeData/createLLMNodeData";
+import { createSvgToDiagramNodeData } from "../../../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeData";
+import { createTextAreaNodeData } from "../../../utils/nodes/textAreaNode/createTextAreaNodeData";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
 import { AI_AGENT_INSTRUCTIONS, AI_AGENT_TOOLS } from "./AgentConstants";
-import type { AgentNodeProps } from "../../../types/props/nodes";
+import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
 
 /**
  * AgentNode component.

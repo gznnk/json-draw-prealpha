@@ -1,9 +1,10 @@
 // Import types.
-import type { EllipseVertices, Shape } from "../../../types";
+import type { EllipseVertices } from "../../../types/base/EllipseVertices";
+import type { Shape } from "../../../types/base/Shape";
 
 // Import utils.
-import { degreesToRadians } from "../common";
-import { affineTransformation } from "../transform";
+import { degreesToRadians } from "../common/degreesToRadians";
+import { affineTransformation } from "../transform/affineTransformation";
 
 /**
  * Calculates the vertices of an ellipse.

@@ -1,4 +1,4 @@
-import type { FileDropEvent } from "../../events";
+import type { FileDropEvent } from "../../events/FileDropEvent";
 
 /**
  * Props for file droppable component.

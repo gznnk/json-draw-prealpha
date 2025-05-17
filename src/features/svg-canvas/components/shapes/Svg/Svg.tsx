@@ -6,21 +6,20 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 
 // Import types.
-import type {
-	DiagramDragEvent,
-	DiagramPointerEvent,
-	SvgProps,
-} from "../../../types";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEvent";
+import type { SvgProps } from "../../../types/props/shapes/SvgProps";
 
 // Import components.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
 // Import hooks.
-import { useDrag } from "../../../hooks";
+import { useDrag } from "../../../hooks/useDrag";
 
 // Import utils.
-import { createSvgTransform, degreesToRadians } from "../../../utils";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 
 /**
  * Svg component.

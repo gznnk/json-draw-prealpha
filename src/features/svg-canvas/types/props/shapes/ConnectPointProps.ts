@@ -1,8 +1,8 @@
 // Import types related to SvgCanvas.
 import type { CreateDiagramProps } from "../core/CreateDiagramProps";
-import type { ConnectPointData } from "../../data";
-import type { DiagramConnectEvent } from "../../events";
-import type { Shape } from "../..";
+import type { ConnectPointData } from "../../data/shapes/ConnectPointData";
+import type { DiagramConnectEvent } from "../../events/DiagramConnectEvent";
+import type { Shape } from "../../base/Shape";
 
 /**
  * 接続ポイントプロパティ

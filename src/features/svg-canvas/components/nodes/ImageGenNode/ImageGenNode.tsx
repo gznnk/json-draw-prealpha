@@ -6,7 +6,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { OpenAI } from "openai";
 
 // Import types.
-import type { ImageGenNodeProps } from "../../../types/props/nodes";
+import type { ImageGenNodeProps } from "../../../types/props/nodes/ImageGenNodeProps";
 
 // Import components.
 import { IconContainer } from "../../core/IconContainer";
@@ -18,8 +18,8 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import utils.
 import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
-import { newEventId } from "../../../utils";
-import { createImageData } from "../../../utils/shapes/image";
+import { newEventId } from "../../../utils/common/newEventId";
+import { createImageData } from "../../../utils/shapes/image/createImageData";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 /**

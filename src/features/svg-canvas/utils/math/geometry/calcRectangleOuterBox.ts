@@ -1,5 +1,6 @@
 // Import types.
-import type { Shape, Box } from "../../../types";
+import type { Box } from "../../../types/base/Box";
+import type { Shape } from "../../../types/base/Shape";
 
 // Import utils.
 import { calcRectangleVertices } from "./calcRectangleVertices";

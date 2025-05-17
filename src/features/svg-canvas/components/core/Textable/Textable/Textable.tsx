@@ -6,7 +6,7 @@ import { memo, useEffect, useRef } from "react";
 import { renderMarkdown } from "../../../../../markdown";
 
 // Import types.
-import type { TextableData } from "../../../../types";
+import type { TextableData } from "../../../../types/data/core/TextableData";
 
 // Import local module files.
 import { Text, TextWrapper } from "./TextableStyled";

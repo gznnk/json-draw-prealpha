@@ -1,4 +1,4 @@
-import type { DiagramType } from "../base";
+import type { DiagramType } from "../base/DiagramType";
 
 /**
  * Event fired when a diagram is dragged and dropped onto another element.

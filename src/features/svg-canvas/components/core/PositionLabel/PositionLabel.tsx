@@ -3,13 +3,13 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types.
-import type { RectangleVertices } from "../../../types";
+import type { RectangleVertices } from "../../../types/base/RectangleVertices";
 
 // Import components.
 import { calcBottomLabelPosition } from "../BottomLabel";
 
 // Import utils.
-import { calcRectangleVertices } from "../../../utils";
+import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
 
 /**
  * Props for PositionLabel component.

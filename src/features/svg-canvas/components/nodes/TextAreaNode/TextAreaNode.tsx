@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { TextAreaNodeProps } from "../../../types/props/nodes";
+import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
 
 // Import components related to SvgCanvas.
 import { Rectangle } from "../../shapes/Rectangle";
@@ -12,7 +12,7 @@ import { Rectangle } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils";
+import { newEventId } from "../../../utils/common/newEventId";
 
 // Imports related to this component.
 import { TextAreaButton, TextAreaButtonText } from "./TextAreaNodeStyled";

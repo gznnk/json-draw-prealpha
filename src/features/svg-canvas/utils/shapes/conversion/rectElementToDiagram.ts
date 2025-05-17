@@ -1,7 +1,7 @@
-import { createRectangleData } from "../rectangle";
+import { createRectangleData } from "../rectangle/createRectangleData";
 
 // Import types.
-import type { RectangleData } from "../../../types";
+import type { RectangleData } from "../../../types/data/shapes/RectangleData";
 
 /**
  * Converts an SVG Rectangle element to a Rectangle diagram data structure.

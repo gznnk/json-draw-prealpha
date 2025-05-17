@@ -1,13 +1,12 @@
 // Import types.
-import type { Diagram } from "../../../catalog";
-import type {
-	ConnectPointMoveData,
-	EllipseVertices,
-	Shape,
-} from "../../../types";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";
+import type { EllipseVertices } from "../../../types/base/EllipseVertices";
+import type { Shape } from "../../../types/base/Shape";
 
 // Import utils.
-import { calcEllipseVertices, isConnectableData } from "../../../utils";
+import { calcEllipseVertices } from "../../math/geometry/calcEllipseVertices";
+import { isConnectableData } from "../../validation/isConnectableData";
 
 /**
  * Calculate the position of the connection points of the ellipse.

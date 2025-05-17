@@ -1,8 +1,9 @@
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../catalog"; // TODO: 依存関係を見直す
+import type { Diagram } from "../../../../catalog/DiagramTypes";
 
 // Import utils.
-import { isItemableData, isTextableData } from "../../../../utils";
+import { isItemableData } from "../../../../utils/validation/isItemableData";
+import { isTextableData } from "../../../../utils/validation/isTextableData";
 
 /**
  * Recursively searches through diagram items to find the item currently in text editing mode.

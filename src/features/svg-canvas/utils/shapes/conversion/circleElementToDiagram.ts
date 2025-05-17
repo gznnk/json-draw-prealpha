@@ -1,7 +1,7 @@
-import { createEllipseData } from "../ellipse";
+import { createEllipseData } from "../ellipse/createEllipseData";
 
 // Import types.
-import type { EllipseData } from "../../../types";
+import type { EllipseData } from "../../../types/data/shapes/EllipseData";
 
 /**
  * Converts an SVG Circle element to an Ellipse diagram data structure.

@@ -1,10 +1,10 @@
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../utils";
-import { dispatchConnectNodesEvent } from "../../canvas/observers/connectNodes";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../llm-client/types";
+import { dispatchConnectNodesEvent } from "../../canvas/observers/connectNodes";
+import { newEventId } from "../../utils/common/newEventId";
 
 /**
  * Handles the connection between two nodes.

@@ -6,7 +6,7 @@
  * @returns Object containing the ID and sheet name or null if required arguments are missing
  */
 
-import { newId } from "../../../features/svg-canvas/utils";
+import { newId } from "../../../features/svg-canvas/utils/shapes/common/newId";
 import { dispatchAddNewSheetEvent } from "../../App";
 import type {
 	FunctionCallHandler,

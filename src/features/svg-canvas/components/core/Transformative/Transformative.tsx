@@ -3,15 +3,13 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type {
-	DiagramDragEvent,
-	DiagramType,
-	EventType,
-	Point,
-	SelectableData,
-	TransformativeData,
-	TransformativeProps,
-} from "../../../types";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramType } from "../../../types/base/DiagramType";
+import type { EventType } from "../../../types/events/EventType";
+import type { Point } from "../../../types/base/Point";
+import type { SelectableData } from "../../../types/data/core/SelectableData";
+import type { TransformativeData } from "../../../types/data/core/TransformativeData";
+import type { TransformativeProps } from "../../../types/props/core/TransformativeProps";
 
 // Import components.
 import { BottomLabel } from "../BottomLabel";
@@ -20,21 +18,19 @@ import { DragPoint } from "../DragPoint";
 import { RotatePoint } from "../RotatePoint";
 
 // Import utils.
-import {
-	affineTransformation,
-	calcNearestCircleIntersectionPoint,
-	calcRadians,
-	calcRectangleVertices,
-	createLinerX2yFunction,
-	createLinerY2xFunction,
-	createSvgTransform,
-	degreesToRadians,
-	getCursorFromAngle,
-	inverseAffineTransformation,
-	nanToZero,
-	radiansToDegrees,
-	signNonZero,
-} from "../../../utils";
+import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
+import { calcNearestCircleIntersectionPoint } from "../../../utils/math/points/calcNearestCircleIntersectionPoint";
+import { calcRadians } from "../../../utils/math/points/calcRadians";
+import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
+import { createLinerX2yFunction } from "../../../utils/math/geometry/createLinerX2yFunction";
+import { createLinerY2xFunction } from "../../../utils/math/geometry/createLinerY2xFunction";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { getCursorFromAngle } from "../../../utils/shapes/common/getCursorFromAngle";
+import { inverseAffineTransformation } from "../../../utils/math/transform/inverseAffineTransformation";
+import { nanToZero } from "../../../utils/math/common/nanToZero";
+import { radiansToDegrees } from "../../../utils/math/common/radiansToDegrees";
+import { signNonZero } from "../../../utils/math/common/signNonZero";
 
 // Import local module files.
 import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";

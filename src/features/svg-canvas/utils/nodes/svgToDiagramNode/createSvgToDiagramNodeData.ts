@@ -1,8 +1,9 @@
 // Import types.
-import type { SvgToDiagramNodeData } from "../../../types";
+import type { SvgToDiagramNodeData } from "../../../types/data/nodes/SvgToDiagramNodeData";
 
 // Import utils.
-import { createRectangleConnectPoint, newId } from "../../shapes";
+import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
+import { newId } from "../../shapes/common/newId";
 
 /**
  * Creates data for a SvgToDiagram node with specified properties.

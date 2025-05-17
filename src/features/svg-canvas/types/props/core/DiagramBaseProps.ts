@@ -1,9 +1,7 @@
-import type {
-	DiagramDragEvent,
-	DiagramDragDropEvent,
-	DiagramClickEvent,
-	DiagramHoverEvent,
-} from "../../events";
+import type { DiagramDragEvent } from "../../events/DiagramDragEvent";
+import type { DiagramDragDropEvent } from "../../events/DiagramDragDropEvent";
+import type { DiagramClickEvent } from "../../events/DiagramClickEvent";
+import type { DiagramHoverEvent } from "../../events/DiagramHoverEvent";
 
 /**
  * Base properties for diagram components.

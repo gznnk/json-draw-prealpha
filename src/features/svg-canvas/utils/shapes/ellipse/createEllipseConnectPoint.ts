@@ -1,8 +1,10 @@
 // Import types.
-import type { ConnectPointData, EllipseVertices } from "../../../types";
+import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
+import type { EllipseVertices } from "../../../types/base/EllipseVertices";
 
 // Import utils.
-import { calcEllipseVertices, newId } from "../../../utils";
+import { calcEllipseVertices } from "../../math/geometry/calcEllipseVertices";
+import { newId } from "../../../utils/shapes/common/newId";
 
 /**
  * Create connection points for the ellipse.

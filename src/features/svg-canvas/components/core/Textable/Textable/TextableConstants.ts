@@ -1,5 +1,6 @@
 // Import types.
-import type { TextAlign, VerticalAlign } from "../../../../types";
+import type { TextAlign } from "../../../../types/base/TextAlign";
+import type { VerticalAlign } from "../../../../types/base/VerticalAlign";
 
 /**
  * Map of horizontal text alignment to CSS `text-align` values.

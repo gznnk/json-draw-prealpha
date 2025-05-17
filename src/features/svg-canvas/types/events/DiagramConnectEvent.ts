@@ -1,5 +1,5 @@
 // Import types.
-import type { PathPointData } from "../data";
+import type { PathPointData } from "../data/shapes/PathPointData";
 
 /**
  * Event fired when connecting two diagrams

@@ -2,9 +2,9 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { DiagramTextChangeEvent } from "../../types/events";
+import type { DiagramTextChangeEvent } from "../../types/events/DiagramTextChangeEvent";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
-import type { TextEditorState } from "../../components/core/Textable";
+import type { TextEditorState } from "../../components/core/Textable/TextEditor/TextEditorTypes";
 
 // Import functions related to SvgCanvas.
 import { addHistory, applyRecursive } from "../SvgCanvasFunctions";

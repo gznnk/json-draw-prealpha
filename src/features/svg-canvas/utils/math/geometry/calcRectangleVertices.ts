@@ -1,9 +1,11 @@
 // Import types.
-import type { RectangleVertices, Shape } from "../../../types";
+import type { RectangleVertices } from "../../../types/base/RectangleVertices";
+import type { Shape } from "../../../types/base/Shape";
 
 // Import utils.
-import { degreesToRadians, nanToZero } from "../common";
-import { affineTransformation } from "../transform";
+import { degreesToRadians } from "../common/degreesToRadians";
+import { nanToZero } from "../common/nanToZero";
+import { affineTransformation } from "../transform/affineTransformation";
 
 /**
  * Calculates the vertices of a rectangle.

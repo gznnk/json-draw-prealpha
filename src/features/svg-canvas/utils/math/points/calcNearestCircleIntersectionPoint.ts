@@ -1,5 +1,5 @@
 // Import types.
-import type { Point } from "../../../types";
+import type { Point } from "../../../types/base/Point";
 
 // Import utils.
 import { closerPoint } from "./closerPoint";

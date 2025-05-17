@@ -1,5 +1,5 @@
 // Import types.
-import type { Point } from "../../../types";
+import type { Point } from "../../../types/base/Point";
 
 /**
  * Applies an inverse affine transformation to a point.

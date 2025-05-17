@@ -3,13 +3,11 @@ import type React from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // Import types.
-import type {
-	DiagramDragEvent,
-	DiagramHoverEvent,
-	DiagramPointerEvent,
-	DiagramTransformEvent,
-	RectangleProps,
-} from "../../../types";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramHoverEvent } from "../../../types/events/DiagramHoverEvent";
+import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEvent";
+import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
+import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
 
 // Import components related to SvgCanvas.
 import { PositionLabel } from "../../core/PositionLabel";
@@ -18,10 +16,12 @@ import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
-import { useDrag, useFileDrop } from "../../../hooks";
+import { useDrag } from "../../../hooks/useDrag";
+import { useFileDrop } from "../../../hooks/useFileDrop";
 
 // Import utils.
-import { createSvgTransform, degreesToRadians } from "../../../utils";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 // Import local module files.
 import { RectangleElement } from "./RectangleStyled";

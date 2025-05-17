@@ -1,6 +1,6 @@
 // Import types related to SvgCanvas.
 import type { CreateDiagramProps } from "../core/CreateDiagramProps";
-import type { PathData } from "../../data";
+import type { PathData } from "../../data/shapes/PathData";
 
 /**
  * 折れ線コンポーネントのプロパティ

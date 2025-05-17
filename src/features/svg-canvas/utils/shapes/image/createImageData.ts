@@ -1,8 +1,8 @@
 // Import types.
-import type { ImageData } from "../../../types";
+import type { ImageData } from "../../../types/data/shapes/ImageData";
 
 // Import utils.
-import { newId } from "../../../utils";
+import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Image component.
 import { DEFAULT_IMAGE_DATA } from "../../../components/shapes/Image/ImageConstants";

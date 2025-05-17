@@ -1,12 +1,10 @@
-import type { DiagramBaseData } from "../../base";
-import type {
-	FillableData,
-	ItemableData,
-	SelectableData,
-	StrokableData,
-	TextableData,
-	TransformativeData,
-} from "../core";
+import type { DiagramBaseData } from "../../base/DiagramBaseData";
+import type { FillableData } from "../core/FillableData";
+import type { ItemableData } from "../core/ItemableData";
+import type { SelectableData } from "../core/SelectableData";
+import type { StrokableData } from "../core/StrokableData";
+import type { TextableData } from "../core/TextableData";
+import type { TransformativeData } from "../core/TransformativeData";
 import type { ConnectableData } from "./ConnectableData";
 
 /**

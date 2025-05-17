@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import utils.
-import { degreesToRadians } from "../../../utils";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 
 /**
  * Props for IconContainer component.

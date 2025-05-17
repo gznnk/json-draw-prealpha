@@ -1,9 +1,9 @@
 // Import types.
-import type { AgentNodeData } from "../../../types/data/nodes";
+import type { AgentNodeData } from "../../../types/data/nodes/AgentNodeData";
 
 // Import utils.
-import { newId } from "../../../utils/shapes";
-import { createRectangleConnectPoint } from "../../../utils/shapes/rectangle";
+import { newId } from "../../../utils/shapes/common/newId";
+import { createRectangleConnectPoint } from "../../../utils/shapes/rectangle/createRectangleConnectPoint";
 
 export const createAgentNodeData = ({
 	x,

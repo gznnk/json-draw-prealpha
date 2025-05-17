@@ -6,22 +6,18 @@ import { memo, useCallback, useRef } from "react";
 import { DragLine } from "../../../core/DragLine";
 
 // Import types related to SvgCanvas.
-import type { Point } from "../../../../types/base";
-import type {
-	DiagramClickEvent,
-	DiagramDragEvent,
-	DiagramPointerEvent,
-} from "../../../../types/events";
+import type { Point } from "../../../../types/base/Point";
+import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
+import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
+import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
 
 // Import functions related to SvgCanvas.
-import { getCursorFromAngle } from "../../../../utils/shapes";
-import {
-	calcRadians,
-	createLinerX2yFunction,
-	createLinerY2xFunction,
-	radiansToDegrees,
-	rotatePoint,
-} from "../../../../utils";
+import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
+import { calcRadians } from "../../../../utils/math/points/calcRadians";
+import { createLinerX2yFunction } from "../../../../utils/math/geometry/createLinerX2yFunction";
+import { createLinerY2xFunction } from "../../../../utils/math/geometry/createLinerY2xFunction";
+import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
+import { rotatePoint } from "../../../../utils/math/points/rotatePoint";
 
 // Imports related to this component.
 import type { SegmentData } from "./SegmentTypes";

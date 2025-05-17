@@ -11,7 +11,7 @@ import { IconContainer } from "../../core/IconContainer";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Imports related to this component.
-import type { HubNodeProps } from "../../../types/props/nodes";
+import type { HubNodeProps } from "../../../types/props/nodes/HubNodeProps";
 
 const HubNodeComponent: React.FC<HubNodeProps> = (props) => {
 	const [isFlashing, setIsFlashing] = useState(false);

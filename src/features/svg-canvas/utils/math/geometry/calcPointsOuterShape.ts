@@ -1,12 +1,12 @@
 // Import types.
-import type { Point, Shape } from "../../../types";
+import type { Point } from "../../../types/base/Point";
+import type { Shape } from "../../../types/base/Shape";
 
 // Import utils.
-import { degreesToRadians, nanToZero } from "../common";
-import {
-	affineTransformation,
-	inverseAffineTransformation,
-} from "../transform";
+import { degreesToRadians } from "../common/degreesToRadians";
+import { nanToZero } from "../common/nanToZero";
+import { affineTransformation } from "../transform/affineTransformation";
+import { inverseAffineTransformation } from "../transform/inverseAffineTransformation";
 
 /**
  * Calculates the bounding box for a set of points.

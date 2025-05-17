@@ -1,17 +1,16 @@
 // SvgCanvas関連型定義をインポート
-import type { Box, Point } from "../../../../types/base";
-import type { Shape } from "../../../../types";
+import type { Box } from "../../../../types/base/Box";
+import type { Point } from "../../../../types/base/Point";
+import type { Shape } from "../../../../types/base/Shape";
 
 // SvgCanvas関連関数をインポート
-import {
-	calcDistance,
-	calcRadians,
-	calcRectangleOuterBox,
-	closer,
-	isLineIntersectingBox,
-	lineIntersects,
-	radiansToDegrees,
-} from "../../../../utils";
+import { calcDistance } from "../../../../utils/math/points/calcDistance";
+import { calcRadians } from "../../../../utils/math/points/calcRadians";
+import { calcRectangleOuterBox } from "../../../../utils/math/geometry/calcRectangleOuterBox";
+import { closer } from "../../../../utils/math/common/closer";
+import { isLineIntersectingBox } from "../../../../utils/math/geometry/isLineIntersectingBox";
+import { lineIntersects } from "../../../../utils/math/geometry/lineIntersects";
+import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
 
 // Imports related to this component.
 import { CONNECT_LINE_MARGIN } from "./ConnectPointConstants";

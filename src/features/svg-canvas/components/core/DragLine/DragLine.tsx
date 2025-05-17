@@ -3,8 +3,8 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 // Import hooks.
-import type { DragProps } from "../../../hooks";
-import { useDrag } from "../../../hooks";
+import type { DragProps } from "../../../hooks/useDrag";
+import { useDrag } from "../../../hooks/useDrag";
 
 /**
  * Props for the DragLine component.

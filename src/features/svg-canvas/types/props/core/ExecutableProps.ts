@@ -1,4 +1,4 @@
-import type { ExecuteEvent } from "../../events";
+import type { ExecuteEvent } from "../../events/ExecuteEvent";
 
 /**
  * Props for executable component.

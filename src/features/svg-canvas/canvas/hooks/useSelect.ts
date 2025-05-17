@@ -2,14 +2,13 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { GroupData } from "../../components/shapes/Group";
-import type { DiagramSelectEvent } from "../../types/events";
+import type { GroupData } from "../../types/data/shapes/GroupData";
+import type { DiagramSelectEvent } from "../../types/events/DiagramSelectEvent";
 
 // Import components related to SvgCanvas.
-import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
+import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group/GroupFunctions";
 
 // Import functions related to SvgCanvas.
-import { isSelectableData } from "../../utils";
 import {
 	applyMultiSelectSourceRecursive,
 	applyRecursive,
@@ -19,6 +18,9 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
+
+// Import utility functions.
+import { isSelectableData } from "../../utils/validation/isSelectableData";
 
 /**
  * Custom hook to handle select events on the canvas.

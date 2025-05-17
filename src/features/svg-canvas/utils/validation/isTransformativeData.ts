@@ -1,5 +1,5 @@
 // Import types.
-import type { TransformativeData } from "../../types";
+import type { TransformativeData } from "../../types/data/core/TransformativeData";
 
 /**
  * Check if an object is TransformativeData.

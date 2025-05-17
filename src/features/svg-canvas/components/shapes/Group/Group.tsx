@@ -2,29 +2,25 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { Diagram } from "../../../catalog";
-import { DiagramComponentCatalog } from "../../../catalog";
-import type {
-	DiagramChangeEvent,
-	DiagramConnectEvent,
-	DiagramDragEvent,
-	DiagramSelectEvent,
-	DiagramTextEditEvent,
-	DiagramTransformEvent,
-	GroupProps,
-} from "../../../types";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import { DiagramComponentCatalog } from "../../../catalog/DiagramComponentCatalog";
+import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
+import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
+import type { DiagramTextEditEvent } from "../../../types/events/DiagramTextEditEvent";
+import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
+import type { GroupProps } from "../../../types/props/shapes/GroupProps";
 
 // Import components related to SvgCanvas.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 
 // Import utils.
-import {
-	degreesToRadians,
-	isItemableData,
-	isTransformativeData,
-	rotatePoint,
-} from "../../../utils";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { isItemableData } from "../../../utils/validation/isItemableData";
+import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
+import { rotatePoint } from "../../../utils/math/points/rotatePoint";
 
 // Imports related to this component.
 import { getSelectedChildDiagram } from "./GroupFunctions";

@@ -6,7 +6,7 @@ import { memo } from "react";
 import { DragPoint } from "../../../core/DragPoint";
 
 // Import types related to SvgCanvas.
-import type { DiagramDragEvent } from "../../../../types/events";
+import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 
 // Imports related to this component.
 import type { NewVertexData } from "./NewVertexTypes";

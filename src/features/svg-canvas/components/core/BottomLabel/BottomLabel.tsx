@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import utils.
-import { calcRectangleVertices } from "../../../utils";
+import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
 
 // Import local module files.
 import { calcBottomLabelPosition } from "./BottomLabelFunctions";

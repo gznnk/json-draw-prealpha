@@ -1,5 +1,5 @@
 import type { CreateDataType } from "./CreateDataType";
-import type { ArrowHeadType } from "../../base";
+import type { ArrowHeadType } from "../../base/ArrowHeadType";
 
 /**
  * Data type for polyline/path elements.

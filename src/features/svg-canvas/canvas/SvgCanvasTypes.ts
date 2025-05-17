@@ -3,22 +3,20 @@ import type { RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { TextEditorState } from "../components/core/Textable";
-import type { GroupData } from "../types/data";
-import type { Diagram } from "../catalog";
-import type {
-	DiagramChangeEvent,
-	DiagramConnectEvent,
-	DiagramDragDropEvent,
-	DiagramDragEvent,
-	DiagramSelectEvent,
-	DiagramTextChangeEvent,
-	DiagramTextEditEvent,
-	DiagramTransformEvent,
-	ExecuteEvent,
-	NewDiagramEvent,
-	StackOrderChangeEvent,
-	SvgCanvasResizeEvent,
-} from "../types/events";
+import type { GroupData } from "../types/data/shapes/GroupData";
+import type { Diagram } from "../catalog/DiagramTypes";
+import type { DiagramChangeEvent } from "../types/events/DiagramChangeEvent";
+import type { DiagramConnectEvent } from "../types/events/DiagramConnectEvent";
+import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
+import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
+import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
+import type { DiagramTextChangeEvent } from "../types/events/DiagramTextChangeEvent";
+import type { DiagramTextEditEvent } from "../types/events/DiagramTextEditEvent";
+import type { DiagramTransformEvent } from "../types/events/DiagramTransformEvent";
+import type { ExecuteEvent } from "../types/events/ExecuteEvent";
+import type { NewDiagramEvent } from "../types/events/NewDiagramEvent";
+import type { StackOrderChangeEvent } from "../types/events/StackOrderChangeEvent";
+import type { SvgCanvasResizeEvent } from "../types/events/SvgCanvasResizeEvent";
 
 /**
  * Type for the data of the SvgCanvas.

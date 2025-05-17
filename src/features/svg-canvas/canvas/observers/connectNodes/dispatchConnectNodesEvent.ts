@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { ConnectNodesEvent } from "../../../types/events";
+import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";
 
 // Imports related to this component.
 import { CONNECT_NODES_EVENT_NAME } from "./connectNodesConstants";

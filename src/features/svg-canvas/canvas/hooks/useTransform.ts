@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { DiagramTransformEvent } from "../../types/events";
+import type { DiagramTransformEvent } from "../../types/events/DiagramTransformEvent";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import hooks related to SvgCanvas.

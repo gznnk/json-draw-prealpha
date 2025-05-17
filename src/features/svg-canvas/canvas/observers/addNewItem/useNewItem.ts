@@ -2,11 +2,11 @@
 import { useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { NewItemEvent } from "../../../types/events";
+import type { NewItemEvent } from "../../../types/events/NewItemEvent";
 import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { isSelectableData } from "../../../utils";
+import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../SvgCanvasFunctions";
 
 // Import related to this component.

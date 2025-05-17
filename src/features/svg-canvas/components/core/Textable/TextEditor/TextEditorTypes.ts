@@ -1,10 +1,8 @@
 // Import types.
-import type {
-	DiagramTextChangeEvent,
-	TextableType,
-	TextAlign,
-	VerticalAlign,
-} from "../../../../types";
+import type { TextableType } from "../../../../types/base/TextableType";
+import type { TextAlign } from "../../../../types/base/TextAlign";
+import type { VerticalAlign } from "../../../../types/base/VerticalAlign";
+import type { DiagramTextChangeEvent } from "../../../../types/events/DiagramTextChangeEvent";
 
 /**
  * Type for the state of the TextEditor.

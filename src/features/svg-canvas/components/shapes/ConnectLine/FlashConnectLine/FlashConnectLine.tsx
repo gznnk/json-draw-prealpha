@@ -2,15 +2,15 @@
 import { memo, useEffect, useState } from "react";
 
 // Import types.
-import type { PathData } from "../../../../types";
+import type { PathData } from "../../../../types/data/shapes/PathData";
 import type { FlashConnectLineEvent } from "./FlashConnectLineTypes";
 
 // Import utils.
+import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import {
-	createDValue,
-	createEndPointArrowHead,
 	createStartPointArrowHead,
-} from "../../../../utils/shapes/path";
+	createEndPointArrowHead,
+} from "../../../../utils/shapes/path/createArrowHeads";
 
 // Import constants and styled components.
 import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";
@@ -35,7 +35,7 @@ export const FlashConnectLineComponent = () => {
 								line.eventId !== event.eventId,
 						),
 					);
-				}, 500); // アニメ後にリセット
+				}, 500); // Reset after animation
 			}
 		};
 
