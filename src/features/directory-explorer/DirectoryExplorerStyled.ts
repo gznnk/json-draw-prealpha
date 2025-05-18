@@ -13,6 +13,8 @@ export const DirectoryExplorerContainer = styled.div`
   overflow: auto;
   user-select: none;
   padding: 4px 0;
+  background-color: #0C0F1C;
+  color: #B0B0B0;
 `;
 
 /**
@@ -34,7 +36,7 @@ export const NodeContainer = styled.div<{
 
 		// フォルダ内の子要素は薄い色のハイライト
 		if (props.isOver) {
-			return "rgba(79, 156, 231, 0.1)";
+			return "rgba(79, 156, 231, 0.2)";
 		}
 
 		return "transparent";

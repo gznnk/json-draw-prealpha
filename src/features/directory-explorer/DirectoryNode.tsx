@@ -169,7 +169,11 @@ const DirectoryNodeComponent = ({
 		<NodeContainer
 			ref={ref}
 			isDragging={isDragging}
-			isOver={canDrop && (isOverShallow || dragOverNodeList.length > 0)}
+			isOver={
+				canDrop &&
+				((item.type === "folder" && isOverShallow) ||
+					dragOverNodeList.length > 0)
+			}
 			isFolder={item.type === "folder"}
 		>
 			{" "}
