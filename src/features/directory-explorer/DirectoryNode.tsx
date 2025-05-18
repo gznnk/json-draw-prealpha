@@ -1,6 +1,10 @@
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import type { DirectoryNodeProps, DropResult } from "./DirectoryExplorerTypes";
+import type {
+	DirectoryNodeProps,
+	DropResult,
+	DirectoryItem,
+} from "./DirectoryExplorerTypes";
 import { DIRECTORY_ITEM_TYPE } from "./DirectoryExplorerConstants";
 import {
 	NodeContainer,
@@ -8,7 +12,7 @@ import {
 	ExpandIconContainer,
 	ItemIconContainer,
 } from "./DirectoryExplorerStyled";
-import { getDirectChildren } from "./DirectoryExplorerFunctions";
+import { getDirectChildren, getParentPath } from "./DirectoryExplorerFunctions";
 
 /**
  * ディレクトリツリーの個々のノードを表示するコンポーネント
@@ -22,7 +26,10 @@ const DirectoryNodeComponent = ({
 	level,
 	onDrop,
 	onItemClick,
+	onDragOver,
+	onDragLeave,
 }: DirectoryNodeProps) => {
+	const [dragOverNodeList, setDragOverNodeList] = useState<string[]>([]);
 	const ref = useRef<HTMLDivElement>(null);
 	const isExpanded = expandedNodes.has(item.id);
 	const children = getDirectChildren(item, allItems);
@@ -34,8 +41,10 @@ const DirectoryNodeComponent = ({
 		collect: (monitor) => ({
 			isDragging: !!monitor.isDragging(),
 		}),
-	}); // ドロップ対象の状態を追跡
-	const [{ isOver, isOverShallow, canDrop }, drop] = useDrop({
+	});
+
+	// ドロップ対象の状態を追跡
+	const [{ isOverShallow, canDrop }, drop] = useDrop({
 		accept: DIRECTORY_ITEM_TYPE,
 		canDrop: (draggedItem: { id: string }) => {
 			// 自分自身へのドロップは許可しない
@@ -44,6 +53,20 @@ const DirectoryNodeComponent = ({
 			// 子孫へのドロップも許可しない（循環参照防止）
 			const draggedItemObj = allItems.find((i) => i.id === draggedItem.id);
 			if (!draggedItemObj) return false;
+
+			// 同じフォルダ内へのドロップは許可しない
+			if (
+				item.type === "file" &&
+				getParentPath(draggedItemObj.path) === getParentPath(item.path)
+			) {
+				return false;
+			}
+			if (
+				item.type === "folder" &&
+				getParentPath(draggedItemObj.path) === item.path
+			) {
+				return false;
+			}
 
 			// ドラッグしているアイテムが現在のアイテムの親か確認
 			return !item.path.startsWith(`${draggedItemObj.path}/`);
@@ -92,14 +115,15 @@ const DirectoryNodeComponent = ({
 			return { dropEffect: "move" };
 		},
 		collect: (monitor) => ({
-			isOver: !!monitor.isOver(),
 			isOverShallow: !!monitor.isOver({ shallow: true }),
 			canDrop: !!monitor.canDrop(),
 		}),
 	});
 
 	// ドラッグ＆ドロップの参照を結合
-	drag(drop(ref)); // アイテムのクリックハンドラー
+	drag(drop(ref));
+
+	// アイテムのクリックハンドラー
 	const handleClick = () => {
 		// フォルダの場合は、子要素の有無にかかわらず展開/折りたたみを切り替える
 		if (item.type === "folder") {
@@ -109,21 +133,47 @@ const DirectoryNodeComponent = ({
 			onItemClick(item);
 		}
 	};
+
+	useEffect(() => {
+		if (item.type === "file") {
+			if (onDragOver && isOverShallow) {
+				onDragOver(item);
+			}
+			if (onDragLeave && !isOverShallow) {
+				onDragLeave(item);
+			}
+		}
+	}, [item, isOverShallow, onDragOver, onDragLeave]);
+
+	// ドラッグオーバー時の処理
+	const handleFileDragOver = (file: DirectoryItem) => {
+		setDragOverNodeList((prev) => {
+			if (prev.includes(file.id)) {
+				return prev;
+			}
+			return [...prev, file.id];
+		});
+	};
+
+	// ドラッグリーブ時の処理
+	const handleFileDragLeave = (file: DirectoryItem) => {
+		setDragOverNodeList((prev) => {
+			if (prev.includes(file.id)) {
+				return prev.filter((id) => id !== file.id);
+			}
+			return prev;
+		});
+	};
+
 	return (
 		<NodeContainer
 			ref={ref}
 			isDragging={isDragging}
-			isOver={isOver}
-			isOverShallow={isOverShallow}
-			canDrop={canDrop}
+			isOver={canDrop && (isOverShallow || dragOverNodeList.length > 0)}
 			isFolder={item.type === "folder"}
 		>
 			{" "}
-			<NodeRow
-				level={level}
-				onClick={handleClick}
-				isDropTarget={isOverShallow && canDrop}
-			>
+			<NodeRow level={level} onClick={handleClick}>
 				{" "}
 				{/* 展開/非展開アイコン */}
 				<ExpandIconContainer>
@@ -156,6 +206,8 @@ const DirectoryNodeComponent = ({
 						level={level + 1}
 						onDrop={onDrop}
 						onItemClick={onItemClick}
+						onDragOver={handleFileDragOver}
+						onDragLeave={handleFileDragLeave}
 					/>
 				))}
 		</NodeContainer>

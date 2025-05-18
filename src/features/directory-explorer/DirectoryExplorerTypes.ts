@@ -58,4 +58,8 @@ export type DirectoryNodeProps = {
 	onDrop: (result: DropResult) => void;
 	/** アイテムクリック時のコールバック */
 	onItemClick?: (item: DirectoryItem) => void;
+	/** ドラッグオーバー時のコールバック */
+	onDragOver?: (item: DirectoryItem) => void;
+	/** ドラッグリーブ時のコールバック */
+	onDragLeave?: (item: DirectoryItem) => void;
 };

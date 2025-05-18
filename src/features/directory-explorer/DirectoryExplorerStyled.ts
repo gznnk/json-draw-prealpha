@@ -20,27 +20,21 @@ export const DirectoryExplorerContainer = styled.div`
  */
 export const NodeContainer = styled.div<{
 	isOver?: boolean;
-	isOverShallow?: boolean;
-	canDrop?: boolean;
 	isDragging?: boolean;
 	isSelected?: boolean;
 	isFolder?: boolean;
 }>`
   display: flex;
-  flex-direction: column;  opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
+  flex-direction: column;
+  opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
   background-color: ${(props) => {
 		if (props.isSelected) {
-			return "var(--list-active-selection-background, #2b579a)";
-		}
-
-		// 直接ホバーされているフォルダの場合は濃い色のハイライト
-		if (props.isOverShallow && props.canDrop && props.isFolder) {
-			return "var(--drop-background, rgba(79, 156, 231, 0.3))";
+			return "#2b579a";
 		}
 
 		// フォルダ内の子要素は薄い色のハイライト
-		if (props.isOver && props.canDrop && !props.isOverShallow) {
-			return "var(--drop-background-child, rgba(79, 156, 231, 0.1))";
+		if (props.isOver) {
+			return "rgba(79, 156, 231, 0.1)";
 		}
 
 		return "transparent";
@@ -56,7 +50,6 @@ export const NodeContainer = styled.div<{
  */
 export const NodeRow = styled.div<{
 	level: number;
-	isDropTarget?: boolean;
 }>`
   display: flex;
   align-items: center;
@@ -64,23 +57,6 @@ export const NodeRow = styled.div<{
   padding-left: ${(props) => props.level * LEVEL_INDENT_WIDTH}px;
   cursor: pointer;
   position: relative;
-    &:hover:not(:has(.drag-over)) {
-    background-color: var(--list-hover-background, rgba(255, 255, 255, 0.05));
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: ${(props) =>
-			props.isDropTarget
-				? "var(--drop-background-folder, rgba(79, 156, 231, 0.4))"
-				: "transparent"};
-    pointer-events: none;
-  }
 `;
 
 /**
