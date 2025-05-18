@@ -1,10 +1,15 @@
-Processed 456 files (3.3s) (2 warnings)
+Processed 457 files (3.4s) (2 warnings)
 
 app/App.tsx
   app/components/MarkdownEditorSample/index.tsx
   app/components/Page/index.tsx
   app/components/SplitView/SplitView.tsx
+  app/tools/new_sheet/index.ts
+  app/tools/sandbox/index.ts
   features/llm-chat-ui/index.tsx
+  features/llm-chat-ui/types.ts
+  features/llm-client/index.ts
+  features/svg-canvas/tools/workflow_agent/index.ts
   utils/KeyManager.ts
   utils/Profiler.ts
 app/components/Body/Body.tsx
@@ -80,14 +85,9 @@ app/tools/sandbox/index.ts
   app/tools/sandbox/definition.ts
   app/tools/sandbox/handler.ts
 features/llm-chat-ui/components/ChatUI/ChatUI.tsx
-  app/tools/new_sheet/index.ts
-  app/tools/sandbox/index.ts
   features/llm-chat-ui/components/ChatUI/ChatUIStyled.ts
   features/llm-chat-ui/components/ChatUI/ChatUITypes.ts
   features/llm-chat-ui/components/MessageItem/MessageItem.tsx
-  features/llm-chat-ui/types.ts
-  features/llm-client/index.ts
-  features/svg-canvas/tools/workflow_agent/index.ts
 features/llm-chat-ui/components/ChatUI/ChatUIStyled.ts
 features/llm-chat-ui/components/ChatUI/ChatUITypes.ts
   features/llm-chat-ui/types.ts
@@ -117,13 +117,14 @@ features/llm-client/openai/client.ts
 features/llm-client/types.ts
 features/markdown-editor/components/MarkdownEditor.tsx
   features/markdown-editor/components/MarkdownEditorConstants.ts
+  features/markdown-editor/components/MarkdownEditorFunctions.ts
   features/markdown-editor/components/MarkdownEditorStyled.ts
   features/markdown-editor/components/SafeHtmlPreview.tsx
   features/markdown-editor/types.ts
   features/markdown/index.ts
 features/markdown-editor/components/MarkdownEditorConstants.ts
+features/markdown-editor/components/MarkdownEditorFunctions.ts
 features/markdown-editor/components/MarkdownEditorStyled.ts
-  features/markdown-editor/types.ts
 features/markdown-editor/components/SafeHtmlPreview.tsx
   features/markdown-editor/components/MarkdownEditorStyled.ts
 features/markdown-editor/index.tsx

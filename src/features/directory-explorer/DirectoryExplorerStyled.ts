@@ -13,6 +13,7 @@ export const DirectoryExplorerContainer = styled.div`
   overflow: auto;
   user-select: none;
   padding: 4px 0;
+  box-sizing: border-box;
   background-color: #0C0F1C;
   color: #B0B0B0;
 `;

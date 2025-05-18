@@ -20,6 +20,10 @@ import {
 	ToolbarButton,
 } from "./MarkdownEditorStyled";
 import { SafeHtmlPreview } from "./SafeHtmlPreview";
+import {
+	adjustScrollBasedOnCaret,
+	syncScroll,
+} from "./MarkdownEditorFunctions";
 
 const MarkdownEditorComponent = ({
 	initialMarkdown = "",
@@ -47,20 +51,34 @@ const MarkdownEditorComponent = ({
 		setRenderedHtml(renderMarkdown(markdown));
 	}, [markdown]);
 
-	// スクロール位置の割合を取得する関数
-	const getScrollPercentage = useCallback((element: HTMLElement) => {
-		return (
-			element.scrollTop / (element.scrollHeight - element.clientHeight) || 0
-		);
-	}, []);
-
-	// スクロール位置をパーセンテージに基づいて設定する関数
-	const setScrollPercentage = useCallback(
-		(element: HTMLElement, percentage: number) => {
-			const maxScroll = element.scrollHeight - element.clientHeight;
-			element.scrollTop = Math.max(
-				0,
-				Math.min(maxScroll, percentage * maxScroll),
+	/**
+	 * スクロールをロックして他方のペインを同期させる
+	 * @param source - スクロール元の要素
+	 * @param target - スクロール先の要素
+	 * @param sourceIsEditor - スクロール元がエディタかどうか
+	 */
+	const syncScrollWithTimeout = useCallback(
+		(source: HTMLElement, target: HTMLElement, sourceIsEditor: boolean) => {
+			syncScroll(
+				source,
+				target,
+				// 同期開始前に実行
+				() => {
+					if (sourceIsEditor) {
+						isScrollingEditor.current = true;
+					} else {
+						isScrollingPreview.current = true;
+					}
+				},
+				// 同期終了後に実行
+				() => {
+					if (sourceIsEditor) {
+						isScrollingEditor.current = false;
+					} else {
+						isScrollingPreview.current = false;
+					}
+				},
+				50,
 			);
 		},
 		[],
@@ -76,15 +94,8 @@ const MarkdownEditorComponent = ({
 		)
 			return;
 
-		isScrollingEditor.current = true;
-		const percentage = getScrollPercentage(textareaRef.current);
-		setScrollPercentage(previewRef.current, percentage);
-
-		// スクロールイベントのロックを解除するタイマー
-		setTimeout(() => {
-			isScrollingEditor.current = false;
-		}, 50);
-	}, [showPreview, getScrollPercentage, setScrollPercentage]);
+		syncScrollWithTimeout(textareaRef.current, previewRef.current, true);
+	}, [showPreview, syncScrollWithTimeout]);
 
 	// プレビューのスクロールイベントハンドラ
 	const handlePreviewScroll = useCallback(() => {
@@ -96,15 +107,8 @@ const MarkdownEditorComponent = ({
 		)
 			return;
 
-		isScrollingPreview.current = true;
-		const percentage = getScrollPercentage(previewRef.current);
-		setScrollPercentage(textareaRef.current, percentage);
-
-		// スクロールイベントのロックを解除するタイマー
-		setTimeout(() => {
-			isScrollingPreview.current = false;
-		}, 50);
-	}, [showEditor, getScrollPercentage, setScrollPercentage]);
+		syncScrollWithTimeout(previewRef.current, textareaRef.current, false);
+	}, [showEditor, syncScrollWithTimeout]);
 
 	// スクロールイベントのリスナーを設定
 	useEffect(() => {
@@ -120,84 +124,65 @@ const MarkdownEditorComponent = ({
 				preview.removeEventListener("scroll", handlePreviewScroll);
 			};
 		}
-	}, [handleEditorScroll, handlePreviewScroll, showEditor, showPreview]); // テキストエリアの変更イベントハンドラ
+	}, [handleEditorScroll, handlePreviewScroll, showEditor, showPreview]);
+
+	// テキストエリアの変更イベントハンドラ
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLTextAreaElement>) => {
 			const newValue = e.target.value;
+			const textarea = e.target;
 			setMarkdown(newValue);
+
+			// 最後の行での入力を検出するための処理
+			const lines = newValue.split("\n");
+			const isLastLine = textarea.selectionStart === newValue.length;
+			const isFirstCharInText = newValue.length === 1;
+
+			// 最終行に入力があった場合、またはテキストが1文字だけの場合
+			// handleKeyDownだけでは捕捉できないケースがあるため、ここでもスクロール調整
+			if ((isLastLine && lines.length > 0) || isFirstCharInText) {
+				// 少し遅延を入れて、DOMの更新後に実行
+				setTimeout(() => {
+					if (!textarea) return;
+					// 最下部にスクロール
+					textarea.scrollTop = textarea.scrollHeight - textarea.clientHeight;
+
+					// プレビューも同期
+					if (
+						showPreview &&
+						previewRef.current &&
+						!isScrollingPreview.current
+					) {
+						syncScrollWithTimeout(textarea, previewRef.current, true);
+					}
+				}, 50);
+			}
+
 			// 親コンポーネントに変更を通知
 			if (onChange) {
 				onChange(newValue);
 			}
 		},
-		[onChange],
+		[onChange, showPreview, syncScrollWithTimeout],
 	);
+	// キー入力情報を保持するref
+	const lastKeyPressRef = useRef<string | null>(null);
+
 	// キャレット位置に基づいてスクロールを調整（全てのキー入力に対応）
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 			// 全てのキー入力で処理する（特殊キーは除外可能だが一旦すべて処理）
-
 			if (textareaRef.current) {
-				// 少し遅延を入れて、キャレット位置が更新された後に実行
-				setTimeout(() => {
+				// 最後に押されたキーを記録
+				lastKeyPressRef.current = e.key;
+
+				// requestAnimationFrameを使用して次の描画フレームでスクロールを調整
+				requestAnimationFrame(() => {
 					const textarea = textareaRef.current;
 					if (!textarea) return;
 
-					const { scrollTop, clientHeight } = textarea;
-					const caretPosition = textarea.selectionStart;
-
-					// テキストの内容を取得して行ごとに分割
-					const text = textarea.value;
-					const lines = text.substring(0, caretPosition).split("\n");
-
-					// キャレットが現在いる行数を計算（0ベース）
-					const currentLineIndex = lines.length - 1;
-
-					// 1行の高さを取得
-					const lineHeight = Number.parseInt(
-						getComputedStyle(textarea).lineHeight,
-						10,
-					);
-
-					// キャレットのY座標を計算
-					const caretY = currentLineIndex * lineHeight;
-
-					// パディングに応じたオフセット
-					const paddingTop = Number.parseInt(
-						getComputedStyle(textarea).paddingTop,
-						10,
-					);
-					const paddingBottom = Number.parseInt(
-						getComputedStyle(textarea).paddingBottom,
-						10,
-					);
-
-					// 上方向のスクロール調整（最初の行の場合、paddingTopを考慮）
-					if (currentLineIndex === 0 || caretY < scrollTop + paddingTop) {
-						textarea.scrollTop = Math.max(0, caretY - paddingTop);
-					} // 下方向のスクロール調整（最後の行の場合、paddingBottomを考慮）
-					const allLines = text.split("\n");
-					const isLastLine = currentLineIndex === allLines.length - 1;
-					const isEnterKey = e.key === "Enter";
-					// 入力が1文字目の場合も特別処理
-					const isFirstChar = text.length === 1;
-
-					// 最終行の場合またはテキストが1文字だけの場合、スクロールを最大まで設定
-					if (isLastLine || isFirstChar) {
-						textarea.scrollTop = textarea.scrollHeight - textarea.clientHeight;
-					}
-					// 最終行でエンターキーが押された場合も最大スクロール
-					else if (isEnterKey && currentLineIndex === allLines.length - 2) {
-						textarea.scrollTop = textarea.scrollHeight - textarea.clientHeight;
-					}
-					// 通常のスクロール調整
-					else if (
-						caretY + lineHeight >
-						scrollTop + clientHeight - paddingBottom
-					) {
-						textarea.scrollTop =
-							caretY + lineHeight - clientHeight + paddingBottom;
-					}
+					// キャレット位置に基づいてスクロールを調整
+					adjustScrollBasedOnCaret(textarea, e.key);
 
 					// エディタがスクロールされたとき、プレビューも同期させる
 					if (
@@ -205,19 +190,41 @@ const MarkdownEditorComponent = ({
 						previewRef.current &&
 						!isScrollingPreview.current
 					) {
-						isScrollingEditor.current = true;
-						const percentage = getScrollPercentage(textarea);
-						setScrollPercentage(previewRef.current, percentage);
-
-						setTimeout(() => {
-							isScrollingEditor.current = false;
-						}, 50);
+						syncScrollWithTimeout(textarea, previewRef.current, true);
 					}
-				}, 0);
+				});
 			}
 		},
-		[showPreview, getScrollPercentage, setScrollPercentage],
+		[showPreview, syncScrollWithTimeout],
 	);
+
+	// キー入力後のスクロール位置調整用のEffect
+	useEffect(() => {
+		// 直前のキー入力があった場合のみ実行
+		const key = lastKeyPressRef.current;
+		if (!key || !textareaRef.current) return;
+
+		const textarea = textareaRef.current;
+
+		// キー入力後、DOMが更新された後でスクロール位置を調整
+		// 特に最終行での入力に対応
+		if (key === "Enter" || key.length === 1) {
+			// 文字入力の場合
+
+			// キャレット位置に基づいてスクロールを調整
+			adjustScrollBasedOnCaret(textarea, key);
+
+			// プレビューも同期
+			if (showPreview && previewRef.current && !isScrollingPreview.current) {
+				syncScrollWithTimeout(textarea, previewRef.current, true);
+			}
+		}
+
+		// クリーンアップでキー入力情報をリセット
+		return () => {
+			lastKeyPressRef.current = null;
+		};
+	}, [showPreview, syncScrollWithTimeout]);
 
 	return (
 		<div

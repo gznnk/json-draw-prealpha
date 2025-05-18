@@ -1,7 +1,7 @@
-Processed 456 files (2.9s) (2 warnings)
+Processed 457 files (3.3s) (2 warnings)
 
-1) app/App.tsx > features/llm-chat-ui/index.tsx > features/llm-chat-ui/components/ChatUI/ChatUI.tsx > app/tools/new_sheet/index.ts > app/tools/new_sheet/handler.ts
-2) app/App.tsx > features/llm-chat-ui/index.tsx > features/llm-chat-ui/components/ChatUI/ChatUI.tsx > app/tools/sandbox/index.ts > app/tools/sandbox/handler.ts
+1) app/App.tsx > app/tools/new_sheet/index.ts > app/tools/new_sheet/handler.ts
+2) app/App.tsx > app/tools/sandbox/index.ts > app/tools/sandbox/handler.ts
 3) features/svg-canvas/canvas/SvgCanvasFunctions.ts > features/svg-canvas/components/shapes/ConnectLine/index.tsx > features/svg-canvas/components/shapes/ConnectLine/ConnectLine/index.tsx > features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx > features/svg-canvas/canvas/index.tsx > features/svg-canvas/canvas/SvgCanvas.tsx
 4) features/svg-canvas/canvas/index.tsx > features/svg-canvas/canvas/SvgCanvas.tsx > features/svg-canvas/catalog/DiagramComponentCatalog.ts > features/svg-canvas/components/nodes/AgentNode/index.tsx > features/svg-canvas/components/nodes/AgentNode/AgentNode.tsx
 5) features/svg-canvas/canvas/observers/addNewItem/index.ts > features/svg-canvas/canvas/observers/addNewItem/useNewItem.ts > features/svg-canvas/canvas/SvgCanvasFunctions.ts > features/svg-canvas/components/shapes/ConnectLine/index.tsx > features/svg-canvas/components/shapes/ConnectLine/ConnectLine/index.tsx > features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx > features/svg-canvas/canvas/index.tsx > features/svg-canvas/canvas/SvgCanvas.tsx > features/svg-canvas/catalog/DiagramComponentCatalog.ts > features/svg-canvas/components/nodes/AgentNode/index.tsx > features/svg-canvas/components/nodes/AgentNode/AgentNode.tsx

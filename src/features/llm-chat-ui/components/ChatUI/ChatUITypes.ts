@@ -2,15 +2,17 @@ import type { Message } from "../../types.ts";
 
 /**
  * Props for the ChatUI component.
- * Controls appearance, behavior, and API integration.
+ * Controls appearance, behavior, and message handling.
  */
 export interface ChatUIProps {
 	/** Custom height for the chat container (CSS value) */
 	height?: string;
 	/** Custom width for the chat container (CSS value) */
 	width?: string;
-	/** Optional API key for OpenAI */
-	apiKey?: string;
-	/** Optional initial messages to populate the chat */
-	initialMessages?: Message[];
+	/** Messages to display in the chat */
+	messages: Message[];
+	/** Callback fired when a message is sent by the user */
+	onSendMessage: (message: string) => void;
+	/** Whether the system is currently processing a request */
+	isLoading?: boolean;
 }
