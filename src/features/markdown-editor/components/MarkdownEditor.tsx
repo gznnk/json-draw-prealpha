@@ -53,13 +53,14 @@ const MarkdownEditorComponent = ({
 			}
 		},
 		[onChange],
-	);
-	// キャレット位置に基づいてスクロールを調整
+	); // キャレット位置に基づいてスクロールを調整
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-			// 矢印キーの場合のみ処理
+			// 矢印キーまたはエンターキーの場合のみ処理
 			if (
-				!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)
+				!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter"].includes(
+					e.key,
+				)
 			) {
 				return;
 			}
@@ -102,20 +103,24 @@ const MarkdownEditorComponent = ({
 					// 上方向のスクロール調整（最初の行の場合、paddingTopを考慮）
 					if (currentLineIndex === 0 || caretY < scrollTop + paddingTop) {
 						textarea.scrollTop = Math.max(0, caretY - paddingTop);
-					}
-
-					// 下方向のスクロール調整（最後の行の場合、paddingBottomを考慮）
+					} // 下方向のスクロール調整（最後の行の場合、paddingBottomを考慮）
 					const allLines = text.split("\n");
 					const isLastLine = currentLineIndex === allLines.length - 1;
+					const isEnterKey = e.key === "Enter";
 
+					// 最終行の場合、スクロールを最大まで設定
 					if (isLastLine) {
-						// 最終行の場合、スクロールを最大まで設定
 						textarea.scrollTop = textarea.scrollHeight - textarea.clientHeight;
-					} else if (
+					}
+					// 最終行でエンターキーが押された場合も最大スクロール
+					else if (isEnterKey && currentLineIndex === allLines.length - 2) {
+						textarea.scrollTop = textarea.scrollHeight - textarea.clientHeight;
+					}
+					// 通常のスクロール調整
+					else if (
 						caretY + lineHeight >
 						scrollTop + clientHeight - paddingBottom
 					) {
-						// 通常のスクロール調整
 						textarea.scrollTop =
 							caretY + lineHeight - clientHeight + paddingBottom;
 					}
