@@ -13,30 +13,6 @@ export const getParentPath = (path: string): string => {
 };
 
 /**
- * アイテムに子アイテムがあるかどうかを判定する
- *
- * @param item - 判定対象のアイテム
- * @param allItems - すべてのアイテムの配列
- * @returns 子アイテムがある場合はtrue
- */
-export const hasChildren = (
-	item: DirectoryItem,
-	allItems: DirectoryItem[],
-): boolean => {
-	// ファイルは子を持たない
-	if (item.type === "file") return false;
-
-	const itemPath = item.path;
-	const directChildren = allItems.filter((otherItem) => {
-		const otherPath = otherItem.path;
-		const parentPath = getParentPath(otherPath);
-		return parentPath === itemPath;
-	});
-
-	return directChildren.length > 0;
-};
-
-/**
  * アイテムの直接の子アイテムを取得する
  *
  * @param item - 親アイテム
@@ -53,17 +29,6 @@ export const getDirectChildren = (
 	return allItems
 		.filter((otherItem) => getParentPath(otherItem.path) === itemPath)
 		.sort(sortDirectoryItems);
-};
-
-/**
- * パスのレベル（階層の深さ）を取得する
- *
- * @param path - アイテムのパス
- * @returns パスのレベル（/がない場合は0、/区切りの数+1）
- */
-export const getPathLevel = (path: string): number => {
-	if (!path || path === "/") return 0;
-	return (path.match(/\//g) || []).length;
 };
 
 /**

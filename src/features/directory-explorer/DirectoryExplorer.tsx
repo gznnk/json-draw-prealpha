@@ -36,7 +36,9 @@ const DirectoryExplorerComponent = ({
 			}
 			return next;
 		});
-	}, []); // ドロップ時の処理
+	}, []);
+
+	// ドロップ時の処理
 	const handleDrop = useCallback(
 		(result: DropResult) => {
 			if (onItemsChange) {
@@ -47,6 +49,7 @@ const DirectoryExplorerComponent = ({
 		},
 		[items, onItemsChange],
 	);
+
 	// ルートレベルのアイテムを取得し、ソート
 	const rootItems = getRootItems(items).sort(sortDirectoryItems);
 
