@@ -2,7 +2,7 @@
 
 - [After Copilot Task](./instructions/after-copilot-task.instructions.md)
 - [Biome Linting And Formatting Rules](./instructions/biome-linting-and-formatting-rules.instructions.md)
-- [Color Scheme](./instructions/color-scheme.md)
+- [Color Scheme](./instructions/color-scheme.instructions.md)
 - [Comment Style Guidelines](./instructions/comment-style-guidelines.instructions.md)
 - [Git Operations And Workflow](./instructions/git-operations-and-workflow.instructions.md)
 - [React Component Coding Style](./instructions/react-component-coding-style.instructions.md)
