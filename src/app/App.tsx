@@ -12,6 +12,7 @@ import type { LLMClient } from "../features/llm-client";
 import { Page } from "./components/Page";
 import { SplitView } from "./components/SplitView/SplitView";
 import { MarkdownEditorSample } from "./components/MarkdownEditorSample";
+import { SampleContent } from "./components/SampleContent";
 
 // Import utils.
 import { Profiler } from "../utils/Profiler";
@@ -175,17 +176,23 @@ const App = (): ReactElement => {
 			}
 		},
 	};
-
 	return (
 		<div className="App">
 			<Page>
 				<SplitView
-					initialRatio={0.67}
+					initialRatio={[0.3, 0.4, 0.3]}
 					left={
-						// マークダウンエディターサンプルを表示
+						// サンプルコンテンツ（左ペイン）
+						<SampleContent title="左ペイン" bgColor="#f0f8ff" />
+					}
+					center={
+						// マークダウンエディターサンプルを表示（中央ペイン）
 						<MarkdownEditorSample />
 					}
-					right={<ChatUI {...chatConfig} />}
+					right={
+						// チャットUIを表示（右ペイン）
+						<ChatUI {...chatConfig} />
+					}
 				/>
 			</Page>
 		</div>
