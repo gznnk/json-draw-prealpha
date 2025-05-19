@@ -22,6 +22,7 @@ import { OpenAiKeyManager } from "../utils/KeyManager";
 import { workflowAgent } from "../features/svg-canvas/tools/workflow_agent";
 import { newSheet } from "./tools/new_sheet";
 import { createSandbox } from "./tools/sandbox";
+import { newWork, useNewWork } from "./tools/new_work";
 
 // Import repository and hooks.
 import type { DirectoryItem } from "../features/directory-explorer";
@@ -72,8 +73,17 @@ const App = (): ReactElement => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [apiKey, setApiKey] = useState<string | null>(null);
 	const [llmClient, setLLMClient] = useState<LLMClient | null>(null); // useWorksフックを使用してWorkの管理を行う
-	const { works, updateWorks } = useWorks();
+	const { works, updateWorks, addWork } = useWorks();
 	const [directoryItems, setDirectoryItems] = useState<DirectoryItem[]>([]);
+
+	// new_workイベントのハンドリング
+	useNewWork(async (work) => {
+		try {
+			await addWork(work);
+		} catch (error) {
+			console.error("Failed to add new work:", error);
+		}
+	});
 
 	useEffect(() => {
 		setDirectoryItems(
@@ -121,11 +131,13 @@ const App = (): ReactElement => {
 					workflowAgent.definition,
 					newSheet.definition,
 					createSandbox.definition,
+					newWork.definition,
 				],
 				functionHandlers: {
 					workflow_agent: workflowAgent.handler,
 					new_sheet: newSheet.handler,
 					create_sandbox: createSandbox.handler,
+					new_work: newWork.handler,
 				},
 				systemPrompt:
 					"You are a general-purpose assistant that outputs responses in Markdown format. " +
