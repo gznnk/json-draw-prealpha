@@ -154,28 +154,27 @@ const SplitViewComponent = ({
 				<Pane style={{ flex: ratios[1] }}>{right}</Pane>
 			</Container>
 		);
-	} else {
-		// 3分割モード
-		return (
-			<Container ref={containerRef}>
-				<Pane style={{ flex: ratios[0] }}>{left}</Pane>
-				<Divider>
-					<DividerHitArea
-						ref={firstDividerRef}
-						onPointerDown={handlePointerDown(0)}
-					/>
-				</Divider>
-				<Pane style={{ flex: ratios[1] }}>{center}</Pane>
-				<Divider>
-					<DividerHitArea
-						ref={secondDividerRef}
-						onPointerDown={handlePointerDown(1)}
-					/>
-				</Divider>
-				<Pane style={{ flex: ratios[2] }}>{right}</Pane>
-			</Container>
-		);
 	}
+	// 3分割モード
+	return (
+		<Container ref={containerRef}>
+			<Pane style={{ flex: ratios[0] }}>{left}</Pane>
+			<Divider>
+				<DividerHitArea
+					ref={firstDividerRef}
+					onPointerDown={handlePointerDown(0)}
+				/>
+			</Divider>
+			<Pane style={{ flex: ratios[1] }}>{center}</Pane>
+			<Divider>
+				<DividerHitArea
+					ref={secondDividerRef}
+					onPointerDown={handlePointerDown(1)}
+				/>
+			</Divider>
+			<Pane style={{ flex: ratios[2] }}>{right}</Pane>
+		</Container>
+	);
 };
 
 export const SplitView = memo(SplitViewComponent);
