@@ -1,11 +1,15 @@
 import { definition } from "./definition";
-import { handler } from "./handler";
+import { createHandler } from "./handler";
+import { useTool } from "./hooks";
 
+/**
+ * new_workツールの定義とユーティリティをまとめたオブジェクト
+ * - definition: ツールの定義
+ * - createHandler: EventBusを受け取りハンドラーを生成する関数
+ * - useTool: ツールのイベントをリッスンするフック
+ */
 export const newWork = {
-	definition: definition,
-	handler: handler,
+	definition,
+	createHandler,
+	useTool,
 };
-
-// Re-export EventBus for external use
-export { newWorkEventBus } from "./handler";
-export { useNewWork } from "./hooks";

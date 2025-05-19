@@ -18,11 +18,11 @@ import { MarkdownEditorSample } from "./components/MarkdownEditorSample";
 import { Profiler } from "../utils/Profiler";
 import { OpenAiKeyManager } from "../utils/KeyManager";
 
-// Import AI tools
+// Import AI tools.
 import { workflowAgent } from "../features/svg-canvas/tools/workflow_agent";
 import { newSheet } from "./tools/new_sheet";
 import { createSandbox } from "./tools/sandbox";
-import { newWork, useNewWork } from "./tools/new_work";
+import { newWork } from "./tools/new_work";
 
 // Import repository and hooks.
 import type { DirectoryItem } from "../features/directory-explorer";
@@ -72,12 +72,12 @@ const App = (): ReactElement => {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [apiKey, setApiKey] = useState<string | null>(null);
-	const [llmClient, setLLMClient] = useState<LLMClient | null>(null); // useWorksフックを使用してWorkの管理を行う
+	const [llmClient, setLLMClient] = useState<LLMClient | null>(null);
 	const { works, updateWorks, addWork } = useWorks();
 	const [directoryItems, setDirectoryItems] = useState<DirectoryItem[]>([]);
 
-	// new_workイベントのハンドリング
-	useNewWork(async (work) => {
+	// new_workイベントのハンドリングとEventBusの取得
+	const workEventBus = newWork.useTool(async (work) => {
 		try {
 			await addWork(work);
 		} catch (error) {
@@ -137,7 +137,7 @@ const App = (): ReactElement => {
 					workflow_agent: workflowAgent.handler,
 					new_sheet: newSheet.handler,
 					create_sandbox: createSandbox.handler,
-					new_work: newWork.handler,
+					new_work: newWork.createHandler(workEventBus),
 				},
 				systemPrompt:
 					"You are a general-purpose assistant that outputs responses in Markdown format. " +
@@ -149,7 +149,8 @@ const App = (): ReactElement => {
 		} else {
 			setLLMClient(null);
 		}
-	}, [apiKey]);
+	}, [apiKey, workEventBus]);
+
 	// チャットUIの設定
 	const chatConfig = {
 		height: "100%",
@@ -225,6 +226,7 @@ const App = (): ReactElement => {
 			}
 		},
 	};
+
 	return (
 		<div className="App">
 			<Page>
