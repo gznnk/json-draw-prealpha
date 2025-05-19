@@ -1,5 +1,5 @@
 // Import libraries.
-import type { ToolDefinition } from "../../../llm-client/types";
+import type { ToolDefinition } from "../../../../shared/llm-client/types";
 
 // Import prompt.
 import TOOL_DESCRIPTION from "./prompts/tool-description.md?raw";

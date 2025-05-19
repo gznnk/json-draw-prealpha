@@ -11,7 +11,7 @@ import { dispatchAddNewSheetEvent } from "../../App";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
-} from "../../../features/llm-client/types";
+} from "../../../shared/llm-client/types";
 
 export const handler: FunctionCallHandler = (
 	functionCall: FunctionCallInfo,

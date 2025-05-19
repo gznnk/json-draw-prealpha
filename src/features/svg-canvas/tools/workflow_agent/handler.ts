@@ -1,6 +1,6 @@
 // Import libraries.
-import { LLMClientFactory } from "../../../llm-client";
-import type { FunctionHandlerMap } from "../../../llm-client/types";
+import { LLMClientFactory } from "../../../../shared/llm-client";
+import type { FunctionHandlerMap } from "../../../../shared/llm-client/types";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../utils/KeyManager";
@@ -42,7 +42,7 @@ const functionHandlerMap: FunctionHandlerMap = {
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
-} from "../../../llm-client/types";
+} from "../../../../shared/llm-client/types";
 
 /**
  * ワークフローエージェントのハンドラー関数

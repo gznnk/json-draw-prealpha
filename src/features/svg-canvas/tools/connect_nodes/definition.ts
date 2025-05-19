@@ -1,5 +1,5 @@
 // Import libraries.
-import type { ToolDefinition } from "../../../llm-client/types";
+import type { ToolDefinition } from "../../../../shared/llm-client/types";
 
 /**
  * Description text for the connect_nodes tool.

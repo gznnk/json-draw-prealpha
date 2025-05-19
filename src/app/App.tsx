@@ -5,8 +5,8 @@ import type { ReactElement } from "react";
 // Import features.
 import { ChatUI } from "../features/llm-chat-ui";
 import type { Message } from "../features/llm-chat-ui/types";
-import { LLMClientFactory } from "../features/llm-client";
-import type { LLMClient } from "../features/llm-client";
+import { LLMClientFactory } from "../shared/llm-client";
+import type { LLMClient } from "../shared/llm-client";
 
 // Import components.
 import { Page } from "./components/Page";
@@ -25,7 +25,7 @@ import { createSandbox } from "./tools/sandbox";
 
 // Import repository.
 import { createWorkRepository } from "./repository/work/factory";
-import type { Work } from "./domain/Work";
+import type { Work } from "./model/Work";
 import type { DirectoryItem } from "../features/directory-explorer";
 
 // Create repository instance

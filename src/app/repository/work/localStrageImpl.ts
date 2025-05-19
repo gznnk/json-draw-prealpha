@@ -1,4 +1,4 @@
-import type { Work } from "../../domain/Work";
+import type { Work } from "../../model/Work";
 import type { WorkRepository } from "./interface";
 
 /**

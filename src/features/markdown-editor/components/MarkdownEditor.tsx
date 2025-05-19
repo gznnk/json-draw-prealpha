@@ -6,7 +6,7 @@ import {
 	useState,
 	type ReactElement,
 } from "react";
-import { renderMarkdown } from "../../markdown";
+import { renderMarkdown } from "../../../shared/markdown";
 import type { MarkdownEditorProps } from "../types";
 import {
 	DEFAULT_MIN_HEIGHT,

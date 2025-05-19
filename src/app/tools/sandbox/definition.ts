@@ -1,6 +1,6 @@
 // filepath: c:\Users\maver\Project\react-vite-project-2\src\app\tools\sandbox\definition.ts
 // Import libraries.
-import type { ToolDefinition } from "../../../features/llm-client/types";
+import type { ToolDefinition } from "../../../shared/llm-client/types";
 
 /**
  * Description for the sandbox tool that creates an interactive HTML sandbox.

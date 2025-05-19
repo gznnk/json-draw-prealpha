@@ -1,5 +1,5 @@
 // Import libraries.
-import type { ToolDefinition } from "../../../llm-client/types";
+import type { ToolDefinition } from "../../../../shared/llm-client/types";
 
 // Import shared descriptions.
 import {

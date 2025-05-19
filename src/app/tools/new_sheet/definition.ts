@@ -1,5 +1,5 @@
 // Import libraries.
-import type { ToolDefinition } from "../../../features/llm-client/types";
+import type { ToolDefinition } from "../../../shared/llm-client/types";
 
 /**
  * Description text for the new_sheet tool.

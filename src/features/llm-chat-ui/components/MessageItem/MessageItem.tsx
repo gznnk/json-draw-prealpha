@@ -2,7 +2,7 @@
 import React from "react";
 
 // Import other features.
-import { renderMarkdown } from "../../../markdown";
+import { renderMarkdown } from "../../../../shared/markdown";
 import type { Message } from "../../types";
 
 // Import related to this component.

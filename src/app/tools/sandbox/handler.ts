@@ -9,7 +9,7 @@ import { dispatchUpdateSandboxContentEvent } from "../../components/SandboxSheet
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
-} from "../../../features/llm-client/types";
+} from "../../../shared/llm-client/types";
 
 /**
  * Handles the creation of a new sandbox with custom HTML content.

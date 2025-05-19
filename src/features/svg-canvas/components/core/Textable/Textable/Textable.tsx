@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useEffect, useRef } from "react";
 
 // import features.
-import { renderMarkdown } from "../../../../../markdown";
+import { renderMarkdown } from "../../../../../../shared/markdown";
 
 // Import types.
 import type { TextableData } from "../../../../types/data/core/TextableData";

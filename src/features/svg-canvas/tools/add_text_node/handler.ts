@@ -5,7 +5,7 @@ import { newEventId } from "../../utils/common/newEventId";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
-} from "../../../llm-client/types";
+} from "../../../../shared/llm-client/types";
 
 /**
  * Handles the addition of a Text node to the canvas.
