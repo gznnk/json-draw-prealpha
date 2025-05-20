@@ -4,9 +4,12 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import type {
 	DirectoryExplorerProps,
 	DropResult,
+	DirectoryItem,
+	ContextMenuPosition,
 } from "./DirectoryExplorerTypes";
 import { DirectoryExplorerContainer } from "./DirectoryExplorerStyled";
 import { DirectoryNode } from "./DirectoryNode";
+import { ContextMenu } from "./ContextMenu";
 import {
 	getRootItems,
 	updateItemsAfterDrop,
@@ -22,9 +25,19 @@ const DirectoryExplorerComponent = ({
 	selectedNodeId,
 	onItemsChange,
 	onSelect,
+	onCreateFolder,
+	onCreateFile,
+	onDelete,
 }: DirectoryExplorerProps) => {
 	// 展開されたノードのIDを管理
 	const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+	// コンテキストメニューの状態
+	const [contextMenu, setContextMenu] = useState<ContextMenuPosition>({
+		x: 0,
+		y: 0,
+		visible: false,
+		item: null,
+	});
 
 	// ノードの展開/非展開を切り替える
 	const toggleExpand = useCallback((id: string) => {
@@ -51,6 +64,54 @@ const DirectoryExplorerComponent = ({
 		[items, onItemsChange],
 	);
 
+	// コンテキストメニューを表示
+	const handleContextMenu = useCallback(
+		(item: DirectoryItem, x: number, y: number) => {
+			setContextMenu({
+				x,
+				y,
+				visible: true,
+				item,
+			});
+		},
+		[],
+	);
+
+	// コンテキストメニューを閉じる
+	const handleCloseContextMenu = useCallback(() => {
+		setContextMenu((prev) => ({ ...prev, visible: false }));
+	}, []);
+
+	// フォルダ作成処理
+	const handleCreateFolder = useCallback(
+		(parentId: string, folderName: string) => {
+			if (onCreateFolder) {
+				onCreateFolder(parentId, folderName);
+			}
+		},
+		[onCreateFolder],
+	);
+
+	// ファイル作成処理
+	const handleCreateFile = useCallback(
+		(parentId: string, fileName: string) => {
+			if (onCreateFile) {
+				onCreateFile(parentId, fileName);
+			}
+		},
+		[onCreateFile],
+	);
+
+	// 削除処理
+	const handleDelete = useCallback(
+		(itemId: string) => {
+			if (onDelete) {
+				onDelete(itemId);
+			}
+		},
+		[onDelete],
+	);
+
 	// ルートレベルのアイテムを取得し、ソート
 	const rootItems = getRootItems(items).sort(sortDirectoryItems);
 	// アイテム選択時の処理
@@ -62,7 +123,6 @@ const DirectoryExplorerComponent = ({
 		},
 		[onSelect],
 	);
-
 	return (
 		<DndProvider backend={HTML5Backend}>
 			<DirectoryExplorerContainer>
@@ -77,8 +137,21 @@ const DirectoryExplorerComponent = ({
 						onDrop={handleDrop}
 						selectedNodeId={selectedNodeId}
 						onSelect={handleSelect}
+						onContextMenu={handleContextMenu}
 					/>
 				))}
+				{contextMenu.visible && contextMenu.item && (
+					<ContextMenu
+						x={contextMenu.x}
+						y={contextMenu.y}
+						item={contextMenu.item}
+						allItems={items}
+						onClose={handleCloseContextMenu}
+						onCreateFolder={handleCreateFolder}
+						onCreateFile={handleCreateFile}
+						onDelete={handleDelete}
+					/>
+				)}
 			</DirectoryExplorerContainer>
 		</DndProvider>
 	);

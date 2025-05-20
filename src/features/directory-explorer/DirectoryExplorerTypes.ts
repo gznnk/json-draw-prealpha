@@ -37,6 +37,12 @@ export type DirectoryExplorerProps = {
 	onItemsChange?: (items: DirectoryItem[]) => void;
 	/** ノード選択時のコールバック */
 	onSelect?: (nodeId: string) => void;
+	/** 新しいフォルダを作成する関数 */
+	onCreateFolder?: (parentId: string, folderName: string) => void;
+	/** 新しいファイルを作成する関数 */
+	onCreateFile?: (parentId: string, fileName: string) => void;
+	/** ファイルまたはフォルダを削除する関数 */
+	onDelete?: (itemId: string) => void;
 };
 
 /**
@@ -63,4 +69,38 @@ export type DirectoryNodeProps = {
 	selectedNodeId?: string | null;
 	/** アイテム選択時のコールバック */
 	onSelect?: (itemId: string) => void;
+	/** コンテキストメニュー表示時のコールバック */
+	onContextMenu?: (item: DirectoryItem, x: number, y: number) => void;
+};
+
+/**
+ * コンテキストメニューのプロップス型定義
+ */
+export type ContextMenuProps = {
+	/** コンテキストメニューを表示する位置X */
+	x: number;
+	/** コンテキストメニューを表示する位置Y */
+	y: number;
+	/** メニューが表示されているアイテム */
+	item: DirectoryItem;
+	/** 全てのアイテム */
+	allItems: DirectoryItem[];
+	/** メニューを閉じる関数 */
+	onClose: () => void;
+	/** 新しいフォルダを作成する関数 */
+	onCreateFolder: (parentId: string, folderName: string) => void;
+	/** 新しいファイルを作成する関数 */
+	onCreateFile: (parentId: string, fileName: string) => void;
+	/** ファイルまたはフォルダを削除する関数 */
+	onDelete: (itemId: string) => void;
+};
+
+/**
+ * コンテキストメニューの位置型定義
+ */
+export type ContextMenuPosition = {
+	x: number;
+	y: number;
+	visible: boolean;
+	item: DirectoryItem | null;
 };

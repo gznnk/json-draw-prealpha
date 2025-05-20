@@ -83,3 +83,39 @@ export const ItemIconContainer = styled.span`
   height: 16px;
   margin-right: 4px;
 `;
+
+/**
+ * コンテキストメニューのコンテナ
+ */
+export const ContextMenuContainer = styled.div`
+  position: fixed;
+  z-index: 1000;
+  background-color: #1A1F33;
+  border: 1px solid #2A2F4C;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  min-width: 150px;
+  overflow: hidden;
+`;
+
+/**
+ * コンテキストメニューの項目
+ */
+export const ContextMenuItem = styled.div`
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #C0C4D2;
+  
+  &:hover {
+    background-color: #2A2F4C;
+  }
+`;
+
+/**
+ * コンテキストメニューのセパレーター
+ */
+export const ContextMenuSeparator = styled.div`
+  height: 1px;
+  background-color: #2A2F4C;
+  margin: 4px 0;
+`;

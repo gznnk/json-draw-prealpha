@@ -29,6 +29,7 @@ const DirectoryNodeComponent = ({
 	onDragLeave,
 	selectedNodeId,
 	onSelect,
+	onContextMenu,
 }: DirectoryNodeProps) => {
 	const [dragOverNodeList, setDragOverNodeList] = useState<string[]>([]);
 	const ref = useRef<HTMLDivElement>(null);
@@ -177,7 +178,17 @@ const DirectoryNodeComponent = ({
 			}
 			isFolder={item.isDirectory}
 		>
-			<NodeRow level={level} onClick={handleClick} isSelected={isSelected}>
+			<NodeRow
+				level={level}
+				onClick={handleClick}
+				isSelected={isSelected}
+				onContextMenu={(e) => {
+					e.preventDefault();
+					if (onContextMenu) {
+						onContextMenu(item, e.clientX, e.clientY);
+					}
+				}}
+			>
 				{/* 展開/非展開アイコン */}
 				<ExpandIconContainer>
 					{item.isDirectory ? (
@@ -210,6 +221,7 @@ const DirectoryNodeComponent = ({
 						onDragLeave={handleFileDragLeave}
 						selectedNodeId={selectedNodeId}
 						onSelect={onSelect}
+						onContextMenu={onContextMenu}
 					/>
 				))}
 		</NodeContainer>
