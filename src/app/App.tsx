@@ -12,6 +12,7 @@ import type { LLMClient } from "../shared/llm-client";
 import { Page } from "./components/Page";
 import { SplitView } from "./components/SplitView/SplitView";
 import { DirectoryExplorer } from "../features/directory-explorer";
+import type { DirectoryItem } from "../features/directory-explorer";
 
 // Import utils.
 import { Profiler } from "../utils/Profiler";
@@ -24,7 +25,6 @@ import { createSandbox } from "./tools/sandbox";
 import { newWork } from "./tools/new_work";
 
 // Import repository and hooks.
-import type { DirectoryItem } from "../features/directory-explorer";
 import { useWorks } from "./hooks/useWorks";
 import type { WorkingItem } from "./model/WorkingItem";
 import { MarkdownEditor } from "../features/markdown-editor";
@@ -75,9 +75,8 @@ const App = (): ReactElement => {
 	const [apiKey, setApiKey] = useState<string | null>(null);
 	const [llmClient, setLLMClient] = useState<LLMClient | null>(null);
 	const { works, updateWorks, addWork } = useWorks();
-	const [directoryItems, setDirectoryItems] = useState<DirectoryItem[]>([]);
 	const [workingItems, setWorkingItems] = useState<WorkingItem[]>([]);
-	const [selectedItem, setSelectedItem] = useState<DirectoryItem | undefined>(
+	const [selectedItem, setSelectedItem] = useState<string | undefined>(
 		undefined,
 	);
 
@@ -92,26 +91,13 @@ const App = (): ReactElement => {
 					content: "",
 				},
 			]);
-			setSelectedItem({
-				id: work.id,
-			} as DirectoryItem);
+			setSelectedItem(work.id);
 		} catch (error) {
 			console.error("Failed to add new work:", error);
 		}
 	});
 
-	useEffect(() => {
-		setDirectoryItems(
-			works.map((work) => ({
-				id: work.id,
-				name: work.name,
-				path: work.path,
-				isDirectory: work.type === "group",
-				type: work.type,
-			})),
-		);
-	}, [works]);
-
+	// ドラッグ＆ドロップによるアイテム変更のハンドラ
 	const handleDirectoryItemsChange = useCallback(
 		(newItems: DirectoryItem[]) => {
 			// DirectoryItemの配列をWorkの配列にマッピング
@@ -125,20 +111,128 @@ const App = (): ReactElement => {
 			});
 
 			// 状態とストレージを更新
-			setDirectoryItems(newItems);
 			updateWorks(updatedWorks);
 		},
 		[updateWorks],
 	);
 
+	// フォルダを作成する処理
+	const handleCreateFolder = useCallback(
+		async (parentId: string, folderName: string) => {
+			try {
+				// 親フォルダの情報を取得
+				const parentItem = works.find((work) => work.id === parentId);
+				const parentPath = parentItem ? parentItem.path : "";
+
+				// 新しいフォルダのパスと一意のIDを生成
+				const folderPath = parentPath
+					? `${parentPath}/${folderName}`
+					: folderName;
+				const folderId = `folder-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+				// 新しいワーク(フォルダ)を作成
+				const newFolder = {
+					id: folderId,
+					name: folderName,
+					path: folderPath,
+					type: "group",
+				};
+
+				// ワーク配列に追加
+				await addWork(newFolder);
+			} catch (error) {
+				console.error("Failed to create folder:", error);
+			}
+		},
+		[works, addWork],
+	);
+
+	// ファイルを作成する処理
+	const handleCreateFile = useCallback(
+		async (parentId: string, fileName: string) => {
+			try {
+				// 親フォルダの情報を取得
+				const parentItem = works.find((work) => work.id === parentId);
+				const parentPath = parentItem ? parentItem.path : "";
+
+				// 新しいファイルのパスと一意のIDを生成
+				const filePath = parentPath ? `${parentPath}/${fileName}` : fileName;
+				const fileId = `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+				// 新しいワーク(ファイル)を作成
+				const newFile = {
+					id: fileId,
+					name: fileName,
+					path: filePath,
+					type: "document",
+				};
+
+				// ワーク配列に追加
+				await addWork(newFile);
+
+				// 作業アイテムとして追加
+				const newWorkingItem: WorkingItem = {
+					id: fileId,
+					content: "",
+				};
+				setWorkingItems((prev) => [...prev, newWorkingItem]);
+
+				// 作成したファイルを選択
+				setSelectedItem(fileId);
+			} catch (error) {
+				console.error("Failed to create file:", error);
+			}
+		},
+		[works, addWork],
+	);
+
+	// ファイルまたはフォルダを削除する処理
+	const handleDelete = useCallback(
+		async (itemId: string) => {
+			try {
+				// 削除対象のアイテムとその子孫を特定
+				const itemToDelete = works.find((work) => work.id === itemId);
+				if (!itemToDelete) return;
+
+				// アイテムのパスで始まるすべてのアイテムも削除対象に（子孫）
+				const itemsToDelete = works.filter(
+					(work) =>
+						work.id === itemId || work.path.startsWith(`${itemToDelete.path}/`),
+				);
+				const idsToDelete = itemsToDelete.map((item) => item.id);
+
+				// 削除対象外のアイテムだけを残す
+				const updatedWorks = works.filter(
+					(work) => !idsToDelete.includes(work.id),
+				);
+
+				// ワーク配列を更新
+				await updateWorks(updatedWorks);
+
+				// 選択中のアイテムが削除対象の場合、選択を解除
+				if (selectedItem && idsToDelete.includes(selectedItem)) {
+					setSelectedItem(undefined);
+				}
+
+				// 関連するワーキングアイテムも削除
+				setWorkingItems((prev) =>
+					prev.filter((item) => !idsToDelete.includes(item.id)),
+				);
+			} catch (error) {
+				console.error("Failed to delete item:", error);
+			}
+		},
+		[works, updateWorks, selectedItem],
+	);
+
 	const handleDirectoryItemSelect = useCallback(
 		(itemId: string) => {
-			// itemIdからアイテムを検索
-			const item = directoryItems.find((i) => i.id === itemId);
+			// itemIdからワークを検索
+			const item = works.find((work) => work.id === itemId);
 			if (!item) return;
 
-			const workingItem = workingItems.find((i) => i.id === itemId);
-			if (!workingItem) {
+			const workingItem = workingItems.find((item) => item.id === itemId);
+			if (!workingItem && item.type !== "group") {
 				// 新しいワーキングアイテムを作成
 				const newItem: WorkingItem = {
 					id: itemId,
@@ -147,9 +241,9 @@ const App = (): ReactElement => {
 				setWorkingItems((prevItems) => [...prevItems, newItem]);
 			}
 
-			setSelectedItem(item);
+			setSelectedItem(itemId);
 		},
-		[workingItems, directoryItems],
+		[workingItems, works],
 	);
 
 	// Load OpenAI API key from KeyManager on component mount
@@ -231,7 +325,7 @@ const App = (): ReactElement => {
 							});
 							setWorkingItems((prevItems) =>
 								prevItems.map((item) =>
-									item.id === selectedItem?.id
+									item.id === selectedItem
 										? { ...item, content: item.content + textChunk }
 										: item,
 								),
@@ -269,15 +363,12 @@ const App = (): ReactElement => {
 			}
 		},
 	};
-
 	const content =
-		typeof workingItems.find((item) => item.id === selectedItem?.id)
-			?.content === "string"
-			? (workingItems.find((item) => item.id === selectedItem?.id)
+		typeof workingItems.find((item) => item.id === selectedItem)?.content ===
+		"string"
+			? (workingItems.find((item) => item.id === selectedItem)
 					?.content as string)
 			: undefined;
-
-	console.log(content);
 
 	return (
 		<div className="App">
@@ -286,10 +377,19 @@ const App = (): ReactElement => {
 					initialRatio={[0.2, 0.6, 0.2]}
 					left={
 						<DirectoryExplorer
-							items={directoryItems}
-							selectedNodeId={selectedItem?.id}
-							onItemsChange={handleDirectoryItemsChange}
+							items={works.map((work) => ({
+								id: work.id,
+								name: work.name,
+								path: work.path,
+								isDirectory: work.type === "group",
+								type: work.type,
+							}))}
+							selectedNodeId={selectedItem}
 							onSelect={handleDirectoryItemSelect}
+							onItemsChange={handleDirectoryItemsChange}
+							onCreateFolder={handleCreateFolder}
+							onCreateFile={handleCreateFile}
+							onDelete={handleDelete}
 						/>
 					}
 					center={
@@ -299,7 +399,7 @@ const App = (): ReactElement => {
 							onChange={(newMarkdown) => {
 								setWorkingItems((prevItems) =>
 									prevItems.map((item) =>
-										item.id === selectedItem?.id
+										item.id === selectedItem
 											? { ...item, content: newMarkdown }
 											: item,
 									),
