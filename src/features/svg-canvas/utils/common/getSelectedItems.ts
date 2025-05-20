@@ -1,6 +1,6 @@
 import type { Diagram } from "../../catalog/DiagramTypes";
-import { isItemableData } from "../../utils/validation/isItemableData";
-import { isSelectableData } from "../../utils/validation/isSelectableData";
+import { isItemableData } from "../validation/isItemableData";
+import { isSelectableData } from "../validation/isSelectableData";
 
 /**
  * Get the selected items from a list of items.

@@ -11,7 +11,7 @@ import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group/GroupFun
 // Import functions related to SvgCanvas.
 import { applyMultiSelectSourceRecursive } from "../utils/applyMultiSelectSourceRecursive";
 import { applyRecursive } from "../utils/applyRecursive";
-import { getSelectedItems } from "../utils/getSelectedItems";
+import { getSelectedItems } from "../../utils/common/getSelectedItems";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Imports related to this component.
@@ -86,7 +86,7 @@ export const useSelect = (props: CanvasHooksProps) => {
 					return prevState;
 				}
 
-				// 褁E��選択グループ�E初期値を作�E
+				// 褁E��選択グループ�E初期値を作�E
 				const box = calcGroupBoxOfNoRotation(selectedItems);
 				multiSelectGroup = {
 					id: MULTI_SELECT_GROUP,
@@ -98,16 +98,16 @@ export const useSelect = (props: CanvasHooksProps) => {
 					scaleX: 1,
 					scaleY: 1,
 					keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
-					isSelected: true, // 褁E��選択用のグループ�E常に選択状態にする
-					isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
+					isSelected: true, // 褁E��選択用のグループ�E常に選択状態にする
+					isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
 					items: applyRecursive(selectedItems, (item) => {
 						if (!isSelectableData(item)) {
 							return item;
 						}
 						return {
 							...item,
-							isSelected: false, // 褁E��選択用のグループ�Eの図形は選択状態を解除
-							isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
+							isSelected: false, // 褁E��選択用のグループ�Eの図形は選択状態を解除
+							isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
 						};
 					}),
 				} as GroupData;
@@ -115,7 +115,7 @@ export const useSelect = (props: CanvasHooksProps) => {
 				// Set `isMultiSelectSource` to true to hide the transform outline of the original diagrams during multi-selection.
 				items = applyMultiSelectSourceRecursive(items);
 			} else {
-				// 褁E��選択でなぁE��合�E、�E図形に対して褁E��選択�E選択�EではなぁE��設宁E
+				// 褁E��選択でなぁE��合�E、�E図形に対して褁E��選択�E選択�EではなぁE��設宁E
 				items = applyRecursive(items, (item) => {
 					if (isSelectableData(item)) {
 						return {

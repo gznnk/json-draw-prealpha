@@ -6,7 +6,7 @@ import { DiagramExportFunctions } from "../../catalog/DiagramExportFunctions";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { getSelectedItems } from "../utils/getSelectedItems";
+import { getSelectedItems } from "../../utils/common/getSelectedItems";
 
 /**
  * Custom hook to handle export events on the canvas.
@@ -41,7 +41,7 @@ export const useExport = (props: CanvasHooksProps) => {
 					"image/webp": "webp",
 					"application/pdf": "pdf",
 					"text/plain": "txt",
-					// 忁E��に応じて追加
+					// 忁E��に応じて追加
 				};
 
 				const ext = mimeToExt[blob.type] || "txt"; // Default to txt if type is unknown.

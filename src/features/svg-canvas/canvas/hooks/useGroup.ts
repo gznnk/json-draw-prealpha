@@ -10,7 +10,7 @@ import { newId } from "../../utils/shapes/common/newId";
 import { newEventId } from "../../utils/common/newEventId";
 import { addHistory } from "../utils/addHistory";
 import { clearMultiSelectSourceRecursive } from "../utils/clearMultiSelectSourceRecursive";
-import { getSelectedItems } from "../utils/getSelectedItems";
+import { getSelectedItems } from "../../utils/common/getSelectedItems";
 import { removeGroupedRecursive } from "../utils/removeGroupedRecursive";
 
 /**
@@ -31,8 +31,8 @@ export const useGroup = (props: CanvasHooksProps) => {
 		setCanvasState((prevState) => {
 			const selectedItems = getSelectedItems(prevState.items);
 			if (selectedItems.length < 2) {
-				// 選択されてぁE��図形ぁEつ未満の場合�Eグループ化させなぁE
-				// ここに到達する場合�E呼び出し�Eの制御に不備あり
+				// 選択されてぁE��図形ぁEつ未満の場合�Eグループ化させなぁE
+				// ここに到達する場合�E呼び出し�Eの制御に不備あり
 				console.error("Invalid selection count for group.");
 				return prevState;
 			}
@@ -58,14 +58,14 @@ export const useGroup = (props: CanvasHooksProps) => {
 				})),
 			};
 
-			// グループ化された図形を図形配�Eから削除
+			// グループ化された図形を図形配�Eから削除
 			let items = removeGroupedRecursive(prevState.items);
 			// 新しいグループを追加
 			items = [...items, group];
-			// 褁E��選択�E選択�E設定を解除
+			// 褁E��選択�E選択�E設定を解除
 			items = clearMultiSelectSourceRecursive(items);
 
-			// 新しい状態を作�E
+			// 新しい状態を作�E
 			let newState = {
 				...prevState,
 				items,
