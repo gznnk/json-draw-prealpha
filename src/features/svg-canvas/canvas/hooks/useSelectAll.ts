@@ -11,10 +11,8 @@ import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group";
 
 // Import functions related to SvgCanvas.
 import { isSelectableData } from "../../utils/validation/isSelectableData";
-import {
-	applyMultiSelectSourceRecursive,
-	applyRecursive,
-} from "../SvgCanvasFunctions";
+import { applyMultiSelectSourceRecursive } from "../utils/applyMultiSelectSourceRecursive";
+import { applyRecursive } from "../utils/applyRecursive";
 
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
@@ -76,16 +74,16 @@ export const useSelectAll = (props: CanvasHooksProps) => {
 				scaleX: 1,
 				scaleY: 1,
 				keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
-				isSelected: true, // 複数選択用のグループは常に選択状態にする
-				isMultiSelectSource: false, // 複数選択の選択元ではないと設定
+				isSelected: true, // 褁E��選択用のグループ�E常に選択状態にする
+				isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
 				items: applyRecursive(multiSelectGroupItems, (item) => {
 					if (!isSelectableData(item)) {
 						return item;
 					}
 					return {
 						...item,
-						isSelected: false, // 複数選択用のグループ内の図形は選択状態を解除
-						isMultiSelectSource: false, // 複数選択の選択元ではないと設定
+						isSelected: false, // 褁E��選択用のグループ�Eの図形は選択状態を解除
+						isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
 					};
 				}),
 			} as GroupData;

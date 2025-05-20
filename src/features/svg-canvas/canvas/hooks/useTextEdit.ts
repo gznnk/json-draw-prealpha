@@ -8,7 +8,7 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 import type { TextEditorState } from "../../components/core/Textable/TextEditor/TextEditorTypes";
 
 // Import functions related to SvgCanvas.
-import { applyRecursive } from "../SvgCanvasFunctions";
+import { applyRecursive } from "../utils/applyRecursive";
 
 /**
  * Custom hook to handle text edit events on the canvas.

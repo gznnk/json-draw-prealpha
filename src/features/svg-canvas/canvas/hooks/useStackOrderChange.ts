@@ -9,7 +9,7 @@ import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { newEventId } from "../../utils/common/newEventId";
-import { addHistory } from "../SvgCanvasFunctions";
+import { addHistory } from "../utils/addHistory";
 
 /**
  * Custom hook to handle stack order change events on the canvas.
@@ -59,11 +59,11 @@ export const useStackOrderChange = (props: CanvasHooksProps) => {
 				return newItems;
 			};
 
-			// 再帰的に探し、idが一致する図形の属する親のitems配列を対象に並び替える
+			// 再帰皁E��探し、idが一致する図形の属する親のitems配�Eを対象に並び替える
 			const updateOrderRecursive = (items: Diagram[]): Diagram[] => {
 				return items.map((item) => {
 					if (isItemableData(item)) {
-						// グループ内を再帰的に調査
+						// グループ�Eを�E帰皁E��調査
 						if (item.items?.some((child) => child.id === e.id)) {
 							return {
 								...item,
@@ -79,7 +79,7 @@ export const useStackOrderChange = (props: CanvasHooksProps) => {
 				});
 			};
 
-			// top-level にある場合の対応
+			// top-level にある場合�E対忁E
 			let items = prevState.items;
 			if (items.some((item) => item.id === e.id)) {
 				items = moveInList(items);
@@ -94,7 +94,7 @@ export const useStackOrderChange = (props: CanvasHooksProps) => {
 			};
 
 			// Add a new history entry.
-			newState.lastHistoryEventId = newEventId(); // TODO: Trigger側で設定するようにする
+			newState.lastHistoryEventId = newEventId(); // TODO: Trigger側で設定するよぁE��する
 			newState = addHistory(prevState, newState);
 
 			return newState;

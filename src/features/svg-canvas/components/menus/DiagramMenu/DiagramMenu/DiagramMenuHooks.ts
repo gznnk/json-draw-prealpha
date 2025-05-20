@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // TODO: 場所
-import { getSelectedItems } from "../../../../canvas/SvgCanvasFunctions";
+import { getSelectedItems } from "../../../../canvas/utils/getSelectedItems";
 
 // Import types related to SvgCanvas.
 import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";

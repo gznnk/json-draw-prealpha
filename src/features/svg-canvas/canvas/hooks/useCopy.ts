@@ -8,7 +8,7 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../utils/validation/isItemableData";
-import { getSelectedItems } from "../SvgCanvasFunctions";
+import { getSelectedItems } from "../utils/getSelectedItems";
 
 /**
  * Collects all shape IDs contained in the specified list

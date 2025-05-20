@@ -7,7 +7,7 @@ import { SvgCanvas, useSvgCanvas } from "../../../features/svg-canvas/canvas";
 import type { SvgCanvasRef } from "../../../features/svg-canvas/canvas/SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { loadCanvasDataFromLocalStorage } from "../../../features/svg-canvas/canvas/SvgCanvasFunctions";
+import { loadCanvasDataFromLocalStorage } from "../../../features/svg-canvas/canvas/utils/loadCanvasDataFromLocalStorage";
 
 // Import types related to this component.
 import type { CanvasSheetProps } from "./CanvasSheetTypes";

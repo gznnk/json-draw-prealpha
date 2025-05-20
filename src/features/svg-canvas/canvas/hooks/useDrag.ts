@@ -9,14 +9,12 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 import { useCanvasResize } from "./useCanvasResize";
 
 // Import functions related to SvgCanvas.
-import {
-	addHistory,
-	applyRecursive,
-	isDiagramChangingEvent,
-	isHistoryEvent,
-	updateConnectPointsAndNotifyMove,
-	updateOutlineOfAllGroups,
-} from "../SvgCanvasFunctions";
+import { addHistory } from "../utils/addHistory";
+import { applyRecursive } from "../utils/applyRecursive";
+import { isDiagramChangingEvent } from "../utils/isDiagramChangingEvent";
+import { isHistoryEvent } from "../utils/isHistoryEvent";
+import { updateConnectPointsAndNotifyMove } from "../utils/updateConnectPointsAndNotifyMove";
+import { updateOutlineOfAllGroups } from "../utils/updateOutlineOfAllGroups";
 
 /**
  * Custom hook to handle drag events on the canvas.

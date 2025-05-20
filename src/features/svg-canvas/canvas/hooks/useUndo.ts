@@ -5,10 +5,8 @@ import { useCallback, useRef } from "react";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import {
-	clearSelectedRecursive,
-	saveCanvasDataToLocalStorage,
-} from "../SvgCanvasFunctions";
+import { clearSelectedRecursive } from "../utils/clearSelectedRecursive";
+import { saveCanvasDataToLocalStorage } from "../utils/saveCanvasDataToLocalStorage";
 
 /**
  * Custom hook to handle undo events on the canvas.
