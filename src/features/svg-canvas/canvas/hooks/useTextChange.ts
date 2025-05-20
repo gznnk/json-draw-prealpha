@@ -7,7 +7,8 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 import type { TextEditorState } from "../../components/core/Textable/TextEditor/TextEditorTypes";
 
 // Import functions related to SvgCanvas.
-import { addHistory, applyRecursive } from "../SvgCanvasFunctions";
+import { addHistory } from "../utils/addHistory";
+import { applyRecursive } from "../utils/applyRecursive";
 
 /**
  * Custom hook to handle text change events on the canvas.
@@ -25,7 +26,7 @@ export const useTextChange = (props: CanvasHooksProps) => {
 		const { setCanvasState } = refBus.current.props;
 
 		setCanvasState((prevState) => {
-			// 新しい状態を作成
+			// 新しい状態を作�E
 			let newState = {
 				...prevState,
 				items: applyRecursive(prevState.items, (item) =>

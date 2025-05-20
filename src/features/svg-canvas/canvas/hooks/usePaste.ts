@@ -16,7 +16,7 @@ import { isConnectableData } from "../../utils/validation/isConnectableData";
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { isSelectableData } from "../../utils/validation/isSelectableData";
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
-import { getDiagramById } from "../SvgCanvasFunctions";
+import { getDiagramById } from "../utils/getDiagramById";
 
 /**
  * Offset amount when pasting shapes

@@ -9,11 +9,9 @@ import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 import { newEventId } from "../../utils/common/newEventId";
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { isSelectableData } from "../../utils/validation/isSelectableData";
-import {
-	addHistory,
-	applyRecursive,
-	getDiagramById,
-} from "../SvgCanvasFunctions";
+import { addHistory } from "../utils/addHistory";
+import { applyRecursive } from "../utils/applyRecursive";
+import { getDiagramById } from "../utils/getDiagramById";
 
 /**
  * Custom hook to handle delete events on the canvas.

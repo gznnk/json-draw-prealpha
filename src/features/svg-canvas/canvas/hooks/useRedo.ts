@@ -5,10 +5,8 @@ import { useCallback, useRef } from "react";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import {
-	clearSelectedRecursive,
-	saveCanvasDataToLocalStorage,
-} from "../SvgCanvasFunctions";
+import { clearSelectedRecursive } from "../utils/clearSelectedRecursive";
+import { saveCanvasDataToLocalStorage } from "../utils/saveCanvasDataToLocalStorage";
 
 /**
  * Custom hook to handle redo events on the canvas.
@@ -26,10 +24,10 @@ export const useRedo = (props: CanvasHooksProps) => {
 		const { setCanvasState } = refBus.current.props;
 
 		setCanvasState((prevState) => {
-			// 次の状態を取得
+			// 次の状態を取征E
 			const nextIndex = prevState.historyIndex + 1;
 			if (nextIndex >= prevState.history.length) {
-				// 履歴がない場合は何もしない
+				// 履歴がなぁE��合�E何もしなぁE
 				return prevState;
 			}
 			const nextHistory = prevState.history[nextIndex];

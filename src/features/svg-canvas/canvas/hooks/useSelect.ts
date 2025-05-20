@@ -9,11 +9,9 @@ import type { DiagramSelectEvent } from "../../types/events/DiagramSelectEvent";
 import { calcGroupBoxOfNoRotation } from "../../components/shapes/Group/GroupFunctions";
 
 // Import functions related to SvgCanvas.
-import {
-	applyMultiSelectSourceRecursive,
-	applyRecursive,
-	getSelectedItems,
-} from "../SvgCanvasFunctions";
+import { applyMultiSelectSourceRecursive } from "../utils/applyMultiSelectSourceRecursive";
+import { applyRecursive } from "../utils/applyRecursive";
+import { getSelectedItems } from "../../utils/common/getSelectedItems";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Imports related to this component.
@@ -88,7 +86,7 @@ export const useSelect = (props: CanvasHooksProps) => {
 					return prevState;
 				}
 
-				// 複数選択グループの初期値を作成
+				// 褁E��選択グループ�E初期値を作�E
 				const box = calcGroupBoxOfNoRotation(selectedItems);
 				multiSelectGroup = {
 					id: MULTI_SELECT_GROUP,
@@ -100,16 +98,16 @@ export const useSelect = (props: CanvasHooksProps) => {
 					scaleX: 1,
 					scaleY: 1,
 					keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
-					isSelected: true, // 複数選択用のグループは常に選択状態にする
-					isMultiSelectSource: false, // 複数選択の選択元ではないと設定
+					isSelected: true, // 褁E��選択用のグループ�E常に選択状態にする
+					isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
 					items: applyRecursive(selectedItems, (item) => {
 						if (!isSelectableData(item)) {
 							return item;
 						}
 						return {
 							...item,
-							isSelected: false, // 複数選択用のグループ内の図形は選択状態を解除
-							isMultiSelectSource: false, // 複数選択の選択元ではないと設定
+							isSelected: false, // 褁E��選択用のグループ�Eの図形は選択状態を解除
+							isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
 						};
 					}),
 				} as GroupData;
@@ -117,7 +115,7 @@ export const useSelect = (props: CanvasHooksProps) => {
 				// Set `isMultiSelectSource` to true to hide the transform outline of the original diagrams during multi-selection.
 				items = applyMultiSelectSourceRecursive(items);
 			} else {
-				// 複数選択でない場合は、全図形に対して複数選択の選択元ではないと設定
+				// 褁E��選択でなぁE��合�E、�E図形に対して褁E��選択�E選択�EではなぁE��設宁E
 				items = applyRecursive(items, (item) => {
 					if (isSelectableData(item)) {
 						return {

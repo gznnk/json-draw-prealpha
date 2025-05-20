@@ -14,7 +14,7 @@ import type { Shape } from "../../../types/base/Shape";
 import { createBestConnectPath } from "../../../components/shapes/ConnectPoint";
 import { newId } from "../../../utils/shapes/common/newId";
 import { calcPointsOuterShape } from "../../../utils/math/geometry/calcPointsOuterShape";
-import { getDiagramById } from "../../SvgCanvasFunctions";
+import { getDiagramById } from "../../utils/getDiagramById";
 import { dispatchNewItemEvent } from "../addNewItem";
 
 // Import related to this component.

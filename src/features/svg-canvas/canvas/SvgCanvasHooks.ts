@@ -7,7 +7,7 @@ import type { TextEditorState } from "../components/core/Textable";
 
 // Import functions related to SvgCanvas.
 import { deepCopy } from "../utils/common/deepCopy";
-import { calcOptimalCanvasSize } from "./SvgCanvasFunctions";
+import { calcOptimalCanvasSize } from "./utils/calcOptimalCanvasSize";
 
 // Imports related to this component.
 import type { SvgCanvasState, SvgCanvasRef } from "./SvgCanvasTypes";

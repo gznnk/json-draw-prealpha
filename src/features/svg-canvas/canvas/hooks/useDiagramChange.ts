@@ -17,14 +17,12 @@ import { useCanvasResize } from "./useCanvasResize";
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { isSelectableData } from "../../utils/validation/isSelectableData";
-import {
-	addHistory,
-	applyRecursive,
-	isDiagramChangingEvent,
-	isHistoryEvent,
-	updateConnectPointsAndCollectRecursive,
-	updateOutlineOfAllGroups,
-} from "../SvgCanvasFunctions";
+import { addHistory } from "../utils/addHistory";
+import { applyRecursive } from "../utils/applyRecursive";
+import { isDiagramChangingEvent } from "../utils/isDiagramChangingEvent";
+import { isHistoryEvent } from "../utils/isHistoryEvent";
+import { updateConnectPointsAndCollectRecursive } from "../utils/updateConnectPointsAndCollectRecursive";
+import { updateOutlineOfAllGroups } from "../utils/updateOutlineOfAllGroups";
 
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";

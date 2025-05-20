@@ -27,7 +27,7 @@ import { Group } from "../components/shapes/Group";
 import { newEventId } from "../utils/common/newEventId";
 
 import UserMenu from "../components/menus/UserMenu/UserMenu";
-import { getDiagramById } from "./SvgCanvasFunctions";
+import { getDiagramById } from "./utils/getDiagramById";
 
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";

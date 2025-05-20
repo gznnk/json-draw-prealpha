@@ -6,11 +6,9 @@ import type { CanvasHooksProps, SvgCanvasState } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../utils/common/newEventId";
-import {
-	addHistory,
-	clearMultiSelectSourceRecursive,
-	ungroupSelectedGroupsRecursive,
-} from "../SvgCanvasFunctions";
+import { addHistory } from "../utils/addHistory";
+import { clearMultiSelectSourceRecursive } from "../utils/clearMultiSelectSourceRecursive";
+import { ungroupSelectedGroupsRecursive } from "../utils/ungroupSelectedGroupsRecursive";
 
 /**
  * Custom hook to handle ungroup events on the canvas.
@@ -31,7 +29,7 @@ export const useUngroup = (props: CanvasHooksProps) => {
 			let newItems = ungroupSelectedGroupsRecursive(prevState.items);
 			newItems = clearMultiSelectSourceRecursive(newItems);
 
-			// 新しい状態を作成
+			// 新しい状態を作�E
 			let newState = {
 				...prevState,
 				items: newItems,
