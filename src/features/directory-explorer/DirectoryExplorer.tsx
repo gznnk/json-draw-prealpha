@@ -122,25 +122,25 @@ const DirectoryExplorerComponent = ({
 			}
 		},
 		[onSelect],
-	);	// コンテナの右クリック時、ルートレベルのコンテキストメニューを表示
+	); // コンテナの右クリック時、ルートレベルのコンテキストメニューを表示
 	const handleRootContextMenu = useCallback((e: React.MouseEvent) => {
 		// 右クリックした位置が特定のDirectoryNodeに属する場合は処理しない
 		// (バブリングで処理されるため)
 		if ((e.target as HTMLElement).closest(".directory-node")) {
 			return;
 		}
-		
+
 		e.preventDefault();
-		
+
 		// ルートフォルダ用の仮想アイテムを作成
 		const rootItem: DirectoryItem = {
 			id: "root",
 			name: "ルート",
 			path: "",
 			isDirectory: true,
-			type: "group"
+			type: "group",
 		};
-		
+
 		// コンテキストメニューを表示
 		setContextMenu({
 			x: e.clientX,
@@ -149,7 +149,7 @@ const DirectoryExplorerComponent = ({
 			item: rootItem,
 		});
 	}, []);
-	
+
 	return (
 		<DndProvider backend={HTML5Backend}>
 			<DirectoryExplorerContainer onContextMenu={handleRootContextMenu}>

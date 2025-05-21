@@ -169,7 +169,8 @@ const DirectoryNodeComponent = ({
 			return prev;
 		});
 	};
-	return (		<NodeContainer
+	return (
+		<NodeContainer
 			ref={ref}
 			isDragging={isDragging}
 			isOver={
@@ -209,7 +210,8 @@ const DirectoryNodeComponent = ({
 			</NodeRow>
 			{/* 子ノードの表示（展開時のみ） */}
 			{isExpanded &&
-				children.map((child) => (					<DirectoryNode
+				children.map((child) => (
+					<DirectoryNode
 						key={child.id}
 						item={child}
 						allItems={allItems}
