@@ -21,6 +21,14 @@ const SafeHtmlPreviewComponent = forwardRef<
 	SafeHtmlPreviewProps
 >(({ html }, forwardedRef) => {
 	const localRef = useRef<HTMLDivElement>(null);
+
+	/**
+	 * 親コンポーネントと子コンポーネント両方からDOM要素への参照を可能にするための仕組み
+	 * 1. 親コンポーネントがrefを渡した場合（forwardedRef !== null）はそれを使用
+	 * 2. 親コンポーネントがrefを渡さない場合は内部のlocalRefを使用
+	 * 3. これにより親子どちらからもPreviewAreaのDOM要素を参照できる
+	 * 4. as React.RefObject<HTMLDivElement>でTypeScriptの型を統一
+	 */
 	const resolvedRef = (forwardedRef ||
 		localRef) as React.RefObject<HTMLDivElement>;
 
