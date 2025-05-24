@@ -12,6 +12,8 @@ export type DirectoryItem = {
 	isDirectory: boolean;
 	/** アイテムの種別 */
 	type?: string;
+	/** 編集中かどうか */
+	isEditing?: boolean;
 };
 
 /**

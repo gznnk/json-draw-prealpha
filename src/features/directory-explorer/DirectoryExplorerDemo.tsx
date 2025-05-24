@@ -5,10 +5,15 @@ import { DirectoryExplorer, type DirectoryItem } from "../directory-explorer";
 const sampleData: DirectoryItem[] = [
 	// ルート階層（順序がランダム）
 	{ id: "1", name: "Cフォルダ", path: "C-folder", isDirectory: true },
-	{ id: "2", name: "Bファイル", path: "B-file", isDirectory: false },
+	{
+		id: "2",
+		name: "Bファイル",
+		path: "B-file",
+		isDirectory: false,
+		isEditing: true,
+	},
 	{ id: "3", name: "Aフォルダ", path: "A-folder", isDirectory: true },
 	{ id: "4", name: "Dファイル", path: "D-file", isDirectory: false },
-
 	// Aフォルダの中身
 	{ id: "5", name: "Zファイル", path: "A-folder/Z-file", isDirectory: false },
 	{
@@ -16,6 +21,7 @@ const sampleData: DirectoryItem[] = [
 		name: "Xサブフォルダ",
 		path: "A-folder/X-subfolder",
 		isDirectory: true,
+		isEditing: true,
 	},
 	{ id: "7", name: "Yファイル", path: "A-folder/Y-file", isDirectory: false },
 

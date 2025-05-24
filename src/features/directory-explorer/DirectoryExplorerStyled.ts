@@ -119,3 +119,22 @@ export const ContextMenuSeparator = styled.div`
   background-color: #2A2F4C;
   margin: 4px 0;
 `;
+
+/**
+ * 編集中アイコンのコンテナ
+ */
+export const EditingIconContainer = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  
+  & > div {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3A79B8;
+  }
+`;

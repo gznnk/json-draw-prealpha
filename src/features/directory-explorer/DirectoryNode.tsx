@@ -11,6 +11,7 @@ import {
 	NodeRow,
 	ExpandIconContainer,
 	ItemIconContainer,
+	EditingIconContainer,
 } from "./DirectoryExplorerStyled";
 import { getDirectChildren, getParentPath } from "./DirectoryExplorerFunctions";
 
@@ -180,6 +181,7 @@ const DirectoryNodeComponent = ({
 			isFolder={item.isDirectory}
 			className={className}
 		>
+			{" "}
 			<NodeRow
 				level={level}
 				onClick={handleClick}
@@ -207,6 +209,12 @@ const DirectoryNodeComponent = ({
 				<ItemIconContainer>{item.isDirectory ? "📁" : "📄"}</ItemIconContainer>
 				{/* アイテム名 */}
 				<span>{item.name}</span>
+				{/* 編集中アイコン */}
+				{item.isEditing && (
+					<EditingIconContainer>
+						<div></div>
+					</EditingIconContainer>
+				)}
 			</NodeRow>
 			{/* 子ノードの表示（展開時のみ） */}
 			{isExpanded &&
