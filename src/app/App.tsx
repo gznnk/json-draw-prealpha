@@ -13,6 +13,8 @@ import { Page } from "./components/Page";
 import { SplitView } from "./components/SplitView/SplitView";
 import { DirectoryExplorer } from "../features/directory-explorer";
 import type { DirectoryItem } from "../features/directory-explorer";
+import { ContentContainer } from "./components/ContentContainer";
+import { ContentType } from "./types/ContentType";
 
 // Import utils.
 import { Profiler } from "../utils/Profiler";
@@ -29,7 +31,6 @@ import { useWorks } from "./hooks/useWorks";
 import { useMarkdowns } from "./hooks/useMarkdowns";
 import type { WorkingItem } from "./model/WorkingItem";
 import type { Markdown } from "./model/Markdown";
-import { MarkdownEditor } from "../features/markdown-editor";
 
 declare global {
 	interface Window {
@@ -461,14 +462,16 @@ const App = (): ReactElement => {
 						/>
 					}
 					center={
-						// マークダウンエディターサンプルを表示（中央ペイン）
-						<MarkdownEditor
-							markdown={content}
-							onChange={(newMarkdown) => {
+						// ContentContainerを表示（中央ペイン）
+						<ContentContainer
+							type={selectedItem ? ContentType.MARKDOWN : undefined}
+							content={content}
+							id={selectedItem}
+							onChange={(newContent: string) => {
 								setWorkingItems((prevItems) =>
 									prevItems.map((item) =>
 										item.id === selectedItem
-											? { ...item, content: newMarkdown, isEditing: true }
+											? { ...item, content: newContent, isEditing: true }
 											: item,
 									),
 								);

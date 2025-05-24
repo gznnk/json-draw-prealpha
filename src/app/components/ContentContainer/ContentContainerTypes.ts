@@ -6,7 +6,7 @@ import type { ContentType } from "../../types/ContentType";
  */
 export type ContentContainerProps = {
 	/** コンテンツの種類 */
-	type: ContentType;
+	type?: ContentType;
 	/** コンテンツの表示データ */
 	content?: string;
 	/** コンテンツのID */
