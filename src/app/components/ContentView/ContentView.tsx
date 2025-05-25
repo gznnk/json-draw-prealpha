@@ -4,11 +4,12 @@ import type { ReactElement } from "react";
 // Import components
 import { MarkdownEditor } from "../../../features/markdown-editor";
 import { SandboxedIframe } from "../../../features/sandboxed-iframe";
-import { CanvasSheet } from "../CanvasSheet";
+import { CanvasView } from "../CanvasView";
 
 // Import types and constants
 import { ContentType } from "../../types/ContentType";
 import type { ContentViewProps } from "./ContentViewTypes";
+import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/SvgCanvasTypes";
 import {
 	EMPTY_CONTENT_MESSAGE,
 	NO_SELECTION_MESSAGE,
@@ -30,6 +31,7 @@ const ContentViewComponent = ({
 }: ContentViewProps): ReactElement => {
 	return (
 		<Container>
+			{" "}
 			{!type ? (
 				<EmptyContent>{NO_SELECTION_MESSAGE}</EmptyContent>
 			) : (
@@ -37,12 +39,16 @@ const ContentViewComponent = ({
 					switch (type) {
 						case ContentType.MARKDOWN:
 							return (
-								<MarkdownEditor markdown={content || ""} onChange={onChange} />
+								<MarkdownEditor
+									markdown={(content as string) || ""}
+									onChange={onChange}
+								/>
 							);
 						case ContentType.CANVAS:
-							return <CanvasSheet id={id || ""} />;
+							// contentを直接SvgCanvasDataとして渡す
+							return <CanvasView content={content as SvgCanvasData} id={id} />;
 						case ContentType.SANDBOX:
-							return <SandboxedIframe srcdoc={content || ""} />;
+							return <SandboxedIframe srcdoc={(content as string) || ""} />;
 						default:
 							return <EmptyContent>{EMPTY_CONTENT_MESSAGE}</EmptyContent>;
 					}

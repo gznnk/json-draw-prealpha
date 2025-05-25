@@ -4,7 +4,7 @@
 export enum ContentType {
 	/** マークダウンエディタ */
 	MARKDOWN = "markdown",
-	/** キャンバス */
+	/** キャンバス (ローカルストレージからロードするか、親コンポーネントからデータを受け取る) */
 	CANVAS = "canvas",
 	/** サンドボックス */
 	SANDBOX = "sandbox",
