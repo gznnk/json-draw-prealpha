@@ -81,7 +81,7 @@ const App = (): ReactElement => {
 	const { works, updateWorks, addWork } = useWorks();
 	const { getMarkdownById, saveMarkdown } = useMarkdowns();
 	const {
-		createConversation,
+		saveOrUpdateConversation,
 		getConversationsByWorkId,
 		deleteConversationsByWorkId,
 	} = useConversation();
@@ -564,10 +564,8 @@ const App = (): ReactElement => {
 							`Saving ${conversationHistory.length} conversation messages for work ${selectedItem}:`,
 							conversationHistory,
 						);
-						console.log(`Current UI messages (${messages.length}):`, messages);
-
-						// 新しい会話を作成または既存の会話を更新
-						await createConversation(
+						console.log(`Current UI messages (${messages.length}):`, messages); // 既存の会話を更新または新しい会話を作成
+						await saveOrUpdateConversation(
 							selectedItem,
 							"openai",
 							conversationHistory,
@@ -601,7 +599,7 @@ const App = (): ReactElement => {
 		saveMarkdown,
 		messages,
 		llmClient,
-		createConversation,
+		saveOrUpdateConversation,
 	]);
 
 	return (

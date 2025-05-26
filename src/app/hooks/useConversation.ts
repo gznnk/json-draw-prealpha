@@ -140,10 +140,59 @@ export const useConversation = () => {
 		[],
 	);
 
+	/**
+	 * 既存の会話を更新するか、新しい会話を作成する関数.
+	 *
+	 * @param workId - 紐づけるWorkのID
+	 * @param provider - LLMプロバイダー
+	 * @param messages - メッセージ配列
+	 * @returns 更新または作成された会話
+	 */
+	const saveOrUpdateConversation = useCallback(
+		async (
+			workId: string,
+			provider: LLMProvider,
+			messages: unknown[],
+		): Promise<Conversation> => {
+			try {
+				// 既存の会話を取得
+				const existingConversations = getConversationsByWorkId(workId);
+
+				if (existingConversations.length > 0) {
+					// 最新の会話を更新
+					const latestConversation = existingConversations.sort(
+						(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+					)[0];
+
+					const updatedConversation: Conversation = {
+						...latestConversation,
+						messages,
+						provider,
+					};
+
+					console.log(
+						`Updating existing conversation ${latestConversation.id} for work ${workId}`,
+					);
+					await updateConversation(updatedConversation);
+					return updatedConversation;
+				}
+
+				// 新しい会話を作成
+				console.log(`Creating new conversation for work ${workId}`);
+				return await createConversation(workId, provider, messages);
+			} catch (error) {
+				console.error("Failed to save or update conversation:", error);
+				throw error;
+			}
+		},
+		[getConversationsByWorkId, updateConversation, createConversation],
+	);
+
 	return {
 		conversations,
 		createConversation,
 		updateConversation,
+		saveOrUpdateConversation,
 		deleteConversation,
 		deleteConversationsByWorkId,
 		getConversationsByWorkId,
