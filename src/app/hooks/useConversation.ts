@@ -115,9 +115,7 @@ export const useConversation = () => {
 			}
 		},
 		[],
-	);
-
-	/**
+	); /**
 	 * 指定したWorkIDに紐づく会話を取得する関数.
 	 *
 	 * @param workId - フィルタリングするWorkID
@@ -125,11 +123,21 @@ export const useConversation = () => {
 	 */
 	const getConversationsByWorkId = useCallback(
 		(workId: string): Conversation[] => {
-			return conversations.filter(
-				(conversation) => conversation.workId === workId,
-			);
+			try {
+				// ローカルストレージから直接取得
+				const allConversations =
+					conversationRepository.getConversationsByWorkIdSync(workId);
+				console.log(
+					`Retrieved ${allConversations.length} conversations from storage for work ${workId}:`,
+					allConversations,
+				);
+				return allConversations;
+			} catch (error) {
+				console.error("Failed to get conversations by work ID:", error);
+				return [];
+			}
 		},
-		[conversations],
+		[],
 	);
 
 	return {

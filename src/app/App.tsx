@@ -29,6 +29,7 @@ import { newWork } from "./tools/new_work";
 // Import repository and hooks.
 import { useWorks } from "./hooks/useWorks";
 import { useMarkdowns } from "./hooks/useMarkdowns";
+import { useConversation } from "./hooks/useConversation";
 import type { WorkingItem } from "./models/WorkingItem";
 import type { Markdown } from "./models/Markdown";
 
@@ -79,6 +80,11 @@ const App = (): ReactElement => {
 	const [llmClient, setLLMClient] = useState<LLMClient | null>(null);
 	const { works, updateWorks, addWork } = useWorks();
 	const { getMarkdownById, saveMarkdown } = useMarkdowns();
+	const {
+		createConversation,
+		getConversationsByWorkId,
+		deleteConversationsByWorkId,
+	} = useConversation();
 	const [workingItems, setWorkingItems] = useState<WorkingItem[]>([]);
 	const [selectedItem, setSelectedItem] = useState<string | undefined>(
 		undefined,
@@ -188,7 +194,6 @@ const App = (): ReactElement => {
 		},
 		[works, addWork],
 	);
-
 	// ファイルまたはフォルダを削除する処理
 	const handleDelete = useCallback(
 		async (itemId: string) => {
@@ -212,6 +217,19 @@ const App = (): ReactElement => {
 				// ワーク配列を更新
 				await updateWorks(updatedWorks);
 
+				// 関連する会話も削除
+				for (const id of idsToDelete) {
+					try {
+						await deleteConversationsByWorkId(id);
+						console.log(`Deleted conversations for work ${id}`);
+					} catch (conversationError) {
+						console.error(
+							`Failed to delete conversations for work ${id}:`,
+							conversationError,
+						);
+					}
+				}
+
 				// 選択中のアイテムが削除対象の場合、選択を解除
 				if (selectedItem && idsToDelete.includes(selectedItem)) {
 					setSelectedItem(undefined);
@@ -225,7 +243,7 @@ const App = (): ReactElement => {
 				console.error("Failed to delete item:", error);
 			}
 		},
-		[works, updateWorks, selectedItem],
+		[works, updateWorks, selectedItem, deleteConversationsByWorkId],
 	);
 
 	const handleDirectoryItemSelect = useCallback(
@@ -261,11 +279,126 @@ const App = (): ReactElement => {
 					};
 					setWorkingItems((prevItems) => [...prevItems, newItem]);
 				}
+			} // 保存済みの会話を取得してLLMクライアントに復元
+			try {
+				const savedConversations = getConversationsByWorkId(itemId);
+				console.log(
+					`Found ${savedConversations.length} saved conversations for work ${itemId}:`,
+					savedConversations,
+				);
+
+				if (savedConversations.length > 0 && apiKey) {
+					// 最新の会話を取得（作成日時でソート）
+					const latestConversation = savedConversations.sort(
+						(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+					)[0];
+
+					// LLMクライアントの会話履歴を復元
+					const client = LLMClientFactory.createClient(apiKey, {
+						tools: [
+							workflowAgent.definition,
+							newSheet.definition,
+							createSandbox.definition,
+							newWork.definition,
+						],
+						functionHandlers: {
+							workflow_agent: workflowAgent.handler,
+							new_sheet: newSheet.handler,
+							create_sandbox: createSandbox.handler,
+							new_work: newWork.createHandler(workEventBus),
+						},
+						systemPrompt:
+							"You are a general-purpose assistant that outputs responses in Markdown format. " +
+							"When including LaTeX expressions, do not use code blocks. " +
+							"Instead, use inline LaTeX syntax like $...$ for inline math and $$...$$ for block math." +
+							"When creating workflows, always create a new sheet first before creating the workflow itself. IMPORTANT TOOL SELECTION: When asked to create HTML content, interactive applications (like calculators, games, demos), you MUST use the create_sandbox tool, NOT workflow_agent. The create_sandbox tool is specifically designed for HTML/JavaScript applications with a complete document structure. If the user request contains keywords like 'アプリ', 'ゲーム', 'デモ', 'HTML', 'インタラクティブ', '計算機', 'アプリケーション', or any interactive content that would benefit from HTML rendering, you MUST use the create_sandbox tool. Use workflow_agent ONLY for workflow diagrams, not for web applications.",
+						initialMessages: latestConversation.messages,
+					});
+					setLLMClient(client);
+
+					// メッセージ履歴も復元
+					const restoredMessages: Message[] = (
+						latestConversation.messages as unknown[]
+					)
+						.filter((msg: unknown) => {
+							// メッセージオブジェクトの妥当性をチェック
+							const messageObj = msg as Record<string, unknown>;
+							return (
+								messageObj &&
+								typeof messageObj === "object" &&
+								messageObj.role &&
+								messageObj.content
+							);
+						})
+						.map((msg: unknown) => {
+							const messageObj = msg as Record<string, unknown>;
+							const role = messageObj.role as string;
+							return {
+								role:
+									role === "user" || role === "assistant"
+										? (role as "user" | "assistant")
+										: "user",
+								content: (messageObj.content as string) || "",
+								timestamp: new Date(
+									(messageObj.timestamp as string) || Date.now(),
+								),
+							};
+						});
+
+					console.log(
+						`Restoring ${restoredMessages.length} messages for work ${itemId}:`,
+						restoredMessages,
+					);
+					setMessages(restoredMessages);
+
+					console.log(
+						`Restored conversation with ${latestConversation.messages.length} messages for work ${itemId}`,
+					);
+				} else if (apiKey) {
+					// 会話履歴がない場合は新しいクライアントを作成
+					console.log(
+						`No conversation history found for work ${itemId}, creating new client`,
+					);
+					const client = LLMClientFactory.createClient(apiKey, {
+						tools: [
+							workflowAgent.definition,
+							newSheet.definition,
+							createSandbox.definition,
+							newWork.definition,
+						],
+						functionHandlers: {
+							workflow_agent: workflowAgent.handler,
+							new_sheet: newSheet.handler,
+							create_sandbox: createSandbox.handler,
+							new_work: newWork.createHandler(workEventBus),
+						},
+						systemPrompt:
+							"You are a general-purpose assistant that outputs responses in Markdown format. " +
+							"When including LaTeX expressions, do not use code blocks. " +
+							"Instead, use inline LaTeX syntax like $...$ for inline math and $$...$$ for block math." +
+							"When creating workflows, always create a new sheet first before creating the workflow itself. IMPORTANT TOOL SELECTION: When asked to create HTML content, interactive applications (like calculators, games, demos), you MUST use the create_sandbox tool, NOT workflow_agent. The create_sandbox tool is specifically designed for HTML/JavaScript applications with a complete document structure. If the user request contains keywords like 'アプリ', 'ゲーム', 'デモ', 'HTML', 'インタラクティブ', '計算機', 'アプリケーション', or any interactive content that would benefit from HTML rendering, you MUST use the create_sandbox tool. Use workflow_agent ONLY for workflow diagrams, not for web applications.",
+					});
+					setLLMClient(client);
+					setMessages([]);
+				} else {
+					console.log(
+						`No API key available for work ${itemId}, cannot restore conversation`,
+					);
+				}
+			} catch (error) {
+				console.error(`Failed to load conversation for work ${itemId}:`, error);
 			}
 
 			setSelectedItem(itemId);
 		},
-		[workingItems, works, getMarkdownById],
+		[
+			workingItems,
+			works,
+			getMarkdownById,
+			getConversationsByWorkId,
+			apiKey,
+			workEventBus,
+		],
 	);
 
 	// Load OpenAI API key from KeyManager on component mount
@@ -391,7 +524,6 @@ const App = (): ReactElement => {
 			? (workingItems.find((item) => item.id === selectedItem)
 					?.content as string)
 			: undefined;
-
 	/**
 	 * 保存ボタンがクリックされた時のハンドラ
 	 */
@@ -422,7 +554,35 @@ const App = (): ReactElement => {
 				await saveMarkdown(markdownToSave);
 				console.log(
 					`Content saved successfully for item with ID: ${selectedItem}`,
-				);
+				); // 会話履歴を保存
+				if (messages.length > 0 && llmClient) {
+					try {
+						// LLMクライアントから現在の会話履歴を取得
+						const conversationHistory = llmClient.getConversationHistory();
+
+						console.log(
+							`Saving ${conversationHistory.length} conversation messages for work ${selectedItem}:`,
+							conversationHistory,
+						);
+						console.log(`Current UI messages (${messages.length}):`, messages);
+
+						// 新しい会話を作成または既存の会話を更新
+						await createConversation(
+							selectedItem,
+							"openai",
+							conversationHistory,
+						);
+
+						console.log(
+							`Conversation saved successfully for work ${selectedItem} with ${conversationHistory.length} messages`,
+						);
+					} catch (conversationError) {
+						console.error(
+							"Failed to save conversation history:",
+							conversationError,
+						);
+					}
+				}
 
 				// 編集フラグをリセット
 				setWorkingItems((prev) =>
@@ -434,7 +594,15 @@ const App = (): ReactElement => {
 				console.error("Failed to save markdown content:", error);
 			}
 		}
-	}, [selectedItem, workingItems, works, saveMarkdown]);
+	}, [
+		selectedItem,
+		workingItems,
+		works,
+		saveMarkdown,
+		messages,
+		llmClient,
+		createConversation,
+	]);
 
 	return (
 		<div className="App">

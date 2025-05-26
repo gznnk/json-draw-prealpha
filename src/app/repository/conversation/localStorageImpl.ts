@@ -74,7 +74,6 @@ export class LocalStorageConversationRepository
 		}
 		return value;
 	}
-
 	/**
 	 * Retrieves conversations filtered by work ID.
 	 *
@@ -86,6 +85,29 @@ export class LocalStorageConversationRepository
 		return allConversations.filter(
 			(conversation) => conversation.workId === workId,
 		);
+	}
+
+	/**
+	 * Retrieves conversations filtered by work ID synchronously.
+	 *
+	 * @param workId - The ID of the work to filter by
+	 * @returns An array of Conversation objects associated with the work
+	 */
+	getConversationsByWorkIdSync(workId: string): Conversation[] {
+		try {
+			const data = window.localStorage.getItem(this.storageKey);
+			if (!data) {
+				return [];
+			}
+			const parsed = JSON.parse(data, this.dateReviver) as Conversation[];
+			const allConversations = Array.isArray(parsed) ? parsed : [];
+			return allConversations.filter(
+				(conversation) => conversation.workId === workId,
+			);
+		} catch (error) {
+			console.error("Failed to load conversations synchronously:", error);
+			return [];
+		}
 	}
 
 	/**

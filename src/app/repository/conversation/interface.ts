@@ -14,6 +14,14 @@ export interface ConversationRepository {
 	getConversationsByWorkId(workId: string): Promise<Conversation[]>;
 
 	/**
+	 * Retrieves conversations filtered by work ID synchronously.
+	 *
+	 * @param workId - The ID of the work to filter by
+	 * @returns An array of Conversation objects associated with the work
+	 */
+	getConversationsByWorkIdSync(workId: string): Conversation[];
+
+	/**
 	 * Saves a new conversation or updates an existing one.
 	 * If a conversation with the same ID exists, it will be updated.
 	 * Otherwise, a new conversation will be created.
