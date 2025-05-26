@@ -13,6 +13,7 @@ import type {
  */
 export class OpenAIClient implements LLMClient {
 	private readonly openai: OpenAI;
+	private readonly systemPrompt?: string;
 	private readonly tools?: ToolDefinition[];
 	private readonly functionHandlers: FunctionHandlerMap = {};
 	private messages: OpenAI.Responses.ResponseInput = [];
@@ -42,12 +43,9 @@ export class OpenAIClient implements LLMClient {
 			this.functionHandlers = { ...options.functionHandlers };
 		}
 
-		// システムプロンプトが指定されていれば初期メッセージとして追加
+		// システムプロンプトが指定されていれば登録
 		if (options?.systemPrompt) {
-			this.messages.push({
-				role: "system",
-				content: options.systemPrompt,
-			});
+			this.systemPrompt = options.systemPrompt;
 		}
 	}
 
@@ -97,6 +95,7 @@ export class OpenAIClient implements LLMClient {
 			// ストリーミングレスポンスの作成
 			const stream = await this.openai.responses.create({
 				model: "gpt-4o",
+				instructions: this.systemPrompt,
 				input: this.messages,
 				tools: openaiTools,
 				stream: true,
