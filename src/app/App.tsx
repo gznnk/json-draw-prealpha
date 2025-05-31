@@ -10,7 +10,7 @@ import type { LLMClient } from "../shared/llm-client";
 
 // Import components.
 import { Page } from "./components/Page";
-import { SplitView } from "./components/SplitView/SplitView";
+import { ThreeColumnSplitView } from "./components/SplitView";
 import { DirectoryExplorer } from "../features/directory-explorer";
 import type { DirectoryItem } from "../features/directory-explorer";
 import { ContentView } from "./components/ContentView";
@@ -604,8 +604,9 @@ const App = (): ReactElement => {
 
 	return (
 		<div className="App">
+			{" "}
 			<Page onSave={selectedItem ? handleSave : undefined}>
-				<SplitView
+				<ThreeColumnSplitView
 					initialRatio={[0.2, 0.6, 0.2]}
 					left={
 						<DirectoryExplorer
