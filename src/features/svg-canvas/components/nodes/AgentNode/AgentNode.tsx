@@ -6,7 +6,6 @@ import { memo, useContext, useEffect, useRef, useState } from "react";
 import { OpenAI } from "openai";
 
 // Import components related to SvgCanvas.
-import { SvgCanvasContext } from "../../../canvas";
 import { IconContainer } from "../../core/IconContainer";
 import { Agent } from "../../icons/Agent";
 import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
@@ -29,6 +28,9 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 // Import related to this component.
 import { AI_AGENT_INSTRUCTIONS, AI_AGENT_TOOLS } from "./AgentConstants";
 import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
+
+// Import SvgCanvas context.
+import { SvgCanvasContext } from "../../../canvas/SvgCanvasContext";
 
 /**
  * AgentNode component.

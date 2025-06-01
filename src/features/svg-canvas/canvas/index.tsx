@@ -1,2 +1,2 @@
-export { SvgCanvas, SvgCanvasContext } from "./SvgCanvas";
+export { SvgCanvas } from "./SvgCanvas";
 export { useSvgCanvas } from "./SvgCanvasHooks";

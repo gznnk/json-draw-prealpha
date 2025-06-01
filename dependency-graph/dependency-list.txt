@@ -1,9 +1,10 @@
-Processed 492 files (3.4s) (2 warnings)
+Processed 493 files (3.4s) (2 warnings)
 
 app/App.tsx
   app/components/CanvasView/index.ts
   app/components/Page/index.tsx
-  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  app/models/SvgCanvas.ts
+  app/repository/svg-canvas/index.ts
 app/components/Body/Body.tsx
   app/components/Body/BodyStyled.ts
 app/components/Body/BodyStyled.ts
@@ -165,11 +166,10 @@ features/markdown-editor/index.tsx
 features/markdown-editor/types.ts
 features/svg-canvas/canvas/SvgCanvas.tsx
   features/svg-canvas/canvas/SvgCanvasConstants.ts
+  features/svg-canvas/canvas/SvgCanvasContext.ts
   features/svg-canvas/canvas/SvgCanvasStyled.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/utils/getDiagramById.ts
   features/svg-canvas/catalog/DiagramComponentCatalog.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/core/Textable/index.tsx
   features/svg-canvas/components/menus/CanvasMenu/index.tsx
   features/svg-canvas/components/menus/ContextMenu/index.tsx
@@ -181,6 +181,10 @@ features/svg-canvas/canvas/SvgCanvas.tsx
   features/svg-canvas/types/events/DiagramSelectEvent.ts
   features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/canvas/SvgCanvasConstants.ts
+features/svg-canvas/canvas/SvgCanvasContext.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/utils/getDiagramById.ts
+  features/svg-canvas/catalog/DiagramTypes.ts
 features/svg-canvas/canvas/SvgCanvasHooks.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/useClearAllSelection.ts
@@ -849,7 +853,7 @@ features/svg-canvas/components/menus/UserMenu/UserMenu.tsx
   utils/KeyManager.ts
 features/svg-canvas/components/nodes/AgentNode/AgentConstants.ts
 features/svg-canvas/components/nodes/AgentNode/AgentNode.tsx
-  features/svg-canvas/canvas/index.tsx
+  features/svg-canvas/canvas/SvgCanvasContext.ts
   features/svg-canvas/canvas/observers/addNewItem/index.ts
   features/svg-canvas/canvas/observers/connectNodes/index.ts
   features/svg-canvas/components/core/IconContainer/index.tsx
@@ -951,7 +955,7 @@ features/svg-canvas/components/nodes/WebSearchNode/WebSearchNode.tsx
 features/svg-canvas/components/nodes/WebSearchNode/index.tsx
   features/svg-canvas/components/nodes/WebSearchNode/WebSearchNode.tsx
 features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx
-  features/svg-canvas/canvas/index.tsx
+  features/svg-canvas/canvas/SvgCanvasContext.ts
   features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
   features/svg-canvas/components/shapes/ConnectPoint/index.tsx

@@ -11,7 +11,6 @@ import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeE
 import type { Shape } from "../../../../types/base/Shape";
 
 // Import components related to SvgCanvas.
-import { SvgCanvasContext } from "../../../../canvas";
 import { createBestConnectPath } from "../../ConnectPoint";
 import { Path } from "../../Path";
 
@@ -22,6 +21,9 @@ import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees
 
 // Imports related to this component.
 import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
+
+// Import SvgCanvas context.
+import { SvgCanvasContext } from "../../../../canvas/SvgCanvasContext";
 
 /**
  * ConnectLine component.
