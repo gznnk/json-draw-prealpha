@@ -9,4 +9,6 @@ export type CanvasViewProps = {
 	content: SvgCanvasData;
 	/** コンポーネントの一意識別子（省略可能） */
 	id?: string;
+
+	onDataChange?: (data: SvgCanvasData) => void;
 };

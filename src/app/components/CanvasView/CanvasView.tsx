@@ -15,6 +15,7 @@ import type { CanvasViewProps } from "./CanvasViewTypes";
 const CanvasViewComponent = ({
 	content,
 	id,
+	onDataChange,
 }: CanvasViewProps): ReactElement => {
 	// キャンバスへの参照を作成
 	const canvasRef = useRef<SvgCanvasRef | null>(null);
@@ -34,6 +35,7 @@ const CanvasViewComponent = ({
 		scrollLeft: 0,
 		scrollTop: 0,
 		canvasRef,
+		onDataChange,
 	});
 
 	// SvgCanvas コンポーネントに全ての必要なプロパティを展開して渡す

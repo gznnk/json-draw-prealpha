@@ -171,6 +171,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	// Observer for the connect nodes event.
 	useConnectNodes(canvasHooksProps);
+
 	const canvasProps = {
 		...canvasState,
 		onDrag,
