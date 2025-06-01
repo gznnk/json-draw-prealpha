@@ -11,7 +11,7 @@ import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeE
 import type { Shape } from "../../../../types/base/Shape";
 
 // Import components related to SvgCanvas.
-import { createBestConnectPath } from "../../ConnectPoint";
+import { createBestConnectPath } from "../../../../utils/shapes/connectPoint/createBestConnectPath";
 import { Path } from "../../Path";
 
 // Import utils.

@@ -20,11 +20,9 @@ import { newId } from "../../../../utils/shapes/common/newId";
 // Imports related to this component.
 import { triggerNewConnectLine } from "../NewConnectLine";
 import { EVENT_NAME_CONNECTTION } from "./ConnectPointConstants";
-import {
-	createBestConnectPath,
-	createConnectPathOnDrag,
-	getLineDirection,
-} from "./ConnectPointFunctions";
+import { createBestConnectPath } from "../../../../utils/shapes/connectPoint/createBestConnectPath";
+import { createConnectPathOnDrag } from "../../../../utils/shapes/connectPoint/createConnectPathOnDrag";
+import { getLineDirection } from "../../../../utils/shapes/connectPoint/getLineDirection";
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
 
 /**

@@ -1,4 +1,4 @@
-Processed 493 files (3.4s) (2 warnings)
+Processed 504 files (3.1s) (2 warnings)
 
 app/App.tsx
   app/components/CanvasView/index.ts
@@ -432,7 +432,6 @@ features/svg-canvas/canvas/observers/connectNodes/useConnectNodes.ts
   features/svg-canvas/canvas/observers/connectNodes/connectNodesConstants.ts
   features/svg-canvas/canvas/utils/getDiagramById.ts
   features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/ConnectPoint/index.tsx
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
   features/svg-canvas/types/data/shapes/ConnectableData.ts
@@ -440,6 +439,7 @@ features/svg-canvas/canvas/observers/connectNodes/useConnectNodes.ts
   features/svg-canvas/types/events/ConnectNodesEvent.ts
   features/svg-canvas/utils/math/geometry/calcPointsOuterShape.ts
   features/svg-canvas/utils/shapes/common/newId.ts
+  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
 features/svg-canvas/canvas/utils/addHistory.ts
   features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
@@ -958,7 +958,6 @@ features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx
   features/svg-canvas/canvas/SvgCanvasContext.ts
   features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
-  features/svg-canvas/components/shapes/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/Path/index.tsx
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
@@ -968,6 +967,7 @@ features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx
   features/svg-canvas/utils/math/common/radiansToDegrees.ts
   features/svg-canvas/utils/math/points/calcRadians.ts
   features/svg-canvas/utils/shapes/common/newId.ts
+  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
 features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
 features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineFunctions.ts
   features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
@@ -1000,7 +1000,6 @@ features/svg-canvas/components/shapes/ConnectLine/index.tsx
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
   features/svg-canvas/components/core/DragPoint/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointFunctions.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/index.tsx
   features/svg-canvas/types/base/Point.ts
@@ -1011,27 +1010,18 @@ features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
   features/svg-canvas/types/props/shapes/ConnectPointProps.ts
   features/svg-canvas/utils/math/geometry/calcRectangleOuterBox.ts
   features/svg-canvas/utils/shapes/common/newId.ts
+  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/createConnectPathOnDrag.ts
+  features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
-features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointFunctions.ts
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
-  features/svg-canvas/types/base/Box.ts
-  features/svg-canvas/types/base/Point.ts
-  features/svg-canvas/types/base/Shape.ts
-  features/svg-canvas/utils/math/common/closer.ts
-  features/svg-canvas/utils/math/common/radiansToDegrees.ts
-  features/svg-canvas/utils/math/geometry/calcRectangleOuterBox.ts
-  features/svg-canvas/utils/math/geometry/isLineIntersectingBox.ts
-  features/svg-canvas/utils/math/geometry/lineIntersects.ts
-  features/svg-canvas/utils/math/points/calcDistance.ts
-  features/svg-canvas/utils/math/points/calcRadians.ts
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/types/base/Shape.ts
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointFunctions.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLine.tsx
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineConstants.ts
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineTypes.ts
@@ -1047,8 +1037,11 @@ features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLine.tsx
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineFunctions.ts
 features/svg-canvas/components/shapes/ConnectPoint/index.tsx
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/index.tsx
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/index.tsx
+  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/components/shapes/Ellipse/Ellipse.tsx
   features/svg-canvas/components/core/PositionLabel/index.tsx
   features/svg-canvas/components/core/Textable/index.tsx
@@ -1619,6 +1612,60 @@ features/svg-canvas/utils/nodes/webSearchNode/createWebSearchNodeData.ts
 features/svg-canvas/utils/shapes/common/createSvgTransform.ts
 features/svg-canvas/utils/shapes/common/getCursorFromAngle.ts
 features/svg-canvas/utils/shapes/common/newId.ts
+features/svg-canvas/utils/shapes/connectPoint/addGridCrossPoint.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+features/svg-canvas/utils/shapes/connectPoint/addMarginToBox.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
+  features/svg-canvas/types/base/Box.ts
+features/svg-canvas/utils/shapes/connectPoint/cleanPath.ts
+  features/svg-canvas/types/base/Point.ts
+  features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
+features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/types/base/Point.ts
+  features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/utils/math/common/closer.ts
+  features/svg-canvas/utils/math/geometry/calcRectangleOuterBox.ts
+  features/svg-canvas/utils/math/geometry/isLineIntersectingBox.ts
+  features/svg-canvas/utils/shapes/connectPoint/addGridCrossPoint.ts
+  features/svg-canvas/utils/shapes/connectPoint/cleanPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/createConnectPathOnDrag.ts
+  features/svg-canvas/utils/shapes/connectPoint/getBestPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
+  features/svg-canvas/utils/shapes/connectPoint/getSecondConnectPoint.ts
+  features/svg-canvas/utils/shapes/connectPoint/removeDuplicatePoints.ts
+features/svg-canvas/utils/shapes/connectPoint/createConnectPathOnDrag.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+  features/svg-canvas/types/base/Box.ts
+  features/svg-canvas/types/base/Point.ts
+  features/svg-canvas/utils/math/common/closer.ts
+  features/svg-canvas/utils/math/geometry/lineIntersects.ts
+  features/svg-canvas/utils/shapes/connectPoint/addMarginToBox.ts
+  features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
+  features/svg-canvas/utils/shapes/connectPoint/isUpDown.ts
+features/svg-canvas/utils/shapes/connectPoint/getBestPath.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+  features/svg-canvas/types/base/Point.ts
+  features/svg-canvas/utils/math/points/calcDistance.ts
+  features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
+features/svg-canvas/utils/shapes/connectPoint/getDirection.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+  features/svg-canvas/utils/math/common/radiansToDegrees.ts
+features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+  features/svg-canvas/utils/math/points/calcRadians.ts
+  features/svg-canvas/utils/shapes/connectPoint/getDirection.ts
+features/svg-canvas/utils/shapes/connectPoint/getSecondConnectPoint.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
+  features/svg-canvas/types/base/Point.ts
+  features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/utils/math/geometry/calcRectangleOuterBox.ts
+  features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
+features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
+  features/svg-canvas/types/base/Point.ts
+features/svg-canvas/utils/shapes/connectPoint/isUpDown.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+features/svg-canvas/utils/shapes/connectPoint/removeDuplicatePoints.ts
+  features/svg-canvas/types/base/Point.ts
 features/svg-canvas/utils/shapes/conversion/circleElementToDiagram.ts
   features/svg-canvas/types/data/shapes/EllipseData.ts
   features/svg-canvas/utils/shapes/ellipse/createEllipseData.ts
