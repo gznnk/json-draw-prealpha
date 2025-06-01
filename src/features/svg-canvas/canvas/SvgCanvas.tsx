@@ -32,6 +32,7 @@ import {
 	HTMLElementsContainer,
 	MultiSelectGroupContainer,
 	Svg,
+	Viewport,
 	ViewportOverlay,
 } from "./SvgCanvasStyled";
 import type {
@@ -323,7 +324,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		});
 
 		return (
-			<>
+			<Viewport>
 				<Container ref={containerRef} onScroll={onScroll}>
 					<SvgCanvasContext.Provider value={stateProvider.current}>
 						<Svg
@@ -372,14 +373,14 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						<TextEditor {...textEditorState} onTextChange={onTextChange} />
 						<DiagramMenu {...diagramMenuProps} />
 					</HTMLElementsContainer>
-					{/* Container for HTML elements fixed to the viewport. */}
-					<ViewportOverlay>
-						<CanvasMenu onNewDiagram={onNewDiagram} />
-						<UserMenu />
-						<ContextMenu {...contextMenuProps} />
-					</ViewportOverlay>
 				</Container>
-			</>
+				{/* Container for HTML elements fixed to the viewport. */}
+				<ViewportOverlay>
+					<CanvasMenu onNewDiagram={onNewDiagram} />
+					<UserMenu />
+					<ContextMenu {...contextMenuProps} />
+				</ViewportOverlay>
+			</Viewport>
 		);
 	},
 );
