@@ -3,7 +3,6 @@ import type { ReactElement } from "react";
 
 // Import components
 import { MarkdownEditor } from "../../../features/markdown-editor";
-import { SandboxedIframe } from "../../../features/sandboxed-iframe";
 import { CanvasView } from "../CanvasView";
 
 // Import types and constants
@@ -47,8 +46,6 @@ const ContentViewComponent = ({
 						case ContentType.CANVAS:
 							// contentを直接SvgCanvasDataとして渡す
 							return <CanvasView content={content as SvgCanvasData} id={id} />;
-						case ContentType.SANDBOX:
-							return <SandboxedIframe srcdoc={(content as string) || ""} />;
 						default:
 							return <EmptyContent>{EMPTY_CONTENT_MESSAGE}</EmptyContent>;
 					}

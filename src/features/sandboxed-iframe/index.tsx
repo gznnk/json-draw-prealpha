@@ -1,1 +1,0 @@
-export { SandboxedIframe } from "./SandboxedIframe";

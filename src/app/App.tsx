@@ -19,8 +19,6 @@ import { OpenAiKeyManager } from "../utils/KeyManager";
 
 // Import AI tools.
 import { workflowAgent } from "../features/svg-canvas/tools/workflow_agent";
-import { newSheet } from "./tools/new_sheet";
-import { createSandbox } from "./tools/sandbox";
 import { newWork } from "./tools/new_work";
 
 // Import repository and hooks.
@@ -96,16 +94,9 @@ const App = (): ReactElement => {
 		if (apiKey) {
 			// LLMClientFactoryを使用してクライアントを初期化
 			const client = LLMClientFactory.createClient(apiKey, {
-				tools: [
-					workflowAgent.definition,
-					newSheet.definition,
-					createSandbox.definition,
-					newWork.definition,
-				],
+				tools: [workflowAgent.definition, newWork.definition],
 				functionHandlers: {
 					workflow_agent: workflowAgent.handler,
-					new_sheet: newSheet.handler,
-					create_sandbox: createSandbox.handler,
 					new_work: newWork.createHandler(workEventBus),
 				},
 				systemPrompt:

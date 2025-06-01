@@ -9,6 +9,7 @@ export const Container = styled.div`
 `;
 
 export const Pane = styled.div`
+  position: relative;
   overflow: auto;
   height: 100%;
 `;
