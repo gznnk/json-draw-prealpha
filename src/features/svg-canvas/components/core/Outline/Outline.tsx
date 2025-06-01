@@ -19,11 +19,13 @@ type OutlineProps = {
 	scaleY: number;
 	isSelected: boolean;
 	isMultiSelectSource: boolean;
+	showAsChildOutline?: boolean;
 };
 
 /**
  * Component that displays a selection outline around diagram elements.
  * Shows a dashed border when an element is selected but not the multi-select source.
+ * Can also show child outline when parent group is selected.
  */
 const OutlineComponent: React.FC<OutlineProps> = ({
 	x,
@@ -35,9 +37,10 @@ const OutlineComponent: React.FC<OutlineProps> = ({
 	scaleY,
 	isSelected,
 	isMultiSelectSource,
+	showAsChildOutline = false,
 }) => {
-	// Don't render if the component is not selected
-	if (!isSelected) {
+	// Don't render if the component is not selected and not showing as child outline
+	if (!isSelected && !showAsChildOutline) {
 		return null;
 	}
 

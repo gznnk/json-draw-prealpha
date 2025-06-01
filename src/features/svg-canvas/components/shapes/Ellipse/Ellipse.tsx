@@ -58,6 +58,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	isTextEditing,
 	isTextEditEnabled = true,
 	isTransparent,
+	showAsChildOutline = false,
 	onDrag,
 	onClick,
 	onSelect,
@@ -274,6 +275,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 				scaleY={scaleY}
 				isSelected={isSelected}
 				isMultiSelectSource={isMultiSelectSource}
+				showAsChildOutline={showAsChildOutline}
 			/>
 			{showTransformative && (
 				<Transformative

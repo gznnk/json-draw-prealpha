@@ -36,6 +36,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 	isMultiSelectSource,
 	syncWithSameId = false,
 	base64Data,
+	showAsChildOutline = false,
 	onDrag,
 	onClick,
 	onSelect,
@@ -139,6 +140,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 				scaleY={scaleY}
 				isSelected={isSelected}
 				isMultiSelectSource={isMultiSelectSource}
+				showAsChildOutline={showAsChildOutline}
 			/>
 			{showTransformative && (
 				<Transformative
