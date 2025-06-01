@@ -1,41 +1,14 @@
-Processed 529 files (4.1s) (2 warnings)
+Processed 492 files (3.4s) (2 warnings)
 
 app/App.tsx
-  app/components/ContentView/index.tsx
+  app/components/CanvasView/index.ts
   app/components/Page/index.tsx
-  app/components/SplitView/SplitView.tsx
-  app/hooks/useConversation.ts
-  app/hooks/useMarkdowns.ts
-  app/hooks/useWorks.ts
-  app/models/Markdown.ts
-  app/models/WorkingItem.ts
-  app/tools/new_sheet/index.ts
-  app/tools/new_work/index.ts
-  app/tools/sandbox/index.ts
-  app/types/ContentType.ts
-  features/directory-explorer/index.ts
-  features/llm-chat-ui/index.tsx
-  features/llm-chat-ui/types.ts
-  features/svg-canvas/tools/workflow_agent/index.ts
-  shared/llm-client/index.ts
-  utils/KeyManager.ts
-  utils/Profiler.ts
-app/agents/interface.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
 app/components/Body/Body.tsx
   app/components/Body/BodyStyled.ts
 app/components/Body/BodyStyled.ts
 app/components/Body/index.tsx
   app/components/Body/Body.tsx
-app/components/CanvasSheet/CanvasSheet.tsx
-  app/components/CanvasSheet/CanvasSheetTypes.ts
-  features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/index.tsx
-  features/svg-canvas/canvas/utils/loadCanvasDataFromLocalStorage.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-app/components/CanvasSheet/CanvasSheetTypes.ts
-app/components/CanvasSheet/index.tsx
-  app/components/CanvasSheet/CanvasSheet.tsx
-  app/components/CanvasSheet/CanvasSheetTypes.ts
 app/components/CanvasView/CanvasView.tsx
   app/components/CanvasView/CanvasViewTypes.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
@@ -52,7 +25,6 @@ app/components/ContentView/ContentView.tsx
   app/components/ContentView/ContentViewTypes.ts
   app/types/ContentType.ts
   features/markdown-editor/index.tsx
-  features/sandboxed-iframe/index.tsx
   features/svg-canvas/canvas/SvgCanvasTypes.ts
 app/components/ContentView/ContentViewConstants.ts
 app/components/ContentView/ContentViewStyled.ts
@@ -75,36 +47,23 @@ app/components/Page/Page.tsx
 app/components/Page/PageStyled.ts
 app/components/Page/index.tsx
   app/components/Page/Page.tsx
-app/components/SandboxSheet/SandboxSheet.tsx
-  app/components/SandboxSheet/SandboxSheetFunctions.ts
-  app/components/SandboxSheet/SandboxSheetTypes.ts
-  features/sandboxed-iframe/SandboxedIframe.tsx
-app/components/SandboxSheet/SandboxSheetFunctions.ts
-app/components/SandboxSheet/SandboxSheetTypes.ts
-app/components/SandboxSheet/index.tsx
-  app/components/SandboxSheet/SandboxSheet.tsx
-  app/components/SandboxSheet/SandboxSheetFunctions.ts
-  app/components/SandboxSheet/SandboxSheetTypes.ts
-app/components/Sheets/Sheets.tsx
-  app/components/Sheets/SheetsStyled.ts
-  app/components/Sheets/SheetsTypes.ts
-app/components/Sheets/SheetsStyled.ts
-app/components/Sheets/SheetsTypes.ts
-app/components/Sheets/index.tsx
-  app/components/Sheets/Sheets.tsx
-  app/components/Sheets/SheetsTypes.ts
 app/components/SplitView/SplitView.tsx
-  app/components/SplitView/SplitViewStyled.ts
+  app/components/SplitView/ThreeColumnSplitView.tsx
+  app/components/SplitView/TwoColumnSplitView.tsx
 app/components/SplitView/SplitViewStyled.ts
+app/components/SplitView/ThreeColumnSplitView.tsx
+  app/components/SplitView/SplitViewStyled.ts
+app/components/SplitView/TwoColumnSplitView.tsx
+  app/components/SplitView/SplitViewStyled.ts
+app/components/SplitView/index.tsx
+  app/components/SplitView/SplitView.tsx
+  app/components/SplitView/ThreeColumnSplitView.tsx
+  app/components/SplitView/TwoColumnSplitView.tsx
 app/hooks/useConversation.ts
   app/models/Conversation.ts
   app/repository/conversation/factory.ts
   app/repository/conversation/interface.ts
   app/types/LLMProvider.ts
-app/hooks/useMarkdowns.ts
-  app/models/Markdown.ts
-  app/repository/markdown/factory.ts
-  app/repository/markdown/interface.ts
 app/hooks/useSvgCanvases.ts
   app/models/SvgCanvas.ts
   app/repository/svg-canvas/factory.ts
@@ -116,12 +75,9 @@ app/hooks/useWorks.ts
 app/index.css
 app/models/Conversation.ts
   app/types/LLMProvider.ts
-app/models/Markdown.ts
 app/models/SvgCanvas.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
 app/models/Work.ts
-app/models/WorkingItem.ts
-  app/types/ContentType.ts
 app/repository/conversation/factory.ts
   app/repository/conversation/interface.ts
   app/repository/conversation/localStorageImpl.ts
@@ -133,18 +89,6 @@ app/repository/conversation/interface.ts
 app/repository/conversation/localStorageImpl.ts
   app/models/Conversation.ts
   app/repository/conversation/interface.ts
-app/repository/markdown/factory.ts
-  app/repository/markdown/interface.ts
-  app/repository/markdown/localStorageImpl.ts
-app/repository/markdown/index.ts
-  app/repository/markdown/factory.ts
-  app/repository/markdown/interface.ts
-  app/repository/markdown/localStorageImpl.ts
-app/repository/markdown/interface.ts
-  app/models/Markdown.ts
-app/repository/markdown/localStorageImpl.ts
-  app/models/Markdown.ts
-  app/repository/markdown/interface.ts
 app/repository/svg-canvas/factory.ts
   app/repository/svg-canvas/interface.ts
   app/repository/svg-canvas/localStorageImpl.ts
@@ -169,15 +113,6 @@ app/repository/work/interface.ts
 app/repository/work/localStrageImpl.ts
   app/models/Work.ts
   app/repository/work/interface.ts
-app/tools/new_sheet/definition.ts
-  shared/llm-client/types.ts
-app/tools/new_sheet/handler.ts
-  app/App.tsx
-  features/svg-canvas/utils/shapes/common/newId.ts
-  shared/llm-client/types.ts
-app/tools/new_sheet/index.ts
-  app/tools/new_sheet/definition.ts
-  app/tools/new_sheet/handler.ts
 app/tools/new_work/constants.ts
 app/tools/new_work/definition.ts
   shared/llm-client/types.ts
@@ -193,45 +128,8 @@ app/tools/new_work/index.ts
   app/tools/new_work/definition.ts
   app/tools/new_work/handler.ts
   app/tools/new_work/hooks.ts
-app/tools/sandbox/definition.ts
-  shared/llm-client/types.ts
-app/tools/sandbox/handler.ts
-  app/App.tsx
-  app/components/SandboxSheet/index.tsx
-  features/svg-canvas/utils/shapes/common/newId.ts
-  shared/llm-client/types.ts
-app/tools/sandbox/index.ts
-  app/tools/sandbox/definition.ts
-  app/tools/sandbox/handler.ts
 app/types/ContentType.ts
 app/types/LLMProvider.ts
-features/directory-explorer/ContextMenu.tsx
-  features/directory-explorer/DirectoryExplorerConstants.ts
-  features/directory-explorer/DirectoryExplorerStyled.ts
-  features/directory-explorer/DirectoryExplorerTypes.ts
-features/directory-explorer/DirectoryExplorer.tsx
-  features/directory-explorer/ContextMenu.tsx
-  features/directory-explorer/DirectoryExplorerFunctions.ts
-  features/directory-explorer/DirectoryExplorerStyled.ts
-  features/directory-explorer/DirectoryExplorerTypes.ts
-  features/directory-explorer/DirectoryNode.tsx
-features/directory-explorer/DirectoryExplorerConstants.ts
-features/directory-explorer/DirectoryExplorerDemo.tsx
-  features/directory-explorer/index.ts
-features/directory-explorer/DirectoryExplorerFunctions.ts
-  features/directory-explorer/DirectoryExplorerTypes.ts
-features/directory-explorer/DirectoryExplorerStyled.ts
-  features/directory-explorer/DirectoryExplorerConstants.ts
-features/directory-explorer/DirectoryExplorerTypes.ts
-features/directory-explorer/DirectoryNode.tsx
-  features/directory-explorer/DirectoryExplorerConstants.ts
-  features/directory-explorer/DirectoryExplorerFunctions.ts
-  features/directory-explorer/DirectoryExplorerStyled.ts
-  features/directory-explorer/DirectoryExplorerTypes.ts
-features/directory-explorer/index.ts
-  features/directory-explorer/DirectoryExplorer.tsx
-  features/directory-explorer/DirectoryExplorerFunctions.ts
-  features/directory-explorer/DirectoryExplorerTypes.ts
 features/llm-chat-ui/components/ChatUI/ChatUI.tsx
   features/llm-chat-ui/components/ChatUI/ChatUIStyled.ts
   features/llm-chat-ui/components/ChatUI/ChatUITypes.ts
@@ -265,11 +163,6 @@ features/markdown-editor/index.tsx
   features/markdown-editor/components/MarkdownEditor.tsx
   features/markdown-editor/types.ts
 features/markdown-editor/types.ts
-features/sandboxed-iframe/SandboxedIframe.tsx
-  features/sandboxed-iframe/SandboxedIframeStyled.ts
-features/sandboxed-iframe/SandboxedIframeStyled.ts
-features/sandboxed-iframe/index.tsx
-  features/sandboxed-iframe/SandboxedIframe.tsx
 features/svg-canvas/canvas/SvgCanvas.tsx
   features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasStyled.ts
@@ -1823,7 +1716,6 @@ features/svg-canvas/utils/validation/isTextableData.ts
   features/svg-canvas/types/data/core/TextableData.ts
 features/svg-canvas/utils/validation/isTransformativeData.ts
   features/svg-canvas/types/data/core/TransformativeData.ts
-logger.json
 main.tsx
   app/App.tsx
   app/index.css
@@ -1845,8 +1737,5 @@ shared/llm-client/types.ts
 shared/markdown/index.ts
 shared/markdown/markdown-it-katex.d.ts
 utils/KeyManager.ts
-utils/Logger.ts
-  logger.json
-utils/Profiler.ts
 vite-env.d.ts
 

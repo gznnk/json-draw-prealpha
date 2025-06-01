@@ -19,7 +19,7 @@ export const Container = styled.div`
 export const Svg = styled.svg`
     display: block;
     box-sizing: border-box;
-    background-color: #0C0F1C;
+    background-color: #eeeeee;
     outline: none;
     * {
         outline: none;

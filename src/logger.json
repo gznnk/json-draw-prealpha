@@ -1,9 +1,0 @@
-{
-	"root": "INFO",
-	"Group": "DEBUG",
-	"Line": "INFO",
-	"Rectangle": "INFO",
-	"SvgCanvas": "INFO",
-	"SvgCanvasHooks": "INFO",
-	"draggableHooks": "INFO"
-}
