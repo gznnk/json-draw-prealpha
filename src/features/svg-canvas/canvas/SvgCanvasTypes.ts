@@ -36,6 +36,7 @@ export type SvgCanvasData = {
 export type SvgCanvasState = {
 	scrollTop: number;
 	scrollLeft: number;
+	zoom: number;
 	multiSelectGroup?: GroupData;
 	isDiagramChanging: boolean;
 	history: SvgCanvasHistory[];
@@ -100,4 +101,5 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onScroll?: (e: React.UIEvent<HTMLDivElement, UIEvent>) => void;
 	onCopy?: () => void;
 	onPaste?: () => void;
+	onZoom?: (zoom: number) => void;
 };

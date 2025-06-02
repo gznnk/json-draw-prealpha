@@ -34,6 +34,7 @@ const CanvasViewComponent = ({
 		height: height || 2000,
 		scrollLeft: 0,
 		scrollTop: 0,
+		zoom: 1.0,
 		canvasRef,
 		onDataChange,
 	});

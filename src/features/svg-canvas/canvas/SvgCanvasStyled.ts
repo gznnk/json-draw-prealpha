@@ -21,13 +21,26 @@ export const Container = styled.div`
 `;
 
 /**
+ * Props for the Svg element with zoom support.
+ */
+type SvgProps = {
+	zoom: number;
+	contentWidth: number;
+	contentHeight: number;
+};
+
+/**
  * Styled SVG element for rendering the diagram.
  */
-export const Svg = styled.svg`
+export const Svg = styled.svg<SvgProps>`
     display: block;
     box-sizing: border-box;
     background-color: #eeeeee;
     outline: none;
+    width: ${(props) => props.contentWidth * props.zoom}px;
+    height: ${(props) => props.contentHeight * props.zoom}px;
+    transform: scale(${(props) => props.zoom});
+    transform-origin: 0 0;
     * {
         outline: none;
     }
@@ -50,6 +63,7 @@ type HTMLElementsContainerProps = {
 	top: number;
 	width: number;
 	height: number;
+	zoom: number;
 };
 
 /**
@@ -61,6 +75,8 @@ export const HTMLElementsContainer = styled.div<HTMLElementsContainerProps>`
     top: ${(props) => props.top}px;
     width: ${(props) => props.width}px;
     height: ${(props) => props.height}px;
+    transform: scale(${(props) => props.zoom});
+    transform-origin: 0 0;
     pointer-events: none;
 `;
 

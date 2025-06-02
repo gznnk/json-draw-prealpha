@@ -22,6 +22,7 @@ export const loadCanvasDataFromLocalStorage = (
 		const lastHistoryEventId = newEventId(); // Generate a new event ID for the loaded state
 		return {
 			...canvasState,
+			zoom: canvasState.zoom || 1.0, // Ensure zoom has a default value
 			history: newHistory,
 			historyIndex,
 			lastHistoryEventId,

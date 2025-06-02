@@ -39,6 +39,7 @@ import { useUngroup } from "./hooks/useUngroup";
 import { useExecute } from "./hooks/useExecute";
 import { useExport } from "./hooks/useExport";
 import { useScroll } from "./hooks/useScroll";
+import { useZoom } from "./hooks/useZoom";
 import { useConnectNodes } from "./observers/connectNodes";
 
 /**
@@ -53,6 +54,7 @@ type SvgCanvasHooksProps = {
 	items: Diagram[];
 	scrollLeft: number;
 	scrollTop: number;
+	zoom: number;
 	canvasRef: RefObject<SvgCanvasRef | null>;
 	onDataChange?: (data: SvgCanvasData) => void;
 };
@@ -83,6 +85,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		isDiagramChanging: false,
 		scrollLeft: props.scrollLeft,
 		scrollTop: props.scrollTop,
+		zoom: props.zoom,
 		history: [
 			{
 				...initialBounds,
@@ -166,6 +169,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the paste event.
 	const onPaste = usePaste(canvasHooksProps);
 
+	// Handler for the zoom event.
+	const onZoom = useZoom(canvasHooksProps);
+
 	// Observer for the new item event.
 	useNewItem(canvasHooksProps);
 
@@ -196,6 +202,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onScroll,
 		onCopy,
 		onPaste,
+		onZoom,
 	};
 
 	return {

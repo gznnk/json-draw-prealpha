@@ -60,6 +60,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			items,
 			scrollLeft,
 			scrollTop,
+			zoom,
 			multiSelectGroup,
 			textEditorState,
 			onTransform,
@@ -81,6 +82,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onScroll,
 			onCopy,
 			onPaste,
+			onZoom,
 		} = props;
 
 		// SVG要素のコンテナの参照
@@ -112,6 +114,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			items,
 			scrollLeft,
 			scrollTop,
+			zoom,
 		} as SvgCanvasState);
 
 		// Use the context menu hook to handle context menu events.
@@ -124,6 +127,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		const refBusVal = {
 			scrollLeft,
 			scrollTop,
+			zoom,
 			hasFocus,
 			textEditorState,
 			onDrag,
@@ -138,6 +142,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onScroll,
 			onCopy,
 			onPaste,
+			onZoom,
 			contextMenuFunctions,
 		};
 		const refBus = useRef(refBusVal);
@@ -175,6 +180,21 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			},
 			[],
 		);
+		/**
+		 * Handle the wheel event for zooming.
+		 */
+		const handleWheel = useCallback(
+			(e: React.WheelEvent<SVGSVGElement>) => {
+				if (e.ctrlKey) {
+					e.preventDefault();
+					e.stopPropagation();
+					const delta = e.deltaY > 0 ? 0.9 : 1.1;
+					const newZoom = Math.max(0.1, Math.min(3.0, zoom * delta));
+					onZoom?.(newZoom);
+				}
+			},
+			[zoom, onZoom],
+		);
 
 		/**
 		 * SvgCanvasのキーダウンイベントハンドラ
@@ -211,6 +231,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				const {
 					hasFocus,
 					textEditorState,
+					zoom,
 					onDelete,
 					onSelectAll,
 					onClearAllSelection,
@@ -218,6 +239,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					onRedo,
 					onCopy,
 					onPaste,
+					onZoom,
 				} = refBus.current;
 
 				if (e.key === "Control") {
@@ -260,6 +282,37 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						// Paste items from clipboard when Ctrl+V is pressed.
 						e.preventDefault();
 						onPaste?.();
+					} // Zoom in when Ctrl+Plus is pressed (support multiple key variations)
+					if (
+						(e.key === "+" ||
+							e.key === "=" ||
+							e.code === "Equal" ||
+							e.code === "Semicolon") &&
+						!textEditorState.isActive
+					) {
+						e.preventDefault();
+						e.stopPropagation();
+						const newZoom = Math.min(3.0, zoom * 1.1);
+						onZoom?.(newZoom);
+					}
+					// Zoom out when Ctrl+Minus is pressed (support multiple key variations)
+					if (
+						(e.key === "-" || e.code === "Minus") &&
+						!textEditorState.isActive
+					) {
+						e.preventDefault();
+						e.stopPropagation();
+						const newZoom = Math.max(0.1, zoom * 0.9);
+						onZoom?.(newZoom);
+					}
+					// Reset zoom when Ctrl+0 is pressed
+					if (
+						(e.key === "0" || e.code === "Digit0") &&
+						!textEditorState.isActive
+					) {
+						e.preventDefault();
+						e.stopPropagation();
+						onZoom?.(1.0);
 					}
 				}
 			};
@@ -291,16 +344,16 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		useEffect(() => {
 			const el = containerRef.current;
 
-			const handleTouchMove = (e: TouchEvent) => {
-				if (e.target !== e.currentTarget && e.target !== svgRef.current) {
+			const handleWheel = (e: WheelEvent) => {
+				if (e.ctrlKey) {
 					e.preventDefault();
 				}
 			};
 
-			el?.addEventListener("touchmove", handleTouchMove, { passive: false });
+			el?.addEventListener("wheel", handleWheel, { passive: false });
 
 			return () => {
-				el?.removeEventListener("touchmove", handleTouchMove);
+				el?.removeEventListener("wheel", handleWheel);
 			};
 		}, []);
 
@@ -322,7 +375,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 			return React.createElement(component(), props);
 		});
-
 		return (
 			<Viewport>
 				<Container ref={containerRef} onScroll={onScroll}>
@@ -333,11 +385,15 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							viewBox={`${minX} ${minY} ${width} ${height}`}
 							tabIndex={0}
 							ref={svgRef}
+							zoom={zoom}
+							contentWidth={width}
+							contentHeight={height}
 							onPointerDown={handlePointerDown}
 							onKeyDown={handleKeyDown}
 							onFocus={handleFocus}
 							onBlur={handleBlur}
 							onContextMenu={contextMenuHandlers.onContextMenu}
+							onWheel={handleWheel}
 						>
 							<title>{title}</title>
 							{/* Render the items in the SvgCanvas. */}
@@ -369,6 +425,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						top={-minY}
 						width={width + minX}
 						height={height + minY}
+						zoom={zoom}
 					>
 						<TextEditor {...textEditorState} onTextChange={onTextChange} />
 						<DiagramMenu {...diagramMenuProps} />
