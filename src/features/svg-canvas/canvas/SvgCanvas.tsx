@@ -29,6 +29,7 @@ import { newEventId } from "../utils/common/newEventId";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import {
 	Container,
+	ContentWrapper,
 	HTMLElementsContainer,
 	MultiSelectGroupContainer,
 	Svg,
@@ -180,21 +181,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			},
 			[],
 		);
-		/**
-		 * Handle the wheel event for zooming.
-		 */
-		const handleWheel = useCallback(
-			(e: React.WheelEvent<SVGSVGElement>) => {
-				if (e.ctrlKey) {
-					e.preventDefault();
-					e.stopPropagation();
-					const delta = e.deltaY > 0 ? 0.9 : 1.1;
-					const newZoom = Math.max(0.1, Math.min(3.0, zoom * delta));
-					onZoom?.(newZoom);
-				}
-			},
-			[zoom, onZoom],
-		);
 
 		/**
 		 * SvgCanvasのキーダウンイベントハンドラ
@@ -323,13 +309,32 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				}
 			};
 
-			// Add event listeners for keydown and keyup events.
+			// Prevent browser zoom with Ctrl+wheel at document level
+			const onDocumentWheel = (e: WheelEvent) => {
+				if (e.ctrlKey) {
+					e.preventDefault();
+					e.stopPropagation();
+					const delta = e.deltaY > 0 ? 0.9 : 1.1;
+					const newZoom = Math.max(
+						0.1,
+						Math.min(3.0, refBus.current.zoom * delta),
+					);
+					refBus.current.onZoom?.(newZoom);
+				}
+			};
+
+			// Add event listeners for keydown, keyup, and wheel events.
 			document.addEventListener("keydown", onDocumentKeyDown);
 			document.addEventListener("keyup", onDocumentKeyUp);
+			document.addEventListener("wheel", onDocumentWheel, {
+				passive: false,
+				capture: true,
+			});
 
 			return () => {
 				document.removeEventListener("keydown", onDocumentKeyDown);
 				document.removeEventListener("keyup", onDocumentKeyUp);
+				document.removeEventListener("wheel", onDocumentWheel, true);
 			};
 		}, []);
 
@@ -339,22 +344,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				containerRef.current.scrollLeft = scrollLeft;
 				containerRef.current.scrollTop = scrollTop;
 			}
-		}, []);
-
-		useEffect(() => {
-			const el = containerRef.current;
-
-			const handleWheel = (e: WheelEvent) => {
-				if (e.ctrlKey) {
-					e.preventDefault();
-				}
-			};
-
-			el?.addEventListener("wheel", handleWheel, { passive: false });
-
-			return () => {
-				el?.removeEventListener("wheel", handleWheel);
-			};
 		}, []);
 
 		// 図形の描画
@@ -375,61 +364,67 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 			return React.createElement(component(), props);
 		});
+
 		return (
 			<Viewport>
 				<Container ref={containerRef} onScroll={onScroll}>
-					<SvgCanvasContext.Provider value={stateProvider.current}>
-						<Svg
-							width={width}
-							height={height}
-							viewBox={`${minX} ${minY} ${width} ${height}`}
-							tabIndex={0}
-							ref={svgRef}
-							zoom={zoom}
-							contentWidth={width}
-							contentHeight={height}
-							onPointerDown={handlePointerDown}
-							onKeyDown={handleKeyDown}
-							onFocus={handleFocus}
-							onBlur={handleBlur}
-							onContextMenu={contextMenuHandlers.onContextMenu}
-							onWheel={handleWheel}
-						>
-							<title>{title}</title>
-							{/* Render the items in the SvgCanvas. */}
-							{renderedItems}
-							{/* Dummy group for multi-select. */}
-							{multiSelectGroup && (
-								// The MultiSelectGroupContainer makes the diagrams transparent and displays only the outline for transformations.
-								// This allows for the dragging and transformation of the multi-selected diagrams while maintaining their stacking order of rendering.
-								<MultiSelectGroupContainer>
-									<Group
-										{...multiSelectGroup}
-										id={MULTI_SELECT_GROUP}
-										syncWithSameId
-										onSelect={handleSelect}
-										onTransform={onTransform}
-										onDiagramChange={onDiagramChange}
-									/>
-								</MultiSelectGroupContainer>
-							)}
-							{/* Render new connect line. */}
-							<NewConnectLine />
-							{/* Render flash connect lines */}
-							<FlashConnectLine />
-						</Svg>
-					</SvgCanvasContext.Provider>
-					{/* Container for HTML elements that follow the scroll of the SVG canvas. */}
-					<HTMLElementsContainer
-						left={-minX}
-						top={-minY}
-						width={width + minX}
-						height={height + minY}
+					<ContentWrapper
 						zoom={zoom}
+						contentWidth={width}
+						contentHeight={height}
 					>
-						<TextEditor {...textEditorState} onTextChange={onTextChange} />
-						<DiagramMenu {...diagramMenuProps} />
-					</HTMLElementsContainer>
+						<SvgCanvasContext.Provider value={stateProvider.current}>
+							<Svg
+								width={width}
+								height={height}
+								viewBox={`${minX} ${minY} ${width} ${height}`}
+								tabIndex={0}
+								ref={svgRef}
+								zoom={zoom}
+								contentWidth={width}
+								contentHeight={height}
+								onPointerDown={handlePointerDown}
+								onKeyDown={handleKeyDown}
+								onFocus={handleFocus}
+								onBlur={handleBlur}
+								onContextMenu={contextMenuHandlers.onContextMenu}
+							>
+								<title>{title}</title>
+								{/* Render the items in the SvgCanvas. */}
+								{renderedItems}
+								{/* Dummy group for multi-select. */}
+								{multiSelectGroup && (
+									// The MultiSelectGroupContainer makes the diagrams transparent and displays only the outline for transformations.
+									// This allows for the dragging and transformation of the multi-selected diagrams while maintaining their stacking order of rendering.
+									<MultiSelectGroupContainer>
+										<Group
+											{...multiSelectGroup}
+											id={MULTI_SELECT_GROUP}
+											syncWithSameId
+											onSelect={handleSelect}
+											onTransform={onTransform}
+											onDiagramChange={onDiagramChange}
+										/>
+									</MultiSelectGroupContainer>
+								)}
+								{/* Render new connect line. */}
+								<NewConnectLine />
+								{/* Render flash connect lines */}
+								<FlashConnectLine />
+							</Svg>
+						</SvgCanvasContext.Provider>
+						{/* Container for HTML elements that follow the scroll of the SVG canvas. */}
+						<HTMLElementsContainer
+							left={-minX}
+							top={-minY}
+							width={width + minX}
+							height={height + minY}
+							zoom={zoom}
+						>
+							<TextEditor {...textEditorState} onTextChange={onTextChange} />
+							<DiagramMenu {...diagramMenuProps} />
+						</HTMLElementsContainer>
+					</ContentWrapper>
 				</Container>
 				{/* Container for HTML elements fixed to the viewport. */}
 				<ViewportOverlay>

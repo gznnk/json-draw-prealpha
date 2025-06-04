@@ -21,6 +21,24 @@ export const Container = styled.div`
 `;
 
 /**
+ * Props for the content wrapper element with zoom support.
+ */
+type ContentWrapperProps = {
+	zoom: number;
+	contentWidth: number;
+	contentHeight: number;
+};
+
+/**
+ * Styled wrapper element for the content that scales with zoom.
+ */
+export const ContentWrapper = styled.div<ContentWrapperProps>`
+    position: relative;
+    width: ${(props) => props.contentWidth * props.zoom}px;
+    height: ${(props) => props.contentHeight * props.zoom}px;
+`;
+
+/**
  * Props for the Svg element with zoom support.
  */
 type SvgProps = {
@@ -37,8 +55,8 @@ export const Svg = styled.svg<SvgProps>`
     box-sizing: border-box;
     background-color: #eeeeee;
     outline: none;
-    width: ${(props) => props.contentWidth * props.zoom}px;
-    height: ${(props) => props.contentHeight * props.zoom}px;
+    width: ${(props) => props.contentWidth}px;
+    height: ${(props) => props.contentHeight}px;
     transform: scale(${(props) => props.zoom});
     transform-origin: 0 0;
     * {
