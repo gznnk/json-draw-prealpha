@@ -11,6 +11,7 @@ import type { ImageProps } from "../../../types/props/shapes/ImageProps";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Outline } from "../../core/Outline";
 import { Transformative } from "../../core/Transformative";
+import { ImageElement } from "./ImageStyled";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
@@ -116,8 +117,8 @@ const ImageComponent: React.FC<ImageProps> = ({
 	return (
 		<>
 			<g transform={transform}>
-				<image
-					className="diagram"
+				{" "}
+				<ImageElement
 					id={id}
 					x={-width / 2}
 					y={-height / 2}
@@ -126,6 +127,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 					tabIndex={0}
 					cursor="move"
 					href={`data:image/png;base64,${base64Data}`}
+					isTransparent={isMultiSelectSource}
 					ref={svgRef}
 					{...dragProps}
 				/>

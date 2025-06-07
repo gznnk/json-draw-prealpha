@@ -30,7 +30,6 @@ import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import {
 	Container,
 	HTMLElementsContainer,
-	MultiSelectGroupContainer,
 	Svg,
 	Viewport,
 	ViewportOverlay,
@@ -344,18 +343,14 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							{renderedItems}
 							{/* Dummy group for multi-select. */}
 							{multiSelectGroup && (
-								// The MultiSelectGroupContainer makes the diagrams transparent and displays only the outline for transformations.
-								// This allows for the dragging and transformation of the multi-selected diagrams while maintaining their stacking order of rendering.
-								<MultiSelectGroupContainer>
-									<Group
-										{...multiSelectGroup}
-										id={MULTI_SELECT_GROUP}
-										syncWithSameId
-										onSelect={handleSelect}
-										onTransform={onTransform}
-										onDiagramChange={onDiagramChange}
-									/>
-								</MultiSelectGroupContainer>
+								<Group
+									{...multiSelectGroup}
+									id={MULTI_SELECT_GROUP}
+									syncWithSameId
+									onSelect={handleSelect}
+									onTransform={onTransform}
+									onDiagramChange={onDiagramChange}
+								/>
 							)}
 							{/* Render new connect line. */}
 							<NewConnectLine />

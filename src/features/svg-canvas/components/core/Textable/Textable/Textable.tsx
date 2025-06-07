@@ -9,7 +9,7 @@ import { renderMarkdown } from "../../../../../../shared/markdown";
 import type { TextableData } from "../../../../types/data/core/TextableData";
 
 // Import local module files.
-import { Text, TextWrapper } from "./TextableStyled";
+import { ForeignObjectElement, Text, TextWrapper } from "./TextableStyled";
 
 /**
  * Props for rendering editable text inside the SVG shape.
@@ -20,6 +20,7 @@ type TextableProps = TextableData & {
 	width: number;
 	height: number;
 	transform: string;
+	isMultiSelectSource?: boolean;
 };
 
 /**
@@ -40,6 +41,7 @@ const TextableComponent: React.FC<TextableProps> = ({
 	fontFamily,
 	fontWeight,
 	isTextEditing,
+	isMultiSelectSource,
 }) => {
 	const textRef = useRef<HTMLDivElement>(null);
 
@@ -54,16 +56,15 @@ const TextableComponent: React.FC<TextableProps> = ({
 
 	if (!text) return null;
 	if (isTextEditing) return null;
-
 	return (
-		<foreignObject
-			className="diagram"
+		<ForeignObjectElement
 			x={x}
 			y={y}
 			width={width}
 			height={height}
 			transform={transform}
 			pointerEvents="none"
+			isTransparent={isMultiSelectSource}
 		>
 			<TextWrapper verticalAlign={verticalAlign}>
 				{textType === "markdown" ? (
@@ -91,7 +92,7 @@ const TextableComponent: React.FC<TextableProps> = ({
 					</Text>
 				)}
 			</TextWrapper>
-		</foreignObject>
+		</ForeignObjectElement>
 	);
 };
 

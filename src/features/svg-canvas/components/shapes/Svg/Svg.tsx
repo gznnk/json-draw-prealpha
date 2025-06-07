@@ -14,6 +14,7 @@ import type { SvgProps } from "../../../types/props/shapes/SvgProps";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Outline } from "../../core/Outline";
 import { Transformative } from "../../core/Transformative";
+import { SvgGroupElement, SvgRectElement } from "./SvgStyled";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
@@ -137,15 +138,15 @@ const SvgComponent: React.FC<SvgProps> = ({
 
 	return (
 		<>
+			{" "}
 			<g transform={transform}>
-				<g
-					className="diagram"
+				<SvgGroupElement
 					transform={`translate(${-width / 2}, ${-height / 2}) scale(${width / initialWidth}, ${height / initialHeight})`}
+					isTransparent={isMultiSelectSource}
 					ref={groupRef}
 				/>
 				{/* Element for handle pointer events */}
-				<rect
-					className="diagram"
+				<SvgRectElement
 					id={id}
 					x={-width / 2}
 					y={-height / 2}
@@ -154,6 +155,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 					tabIndex={0}
 					cursor="move"
 					fill="transparent"
+					isTransparent={isMultiSelectSource}
 					ref={svgRef}
 					{...dragProps}
 				/>

@@ -99,3 +99,17 @@ export const Text = styled.div<TextProps>`
         margin: 0 0.2em;
     }
 `;
+
+/**
+ * Props for the SVG foreignObject element.
+ */
+type ForeignObjectProps = {
+	isTransparent?: boolean;
+};
+
+/**
+ * Styled foreignObject element for text display.
+ */
+export const ForeignObjectElement = styled.foreignObject<ForeignObjectProps>`
+    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+`;

@@ -233,9 +233,9 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 
 	return (
 		<>
+			{" "}
 			<g transform="translate(0.5,0.5)">
 				<RectangleElement
-					className="diagram"
 					id={id}
 					x={-width / 2}
 					y={-height / 2}
@@ -248,7 +248,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					strokeWidth={strokeWidth}
 					tabIndex={0}
 					cursor="move"
-					isTransparent={isTransparent}
+					isTransparent={isTransparent || isMultiSelectSource}
 					transform={transform}
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}

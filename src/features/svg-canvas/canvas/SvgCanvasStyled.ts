@@ -34,15 +34,6 @@ export const Svg = styled.svg`
 `;
 
 /**
- * Styled wrapper element for the multi-select group.
- */
-export const MultiSelectGroupContainer = styled.g`
-    .diagram {
-        opacity: 0;
-    }
-`;
-
-/**
  * Props for the wrapper element that contains HTML elements.
  */
 type HTMLElementsContainerProps = {

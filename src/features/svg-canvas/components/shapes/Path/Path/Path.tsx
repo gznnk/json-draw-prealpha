@@ -17,6 +17,7 @@ import { PositionLabel } from "../../../core/PositionLabel";
 import { Group } from "../../Group";
 import { NewVertexList } from "../NewVertexList";
 import { SegmentList } from "../SegmentList";
+import { PathElement } from "./PathStyled";
 
 // Import hooks.
 import { useDrag } from "../../../../hooks/useDrag";
@@ -341,12 +342,13 @@ const PathComponent: React.FC<PathProps> = ({
 		<>
 			{/* 描画用のパス */}
 			<g transform="translate(0.5,0.5)">
-				<path
-					className="diagram"
+				{" "}
+				<PathElement
 					d={d}
 					fill="none"
 					stroke={stroke}
 					strokeWidth={strokeWidth}
+					isTransparent={isMultiSelectSource}
 				/>
 			</g>
 			{/* ドラッグ用のパス */}

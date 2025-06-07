@@ -229,7 +229,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		<>
 			<g transform="translate(0.5,0.5)">
 				<EllipseElement
-					className="diagram"
 					id={id}
 					cx={0}
 					cy={0}
@@ -240,7 +239,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					strokeWidth={strokeWidth}
 					tabIndex={0}
 					cursor="move"
-					isTransparent={isTransparent}
+					isTransparent={isTransparent || isMultiSelectSource}
 					transform={transform}
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
