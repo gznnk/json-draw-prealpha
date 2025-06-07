@@ -18,10 +18,3 @@ graph TD
     features/svg-canvas --> features/markdown
     features/svg-canvas --> shared/ai-tools
 ```
-
-## FIXME
-```mermaid
-graph TD
-    features/llm-chat-ui -. 避けたい .-> features/svg-canvas
-    features/llm-chat-ui -. NG .-> app/tools
-```

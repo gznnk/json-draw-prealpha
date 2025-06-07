@@ -3,7 +3,7 @@ import type { DiagramType } from "../types/base/DiagramType";
 import type { Diagram } from "./DiagramTypes";
 
 // Import utils.
-import { imageToBlob } from "../utils/shapes/image/imageUtils";
+import { imageToBlob } from "../utils/shapes/image/imageToBlob";
 import { svgToBlob } from "../components/shapes/Svg";
 
 /**
