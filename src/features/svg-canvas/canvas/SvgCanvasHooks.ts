@@ -48,8 +48,6 @@ type SvgCanvasHooksProps = {
 	id: string;
 	minX: number;
 	minY: number;
-	width: number;
-	height: number;
 	items: Diagram[];
 	scrollLeft: number;
 	scrollTop: number;
@@ -68,8 +66,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	let initialBounds = {
 		minX: props.minX,
 		minY: props.minY,
-		width: props.width,
-		height: props.height,
 	};
 	if (props.items.length > 0) {
 		initialBounds = calcOptimalCanvasSize(props.items);

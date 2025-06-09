@@ -12,8 +12,6 @@ export const svgCanvasStateToData = (state: SvgCanvasState): SvgCanvasData => {
 		id: state.id,
 		minX: state.minX,
 		minY: state.minY,
-		width: state.width,
-		height: state.height,
 		items: state.items,
 	};
 };

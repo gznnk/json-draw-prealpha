@@ -22,7 +22,7 @@ const CanvasViewComponent = ({
 
 	// contentからキャンバスデータを抽出
 	const canvasId = id || content.id;
-	const { items, minX, minY, width, height } = content;
+	const { items, minX, minY } = content;
 
 	// useSvgCanvasフックを使用して必要な状態を初期化
 	const { canvasProps } = useSvgCanvas({
@@ -30,8 +30,6 @@ const CanvasViewComponent = ({
 		items,
 		minX: minX || 0,
 		minY: minY || 0,
-		width: width || 2000,
-		height: height || 2000,
 		scrollLeft: 0,
 		scrollTop: 0,
 		canvasRef,

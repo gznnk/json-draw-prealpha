@@ -41,8 +41,6 @@ const App = (): ReactElement => {
 							items: [],
 							minX: 0,
 							minY: 0,
-							width: 2000,
-							height: 2000,
 						},
 					});
 				}

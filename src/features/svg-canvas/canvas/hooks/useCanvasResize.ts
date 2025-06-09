@@ -9,10 +9,10 @@ import {
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 /**
- * Custom hook to risze the canvas when cursor approaches boundaries.
+ * Custom hook to handle scroll adjustments when cursor approaches canvas boundaries.
  *
  * @param props - Canvas hook props including canvas state and setter
- * @returns Function to resize canvas and directly modify canvas DOM attributes
+ * @returns Function to adjust scroll position when cursor is near edges
  */
 export const useCanvasResize = (props: CanvasHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
@@ -31,85 +31,63 @@ export const useCanvasResize = (props: CanvasHooksProps) => {
 			cursorY: number;
 		}) => {
 			const {
-				canvasState: { minX, minY, width, height },
+				canvasState: { minX, minY },
 				canvasRef,
 				setCanvasState,
 			} = refBus.current.props;
 
 			if (!canvasRef) return;
 
-			const { containerRef, svgRef } = canvasRef;
+			const { containerRef } = canvasRef;
+			if (!containerRef.current) return;
+
+			// Get current container dimensions
+			const containerRect = containerRef.current.getBoundingClientRect();
+			const containerWidth = containerRect.width;
+			const containerHeight = containerRect.height;
 
 			// Calculate distances from each edge in SVG coordinates
 			const distFromLeft = cursorX - minX;
 			const distFromTop = cursorY - minY;
-			const distFromRight = minX + width - cursorX;
-			const distFromBottom = minY + height - cursorY;
+			const distFromRight = minX + containerWidth - cursorX;
+			const distFromBottom = minY + containerHeight - cursorY;
 
-			// Left edge expansion
+			// Left edge scroll adjustment
 			if (distFromLeft < CANVAS_EXPANSION_THRESHOLD) {
-				if (containerRef.current && svgRef.current) {
-					// Calculate new dimensions
-					const newMinX = minX - CANVAS_EXPANSION_SIZE;
-					const newWidth = width + (minX - newMinX);
+				const newMinX = minX - CANVAS_EXPANSION_SIZE;
 
-					// Update state for component re-renders
-					setCanvasState((prevState) => ({
-						...prevState,
-						minX: newMinX,
-						width: newWidth,
-					}));
-
-					// Direct DOM manipulation for immediate visual feedback
-					svgRef.current.setAttribute("width", `${newWidth}`);
-					svgRef.current.setAttribute(
-						"viewBox",
-						`${newMinX} ${minY} ${newWidth} ${height}`,
-					);
-
-					// Maintain scroll position relative to content
-					containerRef.current.scrollLeft = CANVAS_EXPANSION_SIZE;
-				}
-			}
-			// Top edge expansion
-			else if (distFromTop < CANVAS_EXPANSION_THRESHOLD) {
-				if (containerRef.current && svgRef.current) {
-					// Calculate new dimensions
-					const newMinY = minY - CANVAS_EXPANSION_SIZE;
-					const newHeight = height + (minY - newMinY);
-
-					// Update state for component re-renders
-					setCanvasState((prevState) => ({
-						...prevState,
-						minY: newMinY,
-						height: newHeight,
-					}));
-
-					// Direct DOM manipulation for immediate visual feedback
-					svgRef.current.setAttribute("height", `${newHeight}`);
-					svgRef.current.setAttribute(
-						"viewBox",
-						`${minX} ${newMinY} ${width} ${newHeight}`,
-					);
-
-					// Maintain scroll position relative to content
-					containerRef.current.scrollTop = CANVAS_EXPANSION_SIZE;
-				}
-			}
-			// Right edge expansion
-			else if (distFromRight < CANVAS_EXPANSION_THRESHOLD) {
-				// Simple width increase without scroll adjustment needed
+				// Update state with new scroll position
 				setCanvasState((prevState) => ({
 					...prevState,
-					width: width + CANVAS_EXPANSION_SIZE,
+					minX: newMinX,
+					scrollLeft: prevState.scrollLeft + CANVAS_EXPANSION_SIZE,
 				}));
 			}
-			// Bottom edge expansion
-			else if (distFromBottom < CANVAS_EXPANSION_THRESHOLD) {
-				// Simple height increase without scroll adjustment needed
+			// Top edge scroll adjustment
+			else if (distFromTop < CANVAS_EXPANSION_THRESHOLD) {
+				const newMinY = minY - CANVAS_EXPANSION_SIZE;
+
+				// Update state with new scroll position
 				setCanvasState((prevState) => ({
 					...prevState,
-					height: height + CANVAS_EXPANSION_SIZE,
+					minY: newMinY,
+					scrollTop: prevState.scrollTop + CANVAS_EXPANSION_SIZE,
+				}));
+			}
+			// Right edge scroll adjustment
+			else if (distFromRight < CANVAS_EXPANSION_THRESHOLD) {
+				// Expand the canvas area to the right by adjusting scroll
+				setCanvasState((prevState) => ({
+					...prevState,
+					scrollLeft: prevState.scrollLeft - CANVAS_EXPANSION_SIZE,
+				}));
+			}
+			// Bottom edge scroll adjustment
+			else if (distFromBottom < CANVAS_EXPANSION_THRESHOLD) {
+				// Expand the canvas area downward by adjusting scroll
+				setCanvasState((prevState) => ({
+					...prevState,
+					scrollTop: prevState.scrollTop - CANVAS_EXPANSION_SIZE,
 				}));
 			}
 		},

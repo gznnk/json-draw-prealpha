@@ -25,8 +25,6 @@ export type SvgCanvasData = {
 	id: string;
 	minX: number;
 	minY: number;
-	width: number;
-	height: number;
 	items: Diagram[];
 };
 

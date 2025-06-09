@@ -6,6 +6,7 @@ import React, {
 	useEffect,
 	useImperativeHandle,
 	useRef,
+	useState,
 } from "react";
 
 // SvgCanvas関連型定義をインポート
@@ -54,8 +55,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			title,
 			minX,
 			minY,
-			width,
-			height,
 			items,
 			scrollLeft,
 			scrollTop,
@@ -87,6 +86,10 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// SVG要素の参照
 		const svgRef = useRef<SVGSVGElement>(null);
 
+		// Container dimensions state
+		const [containerWidth, setContainerWidth] = useState(0);
+		const [containerHeight, setContainerHeight] = useState(0);
+
 		// Forward refs to parent using useImperativeHandle
 		useImperativeHandle(ref, () => ({
 			containerRef,
@@ -106,8 +109,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		stateProvider.current.setState({
 			minX,
 			minY,
-			width,
-			height,
 			items,
 			scrollLeft,
 			scrollTop,
@@ -173,6 +174,36 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				contextMenuFunctions.closeContextMenu();
 			},
 			[],
+		);
+
+		/**
+		 * Handle the wheel event on the SVG canvas for scrolling.
+		 */
+		const handleWheel = useCallback(
+			(e: React.WheelEvent<SVGSVGElement>) => {
+				e.preventDefault();
+
+				// Bypass references to avoid function creation in every render.
+				const { onScroll } = refBus.current;
+
+				// Calculate new scroll position
+				const deltaX = e.deltaX;
+				const deltaY = e.deltaY;
+
+				const newScrollLeft = Math.max(0, scrollLeft + deltaX);
+				const newScrollTop = Math.max(0, scrollTop + deltaY);
+
+				// Create a synthetic scroll event
+				const syntheticEvent = {
+					currentTarget: {
+						scrollLeft: newScrollLeft,
+						scrollTop: newScrollTop,
+					},
+				} as React.UIEvent<HTMLDivElement, UIEvent>;
+
+				onScroll?.(syntheticEvent);
+			},
+			[scrollLeft, scrollTop],
 		);
 
 		/**
@@ -279,12 +310,29 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			};
 		}, []);
 
+		// Monitor container size changes with ResizeObserver
 		useEffect(() => {
-			if (containerRef.current) {
-				const { scrollLeft, scrollTop } = refBus.current;
-				containerRef.current.scrollLeft = scrollLeft;
-				containerRef.current.scrollTop = scrollTop;
-			}
+			const container = containerRef.current;
+			if (!container) return;
+
+			const resizeObserver = new ResizeObserver((entries) => {
+				for (const entry of entries) {
+					const { width, height } = entry.contentRect;
+					setContainerWidth(width);
+					setContainerHeight(height);
+				}
+			});
+
+			resizeObserver.observe(container);
+
+			// Initialize with current dimensions
+			const rect = container.getBoundingClientRect();
+			setContainerWidth(rect.width);
+			setContainerHeight(rect.height);
+
+			return () => {
+				resizeObserver.disconnect();
+			};
 		}, []);
 
 		useEffect(() => {
@@ -324,18 +372,19 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		return (
 			<Viewport>
-				<Container ref={containerRef} onScroll={onScroll}>
+				<Container ref={containerRef}>
 					<SvgCanvasContext.Provider value={stateProvider.current}>
 						<Svg
-							width={width}
-							height={height}
-							viewBox={`${minX} ${minY} ${width} ${height}`}
+							width={containerWidth}
+							height={containerHeight}
+							viewBox={`${minX + scrollLeft} ${minY + scrollTop} ${containerWidth} ${containerHeight}`}
 							tabIndex={0}
 							ref={svgRef}
 							onPointerDown={handlePointerDown}
 							onKeyDown={handleKeyDown}
 							onFocus={handleFocus}
 							onBlur={handleBlur}
+							onWheel={handleWheel}
 							onContextMenu={contextMenuHandlers.onContextMenu}
 						>
 							<title>{title}</title>
@@ -358,12 +407,12 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							<FlashConnectLine />
 						</Svg>
 					</SvgCanvasContext.Provider>
-					{/* Container for HTML elements that follow the scroll of the SVG canvas. */}
+					{/* Container for HTML elements that follow the scroll of the SVG canvas. */}{" "}
 					<HTMLElementsContainer
-						left={-minX}
-						top={-minY}
-						width={width + minX}
-						height={height + minY}
+						left={-minX - scrollLeft}
+						top={-minY - scrollTop}
+						width={containerWidth + minX + scrollLeft}
+						height={containerHeight + minY + scrollTop}
 					>
 						<TextEditor {...textEditorState} onTextChange={onTextChange} />
 						<DiagramMenu {...diagramMenuProps} />
