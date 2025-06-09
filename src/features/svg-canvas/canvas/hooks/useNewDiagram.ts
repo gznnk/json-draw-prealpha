@@ -35,8 +35,8 @@ export const useNewDiagram = (props: CanvasHooksProps) => {
 			x = e.x;
 			y = e.y;
 		} else {
-			x = canvasState.minX + canvasState.scrollLeft + window.innerWidth / 2;
-			y = canvasState.minY + canvasState.scrollTop + window.innerHeight / 2;
+			x = canvasState.minX + window.innerWidth / 2;
+			y = canvasState.minY + window.innerHeight / 2;
 		}
 
 		const diagramType = e.diagramType as DiagramType;

@@ -83,9 +83,8 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 			// Add the input to the first node position.
 			const canvasState = canvasStateProvider?.state();
 			if (canvasState) {
-				const startX = canvasState.minX + canvasState.scrollLeft + 300;
-				const startY =
-					canvasState.minY + canvasState.scrollTop + window.innerHeight / 2;
+				const startX = canvasState.minX + 300;
+				const startY = canvasState.minY + window.innerHeight / 2;
 
 				input.push({
 					role: "user",

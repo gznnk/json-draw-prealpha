@@ -56,8 +56,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			minX,
 			minY,
 			items,
-			scrollLeft,
-			scrollTop,
 			multiSelectGroup,
 			textEditorState,
 			onTransform,
@@ -110,8 +108,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			minX,
 			minY,
 			items,
-			scrollLeft,
-			scrollTop,
 		} as SvgCanvasState);
 
 		// Use the context menu hook to handle context menu events.
@@ -122,8 +118,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		const { diagramMenuProps } = useDiagramMenu(props);
 		// Create references bypass to avoid function creation in every render.
 		const refBusVal = {
-			scrollLeft,
-			scrollTop,
 			hasFocus,
 			textEditorState,
 			onDrag,
@@ -181,7 +175,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		 */
 		const handleWheel = useCallback(
 			(e: React.WheelEvent<SVGSVGElement>) => {
-				e.preventDefault();
+				// e.preventDefault();
 
 				// Bypass references to avoid function creation in every render.
 				const { onScroll } = refBus.current;
@@ -190,20 +184,12 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				const deltaX = e.deltaX;
 				const deltaY = e.deltaY;
 
-				const newScrollLeft = Math.max(0, scrollLeft + deltaX);
-				const newScrollTop = Math.max(0, scrollTop + deltaY);
-
-				// Create a synthetic scroll event
-				const syntheticEvent = {
-					currentTarget: {
-						scrollLeft: newScrollLeft,
-						scrollTop: newScrollTop,
-					},
-				} as React.UIEvent<HTMLDivElement, UIEvent>;
-
-				onScroll?.(syntheticEvent);
+				onScroll?.({
+					minX: minX + deltaX,
+					minY: minY + deltaY,
+				});
 			},
-			[scrollLeft, scrollTop],
+			[minX, minY],
 		);
 
 		/**
@@ -377,7 +363,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						<Svg
 							width={containerWidth}
 							height={containerHeight}
-							viewBox={`${minX + scrollLeft} ${minY + scrollTop} ${containerWidth} ${containerHeight}`}
+							viewBox={`${minX} ${minY} ${containerWidth} ${containerHeight}`}
 							tabIndex={0}
 							ref={svgRef}
 							onPointerDown={handlePointerDown}
@@ -409,10 +395,10 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					</SvgCanvasContext.Provider>
 					{/* Container for HTML elements that follow the scroll of the SVG canvas. */}{" "}
 					<HTMLElementsContainer
-						left={-minX - scrollLeft}
-						top={-minY - scrollTop}
-						width={containerWidth + minX + scrollLeft}
-						height={containerHeight + minY + scrollTop}
+						left={-minX}
+						top={-minY}
+						width={containerWidth + minX}
+						height={containerHeight + minY}
 					>
 						<TextEditor {...textEditorState} onTextChange={onTextChange} />
 						<DiagramMenu {...diagramMenuProps} />

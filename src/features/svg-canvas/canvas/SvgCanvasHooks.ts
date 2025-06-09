@@ -49,8 +49,6 @@ type SvgCanvasHooksProps = {
 	minX: number;
 	minY: number;
 	items: Diagram[];
-	scrollLeft: number;
-	scrollTop: number;
 	canvasRef: RefObject<SvgCanvasRef | null>;
 	onDataChange?: (data: SvgCanvasData) => void;
 };
@@ -77,8 +75,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		id: props.id,
 		items: props.items,
 		isDiagramChanging: false,
-		scrollLeft: props.scrollLeft,
-		scrollTop: props.scrollTop,
 		history: [
 			{
 				...initialBounds,

@@ -30,8 +30,6 @@ const CanvasViewComponent = ({
 		items,
 		minX: minX || 0,
 		minY: minY || 0,
-		scrollLeft: 0,
-		scrollTop: 0,
 		canvasRef,
 		onDataChange,
 	});

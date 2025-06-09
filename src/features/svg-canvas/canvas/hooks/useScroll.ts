@@ -5,6 +5,7 @@ import { useCallback, useRef } from "react";
 import { SVG_CANVAS_SCROLL_EVENT_NAME } from "../../types/events/Constants";
 import type { SvgCanvasScrollEvent } from "../../types/events/SvgCanvasScrollEvent";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
+import type { ScrollEvent } from "../../types/events/ScrollEvent";
 
 /**
  * Custom hook to handle scroll events on the canvas.
@@ -17,26 +18,24 @@ export const useScroll = (props: CanvasHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	return useCallback((e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+	return useCallback((e: ScrollEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const { setCanvasState } = refBus.current.props;
 
-		const scrollTop = e.currentTarget.scrollTop;
-		const scrollLeft = e.currentTarget.scrollLeft;
-
 		setCanvasState((prevState) => ({
 			...prevState,
-			scrollTop: scrollTop,
-			scrollLeft: scrollLeft,
+			minX: e.minX,
+			minY: e.minY,
 		}));
 
+		// FIXME: 修正
 		// Dispatch a custom event with scroll position.
 		document.dispatchEvent(
 			new CustomEvent(SVG_CANVAS_SCROLL_EVENT_NAME, {
 				bubbles: true,
 				detail: {
-					scrollTop: scrollTop,
-					scrollLeft: scrollLeft,
+					scrollTop: e.minX,
+					scrollLeft: e.minY,
 				} as SvgCanvasScrollEvent,
 			}),
 		);
