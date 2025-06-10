@@ -173,9 +173,11 @@ export const useDiagramChange = (props: CanvasHooksProps) => {
 		});
 
 		// Resize the canvas if the cursor is near the edges.
-		canvasResize({
-			cursorX: e.cursorX ?? e.endDiagram.x ?? 100,
-			cursorY: e.cursorY ?? e.endDiagram.y ?? 100,
-		});
+		if (e.cursorX !== undefined && e.cursorY !== undefined) {
+			canvasResize({
+				cursorX: e.cursorX,
+				cursorY: e.cursorY,
+			});
+		}
 	}, []);
 };

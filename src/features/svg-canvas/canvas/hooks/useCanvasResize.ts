@@ -54,24 +54,18 @@ export const useCanvasResize = (props: CanvasHooksProps) => {
 
 			// Left edge scroll adjustment
 			if (distFromLeft < CANVAS_EXPANSION_THRESHOLD) {
-				const newMinX = minX - CANVAS_EXPANSION_SIZE;
-
 				// Update state with new scroll position
 				setCanvasState((prevState) => ({
 					...prevState,
-					minX: newMinX,
-					scrollLeft: prevState.scrollLeft + CANVAS_EXPANSION_SIZE,
+					minX: minX - CANVAS_EXPANSION_SIZE,
 				}));
 			}
 			// Top edge scroll adjustment
 			else if (distFromTop < CANVAS_EXPANSION_THRESHOLD) {
-				const newMinY = minY - CANVAS_EXPANSION_SIZE;
-
 				// Update state with new scroll position
 				setCanvasState((prevState) => ({
 					...prevState,
-					minY: newMinY,
-					scrollTop: prevState.scrollTop + CANVAS_EXPANSION_SIZE,
+					minY: minY - CANVAS_EXPANSION_SIZE,
 				}));
 			}
 			// Right edge scroll adjustment
@@ -79,7 +73,7 @@ export const useCanvasResize = (props: CanvasHooksProps) => {
 				// Expand the canvas area to the right by adjusting scroll
 				setCanvasState((prevState) => ({
 					...prevState,
-					scrollLeft: prevState.scrollLeft - CANVAS_EXPANSION_SIZE,
+					minX: minX + CANVAS_EXPANSION_SIZE,
 				}));
 			}
 			// Bottom edge scroll adjustment
@@ -87,7 +81,7 @@ export const useCanvasResize = (props: CanvasHooksProps) => {
 				// Expand the canvas area downward by adjusting scroll
 				setCanvasState((prevState) => ({
 					...prevState,
-					scrollTop: prevState.scrollTop - CANVAS_EXPANSION_SIZE,
+					minY: minY + CANVAS_EXPANSION_SIZE,
 				}));
 			}
 		},
