@@ -3,15 +3,15 @@ import { useCallback, useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import {
+	type SvgCanvasScrollEvent,
+	SVG_CANVAS_SCROLL_EVENT_NAME,
+} from "../../types/events/SvgCanvasScrollEvent";
+import {
 	AUTO_SCROLL_INTERVAL_MS,
 	AUTO_SCROLL_STEP_SIZE,
 	AUTO_SCROLL_THRESHOLD,
 } from "../SvgCanvasConstants";
 import type { CanvasHooksProps } from "../SvgCanvasTypes";
-import {
-	type SvgCanvasScrollEvent,
-	SVG_CANVAS_SCROLL_EVENT_NAME,
-} from "../../types/events/SvgCanvasScrollEvent";
 
 /**
  * Type definition for scroll directions.
@@ -31,6 +31,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
+
 	// Reference to store the current scroll interval ID
 	const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 	// Reference to store the last scroll direction for continuous scrolling
@@ -38,9 +39,14 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 		direction: ScrollDirection | null;
 	}>({ direction: null });
 
+	// Reference to store the current cursor position for continuous scrolling
+	const currentCursorRef = useRef<{
+		x: number;
+		y: number;
+	}>({ x: 0, y: 0 });
+
 	// Function to clear the scroll interval
 	const clearScrollInterval = useCallback(() => {
-		// console.log("clearScrollInterval");
 		if (scrollIntervalRef.current) {
 			clearInterval(scrollIntervalRef.current);
 			scrollIntervalRef.current = null;
@@ -49,7 +55,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 	}, []);
 
 	// Function to perform a single scroll action with known base client coordinates
-	const performScrollWithBaseClient = useCallback(
+	const performScroll = useCallback(
 		(direction: ScrollDirection, baseClientX: number, baseClientY: number) => {
 			const { canvasState, setCanvasState } = refBus.current.props;
 			const { minX, minY } = canvasState;
@@ -107,8 +113,6 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 				clientY: adjustedClientY,
 			};
 
-			// console.log("autoEdgeScroll", adjustedClientX, adjustedClientY);
-
 			document.dispatchEvent(
 				new CustomEvent(SVG_CANVAS_SCROLL_EVENT_NAME, {
 					bubbles: true,
@@ -127,6 +131,10 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 
 			// Set the new direction
 			lastScrollDirectionRef.current.direction = direction;
+
+			// Store current cursor position
+			currentCursorRef.current.x = cursorX;
+			currentCursorRef.current.y = cursorY;
 
 			// Convert initial cursor position to client coordinates and store it
 			let baseClientX = 0;
@@ -148,7 +156,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 			}
 
 			// Perform initial scroll immediately
-			performScrollWithBaseClient(direction, baseClientX, baseClientY);
+			performScroll(direction, baseClientX, baseClientY);
 
 			// Start interval for continuous scrolling
 			scrollIntervalRef.current = setInterval(() => {
@@ -159,11 +167,33 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					return;
 				}
 
-				// Use the same base client coordinates for continuous scrolling
-				performScrollWithBaseClient(direction, baseClientX, baseClientY);
+				// Get current cursor position
+				const currentCursorX = currentCursorRef.current.x;
+				const currentCursorY = currentCursorRef.current.y;
+
+				// Convert current cursor position to client coordinates
+				let currentClientX = 0;
+				let currentClientY = 0;
+
+				if (canvasRef?.svgRef?.current) {
+					const svgElement = canvasRef.svgRef.current;
+					const svgPoint = svgElement.createSVGPoint();
+					svgPoint.x = currentCursorX;
+					svgPoint.y = currentCursorY;
+
+					const screenCTM = svgElement.getScreenCTM();
+					if (screenCTM) {
+						const clientPoint = svgPoint.matrixTransform(screenCTM);
+						currentClientX = clientPoint.x;
+						currentClientY = clientPoint.y;
+					}
+				}
+
+				// Use current client coordinates for continuous scrolling
+				performScroll(direction, currentClientX, currentClientY);
 			}, AUTO_SCROLL_INTERVAL_MS);
 		},
-		[clearScrollInterval, performScrollWithBaseClient],
+		[clearScrollInterval, performScroll],
 	);
 
 	// Cleanup interval on unmount
@@ -200,7 +230,13 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 			// Get current container dimensions
 			const containerRect = containerRef.current.getBoundingClientRect();
 			const containerWidth = containerRect.width;
-			const containerHeight = containerRect.height; // Calculate distances from each edge in SVG coordinates
+			const containerHeight = containerRect.height;
+
+			// Update current cursor position for continuous scrolling
+			currentCursorRef.current.x = cursorX;
+			currentCursorRef.current.y = cursorY;
+
+			// Calculate distances from each edge in SVG coordinates
 			const distFromLeft = cursorX - minX;
 			const distFromTop = cursorY - minY;
 			const distFromRight = minX + containerWidth - cursorX;
