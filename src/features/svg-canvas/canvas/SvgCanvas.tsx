@@ -56,6 +56,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			minX,
 			minY,
 			items,
+			zoom,
 			multiSelectGroup,
 			textEditorState,
 			onTransform,
@@ -75,6 +76,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onNewDiagram,
 			onExecute,
 			onScroll,
+			onZoom,
 			onCopy,
 			onPaste,
 		} = props;
@@ -116,8 +118,10 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// Use the diagram menu hook to handle diagram menu events.
 		const { diagramMenuProps } = useDiagramMenu(props);
+
 		// Create references bypass to avoid function creation in every render.
 		const refBusVal = {
+			zoom,
 			hasFocus,
 			textEditorState,
 			onDrag,
@@ -130,6 +134,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onRedo,
 			onDataChange,
 			onScroll,
+			onZoom,
 			onCopy,
 			onPaste,
 			contextMenuFunctions,
@@ -318,18 +323,28 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		}, []);
 
 		useEffect(() => {
-			const el = containerRef.current;
-
-			const handleTouchMove = (e: TouchEvent) => {
-				if (e.target !== e.currentTarget && e.target !== svgRef.current) {
+			// Prevent browser zoom with Ctrl+wheel at document level
+			const onDocumentWheel = (e: WheelEvent) => {
+				if (e.ctrlKey) {
 					e.preventDefault();
+					e.stopPropagation();
+
+					const delta = e.deltaY > 0 ? 0.9 : 1.1;
+					const newZoom = Math.max(
+						0.1,
+						Math.min(3.0, refBus.current.zoom * delta),
+					);
+					refBus.current.onZoom?.(newZoom);
 				}
 			};
 
-			el?.addEventListener("touchmove", handleTouchMove, { passive: false });
+			document.addEventListener("wheel", onDocumentWheel, {
+				passive: false,
+				capture: true,
+			});
 
 			return () => {
-				el?.removeEventListener("touchmove", handleTouchMove);
+				document.removeEventListener("wheel", onDocumentWheel, true);
 			};
 		}, []);
 

@@ -11,9 +11,9 @@ import { calcOptimalCanvasSize } from "./utils/calcOptimalCanvasSize";
 
 // Imports related to this component.
 import type {
-	SvgCanvasState,
-	SvgCanvasRef,
 	SvgCanvasData,
+	SvgCanvasRef,
+	SvgCanvasState,
 } from "./SvgCanvasTypes";
 
 // Import canvas custom hooks.
@@ -23,11 +23,13 @@ import { useCopy } from "./hooks/useCopy";
 import { useDelete } from "./hooks/useDelete";
 import { useDiagramChange } from "./hooks/useDiagramChange";
 import { useDrag } from "./hooks/useDrag";
+import { useExecute } from "./hooks/useExecute";
+import { useExport } from "./hooks/useExport";
 import { useGroup } from "./hooks/useGroup";
 import { useNewDiagram } from "./hooks/useNewDiagram";
-import { useNewItem } from "./observers/addNewItem";
 import { usePaste } from "./hooks/usePaste";
 import { useRedo } from "./hooks/useRedo";
+import { useScroll } from "./hooks/useScroll";
 import { useSelect } from "./hooks/useSelect";
 import { useSelectAll } from "./hooks/useSelectAll";
 import { useStackOrderChange } from "./hooks/useStackOrderChange";
@@ -36,9 +38,8 @@ import { useTextEdit } from "./hooks/useTextEdit";
 import { useTransform } from "./hooks/useTransform";
 import { useUndo } from "./hooks/useUndo";
 import { useUngroup } from "./hooks/useUngroup";
-import { useExecute } from "./hooks/useExecute";
-import { useExport } from "./hooks/useExport";
-import { useScroll } from "./hooks/useScroll";
+import { useZoom } from "./hooks/useZoom";
+import { useNewItem } from "./observers/addNewItem";
 import { useConnectNodes } from "./observers/connectNodes";
 
 /**
@@ -49,6 +50,7 @@ type SvgCanvasHooksProps = {
 	minX: number;
 	minY: number;
 	items: Diagram[];
+	zoom: number;
 	canvasRef: RefObject<SvgCanvasRef | null>;
 	onDataChange?: (data: SvgCanvasData) => void;
 };
@@ -74,6 +76,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		...initialBounds,
 		id: props.id,
 		items: props.items,
+		zoom: props.zoom,
 		isDiagramChanging: false,
 		history: [
 			{
@@ -152,6 +155,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the scroll event.
 	const onScroll = useScroll(canvasHooksProps);
 
+	// Handler for the zoom event.
+	const onZoom = useZoom(canvasHooksProps);
+
 	// Handler for the copy event.
 	const onCopy = useCopy(canvasHooksProps);
 
@@ -186,6 +192,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onExecute,
 		onExport,
 		onScroll,
+		onZoom,
 		onCopy,
 		onPaste,
 	};

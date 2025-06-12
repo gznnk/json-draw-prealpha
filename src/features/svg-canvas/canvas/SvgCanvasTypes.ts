@@ -33,6 +33,7 @@ export type SvgCanvasData = {
  * Type for the state of the SvgCanvas.
  */
 export type SvgCanvasState = {
+	zoom: number;
 	multiSelectGroup?: GroupData;
 	isDiagramChanging: boolean;
 	history: SvgCanvasHistory[];
@@ -97,4 +98,5 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onScroll?: (e: SvgCanvasScrollEvent) => void;
 	onCopy?: () => void;
 	onPaste?: () => void;
+	onZoom?: (zoom: number) => void;
 };
