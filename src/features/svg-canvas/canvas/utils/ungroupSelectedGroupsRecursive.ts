@@ -4,40 +4,42 @@ import { isItemableData } from "../../utils/validation/isItemableData";
 /**
  * Ungroup selected groups.
  *
- * @param items - List of diagrams.
+ * @param items - List of all existing diagrams.
  * @returns Updated list of diagrams.
  */
 export const ungroupSelectedGroupsRecursive = (items: Diagram[]) => {
-	// Extract the diagrams from the selected groups.
-	let extractedItems: Diagram[] = [];
-	for (const item of [...items]) {
-		if (
-			item.type === "Group" &&
-			isItemableData(item) &&
-			item.items !== undefined
-		) {
+	// Recursively ungroup selected groups and rebuild the item list.
+	const ungroupedItems: Diagram[] = [];
+
+	for (const item of items) {
+		if (item.type === "Group" && isItemableData(item)) {
 			if (item.isSelected) {
 				for (const groupItem of item.items) {
-					extractedItems.push(groupItem);
+					ungroupedItems.push(groupItem);
 				}
 			} else {
-				item.items = ungroupSelectedGroupsRecursive(item.items);
-				extractedItems.push(item);
+				const updatedGroup: Diagram = {
+					...item,
+					items: ungroupSelectedGroupsRecursive(item.items),
+				};
+				ungroupedItems.push(updatedGroup);
 			}
 		} else {
-			extractedItems.push(item);
+			ungroupedItems.push(item);
 		}
 	}
 
 	// Remove empty groups.
-	extractedItems = extractedItems.filter((item) => {
-		if (isItemableData(item) && item.type === "Group") {
-			if (item.items?.length === 0) {
-				return false;
-			}
+	const cleanedItems = ungroupedItems.filter((item) => {
+		if (
+			item.type === "Group" &&
+			isItemableData(item) &&
+			item.items.length === 0
+		) {
+			return false;
 		}
 		return true;
 	});
 
-	return extractedItems;
+	return cleanedItems;
 };
