@@ -330,10 +330,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					e.stopPropagation();
 
 					const delta = e.deltaY > 0 ? 0.9 : 1.1;
-					const newZoom = Math.max(
-						0.1,
-						Math.min(3.0, refBus.current.zoom * delta),
-					);
+					const newZoom = refBus.current.zoom * delta;
 					refBus.current.onZoom?.(newZoom);
 				}
 			};
