@@ -16,6 +16,7 @@ export const MiniMapContainer = styled.div<{ width: number; height: number }>`
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 	overflow: hidden;
 	z-index: 1000;
+	pointer-events: auto;
 `;
 
 /**
@@ -25,6 +26,7 @@ export const MiniMapSvg = styled.svg`
 	width: 100%;
 	height: 100%;
 	display: block;
+	pointer-events: auto;
 `;
 
 /**
