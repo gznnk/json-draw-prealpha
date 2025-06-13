@@ -96,7 +96,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					return prevState;
 				}
 
-				// 褁E��選択グループ�E初期値を作�E
+				// Create initial values for the multi-select group
 				const box = calcGroupBoxOfNoRotation(selectedItems);
 				multiSelectGroup = {
 					id: MULTI_SELECT_GROUP,
@@ -108,16 +108,16 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					scaleX: 1,
 					scaleY: 1,
 					keepProportion: prevState.multiSelectGroup?.keepProportion ?? true,
-					isSelected: true, // 褁E��選択用のグループ�E常に選択状態にする
-					isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
+					isSelected: true, // Multi-select group is always in selected state
+					isMultiSelectSource: false, // Multi-select group is not a multi-select source
 					items: applyRecursive(selectedItems, (item) => {
 						if (!isSelectableData(item)) {
 							return item;
 						}
 						return {
 							...item,
-							isSelected: false, // 褁E��選択用のグループ�Eの図形は選択状態を解除
-							isMultiSelectSource: false, // 褁E��選択�E選択�EではなぁE��設宁E
+							isSelected: false, // Shapes in multi-select group have their selection state cleared
+							isMultiSelectSource: false, // Multi-select source is not the selection source
 						};
 					}),
 				} as GroupData;
@@ -125,7 +125,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 				// Set `isMultiSelectSource` to true to hide the transform outline of the original diagrams during multi-selection.
 				items = applyMultiSelectSourceRecursive(items);
 			} else {
-				// 褁E��選択でなぁE��合�E、�E図形に対して褁E��選択�E選択�EではなぁE��設宁E
+				// When not in multi-select mode, set all shapes to not be multi-select sources
 				items = applyRecursive(items, (item) => {
 					if (isSelectableData(item)) {
 						return {
