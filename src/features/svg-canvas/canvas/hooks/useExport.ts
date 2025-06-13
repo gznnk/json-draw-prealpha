@@ -33,7 +33,7 @@ export const useExport = (props: CanvasHooksProps) => {
 			if (blob) {
 				const url = URL.createObjectURL(blob);
 
-					const ext = mimeToExtension[blob.type] || "txt"; // Default to txt if type is unknown.
+				const ext = mimeToExtension[blob.type] || "txt"; // Default to txt if type is unknown.
 
 				// Create a link element to download the SVG.
 				const link = document.createElement("a");
