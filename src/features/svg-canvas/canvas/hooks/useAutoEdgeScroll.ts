@@ -58,7 +58,10 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 	const performScroll = useCallback(
 		(direction: ScrollDirection, baseClientX: number, baseClientY: number) => {
 			const { canvasState, setCanvasState } = refBus.current.props;
-			const { minX, minY } = canvasState;
+			const { minX, minY, zoom } = canvasState;
+
+			// Calculate zoom-adjusted scroll step for consistent scrolling behavior
+			const adjustedScrollStep = AUTO_SCROLL_STEP_SIZE * zoom;
 
 			let newMinX = minX;
 			let newMinY = minY;
@@ -67,7 +70,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 
 			switch (direction) {
 				case "left":
-					scrollDeltaX = -AUTO_SCROLL_STEP_SIZE;
+					scrollDeltaX = -adjustedScrollStep;
 					newMinX = minX + scrollDeltaX;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -75,7 +78,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					}));
 					break;
 				case "top":
-					scrollDeltaY = -AUTO_SCROLL_STEP_SIZE;
+					scrollDeltaY = -adjustedScrollStep;
 					newMinY = minY + scrollDeltaY;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -83,7 +86,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					}));
 					break;
 				case "right":
-					scrollDeltaX = AUTO_SCROLL_STEP_SIZE;
+					scrollDeltaX = adjustedScrollStep;
 					newMinX = minX + scrollDeltaX;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -91,7 +94,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					}));
 					break;
 				case "bottom":
-					scrollDeltaY = AUTO_SCROLL_STEP_SIZE;
+					scrollDeltaY = adjustedScrollStep;
 					newMinY = minY + scrollDeltaY;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -212,7 +215,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 			cursorY: number;
 		}) => {
 			const {
-				canvasState: { minX, minY, isDiagramChanging },
+				canvasState: { minX, minY, zoom, isDiagramChanging },
 				canvasRef,
 			} = refBus.current.props;
 
@@ -236,29 +239,36 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 			currentCursorRef.current.x = cursorX;
 			currentCursorRef.current.y = cursorY;
 
-			// Calculate distances from each edge in SVG coordinates
-			const distFromLeft = cursorX - minX;
-			const distFromTop = cursorY - minY;
-			const distFromRight = minX + containerWidth - cursorX;
-			const distFromBottom = minY + containerHeight - cursorY;
+			// Calculate the viewBox boundaries considering zoom
+			const viewBoxX = minX * zoom;
+			const viewBoxY = minY * zoom;
+			const viewBoxWidth = containerWidth * zoom;
+			const viewBoxHeight = containerHeight * zoom;
 
-			// Determine which edge the cursor is closest to
+			// Calculate distances from each edge in viewBox coordinates
+			const distFromLeft = cursorX - viewBoxX;
+			const distFromTop = cursorY - viewBoxY;
+			const distFromRight = viewBoxX + viewBoxWidth - cursorX;
+			const distFromBottom = viewBoxY + viewBoxHeight - cursorY; // Determine which edge the cursor is closest to
 			let newDirection: ScrollDirection | null = null;
 
+			// Calculate zoom-adjusted threshold for more consistent behavior across zoom levels
+			const adjustedThreshold = AUTO_SCROLL_THRESHOLD * zoom;
+
 			// Left edge scroll adjustment
-			if (distFromLeft < AUTO_SCROLL_THRESHOLD) {
+			if (distFromLeft < adjustedThreshold) {
 				newDirection = "left";
 			}
 			// Top edge scroll adjustment
-			else if (distFromTop < AUTO_SCROLL_THRESHOLD) {
+			else if (distFromTop < adjustedThreshold) {
 				newDirection = "top";
 			}
 			// Right edge scroll adjustment
-			else if (distFromRight < AUTO_SCROLL_THRESHOLD) {
+			else if (distFromRight < adjustedThreshold) {
 				newDirection = "right";
 			}
 			// Bottom edge scroll adjustment
-			else if (distFromBottom < AUTO_SCROLL_THRESHOLD) {
+			else if (distFromBottom < adjustedThreshold) {
 				newDirection = "bottom";
 			}
 			// Handle direction changes
