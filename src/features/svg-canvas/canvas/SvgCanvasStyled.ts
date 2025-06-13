@@ -21,11 +21,11 @@ export const Container = styled.div`
 `;
 
 /**
- * Props for the SVG element.
+ * Props for the SVG element for grab scroll functionality.
  */
 type SvgProps = {
-	isCtrlPressed?: boolean;
-	isDragging?: boolean;
+	isGrabScrollReady?: boolean;
+	isGrabScrolling?: boolean;
 };
 
 /**
@@ -37,8 +37,8 @@ export const Svg = styled.svg<SvgProps>`
     background-color: #eeeeee;
     outline: none;
     cursor: ${(props) => {
-			if (props.isDragging) return "grabbing";
-			if (props.isCtrlPressed) return "grab";
+			if (props.isGrabScrolling) return "grabbing";
+			if (props.isGrabScrollReady) return "grab";
 			return "default";
 		}};
     * {
