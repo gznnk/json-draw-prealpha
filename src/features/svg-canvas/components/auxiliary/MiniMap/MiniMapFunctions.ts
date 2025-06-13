@@ -1,4 +1,7 @@
 import type { Bounds } from "../../../types/base/Bounds";
+import type { Diagram } from "../../../catalog/DiagramTypes";
+import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
+import { isItemableData } from "../../../utils/validation/isItemableData";
 
 /**
  * Calculate the minimap scale factor based on canvas bounds and minimap size
@@ -117,4 +120,27 @@ export const calculateViewportRect = (
 		width: bottomRight.x - topLeft.x,
 		height: bottomRight.y - topLeft.y,
 	};
+};
+
+/**
+ * Recursively extract all transformative items from a diagram array,
+ * including items inside groups
+ */
+export const extractTransformativeItemsRecursive = (
+	items: Diagram[],
+): Diagram[] => {
+	const result: Diagram[] = [];
+
+	for (const item of items) {
+		if (item.type === "Group" && isItemableData(item)) {
+			// For groups, recursively extract items from their children
+			const childItems = extractTransformativeItemsRecursive(item.items || []);
+			result.push(...childItems);
+		} else if (isTransformativeData(item)) {
+			// For non-group transformative items, add them directly
+			result.push(item);
+		}
+	}
+
+	return result;
 };

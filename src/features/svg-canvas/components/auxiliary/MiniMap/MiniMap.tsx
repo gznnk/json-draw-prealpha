@@ -3,17 +3,16 @@ import { memo, useCallback, useMemo } from "react";
 import type React from "react";
 
 // Import types related to SvgCanvas.
-import type { DiagramBaseData } from "../../../types/base/DiagramBaseData";
+import type { Diagram } from "../../../catalog/DiagramTypes";
 
 // Import functions related to SvgCanvas.
 import { calcCanvasBounds } from "../../../canvas/utils/calcCanvasBounds";
-import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
-import type { TransformativeData } from "../../../types/data/core/TransformativeData";
 
 // Imports related to this component.
 import {
 	calculateMiniMapScale,
 	calculateViewportRect,
+	extractTransformativeItemsRecursive,
 	transformFromMiniMapCoords,
 	transformToMiniMapCoords,
 } from "./MiniMapFunctions";
@@ -123,9 +122,17 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 		],
 	); // Render minimap items
 	const miniMapItems = useMemo(() => {
-		return items.filter(isTransformativeData).map((item) => {
-			// Type assertion to ensure item has transformative properties
-			const transformativeItem = item as TransformativeData & DiagramBaseData;
+		// Extract all transformative items recursively, including from groups
+		const allTransformativeItems = extractTransformativeItemsRecursive(items);
+
+		return allTransformativeItems.map((item) => {
+			// At this point, item is guaranteed to be transformative by the extraction function
+			const transformativeItem = item as Diagram & {
+				x: number;
+				y: number;
+				width: number;
+				height: number;
+			};
 
 			// Transform item coordinates to minimap coordinates
 			const topLeft = transformToMiniMapCoords(
