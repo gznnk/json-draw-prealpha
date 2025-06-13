@@ -7,6 +7,7 @@ import type { CanvasHooksProps } from "../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { getSelectedItems } from "../../utils/common/getSelectedItems";
+import { mimeToExtension } from "../../utils/common/mimeToExtension";
 
 /**
  * Custom hook to handle export events on the canvas.
@@ -32,19 +33,7 @@ export const useExport = (props: CanvasHooksProps) => {
 			if (blob) {
 				const url = URL.createObjectURL(blob);
 
-				// TODO: 共通化
-				const mimeToExt: Record<string, string> = {
-					"image/png": "png",
-					"image/jpeg": "jpg",
-					"image/svg+xml": "svg",
-					"image/gif": "gif",
-					"image/webp": "webp",
-					"application/pdf": "pdf",
-					"text/plain": "txt",
-					// 忁E��に応じて追加
-				};
-
-				const ext = mimeToExt[blob.type] || "txt"; // Default to txt if type is unknown.
+                               const ext = mimeToExtension(blob.type);
 
 				// Create a link element to download the SVG.
 				const link = document.createElement("a");
