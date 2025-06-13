@@ -1,5 +1,5 @@
 // Import React.
-import { useState, useCallback, type RefObject } from "react";
+import { useState, type RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { Diagram } from "../catalog/DiagramTypes";
@@ -41,6 +41,7 @@ import { useUngroup } from "./hooks/useUngroup";
 import { useZoom } from "./hooks/useZoom";
 import { useCtrl } from "./hooks/useCtrl";
 import { useGrabScroll } from "./hooks/useGrabScroll";
+import { useNavigate } from "./hooks/useNavigate";
 import { useNewItem } from "./observers/addNewItem";
 import { useConnectNodes } from "./observers/connectNodes";
 
@@ -174,12 +175,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onPaste = usePaste(canvasHooksProps);
 
 	// Handler for the navigate event (using scroll)
-	const onNavigate = useCallback(
-		(minX: number, minY: number) => {
-			onScroll({ minX, minY, clientX: 0, clientY: 0 });
-		},
-		[onScroll],
-	);
+	const onNavigate = useNavigate({ ...canvasHooksProps, onScroll });
 
 	// Use grab scroll hook for Ctrl+drag functionality
 	const { onGrabStart, onGrabMove, onGrabEnd } = useGrabScroll(
