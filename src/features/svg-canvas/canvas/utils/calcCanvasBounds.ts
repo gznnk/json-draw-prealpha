@@ -11,6 +11,7 @@ import { calcBoundsOfAllItems } from "./calcBoundsOfAllItems";
  */
 export const calcCanvasBounds = (items: Diagram[]): Bounds => {
 	const bounds = calcBoundsOfAllItems(items);
+
 	let minX = 0;
 	if (bounds.left < 0) {
 		const minXMultiplier =

@@ -7,7 +7,7 @@ import type { TextEditorState } from "../components/core/Textable";
 
 // Import functions related to SvgCanvas.
 import { deepCopy } from "../utils/common/deepCopy";
-import { calcOptimalCanvasSize } from "./utils/calcOptimalCanvasSize";
+import { calcCanvasBounds } from "./utils/calcCanvasBounds";
 
 // Imports related to this component.
 import type {
@@ -68,7 +68,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		minY: props.minY,
 	};
 	if (props.items.length > 0) {
-		const optimalBounds = calcOptimalCanvasSize(props.items);
+		const optimalBounds = calcCanvasBounds(props.items);
 		initialBounds = {
 			minX: optimalBounds.x,
 			minY: optimalBounds.y,

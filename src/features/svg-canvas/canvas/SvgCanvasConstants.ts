@@ -4,9 +4,9 @@
 export const MAX_HISTORY_SIZE = 20;
 
 /**
- * The amount of space to expand the canvas when calculating optimal canvas size.
+ * The grid size used for canvas bounds calculations and expansion.
  */
-export const CANVAS_EXPANSION_SIZE = 10;
+export const CANVAS_GRID_SIZE = 100;
 
 /**
  * The threshold from the edge of the canvas to trigger auto-expansion.
