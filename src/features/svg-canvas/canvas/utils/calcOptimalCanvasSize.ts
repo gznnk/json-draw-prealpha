@@ -1,4 +1,5 @@
 import type { Diagram } from "../../catalog/DiagramTypes";
+import type { Bounds } from "../../types/base/Bounds";
 import { CANVAS_EXPANSION_SIZE } from "../SvgCanvasConstants";
 import { calcBoundsOfAllItems } from "./calcBoundsOfAllItems";
 
@@ -6,9 +7,9 @@ import { calcBoundsOfAllItems } from "./calcBoundsOfAllItems";
  * Calculate the optimal canvas size based on the items.
  *
  * @param items - The list of items to calculate the canvas size for.
- * @returns - The optimal canvas bounds (minX, minY only).
+ * @returns - The optimal canvas bounds including position and dimensions.
  */
-export const calcOptimalCanvasSize = (items: Diagram[]) => {
+export const calcOptimalCanvasSize = (items: Diagram[]): Bounds => {
 	const bounds = calcBoundsOfAllItems(items);
 
 	let minX = 0;
@@ -25,8 +26,20 @@ export const calcOptimalCanvasSize = (items: Diagram[]) => {
 		minY = -minYMultiplier * CANVAS_EXPANSION_SIZE;
 	}
 
+	// Calculate width based on the bounds of all items
+	const widthMultiplier =
+		Math.floor((bounds.right - bounds.left) / CANVAS_EXPANSION_SIZE) + 1;
+	const width = widthMultiplier * CANVAS_EXPANSION_SIZE;
+
+	// Calculate height based on the bounds of all items
+	const heightMultiplier =
+		Math.floor((bounds.bottom - bounds.top) / CANVAS_EXPANSION_SIZE) + 1;
+	const height = heightMultiplier * CANVAS_EXPANSION_SIZE;
+
 	return {
-		minX,
-		minY,
+		x: minX,
+		y: minY,
+		width,
+		height,
 	};
 };

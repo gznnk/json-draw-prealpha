@@ -68,7 +68,11 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		minY: props.minY,
 	};
 	if (props.items.length > 0) {
-		initialBounds = calcOptimalCanvasSize(props.items);
+		const optimalBounds = calcOptimalCanvasSize(props.items);
+		initialBounds = {
+			minX: optimalBounds.x,
+			minY: optimalBounds.y,
+		};
 	}
 
 	// The state of the canvas.
