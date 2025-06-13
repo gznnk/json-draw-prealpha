@@ -104,7 +104,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	};
 
 	// Ctrl key state management
-	const { isCtrlDown } = useCtrl();
+	const { isCtrlPressed } = useCtrl();
 
 	// Handler for the drag event.
 	const onDrag = useDrag(canvasHooksProps);
@@ -116,7 +116,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onDiagramChange = useDiagramChange(canvasHooksProps);
 
 	// Handler for the select event.
-	const onSelect = useSelect(canvasHooksProps, isCtrlDown);
+	const onSelect = useSelect(canvasHooksProps, isCtrlPressed);
 
 	// Handler for the select all event.
 	const onSelectAll = useSelectAll(canvasHooksProps);

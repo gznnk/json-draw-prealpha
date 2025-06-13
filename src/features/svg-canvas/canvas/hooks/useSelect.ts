@@ -1,6 +1,5 @@
 // Import React.
 import { useCallback, useRef } from "react";
-import type { RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { GroupData } from "../../types/data/shapes/GroupData";
@@ -24,14 +23,11 @@ import { isSelectableData } from "../../utils/validation/isSelectableData";
 /**
  * Custom hook to handle select events on the canvas.
  */
-export const useSelect = (
-	props: CanvasHooksProps,
-	isCtrlDown?: RefObject<boolean>,
-) => {
+export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
-		isCtrlDown,
+		isCtrlPressed,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -43,13 +39,14 @@ export const useSelect = (
 		// Bypass references to avoid function creation in every render.
 		const {
 			props: { setCanvasState },
-			isCtrlDown,
+			isCtrlPressed,
 		} = refBus.current;
 
-		// Override isMultiSelect based on Ctrl key state if isCtrlDown is provided
+		// Override isMultiSelect based on Ctrl key state if isCtrlPressed is provided
 		const actualEvent = {
 			...e,
-			isMultiSelect: isCtrlDown ? isCtrlDown.current : e.isMultiSelect,
+			isMultiSelect:
+				isCtrlPressed !== undefined ? isCtrlPressed : e.isMultiSelect,
 		};
 		setCanvasState((prevState) => {
 			// Update the selected state of the items.

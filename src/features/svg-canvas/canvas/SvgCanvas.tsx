@@ -25,6 +25,7 @@ import { MiniMap } from "../components/auxiliary/MiniMap";
 
 // Imports related to this component.
 import { useShortcutKey } from "./hooks/useShortcutKey";
+import { useCtrl } from "./hooks/useCtrl";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import {
 	Container,
@@ -88,6 +89,18 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// Container dimensions state
 		const [containerWidth, setContainerWidth] = useState(0);
 		const [containerHeight, setContainerHeight] = useState(0);
+
+		// Use Ctrl key hook for grab scrolling
+		const { isCtrlPressed } = useCtrl();
+		const [isDragging, setIsDragging] = useState(false);
+		const dragStartPos = useRef<{ x: number; y: number } | null>(null);
+		// End dragging if Ctrl is released during drag
+		useEffect(() => {
+			if (!isCtrlPressed && isDragging) {
+				setIsDragging(false);
+				dragStartPos.current = null;
+			}
+		}, [isCtrlPressed, isDragging]);
 
 		// Forward refs to parent using useImperativeHandle
 		useImperativeHandle(ref, () => ({
@@ -167,6 +180,15 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				// Bypass references to avoid function creation in every render.
 				const { onClearAllSelection, contextMenuFunctions } = refBus.current;
 
+				// Check for Ctrl+drag to start grab scrolling
+				if (e.ctrlKey && e.target === e.currentTarget) {
+					setIsDragging(true);
+					dragStartPos.current = { x: e.clientX, y: e.clientY };
+					e.currentTarget.setPointerCapture(e.pointerId);
+					e.preventDefault();
+					return;
+				}
+
 				if (e.target === e.currentTarget) {
 					// Clear the selection when pointer is down on the canvas.
 					onClearAllSelection?.();
@@ -176,6 +198,45 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				contextMenuFunctions.closeContextMenu();
 			},
 			[],
+		);
+
+		/**
+		 * Handle the pointer move event for grab scrolling.
+		 */
+		const handlePointerMove = useCallback(
+			(e: React.PointerEvent<SVGSVGElement>) => {
+				if (isDragging && dragStartPos.current) {
+					const deltaX = e.clientX - dragStartPos.current.x;
+					const deltaY = e.clientY - dragStartPos.current.y;
+
+					// Update scroll position
+					const { onScroll } = refBus.current;
+					onScroll?.({
+						minX: minX - deltaX,
+						minY: minY - deltaY,
+						clientX: e.clientX,
+						clientY: e.clientY,
+					});
+
+					// Update drag start position for next move
+					dragStartPos.current = { x: e.clientX, y: e.clientY };
+				}
+			},
+			[isDragging, minX, minY],
+		);
+
+		/**
+		 * Handle the pointer up event to end grab scrolling.
+		 */
+		const handlePointerUp = useCallback(
+			(e: React.PointerEvent<SVGSVGElement>) => {
+				if (isDragging) {
+					setIsDragging(false);
+					dragStartPos.current = null;
+					e.currentTarget.releasePointerCapture(e.pointerId);
+				}
+			},
+			[isDragging],
 		);
 
 		/**
@@ -237,7 +298,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		useEffect(() => {
 			// Prevent browser zoom with Ctrl+wheel at document level
 			const onDocumentWheel = (e: WheelEvent) => {
-				if (e.ctrlKey) {
+				if (e.ctrlKey && !isDragging) {
 					e.preventDefault();
 					e.stopPropagation();
 
@@ -255,7 +316,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			return () => {
 				document.removeEventListener("wheel", onDocumentWheel, true);
 			};
-		}, []);
+		}, [isDragging]);
 
 		// 図形の描画
 		const renderedItems = items.map((item) => {
@@ -286,7 +347,11 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							viewBox={`${minX / zoom} ${minY / zoom} ${containerWidth / zoom} ${containerHeight / zoom}`}
 							tabIndex={0}
 							ref={svgRef}
+							isCtrlPressed={isCtrlPressed}
+							isDragging={isDragging}
 							onPointerDown={handlePointerDown}
+							onPointerMove={handlePointerMove}
+							onPointerUp={handlePointerUp}
 							onKeyDown={handleKeyDown}
 							onFocus={handleFocus}
 							onBlur={handleBlur}

@@ -21,13 +21,26 @@ export const Container = styled.div`
 `;
 
 /**
+ * Props for the SVG element.
+ */
+type SvgProps = {
+	isCtrlPressed?: boolean;
+	isDragging?: boolean;
+};
+
+/**
  * Styled SVG element for rendering the diagram.
  */
-export const Svg = styled.svg`
+export const Svg = styled.svg<SvgProps>`
     display: block;
     box-sizing: border-box;
     background-color: #eeeeee;
     outline: none;
+    cursor: ${(props) => {
+			if (props.isDragging) return "grabbing";
+			if (props.isCtrlPressed) return "grab";
+			return "default";
+		}};
     * {
         outline: none;
     }
