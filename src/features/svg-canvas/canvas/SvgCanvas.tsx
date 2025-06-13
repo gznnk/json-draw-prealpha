@@ -11,7 +11,6 @@ import React, {
 
 // SvgCanvas関連型定義をインポート
 import { DiagramComponentCatalog } from "../catalog/DiagramComponentCatalog";
-import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor } from "../components/core/Textable";
@@ -23,9 +22,6 @@ import { NewConnectLine } from "../components/shapes/ConnectPoint";
 import { Group } from "../components/shapes/Group";
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { MiniMap } from "../components/auxiliary/MiniMap";
-
-// SvgCanvas関連関数をインポート
-import { newEventId } from "../utils/common/newEventId";
 
 // Imports related to this component.
 import { useShortcutKey } from "./hooks/useShortcutKey";
@@ -99,8 +95,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			svgRef,
 		}));
 
-		// Ctrlキーが押されているかどうかのフラグ
-		const isCtrlDown = useRef(false);
 		// SVG要素にフォーカスがあるかどうかのフラグ
 		const hasFocus = useRef(false);
 
@@ -142,7 +136,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			textEditorState,
 			onDrag,
 			onDiagramChange,
-			onSelect,
 			onClearAllSelection,
 			onDataChange,
 			onScroll,
@@ -216,45 +209,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			[],
 		);
 
-		/**
-		 * 図形選択イベントハンドラ
-		 */
-		const handleSelect = useCallback((e: DiagramSelectEvent) => {
-			// Bypass references to avoid function creation in every render.
-			const { onSelect } = refBus.current;
-
-			// Ctrlキーの押下状態を付与して、処理をHooksに委譲
-			onSelect?.({
-				eventId: newEventId(),
-				id: e.id,
-				isMultiSelect: isCtrlDown.current,
-			});
-		}, []);
-
-		// Monitor keyboard events for Ctrl key state
-		useEffect(() => {
-			const onDocumentKeyDown = (e: KeyboardEvent) => {
-				if (e.key === "Control") {
-					isCtrlDown.current = true;
-				}
-			};
-
-			const onDocumentKeyUp = (e: KeyboardEvent) => {
-				if (e.key === "Control") {
-					isCtrlDown.current = false;
-				}
-			};
-
-			// Add event listeners for keydown and keyup events
-			document.addEventListener("keydown", onDocumentKeyDown);
-			document.addEventListener("keyup", onDocumentKeyUp);
-
-			return () => {
-				document.removeEventListener("keydown", onDocumentKeyDown);
-				document.removeEventListener("keyup", onDocumentKeyUp);
-			};
-		}, []);
-
 		// Monitor container size changes with ResizeObserver
 		useEffect(() => {
 			const container = containerRef.current;
@@ -313,7 +267,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				onDiagramChange,
 				onDrag,
 				onDrop,
-				onSelect: handleSelect,
+				onSelect,
 				onConnect,
 				onTextEdit,
 				onExecute,
@@ -348,7 +302,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									{...multiSelectGroup}
 									id={MULTI_SELECT_GROUP}
 									syncWithSameId
-									onSelect={handleSelect}
+									onSelect={onSelect}
 									onTransform={onTransform}
 									onDiagramChange={onDiagramChange}
 								/>

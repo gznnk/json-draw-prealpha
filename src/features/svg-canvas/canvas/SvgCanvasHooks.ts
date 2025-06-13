@@ -39,6 +39,7 @@ import { useTransform } from "./hooks/useTransform";
 import { useUndo } from "./hooks/useUndo";
 import { useUngroup } from "./hooks/useUngroup";
 import { useZoom } from "./hooks/useZoom";
+import { useCtrl } from "./hooks/useCtrl";
 import { useNewItem } from "./observers/addNewItem";
 import { useConnectNodes } from "./observers/connectNodes";
 
@@ -102,6 +103,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onDataChange: props.onDataChange,
 	};
 
+	// Ctrl key state management
+	const { isCtrlDown } = useCtrl();
+
 	// Handler for the drag event.
 	const onDrag = useDrag(canvasHooksProps);
 
@@ -112,7 +116,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onDiagramChange = useDiagramChange(canvasHooksProps);
 
 	// Handler for the select event.
-	const onSelect = useSelect(canvasHooksProps);
+	const onSelect = useSelect(canvasHooksProps, isCtrlDown);
 
 	// Handler for the select all event.
 	const onSelectAll = useSelectAll(canvasHooksProps);

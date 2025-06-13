@@ -1,5 +1,6 @@
 // Import React.
 import { useCallback, useRef } from "react";
+import type { RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { GroupData } from "../../types/data/shapes/GroupData";
@@ -23,10 +24,14 @@ import { isSelectableData } from "../../utils/validation/isSelectableData";
 /**
  * Custom hook to handle select events on the canvas.
  */
-export const useSelect = (props: CanvasHooksProps) => {
+export const useSelect = (
+	props: CanvasHooksProps,
+	isCtrlDown?: RefObject<boolean>,
+) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		isCtrlDown,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -36,8 +41,16 @@ export const useSelect = (props: CanvasHooksProps) => {
 		if (e.id === MULTI_SELECT_GROUP) return;
 
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
+		const {
+			props: { setCanvasState },
+			isCtrlDown,
+		} = refBus.current;
 
+		// Override isMultiSelect based on Ctrl key state if isCtrlDown is provided
+		const actualEvent = {
+			...e,
+			isMultiSelect: isCtrlDown ? isCtrlDown.current : e.isMultiSelect,
+		};
 		setCanvasState((prevState) => {
 			// Update the selected state of the items.
 			let items = applyRecursive(prevState.items, (item) => {
@@ -46,8 +59,8 @@ export const useSelect = (props: CanvasHooksProps) => {
 					return item;
 				}
 
-				if (item.id === e.id) {
-					if (e.isMultiSelect) {
+				if (item.id === actualEvent.id) {
+					if (actualEvent.isMultiSelect) {
 						// When multiple selection, toggle the selection state of the selected diagram.
 						return {
 							...item,
@@ -59,7 +72,7 @@ export const useSelect = (props: CanvasHooksProps) => {
 					return { ...item, isSelected: true };
 				}
 
-				if (e.isMultiSelect && item.isSelected) {
+				if (actualEvent.isMultiSelect && item.isSelected) {
 					// When multiple selection, do not change the selection state of the selected diagram.
 					return item;
 				}
@@ -131,7 +144,7 @@ export const useSelect = (props: CanvasHooksProps) => {
 				...prevState,
 				items,
 				multiSelectGroup,
-				selectedItemId: e.id,
+				selectedItemId: actualEvent.id,
 			};
 		});
 	}, []);
