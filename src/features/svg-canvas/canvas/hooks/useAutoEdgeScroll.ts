@@ -58,10 +58,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 	const performScroll = useCallback(
 		(direction: ScrollDirection, baseClientX: number, baseClientY: number) => {
 			const { canvasState, setCanvasState } = refBus.current.props;
-			const { minX, minY, zoom } = canvasState;
-
-			// Calculate zoom-adjusted scroll step for consistent scrolling behavior
-			const adjustedScrollStep = AUTO_SCROLL_STEP_SIZE * zoom;
+			const { minX, minY } = canvasState;
 
 			let newMinX = minX;
 			let newMinY = minY;
@@ -70,7 +67,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 
 			switch (direction) {
 				case "left":
-					scrollDeltaX = -adjustedScrollStep;
+					scrollDeltaX = -AUTO_SCROLL_STEP_SIZE;
 					newMinX = minX + scrollDeltaX;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -78,7 +75,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					}));
 					break;
 				case "top":
-					scrollDeltaY = -adjustedScrollStep;
+					scrollDeltaY = -AUTO_SCROLL_STEP_SIZE;
 					newMinY = minY + scrollDeltaY;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -86,7 +83,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					}));
 					break;
 				case "right":
-					scrollDeltaX = adjustedScrollStep;
+					scrollDeltaX = AUTO_SCROLL_STEP_SIZE;
 					newMinX = minX + scrollDeltaX;
 					setCanvasState((prevState) => ({
 						...prevState,
@@ -94,7 +91,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 					}));
 					break;
 				case "bottom":
-					scrollDeltaY = adjustedScrollStep;
+					scrollDeltaY = AUTO_SCROLL_STEP_SIZE;
 					newMinY = minY + scrollDeltaY;
 					setCanvasState((prevState) => ({
 						...prevState,
