@@ -1,8 +1,8 @@
 /**
- * Defines the coordinates for the four sides of a rectangular frame.
+ * Defines the coordinates for the four sides of a rectangular box.
  * Used for positioning and layout calculations.
  */
-export type Frame = {
+export type Box = {
 	top: number;
 	left: number;
 	right: number;
