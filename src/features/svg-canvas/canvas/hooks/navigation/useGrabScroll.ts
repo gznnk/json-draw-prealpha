@@ -2,11 +2,11 @@
 import { useCallback, useEffect, useRef } from "react";
 
 // Import types.
-import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import hooks.
 import { useCtrl } from "../keyboard/useCtrl";
+import { useScroll } from "./useScroll";
 
 /**
  * Return type for the useGrabScroll hook
@@ -23,10 +23,7 @@ type UseGrabScrollReturn = {
  * @param props - Configuration options for grab scrolling
  * @returns Object containing Ctrl state, drag state, and event handlers
  */
-export const useGrabScroll = (
-	props: CanvasHooksProps,
-	onScroll: (e: SvgCanvasScrollEvent) => void,
-): UseGrabScrollReturn => {
+export const useGrabScroll = (props: CanvasHooksProps): UseGrabScrollReturn => {
 	const {
 		canvasState: { minX, minY, isGrabScrolling },
 		setCanvasState,
@@ -35,6 +32,9 @@ export const useGrabScroll = (
 	// Use Ctrl key hook for grab scrolling
 	const { isCtrlPressed } = useCtrl();
 	const dragStartPos = useRef<{ x: number; y: number } | null>(null);
+
+	// Get scroll handler
+	const onScroll = useScroll(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

@@ -175,13 +175,11 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onPaste = usePaste(canvasHooksProps);
 
 	// Handler for the navigate event (using scroll)
-	const onNavigate = useNavigate(onScroll);
+	const onNavigate = useNavigate(canvasHooksProps);
 
 	// Use grab scroll hook for Ctrl+drag functionality
-	const { onGrabStart, onGrabMove, onGrabEnd } = useGrabScroll(
-		canvasHooksProps,
-		onScroll,
-	);
+	const { onGrabStart, onGrabMove, onGrabEnd } =
+		useGrabScroll(canvasHooksProps);
 
 	// Observer for the new item event.
 	useNewItem(canvasHooksProps);
