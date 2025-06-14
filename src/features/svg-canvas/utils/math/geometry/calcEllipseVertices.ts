@@ -62,8 +62,7 @@ export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
 		tx,
 		ty,
 	);
-
-	const rightTopPoint = affineTransformation(
+	const topRightPoint = affineTransformation(
 		halfWidth / Math.sqrt(2),
 		-halfHeight / Math.sqrt(2),
 		scaleX,
@@ -73,7 +72,7 @@ export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
 		ty,
 	);
 
-	const rightBottomPoint = affineTransformation(
+	const bottomRightPoint = affineTransformation(
 		halfWidth / Math.sqrt(2),
 		halfHeight / Math.sqrt(2),
 		scaleX,
@@ -83,7 +82,7 @@ export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
 		ty,
 	);
 
-	const leftBottomPoint = affineTransformation(
+	const bottomLeftPoint = affineTransformation(
 		-halfWidth / Math.sqrt(2),
 		halfHeight / Math.sqrt(2),
 		scaleX,
@@ -93,7 +92,7 @@ export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
 		ty,
 	);
 
-	const leftTopPoint = affineTransformation(
+	const topLeftPoint = affineTransformation(
 		-halfWidth / Math.sqrt(2),
 		-halfHeight / Math.sqrt(2),
 		scaleX,
@@ -104,10 +103,10 @@ export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
 	);
 
 	return {
-		leftTopPoint,
-		leftBottomPoint,
-		rightTopPoint,
-		rightBottomPoint,
+		topLeftPoint,
+		bottomLeftPoint,
+		topRightPoint,
+		bottomRightPoint,
 		topCenterPoint,
 		leftCenterPoint,
 		rightCenterPoint,

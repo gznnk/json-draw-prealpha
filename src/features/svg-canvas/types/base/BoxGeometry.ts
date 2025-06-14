@@ -11,8 +11,8 @@ export type BoxGeometry = {
 	right: number;
 	bottom: number;
 	center: Point;
-	leftTop: Point;
-	leftBottom: Point;
-	rightTop: Point;
-	rightBottom: Point;
+	topLeft: Point;
+	bottomLeft: Point;
+	topRight: Point;
+	bottomRight: Point;
 };

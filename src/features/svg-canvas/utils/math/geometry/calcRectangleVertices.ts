@@ -24,7 +24,7 @@ export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
 
 	const radians = degreesToRadians(rotation);
 
-	const leftTopPoint = affineTransformation(
+	const topLeftPoint = affineTransformation(
 		-halfWidth,
 		-halfHeight,
 		scaleX,
@@ -34,7 +34,7 @@ export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
 		ty,
 	);
 
-	const leftBottomPoint = affineTransformation(
+	const bottomLeftPoint = affineTransformation(
 		-halfWidth,
 		halfHeight,
 		scaleX,
@@ -44,7 +44,7 @@ export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
 		ty,
 	);
 
-	const rightTopPoint = affineTransformation(
+	const topRightPoint = affineTransformation(
 		halfWidth,
 		-halfHeight,
 		scaleX,
@@ -54,7 +54,7 @@ export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
 		ty,
 	);
 
-	const rightBottomPoint = affineTransformation(
+	const bottomRightPoint = affineTransformation(
 		halfWidth,
 		halfHeight,
 		scaleX,
@@ -65,30 +65,30 @@ export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
 	);
 
 	const topCenterPoint = {
-		x: nanToZero(leftTopPoint.x + rightTopPoint.x) / 2,
-		y: nanToZero(leftTopPoint.y + rightTopPoint.y) / 2,
+		x: nanToZero(topLeftPoint.x + topRightPoint.x) / 2,
+		y: nanToZero(topLeftPoint.y + topRightPoint.y) / 2,
 	};
 
 	const leftCenterPoint = {
-		x: nanToZero(leftTopPoint.x + leftBottomPoint.x) / 2,
-		y: nanToZero(leftTopPoint.y + leftBottomPoint.y) / 2,
+		x: nanToZero(topLeftPoint.x + bottomLeftPoint.x) / 2,
+		y: nanToZero(topLeftPoint.y + bottomLeftPoint.y) / 2,
 	};
 
 	const rightCenterPoint = {
-		x: nanToZero(rightTopPoint.x + rightBottomPoint.x) / 2,
-		y: nanToZero(rightTopPoint.y + rightBottomPoint.y) / 2,
+		x: nanToZero(topRightPoint.x + bottomRightPoint.x) / 2,
+		y: nanToZero(topRightPoint.y + bottomRightPoint.y) / 2,
 	};
 
 	const bottomCenterPoint = {
-		x: nanToZero(leftBottomPoint.x + rightBottomPoint.x) / 2,
-		y: nanToZero(leftBottomPoint.y + rightBottomPoint.y) / 2,
+		x: nanToZero(bottomLeftPoint.x + bottomRightPoint.x) / 2,
+		y: nanToZero(bottomLeftPoint.y + bottomRightPoint.y) / 2,
 	};
 
 	return {
-		leftTopPoint,
-		leftBottomPoint,
-		rightTopPoint,
-		rightBottomPoint,
+		topLeftPoint,
+		bottomLeftPoint,
+		topRightPoint,
+		bottomRightPoint,
 		topCenterPoint,
 		leftCenterPoint,
 		rightCenterPoint,

@@ -275,8 +275,8 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const inversedDragPoint = inverseAffineTransformationOnDrag(e.endX, e.endY);
 		const inversedRightBottom = inverseAffineTransformationOnDrag(
-			startShape.current.rightBottomPoint.x,
-			startShape.current.rightBottomPoint.y,
+			startShape.current.bottomRightPoint.x,
+			startShape.current.bottomRightPoint.y,
 		);
 
 		const newWidth = inversedRightBottom.x - inversedDragPoint.x;
@@ -312,8 +312,8 @@ const TransformativeComponent: React.FC<Props> = ({
 	const linerDragFunctionLeftTop = useCallback(
 		(x: number, y: number) =>
 			createLinerY2xFunction(
-				startShape.current.leftTopPoint,
-				startShape.current.rightBottomPoint,
+				startShape.current.topLeftPoint,
+				startShape.current.bottomRightPoint,
 			)(x, y),
 		[],
 	);
@@ -339,8 +339,8 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const inversedDragPoint = inverseAffineTransformationOnDrag(e.endX, e.endY);
 		const inversedRightTop = inverseAffineTransformationOnDrag(
-			startShape.current.rightTopPoint.x,
-			startShape.current.rightTopPoint.y,
+			startShape.current.topRightPoint.x,
+			startShape.current.topRightPoint.y,
 		);
 
 		const newWidth = inversedRightTop.x - inversedDragPoint.x;
@@ -375,8 +375,8 @@ const TransformativeComponent: React.FC<Props> = ({
 	const linerDragFunctionLeftBottom = useCallback(
 		(x: number, y: number) =>
 			createLinerY2xFunction(
-				startShape.current.rightTopPoint,
-				startShape.current.leftBottomPoint,
+				startShape.current.topRightPoint,
+				startShape.current.bottomLeftPoint,
 			)(x, y),
 		[],
 	);
@@ -402,8 +402,8 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const inversedDragPoint = inverseAffineTransformationOnDrag(e.endX, e.endY);
 		const inversedLeftBottom = inverseAffineTransformationOnDrag(
-			startShape.current.leftBottomPoint.x,
-			startShape.current.leftBottomPoint.y,
+			startShape.current.bottomLeftPoint.x,
+			startShape.current.bottomLeftPoint.y,
 		);
 
 		const newWidth = inversedDragPoint.x - inversedLeftBottom.x;
@@ -438,8 +438,8 @@ const TransformativeComponent: React.FC<Props> = ({
 	const linerDragFunctionRightTop = useCallback(
 		(x: number, y: number) =>
 			createLinerY2xFunction(
-				startShape.current.rightTopPoint,
-				startShape.current.leftBottomPoint,
+				startShape.current.topRightPoint,
+				startShape.current.bottomLeftPoint,
 			)(x, y),
 		[],
 	);
@@ -465,8 +465,8 @@ const TransformativeComponent: React.FC<Props> = ({
 
 		const inversedDragPoint = inverseAffineTransformationOnDrag(e.endX, e.endY);
 		const inversedLeftTop = inverseAffineTransformationOnDrag(
-			startShape.current.leftTopPoint.x,
-			startShape.current.leftTopPoint.y,
+			startShape.current.topLeftPoint.x,
+			startShape.current.topLeftPoint.y,
 		);
 
 		const newWidth = inversedDragPoint.x - inversedLeftTop.x;
@@ -501,8 +501,8 @@ const TransformativeComponent: React.FC<Props> = ({
 	const linerDragFunctionRightBottom = useCallback(
 		(x: number, y: number) =>
 			createLinerY2xFunction(
-				startShape.current.rightBottomPoint,
-				startShape.current.leftTopPoint,
+				startShape.current.bottomRightPoint,
+				startShape.current.topLeftPoint,
 			)(x, y),
 		[],
 	);
@@ -911,10 +911,10 @@ const TransformativeComponent: React.FC<Props> = ({
 						id={`${id}-topCenter-line`}
 						x={vertices.topCenterPoint.x}
 						y={vertices.topCenterPoint.y}
-						startX={vertices.leftTopPoint.x}
-						startY={vertices.leftTopPoint.y}
-						endX={vertices.rightTopPoint.x}
-						endY={vertices.rightTopPoint.y}
+						startX={vertices.topLeftPoint.x}
+						startY={vertices.topLeftPoint.y}
+						endX={vertices.topRightPoint.x}
+						endY={vertices.topRightPoint.y}
 						cursor={cursors.topCenter}
 						onDrag={handleDragTopCenter}
 						dragPositioningFunction={linerDragFunctionTopCenter}
@@ -924,10 +924,10 @@ const TransformativeComponent: React.FC<Props> = ({
 						id={`${id}-leftCenter-line`}
 						x={vertices.leftCenterPoint.x}
 						y={vertices.leftCenterPoint.y}
-						startX={vertices.leftTopPoint.x}
-						startY={vertices.leftTopPoint.y}
-						endX={vertices.leftBottomPoint.x}
-						endY={vertices.leftBottomPoint.y}
+						startX={vertices.topLeftPoint.x}
+						startY={vertices.topLeftPoint.y}
+						endX={vertices.bottomLeftPoint.x}
+						endY={vertices.bottomLeftPoint.y}
 						cursor={cursors.leftCenter}
 						onDrag={handleDragLeftCenter}
 						dragPositioningFunction={linerDragFunctionLeftCenter}
@@ -937,10 +937,10 @@ const TransformativeComponent: React.FC<Props> = ({
 						id={`${id}-rightCenter-line`}
 						x={vertices.rightCenterPoint.x}
 						y={vertices.rightCenterPoint.y}
-						startX={vertices.rightTopPoint.x}
-						startY={vertices.rightTopPoint.y}
-						endX={vertices.rightBottomPoint.x}
-						endY={vertices.rightBottomPoint.y}
+						startX={vertices.topRightPoint.x}
+						startY={vertices.topRightPoint.y}
+						endX={vertices.bottomRightPoint.x}
+						endY={vertices.bottomRightPoint.y}
 						cursor={cursors.rightCenter}
 						onDrag={handleDragRightCenter}
 						dragPositioningFunction={linerDragFunctionRightCenter}
@@ -950,52 +950,52 @@ const TransformativeComponent: React.FC<Props> = ({
 						id={`${id}-bottomCenter-line`}
 						x={vertices.bottomCenterPoint.x}
 						y={vertices.bottomCenterPoint.y}
-						startX={vertices.leftBottomPoint.x}
-						startY={vertices.leftBottomPoint.y}
-						endX={vertices.rightBottomPoint.x}
-						endY={vertices.rightBottomPoint.y}
+						startX={vertices.bottomLeftPoint.x}
+						startY={vertices.bottomLeftPoint.y}
+						endX={vertices.bottomRightPoint.x}
+						endY={vertices.bottomRightPoint.y}
 						cursor={cursors.bottomCenter}
 						onDrag={handleDragBottomCenter}
 						dragPositioningFunction={linerDragFunctionBottomCenter}
 					/>
-					{/* Left top DragPoint */}
+					{/* Top left DragPoint */}
 					<DragPoint
-						id={`${id}-leftTop`}
-						x={vertices.leftTopPoint.x}
-						y={vertices.leftTopPoint.y}
+						id={`${id}-topLeft`}
+						x={vertices.topLeftPoint.x}
+						y={vertices.topLeftPoint.y}
 						cursor={cursors.leftTop}
 						onDrag={handleDragLeftTop}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionLeftTop : undefined
 						}
 					/>
-					{/* Right bottom DragPoint */}
+					{/* Bottom left DragPoint */}
 					<DragPoint
-						id={`${id}-leftBottom`}
-						x={vertices.leftBottomPoint.x}
-						y={vertices.leftBottomPoint.y}
+						id={`${id}-bottomLeft`}
+						x={vertices.bottomLeftPoint.x}
+						y={vertices.bottomLeftPoint.y}
 						cursor={cursors.leftBottom}
 						onDrag={handleDragLeftBottom}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionLeftBottom : undefined
 						}
 					/>
-					{/* Right top DragPoint */}
+					{/* Top right DragPoint */}
 					<DragPoint
-						id={`${id}-rightTop`}
-						x={vertices.rightTopPoint.x}
-						y={vertices.rightTopPoint.y}
+						id={`${id}-topRight`}
+						x={vertices.topRightPoint.x}
+						y={vertices.topRightPoint.y}
 						cursor={cursors.rightTop}
 						onDrag={handleDragRightTop}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionRightTop : undefined
 						}
 					/>
-					{/* Right bottom DragPoint */}
+					{/* Bottom right DragPoint */}
 					<DragPoint
-						id={`${id}-rightBottom`}
-						x={vertices.rightBottomPoint.x}
-						y={vertices.rightBottomPoint.y}
+						id={`${id}-bottomRight`}
+						x={vertices.bottomRightPoint.x}
+						y={vertices.bottomRightPoint.y}
 						cursor={cursors.rightBottom}
 						onDrag={handleDragRightBottom}
 						dragPositioningFunction={

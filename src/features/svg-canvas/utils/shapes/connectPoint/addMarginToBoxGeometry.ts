@@ -20,9 +20,9 @@ export const addMarginToBoxGeometry = (
 		right,
 		bottom,
 		center: boxGeometry.center,
-		leftTop: { x: left, y: top },
-		leftBottom: { x: left, y: bottom },
-		rightTop: { x: right, y: top },
-		rightBottom: { x: right, y: bottom },
+		topLeft: { x: left, y: top },
+		bottomLeft: { x: left, y: bottom },
+		topRight: { x: right, y: top },
+		bottomRight: { x: right, y: bottom },
 	};
 };

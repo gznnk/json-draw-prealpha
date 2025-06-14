@@ -6,10 +6,10 @@ import type { Point } from "./Point";
  * Includes corner points and mid-points for each side to support manipulation and connection.
  */
 export type EllipseVertices = {
-	leftTopPoint: Point;
-	leftBottomPoint: Point;
-	rightTopPoint: Point;
-	rightBottomPoint: Point;
+	topLeftPoint: Point;
+	bottomLeftPoint: Point;
+	topRightPoint: Point;
+	bottomRightPoint: Point;
 	topCenterPoint: Point;
 	leftCenterPoint: Point;
 	rightCenterPoint: Point;

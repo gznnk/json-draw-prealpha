@@ -13,32 +13,32 @@ import { calcRectangleVertices } from "./calcRectangleVertices";
  * @returns The outer bounding box geometry
  */
 export const calcRectangleOuterBoxGeometry = (shape: Shape): BoxGeometry => {
-	const { leftTopPoint, leftBottomPoint, rightTopPoint, rightBottomPoint } =
+	const { topLeftPoint, bottomLeftPoint, topRightPoint, bottomRightPoint } =
 		calcRectangleVertices(shape);
 
 	const left = Math.min(
-		leftTopPoint.x,
-		leftBottomPoint.x,
-		rightTopPoint.x,
-		rightBottomPoint.x,
+		topLeftPoint.x,
+		bottomLeftPoint.x,
+		topRightPoint.x,
+		bottomRightPoint.x,
 	);
 	const top = Math.min(
-		leftTopPoint.y,
-		leftBottomPoint.y,
-		rightTopPoint.y,
-		rightBottomPoint.y,
+		topLeftPoint.y,
+		bottomLeftPoint.y,
+		topRightPoint.y,
+		bottomRightPoint.y,
 	);
 	const right = Math.max(
-		leftTopPoint.x,
-		leftBottomPoint.x,
-		rightTopPoint.x,
-		rightBottomPoint.x,
+		topLeftPoint.x,
+		bottomLeftPoint.x,
+		topRightPoint.x,
+		bottomRightPoint.x,
 	);
 	const bottom = Math.max(
-		leftTopPoint.y,
-		leftBottomPoint.y,
-		rightTopPoint.y,
-		rightBottomPoint.y,
+		topLeftPoint.y,
+		bottomLeftPoint.y,
+		topRightPoint.y,
+		bottomRightPoint.y,
 	);
 
 	return {
@@ -50,19 +50,19 @@ export const calcRectangleOuterBoxGeometry = (shape: Shape): BoxGeometry => {
 			x: (left + right) / 2,
 			y: (top + bottom) / 2,
 		},
-		leftTop: {
+		topLeft: {
 			x: left,
 			y: top,
 		},
-		leftBottom: {
+		bottomLeft: {
 			x: left,
 			y: bottom,
 		},
-		rightTop: {
+		topRight: {
 			x: right,
 			y: top,
 		},
-		rightBottom: {
+		bottomRight: {
 			x: right,
 			y: bottom,
 		},

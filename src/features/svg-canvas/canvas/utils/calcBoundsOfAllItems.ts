@@ -27,7 +27,8 @@ export const calcBoundsOfAllItems = (items: Diagram[]): Box => {
 			box.top = Math.min(box.top, groupBox.y);
 			box.left = Math.min(box.left, groupBox.x);
 			box.right = Math.max(box.right, groupBox.x + groupBox.width);
-			box.bottom = Math.max(box.bottom, groupBox.y + groupBox.height);		} else if (isTransformativeData(item)) {
+			box.bottom = Math.max(box.bottom, groupBox.y + groupBox.height);
+		} else if (isTransformativeData(item)) {
 			const radians = degreesToRadians(item.rotation);
 			const leftTop = rotatePoint(
 				item.x - item.width / 2,

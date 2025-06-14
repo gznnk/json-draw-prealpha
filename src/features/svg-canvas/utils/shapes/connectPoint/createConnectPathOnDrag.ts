@@ -89,56 +89,56 @@ export const createConnectPathOnDrag = (
 	let isAccrossFartherLine = false;
 	if (startDirection === "up") {
 		isAccrossCloserLine = lineIntersects(
-			marginBoxGeometry.leftTop,
-			marginBoxGeometry.rightTop,
+			marginBoxGeometry.topLeft,
+			marginBoxGeometry.topRight,
 			p3,
 			p4,
 		);
 		isAccrossFartherLine = lineIntersects(
-			marginBoxGeometry.leftBottom,
-			marginBoxGeometry.rightBottom,
+			marginBoxGeometry.bottomLeft,
+			marginBoxGeometry.bottomRight,
 			p3,
 			p4,
 		);
 	}
 	if (startDirection === "down") {
 		isAccrossCloserLine = lineIntersects(
-			marginBoxGeometry.leftBottom,
-			marginBoxGeometry.rightBottom,
+			marginBoxGeometry.bottomLeft,
+			marginBoxGeometry.bottomRight,
 			p3,
 			p4,
 		);
 		isAccrossFartherLine = lineIntersects(
-			marginBoxGeometry.leftTop,
-			marginBoxGeometry.rightTop,
+			marginBoxGeometry.topLeft,
+			marginBoxGeometry.topRight,
 			p3,
 			p4,
 		);
 	}
 	if (startDirection === "left") {
 		isAccrossCloserLine = lineIntersects(
-			marginBoxGeometry.leftTop,
-			marginBoxGeometry.leftBottom,
+			marginBoxGeometry.topLeft,
+			marginBoxGeometry.bottomLeft,
 			p3,
 			p4,
 		);
 		isAccrossFartherLine = lineIntersects(
-			marginBoxGeometry.rightTop,
-			marginBoxGeometry.rightBottom,
+			marginBoxGeometry.topRight,
+			marginBoxGeometry.bottomRight,
 			p3,
 			p4,
 		);
 	}
 	if (startDirection === "right") {
 		isAccrossCloserLine = lineIntersects(
-			marginBoxGeometry.rightTop,
-			marginBoxGeometry.rightBottom,
+			marginBoxGeometry.topRight,
+			marginBoxGeometry.bottomRight,
 			p3,
 			p4,
 		);
 		isAccrossFartherLine = lineIntersects(
-			marginBoxGeometry.leftTop,
-			marginBoxGeometry.leftBottom,
+			marginBoxGeometry.topLeft,
+			marginBoxGeometry.bottomLeft,
 			p3,
 			p4,
 		);
