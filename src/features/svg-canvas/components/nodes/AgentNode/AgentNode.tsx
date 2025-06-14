@@ -14,8 +14,8 @@ import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
-import { dispatchConnectNodesEvent } from "../../../canvas/observers/connectNodes";
+import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
+import { dispatchConnectNodesEvent } from "../../../canvas/hooks/listeners/connectNodes";
 import { newEventId } from "../../../utils/common/newEventId";
 import { createImageGenNodeData } from "../../../utils/nodes/imageGenNode/createImageGenNodeData";
 import { createLLMNodeData } from "../../../utils/nodes/llmNodeData/createLLMNodeData";

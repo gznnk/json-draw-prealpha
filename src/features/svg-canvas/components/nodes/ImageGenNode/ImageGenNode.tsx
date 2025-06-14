@@ -17,7 +17,7 @@ import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import utils.
-import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
+import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
 import { newEventId } from "../../../utils/common/newEventId";
 import { createImageData } from "../../../utils/shapes/image/createImageData";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

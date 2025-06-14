@@ -3,7 +3,7 @@ import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-import { dispatchConnectNodesEvent } from "../../canvas/observers/connectNodes";
+import { dispatchConnectNodesEvent } from "../../canvas/hooks/listeners/connectNodes";
 import { newEventId } from "../../utils/common/newEventId";
 
 /**

@@ -17,33 +17,33 @@ import type {
 } from "./SvgCanvasTypes";
 
 // Import canvas custom hooks.
-import { useClearAllSelection } from "./hooks/useClearAllSelection";
-import { useConnect } from "./hooks/useConnect";
-import { useCopy } from "./hooks/useCopy";
-import { useDelete } from "./hooks/useDelete";
-import { useDiagramChange } from "./hooks/useDiagramChange";
-import { useDrag } from "./hooks/useDrag";
-import { useExecute } from "./hooks/useExecute";
-import { useExport } from "./hooks/useExport";
-import { useGroup } from "./hooks/useGroup";
-import { useNewDiagram } from "./hooks/useNewDiagram";
-import { usePaste } from "./hooks/usePaste";
-import { useRedo } from "./hooks/useRedo";
-import { useScroll } from "./hooks/useScroll";
-import { useSelect } from "./hooks/useSelect";
-import { useSelectAll } from "./hooks/useSelectAll";
-import { useStackOrderChange } from "./hooks/useStackOrderChange";
-import { useTextChange } from "./hooks/useTextChange";
-import { useTextEdit } from "./hooks/useTextEdit";
-import { useTransform } from "./hooks/useTransform";
-import { useUndo } from "./hooks/useUndo";
-import { useUngroup } from "./hooks/useUngroup";
-import { useZoom } from "./hooks/useZoom";
-import { useCtrl } from "./hooks/useCtrl";
-import { useGrabScroll } from "./hooks/useGrabScroll";
-import { useNavigate } from "./hooks/useNavigate";
-import { useNewItem } from "./observers/addNewItem";
-import { useConnectNodes } from "./observers/connectNodes";
+import { useConnect } from "./hooks/actions/useConnect";
+import { useCopy } from "./hooks/actions/useCopy";
+import { useDelete } from "./hooks/actions/useDelete";
+import { useDiagramChange } from "./hooks/actions/useDiagramChange";
+import { useDrag } from "./hooks/actions/useDrag";
+import { useExecute } from "./hooks/actions/useExecute";
+import { useExport } from "./hooks/actions/useExport";
+import { useGroup } from "./hooks/actions/useGroup";
+import { useNewDiagram } from "./hooks/actions/useNewDiagram";
+import { usePaste } from "./hooks/actions/usePaste";
+import { useStackOrderChange } from "./hooks/actions/useStackOrderChange";
+import { useTextChange } from "./hooks/actions/useTextChange";
+import { useTextEdit } from "./hooks/actions/useTextEdit";
+import { useTransform } from "./hooks/actions/useTransform";
+import { useUngroup } from "./hooks/actions/useUngroup";
+import { useRedo } from "./hooks/history/useRedo";
+import { useUndo } from "./hooks/history/useUndo";
+import { useCtrl } from "./hooks/keyboard/useCtrl";
+import { useNewItem } from "./hooks/listeners/addNewItem";
+import { useConnectNodes } from "./hooks/listeners/connectNodes";
+import { useGrabScroll } from "./hooks/navigation/useGrabScroll";
+import { useNavigate } from "./hooks/navigation/useNavigate";
+import { useScroll } from "./hooks/navigation/useScroll";
+import { useZoom } from "./hooks/navigation/useZoom";
+import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
+import { useSelect } from "./hooks/selection/useSelect";
+import { useSelectAll } from "./hooks/selection/useSelectAll";
 
 /**
  * Props for the useSvgCanvas hook.

@@ -17,7 +17,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 // Import functions related to SvgCanvas.
 import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
 import { newEventId } from "../../../utils/common/newEventId";
-import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
+import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
 
 /**
  * SvgToDiagramNode component.

@@ -1,5 +1,5 @@
 // Import functions related to SvgCanvas.
-import { dispatchNewItemEvent } from "../../canvas/observers/addNewItem";
+import { dispatchNewItemEvent } from "../../canvas/hooks/listeners/addNewItem";
 import { createTextAreaNodeData } from "../../utils/nodes/textAreaNode/createTextAreaNodeData";
 import { newEventId } from "../../utils/common/newEventId";
 import type {

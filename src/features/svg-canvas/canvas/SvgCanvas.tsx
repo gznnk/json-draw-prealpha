@@ -24,7 +24,7 @@ import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { MiniMap } from "../components/auxiliary/MiniMap";
 
 // Imports related to this component.
-import { useShortcutKey } from "./hooks/useShortcutKey";
+import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import {
 	Container,

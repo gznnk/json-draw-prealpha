@@ -1,5 +1,5 @@
 // Import functions related to SvgCanvas.
-import { dispatchNewItemEvent } from "../../canvas/observers/addNewItem";
+import { dispatchNewItemEvent } from "../../canvas/hooks/listeners/addNewItem";
 import { createLLMNodeData } from "../../utils/nodes/llmNodeData/createLLMNodeData";
 import { newEventId } from "../../utils/common/newEventId";
 import type {
