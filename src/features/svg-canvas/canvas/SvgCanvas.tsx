@@ -123,6 +123,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// Use the shortcut key hook to handle keyboard shortcuts
 		useShortcutKey({
+			zoom,
 			hasFocus,
 			textEditorState,
 			onDelete,
@@ -132,6 +133,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onRedo,
 			onCopy,
 			onPaste,
+			onZoom,
 		});
 
 		// Create references bypass to avoid function creation in every render.

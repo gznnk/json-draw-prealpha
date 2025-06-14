@@ -6,6 +6,8 @@ import type { TextEditorState } from "../../components/core/Textable/TextEditor/
  * Properties for the useShortcutKey hook
  */
 export type UseShortcutKeyProps = {
+	/** Current zoom level of the SVG canvas */
+	zoom: number;
 	/** Current state of the SVG canvas focus */
 	hasFocus: RefObject<boolean>;
 	/** Current state of the text editor */
@@ -24,6 +26,8 @@ export type UseShortcutKeyProps = {
 	onCopy?: () => void;
 	/** Handler for paste operation */
 	onPaste?: () => void;
+	/** Function to handle zooming in or out */
+	onZoom?: (zoom: number) => void;
 };
 
 /** * Custom hook to handle keyboard shortcuts for the SVG canvas.
@@ -43,6 +47,7 @@ export const useShortcutKey = (props: UseShortcutKeyProps): void => {
 		 */
 		const onDocumentKeyDown = (e: KeyboardEvent) => {
 			const {
+				zoom,
 				hasFocus,
 				textEditorState,
 				onDelete,
@@ -52,6 +57,7 @@ export const useShortcutKey = (props: UseShortcutKeyProps): void => {
 				onRedo,
 				onCopy,
 				onPaste,
+				onZoom,
 			} = propsRef.current;
 
 			// Skip processing if SVG canvas doesn't have focus and text editor is not active
@@ -76,20 +82,46 @@ export const useShortcutKey = (props: UseShortcutKeyProps): void => {
 					// Redo the last action when Ctrl+Y is pressed
 					onRedo?.();
 				}
-				if (e.key === "a" && !textEditorState.isActive) {
-					// Select all items when Ctrl+A is pressed
-					e.preventDefault();
-					onSelectAll?.();
-				}
-				if (e.key === "c" && !textEditorState.isActive) {
-					// Copy selected items when Ctrl+C is pressed
-					e.preventDefault();
-					onCopy?.();
-				}
-				if (e.key === "v" && !textEditorState.isActive) {
-					// Paste items from clipboard when Ctrl+V is pressed
-					e.preventDefault();
-					onPaste?.();
+				// Handle shortcuts that should not work when text editor is active
+				if (!textEditorState.isActive) {
+					if (e.key === "a") {
+						// Select all items when Ctrl+A is pressed
+						e.preventDefault();
+						onSelectAll?.();
+					}
+					if (e.key === "c") {
+						// Copy selected items when Ctrl+C is pressed
+						e.preventDefault();
+						onCopy?.();
+					}
+					if (e.key === "v") {
+						// Paste items from clipboard when Ctrl+V is pressed
+						e.preventDefault();
+						onPaste?.();
+					}
+					// Zoom in when Ctrl+Plus is pressed (support multiple key variations)
+					if (
+						e.key === "+" ||
+						e.key === "=" ||
+						e.code === "Equal" ||
+						e.code === "Semicolon"
+					) {
+						e.preventDefault();
+						e.stopPropagation();
+						onZoom?.(zoom * 1.1);
+					}
+					// Zoom out when Ctrl+Minus is pressed (support multiple key variations)
+					if (e.key === "-" || e.code === "Minus") {
+						e.preventDefault();
+						e.stopPropagation();
+						onZoom?.(zoom * 0.9);
+					}
+					// Reset zoom when Ctrl+0 is pressed
+					if (e.key === "0" || e.code === "Digit0") {
+						e.preventDefault();
+						e.stopPropagation();
+						onZoom?.(1.0);
+					}
 				}
 			}
 		};
