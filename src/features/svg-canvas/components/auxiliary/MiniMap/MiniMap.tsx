@@ -1,5 +1,5 @@
 // Import React.
-import { memo, useCallback, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import type React from "react";
 
 // Imports related to this component.
@@ -37,8 +37,8 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 	height = 150,
 	onNavigate,
 }) => {
-	// Calculate canvas bounds based on all items and current viewport
-	const canvasBounds = useMemo(() => {
+	// Calculate all minimap properties in a single memoized computation for efficiency
+	const { canvasBounds, scale, viewportRect } = useMemo(() => {
 		const viewportBounds = calculateViewportBounds(
 			minX,
 			minY,
@@ -47,38 +47,41 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 			zoom,
 		);
 
-		return calculateCombinedCanvasBounds(items, viewportBounds);
-	}, [items, minX, minY, containerWidth, containerHeight, zoom]);
-
-	// Calculate minimap scale
-	const scale = useMemo(() => {
-		return calculateMiniMapScale(canvasBounds, width, height);
-	}, [canvasBounds, width, height]);
-
-	// Calculate viewport rectangle
-	const viewportRect = useMemo(() => {
-		return calculateViewportRect(
+		const bounds = calculateCombinedCanvasBounds(items, viewportBounds);
+		const computedScale = calculateMiniMapScale(bounds, width, height);
+		const rect = calculateViewportRect(
 			minX,
 			minY,
 			containerWidth,
 			containerHeight,
 			zoom,
+			bounds,
+			computedScale,
+			width,
+			height,
+		);
+
+		return {
+			canvasBounds: bounds,
+			scale: computedScale,
+			viewportRect: rect,
+		};
+	}, [items, minX, minY, containerWidth, containerHeight, zoom, width, height]);
+
+	// Create navigation parameters object to reduce dependency array size
+	const navigationParams = useMemo(
+		() => ({
 			canvasBounds,
 			scale,
 			width,
 			height,
-		);
-	}, [
-		minX,
-		minY,
-		containerWidth,
-		containerHeight,
-		zoom,
-		canvasBounds,
-		scale,
-		width,
-		height,
-	]);
+			containerWidth,
+			containerHeight,
+			zoom,
+		}),
+		[canvasBounds, scale, width, height, containerWidth, containerHeight, zoom],
+	);
+
 	// Handle navigation based on click coordinates
 	const handleNavigate = useCallback(
 		(clientX: number, clientY: number, svgElement: SVGSVGElement) => {
@@ -88,55 +91,37 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 				clientX,
 				clientY,
 				svgElement,
-				canvasBounds,
-				scale,
-				width,
-				height,
-				containerWidth,
-				containerHeight,
-				zoom,
+				navigationParams.canvasBounds,
+				navigationParams.scale,
+				navigationParams.width,
+				navigationParams.height,
+				navigationParams.containerWidth,
+				navigationParams.containerHeight,
+				navigationParams.zoom,
 			);
 
 			onNavigate(newMinX, newMinY);
 		},
-		[
-			onNavigate,
-			canvasBounds,
-			scale,
-			width,
-			height,
-			containerWidth,
-			containerHeight,
-			zoom,
-		],
+		[onNavigate, navigationParams],
 	);
 
 	// State management for drag operations
-	const [isPointerDown, setIsPointerDown] = useState(false);
 	const [dragOffsetRatio, setDragOffsetRatio] = useState({ x: 0, y: 0 });
-	const [hasDragged, setHasDragged] = useState(false);
-	const svgRef = useRef<SVGSVGElement>(null);
+	const [isViewportInteraction, setIsViewportInteraction] = useState(false);
 
 	// Click handler for minimap navigation
 	const handleClick = useCallback(
 		(e: React.MouseEvent<SVGSVGElement>) => {
-			// Only navigate on click if no drag operation occurred
-			// ViewportIndicator clicks are blocked by stopPropagation in handleViewportClick
-			if (!hasDragged) {
-				handleNavigate(e.clientX, e.clientY, e.currentTarget);
-			}
-			// Reset drag state after handling click
-			setHasDragged(false);
+			// Navigate to the clicked position
+			handleNavigate(e.clientX, e.clientY, e.currentTarget);
 		},
-		[handleNavigate, hasDragged],
+		[handleNavigate],
 	);
 
 	// ViewportIndicator event handlers
 	const handleViewportPointerDown = useCallback(
 		(e: React.PointerEvent<SVGRectElement>) => {
-			e.stopPropagation();
-			setIsPointerDown(true);
-			setHasDragged(false);
+			setIsViewportInteraction(true);
 			e.currentTarget.setPointerCapture(e.pointerId);
 
 			// Calculate relative position within viewport using pure function
@@ -153,12 +138,11 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 		},
 		[viewportRect],
 	);
+
+	// Handle pointer move event to update viewport position
 	const handleViewportPointerMove = useCallback(
 		(e: React.PointerEvent<SVGRectElement>) => {
-			if (!isPointerDown) return;
-
-			e.stopPropagation();
-			setHasDragged(true);
+			if (!isViewportInteraction) return;
 
 			const svgElement = e.currentTarget.ownerSVGElement;
 			if (!svgElement) return;
@@ -170,13 +154,13 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 				svgElement,
 				dragOffsetRatio,
 				viewportRect,
-				canvasBounds,
-				scale,
-				width,
-				height,
-				containerWidth,
-				containerHeight,
-				zoom,
+				navigationParams.canvasBounds,
+				navigationParams.scale,
+				navigationParams.width,
+				navigationParams.height,
+				navigationParams.containerWidth,
+				navigationParams.containerHeight,
+				navigationParams.zoom,
 			);
 
 			if (onNavigate) {
@@ -184,37 +168,30 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 			}
 		},
 		[
-			isPointerDown,
+			isViewportInteraction,
 			dragOffsetRatio,
 			viewportRect,
-			canvasBounds,
-			scale,
-			width,
-			height,
-			containerWidth,
-			containerHeight,
-			zoom,
+			navigationParams,
 			onNavigate,
 		],
 	);
 
+	// Handle pointer up event to release interaction state
 	const handleViewportPointerUp = useCallback(
 		(e: React.PointerEvent<SVGRectElement>) => {
-			e.stopPropagation();
-			setIsPointerDown(false);
+			// Reset interaction state
+			setIsViewportInteraction(false);
 
 			// Release pointer capture from the ViewportIndicator element
 			e.currentTarget.releasePointerCapture(e.pointerId);
-
-			// Reset drag state after a short delay to allow click handler to check hasDragged
-			setTimeout(() => setHasDragged(false), 0);
 		},
 		[],
 	);
 
-	// Prevent click navigation when clicking on ViewportIndicator
+	// Prevent click events on the viewport to avoid triggering navigation
 	const handleViewportClick = useCallback(
 		(e: React.MouseEvent<SVGRectElement>) => {
+			// Prevent click from propagating to the SVG
 			e.stopPropagation();
 		},
 		[],
@@ -244,7 +221,6 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 	return (
 		<MiniMapContainer width={width} height={height}>
 			<MiniMapSvg
-				ref={svgRef}
 				width={width}
 				height={height}
 				viewBox={`0 0 ${width} ${height}`}
