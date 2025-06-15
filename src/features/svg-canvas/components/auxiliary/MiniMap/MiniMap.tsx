@@ -128,9 +128,12 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 	const handleClick = useCallback(
 		(e: React.MouseEvent<SVGSVGElement>) => {
 			// Only navigate on click if no drag operation occurred
+			// ViewportIndicator clicks are blocked by stopPropagation in handleViewportClick
 			if (!hasDragged) {
 				handleNavigate(e.clientX, e.clientY, e.currentTarget);
 			}
+			// Reset drag state after handling click
+			setHasDragged(false);
 		},
 		[handleNavigate, hasDragged],
 	);
@@ -231,6 +234,17 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 
 			// Release pointer capture from the ViewportIndicator element
 			e.currentTarget.releasePointerCapture(e.pointerId);
+
+			// Reset drag state after a short delay to allow click handler to check hasDragged
+			setTimeout(() => setHasDragged(false), 0);
+		},
+		[],
+	);
+
+	// Prevent click navigation when clicking on ViewportIndicator
+	const handleViewportClick = useCallback(
+		(e: React.MouseEvent<SVGRectElement>) => {
+			e.stopPropagation();
 		},
 		[],
 	);
@@ -280,6 +294,7 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 					onPointerDown={handleViewportPointerDown}
 					onPointerMove={handleViewportPointerMove}
 					onPointerUp={handleViewportPointerUp}
+					onClick={handleViewportClick}
 				/>
 			</MiniMapSvg>
 		</MiniMapContainer>
