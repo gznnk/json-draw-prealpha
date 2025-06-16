@@ -1,5 +1,5 @@
 // Import React.
-import { useState, type RefObject } from "react";
+import { useState, useRef, type RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { Diagram } from "../types/data/catalog/Diagram";
@@ -8,6 +8,9 @@ import type { TextEditorState } from "../components/core/Textable";
 // Import functions related to SvgCanvas.
 import { deepCopy } from "../utils/common/deepCopy";
 import { calcCanvasBounds } from "./utils/calcCanvasBounds";
+
+// Import EventBus.
+import { EventBus } from "../../../shared/event-bus/EventBus";
 
 // Imports related to this component.
 import type {
@@ -65,6 +68,9 @@ type SvgCanvasHooksProps = {
  * @returns The state, props and functions of the SvgCanvas
  */
 export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
+	// Create EventBus instance for canvas-wide event communication
+	const eventBusRef = useRef(new EventBus());
+
 	// Calculate the initial bounds of the canvas.
 	let initialBounds = {
 		minX: props.minX,
@@ -103,6 +109,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		setCanvasState,
 		canvasRef: props.canvasRef.current,
 		onDataChange: props.onDataChange,
+		eventBus: eventBusRef.current,
 	};
 
 	// Ctrl key state management
@@ -189,6 +196,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	const canvasProps = {
 		...canvasState,
+		eventBus: eventBusRef.current,
 		onDrag,
 		onSelect,
 		onSelectAll,

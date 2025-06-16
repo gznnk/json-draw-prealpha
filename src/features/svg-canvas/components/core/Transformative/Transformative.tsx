@@ -61,6 +61,7 @@ const TransformativeComponent: React.FC<Props> = ({
 	keepProportion,
 	isSelected,
 	isMultiSelectSource,
+	eventBus,
 	onTransform,
 }) => {
 	const [isResizing, setIsResizing] = useState(false);
@@ -916,6 +917,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endX={vertices.topRightPoint.x}
 						endY={vertices.topRightPoint.y}
 						cursor={cursors.topCenter}
+						eventBus={eventBus}
 						onDrag={handleDragTopCenter}
 						dragPositioningFunction={linerDragFunctionTopCenter}
 					/>
@@ -929,6 +931,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endX={vertices.bottomLeftPoint.x}
 						endY={vertices.bottomLeftPoint.y}
 						cursor={cursors.leftCenter}
+						eventBus={eventBus}
 						onDrag={handleDragLeftCenter}
 						dragPositioningFunction={linerDragFunctionLeftCenter}
 					/>
@@ -942,6 +945,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endX={vertices.bottomRightPoint.x}
 						endY={vertices.bottomRightPoint.y}
 						cursor={cursors.rightCenter}
+						eventBus={eventBus}
 						onDrag={handleDragRightCenter}
 						dragPositioningFunction={linerDragFunctionRightCenter}
 					/>
@@ -955,6 +959,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endX={vertices.bottomRightPoint.x}
 						endY={vertices.bottomRightPoint.y}
 						cursor={cursors.bottomCenter}
+						eventBus={eventBus}
 						onDrag={handleDragBottomCenter}
 						dragPositioningFunction={linerDragFunctionBottomCenter}
 					/>
@@ -964,6 +969,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.topLeftPoint.x}
 						y={vertices.topLeftPoint.y}
 						cursor={cursors.leftTop}
+						eventBus={eventBus}
 						onDrag={handleDragLeftTop}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionLeftTop : undefined
@@ -975,6 +981,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.bottomLeftPoint.x}
 						y={vertices.bottomLeftPoint.y}
 						cursor={cursors.leftBottom}
+						eventBus={eventBus}
 						onDrag={handleDragLeftBottom}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionLeftBottom : undefined
@@ -986,6 +993,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.topRightPoint.x}
 						y={vertices.topRightPoint.y}
 						cursor={cursors.rightTop}
+						eventBus={eventBus}
 						onDrag={handleDragRightTop}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionRightTop : undefined
@@ -997,6 +1005,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.bottomRightPoint.x}
 						y={vertices.bottomRightPoint.y}
 						cursor={cursors.rightBottom}
+						eventBus={eventBus}
 						onDrag={handleDragRightBottom}
 						dragPositioningFunction={
 							doKeepProportion ? linerDragFunctionRightBottom : undefined
@@ -1008,6 +1017,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.topCenterPoint.x}
 						y={vertices.topCenterPoint.y}
 						cursor={cursors.topCenter}
+						eventBus={eventBus}
 						onDrag={handleDragTopCenter}
 						dragPositioningFunction={linerDragFunctionTopCenter}
 					/>
@@ -1017,6 +1027,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.leftCenterPoint.x}
 						y={vertices.leftCenterPoint.y}
 						cursor={cursors.leftCenter}
+						eventBus={eventBus}
 						onDrag={handleDragLeftCenter}
 						dragPositioningFunction={linerDragFunctionLeftCenter}
 					/>
@@ -1026,6 +1037,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.rightCenterPoint.x}
 						y={vertices.rightCenterPoint.y}
 						cursor={cursors.rightCenter}
+						eventBus={eventBus}
 						onDrag={handleDragRightCenter}
 						dragPositioningFunction={linerDragFunctionRightCenter}
 					/>
@@ -1035,6 +1047,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						x={vertices.bottomCenterPoint.x}
 						y={vertices.bottomCenterPoint.y}
 						cursor={cursors.bottomCenter}
+						eventBus={eventBus}
 						onDrag={handleDragBottomCenter}
 						dragPositioningFunction={linerDragFunctionBottomCenter}
 					/>
@@ -1047,6 +1060,7 @@ const TransformativeComponent: React.FC<Props> = ({
 					x={rotationPoint.x}
 					y={rotationPoint.y}
 					rotation={rotation}
+					eventBus={eventBus}
 					onDrag={handleDragRotationPoint}
 					dragPositioningFunction={dragFunctionRotationPoint}
 				/>

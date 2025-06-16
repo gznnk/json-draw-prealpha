@@ -61,6 +61,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	isTextEditEnabled = true,
 	isTransparent,
 	showAsChildOutline = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -184,6 +185,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
+		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -299,6 +301,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={handleTransform}
 				/>
 			)}
@@ -313,6 +316,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 						ownerId={id}
 						ownerShape={ownerShape}
 						isTransparent={!isHovered || isDragging || isTransformimg}
+						eventBus={eventBus}
 						onConnect={onConnect}
 					/>
 				))}

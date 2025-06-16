@@ -43,6 +43,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 	initialHeight,
 	svgText,
 	showAsChildOutline = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -103,6 +104,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
+		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -185,6 +187,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={onTransform}
 				/>
 			)}

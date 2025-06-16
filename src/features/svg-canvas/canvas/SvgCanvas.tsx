@@ -54,6 +54,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// In the SvgCanvas render function,
 		// we handle DOM events related to the SvgCanvas elements.
 		const {
+			eventBus,
 			title,
 			minX,
 			minY,
@@ -93,7 +94,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		const containerRef = useRef<HTMLDivElement>(null);
 		// SVG要素の参照
 		const svgRef = useRef<SVGSVGElement>(null);
-
 		// Container dimensions state
 		const [containerWidth, setContainerWidth] = useState(0);
 		const [containerHeight, setContainerHeight] = useState(0);
@@ -305,6 +305,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			const props = {
 				...item,
 				key: item.id,
+				eventBus,
 				onTransform,
 				onDiagramChange,
 				onDrag,
@@ -348,13 +349,14 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									{...multiSelectGroup}
 									id={MULTI_SELECT_GROUP}
 									syncWithSameId
+									eventBus={eventBus}
 									onSelect={onSelect}
 									onTransform={onTransform}
 									onDiagramChange={onDiagramChange}
 								/>
 							)}
 							{/* Render new connect line. */}
-							<NewConnectLine />
+							<NewConnectLine eventBus={eventBus} />
 							{/* Render flash connect lines */}
 							<FlashConnectLine />
 						</Svg>

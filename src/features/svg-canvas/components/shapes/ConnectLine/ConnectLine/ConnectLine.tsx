@@ -46,6 +46,7 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 	autoRouting,
 	startArrowHead,
 	endArrowHead,
+	eventBus,
 	onClick,
 	onSelect,
 	onDiagramChange,
@@ -340,6 +341,7 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 			startArrowHead={startArrowHead}
 			endArrowHead={endArrowHead}
 			items={items}
+			eventBus={eventBus}
 			onClick={onClick}
 			onSelect={onSelect}
 			onDiagramChange={handlePathChange}

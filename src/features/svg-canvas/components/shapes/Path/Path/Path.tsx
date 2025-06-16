@@ -68,6 +68,7 @@ const PathComponent: React.FC<PathProps> = ({
 	fixBothEnds = false,
 	startArrowHead = "None",
 	endArrowHead = "None",
+	eventBus,
 	onClick,
 	onDrag,
 	onSelect,
@@ -290,6 +291,7 @@ const PathComponent: React.FC<PathProps> = ({
 		onPointerDown: handlePointerDown,
 		onClick: handleClick,
 		onDrag: handleDrag,
+		eventBus,
 	});
 
 	// 折れ線のd属性値を生成
@@ -375,6 +377,7 @@ const PathComponent: React.FC<PathProps> = ({
 					rightAngleSegmentDrag={rightAngleSegmentDrag}
 					fixBothEnds={fixBothEnds}
 					items={items}
+					eventBus={eventBus}
 					onPointerDown={handlePointerDown}
 					onClick={handleClick}
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
@@ -385,6 +388,7 @@ const PathComponent: React.FC<PathProps> = ({
 				<NewVertexList
 					id={id}
 					items={items}
+					eventBus={eventBus}
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
@@ -418,6 +422,7 @@ const PathComponent: React.FC<PathProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					items={linePoints}
+					eventBus={eventBus}
 					onDrag={handlePathPointDrag}
 					onTransform={onTransform}
 					onDiagramChange={onDiagramChange}

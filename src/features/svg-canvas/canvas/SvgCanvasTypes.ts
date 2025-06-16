@@ -18,6 +18,7 @@ import type { NewDiagramEvent } from "../types/events/NewDiagramEvent";
 import type { StackOrderChangeEvent } from "../types/events/StackOrderChangeEvent";
 import type { SvgCanvasResizeEvent } from "../types/events/SvgCanvasResizeEvent";
 import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
+import type { EventBus } from "../../../shared/event-bus/EventBus";
 
 /**
  * Type for the data of the SvgCanvas.
@@ -74,6 +75,7 @@ export type CanvasHooksProps = {
  * Props for the SvgCanvas component.
  */
 export type SvgCanvasProps = SvgCanvasState & {
+	eventBus: EventBus;
 	title?: string;
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;

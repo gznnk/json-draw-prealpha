@@ -38,6 +38,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 	syncWithSameId = false,
 	base64Data,
 	showAsChildOutline = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -97,6 +98,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
+		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -157,6 +159,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={onTransform}
 				/>
 			)}

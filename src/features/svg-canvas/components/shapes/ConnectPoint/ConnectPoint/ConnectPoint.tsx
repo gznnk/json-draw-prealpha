@@ -35,6 +35,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	ownerId,
 	ownerShape,
 	isTransparent,
+	eventBus,
 	onConnect,
 }) => {
 	// ホバー状態の管理
@@ -88,7 +89,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		setPathPoints(newPathPoints);
 
 		// Notify the path data for the new connection line rendering.
-		triggerNewConnectLine({
+		triggerNewConnectLine(eventBus, {
 			id: `${id}-connecting-path`,
 			type: "Path",
 			x: 0,
@@ -117,6 +118,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		ownerId,
 		ownerShape,
 		onConnect,
+		eventBus,
 		// 内部変数・内部関数
 		pathPoints,
 		updatePathPoints,
@@ -140,7 +142,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			setPathPoints([]);
 
 			// Clear the path data for the new connection line rendering.
-			triggerNewConnectLine();
+			triggerNewConnectLine(refBus.current.eventBus);
 		}
 	}, []);
 
@@ -151,10 +153,10 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		if (e.dropItem.type === "ConnectPoint") {
 			setIsHovered(true);
 
-			const { id, x, y, ownerId, ownerShape } = refBus.current;
+			const { id, x, y, ownerId, ownerShape, eventBus } = refBus.current;
 
 			// 接続元に情報を送信
-			document.dispatchEvent(
+			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_CONNECTTION, {
 					detail: {
 						eventId: e.eventId,
@@ -172,7 +174,6 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			);
 		}
 	}, []);
-
 	/**
 	 * この接続ポイントの上から要素が外れた時のイベントハンドラ
 	 */
@@ -180,10 +181,10 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		setIsHovered(false);
 		// 接続が切れた時の処理
 		if (e.dropItem.type === "ConnectPoint") {
-			const { id, x, y, ownerId, ownerShape } = refBus.current;
+			const { id, x, y, ownerId, ownerShape, eventBus } = refBus.current;
 
 			// 接続元に情報を送信
-			document.dispatchEvent(
+			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_CONNECTTION, {
 					detail: {
 						eventId: e.eventId,
@@ -201,17 +202,16 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			);
 		}
 	}, []);
-
 	/**
 	 * この接続ポイントに要素がドロップされた時のイベントハンドラ
 	 */
 	const handleDrop = useCallback((e: DiagramDragDropEvent) => {
 		// ドロップされたときの処理
 		if (e.dropItem.type === "ConnectPoint") {
-			const { id, x, y, ownerId, ownerShape } = refBus.current;
+			const { id, x, y, ownerId, ownerShape, eventBus } = refBus.current;
 
 			// 接続元に情報を送信
-			document.dispatchEvent(
+			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_CONNECTTION, {
 					detail: {
 						eventId: e.eventId,
@@ -244,7 +244,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	useEffect(() => {
 		const handleConnection = (e: Event) => {
 			// refBusを介して参照値を取得
-			const { id, pathPoints, ownerId, onConnect, updatePathPoints } =
+			const { id, pathPoints, ownerId, onConnect, updatePathPoints, eventBus } =
 				refBus.current;
 
 			const customEvent = e as CustomEvent<ConnectionEvent>;
@@ -291,19 +291,19 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 					setPathPoints([]);
 
 					// Clear the path data for the new connection line rendering.
-					triggerNewConnectLine();
+					triggerNewConnectLine(eventBus);
 				}
 			}
 		};
 
-		document.addEventListener(EVENT_NAME_CONNECTTION, handleConnection);
+		eventBus.addEventListener(EVENT_NAME_CONNECTTION, handleConnection);
 
 		return () => {
 			if (handleConnection) {
-				document.removeEventListener(EVENT_NAME_CONNECTTION, handleConnection);
+				eventBus.removeEventListener(EVENT_NAME_CONNECTTION, handleConnection);
 			}
 		};
-	}, []);
+	}, [eventBus]);
 
 	return (
 		<DragPoint
@@ -319,6 +319,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			// Show when hovered, even if isTransparent is true.
 			// If you want to hide when hovered, do not render this component.
 			isTransparent={isTransparent && !isHovered}
+			eventBus={eventBus}
 			onDrag={handleDrag}
 			onDragOver={handleDragOver}
 			onDragLeave={handleDragLeave}

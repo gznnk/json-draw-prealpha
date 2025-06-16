@@ -45,6 +45,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 	showConnectPoints = true,
 	showAsChildOutline = false,
 	syncWithSameId = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -477,6 +478,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			// グループが選択されているか、親から子要素としてアウトライン表示指示があった場合に子要素にアウトラインを表示
 			showAsChildOutline: isSelected || showAsChildOutline,
 			syncWithSameId,
+			eventBus,
 			onClick: handleChildDiagramClick,
 			onSelect: handleChildDiagramSelect,
 			onDrag: handleChildDiagramDrag,
@@ -518,6 +520,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={handleTransform}
 				/>
 			)}

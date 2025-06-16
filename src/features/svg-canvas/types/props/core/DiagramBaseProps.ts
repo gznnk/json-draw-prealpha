@@ -2,6 +2,7 @@ import type { DiagramDragEvent } from "../../events/DiagramDragEvent";
 import type { DiagramDragDropEvent } from "../../events/DiagramDragDropEvent";
 import type { DiagramClickEvent } from "../../events/DiagramClickEvent";
 import type { DiagramHoverEvent } from "../../events/DiagramHoverEvent";
+import type { EventBus } from "../../../../../shared/event-bus/EventBus";
 
 /**
  * Base properties for diagram components.
@@ -9,6 +10,7 @@ import type { DiagramHoverEvent } from "../../events/DiagramHoverEvent";
  */
 export type DiagramBaseProps = {
 	isTransparent?: boolean;
+	eventBus: EventBus;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
