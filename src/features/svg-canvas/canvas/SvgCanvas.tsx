@@ -11,7 +11,7 @@ import React, {
 
 // SvgCanvas関連型定義をインポート
 import { DiagramRegistry } from "../registry";
-import { initializeSvgCanvasDiagrams } from "./SvgCanvasDiagramRegistry";
+import { initializeSvgCanvasDiagrams } from "./SvgCanvasRegistry";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor } from "../components/core/Textable";
@@ -42,6 +42,9 @@ import type {
 
 // Import SvgCanvas context.
 import { SvgCanvasContext, SvgCanvasStateProvider } from "./SvgCanvasContext";
+
+// Initialize all diagram types when this module is loaded
+initializeSvgCanvasDiagrams();
 
 /**
  * SvgCanvasコンポーネント
@@ -103,11 +106,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// SVG要素にフォーカスがあるかどうかのフラグ
 		const hasFocus = useRef(false);
-
-		// Initialize diagram registry on component mount
-		useEffect(() => {
-			initializeSvgCanvasDiagrams();
-		}, []);
 
 		// SvgCanvasStateProviderのインスタンスを生成
 		// 現時点ではシングルトン的に扱うため、useRefで保持し、以降再作成しない
@@ -296,6 +294,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				document.removeEventListener("wheel", onDocumentWheel, true);
 			};
 		}, [isGrabScrolling]);
+
 		// 図形の描画
 		const renderedItems = items.map((item) => {
 			const component = DiagramRegistry.getComponent(item.type);
