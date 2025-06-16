@@ -8,7 +8,7 @@ import type { DiagramType } from "../../../types/base/DiagramType";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { DiagramCreateFunctions } from "../../../catalog/DiagramCreateFunctions";
+import { DiagramRegistry } from "../../../registry";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { dispatchNewItemEvent } from "../listeners/addNewItem";
 
@@ -42,10 +42,16 @@ export const useNewDiagram = (props: CanvasHooksProps) => {
 		const diagramType = e.diagramType as DiagramType;
 
 		// Create a new diagram based on the diagram type.
-		const data = DiagramCreateFunctions[diagramType]({
+		const createFunction = DiagramRegistry.getCreateFunction(diagramType);
+		const data = createFunction?.({
 			x,
 			y,
 		}) as Diagram;
+
+		if (!data) {
+			console.warn(`Create function not found for type: ${diagramType}`);
+			return;
+		}
 
 		if (e.isSelected && isSelectableData(data)) {
 			data.isSelected = true;

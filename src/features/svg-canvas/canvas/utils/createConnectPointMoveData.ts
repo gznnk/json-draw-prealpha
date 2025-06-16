@@ -1,4 +1,4 @@
-import { DiagramConnectPointCalculators } from "../../catalog/DiagramConnectPointCalculators";
+import { DiagramRegistry } from "../../registry";
 import type { Diagram } from "../../catalog/DiagramTypes";
 import type { ConnectPointMoveData } from "../../types/events/ConnectPointMoveData";
 import { isConnectableData } from "../../utils/validation/isConnectableData";
@@ -14,7 +14,8 @@ export const createConnectPointMoveData = (
 ): ConnectPointMoveData[] => {
 	if (isConnectableData(newItem)) {
 		// 複数選択の選択元かどうかに関わらず、全ての接続可能な図形の接続ポイントを処理する
-		return DiagramConnectPointCalculators[newItem.type](newItem);
+		const calculator = DiagramRegistry.getConnectPointCalculator(newItem.type);
+		return calculator ? calculator(newItem) : [];
 	}
 
 	return [];

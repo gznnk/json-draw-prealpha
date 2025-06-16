@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import { DiagramExportFunctions } from "../../../catalog/DiagramExportFunctions";
+import { DiagramRegistry } from "../../../registry";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
@@ -29,7 +29,8 @@ export const useExport = (props: CanvasHooksProps) => {
 		const selectedItems = getSelectedItems(items);
 
 		for (const item of selectedItems) {
-			const blob = DiagramExportFunctions[item.type]?.(item);
+			const exportFunction = DiagramRegistry.getExportFunction(item.type);
+			const blob = exportFunction?.(item);
 			if (blob) {
 				const url = URL.createObjectURL(blob);
 

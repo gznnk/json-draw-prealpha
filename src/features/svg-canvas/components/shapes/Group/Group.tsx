@@ -3,7 +3,7 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
 import type { Diagram } from "../../../catalog/DiagramTypes";
-import { DiagramComponentCatalog } from "../../../catalog/DiagramComponentCatalog";
+import { DiagramRegistry } from "../../../registry";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
@@ -465,11 +465,11 @@ const GroupComponent: React.FC<GroupProps> = ({
 			console.error("Item has no type", item);
 			return null;
 		}
-
-		const component =
-			DiagramComponentCatalog[
-				item.type as keyof typeof DiagramComponentCatalog
-			];
+		const component = DiagramRegistry.getComponent(item.type);
+		if (!component) {
+			console.warn(`Component not found for type: ${item.type}`);
+			return null;
+		}
 		const props = {
 			...item,
 			key: item.id,

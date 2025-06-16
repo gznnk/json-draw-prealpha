@@ -1,5 +1,5 @@
 // TODO: 依存関係を整理する
-import { DiagramExportFunctions } from "../../catalog/DiagramExportFunctions";
+import { DiagramRegistry } from "../../registry";
 
 // Import types.
 import type { DiagramType } from "../../types/base/DiagramType";
@@ -15,6 +15,6 @@ export const isExportable = (obj: unknown): boolean => {
 		obj !== null &&
 		typeof obj === "object" &&
 		"type" in obj &&
-		DiagramExportFunctions[obj.type as DiagramType] !== undefined
+		DiagramRegistry.getExportFunction(obj.type as DiagramType) !== undefined
 	);
 };
