@@ -3,16 +3,21 @@
 ## General Rules
 ```mermaid
 graph TD
+    registry --> types
     utils --> types
+    utils --> registry
     hooks --> types
     hooks --> utils
+    hooks --> registry
     components --> types
     components --> utils
     components --> hooks
+    components --> registry
     canvas --> types
     canvas --> utils
     canvas --> hooks
     canvas --> components
+    canvas --> registry
 ```
 
 
