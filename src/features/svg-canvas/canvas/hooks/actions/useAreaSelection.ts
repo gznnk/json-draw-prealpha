@@ -66,6 +66,57 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 		[],
 	);
 
+	/**
+	 * Update items selection based on the current selection state
+	 */
+	const updateItemsSelection = useCallback(
+		(selectionBounds: {
+			startX: number;
+			startY: number;
+			endX: number;
+			endY: number;
+		}) => {
+			const { setCanvasState } = refBus.current.props;
+
+			setCanvasState((prevCanvasState) => {
+				// Calculate selection bounds in canvas coordinates
+				const minX = Math.min(selectionBounds.startX, selectionBounds.endX);
+				const maxX = Math.max(selectionBounds.startX, selectionBounds.endX);
+				const minY = Math.min(selectionBounds.startY, selectionBounds.endY);
+				const maxY = Math.max(selectionBounds.startY, selectionBounds.endY);
+
+				// Update selection state of items
+				const updatedItems = prevCanvasState.items.map((item) => {
+					if (!isSelectableData(item)) return item;
+
+					// Calculate item bounds - items are already in canvas coordinate system
+					const itemLeft = item.x;
+					const itemRight = item.x + (item.width || 0);
+					const itemTop = item.y;
+					const itemBottom = item.y + (item.height || 0);
+
+					// Check if item overlaps with selection rectangle
+					const isSelected =
+						itemLeft < maxX &&
+						itemRight > minX &&
+						itemTop < maxY &&
+						itemBottom > minY;
+
+					return {
+						...item,
+						isSelected,
+					};
+				});
+
+				return {
+					...prevCanvasState,
+					items: updatedItems,
+				};
+			});
+		},
+		[],
+	);
+
 	const onStartAreaSelection = useCallback(
 		(clientX: number, clientY: number) => {
 			const { x, y } = clientToCanvasCoords(clientX, clientY);
@@ -83,71 +134,30 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 	const onUpdateAreaSelection = useCallback(
 		(clientX: number, clientY: number) => {
 			const { x, y } = clientToCanvasCoords(clientX, clientY);
-			setSelectionState((prev) => ({
-				...prev,
-				endX: x,
-				endY: y,
-			}));
+
+			setSelectionState((prev) => {
+				const newState = {
+					...prev,
+					endX: x,
+					endY: y,
+				};
+
+				// Perform real-time selection update
+				updateItemsSelection(newState);
+
+				return newState;
+			});
 		},
-		[clientToCanvasCoords],
+		[clientToCanvasCoords, updateItemsSelection],
 	);
 
 	const onEndAreaSelection = useCallback(() => {
-		const {
-			props: { setCanvasState },
-			selectionState: currentSelectionState,
-		} = refBus.current;
+		const { selectionState: currentSelectionState } = refBus.current;
 
 		if (!currentSelectionState.isSelecting) return;
 
-		// Select items within the selection area
-		setCanvasState((prevState) => {
-			// Calculate selection bounds in canvas coordinates
-			const minX = Math.min(
-				currentSelectionState.startX,
-				currentSelectionState.endX,
-			);
-			const maxX = Math.max(
-				currentSelectionState.startX,
-				currentSelectionState.endX,
-			);
-			const minY = Math.min(
-				currentSelectionState.startY,
-				currentSelectionState.endY,
-			);
-			const maxY = Math.max(
-				currentSelectionState.startY,
-				currentSelectionState.endY,
-			);
-
-			// Update selection state of items
-			const updatedItems = prevState.items.map((item) => {
-				if (!isSelectableData(item)) return item;
-
-				// Calculate item bounds - items are already in canvas coordinate system
-				const itemLeft = item.x;
-				const itemRight = item.x + (item.width || 0);
-				const itemTop = item.y;
-				const itemBottom = item.y + (item.height || 0);
-
-				// Check if item overlaps with selection rectangle
-				const isSelected =
-					itemLeft < maxX &&
-					itemRight > minX &&
-					itemTop < maxY &&
-					itemBottom > minY;
-
-				return {
-					...item,
-					isSelected,
-				};
-			});
-
-			return {
-				...prevState,
-				items: updatedItems,
-			};
-		});
+		// Update items selection with current selection bounds
+		updateItemsSelection(currentSelectionState);
 
 		// Reset selection state
 		setSelectionState({
@@ -157,7 +167,7 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 			endX: 0,
 			endY: 0,
 		});
-	}, []);
+	}, [updateItemsSelection]);
 
 	const onCancelAreaSelection = useCallback(() => {
 		setSelectionState({
