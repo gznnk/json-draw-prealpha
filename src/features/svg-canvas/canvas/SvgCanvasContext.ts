@@ -1,17 +1,17 @@
 // Import React.
 import { createContext } from "react";
 
-// SvgCanvas関連型定義をインポート
-import type { Diagram } from "../catalog/DiagramTypes";
+// Import SvgCanvas related type definitions
+import type { Diagram } from "../types/data/catalog/Diagram";
 
-// SvgCanvas関連関数をインポート
+// Import SvgCanvas related functions
 import { getDiagramById } from "./utils/getDiagramById";
 
 // Imports related to this component.
 import type { SvgCanvasState } from "./SvgCanvasTypes";
 
 /**
- * 階層を跨いでSvgCanvasの状態を提供するクラス.
+ * Class that provides SvgCanvas state across component hierarchy.
  */
 export class SvgCanvasStateProvider {
 	s: SvgCanvasState;
@@ -19,7 +19,7 @@ export class SvgCanvasStateProvider {
 		this.s = state;
 	}
 	setState(state: SvgCanvasState) {
-		// 現時点ではシングルトン的に扱っているため、状態の更新関数を提供
+		// Currently treated as singleton, providing state update function
 		this.s = state;
 	}
 	state(): SvgCanvasState {
@@ -33,7 +33,7 @@ export class SvgCanvasStateProvider {
 	}
 }
 
-// SvgCanvasの状態を階層を跨いで提供するためにSvgCanvasStateProviderを保持するコンテキストを作成
+// Create context that holds SvgCanvasStateProvider to provide SvgCanvas state across component hierarchy
 export const SvgCanvasContext = createContext<SvgCanvasStateProvider | null>(
 	null,
 );

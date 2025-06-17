@@ -3,13 +3,16 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to this component.
-import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { SvgToDiagramNodeProps } from "../../../types/props/nodes/SvgToDiagramNodeProps";
 
 // Import components related to SvgCanvas.
-import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
+import { Rectangle } from "../../shapes/Rectangle";
 import { Gachapon } from "../../icons/Gachapon";
 import { IconContainer } from "../../core/IconContainer";
+
+// Import constants.
+import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -17,7 +20,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 // Import functions related to SvgCanvas.
 import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
 import { newEventId } from "../../../utils/common/newEventId";
-import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
+import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
 
 /**
  * SvgToDiagramNode component.

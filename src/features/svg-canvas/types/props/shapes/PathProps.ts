@@ -3,7 +3,7 @@ import type { CreateDiagramProps } from "../core/CreateDiagramProps";
 import type { PathData } from "../../data/shapes/PathData";
 
 /**
- * 折れ線コンポーネントのプロパティ
+ * Props for Path component
  */
 export type PathProps = CreateDiagramProps<
 	PathData,

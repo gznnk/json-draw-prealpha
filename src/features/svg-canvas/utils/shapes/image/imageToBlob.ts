@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utils.
 import { isImageData } from "../../../utils/validation/isImageData";

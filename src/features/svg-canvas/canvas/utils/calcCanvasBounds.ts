@@ -1,7 +1,7 @@
-import type { Diagram } from "../../catalog/DiagramTypes";
+import type { Diagram } from "../../types/data/catalog/Diagram";
 import type { Bounds } from "../../types/base/Bounds";
 import { CANVAS_GRID_SIZE } from "../SvgCanvasConstants";
-import { calcBoundsOfAllItems } from "./calcBoundsOfAllItems";
+import { calcItemsBoundingBox } from "../../utils/math/geometry/calcItemsBoundingBox";
 
 /**
  * Calculate the optimal canvas size based on the items.
@@ -10,7 +10,7 @@ import { calcBoundsOfAllItems } from "./calcBoundsOfAllItems";
  * @returns - The optimal canvas bounds including position and dimensions.
  */
 export const calcCanvasBounds = (items: Diagram[]): Bounds => {
-	const bounds = calcBoundsOfAllItems(items);
+	const bounds = calcItemsBoundingBox(items);
 
 	let minX = 0;
 	if (bounds.left < 0) {

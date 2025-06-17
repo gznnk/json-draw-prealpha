@@ -3,7 +3,7 @@ import type { CreateDiagramProps } from "../core/CreateDiagramProps";
 import type { RectangleData } from "../../data/shapes/RectangleData";
 
 /**
- * 四角形コンポーネントのプロパティ
+ * Props for Rectangle component
  */
 export type RectangleProps = CreateDiagramProps<
 	RectangleData,

@@ -12,7 +12,16 @@ import type { PathPointProps } from "../../../../types/props/shapes/PathPointPro
  * 折れ線の頂点コンポーネント
  */
 export const PathPoint: React.FC<PathPointProps> = memo(
-	({ id, x, y, hidden, onDrag }) => {
-		return <DragPoint id={id} x={x} y={y} hidden={hidden} onDrag={onDrag} />;
+	({ id, x, y, hidden, eventBus, onDrag }) => {
+		return (
+			<DragPoint
+				id={id}
+				x={x}
+				y={y}
+				hidden={hidden}
+				eventBus={eventBus}
+				onDrag={onDrag}
+			/>
+		);
 	},
 );

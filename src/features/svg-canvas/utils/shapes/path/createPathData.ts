@@ -6,7 +6,7 @@ import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Path component.
-import { DEFAULT_PATH_DATA } from "../../../components/shapes/Path/Path/PathConstants";
+import { DEFAULT_PATH_DATA } from "../../../constants/DefaultData";
 
 /**
  * Creates path data with the specified properties.

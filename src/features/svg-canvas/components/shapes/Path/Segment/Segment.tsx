@@ -10,6 +10,7 @@ import type { Point } from "../../../../types/base/Point";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
+import type { EventBus } from "../../../../../../shared/event-bus/EventBus";
 
 // Import functions related to SvgCanvas.
 import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
@@ -27,6 +28,7 @@ import type { SegmentData } from "./SegmentTypes";
  */
 type SegmentProps = SegmentData & {
 	rightAngleSegmentDrag: boolean;
+	eventBus: EventBus;
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
@@ -43,6 +45,7 @@ const SegmentComponent: React.FC<SegmentProps> = ({
 	endX,
 	endY,
 	rightAngleSegmentDrag,
+	eventBus,
 	onPointerDown,
 	onClick,
 	onDrag,
@@ -93,6 +96,7 @@ const SegmentComponent: React.FC<SegmentProps> = ({
 			endX={endX}
 			endY={endY}
 			cursor={cursor}
+			eventBus={eventBus}
 			onPointerDown={onPointerDown}
 			onClick={onClick}
 			onDrag={onDrag}

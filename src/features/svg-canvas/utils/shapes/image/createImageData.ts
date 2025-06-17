@@ -5,7 +5,7 @@ import type { ImageData } from "../../../types/data/shapes/ImageData";
 import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Image component.
-import { DEFAULT_IMAGE_DATA } from "../../../components/shapes/Image/ImageConstants";
+import { DEFAULT_IMAGE_DATA } from "../../../constants/DefaultData";
 
 /**
  * Creates image data with the specified properties.

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 // Import types.
 import type { ExecutionPropagationEvent } from "../types/events/ExecutionPropagationEvent";
-import { EXECUTION_PROPAGATION_EVENT_NAME } from "../types/events/Constants";
+import { EVENT_NAME_EXECUTION_PROPAGATION } from "../constants/EventNames";
 
 type ExecutionChainProps = {
 	id: string;
@@ -33,14 +33,14 @@ export const useExecutionChain = (props: ExecutionChainProps) => {
 		};
 		// Add the event listener to the document object.
 		document.addEventListener(
-			EXECUTION_PROPAGATION_EVENT_NAME,
+			EVENT_NAME_EXECUTION_PROPAGATION,
 			handlePropagation,
 		);
 
 		return () => {
 			// Remove the event listener from the document object.
 			document.removeEventListener(
-				EXECUTION_PROPAGATION_EVENT_NAME,
+				EVENT_NAME_EXECUTION_PROPAGATION,
 				handlePropagation,
 			);
 		};

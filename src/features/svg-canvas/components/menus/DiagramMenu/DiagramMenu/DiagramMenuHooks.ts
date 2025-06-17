@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
 import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
-import type { Diagram } from "../../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../../types/data/catalog/Diagram";
 import type { FillableData } from "../../../../types/data/core/FillableData";
 import type { StrokableData } from "../../../../types/data/core/StrokableData";
 import type { TextableData } from "../../../../types/data/core/TextableData";

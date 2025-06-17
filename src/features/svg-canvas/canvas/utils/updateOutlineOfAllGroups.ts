@@ -1,5 +1,5 @@
-import type { Diagram } from "../../catalog/DiagramTypes";
-import { calcBoundsOfGroup } from "../../components/shapes/Group";
+import type { Diagram } from "../../types/data/catalog/Diagram";
+import { calcGroupOrientedBox } from "../../utils/shapes/group/calcGroupOrientedBox";
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { applyRecursive } from "./applyRecursive";
 
@@ -13,7 +13,7 @@ export const updateOutlineOfAllGroups = (items: Diagram[]): Diagram[] => {
 	return applyRecursive(items, (item) => {
 		if (isItemableData(item)) {
 			// Calculate the bounds of the group.
-			const box = calcBoundsOfGroup(item);
+			const box = calcGroupOrientedBox(item);
 			if (
 				item.x === box.x &&
 				item.y === box.y &&

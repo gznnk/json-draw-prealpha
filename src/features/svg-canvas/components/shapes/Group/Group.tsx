@@ -2,8 +2,8 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { Diagram } from "../../../catalog/DiagramTypes";
-import { DiagramComponentCatalog } from "../../../catalog/DiagramComponentCatalog";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
+import { DiagramRegistry } from "../../../registry";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
@@ -24,7 +24,7 @@ import { isTransformativeData } from "../../../utils/validation/isTransformative
 import { rotatePoint } from "../../../utils/math/points/rotatePoint";
 
 // Imports related to this component.
-import { getSelectedChildDiagram } from "./GroupFunctions";
+import { getSelectedChildDiagram } from "../../../utils/shapes/group/getSelectedChildDiagram";
 
 /**
  * Group component.
@@ -43,8 +43,9 @@ const GroupComponent: React.FC<GroupProps> = ({
 	isMultiSelectSource,
 	items,
 	showConnectPoints = true,
-	showAsChildOutline = false,
+	showOutline = false,
 	syncWithSameId = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -70,7 +71,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 	// List of child shapes at the start of a drag or transform.
 	const startItems = useRef<Diagram[]>(items);
 
-	// Group's bounding box at the start of a drag or transform.
+	// Group's oriented box at the start of a drag or transform.
 	const startBox = useRef({ x, y, width, height });
 
 	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する
@@ -465,18 +466,19 @@ const GroupComponent: React.FC<GroupProps> = ({
 			console.error("Item has no type", item);
 			return null;
 		}
-
-		const component =
-			DiagramComponentCatalog[
-				item.type as keyof typeof DiagramComponentCatalog
-			];
+		const component = DiagramRegistry.getComponent(item.type);
+		if (!component) {
+			console.warn(`Component not found for type: ${item.type}`);
+			return null;
+		}
 		const props = {
 			...item,
 			key: item.id,
 			showConnectPoints: doShowConnectPoints,
 			// グループが選択されているか、親から子要素としてアウトライン表示指示があった場合に子要素にアウトラインを表示
-			showAsChildOutline: isSelected || showAsChildOutline,
+			showOutline: isSelected || showOutline,
 			syncWithSameId,
+			eventBus,
 			onClick: handleChildDiagramClick,
 			onSelect: handleChildDiagramSelect,
 			onDrag: handleChildDiagramDrag,
@@ -501,7 +503,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 				scaleX={scaleX}
 				scaleY={scaleY}
 				isSelected={isSelected}
-				showAsChildOutline={showAsChildOutline}
+				showOutline={showOutline}
 				isMultiSelectSource={isMultiSelectSource}
 			/>
 			{!isMultiSelectSource && !isGroupDragging && (
@@ -518,6 +520,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={handleTransform}
 				/>
 			)}

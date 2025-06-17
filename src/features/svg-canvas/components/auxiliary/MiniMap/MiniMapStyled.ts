@@ -40,10 +40,23 @@ export const MiniMapBackground = styled.rect`
  * Viewport indicator rectangle
  */
 export const ViewportIndicator = styled.rect`
-	fill: none;
+	fill: transparent;
 	stroke: #4EA1FF;
 	stroke-width: 1;
 	opacity: 0.8;
+	cursor: grab;
+	pointer-events: all;
+	
+	&:hover {
+		stroke-width: 2;
+		opacity: 1;
+	}
+	
+	&:active {
+		cursor: grabbing;
+		stroke-width: 2;
+		opacity: 1;
+	}
 `;
 
 /**

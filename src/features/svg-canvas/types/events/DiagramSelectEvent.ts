@@ -5,5 +5,4 @@
 export type DiagramSelectEvent = {
 	eventId: string;
 	id: string;
-	isMultiSelect?: boolean;
 };

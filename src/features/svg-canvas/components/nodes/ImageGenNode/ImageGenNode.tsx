@@ -11,13 +11,16 @@ import type { ImageGenNodeProps } from "../../../types/props/nodes/ImageGenNodeP
 // Import components.
 import { IconContainer } from "../../core/IconContainer";
 import { Picture } from "../../icons/Picture";
-import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
+import { Rectangle } from "../../shapes/Rectangle";
+
+// Import constants.
+import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 
 // Import hooks.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import utils.
-import { dispatchNewItemEvent } from "../../../canvas/observers/addNewItem";
+import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
 import { newEventId } from "../../../utils/common/newEventId";
 import { createImageData } from "../../../utils/shapes/image/createImageData";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";

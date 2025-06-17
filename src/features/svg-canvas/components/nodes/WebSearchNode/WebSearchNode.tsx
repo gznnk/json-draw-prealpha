@@ -7,7 +7,10 @@ import { OpenAI } from "openai";
 
 // Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
-import { DEFAULT_RECTANGLE_DATA, Rectangle } from "../../shapes/Rectangle";
+import { Rectangle } from "../../shapes/Rectangle";
+
+// Import constants.
+import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";

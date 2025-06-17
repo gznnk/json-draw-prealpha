@@ -6,7 +6,7 @@ import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import { newId } from "../common/newId";
 
 // Import constants.
-import { DEFAULT_PATH_DATA } from "../../../components/shapes/Path/Path/PathConstants";
+import { DEFAULT_PATH_DATA } from "../../../constants/DefaultData";
 
 /**
  * Converts an SVG Line element to a Path diagram data structure.

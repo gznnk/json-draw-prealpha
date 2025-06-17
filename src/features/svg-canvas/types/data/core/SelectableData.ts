@@ -5,5 +5,5 @@
 export type SelectableData = {
 	isSelected: boolean;
 	isMultiSelectSource: boolean; // Indicates if this is the source element in a multi-selection
-	showAsChildOutline?: boolean; // Shows outline when parent group is selected
+	showOutline?: boolean; // Shows outline for various states (parent group selected, area selection, etc.)
 };

@@ -3,7 +3,7 @@ import type { CreateDiagramProps } from "../core/CreateDiagramProps";
 import type { EllipseData } from "../../data/shapes/EllipseData";
 
 /**
- * 楕円コンポーネントのプロパティ
+ * Props for Ellipse component
  */
 export type EllipseProps = CreateDiagramProps<
 	EllipseData,

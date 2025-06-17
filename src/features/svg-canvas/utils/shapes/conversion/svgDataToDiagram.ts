@@ -1,9 +1,9 @@
 // Import types.
-import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 
 // Import utils.
-import { calcGroupBoxOfNoRotation } from "../../../components/shapes/Group";
+import { calcUnrotatedGroupBoundingBox } from "../group/calcUnrotatedGroupBoundingBox";
 import { nanToZero } from "../../math/common/nanToZero";
 import { newId } from "../common/newId";
 
@@ -45,15 +45,15 @@ export const svgDataToDiagram = (data: string): GroupData => {
 		}
 	}
 
-	const box = calcGroupBoxOfNoRotation(newData);
+	const boundingBox = calcUnrotatedGroupBoundingBox(newData);
 
 	const ret = {
 		id: newId(),
 		type: "Group",
-		x: box.left + nanToZero(box.left + box.right) / 2,
-		y: box.top + nanToZero(box.top + box.bottom) / 2,
-		width: box.right - box.left,
-		height: box.bottom - box.top,
+		x: boundingBox.left + nanToZero(boundingBox.left + boundingBox.right) / 2,
+		y: boundingBox.top + nanToZero(boundingBox.top + boundingBox.bottom) / 2,
+		width: boundingBox.right - boundingBox.left,
+		height: boundingBox.bottom - boundingBox.top,
 		rotation: 0,
 		scaleX: 1,
 		scaleY: 1,

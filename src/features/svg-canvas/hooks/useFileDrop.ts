@@ -8,7 +8,7 @@ import type { FileDropEvent } from "../types/events/FileDropEvent";
 import { newEventId } from "../utils/common/newEventId";
 
 /**
- * useFileDropフックの引数型定義
+ * Type definition for useFileDrop hook options
  */
 export type UseFileDropOptions = {
 	id: string;
@@ -16,36 +16,36 @@ export type UseFileDropOptions = {
 };
 
 /**
- * ファイルドロップイベントを処理するためのカスタムフック
+ * Custom hook for handling file drop events
  *
- * @param options - フックのオプション
- * @param options.id - 対象要素のID
- * @param options.onFileDrop - ファイルがドロップされたときに呼び出されるコールバック関数
+ * @param options - Hook options
+ * @param options.id - ID of the target element
+ * @param options.onFileDrop - Callback function called when files are dropped
  */
 export const useFileDrop = ({ id, onFileDrop }: UseFileDropOptions) => {
-	// すべての参照値をオブジェクトとしてまとめてuseRefに保持
+	// Store all reference values as an object in useRef
 	const refBusVal = {
 		id,
 		onFileDrop,
 	};
 	const refBus = useRef(refBusVal);
-	// 参照値を最新に更新
+	// Update reference values to the latest
 	refBus.current = refBusVal;
 
 	const onDragOver = useCallback<React.DragEventHandler>((event) => {
-		// ドラッグされているアイテムにファイルが含まれている場合のみpreventDefaultを呼び出す
+		// Only call preventDefault if the dragged items include files
 		if (event.dataTransfer.types.includes("Files")) {
 			event.preventDefault();
 		}
 	}, []);
 
 	const onDrop = useCallback<React.DragEventHandler>((event) => {
-		// ドラッグされているアイテムにファイルが含まれている場合のみpreventDefaultを呼び出す
+		// Only call preventDefault if the dragged items include files
 		if (event.dataTransfer.types.includes("Files")) {
 			event.preventDefault();
 			const files = event.dataTransfer.files;
 			if (files && files.length > 0) {
-				// refBusを介して常に最新のコールバック関数を参照
+				// Always reference the latest callback function via refBus
 				if (refBus.current.onFileDrop) {
 					refBus.current.onFileDrop({
 						eventId: newEventId(),
@@ -55,7 +55,7 @@ export const useFileDrop = ({ id, onFileDrop }: UseFileDropOptions) => {
 				}
 			}
 		}
-	}, []); // 依存配列を空にして不要な再作成を防止
+	}, []); // Empty dependency array to prevent unnecessary recreation
 
 	return { onDragOver, onDrop };
 };

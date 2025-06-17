@@ -37,7 +37,8 @@ const ImageComponent: React.FC<ImageProps> = ({
 	isMultiSelectSource,
 	syncWithSameId = false,
 	base64Data,
-	showAsChildOutline = false,
+	showOutline = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -97,6 +98,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
+		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -141,7 +143,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 				scaleY={scaleY}
 				isSelected={isSelected}
 				isMultiSelectSource={isMultiSelectSource}
-				showAsChildOutline={showAsChildOutline}
+				showOutline={showOutline}
 			/>
 			{showTransformative && (
 				<Transformative
@@ -157,6 +159,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={onTransform}
 				/>
 			)}

@@ -4,15 +4,22 @@ import { memo, useEffect, useState } from "react";
 // Import components related to SvgCanvas.
 import { Path } from "../../Path";
 import type { PathData } from "../../../../types/data/shapes/PathData";
+import type { EventBus } from "../../../../../../shared/event-bus/EventBus";
 
 // Import related to this component.
-import { NEW_CONNECT_LINE_EVENT_NAME } from "./NewConnectLineConstants";
+import { EVENT_NAME_NEW_CONNECT_LINE } from "../../../../constants/EventNames";
 import type { NewConnectLineEvent } from "./NewConnectLineTypes";
+
+type NewConnectLineProps = {
+	eventBus: EventBus;
+};
 
 /**
  * Component for rendering a new connection line.
  */
-export const NewConnectLineComponent = () => {
+const NewConnectLineComponent: React.FC<NewConnectLineProps> = ({
+	eventBus,
+}) => {
 	const [connectLine, setConnectLine] = useState<PathData>();
 
 	useEffect(() => {
@@ -24,23 +31,23 @@ export const NewConnectLineComponent = () => {
 			}
 		};
 
-		document.addEventListener(
-			NEW_CONNECT_LINE_EVENT_NAME,
+		eventBus.addEventListener(
+			EVENT_NAME_NEW_CONNECT_LINE,
 			handleNewConnectLine,
 		);
 		return () => {
-			document.removeEventListener(
-				NEW_CONNECT_LINE_EVENT_NAME,
+			eventBus.removeEventListener(
+				EVENT_NAME_NEW_CONNECT_LINE,
 				handleNewConnectLine,
 			);
 		};
-	}, []);
+	}, [eventBus]);
 
 	if (!connectLine) {
 		return null;
 	}
 
-	return <Path {...connectLine} />;
+	return <Path {...connectLine} eventBus={eventBus} />;
 };
 
 export const NewConnectLine = memo(NewConnectLineComponent);

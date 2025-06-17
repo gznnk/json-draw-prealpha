@@ -1,4 +1,4 @@
-import type { Diagram } from "../../catalog/DiagramTypes";
+import type { Diagram } from "../../types/data/catalog/Diagram";
 import type { ConnectPointMoveData } from "../../types/events/ConnectPointMoveData";
 import { isConnectableData } from "../../utils/validation/isConnectableData";
 import { applyConnectPointMoveData } from "./applyConnectPointMoveData";

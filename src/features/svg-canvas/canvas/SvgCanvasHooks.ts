@@ -1,13 +1,16 @@
 // Import React.
-import { useState, type RefObject } from "react";
+import { useState, useRef, type RefObject } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../catalog/DiagramTypes";
+import type { Diagram } from "../types/data/catalog/Diagram";
 import type { TextEditorState } from "../components/core/Textable";
 
 // Import functions related to SvgCanvas.
 import { deepCopy } from "../utils/common/deepCopy";
 import { calcCanvasBounds } from "./utils/calcCanvasBounds";
+
+// Import EventBus.
+import { EventBus } from "../../../shared/event-bus/EventBus";
 
 // Imports related to this component.
 import type {
@@ -17,33 +20,34 @@ import type {
 } from "./SvgCanvasTypes";
 
 // Import canvas custom hooks.
-import { useClearAllSelection } from "./hooks/useClearAllSelection";
-import { useConnect } from "./hooks/useConnect";
-import { useCopy } from "./hooks/useCopy";
-import { useDelete } from "./hooks/useDelete";
-import { useDiagramChange } from "./hooks/useDiagramChange";
-import { useDrag } from "./hooks/useDrag";
-import { useExecute } from "./hooks/useExecute";
-import { useExport } from "./hooks/useExport";
-import { useGroup } from "./hooks/useGroup";
-import { useNewDiagram } from "./hooks/useNewDiagram";
-import { usePaste } from "./hooks/usePaste";
-import { useRedo } from "./hooks/useRedo";
-import { useScroll } from "./hooks/useScroll";
-import { useSelect } from "./hooks/useSelect";
-import { useSelectAll } from "./hooks/useSelectAll";
-import { useStackOrderChange } from "./hooks/useStackOrderChange";
-import { useTextChange } from "./hooks/useTextChange";
-import { useTextEdit } from "./hooks/useTextEdit";
-import { useTransform } from "./hooks/useTransform";
-import { useUndo } from "./hooks/useUndo";
-import { useUngroup } from "./hooks/useUngroup";
-import { useZoom } from "./hooks/useZoom";
-import { useCtrl } from "./hooks/useCtrl";
-import { useGrabScroll } from "./hooks/useGrabScroll";
-import { useNavigate } from "./hooks/useNavigate";
-import { useNewItem } from "./observers/addNewItem";
-import { useConnectNodes } from "./observers/connectNodes";
+import { useAreaSelection } from "./hooks/selection/useAreaSelection";
+import { useConnect } from "./hooks/actions/useConnect";
+import { useCopy } from "./hooks/actions/useCopy";
+import { useDelete } from "./hooks/actions/useDelete";
+import { useDiagramChange } from "./hooks/actions/useDiagramChange";
+import { useDrag } from "./hooks/actions/useDrag";
+import { useExecute } from "./hooks/actions/useExecute";
+import { useExport } from "./hooks/actions/useExport";
+import { useGroup } from "./hooks/actions/useGroup";
+import { useNewDiagram } from "./hooks/actions/useNewDiagram";
+import { usePaste } from "./hooks/actions/usePaste";
+import { useStackOrderChange } from "./hooks/actions/useStackOrderChange";
+import { useTextChange } from "./hooks/actions/useTextChange";
+import { useTextEdit } from "./hooks/actions/useTextEdit";
+import { useTransform } from "./hooks/actions/useTransform";
+import { useUngroup } from "./hooks/actions/useUngroup";
+import { useRedo } from "./hooks/history/useRedo";
+import { useUndo } from "./hooks/history/useUndo";
+import { useCtrl } from "./hooks/keyboard/useCtrl";
+import { useNewItem } from "./hooks/listeners/addNewItem";
+import { useConnectNodes } from "./hooks/listeners/connectNodes";
+import { useGrabScroll } from "./hooks/navigation/useGrabScroll";
+import { useNavigate } from "./hooks/navigation/useNavigate";
+import { useScroll } from "./hooks/navigation/useScroll";
+import { useZoom } from "./hooks/navigation/useZoom";
+import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
+import { useSelect } from "./hooks/selection/useSelect";
+import { useSelectAll } from "./hooks/selection/useSelectAll";
 
 /**
  * Props for the useSvgCanvas hook.
@@ -65,6 +69,9 @@ type SvgCanvasHooksProps = {
  * @returns The state, props and functions of the SvgCanvas
  */
 export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
+	// Create EventBus instance for canvas-wide event communication
+	const eventBusRef = useRef(new EventBus());
+
 	// Calculate the initial bounds of the canvas.
 	let initialBounds = {
 		minX: props.minX,
@@ -103,10 +110,20 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		setCanvasState,
 		canvasRef: props.canvasRef.current,
 		onDataChange: props.onDataChange,
+		eventBus: eventBusRef.current,
 	};
 
 	// Ctrl key state management
 	const { isCtrlPressed } = useCtrl();
+
+	// Handler for area selection
+	const {
+		selectionState,
+		onStartAreaSelection,
+		onUpdateAreaSelection,
+		onEndAreaSelection,
+		onCancelAreaSelection,
+	} = useAreaSelection(canvasHooksProps);
 
 	// Handler for the drag event.
 	const onDrag = useDrag(canvasHooksProps);
@@ -175,13 +192,11 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onPaste = usePaste(canvasHooksProps);
 
 	// Handler for the navigate event (using scroll)
-	const onNavigate = useNavigate(onScroll);
+	const onNavigate = useNavigate(canvasHooksProps);
 
 	// Use grab scroll hook for Ctrl+drag functionality
-	const { onGrabStart, onGrabMove, onGrabEnd } = useGrabScroll(
-		canvasHooksProps,
-		onScroll,
-	);
+	const { onGrabStart, onGrabMove, onGrabEnd } =
+		useGrabScroll(canvasHooksProps);
 
 	// Observer for the new item event.
 	useNewItem(canvasHooksProps);
@@ -191,6 +206,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	const canvasProps = {
 		...canvasState,
+		eventBus: eventBusRef.current,
+		selectionState,
 		onDrag,
 		onSelect,
 		onSelectAll,
@@ -218,6 +235,10 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onGrabStart,
 		onGrabMove,
 		onGrabEnd,
+		onStartAreaSelection,
+		onUpdateAreaSelection,
+		onEndAreaSelection,
+		onCancelAreaSelection,
 	};
 
 	return {

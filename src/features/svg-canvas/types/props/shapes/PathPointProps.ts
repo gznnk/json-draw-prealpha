@@ -3,6 +3,6 @@ import type { CreateDiagramProps } from "../core/CreateDiagramProps";
 import type { PathPointData } from "../../data/shapes/PathPointData";
 
 /**
- * 折れ線の頂点プロパティ
+ * Props for PathPoint component
  */
 export type PathPointProps = CreateDiagramProps<PathPointData, object>;

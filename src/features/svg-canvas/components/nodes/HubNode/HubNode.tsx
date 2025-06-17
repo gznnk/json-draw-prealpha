@@ -3,9 +3,12 @@ import type React from "react";
 import { memo, useState } from "react";
 
 // Import components related to SvgCanvas.
-import { Ellipse, DEFAULT_ELLIPSE_DATA } from "../../shapes/Ellipse";
+import { Ellipse } from "../../shapes/Ellipse";
 import { Hub } from "../../icons/Hub";
 import { IconContainer } from "../../core/IconContainer";
+
+// Import constants.
+import { DEFAULT_ELLIPSE_DATA } from "../../../constants/DefaultData";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";

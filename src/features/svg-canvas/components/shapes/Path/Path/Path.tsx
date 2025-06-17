@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { Diagram } from "../../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../../types/data/catalog/Diagram";
 import type { DiagramBaseData } from "../../../../types/base/DiagramBaseData";
 import type { PathData } from "../../../../types/data/shapes/PathData";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
@@ -57,7 +57,7 @@ const PathComponent: React.FC<PathProps> = ({
 	strokeWidth = "1px",
 	isSelected = false,
 	isMultiSelectSource = false,
-	showAsChildOutline = false,
+	showOutline = false,
 	items = [],
 	syncWithSameId = false,
 	dragEnabled = true,
@@ -68,6 +68,7 @@ const PathComponent: React.FC<PathProps> = ({
 	fixBothEnds = false,
 	startArrowHead = "None",
 	endArrowHead = "None",
+	eventBus,
 	onClick,
 	onDrag,
 	onSelect,
@@ -290,6 +291,7 @@ const PathComponent: React.FC<PathProps> = ({
 		onPointerDown: handlePointerDown,
 		onClick: handleClick,
 		onDrag: handleDrag,
+		eventBus,
 	});
 
 	// 折れ線のd属性値を生成
@@ -375,6 +377,7 @@ const PathComponent: React.FC<PathProps> = ({
 					rightAngleSegmentDrag={rightAngleSegmentDrag}
 					fixBothEnds={fixBothEnds}
 					items={items}
+					eventBus={eventBus}
 					onPointerDown={handlePointerDown}
 					onClick={handleClick}
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
@@ -385,6 +388,7 @@ const PathComponent: React.FC<PathProps> = ({
 				<NewVertexList
 					id={id}
 					items={items}
+					eventBus={eventBus}
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
@@ -400,7 +404,7 @@ const PathComponent: React.FC<PathProps> = ({
 					scaleY={scaleY}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
-					showAsChildOutline={showAsChildOutline}
+					showOutline={showOutline}
 				/>
 			)}
 			{/* 全体変形用グループ */}
@@ -418,6 +422,7 @@ const PathComponent: React.FC<PathProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					items={linePoints}
+					eventBus={eventBus}
 					onDrag={handlePathPointDrag}
 					onTransform={onTransform}
 					onDiagramChange={onDiagramChange}

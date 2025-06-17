@@ -29,6 +29,7 @@ const RotatePointComponent: React.FC<RotatePointProps> = ({
 	type,
 	x,
 	y,
+	eventBus,
 	onDrag,
 	dragPositioningFunction,
 	rotation = 0,
@@ -61,6 +62,7 @@ const RotatePointComponent: React.FC<RotatePointProps> = ({
 		x,
 		y,
 		ref: svgRef,
+		eventBus,
 		onDrag: handleDrag,
 		dragPositioningFunction,
 	});

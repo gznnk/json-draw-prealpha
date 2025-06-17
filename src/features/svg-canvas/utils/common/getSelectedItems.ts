@@ -1,4 +1,4 @@
-import type { Diagram } from "../../catalog/DiagramTypes";
+import type { Diagram } from "../../types/data/catalog/Diagram";
 import { isItemableData } from "../validation/isItemableData";
 import { isSelectableData } from "../validation/isSelectableData";
 

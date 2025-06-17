@@ -9,9 +9,9 @@ import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEv
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
 
-// Import components related to SvgCanvas.
-import { PositionLabel } from "../../core/PositionLabel";
+// Import components.
 import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
@@ -60,7 +60,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	isTextEditing,
 	isTextEditEnabled = true,
 	isTransparent,
-	showAsChildOutline = false,
+	showOutline = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -184,6 +185,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
+		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -283,7 +285,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				scaleY={scaleY}
 				isSelected={isSelected}
 				isMultiSelectSource={isMultiSelectSource}
-				showAsChildOutline={showAsChildOutline}
+				showOutline={showOutline}
 			/>
 			{showTransformative && (
 				<Transformative
@@ -299,6 +301,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={handleTransform}
 				/>
 			)}
@@ -313,6 +316,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 						ownerId={id}
 						ownerShape={ownerShape}
 						isTransparent={!isHovered || isDragging || isTransformimg}
+						eventBus={eventBus}
 						onConnect={onConnect}
 					/>
 				))}

@@ -3,9 +3,10 @@ import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../../types/data/catalog/Diagram";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
+import type { EventBus } from "../../../../../../shared/event-bus/EventBus";
 
 // Import functions related to SvgCanvas.
 import { newId } from "../../../../utils/shapes/common/newId";
@@ -19,6 +20,7 @@ import { NewVertex, type NewVertexData } from "../NewVertex";
 type NewVertexListProps = {
 	id: string;
 	items: Diagram[];
+	eventBus: EventBus;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;
 };
 
@@ -28,6 +30,7 @@ type NewVertexListProps = {
 const NewVertexListComponent: React.FC<NewVertexListProps> = ({
 	id,
 	items,
+	eventBus,
 	onDiagramChange,
 }) => {
 	// Dragging NewVertex component data.
@@ -166,7 +169,12 @@ const NewVertexListComponent: React.FC<NewVertexListProps> = ({
 	return (
 		<>
 			{newVertexList.map((item) => (
-				<NewVertex key={item.id} {...item} onDrag={handleNewVertexDrag} />
+				<NewVertex
+					key={item.id}
+					{...item}
+					eventBus={eventBus}
+					onDrag={handleNewVertexDrag}
+				/>
 			))}
 		</>
 	);

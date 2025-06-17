@@ -1,6 +1,5 @@
 export {
 	ConnectLine,
-	EVENT_NAME_CONNECT_POINTS_MOVE,
 	notifyConnectPointsMove,
 } from "./ConnectLine";
 

@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../../catalog/DiagramTypes";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { RectangleVertices } from "../../../types/base/RectangleVertices";
 import type { Shape } from "../../../types/base/Shape";
 import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";

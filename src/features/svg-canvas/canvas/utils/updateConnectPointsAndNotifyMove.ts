@@ -1,4 +1,4 @@
-import type { Diagram } from "../../catalog/DiagramTypes";
+import type { Diagram } from "../../types/data/catalog/Diagram";
 import { notifyConnectPointsMove } from "../../components/shapes/ConnectLine";
 import type { ConnectableData } from "../../types/data/shapes/ConnectableData";
 import type { EventType } from "../../types/events/EventType";

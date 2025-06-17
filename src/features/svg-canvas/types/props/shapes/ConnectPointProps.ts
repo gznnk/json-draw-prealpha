@@ -5,14 +5,14 @@ import type { DiagramConnectEvent } from "../../events/DiagramConnectEvent";
 import type { Shape } from "../../base/Shape";
 
 /**
- * 接続ポイントプロパティ
+ * Connect point properties
  */
 export type ConnectPointProps = CreateDiagramProps<
 	ConnectPointData,
 	{ connectable: true }
 > & {
 	ownerId: string;
-	ownerShape: Shape; // memo化して渡すこと
+	ownerShape: Shape; // Should be passed as memoized
 	isTransparent: boolean;
 	onConnect?: (e: DiagramConnectEvent) => void;
 };

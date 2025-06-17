@@ -11,7 +11,7 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { createEllipseConnectPoint } from "./createEllipseConnectPoint";
 
 // Import constants from Ellipse component.
-import { DEFAULT_ELLIPSE_DATA } from "../../../components/shapes/Ellipse/EllipseConstants";
+import { DEFAULT_ELLIPSE_DATA } from "../../../constants/DefaultData";
 
 /**
  * Creates ellipse data with the specified properties.

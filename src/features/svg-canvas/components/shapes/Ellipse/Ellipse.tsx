@@ -58,7 +58,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	isTextEditing,
 	isTextEditEnabled = true,
 	isTransparent,
-	showAsChildOutline = false,
+	showOutline = false,
+	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -181,6 +182,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
+		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -274,7 +276,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 				scaleY={scaleY}
 				isSelected={isSelected}
 				isMultiSelectSource={isMultiSelectSource}
-				showAsChildOutline={showAsChildOutline}
+				showOutline={showOutline}
 			/>
 			{showTransformative && (
 				<Transformative
@@ -290,6 +292,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
+					eventBus={eventBus}
 					onTransform={handleTransform}
 				/>
 			)}
@@ -304,6 +307,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 						ownerId={id}
 						ownerShape={ownerShape}
 						isTransparent={!isHovered || isDragging || isTransformimg}
+						eventBus={eventBus}
 						onConnect={onConnect}
 					/>
 				))}

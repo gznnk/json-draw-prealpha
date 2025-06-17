@@ -1,7 +1,7 @@
 import type { ConnectPointsMoveEvent } from "../../../../types/events/ConnectPointsMoveEvent";
 
 // Imports related to this component.
-import { EVENT_NAME_CONNECT_POINTS_MOVE } from "./ConnectLineConstants";
+import { EVENT_NAME_CONNECT_POINTS_MOVE } from "../../../../constants/EventNames";
 
 /**
  * Trigger the ConnectPoint components move event.

@@ -10,7 +10,8 @@ import React, {
 } from "react";
 
 // SvgCanvas関連型定義をインポート
-import { DiagramComponentCatalog } from "../catalog/DiagramComponentCatalog";
+import { DiagramRegistry } from "../registry";
+import { initializeSvgCanvasDiagrams } from "./SvgCanvasRegistry";
 
 // SvgCanvas関連コンポーネントをインポート
 import { TextEditor } from "../components/core/Textable";
@@ -24,11 +25,12 @@ import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { MiniMap } from "../components/auxiliary/MiniMap";
 
 // Imports related to this component.
-import { useShortcutKey } from "./hooks/useShortcutKey";
+import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import {
 	Container,
 	HTMLElementsContainer,
+	SelectionRect,
 	Svg,
 	Viewport,
 	ViewportOverlay,
@@ -42,6 +44,9 @@ import type {
 // Import SvgCanvas context.
 import { SvgCanvasContext, SvgCanvasStateProvider } from "./SvgCanvasContext";
 
+// Initialize all diagram types when this module is loaded
+initializeSvgCanvasDiagrams();
+
 /**
  * SvgCanvasコンポーネント
  */
@@ -50,6 +55,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// In the SvgCanvas render function,
 		// we handle DOM events related to the SvgCanvas elements.
 		const {
+			eventBus,
 			title,
 			minX,
 			minY,
@@ -59,6 +65,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			textEditorState,
 			isGrabScrollReady,
 			isGrabScrolling,
+			selectionState,
 			onTransform,
 			onDiagramChange,
 			onDrag,
@@ -83,13 +90,16 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onGrabStart,
 			onGrabMove,
 			onGrabEnd,
+			onStartAreaSelection,
+			onUpdateAreaSelection,
+			onEndAreaSelection,
+			onCancelAreaSelection,
 		} = props;
 
 		// SVG要素のコンテナの参照
 		const containerRef = useRef<HTMLDivElement>(null);
 		// SVG要素の参照
 		const svgRef = useRef<SVGSVGElement>(null);
-
 		// Container dimensions state
 		const [containerWidth, setContainerWidth] = useState(0);
 		const [containerHeight, setContainerHeight] = useState(0);
@@ -180,12 +190,17 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				const { onClearAllSelection, onGrabStart, contextMenuFunctions } =
 					refBus.current;
 
-				// Check for Ctrl+drag to start grab scrolling
-				if (onGrabStart?.(e)) {
-					return;
-				}
-
 				if (e.target === e.currentTarget) {
+					// Check for Ctrl+drag to start grab scrolling
+					if (e.ctrlKey && onGrabStart?.(e)) {
+						return;
+					}
+
+					// Start area selection if not pressing Ctrl key
+					if (!e.ctrlKey) {
+						onStartAreaSelection?.(e.clientX, e.clientY);
+					}
+
 					// Clear the selection when pointer is down on the canvas.
 					onClearAllSelection?.();
 				}
@@ -193,26 +208,38 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				// Close the context menu.
 				contextMenuFunctions.closeContextMenu();
 			},
-			[],
+			[onStartAreaSelection],
 		);
 		/**
-		 * Handle the pointer move event for grab scrolling.
+		 * Handle the pointer move event for grab scrolling and area selection.
 		 */
 		const handlePointerMove = useCallback(
 			(e: React.PointerEvent<SVGSVGElement>) => {
+				// Handle area selection if active
+				if (selectionState?.isSelecting) {
+					onUpdateAreaSelection?.(e.clientX, e.clientY);
+					return;
+				}
+
 				refBus.current.onGrabMove?.(e);
 			},
-			[],
+			[selectionState?.isSelecting, onUpdateAreaSelection],
 		);
 
 		/**
-		 * Handle the pointer up event to end grab scrolling.
+		 * Handle the pointer up event to end grab scrolling and area selection.
 		 */
 		const handlePointerUp = useCallback(
 			(e: React.PointerEvent<SVGSVGElement>) => {
+				// Handle area selection end
+				if (selectionState?.isSelecting) {
+					onEndAreaSelection?.();
+					return;
+				}
+
 				refBus.current.onGrabEnd?.(e);
 			},
-			[],
+			[selectionState?.isSelecting, onEndAreaSelection],
 		);
 
 		/**
@@ -235,12 +262,21 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		 */
 		const handleKeyDown = useCallback(
 			(e: React.KeyboardEvent<SVGSVGElement>) => {
+				// Cancel area selection on Escape key
+				if (e.key === "Escape" && selectionState?.isSelecting) {
+					e.preventDefault();
+					if (onCancelAreaSelection) {
+						onCancelAreaSelection();
+					}
+					return;
+				}
+
 				// キャンバスにフォーカスがない場合はイベントをキャンセルし、スクロールを無効化
 				if (e.target !== e.currentTarget) {
 					e.preventDefault();
 				}
 			},
-			[],
+			[selectionState?.isSelecting, onCancelAreaSelection],
 		);
 
 		// Monitor container size changes with ResizeObserver
@@ -293,10 +329,15 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// 図形の描画
 		const renderedItems = items.map((item) => {
-			const component = DiagramComponentCatalog[item.type];
+			const component = DiagramRegistry.getComponent(item.type);
+			if (!component) {
+				console.warn(`Component not found for type: ${item.type}`);
+				return null;
+			}
 			const props = {
 				...item,
 				key: item.id,
+				eventBus,
 				onTransform,
 				onDiagramChange,
 				onDrag,
@@ -340,15 +381,25 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									{...multiSelectGroup}
 									id={MULTI_SELECT_GROUP}
 									syncWithSameId
+									eventBus={eventBus}
 									onSelect={onSelect}
 									onTransform={onTransform}
 									onDiagramChange={onDiagramChange}
 								/>
 							)}
 							{/* Render new connect line. */}
-							<NewConnectLine />
-							{/* Render flash connect lines */}
-							<FlashConnectLine />
+							<NewConnectLine eventBus={eventBus} />
+							{/* Render flash connect lines */} <FlashConnectLine />
+							{/* Render area selection rectangle */}
+							{selectionState && (
+								<SelectionRect
+									x={Math.min(selectionState.startX, selectionState.endX)}
+									y={Math.min(selectionState.startY, selectionState.endY)}
+									width={Math.abs(selectionState.endX - selectionState.startX)}
+									height={Math.abs(selectionState.endY - selectionState.startY)}
+									visible={selectionState.isSelecting}
+								/>
+							)}
 						</Svg>
 					</SvgCanvasContext.Provider>
 					{/* Container for HTML elements that follow the scroll of the SVG canvas with zoom scaling. */}

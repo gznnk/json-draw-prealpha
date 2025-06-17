@@ -13,7 +13,7 @@ import {
 } from "../../../../utils/shapes/path/createArrowHeads";
 
 // Import constants and styled components.
-import { FLASH_CONNECT_LINE_EVENT_NAME } from "./FlashConnectLineConstants";
+import { EVENT_NAME_FLASH_CONNECT_LINE } from "../../../../constants/EventNames";
 import { FlashGroup } from "./FlashConnectLineStyled";
 
 export const FlashConnectLineComponent = () => {
@@ -40,12 +40,12 @@ export const FlashConnectLineComponent = () => {
 		};
 
 		document.addEventListener(
-			FLASH_CONNECT_LINE_EVENT_NAME,
+			EVENT_NAME_FLASH_CONNECT_LINE,
 			handleFlashConnectLine,
 		);
 		return () => {
 			document.removeEventListener(
-				FLASH_CONNECT_LINE_EVENT_NAME,
+				EVENT_NAME_FLASH_CONNECT_LINE,
 				handleFlashConnectLine,
 			);
 		};

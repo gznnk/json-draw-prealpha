@@ -11,16 +11,19 @@ import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
 import type { DiagramHoverEvent } from "../types/events/DiagramHoverEvent";
 import type { DiagramPointerEvent } from "../types/events/DiagramPointerEvent";
 import type { EventType } from "../types/events/EventType";
-import {
-	type SvgCanvasScrollEvent,
-	SVG_CANVAS_SCROLL_EVENT_NAME,
-} from "../types/events/SvgCanvasScrollEvent";
+import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
 
 // Import utils.
 import { newEventId } from "../utils/common/newEventId";
 
-/** 全体通知用ドラッグイベントの名前 */
-const EVENT_NAME_BROADCAST_DRAG = "BroadcastDrag";
+// Import EventBus.
+import type { EventBus } from "../../../shared/event-bus/EventBus";
+
+// Import event names
+import {
+	EVENT_NAME_BROADCAST_DRAG,
+	EVENT_NAME_SVG_CANVAS_SCROLL,
+} from "../constants/EventNames";
 
 /** ドラッグのあそび */
 const DRAG_DEAD_ZONE = 5;
@@ -51,6 +54,7 @@ export type DragProps = {
 	y: number;
 	syncWithSameId?: boolean;
 	ref: React.RefObject<SVGElement>;
+	eventBus: EventBus;
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onPointerUp?: (e: DiagramPointerEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
@@ -92,6 +96,7 @@ export const useDrag = (props: DragProps) => {
 		type,
 		syncWithSameId = false,
 		ref,
+		eventBus,
 		onPointerDown,
 		onPointerUp,
 		onClick,
@@ -257,9 +262,8 @@ export const useDrag = (props: DragProps) => {
 			});
 
 			// 親子関係にない図形でハンドリングする用のドラッグ中イベント発火
-			ref.current?.dispatchEvent(
+			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_BROADCAST_DRAG, {
-					bubbles: true,
 					detail: {
 						...broadcastDragEvent,
 						eventType: "Start",
@@ -280,9 +284,8 @@ export const useDrag = (props: DragProps) => {
 		onDrag?.(dragEvent);
 
 		// 親子関係にない図形でハンドリングする用のドラッグ中イベント発火
-		ref.current?.dispatchEvent(
+		eventBus.dispatchEvent(
 			new CustomEvent(EVENT_NAME_BROADCAST_DRAG, {
-				bubbles: true,
 				detail: broadcastDragEvent,
 			}),
 		);
@@ -316,12 +319,9 @@ export const useDrag = (props: DragProps) => {
 				endY: dragPoint.y,
 				cursorX: svgCursorPoint.x,
 				cursorY: svgCursorPoint.y,
-			});
-
-			// 親子関係にない図形でハンドリングする用のドラッグ終了イベント発火
-			ref.current?.dispatchEvent(
+			}); // 親子関係にない図形でハンドリングする用のドラッグ終了イベント発火
+			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_BROADCAST_DRAG, {
-					bubbles: true,
 					detail: {
 						eventId,
 						eventType: "End",
@@ -534,6 +534,7 @@ export const useDrag = (props: DragProps) => {
 		type,
 		ref,
 		syncWithSameId,
+		eventBus,
 		onDrag,
 		onDragOver,
 		onDragLeave,
@@ -546,13 +547,14 @@ export const useDrag = (props: DragProps) => {
 	refBus.current = refBusVal;
 
 	useEffect(() => {
-		let handleBroadcastDrag: (e: Event) => void;
-		let handleBroadcastDragForSync: (e: Event) => void;
+		let handleBroadcastDrag: (e: CustomEvent) => void;
+		let handleBroadcastDragForSync: (e: CustomEvent) => void;
 
-		const { ref, onDrag, onDragOver, onDrop, syncWithSameId } = refBus.current;
+		const { ref, eventBus, onDrag, onDragOver, onDrop, syncWithSameId } =
+			refBus.current;
 
 		if (onDragOver || onDrop) {
-			handleBroadcastDrag = (e: Event) => {
+			handleBroadcastDrag = (e: CustomEvent) => {
 				// refBusを介して参照値を取得
 				const { id, x, y, type, ref, onDragOver, onDragLeave } = refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
@@ -594,11 +596,11 @@ export const useDrag = (props: DragProps) => {
 					onDragLeave?.(dragDropEvent);
 				}
 			};
-			document.addEventListener(EVENT_NAME_BROADCAST_DRAG, handleBroadcastDrag);
+			eventBus.addEventListener(EVENT_NAME_BROADCAST_DRAG, handleBroadcastDrag);
 		}
 
 		if (syncWithSameId && onDrag) {
-			handleBroadcastDragForSync = (e: Event) => {
+			handleBroadcastDragForSync = (e: CustomEvent) => {
 				// refBusを介して参照値を取得
 				const { id, onDrag, getSvgPoint } = refBus.current;
 				const customEvent = e as CustomEvent<BroadcastDragEvent>;
@@ -626,7 +628,7 @@ export const useDrag = (props: DragProps) => {
 					onDrag?.(dragEvent);
 				}
 			};
-			document.addEventListener(
+			eventBus.addEventListener(
 				EVENT_NAME_BROADCAST_DRAG,
 				handleBroadcastDragForSync,
 			);
@@ -634,14 +636,14 @@ export const useDrag = (props: DragProps) => {
 
 		return () => {
 			if (handleBroadcastDrag) {
-				document.removeEventListener(
+				eventBus.removeEventListener(
 					EVENT_NAME_BROADCAST_DRAG,
 					handleBroadcastDrag,
 				);
 			}
 
 			if (handleBroadcastDragForSync) {
-				document.removeEventListener(
+				eventBus.removeEventListener(
 					EVENT_NAME_BROADCAST_DRAG,
 					handleBroadcastDragForSync,
 				);
@@ -684,7 +686,7 @@ export const useDrag = (props: DragProps) => {
 				});
 			};
 			document.addEventListener(
-				SVG_CANVAS_SCROLL_EVENT_NAME,
+				EVENT_NAME_SVG_CANVAS_SCROLL,
 				handleSvgCanvasScroll,
 				true,
 			);
@@ -692,7 +694,7 @@ export const useDrag = (props: DragProps) => {
 		return () => {
 			if (handleSvgCanvasScroll) {
 				document.removeEventListener(
-					SVG_CANVAS_SCROLL_EVENT_NAME,
+					EVENT_NAME_SVG_CANVAS_SCROLL,
 					handleSvgCanvasScroll,
 					true,
 				);

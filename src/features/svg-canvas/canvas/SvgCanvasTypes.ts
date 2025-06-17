@@ -2,7 +2,7 @@
 import type { RefObject } from "react";
 
 // Import types related to SvgCanvas.
-import type { Diagram } from "../catalog/DiagramTypes";
+import type { Diagram } from "../types/data/catalog/Diagram";
 import type { TextEditorState } from "../components/core/Textable";
 import type { GroupData } from "../types/data/shapes/GroupData";
 import type { DiagramChangeEvent } from "../types/events/DiagramChangeEvent";
@@ -18,6 +18,10 @@ import type { NewDiagramEvent } from "../types/events/NewDiagramEvent";
 import type { StackOrderChangeEvent } from "../types/events/StackOrderChangeEvent";
 import type { SvgCanvasResizeEvent } from "../types/events/SvgCanvasResizeEvent";
 import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
+import type { EventBus } from "../../../shared/event-bus/EventBus";
+
+// Import area selection types.
+import type { AreaSelectionState } from "./hooks/selection/useAreaSelection";
 
 /**
  * Type for the data of the SvgCanvas.
@@ -68,13 +72,16 @@ export type CanvasHooksProps = {
 	canvasRef?: SvgCanvasRef | null;
 	setCanvasState: React.Dispatch<React.SetStateAction<SvgCanvasState>>;
 	onDataChange?: (data: SvgCanvasData) => void;
+	eventBus: EventBus;
 };
 
 /**
  * Props for the SvgCanvas component.
  */
 export type SvgCanvasProps = SvgCanvasState & {
+	eventBus: EventBus;
 	title?: string;
+	selectionState?: AreaSelectionState;
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
@@ -105,4 +112,8 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onGrabStart?: (e: React.PointerEvent<SVGSVGElement>) => boolean;
 	onGrabMove?: (e: React.PointerEvent<SVGSVGElement>) => void;
 	onGrabEnd?: (e: React.PointerEvent<SVGSVGElement>) => void;
+	onStartAreaSelection?: (clientX: number, clientY: number) => void;
+	onUpdateAreaSelection?: (clientX: number, clientY: number) => void;
+	onEndAreaSelection?: () => void;
+	onCancelAreaSelection?: () => void;
 };

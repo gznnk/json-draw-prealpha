@@ -83,3 +83,26 @@ export const ViewportOverlay = styled.div`
     overflow: hidden;
     pointer-events: none;
 `;
+
+/**
+ * Props for the selection rectangle element.
+ */
+type SelectionRectProps = {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	visible: boolean;
+};
+
+/**
+ * Styled selection rectangle for area selection.
+ */
+export const SelectionRect = styled.rect<SelectionRectProps>`
+    fill: rgba(58, 121, 184, 0.1);
+    stroke: #3A79B8;
+    stroke-width: 1;
+    stroke-dasharray: 5,5;
+    pointer-events: none;
+    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+`;
