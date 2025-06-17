@@ -6,6 +6,7 @@ import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
+import { calcItemBoundingBox } from "../../../utils/math/geometry/calcItemBoundingBox";
 
 /**
  * Area selection state type
@@ -83,24 +84,21 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 				const minX = Math.min(selectionBounds.startX, selectionBounds.endX);
 				const maxX = Math.max(selectionBounds.startX, selectionBounds.endX);
 				const minY = Math.min(selectionBounds.startY, selectionBounds.endY);
-				const maxY = Math.max(selectionBounds.startY, selectionBounds.endY); // Update selection state of items
+				const maxY = Math.max(selectionBounds.startY, selectionBounds.endY);
+
+				// Update selection state of items
 				const updatedItems = prevCanvasState.items.map((item) => {
 					if (!isSelectableData(item)) return item;
 
-					// Calculate item bounds - item.x and item.y are center coordinates
-					const halfWidth = (item.width || 0) / 2;
-					const halfHeight = (item.height || 0) / 2;
-					const itemLeft = item.x - halfWidth;
-					const itemRight = item.x + halfWidth;
-					const itemTop = item.y - halfHeight;
-					const itemBottom = item.y + halfHeight;
+					// Calculate item bounding box using calcItemBoundingBox function
+					const itemBounds = calcItemBoundingBox(item);
 
-					// Check if item overlaps with selection rectangle
+					// Check if item's bounding box is completely contained within selection rectangle
 					const isSelected =
-						itemLeft < maxX &&
-						itemRight > minX &&
-						itemTop < maxY &&
-						itemBottom > minY;
+						itemBounds.left >= minX &&
+						itemBounds.right <= maxX &&
+						itemBounds.top >= minY &&
+						itemBounds.bottom <= maxY;
 
 					return {
 						...item,

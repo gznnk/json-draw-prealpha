@@ -199,7 +199,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					// Start area selection if not pressing Ctrl key
 					if (!e.ctrlKey) {
 						onStartAreaSelection?.(e.clientX, e.clientY);
-						return;
 					}
 
 					// Clear the selection when pointer is down on the canvas.
@@ -218,9 +217,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			(e: React.PointerEvent<SVGSVGElement>) => {
 				// Handle area selection if active
 				if (selectionState?.isSelecting) {
-					if (onUpdateAreaSelection) {
-						onUpdateAreaSelection(e.clientX, e.clientY);
-					}
+					onUpdateAreaSelection?.(e.clientX, e.clientY);
 					return;
 				}
 
