@@ -1,19 +1,22 @@
+// Import types.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
+
+// Import utils.
 import { degreesToRadians } from "../../math/common/degreesToRadians";
 import { nanToZero } from "../../math/common/nanToZero";
 import { rotatePoint } from "../../math/points/rotatePoint";
 import { isTransformativeData } from "../../validation/isTransformativeData";
 
 /**
- * グループの回転を戻した時の、図形のbounding boxを計算する
+ * Calculates the bounding box of a shape when the group rotation is removed.
  *
- * @param item - 図形
- * @param groupCenterX - グループの中心X座標
- * @param groupCenterY - グループの中心Y座標
- * @param groupRotation - グループの回転角度
- * @returns 図形のbounding box
+ * @param item - The shape item
+ * @param groupCenterX - Group center X coordinate
+ * @param groupCenterY - Group center Y coordinate
+ * @param groupRotation - Group rotation angle in degrees
+ * @returns The shape's bounding box
  */
-export const calcItemBoundingBoxOfNoGroupRotation = (
+export const calcItemBoundingBoxInUnrotatedGroup = (
 	item: Diagram,
 	groupCenterX: number,
 	groupCenterY: number,
