@@ -1,7 +1,7 @@
 import type { Diagram } from "../../types/data/catalog/Diagram";
 import type { Bounds } from "../../types/base/Bounds";
 import { CANVAS_GRID_SIZE } from "../SvgCanvasConstants";
-import { calcItemsBoundingBox } from "./calcItemsBoundingBox";
+import { calcItemsBoundingBox } from "../../utils/math/geometry/calcItemsBoundingBox";
 
 /**
  * Calculate the optimal canvas size based on the items.

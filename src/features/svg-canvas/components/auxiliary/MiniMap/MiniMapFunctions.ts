@@ -1,8 +1,11 @@
+// Import types.
 import type { Bounds } from "../../../types/base/Bounds";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
+
+// Import utils.
 import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
 import { isItemableData } from "../../../utils/validation/isItemableData";
-import { calcItemsBoundingBox } from "../../../canvas/utils/calcItemsBoundingBox";
+import { calcItemsBoundingBox } from "../../../utils/math/geometry/calcItemsBoundingBox";
 
 /**
  * Calculate viewport bounds in canvas coordinates based on current view state

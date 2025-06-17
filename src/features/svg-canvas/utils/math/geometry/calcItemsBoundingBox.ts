@@ -1,12 +1,12 @@
 // Import types.
-import type { Box } from "../../types/base/Box";
-import type { Diagram } from "../../types/data/catalog/Diagram";
+import type { Box } from "../../../types/base/Box";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utils.
-import { calcGroupOrientedBox } from "../../utils/shapes/group/calcGroupOrientedBox";
-import { calcItemBoundingBox } from "../../utils/math/geometry/calcItemBoundingBox";
-import { isItemableData } from "../../utils/validation/isItemableData";
-import { isTransformativeData } from "../../utils/validation/isTransformativeData";
+import { calcGroupOrientedBox } from "../../../utils/shapes/group/calcGroupOrientedBox";
+import { isItemableData } from "../../../utils/validation/isItemableData";
+import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
+import { calcItemBoundingBox } from "./calcItemBoundingBox";
 
 /**
  * Calculate the bounding box of all provided items.
