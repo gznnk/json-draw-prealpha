@@ -13,7 +13,7 @@ import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
  * @param startX - Start point x coordinate
  * @param startY - Start point y coordinate
  * @param startDirection - Direction from start shape
- * @param startOwnerOuterBoxGeometry - Outer box geometry of start shape
+ * @param startOwnerBoundingBoxGeometry - Bounding box geometry of start shape
  * @param endX - End point x coordinate
  * @param endY - End point y coordinate
  * @returns Array of points representing the connection path
@@ -22,7 +22,7 @@ export const createConnectPathOnDrag = (
 	startX: number,
 	startY: number,
 	startDirection: Direction,
-	startOwnerOuterBoxGeometry: BoxGeometry,
+	startOwnerBoundingBoxGeometry: BoxGeometry,
 	endX: number,
 	endY: number,
 ) => {
@@ -32,7 +32,9 @@ export const createConnectPathOnDrag = (
 	// 開始方向が上下かどうか
 	const isDirectionUpDown = isUpDown(startDirection);
 
-	const marginBoxGeometry = addMarginToBoxGeometry(startOwnerOuterBoxGeometry);
+	const marginBoxGeometry = addMarginToBoxGeometry(
+		startOwnerBoundingBoxGeometry,
+	);
 
 	// p1
 	const p1 = { x: startX, y: startY };

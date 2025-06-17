@@ -10,7 +10,7 @@ import type { Shape } from "../../../types/base/Shape";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
-import { calcGroupBoxOfNoRotation } from "../../../utils/shapes/group/calcGroupBoxOfNoRotation";
+import { calcGroupBoundingBoxOfNoRotation } from "../../../utils/shapes/group/calcGroupBoundingBoxOfNoRotation";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { isItemableData } from "../../../utils/validation/isItemableData";
@@ -346,14 +346,16 @@ export const usePaste = (props: CanvasHooksProps) => {
 						let multiSelectGroup: GroupData | undefined = undefined;
 						if (isMultiSelect) {
 							// Create multi-select group
-							const box = calcGroupBoxOfNoRotation(pastedNormalItems);
+							const boundingBox =
+								calcGroupBoundingBoxOfNoRotation(pastedNormalItems);
 							multiSelectGroup = {
 								id: MULTI_SELECT_GROUP,
 								type: "Group",
-								x: box.left + (box.right - box.left) / 2,
-								y: box.top + (box.bottom - box.top) / 2,
-								width: box.right - box.left,
-								height: box.bottom - box.top,
+								x:
+									boundingBox.left + (boundingBox.right - boundingBox.left) / 2,
+								y: boundingBox.top + (boundingBox.bottom - boundingBox.top) / 2,
+								width: boundingBox.right - boundingBox.left,
+								height: boundingBox.bottom - boundingBox.top,
 								rotation: 0,
 								scaleX: 1,
 								scaleY: 1,

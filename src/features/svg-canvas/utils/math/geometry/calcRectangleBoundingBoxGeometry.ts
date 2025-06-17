@@ -6,13 +6,13 @@ import type { Shape } from "../../../types/base/Shape";
 import { calcRectangleVertices } from "./calcRectangleVertices";
 
 /**
- * Calculates the outer bounding box geometry of a rectangle.
+ * Calculates the bounding box geometry of a rectangle.
  * Takes into account rotation and scaling.
  *
  * @param shape - Rectangle shape parameters
- * @returns The outer bounding box geometry
+ * @returns The bounding box geometry
  */
-export const calcRectangleOuterBoxGeometry = (shape: Shape): BoxGeometry => {
+export const calcRectangleBoundingBoxGeometry = (shape: Shape): BoxGeometry => {
 	const { topLeftPoint, bottomLeftPoint, topRightPoint, bottomRightPoint } =
 		calcRectangleVertices(shape);
 

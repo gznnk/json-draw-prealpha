@@ -71,7 +71,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 	// List of child shapes at the start of a drag or transform.
 	const startItems = useRef<Diagram[]>(items);
 
-	// Group's bounding box at the start of a drag or transform.
+	// Group's oriented box at the start of a drag or transform.
 	const startBox = useRef({ x, y, width, height });
 
 	// ハンドラ生成の頻発を回避するため、参照する値をuseRefで保持する

@@ -5,15 +5,15 @@ import { rotatePoint } from "../../math/points/rotatePoint";
 import { isTransformativeData } from "../../validation/isTransformativeData";
 
 /**
- * グループの回転を戻した時の、図形の四辺の座標を計算する
+ * グループの回転を戻した時の、図形のbounding boxを計算する
  *
  * @param item - 図形
  * @param groupCenterX - グループの中心X座標
  * @param groupCenterY - グループの中心Y座標
  * @param groupRotation - グループの回転角度
- * @returns 図形の四辺の座標
+ * @returns 図形のbounding box
  */
-export const calcItemBoxOfNoGroupRotation = (
+export const calcItemBoundingBoxOfNoGroupRotation = (
 	item: Diagram,
 	groupCenterX: number,
 	groupCenterY: number,

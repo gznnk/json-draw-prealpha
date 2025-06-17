@@ -7,7 +7,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import components related to SvgCanvas.
-import { calcGroupBoxOfNoRotation } from "../../../utils/shapes/group/calcGroupBoxOfNoRotation";
+import { calcGroupBoundingBoxOfNoRotation } from "../../../utils/shapes/group/calcGroupBoundingBoxOfNoRotation";
 
 // Import functions related to SvgCanvas.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
@@ -62,14 +62,16 @@ export const useSelectAll = (props: CanvasHooksProps) => {
 				return prevState;
 			}
 
-			const box = calcGroupBoxOfNoRotation(multiSelectGroupItems);
+			const boundingBox = calcGroupBoundingBoxOfNoRotation(
+				multiSelectGroupItems,
+			);
 
 			const multiSelectGroup = {
 				id: MULTI_SELECT_GROUP,
-				x: box.left + (box.right - box.left) / 2,
-				y: box.top + (box.bottom - box.top) / 2,
-				width: box.right - box.left,
-				height: box.bottom - box.top,
+				x: boundingBox.left + (boundingBox.right - boundingBox.left) / 2,
+				y: boundingBox.top + (boundingBox.bottom - boundingBox.top) / 2,
+				width: boundingBox.right - boundingBox.left,
+				height: boundingBox.bottom - boundingBox.top,
 				rotation: 0,
 				scaleX: 1,
 				scaleY: 1,
