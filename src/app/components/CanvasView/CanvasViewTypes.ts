@@ -1,13 +1,13 @@
 import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/SvgCanvasTypes";
 
 /**
- * CanvasViewコンポーネントのプロパティ定義
- * 親コンポーネントからキャンバスデータを受け取る
+ * Property definitions for the CanvasView component.
+ * Receives canvas data from the parent component.
  */
 export type CanvasViewProps = {
-	/** キャンバスの表示データ */
+	/** Data used to render the canvas */
 	content: SvgCanvasData;
-	/** コンポーネントの一意識別子（省略可能） */
+	/** Optional unique identifier for the component */
 	id?: string;
 
 	onDataChange?: (data: SvgCanvasData) => void;

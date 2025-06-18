@@ -1,16 +1,16 @@
-// 共通型定義からContentTypeをインポート
+// Import ContentType from shared type definitions
 import type { ContentType } from "../../types/ContentType";
 
 /**
- * ContentViewコンポーネントのプロパティ
+ * Props for the ContentView component
  */
 export type ContentViewProps = {
-	/** コンテンツの種類 */
+	/** Type of content */
 	type?: ContentType;
-	/** コンテンツの表示データ（型はコンテンツの種類によって異なる） */
+	/** Data to display (varies by content type) */
 	content?: unknown;
-	/** コンテンツのID */
+	/** Content ID */
 	id?: string;
-	/** コンテンツが変更された時のコールバック関数 */
+	/** Callback fired when content changes */
 	onChange?: (content: string) => void;
 };

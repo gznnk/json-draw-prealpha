@@ -1,32 +1,32 @@
 import type { LLMProvider } from "../types/LLMProvider";
 
 /**
- * 会話のモデル.
- * WorkとLLMクライアントの会話を紐づけて管理します.
+ * Conversation model.
+ * Links work items with LLM client conversations.
  */
 export type Conversation = {
 	/**
-	 * 会話の一意識別子.
+	 * Unique identifier of the conversation
 	 */
 	id: string;
 
 	/**
-	 * 紐づけられるWorkのID.
+	 * ID of the associated work
 	 */
 	workId: string;
 	/**
-	 * LLMプロバイダーの種別.
+	 * Type of LLM provider
 	 */
 	provider: LLMProvider;
 
 	/**
-	 * 会話のメッセージリスト.
-	 * プロバイダー固有の形式のメッセージを保存します.
+	 * List of messages in the conversation
+	 * Stored in provider-specific format
 	 */
 	messages: unknown[];
 
 	/**
-	 * 会話の作成日時.
+	 * Timestamp when the conversation was created
 	 */
 	createdAt: Date;
 };

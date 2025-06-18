@@ -15,7 +15,7 @@ type HeaderProps = {
 	 */
 	height?: number;
 	/**
-	 * 保存ボタンがクリックされた時に呼び出されるコールバック関数
+	 * Callback invoked when the save button is clicked
 	 */
 	onSave?: () => void;
 };

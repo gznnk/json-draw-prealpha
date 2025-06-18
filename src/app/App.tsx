@@ -16,15 +16,15 @@ import type { SvgCanvas } from "./models/SvgCanvas";
 const svgCanvasRepository: SvgCanvasRepository = createSvgCanvasRepository();
 
 /**
- * Appコンポーネント
- * アプリケーションのメインレイアウトを定義します
+ * App component
+ * Defines the main application layout
  */
 const App = (): ReactElement => {
 	const [initialCanvasState, setInitialCanvasState] =
 		useState<SvgCanvas | null>(null);
 
 	useEffect(() => {
-		// 初期状態のキャンバスデータを取得
+		// Fetch initial canvas data
 		const fetchInitialCanvasData = async () => {
 			try {
 				const canvasData =
@@ -32,7 +32,7 @@ const App = (): ReactElement => {
 				if (canvasData) {
 					setInitialCanvasState(canvasData);
 				} else {
-					// デフォルトのキャンバスデータが存在しない場合は、空のデータを設定
+					// If no default canvas exists, set empty data
 					setInitialCanvasState({
 						id: "default-canvas",
 						name: "Default Canvas",
@@ -58,7 +58,7 @@ const App = (): ReactElement => {
 					<CanvasView
 						content={initialCanvasState?.content}
 						onDataChange={async (data) => {
-							// キャンバスデータが変更されたときにリポジトリに保存
+							// Save canvas data to the repository when it changes
 							await svgCanvasRepository.updateCanvas({
 								...initialCanvasState,
 								content: data,

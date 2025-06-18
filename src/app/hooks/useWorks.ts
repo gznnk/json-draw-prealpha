@@ -3,19 +3,19 @@ import type { Work } from "../models/Work";
 import { createWorkRepository } from "../repository/work/factory";
 import type { WorkRepository } from "../repository/work/interface";
 
-// リポジトリインスタンスの生成
+// Create repository instance
 const workRepository: WorkRepository = createWorkRepository();
 
 /**
- * useWorksフック - Workの管理と永続化を行うカスタムフック
+ * Custom hook for managing and persisting works
  *
- * @returns Work配列と操作関数を含むオブジェクト
+ * @returns Object containing the works array and operations
  */
 export const useWorks = () => {
-	// Work配列のstate管理
+	// Manage works array state
 	const [works, setWorks] = useState<Work[]>([]);
 
-	// 初期表示時にリポジトリからWorkを取得
+	// Load works from the repository on initial render
 	useEffect(() => {
 		const loadWorks = async () => {
 			try {
@@ -30,84 +30,84 @@ export const useWorks = () => {
 	}, []);
 
 	/**
-	 * Work配列に新しいWorkを追加する関数
+	 * Add a new work to the works array
 	 *
-	 * @param newWork - 追加するWork
+	 * @param newWork - Work to add
 	 */
 	const addWork = useCallback(
 		async (newWork: Work) => {
-			// 現在の状態をバックアップ
+			// Backup the current state
 			const originalWorks = [...works];
 
 			try {
-				// 新しいWork配列を作成
+				// Create a new works array
 				const updatedWorks = [...works, newWork];
 
-				// stateを更新
+				// Update state
 				setWorks(updatedWorks);
 
-				// リポジトリを使用して永続化
+				// Persist using the repository
 				await workRepository.saveWorks(updatedWorks);
 			} catch (error) {
 				console.error("Failed to add work:", error);
-				// エラー時はバックアップした状態に戻す
+				// Revert to the backed up state on error
 				setWorks(originalWorks);
-				throw error; // エラーを上位に伝播させる
+				throw error; // Propagate error to caller
 			}
 		},
 		[works],
 	);
 
 	/**
-	 * Work配列を更新する関数（一括更新）
+	 * Update the works array in bulk
 	 *
-	 * @param updatedWorks - 更新後のWork配列
+	 * @param updatedWorks - Updated works array
 	 */
 	const updateWorks = useCallback(
 		async (updatedWorks: Work[]) => {
-			// 現在の状態をバックアップ
+			// Backup the current state
 			const originalWorks = [...works];
 
 			try {
-				// stateを更新
+				// Update state
 				setWorks(updatedWorks);
 
-				// リポジトリを使用して永続化
+				// Persist using the repository
 				await workRepository.saveWorks(updatedWorks);
 			} catch (error) {
 				console.error("Failed to update works:", error);
-				// エラー時はバックアップした状態に戻す
+				// Revert to the backed up state on error
 				setWorks(originalWorks);
-				throw error; // エラーを上位に伝播させる
+				throw error; // Propagate error to caller
 			}
 		},
 		[works],
 	);
 
 	/**
-	 * 特定のWorkを削除する関数
+	 * Remove a specific work
 	 *
-	 * @param workId - 削除するWorkのID
+	 * @param workId - ID of the work to delete
 	 */
 	const removeWork = useCallback(
 		async (workId: string) => {
-			// 現在の状態をバックアップ
+			// Backup the current state
 			const originalWorks = [...works];
 
 			try {
-				// IDに一致しないWorkだけを残す
+				// Keep only works whose ID does not match
 				const updatedWorks = works.filter((work) => work.id !== workId);
 
-				// stateを更新
+				// Update state
 				setWorks(updatedWorks);
 
-				// リポジトリを使用して永続化
+				// Persist using the repository
 				await workRepository.saveWorks(updatedWorks);
 			} catch (error) {
 				console.error("Failed to remove work:", error);
-				// エラー時はバックアップした状態に戻す
+				// Revert to the backed up state on error
 				setWorks(originalWorks);
-				throw error; // エラーを上位に伝播させる
+				throw error; // Propagate error to caller
 			}
 		},
 		[works],

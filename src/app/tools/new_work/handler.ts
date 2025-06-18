@@ -13,14 +13,14 @@ import type { EventBus } from "../../../shared/event-bus/EventBus";
 import { NEW_WORK_EVENT } from "./constants";
 
 /**
- * ハンドラーを作成する関数
- * EventBusを受け取り、FunctionCallHandlerを返す
+ * Factory to create a handler
+ * Accepts an EventBus and returns a FunctionCallHandler
  *
- * @param eventBus - イベントを発行するためのEventBusインスタンス
- * @returns 関数呼び出しを処理するハンドラー
+ * @param eventBus - EventBus instance used to dispatch events
+ * @returns Handler that processes function calls
  */
 export const createHandler = (eventBus: EventBus): FunctionCallHandler => {
-	// 実際のハンドラー関数を返す
+	// Return the actual handler function
 	return (functionCall: FunctionCallInfo) => {
 		const args = functionCall.arguments as { work_name: string };
 
@@ -31,7 +31,7 @@ export const createHandler = (eventBus: EventBus): FunctionCallHandler => {
 			const workData = {
 				id,
 				name: args.work_name,
-				// デフォルトのタイプとパス
+				// Default type and path
 				type: "markdown",
 				path: args.work_name,
 			};
@@ -53,6 +53,6 @@ export const createHandler = (eventBus: EventBus): FunctionCallHandler => {
 	};
 };
 
-// ランタイムでハンドラーが初期化される前にエラーを防ぐためのダミー実装
-// index.tsでは実際のEventBusを使用して上書きされる
+// Dummy implementation to avoid errors before runtime initialization
+// Overwritten in index.ts with the real EventBus
 export const handler: FunctionCallHandler = () => null;

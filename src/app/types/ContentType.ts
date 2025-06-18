@@ -1,13 +1,13 @@
 /**
- * コンテンツの種類を定義する列挙型
+ * Enumeration of content types
  */
 export enum ContentType {
-	/** マークダウンエディタ */
+	/** Markdown editor */
 	MARKDOWN = "markdown",
-	/** キャンバス (ローカルストレージからロードするか、親コンポーネントからデータを受け取る) */
+	/** Canvas (loaded from local storage or provided by the parent component) */
 	CANVAS = "canvas",
-	/** サンドボックス */
+	/** Sandbox */
 	SANDBOX = "sandbox",
-	/** その他のタイプ（将来の拡張用） */
+	/** Other type for future extension */
 	OTHER = "other",
 }

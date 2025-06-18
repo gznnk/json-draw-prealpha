@@ -4,35 +4,35 @@ import type { LLMProvider } from "../types/LLMProvider";
 import { createConversationRepository } from "../repository/conversation/factory";
 import type { ConversationRepository } from "../repository/conversation/interface";
 
-// リポジトリインスタンスの生成
+// Create repository instance
 const conversationRepository: ConversationRepository =
 	createConversationRepository();
 
 /**
- * 会話の一意IDを生成するヘルパー関数.
+ * Helper to generate a unique conversation ID
  *
- * @returns 新しい一意ID
+ * @returns New unique ID
  */
 const generateConversationId = (): string => {
 	return `conversation_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
 };
 
 /**
- * useConversationフック - 会話の管理と永続化を行うカスタムフック
+ * Custom hook for managing and persisting conversations
  *
- * @returns 会話配列と操作関数を含むオブジェクト
+ * @returns Object containing the conversation array and operations
  */
 export const useConversation = () => {
-	// 会話配列のstate管理
+	// Manage conversation array state
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 
 	/**
-	 * 新しい会話を作成する関数.
+	 * Function to create a new conversation
 	 *
-	 * @param workId - 紐づけるWorkのID
-	 * @param provider - LLMプロバイダー
-	 * @param initialMessages - 初期メッセージ配列（オプション）
-	 * @returns 作成された会話
+	 * @param workId - Associated work ID
+	 * @param provider - LLM provider
+	 * @param initialMessages - Optional initial messages
+	 * @returns Created conversation
 	 */
 	const createConversation = useCallback(
 		async (
@@ -61,9 +61,9 @@ export const useConversation = () => {
 	);
 
 	/**
-	 * 会話を更新する関数.
+	 * Function to update a conversation
 	 *
-	 * @param conversation - 更新する会話
+	 * @param conversation - Conversation to update
 	 */
 	const updateConversation = useCallback(
 		async (conversation: Conversation): Promise<void> => {
@@ -81,9 +81,9 @@ export const useConversation = () => {
 	);
 
 	/**
-	 * 会話を削除する関数.
+	 * Function to delete a conversation
 	 *
-	 * @param id - 削除する会話のID
+	 * @param id - ID of the conversation to remove
 	 */
 	const deleteConversation = useCallback(async (id: string): Promise<void> => {
 		try {
@@ -98,9 +98,9 @@ export const useConversation = () => {
 	}, []);
 
 	/**
-	 * 指定したWorkIDに紐づく全ての会話を削除する関数.
+	 * Delete all conversations associated with the given Work ID
 	 *
-	 * @param workId - 削除対象のWorkID
+	 * @param workId - Target Work ID
 	 */
 	const deleteConversationsByWorkId = useCallback(
 		async (workId: string): Promise<void> => {
@@ -116,15 +116,15 @@ export const useConversation = () => {
 		},
 		[],
 	); /**
-	 * 指定したWorkIDに紐づく会話を取得する関数.
+	 * Get all conversations associated with a Work ID
 	 *
-	 * @param workId - フィルタリングするWorkID
-	 * @returns 指定したWorkIDに紐づく会話配列
+	 * @param workId - Work ID to filter by
+	 * @returns Array of conversations for the given Work ID
 	 */
 	const getConversationsByWorkId = useCallback(
 		(workId: string): Conversation[] => {
 			try {
-				// ローカルストレージから直接取得
+				// Retrieve directly from local storage
 				const allConversations =
 					conversationRepository.getConversationsByWorkIdSync(workId);
 				console.log(
@@ -141,12 +141,12 @@ export const useConversation = () => {
 	);
 
 	/**
-	 * 既存の会話を更新するか、新しい会話を作成する関数.
+	 * Update an existing conversation or create a new one
 	 *
-	 * @param workId - 紐づけるWorkのID
-	 * @param provider - LLMプロバイダー
-	 * @param messages - メッセージ配列
-	 * @returns 更新または作成された会話
+	 * @param workId - Associated work ID
+	 * @param provider - LLM provider
+	 * @param messages - Message array
+	 * @returns The updated or newly created conversation
 	 */
 	const saveOrUpdateConversation = useCallback(
 		async (
@@ -155,11 +155,11 @@ export const useConversation = () => {
 			messages: unknown[],
 		): Promise<Conversation> => {
 			try {
-				// 既存の会話を取得
+				// Get existing conversations
 				const existingConversations = getConversationsByWorkId(workId);
 
 				if (existingConversations.length > 0) {
-					// 最新の会話を更新
+					// Update the most recent conversation
 					const latestConversation = existingConversations.sort(
 						(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
 					)[0];
@@ -177,7 +177,7 @@ export const useConversation = () => {
 					return updatedConversation;
 				}
 
-				// 新しい会話を作成
+				// Create a new conversation
 				console.log(`Creating new conversation for work ${workId}`);
 				return await createConversation(workId, provider, messages);
 			} catch (error) {

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 
 /**
- * コンテンツビューのルート要素
- * コンテンツ全体をラップするコンテナ
+ * Root element of the content view
+ * Wraps the entire content area
  */
 export const Container = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ export const Container = styled.div`
 `;
 
 /**
- * コンテンツが存在しない場合のメッセージ
+ * Message shown when no content is available
  */
 export const EmptyContent = styled.div`
   display: flex;

@@ -3,10 +3,10 @@ import { createHandler } from "./handler";
 import { useTool } from "./hooks";
 
 /**
- * new_workツールの定義とユーティリティをまとめたオブジェクト
- * - definition: ツールの定義
- * - createHandler: EventBusを受け取りハンドラーを生成する関数
- * - useTool: ツールのイベントをリッスンするフック
+ * Aggregated object for the new_work tool utilities
+ * - definition: tool definition
+ * - createHandler: function to create a handler with an EventBus
+ * - useTool: hook to listen for tool events
  */
 export const newWork = {
 	definition,

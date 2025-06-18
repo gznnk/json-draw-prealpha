@@ -18,9 +18,8 @@ import {
 import { Container, EmptyContent } from "./ContentViewStyled";
 
 /**
- * 様々な種類のコンテンツを表示するビューコンポーネント
- * マークダウン、キャンバス、サンドボックスなど異なるタイプのコンテンツを
- * 統一されたインターフェースで表示します
+ * View component that displays various types of content.
+ * Supports markdown, canvas, sandbox, and other types through a unified interface.
  */
 const ContentViewComponent = ({
 	type,
@@ -43,7 +42,7 @@ const ContentViewComponent = ({
 								/>
 							);
 						case ContentType.CANVAS:
-							// contentを直接SvgCanvasDataとして渡す
+							// Pass content directly as SvgCanvasData
 							return <CanvasView content={content as SvgCanvasData} id={id} />;
 						default:
 							return <EmptyContent>{EMPTY_CONTENT_MESSAGE}</EmptyContent>;

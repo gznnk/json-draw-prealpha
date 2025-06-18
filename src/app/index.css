@@ -5,30 +5,30 @@ body {
 	overflow: hidden;
 }
 
-/* スクロールバー全体 */
+/* Entire scrollbar */
 ::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
 }
 
-/* スクロールバーの軌道（背景） */
+/* Scrollbar track (background) */
 ::-webkit-scrollbar-track {
-	background: transparent; /* 透明で存在感を消す */
+	background: transparent; /* Invisible to minimize presence */
 }
 
-/* スクロールバーのつまみ */
+/* Scrollbar thumb */
 ::-webkit-scrollbar-thumb {
-	background-color: rgba(100, 100, 100, 0.3); /* 半透明グレーで控えめ */
+	background-color: rgba(100, 100, 100, 0.3); /* Subtle translucent gray */
 	border-radius: 4px;
 	transition: background-color 0.3s;
 }
 
-/* ホバー時にちょっと濃くする */
+/* Slightly darker on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background-color: rgba(100, 100, 100, 0.5);
 }
 
-/* 右下の角（スクロールバーの交差部） */
+/* Bottom-right corner where scrollbars intersect */
 ::-webkit-scrollbar-corner {
 	background-color: #0c0f1c;
 }
