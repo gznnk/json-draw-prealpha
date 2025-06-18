@@ -9,22 +9,22 @@ import type { SvgCanvasRef } from "../../../features/svg-canvas/canvas/SvgCanvas
 import type { CanvasViewProps } from "./CanvasViewTypes";
 
 /**
- * 親コンポーネントから渡されたSvgCanvasDataを使用してSVGキャンバスを表示するコンポーネント
- * ローカルストレージからデータを取得せず、親コンポーネントから直接データを受け取ります
+ * Component that renders an SVG canvas using SvgCanvasData supplied by the parent.
+ * Data is received directly from the parent component instead of local storage.
  */
 const CanvasViewComponent = ({
 	content,
 	id,
 	onDataChange,
 }: CanvasViewProps): ReactElement => {
-	// キャンバスへの参照を作成
+	// Create a reference to the canvas
 	const canvasRef = useRef<SvgCanvasRef | null>(null);
 
-	// contentからキャンバスデータを抽出
+	// Extract canvas data from the content
 	const canvasId = id || content.id;
 	const { items, minX, minY } = content;
 
-	// useSvgCanvasフックを使用して必要な状態を初期化
+	// Initialize required state with the useSvgCanvas hook
 	const { canvasProps } = useSvgCanvas({
 		id: canvasId,
 		items,
@@ -35,7 +35,7 @@ const CanvasViewComponent = ({
 		onDataChange,
 	});
 
-	// SvgCanvas コンポーネントに全ての必要なプロパティを展開して渡す
+	// Spread all required props to the SvgCanvas component
 	return <SvgCanvas {...canvasProps} ref={canvasRef} />;
 };
 

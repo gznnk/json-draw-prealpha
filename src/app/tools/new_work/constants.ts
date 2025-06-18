@@ -1,8 +1,8 @@
 /**
- * new_workツール用の定数定義
+ * Constants for the new_work tool
  */
 
 /**
- * new_workイベントのイベント名
+ * Event name for the new_work event
  */
 export const NEW_WORK_EVENT = "new_work";
