@@ -18,7 +18,7 @@ import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { createSvgDataFromText } from "../../shapes/Svg/SvgFunctions";
+import { createSvgDataFromText } from "../../../utils/shapes/svg/createSvgDataFromText";
 import { newEventId } from "../../../utils/common/newEventId";
 import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
 

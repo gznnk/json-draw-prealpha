@@ -42,7 +42,7 @@ import { createWebSearchNodeData } from "../utils/nodes/webSearchNode/createWebS
 
 // Import export functions
 import { imageToBlob } from "../utils/shapes/image/imageToBlob";
-import { svgToBlob } from "../components/shapes/Svg/SvgFunctions";
+import { svgToBlob } from "../utils/shapes/svg/svgToBlob";
 
 /**
  * Initialize all diagram registrations for the SvgCanvas.
