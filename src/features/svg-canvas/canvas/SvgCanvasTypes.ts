@@ -7,6 +7,7 @@ import type { TextEditorState } from "../components/core/Textable";
 import type { GroupData } from "../types/data/shapes/GroupData";
 import type { DiagramChangeEvent } from "../types/events/DiagramChangeEvent";
 import type { DiagramConnectEvent } from "../types/events/DiagramConnectEvent";
+import type { DiagramConstraintChangeEvent } from "../types/events/DiagramConstraintChangeEvent";
 import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
 import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
@@ -86,6 +87,7 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;
 	onDiagramStyleChange?: (e: DiagramStyleChangeEvent) => void;
+	onDiagramConstraintChange?: (e: DiagramConstraintChangeEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;

@@ -346,7 +346,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		const {
 			canvasProps: {
 				multiSelectGroup,
-				onDiagramChange,
+				onDiagramConstraintChange,
 				onGroup,
 				onUngroup,
 				onStackOrderChange,
@@ -354,7 +354,6 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			selectedItems,
 			menuStateMap,
 			singleSelectedItem,
-			changeItems,
 			changeItemsStyle,
 			openControl,
 		} = refBus.current;
@@ -436,24 +435,20 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				break;
 			case "KeepAspectRatio":
 				if (multiSelectGroup) {
-					onDiagramChange?.({
+					onDiagramConstraintChange?.({
 						eventId: newEventId(),
-						eventType: "Instant",
-						changeType: "Appearance",
 						id: multiSelectGroup.id,
-						startDiagram: multiSelectGroup,
-						endDiagram: {
-							keepProportion: menuStateMap.KeepAspectRatio !== "Active",
-						},
+						keepProportion: menuStateMap.KeepAspectRatio !== "Active",
 					});
 				} else {
-					changeItems(
-						selectedItems,
-						{
+					// For single item, use the constraint change event
+					for (const item of selectedItems) {
+						onDiagramConstraintChange?.({
+							eventId: newEventId(),
+							id: item.id,
 							keepProportion: menuStateMap.KeepAspectRatio !== "Active",
-						},
-						false,
-					);
+						});
+					}
 				}
 				break;
 			case "Group":
