@@ -8,6 +8,7 @@ import type { FillableData } from "../../../../types/data/core/FillableData";
 import type { StrokableData } from "../../../../types/data/core/StrokableData";
 import type { TextableData } from "../../../../types/data/core/TextableData";
 import type { RectangleData } from "../../../../types/data/shapes/RectangleData";
+import type { DiagramStyleChangeEvent } from "../../../../types/events/DiagramStyleChangeEvent";
 
 // Import functions related to SvgCanvas.
 import { getSelectedItems } from "../../../../utils/common/getSelectedItems";
@@ -285,6 +286,27 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		}
 	};
 
+	const changeItemsStyle = (
+		items: Diagram[],
+		styleData: Partial<Omit<DiagramStyleChangeEvent, "eventId" | "id">>,
+		recursively = true,
+		eventId: string = newEventId(),
+	) => {
+		for (const item of items) {
+			// Trigger the style change event.
+			canvasProps.onDiagramStyleChange?.({
+				eventId,
+				id: item.id,
+				...styleData,
+			});
+
+			if (recursively && isItemableData(item)) {
+				// Check if the item has children and recursively change their properties.
+				changeItemsStyle(item.items, styleData, recursively, eventId);
+			}
+		}
+	};
+
 	const openControl = (menuType: DiagramMenuType) => {
 		const newControlsStateMap = {
 			BgColor: false,
@@ -313,6 +335,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 		menuStateMap,
 		singleSelectedItem,
 		changeItems,
+		changeItemsStyle,
 		openControl,
 	};
 	const refBus = useRef(refBusVal);
@@ -332,6 +355,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			menuStateMap,
 			singleSelectedItem,
 			changeItems,
+			changeItemsStyle,
 			openControl,
 		} = refBus.current;
 
@@ -349,7 +373,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				openControl("FontSize");
 				break;
 			case "Bold":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					fontWeight: menuStateMap.Bold === "Active" ? "normal" : "bold",
 				});
 				break;
@@ -357,32 +381,32 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				openControl("FontColor");
 				break;
 			case "AlignLeft":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					textAlign: "left",
 				});
 				break;
 			case "AlignCenter":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					textAlign: "center",
 				});
 				break;
 			case "AlignRight":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					textAlign: "right",
 				});
 				break;
 			case "AlignTop":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					verticalAlign: "top",
 				});
 				break;
 			case "AlignMiddle":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					verticalAlign: "center",
 				});
 				break;
 			case "AlignBottom":
-				changeItems(selectedItems, {
+				changeItemsStyle(selectedItems, {
 					verticalAlign: "bottom",
 				});
 				break;
@@ -445,18 +469,18 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 	diagramMenuProps.onBorderColorChange = useCallback((borderColor: string) => {
 		// Bypass references to avoid function creation in every render.
-		const { selectedItems, changeItems } = refBus.current;
+		const { selectedItems, changeItemsStyle } = refBus.current;
 
-		changeItems(selectedItems, {
+		changeItemsStyle(selectedItems, {
 			stroke: borderColor,
 		});
 	}, []);
 
 	diagramMenuProps.onBgColorChange = useCallback((bgColor: string) => {
 		// Bypass references to avoid function creation in every render.
-		const { selectedItems, changeItems } = refBus.current;
+		const { selectedItems, changeItemsStyle } = refBus.current;
 
-		changeItems(selectedItems, {
+		changeItemsStyle(selectedItems, {
 			fill: bgColor,
 		});
 	}, []);
@@ -464,9 +488,9 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	diagramMenuProps.onBorderRadiusChange = useCallback(
 		(borderRadius: number) => {
 			// Bypass references to avoid function creation in every render.
-			const { selectedItems, changeItems } = refBus.current;
+			const { selectedItems, changeItemsStyle } = refBus.current;
 
-			changeItems(selectedItems, {
+			changeItemsStyle(selectedItems, {
 				radius: borderRadius,
 			});
 		},
@@ -475,18 +499,18 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 	diagramMenuProps.onFontSizeChange = useCallback((fontSize: number) => {
 		// Bypass references to avoid function creation in every render.
-		const { selectedItems, changeItems } = refBus.current;
+		const { selectedItems, changeItemsStyle } = refBus.current;
 
-		changeItems(selectedItems, {
+		changeItemsStyle(selectedItems, {
 			fontSize,
 		});
 	}, []);
 
 	diagramMenuProps.onFontColorChange = useCallback((fontColor: string) => {
 		// Bypass references to avoid function creation in every render.
-		const { selectedItems, changeItems } = refBus.current;
+		const { selectedItems, changeItemsStyle } = refBus.current;
 
-		changeItems(selectedItems, {
+		changeItemsStyle(selectedItems, {
 			fontColor,
 		});
 	}, []);

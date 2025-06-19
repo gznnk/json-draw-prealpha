@@ -25,6 +25,7 @@ import { useConnect } from "./hooks/actions/useConnect";
 import { useCopy } from "./hooks/actions/useCopy";
 import { useDelete } from "./hooks/actions/useDelete";
 import { useDiagramChange } from "./hooks/actions/useDiagramChange";
+import { useDiagramStyleChange } from "./hooks/actions/useDiagramStyleChange";
 import { useDrag } from "./hooks/actions/useDrag";
 import { useExecute } from "./hooks/actions/useExecute";
 import { useExport } from "./hooks/actions/useExport";
@@ -134,6 +135,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the diagram change event.
 	const onDiagramChange = useDiagramChange(canvasHooksProps);
 
+	// Handler for the diagram style change event.
+	const onDiagramStyleChange = useDiagramStyleChange(canvasHooksProps);
+
 	// Handler for the select event.
 	const onSelect = useSelect(canvasHooksProps, isCtrlPressed);
 
@@ -216,6 +220,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onConnect,
 		onTransform,
 		onDiagramChange,
+		onDiagramStyleChange,
 		onTextEdit,
 		onTextChange,
 		onGroup,

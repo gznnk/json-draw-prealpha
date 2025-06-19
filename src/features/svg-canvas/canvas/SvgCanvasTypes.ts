@@ -10,6 +10,7 @@ import type { DiagramConnectEvent } from "../types/events/DiagramConnectEvent";
 import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
 import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
+import type { DiagramStyleChangeEvent } from "../types/events/DiagramStyleChangeEvent";
 import type { DiagramTextChangeEvent } from "../types/events/DiagramTextChangeEvent";
 import type { DiagramTextEditEvent } from "../types/events/DiagramTextEditEvent";
 import type { DiagramTransformEvent } from "../types/events/DiagramTransformEvent";
@@ -84,6 +85,7 @@ export type SvgCanvasProps = SvgCanvasState & {
 	selectionState?: AreaSelectionState;
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;
+	onDiagramStyleChange?: (e: DiagramStyleChangeEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDragEnd?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
