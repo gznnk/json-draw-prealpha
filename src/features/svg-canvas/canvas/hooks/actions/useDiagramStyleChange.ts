@@ -6,7 +6,9 @@ import type { DiagramStyleChangeEvent } from "../../../types/events/DiagramStyle
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
+import { addHistory } from "../../utils/addHistory";
 import { applyRecursive } from "../../utils/applyRecursive";
+import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
  * Custom hook to handle diagram style change events on the canvas.
@@ -22,7 +24,7 @@ export const useDiagramStyleChange = (props: CanvasHooksProps) => {
 	return useCallback((e: DiagramStyleChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { setCanvasState },
+			props: { setCanvasState, onDataChange },
 		} = refBus.current;
 
 		setCanvasState((prevState) => {
@@ -35,16 +37,24 @@ export const useDiagramStyleChange = (props: CanvasHooksProps) => {
 				const { eventId, id, ...styleChanges } = e;
 
 				// If the id matches, update the item with the new style properties.
-				const newItem = { ...item, ...styleChanges };
-
-				return newItem;
+				return { ...item, ...styleChanges };
 			});
 
-			// Return new state with updated items.
-			return {
+			// Create new state with updated items.
+			let newState = {
 				...prevState,
 				items,
 			};
+
+			// Add a new history entry.
+			newState.lastHistoryEventId = e.eventId;
+			newState = addHistory(prevState, newState);
+
+			// Notify the data change.
+			onDataChange?.(svgCanvasStateToData(newState));
+
+			// Return new state with updated items.
+			return newState;
 		});
 	}, []);
 };
