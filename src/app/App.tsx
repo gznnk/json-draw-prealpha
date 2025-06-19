@@ -1,6 +1,6 @@
 // Import React.
 import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // Import components.
 import { Page } from "./components/Page";
@@ -12,6 +12,7 @@ import {
 	type SvgCanvasRepository,
 } from "./repository/svg-canvas";
 import type { SvgCanvas } from "./models/SvgCanvas";
+import type { SvgCanvasData } from "../features/svg-canvas/canvas/SvgCanvasTypes";
 
 const svgCanvasRepository: SvgCanvasRepository = createSvgCanvasRepository();
 
@@ -51,19 +52,31 @@ const App = (): ReactElement => {
 		fetchInitialCanvasData();
 	}, []);
 
+	const handleCanvasUpdate = useCallback(
+		async (data: SvgCanvasData) => {
+			try {
+				// Reconstruct the full canvas object with the updated data
+				const updatedCanvas: SvgCanvas = {
+					id: initialCanvasState?.id || "default-canvas",
+					name: initialCanvasState?.name || "Default Canvas",
+					content: data,
+				};
+				// Update the canvas in the repository
+				await svgCanvasRepository.updateCanvas(updatedCanvas);
+			} catch (error) {
+				console.error("Failed to update canvas:", error);
+			}
+		},
+		[initialCanvasState],
+	);
+
 	return (
 		<div className="App">
 			<Page>
 				{initialCanvasState?.content && (
 					<CanvasView
 						content={initialCanvasState?.content}
-						onDataChange={async (data) => {
-							// Save canvas data to the repository when it changes
-							await svgCanvasRepository.updateCanvas({
-								...initialCanvasState,
-								content: data,
-							});
-						}}
+						onDataChange={handleCanvasUpdate}
 					/>
 				)}
 			</Page>
