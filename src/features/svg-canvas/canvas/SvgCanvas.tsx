@@ -350,6 +350,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 			return React.createElement(component(), props);
 		});
+
 		return (
 			<Viewport>
 				<Container ref={containerRef}>
@@ -375,7 +376,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 								<title>{title}</title>
 								{/* Render the items in the SvgCanvas. */}
 								{renderedItems}
-								{/* Dummy group for multi-select. */}{" "}
+								{/* Dummy group for multi-select. */}
 								{multiSelectGroup && (
 									<Group
 										{...multiSelectGroup}
@@ -385,7 +386,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 										onTransform={onTransform}
 										onDiagramChange={onDiagramChange}
 									/>
-								)}{" "}
+								)}
 								{/* Render new connect line. */}
 								<NewConnectLine />
 								{/* Render flash connect lines */} <FlashConnectLine />
@@ -402,7 +403,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 										)}
 										visible={selectionState.isSelecting}
 									/>
-								)}{" "}
+								)}
 							</Svg>
 						</SvgCanvasContext.Provider>
 						{/* Container for HTML elements that follow the scroll of the SVG canvas with zoom scaling. */}
@@ -422,7 +423,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							width={containerWidth + minX}
 							height={containerHeight + minY}
 						>
-							{" "}
 							<DiagramMenu {...diagramMenuProps} />
 						</HTMLElementsContainer>
 					</EventBusProvider>

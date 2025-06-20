@@ -22,7 +22,6 @@ import { PathElement } from "./PathStyled";
 
 // Import hooks.
 import { useDrag } from "../../../../hooks/useDrag";
-import { useEventBus } from "../../../../context/EventBusContext";
 
 // Import utils.
 import { calcPointsOuterShape } from "../../../../utils/math/geometry/calcPointsOuterShape";
@@ -33,16 +32,16 @@ import {
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
 
-// TODO: 枠線と重なってぁE��と頂点編雁E��ードにできなぁE
+// TODO: 枠線と重なってぁE��と頂点編雁E��ードにできなぁE
 /**
- * 折れ線コンポ�EネンチE
- * できること�E�E
- * - 折れ線�E描画
- * - 折れ線�E全体ドラチE��
- * - 折れ線�E選抁E
- * - 折れ線�E変形
- * - 折れ線�E線�EのドラチE��
- * - 折れ線�E新規頂点の追加
+ * 折れ線コンポ�EネンチE
+ * できること�E�E
+ * - 折れ線�E描画
+ * - 折れ線�E全体ドラチE��
+ * - 折れ線�E選抁E
+ * - 折れ線�E変形
+ * - 折れ線�E線�EのドラチE��
+ * - 折れ線�E新規頂点の追加
  */
 const PathComponent: React.FC<PathProps> = ({
 	id,
@@ -75,9 +74,6 @@ const PathComponent: React.FC<PathProps> = ({
 	onTransform,
 	onDiagramChange,
 }) => {
-	// Get eventBus from context
-	const eventBus = useEventBus();
-
 	const [isDragging, setIsDragging] = useState(false);
 	const [isPathPointDragging, setIsPathPointDragging] = useState(false);
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
@@ -86,7 +82,7 @@ const PathComponent: React.FC<PathProps> = ({
 	const startItems = useRef<Diagram[]>(items);
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
 
-	// ハンドラ生�Eの頻発を回避するため、参照する値をuseRefで保持する
+	// ハンドラ生�Eの頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		// プロパティ
 		id,
@@ -103,7 +99,7 @@ const PathComponent: React.FC<PathProps> = ({
 		onSelect,
 		onClick,
 		onDiagramChange,
-		// 冁E��変数・冁E��関数
+		// 冁E��変数・冁E��関数
 		isSequentialSelection,
 		isVerticesMode,
 	};
@@ -111,7 +107,7 @@ const PathComponent: React.FC<PathProps> = ({
 	refBus.current = refBusVal;
 
 	/**
-	 * 折れ線�Eポインターダウンイベントハンドラ
+	 * 折れ線�Eポインターダウンイベントハンドラ
 	 */
 	const handlePointerDown = useCallback((e: DiagramPointerEvent) => {
 		const { id, isSelected, transformEnabled, onSelect } = refBus.current;
@@ -132,7 +128,7 @@ const PathComponent: React.FC<PathProps> = ({
 	}, []);
 
 	/**
-	 * 折れ線�EクリチE��イベントハンドラ
+	 * 折れ線�EクリチE��イベントハンドラ
 	 */
 	const handleClick = useCallback((e: DiagramClickEvent) => {
 		const {
@@ -152,7 +148,7 @@ const PathComponent: React.FC<PathProps> = ({
 		});
 	}, []);
 
-	// 折れ線�E選択状態制御
+	// 折れ線�E選択状態制御
 	useEffect(() => {
 		// グループから選択が外れたら連続選択フラグも解除
 		if (!isSelected) {
@@ -162,23 +158,23 @@ const PathComponent: React.FC<PathProps> = ({
 	}, [isSelected]);
 
 	/**
-	 * 折れ線�EドラチE��イベントハンドラ
+	 * 折れ線�EドラチE��イベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
 		const { id, dragEnabled, items, onDiagramChange, isVerticesMode } =
 			refBus.current;
 
-		// ドラチE��が無効な場合�Eイベントを潰してドラチE��を無効匁E
+		// ドラチE��が無効な場合�Eイベントを潰してドラチE��を無効匁E
 		if (!dragEnabled) {
 			return;
 		}
 
-		// 頂点モード�E場合�Eイベントを潰してドラチE��を無効匁E
+		// 頂点モード�E場合�Eイベントを潰してドラチE��を無効匁E
 		if (isVerticesMode) {
 			return;
 		}
 
-		// ドラチE��開始時の処琁E
+		// ドラチE��開始時の処琁E
 		if (e.eventType === "Start") {
 			setIsDragging(true);
 
@@ -234,7 +230,7 @@ const PathComponent: React.FC<PathProps> = ({
 	}, []);
 
 	/**
-	 * 頂点のドラチE��中イベントハンドラ
+	 * 頂点のドラチE��中イベントハンドラ
 	 */
 	const handlePathPointDrag = useCallback((e: DiagramDragEvent) => {
 		if (e.eventType === "Start") {
@@ -249,7 +245,7 @@ const PathComponent: React.FC<PathProps> = ({
 	}, []);
 
 	/**
-	 * 線�Eおよび新規頂点の変更イベントハンドラ
+	 * 線�Eおよび新規頂点の変更イベントハンドラ
 	 */ const handleDiagramChangeBySegumentAndNewVertex = useCallback(
 		(e: DiagramChangeEvent) => {
 			if (!isItemableData<DiagramBaseData>(e.endDiagram)) return; // Type guard with DiagramBaseData
@@ -257,7 +253,7 @@ const PathComponent: React.FC<PathProps> = ({
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 
 			if (e.eventType === "End") {
-				// 新規頂点および線�EのドラチE��完亁E��伴ぁE��スの外枠の形状計箁E
+				// 新規頂点および線�EのドラチE��完亁E��伴ぁE��スの外枠の形状計箁E
 				const newShape = calcPointsOuterShape(
 					(e.endDiagram.items ?? []).map((p) => ({ x: p.x, y: p.y })),
 					rotation,
@@ -283,7 +279,7 @@ const PathComponent: React.FC<PathProps> = ({
 		[],
 	);
 
-	// 折れ線�EドラチE��用要素のプロパティ生�E
+	// 折れ線�EドラチE��用要素のプロパティ生�E
 	const dragProps = useDrag({
 		id,
 		type: "Path",
@@ -294,20 +290,19 @@ const PathComponent: React.FC<PathProps> = ({
 		onPointerDown: handlePointerDown,
 		onClick: handleClick,
 		onDrag: handleDrag,
-		eventBus,
 	});
 
-	// 折れ線�Ed属性値を生戁E
+	// 折れ線�Ed属性値を生戁E
 	const d = createDValue(items);
 
-	// 頂点惁E��を生戁E
+	// 頂点惁E��を生戁E
 	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;
 	const linePoints = items.map((item, idx) => ({
 		...item,
 		hidden: !isVerticesMode || isDragging || (fixBothEnds && isBothEnds(idx)),
 	}));
 
-	// ドラチE��線�Eの表示フラグ
+	// ドラチE��線�Eの表示フラグ
 	const showSegmentList =
 		segmentDragEnabled &&
 		isSelected &&
@@ -325,7 +320,7 @@ const PathComponent: React.FC<PathProps> = ({
 		!isPathPointDragging &&
 		!isMultiSelectSource;
 
-	// 全体変形用グループ�E表示フラグ
+	// 全体変形用グループ�E表示フラグ
 	const showTransformGroup = isSelected && !isMultiSelectSource;
 
 	// Flag to show the position label.
@@ -357,7 +352,7 @@ const PathComponent: React.FC<PathProps> = ({
 					isTransparent={isMultiSelectSource}
 				/>
 			</g>
-			{/* ドラチE��用のパス */}
+			{/* ドラチE��用のパス */}
 			<path
 				id={id}
 				d={d}
@@ -373,14 +368,13 @@ const PathComponent: React.FC<PathProps> = ({
 			{startArrowHeadComp}
 			{/* End point arrow head. */}
 			{endArrowHeadComp}
-			{/* 線�EドラチE�� */}
+			{/* 線�EドラチE�� */}
 			{showSegmentList && (
 				<SegmentList
 					id={id}
 					rightAngleSegmentDrag={rightAngleSegmentDrag}
 					fixBothEnds={fixBothEnds}
 					items={items}
-
 					onPointerDown={handlePointerDown}
 					onClick={handleClick}
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
@@ -391,11 +385,10 @@ const PathComponent: React.FC<PathProps> = ({
 				<NewVertexList
 					id={id}
 					items={items}
-
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
-			{/* アウトライン�E�褁E��選択用�E�E*/}
+			{/* アウトライン�E�褁E��選択用�E�E*/}
 			{!showTransformGroup && (
 				<Outline
 					x={x}
@@ -425,7 +418,6 @@ const PathComponent: React.FC<PathProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					items={linePoints}
-
 					onDrag={handlePathPointDrag}
 					onTransform={onTransform}
 					onDiagramChange={onDiagramChange}

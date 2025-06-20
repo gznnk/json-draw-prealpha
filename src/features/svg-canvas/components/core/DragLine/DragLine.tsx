@@ -5,7 +5,6 @@ import { memo, useRef } from "react";
 // Import hooks.
 import type { DragProps } from "../../../hooks/useDrag";
 import { useDrag } from "../../../hooks/useDrag";
-import { useEventBus } from "../../../context/EventBusContext";
 
 /**
  * Props for the DragLine component.
@@ -35,7 +34,6 @@ const DragLineComponent: React.FC<DragLineProps> = ({
 	onDrag,
 	dragPositioningFunction,
 }) => {
-	const eventBus = useEventBus();
 	const svgRef = useRef<SVGLineElement>({} as SVGLineElement);
 
 	const dragProps = useDrag({
@@ -43,7 +41,6 @@ const DragLineComponent: React.FC<DragLineProps> = ({
 		x,
 		y,
 		ref: svgRef,
-		eventBus,
 		onPointerDown,
 		onClick,
 		onDrag,

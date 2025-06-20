@@ -18,7 +18,6 @@ import { SvgGroupElement, SvgRectElement } from "./SvgStyled";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
-import { useEventBus } from "../../../context/EventBusContext";
 
 // Import utils.
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
@@ -49,9 +48,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 	onSelect,
 	onTransform,
 }) => {
-	// Get eventBus from context
-	const eventBus = useEventBus();
-
 	// Is the element being dragged.
 	const [isDragging, setIsDragging] = useState(false);
 	// Reference to the element.
@@ -107,7 +103,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
-		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -190,7 +185,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
-
 					onTransform={onTransform}
 				/>
 			)}

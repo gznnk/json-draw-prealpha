@@ -9,7 +9,7 @@ import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEv
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
 
-// SvgCanvas関連コンポ�Eネントをインポ�EチE
+// SvgCanvas関連コンポ�Eネントをインポ�EチE
 import { PositionLabel } from "../../core/PositionLabel";
 import { Outline } from "../../core/Outline";
 import { Textable } from "../../core/Textable";
@@ -27,7 +27,7 @@ import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransf
 import { EllipseElement } from "./EllipseStyled";
 
 /**
- * 楕�Eコンポ�EネンチE
+ * 楕�Eコンポ�EネンチE
  */
 const EllipseComponent: React.FC<EllipseProps> = ({
 	id,
@@ -59,7 +59,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	isTextEditEnabled = true,
 	isTransparent,
 	showOutline = false,
-	eventBus,
 	onDrag,
 	onClick,
 	onSelect,
@@ -67,16 +66,16 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	onConnect,
 	onTextEdit,
 }) => {
-	// ドラチE��中か�Eフラグ
+	// ドラチE��中か�Eフラグ
 	const [isDragging, setIsDragging] = useState(false);
-	// 変形中か�Eフラグ
+	// 変形中か�Eフラグ
 	const [isTransformimg, setIsTransforming] = useState(false);
-	// ホバー中か�Eフラグ
+	// ホバー中か�Eフラグ
 	const [isHovered, setIsHovered] = useState(false);
-	// 変形対象のSVG要素への参�E
+	// 変形対象のSVG要素への参�E
 	const svgRef = useRef<SVGEllipseElement>({} as SVGEllipseElement);
 
-	// ハンドラ生�Eの頻発を回避するため、参照する値をuseRefで保持する
+	// ハンドラ生�Eの頻発を回避するため、参照する値をuseRefで保持する
 	const refBusVal = {
 		// プロパティ
 		id,
@@ -91,7 +90,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	refBus.current = refBusVal;
 
 	/**
-	 * 楕�EのドラチE��イベントハンドラ
+	 * 楕�EのドラチE��イベントハンドラ
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
 		const { onDrag } = refBus.current;
@@ -108,7 +107,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	}, []);
 
 	/**
-	 * 楕�Eの変形イベントハンドラ
+	 * 楕�Eの変形イベントハンドラ
 	 */
 	const handleTransform = useCallback((e: DiagramTransformEvent) => {
 		const { onTransform } = refBus.current;
@@ -145,21 +144,21 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	}, []);
 
 	/**
-	 * ドラチE��オーバ�Eイベントハンドラ
+	 * ドラチE��オーバ�Eイベントハンドラ
 	 */
 	const handleDragOver = useCallback(() => {
 		setIsHovered(true);
 	}, []);
 
 	/**
-	 * ドラチE��リーブイベントハンドラ
+	 * ドラチE��リーブイベントハンドラ
 	 */
 	const handleDragLeave = useCallback(() => {
 		setIsHovered(false);
 	}, []);
 
 	/**
-	 * ダブルクリチE��イベントハンドラ
+	 * ダブルクリチE��イベントハンドラ
 	 */
 	const handleDoubleClick = useCallback(() => {
 		const { id, isSelected, isTextEditEnabled, onTextEdit } = refBus.current;
@@ -168,13 +167,13 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 
 		if (!isSelected) return;
 
-		// チE��スト編雁E��ベントを発火
+		// チE��スト編雁E��ベントを発火
 		onTextEdit?.({
 			id,
 		});
 	}, []);
 
-	// ドラチE��用のプロパティを生戁E
+	// ドラチE��用のプロパティを生戁E
 	const dragProps = useDrag({
 		id,
 		type: "Ellipse",
@@ -182,7 +181,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
-		eventBus,
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
@@ -192,8 +190,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	});
 
 	// memo化によりConnectPointの再描画を抑制
-	// keyで刁E��してばら�Eらにpropsで渡すと、各ConnectPoint側それぞれで吁Eeyに対して
-	// 比輁E�E琁E��走り非効玁E��ので、ここでまとめてShapeの差異を検知する
+	// keyで刁E��してばら�Eらにpropsで渡すと、各ConnectPoint側それぞれで吁Eeyに対して
+	// 比輁E�E琁E��走り非効玁E��ので、ここでまとめてShapeの差異を検知する
 	const ownerShape = useMemo(
 		() => ({
 			x,
@@ -216,10 +214,10 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		y,
 	);
 
-	// 変形コンポ�Eネントを表示するか�Eフラグ
+	// 変形コンポ�Eネントを表示するか�Eフラグ
 	const showTransformative = isSelected && !isMultiSelectSource && !isDragging;
 
-	// 接続�Eイントを表示するか�Eフラグ
+	// 接続�Eイントを表示するか�Eフラグ
 	const doShowConnectPoints =
 		showConnectPoints &&
 		!isSelected &&
@@ -292,7 +290,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					keepProportion={keepProportion}
 					isSelected={isSelected}
 					isMultiSelectSource={isMultiSelectSource}
-
 					onTransform={handleTransform}
 				/>
 			)}
@@ -307,7 +304,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 						ownerId={id}
 						ownerShape={ownerShape}
 						isTransparent={!isHovered || isDragging || isTransformimg}
-
 						onConnect={onConnect}
 					/>
 				))}

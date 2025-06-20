@@ -104,7 +104,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		historyIndex: 0,
 		lastHistoryEventId: "",
 		textEditorState: { isActive: false } as TextEditorState,
-	}); // Create props for the canvas hooks.
+	});
+
+	// Create props for the canvas hooks.
 	const canvasHooksProps = {
 		canvasState,
 		setCanvasState,
@@ -210,6 +212,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	// Observer for the connect nodes event.
 	useConnectNodes(canvasHooksProps);
+
+	// Create the canvas props object that will be passed to the SvgCanvas component.
 	const canvasProps = {
 		...canvasState,
 		eventBus: eventBusRef.current,
@@ -248,6 +252,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onEndAreaSelection,
 		onCancelAreaSelection,
 	};
+
 	return {
 		state: [canvasState, setCanvasState] as const,
 		canvasProps,

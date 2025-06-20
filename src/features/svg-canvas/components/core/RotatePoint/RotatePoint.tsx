@@ -54,6 +54,8 @@ const RotatePointComponent: React.FC<RotatePointProps> = ({
 
 		refBus.current.onDrag?.(e);
 	}, []);
+
+	// Create drag properties using the useDrag hook.
 	const dragProps = useDrag({
 		id,
 		type,
