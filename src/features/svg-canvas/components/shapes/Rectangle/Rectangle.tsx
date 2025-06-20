@@ -16,11 +16,13 @@ import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
-import { useComposeEventHandlers } from "../../../hooks/useComposeEventHandlers";
 import { useDrag } from "../../../hooks/useDrag";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
+
+// Import utils.
+import { mergeProps } from "../../../utils/common/mergeProps";
 
 // Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -185,16 +187,12 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	});
 	// Generate properties for file drop
 	const fileDropProps = useFileDrop({ id, onFileDrop });
-
-	// Compose onPointerDown handler
-	const composedPointerDownHandler = useComposeEventHandlers(
-		selectProps.onPointerDown,
-		dragProps.onPointerDown,
-	);
-	// Compose onPointerUp handler
-	const composedPointerUpHandler = useComposeEventHandlers(
-		selectProps.onPointerUp,
-		dragProps.onPointerUp,
+	// Compose props for RectangleElement
+	const composedProps = mergeProps(
+		dragProps,
+		selectProps,
+		hoverProps,
+		fileDropProps,
 	);
 
 	// Suppress ConnectPoint re-rendering by memoization
@@ -251,12 +249,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					transform={transform}
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
-					{...dragProps}
-					{...hoverProps}
-					{...fileDropProps}
-					{...selectProps}
-					onPointerDown={composedPointerDownHandler}
-					onPointerUp={composedPointerUpHandler}
+					{...composedProps}
 				/>
 			</g>
 			{isTextEditEnabled && (
