@@ -5,6 +5,10 @@ import { memo, useRef } from "react";
 // Import hooks
 import type { DragProps } from "../../../hooks/useDrag";
 import { useDrag } from "../../../hooks/useDrag";
+import { useHover } from "../../../hooks/useHover";
+
+// Import types
+import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 
 // Import local module files.
 import { Circle } from "./DragPointStyled";
@@ -20,6 +24,7 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
 	outline?: string;
 	isTransparent?: boolean;
 	hidden?: boolean;
+	onHoverChange?: (e: DiagramHoverChangeEvent) => void;
 };
 
 /**
@@ -34,7 +39,7 @@ const DragPointComponent: React.FC<DragPointProps> = ({
 	onDragOver,
 	onDragLeave,
 	onDrop,
-	onHover,
+	onHoverChange,
 	dragPositioningFunction,
 	radius = 5,
 	stroke = "rgba(100, 149, 237, 0.8)",
@@ -56,8 +61,11 @@ const DragPointComponent: React.FC<DragPointProps> = ({
 		onDragOver,
 		onDragLeave,
 		onDrop,
-		onHover,
 		dragPositioningFunction,
+	});
+	const hoverProps = useHover({
+		id,
+		onHoverChange,
 	});
 
 	if (hidden) {
@@ -78,6 +86,7 @@ const DragPointComponent: React.FC<DragPointProps> = ({
 			isTransparent={isTransparent}
 			ref={svgRef}
 			{...dragProps}
+			{...hoverProps}
 		/>
 	);
 };

@@ -8,7 +8,6 @@ import type { Point } from "../types/base/Point";
 import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
 import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
-import type { DiagramHoverEvent } from "../types/events/DiagramHoverEvent";
 import type { DiagramPointerEvent } from "../types/events/DiagramPointerEvent";
 import type { EventType } from "../types/events/EventType";
 import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
@@ -61,7 +60,6 @@ export type DragProps = {
 	onDragOver?: (e: DiagramDragDropEvent) => void;
 	onDragLeave?: (e: DiagramDragDropEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
-	onHover?: (e: DiagramHoverEvent) => void;
 	dragPositioningFunction?: (x: number, y: number) => Point;
 };
 
@@ -82,9 +80,7 @@ export type DragProps = {
  * @param {(e: DiagramDragEvent) => void} [props.onDrag] Event handler for dragging
  * @param {(e: DiagramDragEvent) => void} [props.onDragEnd] Event handler for drag end
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragOver] Event handler for drag over
- * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] Event handler for drag leave
- * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] Event handler for drop
- * @param {(e: DiagramHoverEvent) => void} [props.onHover] Event handler for hover change
+ * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] Event handler for drag leave * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] Event handler for drop
  * @param {(x: number, y: number) => Point} [props.dragPositioningFunction] Drag position transformation function
  */
 export const useDrag = (props: DragProps) => {
@@ -103,7 +99,6 @@ export const useDrag = (props: DragProps) => {
 		onDragOver,
 		onDragLeave,
 		onDrop,
-		onHover,
 		dragPositioningFunction,
 	} = props;
 	// Flag whether dragging
@@ -308,7 +303,8 @@ export const useDrag = (props: DragProps) => {
 				endY: dragPoint.y,
 				cursorX: svgCursorPoint.x,
 				cursorY: svgCursorPoint.y,
-			}); // Fire drag end event for handling by shapes without parent-child relationship
+			});
+			// Fire drag end event for handling by shapes without parent-child relationship
 			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_BROADCAST_DRAG, {
 					detail: {
@@ -485,28 +481,6 @@ export const useDrag = (props: DragProps) => {
 				isArrowDragging.current = false;
 			}
 		}
-	};
-	/**
-	 * Pointer enter event handler
-	 */
-	const handlePointerEnter = () => {
-		// Fire hover event
-		onHover?.({
-			eventId: newEventId(),
-			id,
-			isHovered: true,
-		});
-	};
-	/**
-	 * Pointer leave event handler
-	 */
-	const handlePointerLeave = () => {
-		// Fire hover release event
-		onHover?.({
-			eventId: newEventId(),
-			id,
-			isHovered: false,
-		});
 	}; // Register global broadcast drag event listener
 	// Use ref to hold referenced values to avoid frequent handler generation
 	const refBusVal = {
@@ -679,15 +653,12 @@ export const useDrag = (props: DragProps) => {
 			}
 		};
 	}, [isDragging]);
-
 	return {
 		onPointerDown: handlePointerDown,
 		onPointerMove: handlePointerMove,
 		onPointerUp: handlePointerUp,
 		onKeyDown: handleKeyDown,
 		onKeyUp: handleKeyUp,
-		onPointerEnter: handlePointerEnter,
-		onPointerLeave: handlePointerLeave,
 	};
 };
 

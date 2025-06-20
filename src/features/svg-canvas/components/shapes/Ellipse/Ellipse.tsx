@@ -4,7 +4,7 @@ import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // Import types.
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { DiagramHoverEvent } from "../../../types/events/DiagramHoverEvent";
+import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEvent";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
@@ -18,6 +18,7 @@ import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
+import { useHover } from "../../../hooks/useHover";
 
 // Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -137,7 +138,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	/**
 	 * Hover state change event handler
 	 */
-	const handleHover = useCallback((e: DiagramHoverEvent) => {
+	const handleHover = useCallback((e: DiagramHoverChangeEvent) => {
 		setIsHovered(e.isHovered);
 	}, []);
 
@@ -170,7 +171,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			id,
 		});
 	}, []);
-
 	// Generate drag properties
 	const dragProps = useDrag({
 		id,
@@ -182,9 +182,13 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
-		onHover: handleHover,
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
+	});
+	// Generate properties for hovering
+	const hoverProps = useHover({
+		id,
+		onHoverChange: handleHover,
 	});
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
@@ -240,6 +244,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
 					{...dragProps}
+					{...hoverProps}
 				/>
 			</g>
 			{isTextEditEnabled && (

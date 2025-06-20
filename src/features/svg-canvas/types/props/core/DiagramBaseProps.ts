@@ -1,7 +1,7 @@
 import type { DiagramDragEvent } from "../../events/DiagramDragEvent";
 import type { DiagramDragDropEvent } from "../../events/DiagramDragDropEvent";
 import type { DiagramClickEvent } from "../../events/DiagramClickEvent";
-import type { DiagramHoverEvent } from "../../events/DiagramHoverEvent";
+import type { DiagramHoverChangeEvent } from "../../events/DiagramHoverChangeEvent";
 
 /**
  * Base properties for diagram components.
@@ -12,5 +12,5 @@ export type DiagramBaseProps = {
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
-	onHover?: (e: DiagramHoverEvent) => void;
+	onHoverChange?: (e: DiagramHoverChangeEvent) => void;
 };

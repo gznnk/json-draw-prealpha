@@ -6,7 +6,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import type { Point } from "../../../../types/base/Point";
 import type { DiagramDragDropEvent } from "../../../../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
-import type { DiagramHoverEvent } from "../../../../types/events/DiagramHoverEvent";
+import type { DiagramHoverChangeEvent } from "../../../../types/events/DiagramHoverChangeEvent";
 import type { ConnectPointProps } from "../../../../types/props/shapes/ConnectPointProps";
 import type { PathPointData } from "../../../../types/data/shapes/PathPointData";
 
@@ -232,10 +232,10 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	/**
 	 * Hover state change event handler
 	 *
-	 * @param {DiagramHoverEvent} e Hover state change event
+	 * @param {DiagramHoverChangeEvent} e Hover state change event
 	 * @returns {void}
 	 */
-	const handleHover = useCallback((e: DiagramHoverEvent) => {
+	const handleHover = useCallback((e: DiagramHoverChangeEvent) => {
 		setIsHovered(e.isHovered);
 	}, []);
 	useEffect(() => {
@@ -320,7 +320,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			onDragOver={handleDragOver}
 			onDragLeave={handleDragLeave}
 			onDrop={handleDrop}
-			onHover={handleHover}
+			onHoverChange={handleHover}
 		/>
 	);
 };

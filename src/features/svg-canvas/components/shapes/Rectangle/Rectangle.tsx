@@ -4,7 +4,7 @@ import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // Import types.
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { DiagramHoverEvent } from "../../../types/events/DiagramHoverEvent";
+import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { DiagramPointerEvent } from "../../../types/events/DiagramPointerEvent";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
@@ -18,6 +18,7 @@ import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
+import { useHover } from "../../../hooks/useHover";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 
 // Import utils.
@@ -139,7 +140,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	/**
 	 * Hover state change event handler
 	 */
-	const handleHover = useCallback((e: DiagramHoverEvent) => {
+	const handleHover = useCallback((e: DiagramHoverChangeEvent) => {
 		setIsHovered(e.isHovered);
 	}, []);
 
@@ -171,7 +172,6 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 			id,
 		});
 	}, []);
-
 	// Generate properties for dragging
 	const dragProps = useDrag({
 		id,
@@ -183,9 +183,13 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		onPointerDown: handlePointerDown,
 		onClick: onClick,
 		onDrag: handleDrag,
-		onHover: handleHover,
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
+	});
+	// Generate properties for hovering
+	const hoverProps = useHover({
+		id,
+		onHoverChange: handleHover,
 	});
 	// Generate properties for file drop
 	const fileDropProps = useFileDrop({ id, onFileDrop });
@@ -245,6 +249,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
 					{...dragProps}
+					{...hoverProps}
 					{...fileDropProps}
 				/>
 			</g>
