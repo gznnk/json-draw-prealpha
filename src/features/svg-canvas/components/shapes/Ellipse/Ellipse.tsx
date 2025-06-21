@@ -18,11 +18,13 @@ import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
 import { useHover } from "../../../hooks/useHover";
 
 // Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { mergeProps } from "../../../utils/common/mergeProps";
 
 // Import local module files.
 import { EllipseElement } from "./EllipseStyled";
@@ -180,16 +182,25 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		syncWithSameId,
 		ref: svgRef,
 		onPointerDown: handlePointerDown,
-		onClick: onClick,
 		onDrag: handleDrag,
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
+	});
+	// Generate properties for clicking
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		ref: svgRef,
+		onClick,
 	});
 	// Generate properties for hovering
 	const hoverProps = useHover({
 		id,
 		onHoverChange: handleHover,
 	});
+	// Compose props for EllipseElement
+	const composedProps = mergeProps(dragProps, clickProps, hoverProps);
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
 	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
@@ -243,8 +254,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					transform={transform}
 					ref={svgRef}
 					onDoubleClick={handleDoubleClick}
-					{...dragProps}
-					{...hoverProps}
+					{...composedProps}
 				/>
 			</g>
 			{isTextEditEnabled && (

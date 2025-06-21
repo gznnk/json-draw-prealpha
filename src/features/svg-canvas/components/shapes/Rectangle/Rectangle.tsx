@@ -17,6 +17,7 @@ import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
@@ -170,10 +171,17 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		y,
 		syncWithSameId,
 		ref: svgRef,
-		onClick,
 		onDrag: handleDrag,
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
+	});
+	// Generate properties for clicking
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		ref: svgRef,
+		onClick,
 	});
 	// Generate properties for selection
 	const selectProps = useSelect({
@@ -186,10 +194,10 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		onHoverChange: handleHover,
 	});
 	// Generate properties for file drop
-	const fileDropProps = useFileDrop({ id, onFileDrop });
-	// Compose props for RectangleElement
+	const fileDropProps = useFileDrop({ id, onFileDrop }); // Compose props for RectangleElement
 	const composedProps = mergeProps(
 		dragProps,
+		clickProps,
 		selectProps,
 		hoverProps,
 		fileDropProps,

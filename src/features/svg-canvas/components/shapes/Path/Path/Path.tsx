@@ -22,6 +22,7 @@ import { PathElement } from "./PathStyled";
 
 // Import hooks.
 import { useDrag } from "../../../../hooks/useDrag";
+import { useClick } from "../../../../hooks/useClick";
 
 // Import utils.
 import { calcPointsOuterShape } from "../../../../utils/math/geometry/calcPointsOuterShape";
@@ -31,6 +32,7 @@ import {
 } from "../../../../utils/shapes/path/createArrowHeads";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
+import { mergeProps } from "../../../../utils/common/mergeProps";
 
 // TODO: Cannot enter vertex editing mode when overlapping with border
 /**
@@ -279,9 +281,18 @@ const PathComponent: React.FC<PathProps> = ({
 		syncWithSameId,
 		ref: dragSvgRef,
 		onPointerDown: handlePointerDown,
-		onClick: handleClick,
 		onDrag: handleDrag,
 	});
+	// Generate properties for clicking
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		ref: dragSvgRef,
+		onClick: handleClick,
+	});
+	// Compose props for path element
+	const composedProps = mergeProps(dragProps, clickProps);
 
 	// Generate polyline d attribute value
 	const d = createDValue(items);
@@ -353,7 +364,7 @@ const PathComponent: React.FC<PathProps> = ({
 				cursor={dragEnabled ? "move" : "pointer"}
 				tabIndex={0}
 				ref={dragSvgRef}
-				{...dragProps}
+				{...composedProps}
 			/>
 			{/* Start point arrow head. */}
 			{startArrowHeadComp}

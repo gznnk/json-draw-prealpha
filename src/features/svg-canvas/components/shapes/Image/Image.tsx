@@ -15,10 +15,12 @@ import { ImageElement } from "./ImageStyled";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
 
 // Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { mergeProps } from "../../../utils/common/mergeProps";
 
 /**
  * Image component.
@@ -88,7 +90,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 			id,
 		});
 	}, []);
-
 	// Prepare props for the drag element.
 	const dragProps = useDrag({
 		id,
@@ -98,9 +99,18 @@ const ImageComponent: React.FC<ImageProps> = ({
 		syncWithSameId,
 		ref: svgRef,
 		onPointerDown: handlePointerDown,
-		onClick: onClick,
 		onDrag: handleDrag,
 	});
+	// Generate properties for clicking
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		ref: svgRef,
+		onClick,
+	});
+	// Compose props for ImageElement
+	const composedProps = mergeProps(dragProps, clickProps);
 
 	// Create the transform attribute for the element.
 	const transform = createSvgTransform(
@@ -128,7 +138,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 					href={`data:image/png;base64,${base64Data}`}
 					isTransparent={isMultiSelectSource}
 					ref={svgRef}
-					{...dragProps}
+					{...composedProps}
 				/>
 			</g>
 			<Outline

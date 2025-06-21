@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 // Import types.
 import type { DiagramType } from "../types/base/DiagramType";
 import type { Point } from "../types/base/Point";
-import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
 import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
 import type { DiagramPointerEvent } from "../types/events/DiagramPointerEvent";
@@ -15,6 +14,9 @@ import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent"
 // Import utils.
 import { newEventId } from "../utils/common/newEventId";
 
+// Import constants.
+import { DRAG_DEAD_ZONE } from "../constants/Constants";
+
 // Import EventBus.
 import { useEventBus } from "../context/EventBusContext";
 
@@ -23,9 +25,6 @@ import {
 	EVENT_NAME_BROADCAST_DRAG,
 	EVENT_NAME_SVG_CANVAS_SCROLL,
 } from "../constants/EventNames";
-
-/** Drag dead zone */
-const DRAG_DEAD_ZONE = 5;
 
 /**
  * Type definition for broadcast drag event
@@ -55,7 +54,6 @@ export type DragProps = {
 	ref: React.RefObject<SVGElement>;
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onPointerUp?: (e: DiagramPointerEvent) => void;
-	onClick?: (e: DiagramClickEvent) => void;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDragOver?: (e: DiagramDragDropEvent) => void;
 	onDragLeave?: (e: DiagramDragDropEvent) => void;
@@ -72,13 +70,9 @@ export type DragProps = {
  * @param {number} props.x X coordinate
  * @param {number} props.y Y coordinate
  * @param {boolean} [props.syncWithSameId] Flag whether to synchronize drag with diagrams of the same ID
- * @param {React.RefObject<SVGElement>} props.ref Reference to the element to be draggable
- * @param {(e: DiagramPointerEvent) => void} [props.onPointerDown] Event handler for pointer down
+ * @param {React.RefObject<SVGElement>} props.ref Reference to the element to be draggable * @param {(e: DiagramPointerEvent) => void} [props.onPointerDown] Event handler for pointer down
  * @param {(e: DiagramPointerEvent) => void} [props.onPointerUp] Event handler for pointer up
- * @param {(e: DiagramClickEvent) => void} [props.onClick] Event handler for click
- * @param {(e: DiagramDragEvent) => void} [props.onDragStart] Event handler for drag start
  * @param {(e: DiagramDragEvent) => void} [props.onDrag] Event handler for dragging
- * @param {(e: DiagramDragEvent) => void} [props.onDragEnd] Event handler for drag end
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragOver] Event handler for drag over
  * @param {(e: DiagramDragDropEvent) => void} [props.onDragLeave] Event handler for drag leave * @param {(e: DiagramDragDropEvent) => void} [props.onDrop] Event handler for drop
  * @param {(x: number, y: number) => Point} [props.dragPositioningFunction] Drag position transformation function
@@ -94,7 +88,6 @@ export const useDrag = (props: DragProps) => {
 		ref,
 		onPointerDown,
 		onPointerUp,
-		onClick,
 		onDrag,
 		onDragOver,
 		onDragLeave,
@@ -321,13 +314,6 @@ export const useDrag = (props: DragProps) => {
 					} as BroadcastDragEvent,
 				}),
 			);
-		}
-		if (isPointerDown.current && !isDragging) {
-			// If not pointer up after dragging, notify click event to parent side
-			onClick?.({
-				eventId,
-				id,
-			});
 		}
 
 		// Fire pointer up event

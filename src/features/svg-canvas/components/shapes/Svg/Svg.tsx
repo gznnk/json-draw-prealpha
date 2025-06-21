@@ -18,10 +18,12 @@ import { SvgGroupElement, SvgRectElement } from "./SvgStyled";
 
 // Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
 
 // Import utils.
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { mergeProps } from "../../../utils/common/mergeProps";
 
 /**
  * Svg component.
@@ -94,7 +96,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 			id,
 		});
 	}, []);
-
 	// Prepare props for the drag element.
 	const dragProps = useDrag({
 		id,
@@ -104,9 +105,18 @@ const SvgComponent: React.FC<SvgProps> = ({
 		syncWithSameId,
 		ref: svgRef,
 		onPointerDown: handlePointerDown,
-		onClick: onClick,
 		onDrag: handleDrag,
 	});
+	// Generate properties for clicking
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		ref: svgRef,
+		onClick,
+	});
+	// Compose props for SvgRectElement
+	const composedProps = mergeProps(dragProps, clickProps);
 
 	// Create the transform attribute for the element.
 	const transform = createSvgTransform(
@@ -156,7 +166,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 					fill="transparent"
 					isTransparent={isMultiSelectSource}
 					ref={svgRef}
-					{...dragProps}
+					{...composedProps}
 				/>
 			</g>
 			<Outline
