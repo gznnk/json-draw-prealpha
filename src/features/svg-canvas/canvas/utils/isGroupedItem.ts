@@ -18,12 +18,12 @@ export const isGroupedItem = (
 };
 
 const isGroupedItemInternal = (item: Diagram, items: Diagram[]): boolean => {
+	if (items.some((canvasItem) => canvasItem.id === item.id)) {
+		return true;
+	}
 	for (const canvasItem of items) {
 		if (canvasItem.type === "Group" && isItemableData(canvasItem)) {
 			return isGroupedItemInternal(item, canvasItem.items);
-		}
-		if (canvasItem.id === item.id) {
-			return true;
 		}
 	}
 	return false;
