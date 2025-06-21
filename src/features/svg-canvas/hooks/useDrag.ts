@@ -13,6 +13,7 @@ import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent"
 
 // Import utils.
 import { newEventId } from "../utils/common/newEventId";
+import { getSvgPoint } from "../utils/math/points/getSvgPoint";
 
 // Import constants.
 import { DRAG_DEAD_ZONE } from "../constants/Constants";
@@ -108,24 +109,6 @@ export const useDrag = (props: DragProps) => {
 	// The offset between the center and the pointer.
 	const offsetXBetweenCenterAndPointer = useRef(0);
 	const offsetYBetweenCenterAndPointer = useRef(0);
-
-	/**
-	 * Get the SVG point from the client coordinates.
-	 *
-	 * @param clientX - The X position of the cursor relative to the viewport (not the whole page).
-	 * @param clientY - The Y position of the cursor relative to the viewport (not the whole page).
-	 * @returns The SVG point
-	 */
-	const getSvgPoint = (clientX: number, clientY: number): Point => {
-		const ownerSVGElement = ref.current?.ownerSVGElement;
-		if (ownerSVGElement === null) throw new Error("ownerSVGElement is null."); // Unreachable — added to prevent type errors in the following code.
-
-		const point = ownerSVGElement.createSVGPoint();
-		point.x = clientX;
-		point.y = clientY;
-
-		return point.matrixTransform(ownerSVGElement.getScreenCTM()?.inverse());
-	};
 	/**
 	 * Get the drag area coordinates from the pointer position during dragging
 	 *
@@ -134,7 +117,7 @@ export const useDrag = (props: DragProps) => {
 	 * @returns {Point} Drag area coordinates
 	 */
 	const getPointOnDrag = (clientX: number, clientY: number): Point => {
-		const svgPoint = getSvgPoint(clientX, clientY);
+		const svgPoint = getSvgPoint(clientX, clientY, ref.current);
 
 		let newX = svgPoint.x;
 		let newY = svgPoint.y;
@@ -174,9 +157,8 @@ export const useDrag = (props: DragProps) => {
 			// Remember the drag area coordinates at drag start
 			startX.current = x;
 			startY.current = y;
-
 			// Store the offset between the center and the pointer
-			const svgPoint = getSvgPoint(e.clientX, e.clientY);
+			const svgPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
 			offsetXBetweenCenterAndPointer.current = svgPoint.x - x;
 			offsetYBetweenCenterAndPointer.current = svgPoint.y - y;
 
@@ -198,9 +180,9 @@ export const useDrag = (props: DragProps) => {
 
 		// Get drag coordinates
 		const dragPoint = getPointOnDrag(e.clientX, e.clientY);
-
 		// Get cursor position in SVG coordinate system
-		const svgCursorPoint = getSvgPoint(e.clientX, e.clientY); // Generate event ID
+		const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
+		// Generate event ID
 		const eventId = newEventId();
 
 		// Create event information during dragging
@@ -280,10 +262,8 @@ export const useDrag = (props: DragProps) => {
 
 		if (isDragging) {
 			// Get drag coordinates
-			const dragPoint = getPointOnDrag(e.clientX, e.clientY);
-
-			// Get cursor position in SVG coordinate system
-			const svgCursorPoint = getSvgPoint(e.clientX, e.clientY);
+			const dragPoint = getPointOnDrag(e.clientX, e.clientY); // Get cursor position in SVG coordinate system
+			const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
 
 			// Fire drag end event if dragging was in progress
 			onDrag?.({
@@ -461,13 +441,13 @@ export const useDrag = (props: DragProps) => {
 				e.key === "ArrowDown"
 			) {
 				// When arrow key is released, fire drag end event to notify SvgCanvas side of coordinate update and update coordinates
-				onDrag?.(dragEvent);
-
-				// Mark arrow key drag as ended
+				onDrag?.(dragEvent); // Mark arrow key drag as ended
 				isArrowDragging.current = false;
 			}
 		}
-	}; // Register global broadcast drag event listener
+	};
+
+	// Register global broadcast drag event listener
 	// Use ref to hold referenced values to avoid frequent handler generation
 	const refBusVal = {
 		// Properties
@@ -482,7 +462,6 @@ export const useDrag = (props: DragProps) => {
 		onDragLeave,
 		onDrop,
 		// Internal variables and functions
-		getSvgPoint,
 		getPointOnDrag,
 	};
 	const refBus = useRef(refBusVal);
@@ -542,15 +521,14 @@ export const useDrag = (props: DragProps) => {
 		if (syncWithSameId && onDrag) {
 			handleBroadcastDragForSync = (e: CustomEvent) => {
 				// Get reference values via refBus
-				const { id, onDrag, getSvgPoint } = refBus.current;
-				const customEvent = e as CustomEvent<BroadcastDragEvent>;
-
-				// For drag events of shapes with the same ID but not this instance, fire sync drag event
+				const { id, onDrag } = refBus.current;
+				const customEvent = e as CustomEvent<BroadcastDragEvent>; // For drag events of shapes with the same ID but not this instance, fire sync drag event
 				if (customEvent.detail.id === id && e.target !== ref.current) {
 					// Get cursor position in SVG coordinate system
 					const svgCursorPoint = getSvgPoint(
 						customEvent.detail.clientX,
 						customEvent.detail.clientY,
+						ref.current,
 					);
 
 					const dragEvent = {
@@ -598,7 +576,7 @@ export const useDrag = (props: DragProps) => {
 		let handleSvgCanvasScroll: (e: Event) => void;
 		if (isDragging) {
 			handleSvgCanvasScroll = (e: Event) => {
-				const { id, getPointOnDrag, onDrag, getSvgPoint } = refBus.current;
+				const { id, getPointOnDrag, onDrag } = refBus.current;
 
 				const customEvent = e as CustomEvent<SvgCanvasScrollEvent>;
 
@@ -609,6 +587,7 @@ export const useDrag = (props: DragProps) => {
 				const svgCursorPoint = getSvgPoint(
 					customEvent.detail.clientX,
 					customEvent.detail.clientY,
+					ref.current,
 				);
 
 				onDrag?.({
@@ -638,7 +617,7 @@ export const useDrag = (props: DragProps) => {
 				);
 			}
 		};
-	}, [isDragging]);
+	}, [isDragging, ref]);
 	return {
 		onPointerDown: handlePointerDown,
 		onPointerMove: handlePointerMove,

@@ -4,10 +4,10 @@ import { useRef, useState } from "react";
 
 // Import types.
 import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
-import type { Point } from "../types/base/Point";
 
 // Import utils.
 import { newEventId } from "../utils/common/newEventId";
+import { getSvgPoint } from "../utils/math/points/getSvgPoint";
 
 // Import constants.
 import { DRAG_DEAD_ZONE } from "../constants/Constants";
@@ -43,25 +43,6 @@ export const useClick = (props: ClickProps) => {
 	// Click area coordinates at pointer down
 	const startX = useRef(0);
 	const startY = useRef(0);
-
-	/**
-	 * Get the SVG point from the client coordinates.
-	 *
-	 * @param clientX - The X position of the cursor relative to the viewport (not the whole page).
-	 * @param clientY - The Y position of the cursor relative to the viewport (not the whole page).
-	 * @returns The SVG point
-	 */
-	const getSvgPoint = (clientX: number, clientY: number): Point => {
-		const ownerSVGElement = ref.current?.ownerSVGElement;
-		if (ownerSVGElement === null) throw new Error("ownerSVGElement is null."); // Unreachable — added to prevent type errors in the following code.
-
-		const point = ownerSVGElement.createSVGPoint();
-		point.x = clientX;
-		point.y = clientY;
-
-		return point.matrixTransform(ownerSVGElement.getScreenCTM()?.inverse());
-	};
-
 	/**
 	 * Pointer down event handler within the click area
 	 */
@@ -90,9 +71,8 @@ export const useClick = (props: ClickProps) => {
 			// Do nothing if pointer is not pressed down in this click area
 			return;
 		}
-
 		// Get current SVG coordinates
-		const svgPoint = getSvgPoint(e.clientX, e.clientY);
+		const svgPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
 
 		if (
 			!isDragging &&
