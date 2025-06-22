@@ -155,99 +155,18 @@ const GroupComponent: React.FC<GroupProps> = ({
 	 * Drag event handler for shapes within the group
 	 */
 	const handleChildDiagramDrag = useCallback((e: DiagramDragEvent) => {
-		const {
-			id,
-			x,
-			y,
-			width,
-			height,
-			isSelected,
-			items,
-			onDrag,
-			onDiagramChange,
-			isGroupDragging,
-		} = refBus.current;
+		const { isSelected, onDrag } = refBus.current;
 
 		// Processing at drag start
 		if (e.eventType === "Start") {
-			if (!isSelected) {
-				// If not in group selection, propagate the drag event as is and
-				// move only the selected shapes
-				onDrag?.(e);
-			} else {
+			if (isSelected) {
 				// If in group selection, enable dragging of the entire group
 				setIsGroupDragging(true);
-
-				// Record the group's shape at drag start
-				startItems.current = items;
-				startBox.current = { x, y, width, height };
-
-				// Notify the start of entire group change
-				onDiagramChange?.({
-					eventId: e.eventId,
-					eventType: "Start",
-					changeType: "Drag",
-					id,
-					startDiagram: {
-						x,
-						y,
-						items,
-					},
-					endDiagram: {
-						x,
-						y,
-						items,
-					},
-					cursorX: e.cursorX,
-					cursorY: e.cursorY,
-				});
 			}
-			return;
 		}
-		// Following processing for during drag and drag end
-		if (!isGroupDragging) {
-			// If not dragging the entire group, propagate the drag event as is and
-			// move only the selected shapes
-			onDrag?.(e);
-		} else {
-			// If dragging the entire group, recursively move the shapes in the group
-			const dx = e.endX - e.startX;
-			const dy = e.endY - e.startY;
 
-			// Recursively move shapes in the group (does not include connection points)
-			const moveRecursive = (diagrams: Diagram[]) => {
-				const newItems: Diagram[] = [];
-				for (const item of diagrams) {
-					const newItem = { ...item, x: item.x + dx, y: item.y + dy };
-					if (isItemableData(newItem)) {
-						newItem.items = moveRecursive(newItem.items ?? []);
-					}
-					newItems.push(newItem);
-				}
-
-				return newItems;
-			};
-
-			const event: DiagramChangeEvent = {
-				eventId: e.eventId,
-				eventType: e.eventType,
-				changeType: "Drag",
-				id,
-				startDiagram: {
-					x: startBox.current.x,
-					y: startBox.current.y,
-					items: startItems.current,
-				},
-				endDiagram: {
-					x: startBox.current.x + dx,
-					y: startBox.current.y + dy,
-					items: moveRecursive(startItems.current),
-				},
-				cursorX: e.cursorX,
-				cursorY: e.cursorY,
-			}; // Notify the movement of all shapes in the group collectively
-			onDiagramChange?.(event);
-		}
+		// Processing during drag
+		onDrag?.(e);
 
 		// Clear the dragging flag at drag end
 		if (e.eventType === "End") {
