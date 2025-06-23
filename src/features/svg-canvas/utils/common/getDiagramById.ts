@@ -1,5 +1,5 @@
 import type { Diagram } from "../../types/data/catalog/Diagram";
-import { isItemableData } from "../../utils/validation/isItemableData";
+import { isItemableData } from "../validation/isItemableData";
 
 /**
  * Get the diagram by ID from the list of diagrams.

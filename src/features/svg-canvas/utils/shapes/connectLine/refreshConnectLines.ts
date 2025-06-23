@@ -4,7 +4,7 @@ import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData
 import type { Shape } from "../../../types/base/Shape";
 import { createBestConnectPath } from "../connectPoint/createBestConnectPath";
 import { newId } from "../common/newId";
-import { getDiagramById } from "../../../canvas/utils/getDiagramById";
+import { getDiagramById } from "../../common/getDiagramById";
 import { isConnectableData } from "../../validation/isConnectableData";
 import { calcRadians } from "../../math/points/calcRadians";
 import { radiansToDegrees } from "../../math/common/radiansToDegrees";

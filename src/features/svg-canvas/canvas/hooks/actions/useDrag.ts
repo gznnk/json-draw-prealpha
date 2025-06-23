@@ -18,7 +18,7 @@ import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
 import { applyRecursive } from "../../utils/applyRecursive";
 import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
-import { getDiagramById } from "../../utils/getDiagramById";
+import { getDiagramById } from "../../../utils/common/getDiagramById";
 import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";

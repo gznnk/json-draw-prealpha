@@ -12,7 +12,7 @@ import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { applyRecursive } from "../../utils/applyRecursive";
-import { getDiagramById } from "../../utils/getDiagramById";
+import { getDiagramById } from "../../../utils/common/getDiagramById";
 
 /**
  * Custom hook to handle delete events on the canvas.

@@ -5,7 +5,7 @@ import { createContext } from "react";
 import type { Diagram } from "../types/data/catalog/Diagram";
 
 // Import SvgCanvas related functions
-import { getDiagramById } from "./utils/getDiagramById";
+import { getDiagramById } from "../utils/common/getDiagramById";
 
 // Imports related to this component.
 import type { SvgCanvasState } from "./SvgCanvasTypes";
