@@ -12,13 +12,11 @@ import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
 // Import functions related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";
 import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
+import { getSelectedItems } from "../../../utils/common/getSelectedItems";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { isItemableData } from "../../../utils/validation/isItemableData";
-import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
 import { applyRecursive } from "../../utils/applyRecursive";
-import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
-import { getDiagramById } from "../../../utils/common/getDiagramById";
 import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
@@ -38,13 +36,14 @@ export const useDrag = (props: CanvasHooksProps) => {
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
-
-	// Reference to store ancestor items of the dragged item.
-	const ancestors = useRef<Diagram[]>([]);
-	// The selected ancestor item data of the dragged item at the start of the drag event.
-	const selectedAncestorItem = useRef<Diagram | undefined>(undefined);
 	// Reference to store the canvas state at the start of drag for connect line updates.
 	const startCanvasState = useRef<SvgCanvasState | undefined>(undefined);
+	// Reference to store selected item IDs at the start of drag for performance.
+	const selectedItemIds = useRef<Set<string>>(new Set());
+	// Reference to store initial positions of all items at the start of drag.
+	const initialItemPositions = useRef<Map<string, { x: number; y: number }>>(
+		new Map(),
+	);
 
 	// Return a callback function to handle the drag event.
 	return useCallback((e: DiagramDragEvent) => {
@@ -53,145 +52,114 @@ export const useDrag = (props: CanvasHooksProps) => {
 			props: { setCanvasState, onDataChange },
 			autoEdgeScroll,
 		} = refBus.current;
-
 		setCanvasState((prevState) => {
-			// Remember the ancestor items of the dragged item on the drag start event.
+			// Store the current canvas state for connect line updates on drag start
 			if (e.eventType === "Start") {
-				// Store the current canvas state for connect line updates
 				startCanvasState.current = prevState;
 
-				ancestors.current = getAncestorItemsById(e.id, prevState);
-				if (ancestors.current.length > 0) {
-					selectedAncestorItem.current = ancestors.current.find(
-						(item) => isSelectableData(item) && item.isSelected,
-					);
-				}
+				// Store selected item IDs for performance
+				const selectedItems = getSelectedItems(prevState.items);
+				selectedItemIds.current = new Set(selectedItems.map((item) => item.id));
+
+				// Store initial positions of all items
+				const positionMap = new Map<string, { x: number; y: number }>();
+				const storePositions = (items: Diagram[]) => {
+					for (const item of items) {
+						positionMap.set(item.id, { x: item.x, y: item.y });
+						if (isItemableData(item)) {
+							storePositions(item.items);
+						}
+					}
+				};
+				storePositions(prevState.items);
+				initialItemPositions.current = positionMap;
 			}
 
-			// Updated state to be returned.
-			let newState: SvgCanvasState;
-			// Dragged diagrams to be updated.
-			const draggedDiagrams: Diagram[] = [];
+			// Calculate the movement delta
+			const dx = e.endX - e.startX;
+			const dy = e.endY - e.startY;
 
-			// TODO: Generailize function.
-			// Function to update connect points of the dragged item.
+			// Get selected item IDs from ref (stored at drag start)
+			const selectedIds = selectedItemIds.current;
+			// Get initial positions from ref (stored at drag start)
+			const initialPositions = initialItemPositions.current;
+
+			// Collect all diagrams that will be moved (for connect point updates)
+			const movedDiagrams: Diagram[] = [];
+
+			// Function to update connect points of a moved item
 			const updateConnectPoints = (item: Diagram) => {
 				if (isConnectableData(item)) {
 					const calculator = DiagramRegistry.getConnectPointCalculator(
 						item.type,
 					);
 					if (calculator) {
-						// TODO: Diractly create connect points data.
-						// Update the connect points of the item.
 						item.connectPoints = calculator(item).map((c) => ({
 							...c,
 							type: "ConnectPoint",
 						})) as ConnectPointData[];
-						draggedDiagrams.push(item);
+						movedDiagrams.push(item);
 					}
 				}
 			};
 
-			if (
-				selectedAncestorItem.current &&
-				isItemableData(selectedAncestorItem.current)
-			) {
-				// If the dragged item is grouped, update the position of the ancestor and its children.
-				const dx = e.endX - e.startX;
-				const dy = e.endY - e.startY;
+			// Function to recursively move an item and its children based on initial positions
+			const moveItemRecursively = (item: Diagram): Diagram => {
+				const initialPosition = initialPositions.get(item.id);
+				if (!initialPosition) {
+					// If no initial position found, return item unchanged
+					return item;
+				}
 
-				// Get the items of the selected ancestor.
-				const selectedAncestorItems = selectedAncestorItem.current.items;
+				const newItem = {
+					...item,
+					x: initialPosition.x + dx,
+					y: initialPosition.y + dy,
+				};
 
-				// Function to recursively search the ancestor and update the position of its children.
-				const searchAncetorAndUpdateChildrenPosition = (
-					items: Diagram[],
-				): Diagram[] => {
-					return items.map((item) => {
-						// If the item is the selected ancestor, update its position and the position of its children.
-						if (
-							selectedAncestorItem.current &&
-							item.id === selectedAncestorItem.current.id &&
-							isItemableData(item)
-						) {
-							const newItem = {
-								...item,
-								x: selectedAncestorItem.current.x + dx,
-								y: selectedAncestorItem.current.y + dy,
-								items: applyRecursive(item.items, (childItem) => {
-									const startItem = getDiagramById(
-										selectedAncestorItems,
-										childItem.id,
-									);
-									if (!startItem) {
-										// If the child item is not found in the ancestor's items, return it unchanged.
-										return childItem;
-									}
-									// Update the position of the child items.
-									const newChildItem = {
-										...childItem,
-										x: startItem.x + dx,
-										y: startItem.y + dy,
-									};
+				// Update connect points
+				updateConnectPoints(newItem);
 
-									// Update the connect points of the child item.
-									updateConnectPoints(newChildItem);
-
-									return newChildItem;
-								}),
-							};
-
-							// Update the connect points of the ancestor item.
-							updateConnectPoints(newItem);
-
-							return newItem;
+				// If the item has children, move them recursively
+				if (isItemableData(newItem)) {
+					newItem.items = applyRecursive(newItem.items, (childItem) => {
+						const childInitialPosition = initialPositions.get(childItem.id);
+						if (!childInitialPosition) {
+							return childItem;
 						}
 
-						// If the item is a group, recursively search its children.
-						if (isItemableData(item)) {
-							return {
-								...item,
-								items: searchAncetorAndUpdateChildrenPosition(item.items),
-							};
-						}
-
-						return item;
+						const movedChild = {
+							...childItem,
+							x: childInitialPosition.x + dx,
+							y: childInitialPosition.y + dy,
+						};
+						updateConnectPoints(movedChild);
+						return movedChild;
 					});
-				};
+				}
 
-				newState = {
-					...prevState,
-					items: searchAncetorAndUpdateChildrenPosition(prevState.items),
-				};
-			} else {
-				// If not group dragging, update the position of the dragged item directly.
-				newState = {
-					...prevState,
-					items: applyRecursive(prevState.items, (item) => {
-						if (item.id === e.id) {
-							// Apply the new position to the item.
-							const newItem = {
-								...item,
-								x: e.endX,
-								y: e.endY,
-							};
+				return newItem;
+			};
 
-							// Update the connect points of the dragged item.
-							updateConnectPoints(newItem);
+			// Apply movement to all items in the canvas
+			const newItems = applyRecursive(prevState.items, (item) => {
+				// If this item is selected, move it and its children
+				if (selectedIds.has(item.id)) {
+					return moveItemRecursively(item);
+				}
+				return item;
+			});
 
-							return newItem;
-						}
-						return item;
-					}),
-				};
-			}
+			// Create the new state
+			let newState: SvgCanvasState = {
+				...prevState,
+				items: newItems,
+				isDiagramChanging: isDiagramChangingEvent(e.eventType),
+			};
 
-			// Update isDiagramChanging state based on the event type.
-			newState.isDiagramChanging = isDiagramChangingEvent(e.eventType);
-
-			// Refresh the connect lines for the dragged diagrams.
+			// Refresh the connect lines for the moved diagrams
 			newState = refreshConnectLines(
-				draggedDiagrams,
+				movedDiagrams,
 				newState,
 				startCanvasState.current,
 			);
@@ -209,10 +177,11 @@ export const useDrag = (props: CanvasHooksProps) => {
 			if (e.eventType === "End") {
 				// Update outline of all groups.
 				newState.items = updateOutlineOfAllGroups(newState.items);
-				// clean up the ancestor reference.
-				ancestors.current = [];
-				selectedAncestorItem.current = undefined;
+				// Clean up the canvas state reference.
 				startCanvasState.current = undefined;
+				// Clean up the selected item IDs and initial positions.
+				selectedItemIds.current.clear();
+				initialItemPositions.current.clear();
 			}
 
 			return newState;
