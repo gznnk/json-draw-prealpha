@@ -107,57 +107,61 @@ export const useDrag = (props: CanvasHooksProps) => {
 				}
 			};
 
-			// Function to recursively move an item and its children based on initial positions
-			const moveItemRecursively = (item: Diagram): Diagram => {
-				const initialPosition = initialPositions.get(item.id);
-				if (!initialPosition) {
-					// If no initial position found, return item unchanged
-					return item;
-				}
-
-				const newItem = {
-					...item,
-					x: initialPosition.x + dx,
-					y: initialPosition.y + dy,
-				};
-
-				// Update connect points
-				updateConnectPoints(newItem);
-
-				// If the item has children, move them recursively
-				if (isItemableData(newItem)) {
-					newItem.items = applyRecursive(newItem.items, (childItem) => {
-						const childInitialPosition = initialPositions.get(childItem.id);
-						if (!childInitialPosition) {
-							return childItem;
+			// Function to recursively move items and update their positions
+			const moveRecursively = (items: Diagram[]): Diagram[] => {
+				return items.map((item) => {
+					// If this item is selected, move it
+					if (selectedIds.has(item.id)) {
+						const initialPosition = initialPositions.get(item.id);
+						if (!initialPosition) {
+							// If no initial position found, return item unchanged
+							return item;
 						}
 
-						const movedChild = {
-							...childItem,
-							x: childInitialPosition.x + dx,
-							y: childInitialPosition.y + dy,
+						const newItem = {
+							...item,
+							x: initialPosition.x + dx,
+							y: initialPosition.y + dy,
 						};
-						updateConnectPoints(movedChild);
-						return movedChild;
-					});
-				}
 
-				return newItem;
+						// Update connect points
+						updateConnectPoints(newItem);
+
+						// If the item has children, move them recursively
+						if (isItemableData(newItem)) {
+							newItem.items = applyRecursive(newItem.items, (childItem) => {
+								// Move child items by the same delta
+								const childInitialPosition = initialPositions.get(childItem.id);
+								if (childInitialPosition) {
+									const newChildItem = {
+										...childItem,
+										x: childInitialPosition.x + dx,
+										y: childInitialPosition.y + dy,
+									};
+
+									// Update connect points
+									updateConnectPoints(newChildItem);
+
+									return newChildItem;
+								}
+								return childItem; // If no initial position, return unchanged
+							});
+						}
+
+						return newItem;
+					}
+					if (isItemableData(item)) {
+						// If the item is not selected, recursively move its children
+						item.items = moveRecursively(item.items);
+					}
+					return item; // If not selected, return item unchanged
+				});
 			};
-
-			// Apply movement to all items in the canvas
-			const newItems = applyRecursive(prevState.items, (item) => {
-				// If this item is selected, move it and its children
-				if (selectedIds.has(item.id)) {
-					return moveItemRecursively(item);
-				}
-				return item;
-			});
 
 			// Create the new state
 			let newState: SvgCanvasState = {
 				...prevState,
-				items: newItems,
+				items: moveRecursively(prevState.items),
 				isDiagramChanging: isDiagramChangingEvent(e.eventType),
 			};
 
