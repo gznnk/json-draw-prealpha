@@ -23,6 +23,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { createItemPositionMap } from "../../utils/createItemPositionMap";
 
 /**
  * Custom hook to handle drag events on the canvas.
@@ -62,20 +63,8 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 				// Store selected item IDs for performance
 				const selectedItems = getSelectedItems(prevState.items);
-				selectedItemIds.current = new Set(selectedItems.map((item) => item.id));
-
-				// Store initial positions of all items
-				const positionMap = new Map<string, { x: number; y: number }>();
-				const storePositions = (items: Diagram[]) => {
-					for (const item of items) {
-						positionMap.set(item.id, { x: item.x, y: item.y });
-						if (isItemableData(item)) {
-							storePositions(item.items);
-						}
-					}
-				};
-				storePositions(prevState.items);
-				initialItemPositions.current = positionMap;
+				selectedItemIds.current = new Set(selectedItems.map((item) => item.id)); // Store initial positions of all items
+				initialItemPositions.current = createItemPositionMap(prevState.items);
 			}
 
 			// Calculate the movement delta
