@@ -51,7 +51,6 @@ export type DragProps = {
 	type?: DiagramType;
 	x: number;
 	y: number;
-	syncWithSameId?: boolean;
 	ref: React.RefObject<SVGElement>;
 	onPointerDown?: (e: DiagramPointerEvent) => void;
 	onPointerUp?: (e: DiagramPointerEvent) => void;
@@ -66,11 +65,9 @@ export type DragProps = {
  * Custom hook to create a draggable area
  *
  * @param {DragProps} props Drag area props
- * @param {string} props.id ID (set the same ID to the element to be draggable. Otherwise it will not work correctly)
- * @param {DiagramType} [props.type] Type of diagram
+ * @param {string} props.id ID (set the same ID to the element to be draggable. Otherwise it will not work correctly) * @param {DiagramType} [props.type] Type of diagram
  * @param {number} props.x X coordinate
  * @param {number} props.y Y coordinate
- * @param {boolean} [props.syncWithSameId] Flag whether to synchronize drag with diagrams of the same ID
  * @param {React.RefObject<SVGElement>} props.ref Reference to the element to be draggable * @param {(e: DiagramPointerEvent) => void} [props.onPointerDown] Event handler for pointer down
  * @param {(e: DiagramPointerEvent) => void} [props.onPointerUp] Event handler for pointer up
  * @param {(e: DiagramDragEvent) => void} [props.onDrag] Event handler for dragging
@@ -85,7 +82,6 @@ export const useDrag = (props: DragProps) => {
 		x,
 		y,
 		type,
-		syncWithSameId = false,
 		ref,
 		onPointerDown,
 		onPointerUp,
@@ -456,7 +452,6 @@ export const useDrag = (props: DragProps) => {
 		y,
 		type,
 		ref,
-		syncWithSameId,
 		onDrag,
 		onDragOver,
 		onDragLeave,
@@ -469,8 +464,7 @@ export const useDrag = (props: DragProps) => {
 
 	useEffect(() => {
 		let handleBroadcastDrag: (e: CustomEvent) => void;
-		let handleBroadcastDragForSync: (e: CustomEvent) => void;
-		const { ref, onDrag, onDragOver, onDrop, syncWithSameId } = refBus.current;
+		const { onDragOver, onDrop } = refBus.current;
 
 		if (onDragOver || onDrop) {
 			handleBroadcastDrag = (e: CustomEvent) => {
@@ -518,52 +512,11 @@ export const useDrag = (props: DragProps) => {
 			eventBus.addEventListener(EVENT_NAME_BROADCAST_DRAG, handleBroadcastDrag);
 		}
 
-		if (syncWithSameId && onDrag) {
-			handleBroadcastDragForSync = (e: CustomEvent) => {
-				// Get reference values via refBus
-				const { id, onDrag } = refBus.current;
-				const customEvent = e as CustomEvent<BroadcastDragEvent>; // For drag events of shapes with the same ID but not this instance, fire sync drag event
-				if (customEvent.detail.id === id && e.target !== ref.current) {
-					// Get cursor position in SVG coordinate system
-					const svgCursorPoint = getSvgPoint(
-						customEvent.detail.clientX,
-						customEvent.detail.clientY,
-						ref.current,
-					);
-
-					const dragEvent = {
-						eventId: customEvent.detail.eventId,
-						eventType: customEvent.detail.eventType,
-						id,
-						startX: customEvent.detail.startX,
-						startY: customEvent.detail.startY,
-						endX: customEvent.detail.endX,
-						endY: customEvent.detail.endY,
-						cursorX: svgCursorPoint.x, // Sync cursor position as well
-						cursorY: svgCursorPoint.y, // Sync cursor position as well
-					};
-
-					onDrag?.(dragEvent);
-				}
-			};
-			eventBus.addEventListener(
-				EVENT_NAME_BROADCAST_DRAG,
-				handleBroadcastDragForSync,
-			);
-		}
-
 		return () => {
 			if (handleBroadcastDrag) {
 				eventBus.removeEventListener(
 					EVENT_NAME_BROADCAST_DRAG,
 					handleBroadcastDrag,
-				);
-			}
-
-			if (handleBroadcastDragForSync) {
-				eventBus.removeEventListener(
-					EVENT_NAME_BROADCAST_DRAG,
-					handleBroadcastDragForSync,
 				);
 			}
 		};
@@ -583,7 +536,8 @@ export const useDrag = (props: DragProps) => {
 				const dragPoint = getPointOnDrag(
 					customEvent.detail.clientX,
 					customEvent.detail.clientY,
-				); // Get cursor position in SVG coordinate system
+				);
+				// Get cursor position in SVG coordinate system
 				const svgCursorPoint = getSvgPoint(
 					customEvent.detail.clientX,
 					customEvent.detail.clientY,

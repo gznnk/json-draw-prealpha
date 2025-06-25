@@ -10,5 +10,4 @@ export type DiagramBaseData = {
 	type: DiagramType;
 	x: number;
 	y: number;
-	syncWithSameId?: boolean; // Non-persistent property. TODO: Separate persistent and non-persistent properties
 };

@@ -49,7 +49,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	isMultiSelectSource,
 	connectPoints,
 	showConnectPoints = true,
-	syncWithSameId = false,
 	text,
 	textType,
 	fontColor,
@@ -165,7 +164,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		type: "Ellipse",
 		x,
 		y,
-		syncWithSameId,
 		ref: svgRef,
 		onDrag: handleDrag,
 		onDragOver: handleDragOver,
@@ -190,7 +188,12 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		onHoverChange: handleHover,
 	});
 	// Compose props for EllipseElement
-	const composedProps = mergeProps(dragProps, clickProps, selectProps, hoverProps);
+	const composedProps = mergeProps(
+		dragProps,
+		clickProps,
+		selectProps,
+		hoverProps,
+	);
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
 	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here

@@ -40,7 +40,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 	keepProportion,
 	isSelected,
 	isMultiSelectSource,
-	syncWithSameId = false,
 	initialWidth,
 	initialHeight,
 	svgText,
@@ -89,7 +88,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 		type: "Rectangle",
 		x,
 		y,
-		syncWithSameId,
 		ref: svgRef,
 		onDrag: handleDrag,
 	});

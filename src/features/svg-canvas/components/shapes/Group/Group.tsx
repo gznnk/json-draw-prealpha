@@ -37,7 +37,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 	items,
 	showConnectPoints = true,
 	showOutline = false,
-	syncWithSameId = false,
 	onDrag,
 	onClick,
 	onSelect,
@@ -261,7 +260,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 			showConnectPoints: doShowConnectPoints,
 			// Show outline on child elements when group is selected or when parent requests outline display for child elements
 			showOutline: isSelected || showOutline,
-			syncWithSameId,
 			onClick: handleChildDiagramClick,
 			onSelect: handleChildDiagramSelect,
 			onDrag: handleChildDiagramDrag,

@@ -37,7 +37,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 	keepProportion,
 	isSelected,
 	isMultiSelectSource,
-	syncWithSameId = false,
 	base64Data,
 	showOutline = false,
 	onDrag,
@@ -83,7 +82,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 		type: "Rectangle",
 		x,
 		y,
-		syncWithSameId,
 		ref: svgRef,
 		onDrag: handleDrag,
 	});

@@ -22,7 +22,6 @@ export const DEFAULT_DIAGRAM_BASE_DATA = {
 	type: "Rectangle",
 	x: 0,
 	y: 0,
-	syncWithSameId: false,
 } as const satisfies DiagramBaseData;
 
 /**
