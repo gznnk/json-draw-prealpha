@@ -96,6 +96,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
+		isSelected,
 		ref: svgRef,
 		onSelect,
 	});

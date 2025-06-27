@@ -102,6 +102,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
+		isSelected,
 		ref: svgRef,
 		onSelect,
 	});

@@ -3,7 +3,6 @@ import type React from "react";
 import { useRef, useState } from "react";
 
 // Import types.
-import type { DiagramType } from "../types/base/DiagramType";
 import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
 
 // Import utils.
@@ -18,7 +17,6 @@ import { DRAG_DEAD_ZONE } from "../constants/Constants";
  */
 export type SelectProps = {
 	id: string;
-	type?: DiagramType;
 	isSelected?: boolean;
 	ref: React.RefObject<SVGElement>;
 	onSelect?: (e: DiagramSelectEvent) => void;
@@ -43,6 +41,8 @@ export const useSelect = (props: SelectProps) => {
 	// Element coordinates at pointer down
 	const startX = useRef(0);
 	const startY = useRef(0);
+	// State of selection at pointer down
+	const wasSelectedOnPointerDown = useRef(false);
 
 	/**
 	 * Pointer down event handler within the select area
@@ -52,11 +52,12 @@ export const useSelect = (props: SelectProps) => {
 			// Do nothing for non-left clicks
 			return;
 		}
-
 		// Process the event only if the ID of the element where the pointer event occurred matches the ID of this select area
 		if ((e.target as HTMLElement).id === id) {
 			// Set the flag that the pointer is pressed
 			isPointerDown.current = true;
+			// Save the current selection state
+			wasSelectedOnPointerDown.current = isSelected || false;
 
 			// Get current SVG coordinates and remember them
 			const svgPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
@@ -95,10 +96,13 @@ export const useSelect = (props: SelectProps) => {
 
 	/**
 	 * Pointer up event handler within the select area
-	 */
-	const handlePointerUp = (): void => {
-		if (isPointerDown.current && !isDragging && isSelected) {
-			// If pointer up after clicking (not dragging) and element is already selected, notify reselect event
+	 */ const handlePointerUp = (): void => {
+		if (
+			isPointerDown.current &&
+			!isDragging &&
+			wasSelectedOnPointerDown.current
+		) {
+			// If pointer up after clicking (not dragging) and element was selected on pointer down, notify reselect event
 			onSelect?.({
 				eventId: newEventId(),
 				id,
