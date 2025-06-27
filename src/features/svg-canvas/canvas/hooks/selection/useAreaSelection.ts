@@ -130,6 +130,7 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 				onSelect({
 					eventId: newEventId(),
 					id: itemsToSelect[0],
+					reselect: false,
 				});
 
 				// Add remaining items with multi-select
@@ -137,6 +138,7 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 					onSelect({
 						eventId: newEventId(),
 						id: itemsToSelect[i],
+						reselect: false,
 					});
 				}
 			}

@@ -94,6 +94,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onSelect?.({
 				eventId: e.eventId,
 				id,
+				reselect: e.reselect,
 			});
 		} else if (selectedChild.id !== e.id) {
 			// If a shape in the group is selected and a different shape in the group is selected, make that shape selected

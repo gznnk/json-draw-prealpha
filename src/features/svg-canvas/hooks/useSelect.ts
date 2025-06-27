@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 
 // Import types.
 import type { DiagramType } from "../types/base/DiagramType";
-import type { DiagramPointerEvent } from "../types/events/DiagramPointerEvent";
+import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
 
 // Import utils.
 import { newEventId } from "../utils/common/newEventId";
@@ -21,8 +21,7 @@ export type SelectProps = {
 	type?: DiagramType;
 	isSelected?: boolean;
 	ref: React.RefObject<SVGElement>;
-	onSelect?: (e: DiagramPointerEvent) => void;
-	onReselect?: (e: DiagramPointerEvent) => void;
+	onSelect?: (e: DiagramSelectEvent) => void;
 };
 
 /**
@@ -33,11 +32,10 @@ export type SelectProps = {
  * @param {DiagramType} [props.type] Type of diagram
  * @param {boolean} [props.isSelected] Whether the element is already selected
  * @param {React.RefObject<SVGElement>} props.ref Reference to the element
- * @param {(e: DiagramPointerEvent) => void} [props.onSelect] Event handler for selection
- * @param {(e: DiagramPointerEvent) => void} [props.onReselect] Event handler for reselection
+ * @param {(e: DiagramSelectEvent) => void} [props.onSelect] Event handler for selection
  */
 export const useSelect = (props: SelectProps) => {
-	const { id, isSelected, ref, onSelect, onReselect } = props;
+	const { id, isSelected, ref, onSelect } = props;
 	// Flag whether pointer is pressed down in this select area
 	const isPointerDown = useRef(false);
 	// Flag whether dragging
@@ -69,6 +67,7 @@ export const useSelect = (props: SelectProps) => {
 			onSelect?.({
 				eventId: newEventId(),
 				id,
+				reselect: false,
 			});
 		}
 	};
@@ -100,9 +99,10 @@ export const useSelect = (props: SelectProps) => {
 	const handlePointerUp = (): void => {
 		if (isPointerDown.current && !isDragging && isSelected) {
 			// If pointer up after clicking (not dragging) and element is already selected, notify reselect event
-			onReselect?.({
+			onSelect?.({
 				eventId: newEventId(),
 				id,
+				reselect: true,
 			});
 		}
 
