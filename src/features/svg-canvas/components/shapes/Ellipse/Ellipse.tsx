@@ -46,6 +46,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	strokeWidth,
 	keepProportion,
 	isSelected,
+	isAncestorSelected = false,
 	connectPoints,
 	showConnectPoints = true,
 	text,
@@ -174,14 +175,13 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		id,
 		x,
 		y,
+		isAncestorSelected,
 		ref: svgRef,
 		onClick,
 	});
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
-		isSelected,
-		ref: svgRef,
 		onSelect,
 	});
 	// Generate properties for hovering

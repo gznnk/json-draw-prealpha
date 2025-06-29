@@ -50,6 +50,7 @@ import { useZoom } from "./hooks/navigation/useZoom";
 import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
 import { useSelect } from "./hooks/selection/useSelect";
 import { useSelectAll } from "./hooks/selection/useSelectAll";
+import { useClick } from "./hooks/actions/useClick";
 
 /**
  * Props for the useSvgCanvas hook.
@@ -146,6 +147,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the clear all selection event.
 	const onClearAllSelection = useClearAllSelection(canvasHooksProps);
 
+	// Handler for the click event.
+	const onClick = useClick(canvasHooksProps);
+
 	// Handler for the delete event.
 	const onDelete = useDelete(canvasHooksProps);
 
@@ -212,6 +216,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		eventBus: eventBusRef.current,
 		selectionState,
 		onDrag,
+		onClick,
 		onSelect,
 		onSelectAll,
 		onClearAllSelection,

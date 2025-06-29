@@ -4,4 +4,5 @@
 export type DiagramClickEvent = {
 	eventId: string;
 	id: string;
+	isAncestorSelected: boolean;
 };

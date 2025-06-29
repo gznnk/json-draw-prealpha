@@ -50,6 +50,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	stroke,
 	strokeWidth,
 	isSelected,
+	isAncestorSelected = false,
 	connectPoints,
 	showConnectPoints = true,
 	text,
@@ -178,14 +179,13 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		id,
 		x,
 		y,
+		isAncestorSelected,
 		ref: svgRef,
 		onClick,
 	});
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
-		isSelected,
-		ref: svgRef,
 		onSelect,
 	});
 	// Generate properties for hovering
@@ -194,7 +194,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		onHoverChange: handleHover,
 	});
 	// Generate properties for file drop
-	const fileDropProps = useFileDrop({ id, onFileDrop }); // Compose props for RectangleElement
+	const fileDropProps = useFileDrop({ id, onFileDrop });
+	// Compose props for RectangleElement
 	const composedProps = mergeProps(
 		dragProps,
 		clickProps,

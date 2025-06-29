@@ -36,6 +36,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 	scaleY,
 	keepProportion,
 	isSelected,
+	isAncestorSelected = false,
 	base64Data,
 	showOutline = false,
 	showTransformControls = false,
@@ -90,14 +91,13 @@ const ImageComponent: React.FC<ImageProps> = ({
 		id,
 		x,
 		y,
+		isAncestorSelected,
 		ref: svgRef,
 		onClick,
 	});
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
-		isSelected,
-		ref: svgRef,
 		onSelect,
 	});
 	// Compose props for ImageElement

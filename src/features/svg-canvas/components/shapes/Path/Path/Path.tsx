@@ -58,6 +58,7 @@ const PathComponent: React.FC<PathProps> = ({
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
+	isAncestorSelected = false,
 	showOutline = false,
 	showTransformControls = false,
 	items = [],
@@ -136,6 +137,7 @@ const PathComponent: React.FC<PathProps> = ({
 		onClick?.({
 			eventId: e.eventId,
 			id,
+			isAncestorSelected: e.isAncestorSelected,
 		});
 	}, []);
 	// Polyline selection state control
@@ -280,13 +282,12 @@ const PathComponent: React.FC<PathProps> = ({
 		id,
 		x,
 		y,
+		isAncestorSelected,
 		ref: dragSvgRef,
 		onClick: handleClick,
 	}); // Generate properties for selection
 	const selectProps = useSelect({
 		id,
-		isSelected,
-		ref: dragSvgRef,
 		onSelect,
 	});
 	// Compose props for path element

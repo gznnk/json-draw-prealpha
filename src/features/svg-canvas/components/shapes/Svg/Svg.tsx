@@ -39,6 +39,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 	scaleY,
 	keepProportion,
 	isSelected,
+	isAncestorSelected = false,
 	initialWidth,
 	initialHeight,
 	svgText,
@@ -96,14 +97,13 @@ const SvgComponent: React.FC<SvgProps> = ({
 		id,
 		x,
 		y,
+		isAncestorSelected,
 		ref: svgRef,
 		onClick,
 	});
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
-		isSelected,
-		ref: svgRef,
 		onSelect,
 	});
 	// Compose props for SvgRectElement

@@ -18,6 +18,7 @@ import { MULTI_SELECT_GROUP } from "../../SvgCanvasConstants";
 
 // Import utility functions.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
+import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
 
 /**
  * Custom hook to handle select events on the canvas.
@@ -42,43 +43,86 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 		} = refBus.current;
 
 		setCanvasState((prevState) => {
-			// Update the selected state of the items.
-			const items = applyFunctionRecursively(prevState.items, (item) => {
-				if (!isSelectableData(item)) {
-					// Skip if the item is not selectable.
-					return item;
-				}
+			// If the item is already selected, do nothing.
+			const selectedItem = getSelectedItems(prevState.items).find(
+				(item) => item.id === e.id,
+			);
+			if (selectedItem) {
+				return prevState; // If the item is already selected, do nothing.
+			}
 
-				if (item.id === e.id) {
-					if (isCtrlPressed) {
-						// When multiple selection, toggle the selection state of the selected diagram.
+			let targetId = e.id;
+			// Check if the selected item is in a group.
+			const ancestorsOfSelected = getAncestorItemsById(e.id, prevState);
+			if (ancestorsOfSelected.length > 0) {
+				const selectedAncestorIdx = ancestorsOfSelected.findIndex(
+					(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
+				);
+				if (selectedAncestorIdx >= 0) {
+					if (e.allowDescendantSelection) {
+						if (selectedAncestorIdx < ancestorsOfSelected.length - 1) {
+							// Select the next unselected ancestor.
+							targetId = ancestorsOfSelected[selectedAncestorIdx + 1].id;
+						} else {
+							// If the last ancestor is selected, select the item triggering the event.
+						}
+					} else {
+						return prevState; // If the selected ancestor is already selected, do nothing.
+					}
+				} else {
+					// If the selected item is not found in the ancestors, use the first ancestor's ID.
+					targetId = ancestorsOfSelected[0].id;
+				}
+			}
+
+			// Update the selected state of the items.
+			const items = applyFunctionRecursively(
+				prevState.items,
+				(item, ancestors) => {
+					if (!isSelectableData(item)) {
+						// Skip if the item is not selectable.
+						return item;
+					}
+
+					const isAncestorSelected = ancestors.some(
+						(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
+					);
+
+					if (item.id === targetId) {
+						if (isCtrlPressed) {
+							// When multiple selection, toggle the selection state of the selected diagram.
+							return {
+								...item,
+								isSelected: !item.isSelected,
+								showTransformControls: !item.isSelected, // Toggle transform controls visibility.
+							};
+						}
+
+						// Apply the selected state to the diagram.
 						return {
 							...item,
-							isSelected: !item.isSelected,
-							showTransformControls: !item.isSelected, // Toggle transform controls visibility.
+							isSelected: true,
+							showTransformControls: true, // Show transform controls when selected.
 						};
 					}
 
-					// Apply the selected state to the diagram.
+					if (isCtrlPressed) {
+						// When multiple selection, do not change the selection state of the selected diagram.
+						return {
+							...item,
+							isAncestorSelected,
+						};
+					}
+
 					return {
 						...item,
-						isSelected: true,
-						showTransformControls: true, // Show transform controls when selected.
+						// When single selection, clear the selection state of all diagrams except the selected one.
+						isSelected: false,
+						showTransformControls: false, // Hide transform controls when not selected.
+						isAncestorSelected,
 					};
-				}
-
-				if (isCtrlPressed && item.isSelected) {
-					// When multiple selection, do not change the selection state of the selected diagram.
-					return item;
-				}
-
-				return {
-					...item,
-					// When single selection, clear the selection state of all diagrams except the selected one.
-					isSelected: false,
-					showTransformControls: false, // Hide transform controls when not selected.
-				};
-			});
+				},
+			);
 
 			// The following code handles multiple selection.
 

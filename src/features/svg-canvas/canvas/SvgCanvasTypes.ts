@@ -25,6 +25,7 @@ import type { EventBus } from "../../../shared/event-bus/EventBus";
 
 // Import area selection types.
 import type { AreaSelectionState } from "./hooks/selection/useAreaSelection";
+import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
 
 /**
  * Type for the data of the SvgCanvas.
@@ -96,6 +97,7 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onSelectAll?: () => void;
 	onClearAllSelection?: () => void;
 	onDelete?: () => void;
+	onClick?: (e: DiagramClickEvent) => void;
 	onConnect?: (e: DiagramConnectEvent) => void;
 	onTextEdit?: (e: DiagramTextEditEvent) => void;
 	onTextChange?: (e: DiagramTextChangeEvent) => void;

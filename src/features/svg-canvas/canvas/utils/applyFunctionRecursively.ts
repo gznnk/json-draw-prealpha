@@ -6,16 +6,18 @@ import { isItemableData } from "../../utils/validation/isItemableData";
  *
  * @param items - The list of items to apply the function to.
  * @param updateFunction - The function to apply to each item.
+ * @param ancestors - The list of ancestor items for the current recursion level.
  * @returns {Diagram[]} - The updated list of items.
  */
 export const applyFunctionRecursively = (
 	items: Diagram[],
-	updateFunction: (item: Diagram) => Diagram,
+	updateFunction: (item: Diagram, ancestors: Diagram[]) => Diagram,
+	ancestors: Diagram[] = [],
 ): Diagram[] => {
 	let isItemChanged = false;
 	const newItems: Diagram[] = [];
 	for (const item of items) {
-		const newItem = updateFunction(item);
+		const newItem = updateFunction(item, ancestors);
 		newItems.push(newItem);
 
 		// Determine if the reference of the item has changed
@@ -27,6 +29,7 @@ export const applyFunctionRecursively = (
 			const newGroupItems = applyFunctionRecursively(
 				item.items ?? [],
 				updateFunction,
+				[...ancestors, newItem],
 			);
 			// If the reference of the array has changed, mark it as modified.
 			if (newGroupItems !== item.items) {

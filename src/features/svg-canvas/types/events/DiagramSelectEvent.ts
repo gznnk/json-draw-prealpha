@@ -5,5 +5,5 @@
 export type DiagramSelectEvent = {
 	eventId: string;
 	id: string;
-	reselect: boolean;
+	allowDescendantSelection?: boolean;
 };

@@ -10,6 +10,8 @@ import { isSelectableData } from "../../../utils/validation/isSelectableData";
 
 // Imports related to this component.
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
+import { isItemableData } from "../../../utils/validation/isItemableData";
 
 /**
  * Custom hook to handle select all events on the canvas.
@@ -38,6 +40,24 @@ export const useSelectAll = (props: CanvasHooksProps) => {
 						isSelected: false, // Deselect ConnectLine items.
 					};
 				}
+
+				if (isItemableData(item)) {
+					return {
+						...item,
+						items: applyFunctionRecursively(item.items, (childItem) => {
+							if (!isSelectableData(childItem)) {
+								// Ignore non-selectable child items.
+								return childItem;
+							}
+							return {
+								...childItem,
+								isAncestorSelected: true,
+							};
+						}),
+						isSelected: true,
+					};
+				}
+
 				return {
 					...item,
 					isSelected: true,

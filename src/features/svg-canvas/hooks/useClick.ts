@@ -1,6 +1,6 @@
 // Import React.
 import type React from "react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 // Import types.
 import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
@@ -19,6 +19,7 @@ export type ClickProps = {
 	id: string;
 	x: number;
 	y: number;
+	isAncestorSelected?: boolean;
 	ref: React.RefObject<SVGElement>;
 	onClick?: (e: DiagramClickEvent) => void;
 };
@@ -34,15 +35,18 @@ export type ClickProps = {
  * @param {(e: DiagramClickEvent) => void} [props.onClick] Event handler for click
  */
 export const useClick = (props: ClickProps) => {
-	const { id, x, y, ref, onClick } = props;
+	const { id, x, y, ref, isAncestorSelected, onClick } = props;
 
 	// Flag whether pointer is pressed down in this click area
 	const isPointerDown = useRef(false);
 	// Flag whether dragging
-	const [isDragging, setIsDragging] = useState(false);
+	const isDragging = useRef(false);
+	// Flag whether isAncestorSelected is true on pointer down
+	const isAncestorSelectedOnStart = useRef(false);
 	// Click area coordinates at pointer down
 	const startX = useRef(0);
 	const startY = useRef(0);
+
 	/**
 	 * Pointer down event handler within the click area
 	 */
@@ -56,6 +60,8 @@ export const useClick = (props: ClickProps) => {
 		if ((e.target as HTMLElement).id === id) {
 			// Set the flag that the pointer is pressed
 			isPointerDown.current = true;
+			// Set the flag whether isAncestorSelected is true on pointer down
+			isAncestorSelectedOnStart.current = isAncestorSelected ?? false;
 
 			// Remember the click area coordinates at pointer down
 			startX.current = x;
@@ -75,29 +81,32 @@ export const useClick = (props: ClickProps) => {
 		const svgPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
 
 		if (
-			!isDragging &&
+			!isDragging.current &&
 			(Math.abs(svgPoint.x - startX.current) > DRAG_DEAD_ZONE ||
 				Math.abs(svgPoint.y - startY.current) > DRAG_DEAD_ZONE)
 		) {
 			// Start dragging when not dragging and pointer movement exceeds a certain threshold
-			setIsDragging(true);
+			isDragging.current = true;
 		}
 	};
+
 	/**
 	 * Pointer up event handler within the click area
 	 */
 	const handlePointerUp = (_e: React.PointerEvent<SVGElement>): void => {
-		if (isPointerDown.current && !isDragging) {
+		if (isPointerDown.current && !isDragging.current) {
 			// If pointer up after clicking (not dragging), notify click event
 			onClick?.({
 				eventId: newEventId(),
 				id,
+				isAncestorSelected: isAncestorSelectedOnStart.current,
 			});
 		}
 
 		// Clear flags
-		setIsDragging(false);
+		isDragging.current = false;
 		isPointerDown.current = false;
+		isAncestorSelectedOnStart.current = false;
 	};
 
 	return {
