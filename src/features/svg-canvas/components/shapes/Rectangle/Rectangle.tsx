@@ -179,6 +179,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		id,
 		x,
 		y,
+		isSelected,
 		isAncestorSelected,
 		ref: svgRef,
 		onClick,

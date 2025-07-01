@@ -175,6 +175,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		id,
 		x,
 		y,
+		isSelected,
 		isAncestorSelected,
 		ref: svgRef,
 		onClick,

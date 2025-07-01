@@ -137,7 +137,8 @@ const PathComponent: React.FC<PathProps> = ({
 		onClick?.({
 			eventId: e.eventId,
 			id,
-			isAncestorSelected: e.isAncestorSelected,
+			isSelectedOnPointerDown: e.isSelectedOnPointerDown,
+			isAncestorSelectedOnPointerDown: e.isAncestorSelectedOnPointerDown,
 		});
 	}, []);
 	// Polyline selection state control
@@ -282,6 +283,7 @@ const PathComponent: React.FC<PathProps> = ({
 		id,
 		x,
 		y,
+		isSelected,
 		isAncestorSelected,
 		ref: dragSvgRef,
 		onClick: handleClick,

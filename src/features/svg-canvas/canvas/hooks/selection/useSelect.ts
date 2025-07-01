@@ -17,6 +17,7 @@ import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
 import { isItemableData } from "../../../utils/validation/isItemableData";
+import { getDiagramById } from "../../../utils/common/getDiagramById";
 
 /**
  * Custom hook to handle select events on the canvas.
@@ -38,8 +39,13 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 		} = refBus.current;
 
 		setCanvasState((prevState) => {
+			// Check the selection state of the item triggering the event.
+			const eventTriggeredItem = getDiagramById(prevState.items, e.id);
+			const isEventTriggeredItemSelected =
+				isSelectableData(eventTriggeredItem) && eventTriggeredItem.isSelected;
 			// Get the ancestors of the selected item.
 			const ancestorsOfSelectingItem = getAncestorItemsById(e.id, prevState);
+
 			// If the ancestors of the selected item are empty, it means the item is not part of a group.
 			const isGroupedItemSelection = ancestorsOfSelectingItem.length > 0;
 			// Find the index of the first ancestor that is selected.
@@ -49,63 +55,121 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 			// Check if the selected ancestor is selected.
 			const isAncestorSelected = selectedAncestorIdx >= 0;
 
-			if (!isCtrlPressed) {
-				// Single selection logic.
-				// Calculate the new selection target ID based on the selection mode.
-				// In single selection mode, clear the selection state of all items except the target item.
-				let newSelectionTargetId: string;
+			// Calculate the new selection target ID based on the selection mode.
+			let newSelectionTargetId: string;
+			let newSelectionState = true;
 
-				if (!isGroupedItemSelection) {
-					// If the item is not part of a group, use the item's ID.
+			if (!isGroupedItemSelection) {
+				// Non-grouped item selection logic.
+				if (!isEventTriggeredItemSelected) {
+					// If the item is not selected and not part of a group, select the item.
 					newSelectionTargetId = e.id;
+				} else if (
+					isCtrlPressed &&
+					e.isTriggeredByClick &&
+					e.isSelectedOnPointerDown
+				) {
+					// If the item is already selected, deselect it.
+					newSelectionTargetId = e.id;
+					newSelectionState = false;
 				} else {
-					// Grouped item selection logic.
-					if (isAncestorSelected) {
-						if (!e.allowDescendantSelection) {
-							// If the selected ancestor is selected and does not allow descendant selection, do nothing.
+					// If the item is already selected and Ctrl is not pressed, do nothing.
+					return prevState;
+				}
+			} else {
+				// Grouped item selection logic.
+				if (isAncestorSelected) {
+					if (!e.isTriggeredByClick) {
+						// If the selection is not triggered by a click, do not change the selection state.
+						return prevState;
+					}
+					if (!e.isAncestorSelectedOnPointerDown) {
+						// If the ancestor is not selected on pointer down,
+						// do not change the selection state.
+						return prevState;
+					}
+					// Check if the selected ancestor is the parent of the selected item.
+					const isSelectedAncestorIsParent =
+						selectedAncestorIdx === ancestorsOfSelectingItem.length - 1;
+					if (isSelectedAncestorIsParent) {
+						if (!isEventTriggeredItemSelected) {
+							if (!isCtrlPressed) {
+								// If the selected ancestor is the parent of the selected item and Ctrl is not pressed,
+								// select the item triggering the event.
+								newSelectionTargetId = e.id;
+							} else {
+								// If the selected ancestor is the parent of the selected item and Ctrl is pressed,
+								// deselect the parent item.
+								newSelectionTargetId =
+									ancestorsOfSelectingItem[selectedAncestorIdx].id;
+								newSelectionState = false;
+							}
+						} else {
+							// If the selected ancestor is the parent of the selected item and the item is already selected,
+							// do not change the selection state.
 							return prevState;
 						}
-						// Check if the selected ancestor is the parent of the selected item.
-						const isSelectedAncestorIsParent =
-							selectedAncestorIdx === ancestorsOfSelectingItem.length - 1;
-						if (isSelectedAncestorIsParent) {
-							// If the selected ancestor is the parent of the selected item,
-							// select the item triggering the event.
-							newSelectionTargetId = e.id;
+					} else {
+						if (!isEventTriggeredItemSelected) {
+							if (!isCtrlPressed) {
+								// If the selected ancestor is not the parent of the selected item and Ctrl is not pressed,
+								// select the next unselected ancestor.
+								newSelectionTargetId =
+									ancestorsOfSelectingItem[selectedAncestorIdx + 1].id;
+							} else {
+								// If the selected ancestor is not the parent of the selected item and Ctrl is pressed,
+								// deselect the ancestor item.
+								newSelectionTargetId =
+									ancestorsOfSelectingItem[selectedAncestorIdx].id;
+								newSelectionState = false;
+							}
 						} else {
-							// If the selected ancestor is not the parent of the selected item,
-							// select the next unselected ancestor.
-							newSelectionTargetId =
-								ancestorsOfSelectingItem[selectedAncestorIdx + 1].id;
+							// If the selected ancestor is not the parent of the selected item and the item is already selected,
+							// do not change the selection state.
+							return prevState;
+						}
+					}
+				} else {
+					// Check if any of the already selected items belong to the same group as the currently selected item.
+					const isSelectedItemExistsInSameGroup = ancestorsOfSelectingItem.some(
+						(ancestor) =>
+							isItemableData(ancestor) &&
+							ancestor.items.some((item) => item.id === e.id) &&
+							ancestor.items.some(
+								(item) => isSelectableData(item) && item.isSelected,
+							),
+					);
+					if (isSelectedItemExistsInSameGroup) {
+						if (!isEventTriggeredItemSelected) {
+							// If the item is not selected and belongs to a group with selected items, select the item.
+							newSelectionTargetId = e.id;
+						} else if (
+							isCtrlPressed &&
+							e.isTriggeredByClick &&
+							e.isSelectedOnPointerDown
+						) {
+							// If the item is already selected and Ctrl is pressed, deselect the item.
+							newSelectionTargetId = e.id;
+							newSelectionState = false;
+						} else {
+							// If the item is already selected and Ctrl is not pressed, do nothing.
+							return prevState;
 						}
 					} else {
-						// Check if any of the already selected items belong to the same group as the currently selected item.
-						const isSelectedItemExistsInSameGroup =
-							ancestorsOfSelectingItem.some(
+						// Check if there is a common ancestor with selected items.
+						const reversedAncestorsOfSelectingItem = ancestorsOfSelectingItem
+							.slice()
+							.reverse();
+						const commonAncestorOfSelectedItemIdx =
+							reversedAncestorsOfSelectingItem.findIndex(
 								(ancestor) =>
 									isItemableData(ancestor) &&
-									ancestor.items.some((item) => item.id === e.id) &&
-									ancestor.items.some(
-										(item) => isSelectableData(item) && item.isSelected,
-									),
+									getSelectedItems(ancestor.items).length > 0,
 							);
-						if (isSelectedItemExistsInSameGroup) {
-							// If any selected item belongs to the same group, select the item triggering the event.
-							newSelectionTargetId = e.id;
-						} else {
-							// Check if there is a common ancestor with selected items.
-							const reversedAncestorsOfSelectingItem = ancestorsOfSelectingItem
-								.slice()
-								.reverse();
-							const commonAncestorOfSelectedItemIdx =
-								reversedAncestorsOfSelectingItem.findIndex(
-									(ancestor) =>
-										isItemableData(ancestor) &&
-										getSelectedItems(ancestor.items).length > 0,
-								);
-							if (0 <= commonAncestorOfSelectedItemIdx) {
+						if (0 <= commonAncestorOfSelectedItemIdx) {
+							if (!isEventTriggeredItemSelected) {
 								if (commonAncestorOfSelectedItemIdx === 0) {
-									// If the common ancestor is the last ancestor,
+									// If there is a common ancestor with selected items and the item is not selected,
 									// select the item triggering the event.
 									newSelectionTargetId = e.id;
 								} else {
@@ -115,132 +179,97 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 											commonAncestorOfSelectedItemIdx - 1
 										].id;
 								}
+							} else if (
+								isCtrlPressed &&
+								e.isTriggeredByClick &&
+								e.isSelectedOnPointerDown
+							) {
+								// If the item is already selected and Ctrl is pressed, deselect the item.
+								newSelectionTargetId = e.id;
+								newSelectionState = false;
 							} else {
+								// If the item is already selected and Ctrl is not pressed, do nothing.
+								return prevState;
+							}
+						} else {
+							if (!isEventTriggeredItemSelected) {
 								// If there is no common ancestor with selected items, select the first ancestor.
 								newSelectionTargetId = ancestorsOfSelectingItem[0].id;
+							} else if (
+								isCtrlPressed &&
+								e.isTriggeredByClick &&
+								e.isSelectedOnPointerDown
+							) {
+								// If the item is already selected and Ctrl is pressed, deselect the item.
+								newSelectionTargetId = e.id;
+								newSelectionState = false;
+							} else {
+								// If the item is already selected and Ctrl is not pressed, do nothing.
+								return prevState;
 							}
 						}
 					}
-				}
-
-				// Update the selected state of the items.
-				return {
-					...prevState,
-					items: applyFunctionRecursively(
-						prevState.items,
-						(item, ancestors) => {
-							if (!isSelectableData(item)) {
-								// Skip if the item is not selectable.
-								return item;
-							}
-
-							const isAncestorSelected = ancestors.some(
-								(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
-							);
-
-							if (item.id === newSelectionTargetId) {
-								// Apply the selected state to the diagram.
-								return {
-									...item,
-									isSelected: true,
-									showTransformControls: true, // Show transform controls when selected.
-									isAncestorSelected: false, // Clear ancestor selection state.
-								};
-							}
-
-							// Clear the selection state of all diagrams except the selected one.
-							return {
-								...item,
-								isSelected: false,
-								showTransformControls: false, // Hide transform controls when not selected.
-								isAncestorSelected,
-							};
-						},
-					),
-				};
-			}
-
-			// Multi-selection logic.
-			// TODO: implement multi-select logic.
-
-			// If the item is already selected, do nothing.
-			const selectedItem = getSelectedItems(prevState.items).find(
-				(item) => item.id === e.id,
-			);
-			if (selectedItem) {
-				return prevState; // If the item is already selected, do nothing.
-			}
-
-			let targetId = e.id;
-
-			if (ancestorsOfSelectingItem.length > 0) {
-				if (selectedAncestorIdx >= 0) {
-					if (e.allowDescendantSelection) {
-						if (selectedAncestorIdx < ancestorsOfSelectingItem.length - 1) {
-							// Select the next unselected ancestor.
-							targetId = ancestorsOfSelectingItem[selectedAncestorIdx + 1].id;
-						} else {
-							// If the last ancestor is selected, select the item triggering the event.
-						}
-					} else {
-						return prevState; // If the selected ancestor is already selected, do nothing.
-					}
-				} else {
-					// If the selected item is not found in the ancestors, use the first ancestor's ID.
-					targetId = ancestorsOfSelectingItem[0].id;
 				}
 			}
 
 			// Update the selected state of the items.
-			const items = applyFunctionRecursively(
-				prevState.items,
-				(item, ancestors) => {
-					if (!isSelectableData(item)) {
-						// Skip if the item is not selectable.
-						return item;
-					}
+			let items = applyFunctionRecursively(prevState.items, (item) => {
+				if (!isSelectableData(item)) {
+					// Skip if the item is not selectable.
+					return item;
+				}
 
-					const isAncestorSelected = ancestors.some(
-						(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
-					);
-
-					if (item.id === targetId) {
-						if (isCtrlPressed) {
-							// When multiple selection, toggle the selection state of the selected diagram.
-							return {
-								...item,
-								isSelected: !item.isSelected,
-								showTransformControls: !item.isSelected, // Toggle transform controls visibility.
-							};
-						}
-
-						// Apply the selected state to the diagram.
-						return {
-							...item,
-							isSelected: true,
-							showTransformControls: true, // Show transform controls when selected.
-						};
-					}
-
+				if (item.id === newSelectionTargetId) {
 					if (isCtrlPressed) {
-						// When multiple selection, do not change the selection state of the selected diagram.
+						// If Ctrl is pressed, toggle the selection state of the item.
 						return {
 							...item,
-							isAncestorSelected,
+							isSelected: newSelectionState,
+							showTransformControls: newSelectionState,
 						};
 					}
-
+					// Apply the selected state to the diagram.
 					return {
 						...item,
-						// When single selection, clear the selection state of all diagrams except the selected one.
-						isSelected: false,
-						showTransformControls: false, // Hide transform controls when not selected.
-						isAncestorSelected,
+						isSelected: true,
+						showTransformControls: true, // Show transform controls when selected.
 					};
-				},
-			);
+				}
 
-			// The following code handles multiple selection.
+				if (isCtrlPressed) {
+					// If Ctrl is pressed, keep the current selection state.
+					return {
+						...item,
+						showTransformControls: item.isSelected, // Keep transform controls visibility based on current selection state.
+					};
+				}
+
+				// In single selection mode, clear the selection state of all items except the target item.
+				return {
+					...item,
+					isSelected: false,
+					showTransformControls: false, // Hide transform controls when not selected.
+				};
+			});
+
+			// Update isAncestorSelected state for all items.
+			items = applyFunctionRecursively(items, (item, ancestors) => {
+				if (!isSelectableData(item)) {
+					// Skip if the item is not selectable.
+					return item;
+				}
+
+				const isAncestorSelected = ancestors.some(
+					(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
+				);
+
+				return {
+					...item,
+					isAncestorSelected,
+				};
+			});
+
+			// Multi-selection logic.
 
 			// Get the selected diagrams from the updated state.
 			const selectedItems = getSelectedItems(items);
@@ -257,6 +286,17 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					selectedItems,
 					prevState.multiSelectGroup?.keepProportion,
 				);
+
+				// Hide transform controls for all items.
+				items = applyFunctionRecursively(items, (item) => {
+					if (isSelectableData(item)) {
+						return {
+							...item,
+							showTransformControls: false,
+						};
+					}
+					return item; // If not selectable, return item unchanged.
+				});
 			}
 
 			return {

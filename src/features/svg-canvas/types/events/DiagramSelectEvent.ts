@@ -5,5 +5,7 @@
 export type DiagramSelectEvent = {
 	eventId: string;
 	id: string;
-	allowDescendantSelection?: boolean;
+	isTriggeredByClick?: boolean;
+	isSelectedOnPointerDown?: boolean;
+	isAncestorSelectedOnPointerDown?: boolean;
 };

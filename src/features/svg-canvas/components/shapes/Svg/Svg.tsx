@@ -97,6 +97,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 		id,
 		x,
 		y,
+		isSelected,
 		isAncestorSelected,
 		ref: svgRef,
 		onClick,

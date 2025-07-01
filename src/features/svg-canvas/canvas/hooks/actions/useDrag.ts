@@ -92,7 +92,6 @@ export const useDrag = (props: CanvasHooksProps) => {
 							...c,
 							type: "ConnectPoint",
 						})) as ConnectPointData[];
-						movedDiagrams.push(item);
 					}
 				}
 			};
@@ -116,6 +115,7 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 						// Update connect points
 						updateConnectPoints(newItem);
+						movedDiagrams.push(newItem);
 
 						// If the item has children, move them recursively
 						if (isItemableData(newItem)) {
@@ -135,6 +135,7 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 										// Update connect points
 										updateConnectPoints(newChildItem);
+										movedDiagrams.push(newChildItem);
 
 										return newChildItem;
 									}

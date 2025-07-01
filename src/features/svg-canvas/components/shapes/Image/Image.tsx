@@ -91,6 +91,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 		id,
 		x,
 		y,
+		isSelected,
 		isAncestorSelected,
 		ref: svgRef,
 		onClick,

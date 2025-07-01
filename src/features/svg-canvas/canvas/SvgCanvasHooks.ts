@@ -148,7 +148,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onClearAllSelection = useClearAllSelection(canvasHooksProps);
 
 	// Handler for the click event.
-	const onClick = useClick(canvasHooksProps);
+	const onClick = useClick(canvasHooksProps, isCtrlPressed);
 
 	// Handler for the delete event.
 	const onDelete = useDelete(canvasHooksProps);

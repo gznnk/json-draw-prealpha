@@ -9,18 +9,18 @@ import { useSelect } from "../selection/useSelect";
 /**
  * Custom hook to handle click events on the canvas.
  */
-export const useClick = (props: CanvasHooksProps) => {
-	const onSelect = useSelect(props);
+export const useClick = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
+	const onSelect = useSelect(props, isCtrlPressed);
 
 	return useCallback(
 		(e: DiagramClickEvent) => {
-			if (e.isAncestorSelected) {
-				onSelect({
-					eventId: e.eventId,
-					id: e.id,
-					allowDescendantSelection: true,
-				});
-			}
+			onSelect({
+				eventId: e.eventId,
+				id: e.id,
+				isTriggeredByClick: true,
+				isSelectedOnPointerDown: e.isSelectedOnPointerDown,
+				isAncestorSelectedOnPointerDown: e.isAncestorSelectedOnPointerDown,
+			});
 		},
 		[onSelect],
 	);

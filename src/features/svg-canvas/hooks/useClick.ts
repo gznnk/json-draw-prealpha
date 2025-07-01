@@ -19,6 +19,7 @@ export type ClickProps = {
 	id: string;
 	x: number;
 	y: number;
+	isSelected?: boolean;
 	isAncestorSelected?: boolean;
 	ref: React.RefObject<SVGElement>;
 	onClick?: (e: DiagramClickEvent) => void;
@@ -35,14 +36,16 @@ export type ClickProps = {
  * @param {(e: DiagramClickEvent) => void} [props.onClick] Event handler for click
  */
 export const useClick = (props: ClickProps) => {
-	const { id, x, y, ref, isAncestorSelected, onClick } = props;
+	const { id, x, y, ref, isSelected, isAncestorSelected, onClick } = props;
 
 	// Flag whether pointer is pressed down in this click area
 	const isPointerDown = useRef(false);
 	// Flag whether dragging
 	const isDragging = useRef(false);
+	// Flag whether isSelected is true on pointer down
+	const isSelectedOnPointerDown = useRef(false);
 	// Flag whether isAncestorSelected is true on pointer down
-	const isAncestorSelectedOnStart = useRef(false);
+	const isAncestorSelectedOnPointerDown = useRef(false);
 	// Click area coordinates at pointer down
 	const startX = useRef(0);
 	const startY = useRef(0);
@@ -60,8 +63,10 @@ export const useClick = (props: ClickProps) => {
 		if ((e.target as HTMLElement).id === id) {
 			// Set the flag that the pointer is pressed
 			isPointerDown.current = true;
+			// Set the flag whether isSelected is true on pointer down
+			isSelectedOnPointerDown.current = isSelected ?? false;
 			// Set the flag whether isAncestorSelected is true on pointer down
-			isAncestorSelectedOnStart.current = isAncestorSelected ?? false;
+			isAncestorSelectedOnPointerDown.current = isAncestorSelected ?? false;
 
 			// Remember the click area coordinates at pointer down
 			startX.current = x;
@@ -99,14 +104,17 @@ export const useClick = (props: ClickProps) => {
 			onClick?.({
 				eventId: newEventId(),
 				id,
-				isAncestorSelected: isAncestorSelectedOnStart.current,
+				isSelectedOnPointerDown: isSelectedOnPointerDown.current,
+				isAncestorSelectedOnPointerDown:
+					isAncestorSelectedOnPointerDown.current,
 			});
 		}
 
 		// Clear flags
 		isDragging.current = false;
 		isPointerDown.current = false;
-		isAncestorSelectedOnStart.current = false;
+		isSelectedOnPointerDown.current = false;
+		isAncestorSelectedOnPointerDown.current = false;
 	};
 
 	return {
