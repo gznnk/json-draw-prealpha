@@ -149,10 +149,13 @@ export const createBestConnectPath = (
 		}
 	}
 
+	const startPoint = { x: startX, y: startY };
+	const endPoint = { x: endX, y: endY };
+
 	const bestPath =
 		pathList.length !== 0
-			? getBestPath(pathList, [midPoint])
-			: getBestPath(intersectsPathList, [midPoint]);
+			? getBestPath(pathList, startPoint, endPoint, midPoint)
+			: getBestPath(intersectsPathList, startPoint, endPoint, midPoint);
 
 	return cleanPath(bestPath);
 };

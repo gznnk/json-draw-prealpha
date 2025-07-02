@@ -7,45 +7,88 @@ import { isStraight } from "./isStraight";
  * Selects the best path from a list of paths based on distance, turns, and score.
  *
  * @param list - List of paths to evaluate
- * @param goodPoints - Points that provide scoring benefits
+ * @param startPoint - Start point of the connection
+ * @param endPoint - End point of the connection
+ * @param midPoint - Mid point that provides scoring benefits
  * @returns The best path from the list
  */
 export const getBestPath = (
-	list: Point[][],
-	goodPoints: GridPoint[],
+	pathList: Point[][],
+	startPoint: Point,
+	endPoint: Point,
+	midPoint: GridPoint,
 ): Point[] => {
-	const getScore = (p: Point): number => {
-		const goodPoint = goodPoints.find((gp) => gp.x === p.x && gp.y === p.y);
-		return goodPoint ? goodPoint.score || 0 : 0;
+	const getMidPointScore = (point: Point): number => {
+		return point.x === midPoint.x && point.y === midPoint.y
+			? midPoint.score || 0
+			: 0;
 	};
 
-	return list.reduce((a, b) => {
-		const distanceA = a.reduce((acc, p, i) => {
-			if (i === 0) return acc;
-			const ap = a[i - 1];
-			return acc + calcDistance(ap.x, ap.y, p.x, p.y);
+	return pathList.reduce((bestPath, currentPath) => {
+		const bestPathDistance = Math.round(
+			bestPath.reduce((totalDistance, point, index) => {
+				if (index === 0) return totalDistance;
+				const previousPoint = bestPath[index - 1];
+				return (
+					totalDistance +
+					calcDistance(previousPoint.x, previousPoint.y, point.x, point.y)
+				);
+			}, 0),
+		);
+		const fullBestPath = [startPoint].concat(bestPath, endPoint);
+		const bestPathTurns = fullBestPath.reduce((totalTurns, point, index) => {
+			if (index < 2) return totalTurns;
+			return (
+				totalTurns +
+				(isStraight(fullBestPath[index - 2], fullBestPath[index - 1], point)
+					? 0
+					: 1)
+			);
 		}, 0);
-		const turnsA = a.reduce((acc, p, i) => {
-			if (i < 2) return acc;
-			return acc + (isStraight(a[i - 2], a[i - 1], p) ? 0 : 1);
-		}, 0);
-		const scoreA = a.reduce((acc, p) => acc + getScore(p), 0);
+		const bestPathScore = bestPath.reduce(
+			(totalScore, point) => totalScore + getMidPointScore(point),
+			0,
+		);
 
-		const distanceB = b.reduce((acc, p, i) => {
-			if (i === 0) return acc;
-			const bp = b[i - 1];
-			return acc + calcDistance(bp.x, bp.y, p.x, p.y);
-		}, 0);
-		const turnsB = b.reduce((acc, p, i) => {
-			if (i < 2) return acc;
-			return acc + (isStraight(b[i - 2], b[i - 1], p) ? 0 : 1);
-		}, 0);
-		const scoreB = b.reduce((acc, p) => acc + getScore(p), 0);
+		const currentPathDistance = Math.round(
+			currentPath.reduce((totalDistance, point, index) => {
+				if (index === 0) return totalDistance;
+				const previousPoint = currentPath[index - 1];
+				return (
+					totalDistance +
+					calcDistance(previousPoint.x, previousPoint.y, point.x, point.y)
+				);
+			}, 0),
+		);
+		const fullCurrentPath = [startPoint].concat(currentPath, endPoint);
+		const currentPathTurns = fullCurrentPath.reduce(
+			(totalTurns, point, index) => {
+				if (index < 2) return totalTurns;
+				return (
+					totalTurns +
+					(isStraight(
+						fullCurrentPath[index - 2],
+						fullCurrentPath[index - 1],
+						point,
+					)
+						? 0
+						: 1)
+				);
+			},
+			0,
+		);
+		const currentPathScore = currentPath.reduce(
+			(totalScore, point) => totalScore + getMidPointScore(point),
+			0,
+		);
 
-		return distanceA < distanceB ||
-			(distanceA === distanceB && turnsA < turnsB) ||
-			(distanceA === distanceB && turnsA === turnsB && scoreA > scoreB)
-			? a
-			: b;
+		return bestPathDistance < currentPathDistance ||
+			(bestPathDistance === currentPathDistance &&
+				bestPathTurns < currentPathTurns) ||
+			(bestPathDistance === currentPathDistance &&
+				bestPathTurns === currentPathTurns &&
+				bestPathScore > currentPathScore)
+			? bestPath
+			: currentPath;
 	});
 };
