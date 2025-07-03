@@ -34,92 +34,98 @@ export const createBestConnectPath = (
 	endY: number,
 	endOwnerShape: Shape,
 ): Point[] => {
-	// Calculate start direction
+	// Calculate the direction from shape center to connection point
+	// This determines which side of the shape the connection starts/ends
 	const startDirection = getLineDirection(
 		startOwnerShape.x,
 		startOwnerShape.y,
 		startX,
 		startY,
 	);
-	// Calculate end point direction
 	const endDirection = getLineDirection(
 		endOwnerShape.x,
 		endOwnerShape.y,
 		endX,
 		endY,
 	);
-	const startBoundingBoxGeometry =
-		calcRectangleBoundingBoxGeometry(startOwnerShape);
-	const endBoundingBoxGeometry =
-		calcRectangleBoundingBoxGeometry(endOwnerShape);
 
-	const startP2 = getSecondConnectPoint(
+	// Get bounding box geometries for both shapes to calculate connection points
+	const startShapeBounds = calcRectangleBoundingBoxGeometry(startOwnerShape);
+	const endShapeBounds = calcRectangleBoundingBoxGeometry(endOwnerShape);
+
+	// Calculate secondary connection points that extend from the shape edges
+	// These points help create cleaner connection paths that avoid overlapping with shapes
+	const startSecondaryPoint = getSecondConnectPoint(
 		startOwnerShape,
-		startBoundingBoxGeometry,
+		startShapeBounds,
 		startX,
 		startY,
 	);
-	const endP2 = getSecondConnectPoint(
+	const endSecondaryPoint = getSecondConnectPoint(
 		endOwnerShape,
-		endBoundingBoxGeometry,
+		endShapeBounds,
 		endX,
 		endY,
 	);
 
-	const p2MidX = (startP2.x + endP2.x) / 2;
-	const p2MidY = (startP2.y + endP2.y) / 2;
+	// Calculate midpoint between secondary points to determine path routing area
+	const secondaryMidX = (startSecondaryPoint.x + endSecondaryPoint.x) / 2;
+	const secondaryMidY = (startSecondaryPoint.y + endSecondaryPoint.y) / 2;
 
+	// Find the closest edge coordinates to the midpoint for each shape
+	// This helps determine optimal intermediate routing points
 	const startCloserX = closer(
-		p2MidX,
-		startBoundingBoxGeometry.left,
-		startBoundingBoxGeometry.right,
+		secondaryMidX,
+		startShapeBounds.left,
+		startShapeBounds.right,
 	);
 	const startCloserY = closer(
-		p2MidY,
-		startBoundingBoxGeometry.top,
-		startBoundingBoxGeometry.bottom,
+		secondaryMidY,
+		startShapeBounds.top,
+		startShapeBounds.bottom,
 	);
 	const endCloserX = closer(
-		p2MidX,
-		endBoundingBoxGeometry.left,
-		endBoundingBoxGeometry.right,
+		secondaryMidX,
+		endShapeBounds.left,
+		endShapeBounds.right,
 	);
 	const endCloserY = closer(
-		p2MidY,
-		endBoundingBoxGeometry.top,
-		endBoundingBoxGeometry.bottom,
+		secondaryMidY,
+		endShapeBounds.top,
+		endShapeBounds.bottom,
 	);
 
-	const midPoint = {
+	// Calculate optimal intermediate point for connection routing
+	const optimalMidPoint = {
 		x: Math.round((startCloserX + endCloserX) / 2),
 		y: Math.round((startCloserY + endCloserY) / 2),
 		score: 1,
 	};
 
 	// Create grid of candidate center points for connection lines
-	const grid: Point[] = [];
-	addGridCrossPoint(grid, startP2);
-	addGridCrossPoint(grid, endP2);
-	addGridCrossPoint(grid, midPoint);
+	// This grid helps find the best intermediate routing points
+	const candidatePoints: Point[] = [];
+	addGridCrossPoint(candidatePoints, startSecondaryPoint);
+	addGridCrossPoint(candidatePoints, endSecondaryPoint);
+	addGridCrossPoint(candidatePoints, optimalMidPoint);
 
 	// Create routes passing through each center candidate point
-	const validPaths: Point[][] = [];
+	const nonIntersectingPaths: Point[][] = [];
 	const intersectingPaths: Point[][] = [];
-	const marginedStartBoundingBoxGeometry = addMarginToBoxGeometry(
-		startBoundingBoxGeometry,
-	);
-	const marginedEndBoundingBoxGeometry = addMarginToBoxGeometry(
-		endBoundingBoxGeometry,
-	);
-	for (const p of grid) {
+
+	// Add margin to shape bounds to prevent paths from getting too close to shapes
+	const startShapeWithMargin = addMarginToBoxGeometry(startShapeBounds);
+	const endShapeWithMargin = addMarginToBoxGeometry(endShapeBounds);
+
+	for (const candidatePoint of candidatePoints) {
 		// Route from connection source to center candidate
 		const startToCenter = createConnectPathOnDrag(
 			startX,
 			startY,
 			startDirection,
-			startBoundingBoxGeometry,
-			p.x,
-			p.y,
+			startShapeBounds,
+			candidatePoint.x,
+			candidatePoint.y,
 		);
 
 		// Route from connection destination to center candidate
@@ -127,25 +133,31 @@ export const createBestConnectPath = (
 			endX,
 			endY,
 			endDirection,
-			endBoundingBoxGeometry,
-			p.x,
-			p.y,
+			endShapeBounds,
+			candidatePoint.x,
+			candidatePoint.y,
 		);
 
-		const connectPath = [...startToCenter, ...endToCenter.reverse()];
+		// Combine start-to-center and center-to-end paths
+		const fullConnectionPath = [...startToCenter, ...endToCenter.reverse()];
 
-		// Check if intersecting with shapes
-		const isIntersecting = () => {
-			for (let i = 1; i < connectPath.length - 2; i++) {
-				const p1 = connectPath[i];
-				const p2 = connectPath[i + 1];
+		// Check if the path intersects with either shape (excluding connection points)
+		// This helps prioritize paths that don't pass through shapes
+		const isPathIntersectingShapes = () => {
+			for (let i = 1; i < fullConnectionPath.length - 2; i++) {
+				const pathPoint1 = fullConnectionPath[i];
+				const pathPoint2 = fullConnectionPath[i + 1];
 				if (
 					isLineIntersectingBoxGeometry(
-						p1,
-						p2,
-						marginedStartBoundingBoxGeometry,
+						pathPoint1,
+						pathPoint2,
+						startShapeWithMargin,
 					) ||
-					isLineIntersectingBoxGeometry(p1, p2, marginedEndBoundingBoxGeometry)
+					isLineIntersectingBoxGeometry(
+						pathPoint1,
+						pathPoint2,
+						endShapeWithMargin,
+					)
 				) {
 					return true;
 				}
@@ -153,21 +165,28 @@ export const createBestConnectPath = (
 			return false;
 		};
 
-		const pathWithoutDuplicates = removeDuplicatePoints(connectPath);
-		if (!isIntersecting()) {
-			validPaths.push(pathWithoutDuplicates);
+		// Remove duplicate points to clean up the path
+		const cleanedPath = removeDuplicatePoints(fullConnectionPath);
+
+		// Sort paths into non-intersecting (preferred) and intersecting categories
+		if (!isPathIntersectingShapes()) {
+			nonIntersectingPaths.push(cleanedPath);
 		} else {
-			intersectingPaths.push(pathWithoutDuplicates);
+			intersectingPaths.push(cleanedPath);
 		}
 	}
 
+	// Define start and end points for path evaluation
 	const startPoint = { x: startX, y: startY };
 	const endPoint = { x: endX, y: endY };
 
+	// Select the best path: prefer non-intersecting paths, fall back to intersecting ones
+	// if no clean path is available
 	const bestPath =
-		validPaths.length !== 0
-			? getBestPath(validPaths, startPoint, endPoint, midPoint)
-			: getBestPath(intersectingPaths, startPoint, endPoint, midPoint);
+		nonIntersectingPaths.length !== 0
+			? getBestPath(nonIntersectingPaths, startPoint, endPoint, optimalMidPoint)
+			: getBestPath(intersectingPaths, startPoint, endPoint, optimalMidPoint);
 
+	// Final cleanup to remove any remaining redundant points
 	return cleanPath(bestPath);
 };
