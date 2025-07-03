@@ -1,14 +1,14 @@
 // Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+// Import types.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
+import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
 
-// Import functions related to SvgCanvas.
-import { isItemableData } from "../../../utils/validation/isItemableData";
+// Import utils.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";
+import { isItemableData } from "../../../utils/validation/isItemableData";
 
 /**
  * Collects all shape IDs contained in the specified list
@@ -63,18 +63,11 @@ export const useCopy = (props: CanvasHooksProps) => {
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render
 		const {
-			canvasState: { items, multiSelectGroup },
+			canvasState: { items },
 		} = refBus.current.props;
 
-		// Copy items from multi-select group if it exists
-		let selectedItems: Diagram[];
-		if (multiSelectGroup) {
-			// Use items property from multiSelectGroup
-			selectedItems = multiSelectGroup.items;
-		} else {
-			// Get normally selected items
-			selectedItems = getSelectedItems(items);
-		}
+		// Get selected items from the main items array
+		const selectedItems = getSelectedItems(items);
 
 		// If no items are selected, do nothing
 		if (selectedItems.length === 0) return;
