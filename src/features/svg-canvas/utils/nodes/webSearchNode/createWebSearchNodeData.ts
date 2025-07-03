@@ -42,5 +42,6 @@ export const createWebSearchNodeData = ({
 		keepProportion: true,
 		connectPoints,
 		isSelected: false,
+		showOutline: false,
 	} as WebSearchNodeData;
 };

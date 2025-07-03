@@ -268,7 +268,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 				rotation={rotation}
 				scaleX={scaleX}
 				scaleY={scaleY}
-				isSelected={isSelected}
 				showOutline={showOutline}
 			/>
 			{showTransformative && (

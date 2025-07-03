@@ -29,16 +29,17 @@ const createMockDiagram = (
 const createMockGroup = (id: string, items: Diagram[]): GroupData => ({
 	id,
 	type: "Group",
-	x: 0,
-	y: 0,
-	width: 100,
-	height: 100,
+	x: 100,
+	y: 100,
+	width: 200,
+	height: 200,
 	rotation: 0,
 	scaleX: 1,
 	scaleY: 1,
 	keepProportion: false,
 	isSelected: false,
 	showTransformControls: false,
+	showOutline: false,
 	items,
 });
 

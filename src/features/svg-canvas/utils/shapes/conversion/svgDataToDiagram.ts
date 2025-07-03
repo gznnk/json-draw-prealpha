@@ -59,6 +59,7 @@ export const svgDataToDiagram = (data: string): GroupData => {
 		scaleY: 1,
 		keepProportion: false,
 		isSelected: false,
+		showOutline: false,
 		items: newData,
 	} as GroupData;
 

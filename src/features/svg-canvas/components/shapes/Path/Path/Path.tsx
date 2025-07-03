@@ -398,7 +398,6 @@ const PathComponent: React.FC<PathProps> = ({
 					rotation={rotation}
 					scaleX={scaleX}
 					scaleY={scaleY}
-					isSelected={isSelected}
 					showOutline={showOutline}
 				/>
 			)}
@@ -410,6 +409,7 @@ const PathComponent: React.FC<PathProps> = ({
 					y={y}
 					isSelected={showTransformControls && !isVerticesMode}
 					showTransformControls={showTransformControls}
+					showOutline={showOutline}
 					width={width}
 					height={height}
 					rotation={rotation}

@@ -223,6 +223,7 @@ const processConnectLineForPaste = (
 		endOwnerId: newEndOwnerId,
 		isSelected: false, // Pasted connection lines are not selected
 		showTransformControls: false, // Hide transform controls for pasted connection lines
+		showOutline: false, // Hide outline for pasted connection lines
 		// Update path points (simply apply offset)
 		items: connectLine.items.map((point, index) => {
 			// Assign new IDs
@@ -318,6 +319,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 									...item,
 									isSelected: false,
 									showTransformControls: false,
+									showOutline: false,
 								};
 							}
 							return item;
@@ -357,6 +359,7 @@ export const usePaste = (props: CanvasHooksProps) => {
 									return {
 										...item,
 										showTransformControls: false,
+										showOutline: true,
 									};
 								}
 								return item;

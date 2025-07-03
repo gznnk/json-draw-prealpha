@@ -169,7 +169,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 				rotation={rotation}
 				scaleX={scaleX}
 				scaleY={scaleY}
-				isSelected={isSelected}
 				showOutline={showOutline}
 			/>
 			{showTransformative && (

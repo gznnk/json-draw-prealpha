@@ -141,7 +141,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 				rotation={rotation}
 				scaleX={scaleX}
 				scaleY={scaleY}
-				isSelected={isSelected}
 				showOutline={showOutline}
 			/>
 			{showTransformative && (

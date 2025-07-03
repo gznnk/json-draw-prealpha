@@ -52,15 +52,18 @@ export const useSelectAll = (props: CanvasHooksProps) => {
 							return {
 								...childItem,
 								isAncestorSelected: true,
+								showOutline: true,
 							};
 						}),
 						isSelected: true,
+						showOutline: true,
 					};
 				}
 
 				return {
 					...item,
 					isSelected: true,
+					showOutline: true,
 				};
 			});
 

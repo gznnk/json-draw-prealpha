@@ -275,7 +275,6 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				rotation={rotation}
 				scaleX={scaleX}
 				scaleY={scaleY}
-				isSelected={isSelected}
 				showOutline={showOutline}
 			/>
 			{showTransformative && (

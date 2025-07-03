@@ -50,7 +50,12 @@ export const useGroup = (props: CanvasHooksProps) => {
 				id: newId(),
 				type: "Group",
 				isSelected: true,
-				items: selectedItems.map((item) => ({ ...item, isSelected: false })),
+				showOutline: true,
+				items: selectedItems.map((item) => ({
+					...item,
+					isSelected: false,
+					showOutline: false,
+				})),
 			};
 			// Remove grouped shapes from the shape array
 			let items = removeGroupedRecursive(prevState.items);

@@ -192,8 +192,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 			...item,
 			key: item.id,
 			showConnectPoints: doShowConnectPoints,
-			// Show outline on child elements when group is selected or when parent requests outline display for child elements
-			showOutline: isSelected || showOutline,
 			onClick,
 			onSelect,
 			onDrag: handleChildDiagramDrag,
@@ -217,7 +215,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 				rotation={rotation}
 				scaleX={scaleX}
 				scaleY={scaleY}
-				isSelected={isSelected}
 				showOutline={showOutline}
 			/>
 			{!isGroupDragging && (

@@ -222,6 +222,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 							...item,
 							isSelected: newSelectionState,
 							showTransformControls: newSelectionState,
+							showOutline: newSelectionState,
 						};
 					}
 					// Apply the selected state to the diagram.
@@ -229,6 +230,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 						...item,
 						isSelected: true,
 						showTransformControls: true, // Show transform controls when selected.
+						showOutline: true, // Show outline when selected.
 					};
 				}
 
@@ -237,6 +239,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					return {
 						...item,
 						showTransformControls: item.isSelected, // Keep transform controls visibility based on current selection state.
+						showOutline: item.isSelected, // Keep outline visibility based on current selection state.
 					};
 				}
 
@@ -245,10 +248,11 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					...item,
 					isSelected: false,
 					showTransformControls: false, // Hide transform controls when not selected.
+					showOutline: false, // Hide outline when not selected.
 				};
 			});
 
-			// Update isAncestorSelected state for all items.
+			// Update isAncestorSelected and showOutline state for all items.
 			items = applyFunctionRecursively(items, (item, ancestors) => {
 				if (!isSelectableData(item)) {
 					// Skip if the item is not selectable.
@@ -259,9 +263,13 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
 				);
 
+				// Show outline when the item is selected or when any ancestor is selected
+				const shouldShowOutline = item.isSelected || isAncestorSelected;
+
 				return {
 					...item,
 					isAncestorSelected,
+					showOutline: shouldShowOutline,
 				};
 			});
 

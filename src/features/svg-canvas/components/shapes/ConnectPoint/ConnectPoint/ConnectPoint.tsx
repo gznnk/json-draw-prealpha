@@ -108,6 +108,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			keepProportion: false,
 			isSelected: false,
 			showTransformControls: false,
+			showOutline: false,
 			endArrowHead: "Circle",
 			items: newPathPoints,
 		});
