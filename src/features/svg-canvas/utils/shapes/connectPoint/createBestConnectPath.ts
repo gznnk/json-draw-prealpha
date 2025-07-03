@@ -8,7 +8,7 @@ import { calcRectangleBoundingBoxGeometry } from "../../math/geometry/calcRectan
 import { isLineIntersectingBoxGeometry } from "../../math/geometry/isLineIntersectingBoxGeometry";
 import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
 import { cleanPath } from "./cleanPath";
-import { createConnectPathOnDrag } from "./createConnectPathOnDrag";
+import { generatePathFromShapeToPoint } from "./generatePathFromShapeToPoint";
 import { getBestPath } from "./getBestPath";
 import { getLineDirection } from "./getLineDirection";
 import { getSecondConnectPoint } from "./getSecondConnectPoint";
@@ -153,7 +153,7 @@ export const createBestConnectPath = (
 
 	for (const candidatePoint of candidatePoints) {
 		// Route from connection source to center candidate
-		const startToCenter = createConnectPathOnDrag(
+		const startToCenter = generatePathFromShapeToPoint(
 			startX,
 			startY,
 			startDirection,
@@ -163,7 +163,7 @@ export const createBestConnectPath = (
 		);
 
 		// Route from connection destination to center candidate
-		const endToCenter = createConnectPathOnDrag(
+		const endToCenter = generatePathFromShapeToPoint(
 			endX,
 			endY,
 			endDirection,

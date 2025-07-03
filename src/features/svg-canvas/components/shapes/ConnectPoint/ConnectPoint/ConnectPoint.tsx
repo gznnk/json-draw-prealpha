@@ -24,7 +24,7 @@ import { newId } from "../../../../utils/shapes/common/newId";
 import { triggerNewConnectLine } from "../NewConnectLine";
 import { EVENT_NAME_CONNECTTION } from "./ConnectPointConstants";
 import { createBestConnectPath } from "../../../../utils/shapes/connectPoint/createBestConnectPath";
-import { createConnectPathOnDrag } from "../../../../utils/shapes/connectPoint/createConnectPathOnDrag";
+import { generatePathFromShapeToPoint } from "../../../../utils/shapes/connectPoint/generatePathFromShapeToPoint";
 import { getLineDirection } from "../../../../utils/shapes/connectPoint/getLineDirection";
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
 
@@ -61,7 +61,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 		if (!connectingPoint.current) {
 			// Connection line during dragging
-			newPoints = createConnectPathOnDrag(
+			newPoints = generatePathFromShapeToPoint(
 				x,
 				y,
 				direction,
