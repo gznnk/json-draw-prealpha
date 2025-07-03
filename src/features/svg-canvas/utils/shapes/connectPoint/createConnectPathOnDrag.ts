@@ -4,11 +4,12 @@ import type { Direction } from "../../../components/shapes/ConnectPoint/ConnectP
 import { closer } from "../../math/common/closer";
 import { segmentsIntersect } from "../../math/geometry/segmentsIntersect";
 import { getLineDirection } from "./getLineDirection";
-import { isUpDown } from "./isUpDown";
 import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
 
 /**
  * Creates connection path points during drag operation.
+ * This function generates a path that avoids overlapping with the start shape
+ * by creating intermediate points that route around the shape's bounding box.
  *
  * @param startX - Start point x coordinate
  * @param startY - Start point y coordinate
@@ -26,148 +27,174 @@ export const createConnectPathOnDrag = (
 	endX: number,
 	endY: number,
 ) => {
-	// Draw lines to avoid overlapping with shapes
-	const newPoints: Point[] = [];
+	// Array to store the calculated path points
+	const pathPoints: Point[] = [];
 
-	// Check if start direction is up or down
-	const isDirectionUpDown = isUpDown(startDirection);
+	// Determine if the start direction is vertical (up/down) or horizontal (left/right)
+	const isVerticalDirection =
+		startDirection === "up" || startDirection === "down";
 
-	const marginBoxGeometry = addMarginToBoxGeometry(
+	// Add margin to the bounding box to ensure the path doesn't get too close to the shape
+	const expandedBoundingBox = addMarginToBoxGeometry(
 		startOwnerBoundingBoxGeometry,
 	);
 
-	// p1
-	const p1 = { x: startX, y: startY };
-	newPoints.push(p1);
+	// p1: Starting point of the connection
+	const startPoint = { x: startX, y: startY };
+	pathPoints.push(startPoint);
 
-	// p2
-	const p2 = {
-		x: isDirectionUpDown ? p1.x : endX,
-		y: isDirectionUpDown ? endY : p1.y,
+	// p2: First intermediate point - moves away from the start shape in the specified direction
+	const firstIntermediatePoint = {
+		x: isVerticalDirection ? startPoint.x : endX,
+		y: isVerticalDirection ? endY : startPoint.y,
 	};
 
-	if (isDirectionUpDown) {
+	// Adjust p2 position based on start direction to clear the shape boundary
+	if (isVerticalDirection) {
 		if (startDirection === "up") {
-			p2.y = marginBoxGeometry.top;
+			firstIntermediatePoint.y = expandedBoundingBox.top;
 		} else {
-			p2.y = marginBoxGeometry.bottom;
+			firstIntermediatePoint.y = expandedBoundingBox.bottom;
 		}
 	} else {
 		if (startDirection === "right") {
-			p2.x = marginBoxGeometry.right;
+			firstIntermediatePoint.x = expandedBoundingBox.right;
 		} else {
-			p2.x = marginBoxGeometry.left;
+			firstIntermediatePoint.x = expandedBoundingBox.left;
 		}
 	}
-	newPoints.push(p2);
+	pathPoints.push(firstIntermediatePoint);
 
-	// p3
-	const p3 = {
-		x: isDirectionUpDown ? p2.x : endX,
-		y: isDirectionUpDown ? endY : p2.y,
+	// p3: Second intermediate point - positioned to approach the end point
+	const secondIntermediatePoint = {
+		x: isVerticalDirection ? firstIntermediatePoint.x : endX,
+		y: isVerticalDirection ? endY : firstIntermediatePoint.y,
 	};
 
-	// p4
-	const p4 = { x: endX, y: endY };
+	// p4: Final end point
+	const endPoint = { x: endX, y: endY };
 
-	// Check if the direction of the line between p2-p3 is in reverse
-	const isP2ReverseDirection =
-		getLineDirection(p2.x, p2.y, p3.x, p3.y) !== startDirection;
-	if (isP2ReverseDirection) {
-		// If it's in reverse direction
-		if (isDirectionUpDown) {
-			p3.x = p4.x;
-			p3.y = p2.y;
+	// Check if the direction of the line between p2-p3 is in reverse to the start direction
+	// This happens when the end point is behind the start shape relative to the start direction
+	const isReverseDirection =
+		getLineDirection(
+			firstIntermediatePoint.x,
+			firstIntermediatePoint.y,
+			secondIntermediatePoint.x,
+			secondIntermediatePoint.y,
+		) !== startDirection;
+
+	if (isReverseDirection) {
+		// If it's in reverse direction, adjust p3 to create a proper path
+		if (isVerticalDirection) {
+			secondIntermediatePoint.x = endPoint.x;
+			secondIntermediatePoint.y = firstIntermediatePoint.y;
 		} else {
-			p3.x = p2.x;
-			p3.y = p4.y;
+			secondIntermediatePoint.x = firstIntermediatePoint.x;
+			secondIntermediatePoint.y = endPoint.y;
 		}
 	}
-	newPoints.push(p3);
-	newPoints.push(p4);
+	pathPoints.push(secondIntermediatePoint);
+	pathPoints.push(endPoint);
 
 	// Check if the line between p3-p4 intersects with shape edges
-	let isAccrossCloserLine = false;
-	let isAccrossFartherLine = false;
+	// We need to check both the closer edge and the farther edge relative to the start direction
+	let intersectsCloserEdge = false;
+	let intersectsFartherEdge = false;
+
 	if (startDirection === "up") {
-		isAccrossCloserLine = segmentsIntersect(
-			marginBoxGeometry.topLeft,
-			marginBoxGeometry.topRight,
-			p3,
-			p4,
+		// For upward direction: closer edge is top, farther edge is bottom
+		intersectsCloserEdge = segmentsIntersect(
+			expandedBoundingBox.topLeft,
+			expandedBoundingBox.topRight,
+			secondIntermediatePoint,
+			endPoint,
 		);
-		isAccrossFartherLine = segmentsIntersect(
-			marginBoxGeometry.bottomLeft,
-			marginBoxGeometry.bottomRight,
-			p3,
-			p4,
+		intersectsFartherEdge = segmentsIntersect(
+			expandedBoundingBox.bottomLeft,
+			expandedBoundingBox.bottomRight,
+			secondIntermediatePoint,
+			endPoint,
 		);
 	}
 	if (startDirection === "down") {
-		isAccrossCloserLine = segmentsIntersect(
-			marginBoxGeometry.bottomLeft,
-			marginBoxGeometry.bottomRight,
-			p3,
-			p4,
+		// For downward direction: closer edge is bottom, farther edge is top
+		intersectsCloserEdge = segmentsIntersect(
+			expandedBoundingBox.bottomLeft,
+			expandedBoundingBox.bottomRight,
+			secondIntermediatePoint,
+			endPoint,
 		);
-		isAccrossFartherLine = segmentsIntersect(
-			marginBoxGeometry.topLeft,
-			marginBoxGeometry.topRight,
-			p3,
-			p4,
+		intersectsFartherEdge = segmentsIntersect(
+			expandedBoundingBox.topLeft,
+			expandedBoundingBox.topRight,
+			secondIntermediatePoint,
+			endPoint,
 		);
 	}
 	if (startDirection === "left") {
-		isAccrossCloserLine = segmentsIntersect(
-			marginBoxGeometry.topLeft,
-			marginBoxGeometry.bottomLeft,
-			p3,
-			p4,
+		// For leftward direction: closer edge is left, farther edge is right
+		intersectsCloserEdge = segmentsIntersect(
+			expandedBoundingBox.topLeft,
+			expandedBoundingBox.bottomLeft,
+			secondIntermediatePoint,
+			endPoint,
 		);
-		isAccrossFartherLine = segmentsIntersect(
-			marginBoxGeometry.topRight,
-			marginBoxGeometry.bottomRight,
-			p3,
-			p4,
+		intersectsFartherEdge = segmentsIntersect(
+			expandedBoundingBox.topRight,
+			expandedBoundingBox.bottomRight,
+			secondIntermediatePoint,
+			endPoint,
 		);
 	}
 	if (startDirection === "right") {
-		isAccrossCloserLine = segmentsIntersect(
-			marginBoxGeometry.topRight,
-			marginBoxGeometry.bottomRight,
-			p3,
-			p4,
+		// For rightward direction: closer edge is right, farther edge is left
+		intersectsCloserEdge = segmentsIntersect(
+			expandedBoundingBox.topRight,
+			expandedBoundingBox.bottomRight,
+			secondIntermediatePoint,
+			endPoint,
 		);
-		isAccrossFartherLine = segmentsIntersect(
-			marginBoxGeometry.topLeft,
-			marginBoxGeometry.bottomLeft,
-			p3,
-			p4,
+		intersectsFartherEdge = segmentsIntersect(
+			expandedBoundingBox.topLeft,
+			expandedBoundingBox.bottomLeft,
+			secondIntermediatePoint,
+			endPoint,
 		);
 	}
 
-	if (isAccrossCloserLine) {
-		// If intersecting with the closer edge, move p3 to the closer edge
-		if (isDirectionUpDown) {
-			p3.x = closer(endX, marginBoxGeometry.left, marginBoxGeometry.right);
+	if (intersectsCloserEdge) {
+		// If intersecting with the closer edge, move p3 to the edge of the bounding box
+		// to ensure the path goes around the shape properly
+		if (isVerticalDirection) {
+			secondIntermediatePoint.x = closer(
+				endX,
+				expandedBoundingBox.left,
+				expandedBoundingBox.right,
+			);
 		} else {
-			p3.y = closer(endY, marginBoxGeometry.top, marginBoxGeometry.bottom);
+			secondIntermediatePoint.y = closer(
+				endY,
+				expandedBoundingBox.top,
+				expandedBoundingBox.bottom,
+			);
 		}
 		// Adjust p4 position so it doesn't enter inside the shape
-		if (isDirectionUpDown) {
-			p4.x = p3.x;
-			p4.y = endY;
+		if (isVerticalDirection) {
+			endPoint.x = secondIntermediatePoint.x;
+			endPoint.y = endY;
 		} else {
-			p4.x = endX;
-			p4.y = p3.y;
+			endPoint.x = endX;
+			endPoint.y = secondIntermediatePoint.y;
 		}
 	}
 
-	if (isAccrossFartherLine) {
-		// If the farther edge is also intersecting, add p5 to avoid intersection
-		const p5 = { x: endX, y: endY };
-		newPoints.push(p5);
+	if (intersectsFartherEdge) {
+		// If the farther edge is also intersecting, add an additional point (p5)
+		// to completely avoid intersection with the shape
+		const additionalPoint = { x: endX, y: endY };
+		pathPoints.push(additionalPoint);
 	}
 
-	return newPoints;
+	return pathPoints;
 };
