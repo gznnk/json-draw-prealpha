@@ -6,7 +6,6 @@ import type { Shape } from "../../../types/base/Shape";
 import { closer } from "../../math/common/closer";
 import { calcRectangleBoundingBoxGeometry } from "../../math/geometry/calcRectangleBoundingBoxGeometry";
 import { isLineIntersectingBoxGeometry } from "../../math/geometry/isLineIntersectingBoxGeometry";
-import { addGridCrossPoint } from "./addGridCrossPoint";
 import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
 import { cleanPath } from "./cleanPath";
 import { createConnectPathOnDrag } from "./createConnectPathOnDrag";
@@ -14,6 +13,41 @@ import { getBestPath } from "./getBestPath";
 import { getLineDirection } from "./getLineDirection";
 import { getSecondConnectPoint } from "./getSecondConnectPoint";
 import { removeDuplicatePoints } from "./removeDuplicatePoints";
+
+/**
+ * Adds a candidate point to the collection and generates intersection points
+ * with existing candidate points to create a grid of routing options.
+ *
+ * @param candidatePoints - The collection of candidate points to add to
+ * @param point - The point to add to the collection
+ */
+const addCandidatePointWithIntersections = (
+	candidatePoints: Point[],
+	point: Point,
+): void => {
+	// Check if point already exists to avoid duplicates
+	if (!candidatePoints.some((p) => p.x === point.x && p.y === point.y)) {
+		const currentLength = candidatePoints.length;
+
+		// Create intersection points with existing candidates
+		for (let i = 0; i < currentLength; i++) {
+			const existingPoint = candidatePoints[i];
+
+			// Add horizontal intersection point (same y as new point, x from existing)
+			if (existingPoint.x !== point.x) {
+				candidatePoints.push({ x: existingPoint.x, y: point.y });
+			}
+
+			// Add vertical intersection point (same x as new point, y from existing)
+			if (existingPoint.y !== point.y) {
+				candidatePoints.push({ x: point.x, y: existingPoint.y });
+			}
+		}
+
+		// Add the original point
+		candidatePoints.push(point);
+	}
+};
 
 /**
  * Creates the best connection path between two points on shapes.
@@ -105,9 +139,9 @@ export const createBestConnectPath = (
 	// Create grid of candidate center points for connection lines
 	// This grid helps find the best intermediate routing points
 	const candidatePoints: Point[] = [];
-	addGridCrossPoint(candidatePoints, startSecondaryPoint);
-	addGridCrossPoint(candidatePoints, endSecondaryPoint);
-	addGridCrossPoint(candidatePoints, optimalMidPoint);
+	addCandidatePointWithIntersections(candidatePoints, startSecondaryPoint);
+	addCandidatePointWithIntersections(candidatePoints, endSecondaryPoint);
+	addCandidatePointWithIntersections(candidatePoints, optimalMidPoint);
 
 	// Create routes passing through each center candidate point
 	const nonIntersectingPaths: Point[][] = [];
