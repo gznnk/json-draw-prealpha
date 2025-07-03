@@ -1,10 +1,11 @@
-Processed 521 files (3.5s) (2 warnings)
+Processed 536 files (3.3s) (2 warnings)
 
 app/App.tsx
   app/components/CanvasView/index.ts
   app/components/Page/index.tsx
   app/models/SvgCanvas.ts
   app/repository/svg-canvas/index.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
 app/components/Body/Body.tsx
   app/components/Body/BodyStyled.ts
 app/components/Body/BodyStyled.ts
@@ -166,7 +167,6 @@ features/markdown-editor/index.tsx
 features/markdown-editor/types.ts
 features/svg-canvas/canvas/SvgCanvas.tsx
   features/svg-canvas/canvas/SvgCanvasConstants.ts
-  features/svg-canvas/canvas/SvgCanvasContext.ts
   features/svg-canvas/canvas/SvgCanvasRegistry.ts
   features/svg-canvas/canvas/SvgCanvasStyled.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
@@ -180,18 +180,19 @@ features/svg-canvas/canvas/SvgCanvas.tsx
   features/svg-canvas/components/shapes/ConnectLine/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/Group/index.tsx
+  features/svg-canvas/context/EventBusContext.tsx
   features/svg-canvas/registry/index.ts
+  features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/canvas/SvgCanvasConstants.ts
-features/svg-canvas/canvas/SvgCanvasContext.ts
-  features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/utils/getDiagramById.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
 features/svg-canvas/canvas/SvgCanvasHooks.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/hooks/actions/useClick.ts
   features/svg-canvas/canvas/hooks/actions/useConnect.ts
   features/svg-canvas/canvas/hooks/actions/useCopy.ts
   features/svg-canvas/canvas/hooks/actions/useDelete.ts
   features/svg-canvas/canvas/hooks/actions/useDiagramChange.ts
+  features/svg-canvas/canvas/hooks/actions/useDiagramConstraintChange.ts
+  features/svg-canvas/canvas/hooks/actions/useDiagramStyleChange.ts
   features/svg-canvas/canvas/hooks/actions/useDrag.ts
   features/svg-canvas/canvas/hooks/actions/useExecute.ts
   features/svg-canvas/canvas/hooks/actions/useExport.ts
@@ -200,7 +201,6 @@ features/svg-canvas/canvas/SvgCanvasHooks.ts
   features/svg-canvas/canvas/hooks/actions/usePaste.ts
   features/svg-canvas/canvas/hooks/actions/useStackOrderChange.ts
   features/svg-canvas/canvas/hooks/actions/useTextChange.ts
-  features/svg-canvas/canvas/hooks/actions/useTextEdit.ts
   features/svg-canvas/canvas/hooks/actions/useTransform.ts
   features/svg-canvas/canvas/hooks/actions/useUngroup.ts
   features/svg-canvas/canvas/hooks/history/useRedo.ts
@@ -212,13 +212,15 @@ features/svg-canvas/canvas/SvgCanvasHooks.ts
   features/svg-canvas/canvas/hooks/navigation/useNavigate.ts
   features/svg-canvas/canvas/hooks/navigation/useScroll.ts
   features/svg-canvas/canvas/hooks/navigation/useZoom.ts
+  features/svg-canvas/canvas/hooks/selection/useAreaSelection.ts
   features/svg-canvas/canvas/hooks/selection/useClearAllSelection.ts
   features/svg-canvas/canvas/hooks/selection/useSelect.ts
   features/svg-canvas/canvas/hooks/selection/useSelectAll.ts
   features/svg-canvas/canvas/utils/calcCanvasBounds.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/core/Textable/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/common/deepCopy.ts
+  shared/event-bus/EventBus.ts
 features/svg-canvas/canvas/SvgCanvasRegistry.ts
   features/svg-canvas/components/nodes/AgentNode/AgentNodeFunctions.ts
   features/svg-canvas/components/nodes/AgentNode/index.tsx
@@ -237,7 +239,6 @@ features/svg-canvas/canvas/SvgCanvasRegistry.ts
   features/svg-canvas/components/shapes/Image/index.tsx
   features/svg-canvas/components/shapes/Path/index.tsx
   features/svg-canvas/components/shapes/Rectangle/index.tsx
-  features/svg-canvas/components/shapes/Svg/SvgFunctions.ts
   features/svg-canvas/components/shapes/Svg/index.tsx
   features/svg-canvas/registry/index.ts
   features/svg-canvas/utils/nodes/imageGenNode/createImageGenNodeData.ts
@@ -253,45 +254,54 @@ features/svg-canvas/canvas/SvgCanvasRegistry.ts
   features/svg-canvas/utils/shapes/path/createPathData.ts
   features/svg-canvas/utils/shapes/rectangle/calcRectangleConnectPointPosition.ts
   features/svg-canvas/utils/shapes/rectangle/createRectangleData.ts
+  features/svg-canvas/utils/shapes/svg/svgToBlob.ts
 features/svg-canvas/canvas/SvgCanvasStyled.ts
 features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/canvas/hooks/selection/useAreaSelection.ts
   features/svg-canvas/components/core/Textable/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/GroupData.ts
+  features/svg-canvas/types/events/AreaSelectionEvent.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
+  features/svg-canvas/types/events/DiagramClickEvent.ts
   features/svg-canvas/types/events/DiagramConnectEvent.ts
-  features/svg-canvas/types/events/DiagramDragDropEvent.ts
+  features/svg-canvas/types/events/DiagramConstraintChangeEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
   features/svg-canvas/types/events/DiagramSelectEvent.ts
+  features/svg-canvas/types/events/DiagramStyleChangeEvent.ts
   features/svg-canvas/types/events/DiagramTextChangeEvent.ts
-  features/svg-canvas/types/events/DiagramTextEditEvent.ts
   features/svg-canvas/types/events/DiagramTransformEvent.ts
   features/svg-canvas/types/events/ExecuteEvent.ts
   features/svg-canvas/types/events/NewDiagramEvent.ts
   features/svg-canvas/types/events/StackOrderChangeEvent.ts
   features/svg-canvas/types/events/SvgCanvasResizeEvent.ts
   features/svg-canvas/types/events/SvgCanvasScrollEvent.ts
+  shared/event-bus/EventBus.ts
+features/svg-canvas/canvas/hooks/actions/useClick.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/hooks/selection/useSelect.ts
+  features/svg-canvas/types/events/DiagramClickEvent.ts
 features/svg-canvas/canvas/hooks/actions/useConnect.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/listeners/addNewItem/index.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
   features/svg-canvas/types/events/DiagramConnectEvent.ts
-  features/svg-canvas/utils/math/geometry/calcPointsOuterShape.ts
+  features/svg-canvas/utils/math/geometry/calcOrientedShapeFromPoints.ts
   features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/canvas/hooks/actions/useCopy.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
   features/svg-canvas/utils/common/getSelectedItems.ts
   features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/hooks/actions/useDelete.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/canvas/utils/getDiagramById.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
+  features/svg-canvas/utils/common/getDiagramById.ts
   features/svg-canvas/utils/common/newEventId.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
@@ -300,35 +310,55 @@ features/svg-canvas/canvas/hooks/actions/useDiagramChange.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/navigation/useAutoEdgeScroll.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
   features/svg-canvas/canvas/utils/isDiagramChangingEvent.ts
   features/svg-canvas/canvas/utils/isHistoryEvent.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
   features/svg-canvas/canvas/utils/updateConnectPointsAndCollectRecursive.ts
   features/svg-canvas/canvas/utils/updateOutlineOfAllGroups.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/shapes/ConnectLine/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/GroupData.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
+features/svg-canvas/canvas/hooks/actions/useDiagramConstraintChange.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/utils/addHistory.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
+  features/svg-canvas/types/events/DiagramConstraintChangeEvent.ts
+features/svg-canvas/canvas/hooks/actions/useDiagramStyleChange.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/utils/addHistory.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
+  features/svg-canvas/types/events/DiagramStyleChangeEvent.ts
 features/svg-canvas/canvas/hooks/actions/useDrag.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/navigation/useAutoEdgeScroll.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/canvas/utils/createItemMap.ts
+  features/svg-canvas/canvas/utils/createMultiSelectGroup.ts
   features/svg-canvas/canvas/utils/isDiagramChangingEvent.ts
   features/svg-canvas/canvas/utils/isHistoryEvent.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
-  features/svg-canvas/canvas/utils/updateConnectPointsAndNotifyMove.ts
   features/svg-canvas/canvas/utils/updateOutlineOfAllGroups.ts
+  features/svg-canvas/registry/index.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/data/shapes/ConnectPointData.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
+  features/svg-canvas/utils/common/getSelectedItems.ts
+  features/svg-canvas/utils/shapes/connectLine/refreshConnectLines.ts
+  features/svg-canvas/utils/validation/isConnectableData.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/hooks/actions/useExecute.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/components/shapes/ConnectLine/index.tsx
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
-  features/svg-canvas/types/events/Constants.ts
   features/svg-canvas/types/events/ExecuteEvent.ts
   features/svg-canvas/types/events/ExecutionPropagationEvent.ts
 features/svg-canvas/canvas/hooks/actions/useExport.ts
@@ -339,7 +369,6 @@ features/svg-canvas/canvas/hooks/actions/useExport.ts
 features/svg-canvas/canvas/hooks/actions/useGroup.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/clearMultiSelectSourceRecursive.ts
   features/svg-canvas/canvas/utils/removeGroupedRecursive.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
   features/svg-canvas/types/data/shapes/GroupData.ts
@@ -349,21 +378,20 @@ features/svg-canvas/canvas/hooks/actions/useGroup.ts
 features/svg-canvas/canvas/hooks/actions/useNewDiagram.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/listeners/addNewItem/index.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/registry/index.ts
   features/svg-canvas/types/base/DiagramType.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/NewDiagramEvent.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/canvas/hooks/actions/usePaste.ts
-  features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/utils/getDiagramById.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/Group/GroupFunctions.ts
+  features/svg-canvas/canvas/utils/createMultiSelectGroup.ts
   features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
   features/svg-canvas/types/data/shapes/ConnectPointData.ts
   features/svg-canvas/types/data/shapes/GroupData.ts
+  features/svg-canvas/utils/common/getDiagramById.ts
   features/svg-canvas/utils/shapes/common/newId.ts
   features/svg-canvas/utils/validation/isConnectableData.ts
   features/svg-canvas/utils/validation/isItemableData.ts
@@ -372,37 +400,41 @@ features/svg-canvas/canvas/hooks/actions/useStackOrderChange.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/utils/addHistory.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/StackOrderChangeEvent.ts
-  features/svg-canvas/utils/common/newEventId.ts
   features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/hooks/actions/useTextChange.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
-  features/svg-canvas/types/events/DiagramTextChangeEvent.ts
-features/svg-canvas/canvas/hooks/actions/useTextEdit.ts
-  features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/core/Textable/TextEditor/TextEditorTypes.ts
-  features/svg-canvas/types/events/DiagramTextEditEvent.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/events/DiagramTextChangeEvent.ts
 features/svg-canvas/canvas/hooks/actions/useTransform.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/navigation/useAutoEdgeScroll.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
+  features/svg-canvas/canvas/utils/createItemMap.ts
   features/svg-canvas/canvas/utils/isDiagramChangingEvent.ts
   features/svg-canvas/canvas/utils/isHistoryEvent.ts
   features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
-  features/svg-canvas/canvas/utils/updateConnectPointsAndNotifyMove.ts
   features/svg-canvas/canvas/utils/updateOutlineOfAllGroups.ts
+  features/svg-canvas/registry/index.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/data/shapes/ConnectPointData.ts
+  features/svg-canvas/types/data/shapes/GroupData.ts
   features/svg-canvas/types/events/DiagramTransformEvent.ts
+  features/svg-canvas/utils/common/getSelectedItems.ts
+  features/svg-canvas/utils/math/common/degreesToRadians.ts
+  features/svg-canvas/utils/math/points/rotatePoint.ts
+  features/svg-canvas/utils/shapes/connectLine/refreshConnectLines.ts
+  features/svg-canvas/utils/validation/isConnectableData.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
+  features/svg-canvas/utils/validation/isTransformativeData.ts
 features/svg-canvas/canvas/hooks/actions/useUngroup.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/utils/addHistory.ts
-  features/svg-canvas/canvas/utils/clearMultiSelectSourceRecursive.ts
   features/svg-canvas/canvas/utils/ungroupSelectedGroupsRecursive.ts
   features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/canvas/hooks/history/useRedo.ts
@@ -441,19 +473,20 @@ features/svg-canvas/canvas/hooks/listeners/connectNodes/useConnectNodes.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/hooks/listeners/addNewItem/index.ts
   features/svg-canvas/canvas/hooks/listeners/connectNodes/connectNodesConstants.ts
-  features/svg-canvas/canvas/utils/getDiagramById.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
   features/svg-canvas/types/data/shapes/ConnectableData.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
   features/svg-canvas/types/events/ConnectNodesEvent.ts
-  features/svg-canvas/utils/math/geometry/calcPointsOuterShape.ts
+  features/svg-canvas/utils/common/getDiagramById.ts
+  features/svg-canvas/utils/math/geometry/calcOrientedShapeFromPoints.ts
   features/svg-canvas/utils/shapes/common/newId.ts
-  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/generateOptimalShapeToShapeConnection.ts
 features/svg-canvas/canvas/hooks/navigation/useAutoEdgeScroll.ts
   features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/events/SvgCanvasScrollEvent.ts
 features/svg-canvas/canvas/hooks/navigation/useGrabScroll.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
@@ -464,35 +497,49 @@ features/svg-canvas/canvas/hooks/navigation/useNavigate.ts
   features/svg-canvas/canvas/hooks/navigation/useScroll.ts
 features/svg-canvas/canvas/hooks/navigation/useScroll.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/events/SvgCanvasScrollEvent.ts
 features/svg-canvas/canvas/hooks/navigation/useZoom.ts
   features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
+features/svg-canvas/canvas/hooks/selection/useAreaSelection.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/hooks/selection/useClearAllSelection.ts
+  features/svg-canvas/canvas/hooks/selection/useSelect.ts
+  features/svg-canvas/types/events/AreaSelectionEvent.ts
+  features/svg-canvas/utils/common/newEventId.ts
+  features/svg-canvas/utils/math/geometry/calcItemBoundingBox.ts
+  features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/canvas/hooks/selection/useClearAllSelection.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/utils/clearSelectedRecursive.ts
 features/svg-canvas/canvas/hooks/selection/useSelect.ts
-  features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/utils/applyMultiSelectSourceRecursive.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/components/shapes/Group/GroupFunctions.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/canvas/utils/createMultiSelectGroup.ts
+  features/svg-canvas/canvas/utils/getAncestorItemsById.ts
   features/svg-canvas/types/data/shapes/GroupData.ts
   features/svg-canvas/types/events/DiagramSelectEvent.ts
+  features/svg-canvas/utils/common/getDiagramById.ts
   features/svg-canvas/utils/common/getSelectedItems.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/canvas/hooks/selection/useSelectAll.ts
-  features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/canvas/utils/applyMultiSelectSourceRecursive.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/Group/index.tsx
-  features/svg-canvas/types/data/shapes/GroupData.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/canvas/utils/createMultiSelectGroup.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/canvas/index.tsx
   features/svg-canvas/canvas/SvgCanvas.tsx
   features/svg-canvas/canvas/SvgCanvasHooks.ts
+features/svg-canvas/canvas/utils/__test__/getAncestorItemsById.test.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/canvas/utils/getAncestorItemsById.ts
+  features/svg-canvas/types/base/DiagramType.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/data/shapes/GroupData.ts
 features/svg-canvas/canvas/utils/addHistory.ts
   features/svg-canvas/canvas/SvgCanvasConstants.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
@@ -501,44 +548,40 @@ features/svg-canvas/canvas/utils/applyConnectPointMoveData.ts
   features/svg-canvas/types/data/shapes/ConnectPointData.ts
   features/svg-canvas/types/data/shapes/ConnectableData.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
-features/svg-canvas/canvas/utils/applyMultiSelectSourceRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
-  features/svg-canvas/utils/validation/isSelectableData.ts
-features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/utils/validation/isItemableData.ts
-features/svg-canvas/canvas/utils/calcBoundsOfAllItems.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/Group/index.tsx
-  features/svg-canvas/types/base/Box.ts
-  features/svg-canvas/utils/math/common/degreesToRadians.ts
-  features/svg-canvas/utils/math/points/rotatePoint.ts
-  features/svg-canvas/utils/validation/isItemableData.ts
-  features/svg-canvas/utils/validation/isTransformativeData.ts
 features/svg-canvas/canvas/utils/calcCanvasBounds.ts
   features/svg-canvas/canvas/SvgCanvasConstants.ts
-  features/svg-canvas/canvas/utils/calcBoundsOfAllItems.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/types/base/Bounds.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/math/geometry/calcItemsBoundingBox.ts
 features/svg-canvas/canvas/utils/canvasStateToHistory.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/utils/common/deepCopy.ts
-features/svg-canvas/canvas/utils/clearMultiSelectSourceRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/utils/validation/isItemableData.ts
-  features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/canvas/utils/clearSelectedRecursive.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
+features/svg-canvas/canvas/utils/collectItemPositions.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/utils/createConnectPointMoveData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/registry/index.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/utils/validation/isConnectableData.ts
-features/svg-canvas/canvas/utils/getDiagramById.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+features/svg-canvas/canvas/utils/createItemMap.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
+features/svg-canvas/canvas/utils/createMultiSelectGroup.ts
+  features/svg-canvas/canvas/SvgCanvasConstants.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/data/shapes/GroupData.ts
+  features/svg-canvas/utils/shapes/group/calcUnrotatedGroupBoundingBox.ts
+features/svg-canvas/canvas/utils/getAncestorItemsById.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/utils/isDiagramChangingEvent.ts
   features/svg-canvas/types/events/EventType.ts
@@ -549,7 +592,7 @@ features/svg-canvas/canvas/utils/loadCanvasDataFromLocalStorage.ts
   features/svg-canvas/canvas/utils/canvasStateToHistory.ts
   features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/canvas/utils/removeGroupedRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/canvas/utils/saveCanvasDataToLocalStorage.ts
@@ -558,64 +601,53 @@ features/svg-canvas/canvas/utils/saveCanvasDataToLocalStorage.ts
 features/svg-canvas/canvas/utils/svgCanvasStateToData.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
 features/svg-canvas/canvas/utils/ungroupSelectedGroupsRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/utils/updateConnectPoints.ts
   features/svg-canvas/canvas/utils/applyConnectPointMoveData.ts
   features/svg-canvas/canvas/utils/createConnectPointMoveData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isConnectableData.ts
 features/svg-canvas/canvas/utils/updateConnectPointsAndCollect.ts
   features/svg-canvas/canvas/utils/applyConnectPointMoveData.ts
   features/svg-canvas/canvas/utils/createConnectPointMoveData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/utils/validation/isConnectableData.ts
 features/svg-canvas/canvas/utils/updateConnectPointsAndCollectRecursive.ts
   features/svg-canvas/canvas/utils/updateConnectPointsAndCollect.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/utils/updateConnectPointsAndNotifyMove.ts
   features/svg-canvas/canvas/utils/applyConnectPointMoveData.ts
   features/svg-canvas/canvas/utils/createConnectPointMoveData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/shapes/ConnectLine/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/ConnectableData.ts
   features/svg-canvas/types/events/EventType.ts
 features/svg-canvas/canvas/utils/updateConnectPointsRecursive.ts
   features/svg-canvas/canvas/utils/updateConnectPoints.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/canvas/utils/updateOutlineOfAllGroups.ts
-  features/svg-canvas/canvas/utils/applyRecursive.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/Group/index.tsx
+  features/svg-canvas/canvas/utils/applyFunctionRecursively.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/shapes/group/calcGroupOrientedBox.ts
   features/svg-canvas/utils/validation/isItemableData.ts
-features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/types/data/nodes/HubNodeData.ts
-  features/svg-canvas/types/data/shapes/ConnectLineData.ts
-  features/svg-canvas/types/data/shapes/ConnectPointData.ts
-  features/svg-canvas/types/data/shapes/EllipseData.ts
-  features/svg-canvas/types/data/shapes/GroupData.ts
-  features/svg-canvas/types/data/shapes/ImageData.ts
-  features/svg-canvas/types/data/shapes/PathData.ts
-  features/svg-canvas/types/data/shapes/PathPointData.ts
-  features/svg-canvas/types/data/shapes/RectangleData.ts
-  features/svg-canvas/types/data/shapes/SvgData.ts
 features/svg-canvas/components/auxiliary/MiniMap/MiniMap.tsx
   features/svg-canvas/components/auxiliary/MiniMap/MiniMapFunctions.ts
   features/svg-canvas/components/auxiliary/MiniMap/MiniMapStyled.ts
   features/svg-canvas/components/auxiliary/MiniMap/MiniMapTypes.ts
 features/svg-canvas/components/auxiliary/MiniMap/MiniMapFunctions.ts
-  features/svg-canvas/canvas/utils/calcBoundsOfAllItems.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/types/base/Bounds.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/math/geometry/calcItemsBoundingBox.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isTransformativeData.ts
 features/svg-canvas/components/auxiliary/MiniMap/MiniMapStyled.ts
 features/svg-canvas/components/auxiliary/MiniMap/MiniMapTypes.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
 features/svg-canvas/components/auxiliary/MiniMap/index.ts
   features/svg-canvas/components/auxiliary/MiniMap/MiniMap.tsx
   features/svg-canvas/components/auxiliary/MiniMap/MiniMapTypes.ts
@@ -635,12 +667,17 @@ features/svg-canvas/components/core/BottomLabel/index.tsx
   features/svg-canvas/components/core/BottomLabel/BottomLabel.tsx
   features/svg-canvas/components/core/BottomLabel/BottomLabelFunctions.ts
 features/svg-canvas/components/core/DragLine/DragLine.tsx
+  features/svg-canvas/hooks/useClick.ts
   features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/types/events/DiagramClickEvent.ts
+  features/svg-canvas/utils/common/mergeProps.ts
 features/svg-canvas/components/core/DragLine/index.tsx
   features/svg-canvas/components/core/DragLine/DragLine.tsx
 features/svg-canvas/components/core/DragPoint/DragPoint.tsx
   features/svg-canvas/components/core/DragPoint/DragPointStyled.ts
   features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/hooks/useHover.ts
+  features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
 features/svg-canvas/components/core/DragPoint/DragPointStyled.ts
 features/svg-canvas/components/core/DragPoint/index.tsx
   features/svg-canvas/components/core/DragPoint/DragPoint.tsx
@@ -672,7 +709,7 @@ features/svg-canvas/components/core/Textable/TextEditor/TextEditor.tsx
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/shapes/common/createSvgTransform.ts
 features/svg-canvas/components/core/Textable/TextEditor/TextEditorFunctions.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isTextableData.ts
 features/svg-canvas/components/core/Textable/TextEditor/TextEditorStyled.ts
@@ -708,7 +745,6 @@ features/svg-canvas/components/core/Transformative/Transformative.tsx
   features/svg-canvas/components/core/Transformative/TransformativeConstants.ts
   features/svg-canvas/types/base/DiagramType.ts
   features/svg-canvas/types/base/Point.ts
-  features/svg-canvas/types/data/core/SelectableData.ts
   features/svg-canvas/types/data/core/TransformativeData.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
   features/svg-canvas/types/events/EventType.ts
@@ -835,20 +871,21 @@ features/svg-canvas/components/menus/DiagramMenu/DiagramMenu/DiagramMenu.tsx
   features/svg-canvas/utils/math/geometry/calcRectangleVertices.ts
 features/svg-canvas/components/menus/DiagramMenu/DiagramMenu/DiagramMenuConstants.ts
 features/svg-canvas/components/menus/DiagramMenu/DiagramMenu/DiagramMenuFunctions.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isFillableData.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isStrokableData.ts
   features/svg-canvas/utils/validation/isTextableData.ts
 features/svg-canvas/components/menus/DiagramMenu/DiagramMenu/DiagramMenuHooks.ts
   features/svg-canvas/canvas/SvgCanvasTypes.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/menus/DiagramMenu/DiagramMenu/DiagramMenuFunctions.ts
   features/svg-canvas/components/menus/DiagramMenu/DiagramMenu/DiagramMenuTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/core/FillableData.ts
   features/svg-canvas/types/data/core/StrokableData.ts
   features/svg-canvas/types/data/core/TextableData.ts
   features/svg-canvas/types/data/shapes/RectangleData.ts
+  features/svg-canvas/types/events/DiagramStyleChangeEvent.ts
   features/svg-canvas/utils/common/getSelectedItems.ts
   features/svg-canvas/utils/common/newEventId.ts
   features/svg-canvas/utils/validation/isItemableData.ts
@@ -884,13 +921,13 @@ features/svg-canvas/components/menus/UserMenu/UserMenu.tsx
   utils/KeyManager.ts
 features/svg-canvas/components/nodes/AgentNode/AgentConstants.ts
 features/svg-canvas/components/nodes/AgentNode/AgentNode.tsx
-  features/svg-canvas/canvas/SvgCanvasContext.ts
   features/svg-canvas/canvas/hooks/listeners/addNewItem/index.ts
   features/svg-canvas/canvas/hooks/listeners/connectNodes/index.ts
   features/svg-canvas/components/core/IconContainer/index.tsx
   features/svg-canvas/components/icons/Agent.tsx
   features/svg-canvas/components/nodes/AgentNode/AgentConstants.ts
   features/svg-canvas/components/shapes/Rectangle/index.tsx
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/hooks/useExecutionChain.ts
   features/svg-canvas/types/props/nodes/AgentNodeProps.ts
   features/svg-canvas/utils/common/newEventId.ts
@@ -910,6 +947,7 @@ features/svg-canvas/components/nodes/HubNode/HubNode.tsx
   features/svg-canvas/components/core/IconContainer/index.tsx
   features/svg-canvas/components/icons/Hub.tsx
   features/svg-canvas/components/shapes/Ellipse/index.tsx
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/hooks/useExecutionChain.ts
   features/svg-canvas/types/props/nodes/HubNodeProps.ts
 features/svg-canvas/components/nodes/HubNode/HubNodeFunctions.ts
@@ -924,6 +962,7 @@ features/svg-canvas/components/nodes/ImageGenNode/ImageGenNode.tsx
   features/svg-canvas/components/core/IconContainer/index.tsx
   features/svg-canvas/components/icons/Picture.tsx
   features/svg-canvas/components/shapes/Rectangle/index.tsx
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/hooks/useExecutionChain.ts
   features/svg-canvas/types/props/nodes/ImageGenNodeProps.ts
   features/svg-canvas/utils/common/newEventId.ts
@@ -945,14 +984,15 @@ features/svg-canvas/components/nodes/LLMNode/index.tsx
   features/svg-canvas/components/nodes/LLMNode/LLMNode.tsx
 features/svg-canvas/components/nodes/SvgToDiagramNode/SvgToDiagramNode.tsx
   features/svg-canvas/canvas/hooks/listeners/addNewItem/index.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/core/IconContainer/index.tsx
   features/svg-canvas/components/icons/Gachapon.tsx
   features/svg-canvas/components/shapes/Rectangle/index.tsx
-  features/svg-canvas/components/shapes/Svg/SvgFunctions.ts
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/hooks/useExecutionChain.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/props/nodes/SvgToDiagramNodeProps.ts
   features/svg-canvas/utils/common/newEventId.ts
+  features/svg-canvas/utils/shapes/svg/createSvgDataFromText.ts
 features/svg-canvas/components/nodes/SvgToDiagramNode/index.tsx
   features/svg-canvas/components/nodes/SvgToDiagramNode/SvgToDiagramNode.tsx
 features/svg-canvas/components/nodes/TextAreaNode/TextAreaNode.tsx
@@ -968,6 +1008,7 @@ features/svg-canvas/components/nodes/VectorStoreNode/VectorStoreNode.tsx
   features/svg-canvas/components/core/IconContainer/index.tsx
   features/svg-canvas/components/icons/VectorStore.tsx
   features/svg-canvas/components/shapes/Rectangle/index.tsx
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/hooks/useExecutionChain.ts
   features/svg-canvas/types/events/FileDropEvent.ts
   features/svg-canvas/types/props/nodes/VectorStoreNodeProps.ts
@@ -979,6 +1020,7 @@ features/svg-canvas/components/nodes/WebSearchNode/WebSearchNode.tsx
   features/svg-canvas/components/core/IconContainer/index.tsx
   features/svg-canvas/components/icons/WebSearch.tsx
   features/svg-canvas/components/shapes/Rectangle/index.tsx
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/hooks/useExecutionChain.ts
   features/svg-canvas/types/props/nodes/WebSearchNodeProps.ts
   features/svg-canvas/utils/common/newEventId.ts
@@ -986,37 +1028,24 @@ features/svg-canvas/components/nodes/WebSearchNode/WebSearchNode.tsx
 features/svg-canvas/components/nodes/WebSearchNode/index.tsx
   features/svg-canvas/components/nodes/WebSearchNode/WebSearchNode.tsx
 features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx
-  features/svg-canvas/canvas/SvgCanvasContext.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
   features/svg-canvas/components/shapes/Path/index.tsx
-  features/svg-canvas/types/base/Shape.ts
-  features/svg-canvas/types/events/ConnectPointMoveData.ts
-  features/svg-canvas/types/events/ConnectPointsMoveEvent.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/types/props/shapes/ConnectLineProps.ts
-  features/svg-canvas/utils/math/common/radiansToDegrees.ts
-  features/svg-canvas/utils/math/points/calcRadians.ts
-  features/svg-canvas/utils/shapes/common/newId.ts
-  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
-features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
 features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineFunctions.ts
-  features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/events/ConnectPointsMoveEvent.ts
 features/svg-canvas/components/shapes/ConnectLine/ConnectLine/index.tsx
   features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLine.tsx
-  features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineConstants.ts
   features/svg-canvas/components/shapes/ConnectLine/ConnectLine/ConnectLineFunctions.ts
 features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLine.tsx
-  features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineConstants.ts
   features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineStyled.ts
   features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineTypes.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/data/shapes/PathData.ts
   features/svg-canvas/utils/shapes/path/createArrowHeads.tsx
   features/svg-canvas/utils/shapes/path/createDValue.ts
-features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineConstants.ts
 features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineFunctions.ts
-  features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineConstants.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/data/shapes/ConnectLineData.ts
   features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/components/shapes/ConnectLine/FlashConnectLine/FlashConnectLineStyled.ts
@@ -1033,16 +1062,17 @@ features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/index.tsx
+  features/svg-canvas/context/EventBusContext.tsx
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
   features/svg-canvas/types/events/DiagramDragDropEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramHoverEvent.ts
+  features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
   features/svg-canvas/types/props/shapes/ConnectPointProps.ts
-  features/svg-canvas/utils/math/geometry/calcRectangleOuterBoxGeometry.ts
+  features/svg-canvas/utils/math/geometry/calcRectangleBoundingBoxGeometry.ts
   features/svg-canvas/utils/shapes/common/newId.ts
-  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
-  features/svg-canvas/utils/shapes/connectPoint/createConnectPathOnDrag.ts
+  features/svg-canvas/utils/shapes/connectPoint/generateOptimalShapeToShapeConnection.ts
+  features/svg-canvas/utils/shapes/connectPoint/generatePathFromShapeToPoint.ts
   features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
@@ -1051,17 +1081,18 @@ features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointType
 features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
-  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/generateOptimalShapeToShapeConnection.ts
   features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLine.tsx
-  features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineConstants.ts
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineTypes.ts
   features/svg-canvas/components/shapes/Path/index.tsx
+  features/svg-canvas/constants/EventNames.ts
+  features/svg-canvas/context/EventBusContext.tsx
   features/svg-canvas/types/data/shapes/PathData.ts
-features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineConstants.ts
 features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineFunctions.ts
-  features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineConstants.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/data/shapes/PathData.ts
+  shared/event-bus/EventBus.ts
 features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/NewConnectLineTypes.ts
   features/svg-canvas/types/data/shapes/PathData.ts
 features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/index.tsx
@@ -1071,7 +1102,7 @@ features/svg-canvas/components/shapes/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPoint.tsx
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/components/shapes/ConnectPoint/NewConnectLine/index.tsx
-  features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/generateOptimalShapeToShapeConnection.ts
   features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/components/shapes/Ellipse/Ellipse.tsx
   features/svg-canvas/components/core/Outline/index.tsx
@@ -1080,66 +1111,47 @@ features/svg-canvas/components/shapes/Ellipse/Ellipse.tsx
   features/svg-canvas/components/core/Transformative/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/Ellipse/EllipseStyled.ts
+  features/svg-canvas/hooks/useClick.ts
   features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/hooks/useHover.ts
+  features/svg-canvas/hooks/useSelect.ts
+  features/svg-canvas/hooks/useText.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramHoverEvent.ts
-  features/svg-canvas/types/events/DiagramPointerEvent.ts
+  features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
   features/svg-canvas/types/events/DiagramTransformEvent.ts
   features/svg-canvas/types/props/shapes/EllipseProps.ts
+  features/svg-canvas/utils/common/mergeProps.ts
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/shapes/common/createSvgTransform.ts
-features/svg-canvas/components/shapes/Ellipse/EllipseConstants.ts
-  features/svg-canvas/constants/Diagram.ts
-  features/svg-canvas/types/data/shapes/EllipseData.ts
 features/svg-canvas/components/shapes/Ellipse/EllipseStyled.ts
 features/svg-canvas/components/shapes/Ellipse/index.tsx
   features/svg-canvas/components/shapes/Ellipse/Ellipse.tsx
-  features/svg-canvas/components/shapes/Ellipse/EllipseConstants.ts
 features/svg-canvas/components/shapes/Group/Group.tsx
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/core/Outline/index.tsx
   features/svg-canvas/components/core/PositionLabel/index.tsx
   features/svg-canvas/components/core/Transformative/index.tsx
-  features/svg-canvas/components/shapes/Group/GroupFunctions.ts
   features/svg-canvas/registry/index.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/types/events/DiagramConnectEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramSelectEvent.ts
-  features/svg-canvas/types/events/DiagramTextEditEvent.ts
+  features/svg-canvas/types/events/DiagramTextChangeEvent.ts
   features/svg-canvas/types/events/DiagramTransformEvent.ts
   features/svg-canvas/types/props/shapes/GroupProps.ts
-  features/svg-canvas/utils/math/common/degreesToRadians.ts
-  features/svg-canvas/utils/math/points/rotatePoint.ts
-  features/svg-canvas/utils/validation/isItemableData.ts
-  features/svg-canvas/utils/validation/isTransformativeData.ts
-features/svg-canvas/components/shapes/Group/GroupFunctions.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/types/base/Bounds.ts
-  features/svg-canvas/types/data/shapes/GroupData.ts
-  features/svg-canvas/utils/math/common/degreesToRadians.ts
-  features/svg-canvas/utils/math/common/nanToZero.ts
-  features/svg-canvas/utils/math/points/rotatePoint.ts
-  features/svg-canvas/utils/validation/isItemableData.ts
-  features/svg-canvas/utils/validation/isSelectableData.ts
-  features/svg-canvas/utils/validation/isTransformativeData.ts
 features/svg-canvas/components/shapes/Group/index.tsx
   features/svg-canvas/components/shapes/Group/Group.tsx
-  features/svg-canvas/components/shapes/Group/GroupFunctions.ts
 features/svg-canvas/components/shapes/Image/Image.tsx
   features/svg-canvas/components/core/Outline/index.tsx
   features/svg-canvas/components/core/PositionLabel/index.tsx
   features/svg-canvas/components/core/Transformative/index.tsx
   features/svg-canvas/components/shapes/Image/ImageStyled.ts
+  features/svg-canvas/hooks/useClick.ts
   features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/hooks/useSelect.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramPointerEvent.ts
   features/svg-canvas/types/props/shapes/ImageProps.ts
+  features/svg-canvas/utils/common/mergeProps.ts
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/shapes/common/createSvgTransform.ts
-features/svg-canvas/components/shapes/Image/ImageConstants.ts
-  features/svg-canvas/constants/Diagram.ts
-  features/svg-canvas/types/data/shapes/ImageData.ts
 features/svg-canvas/components/shapes/Image/ImageStyled.ts
 features/svg-canvas/components/shapes/Image/index.tsx
   features/svg-canvas/components/shapes/Image/Image.tsx
@@ -1152,40 +1164,38 @@ features/svg-canvas/components/shapes/Path/NewVertex/index.tsx
   features/svg-canvas/components/shapes/Path/NewVertex/NewVertex.tsx
   features/svg-canvas/components/shapes/Path/NewVertex/NewVertexTypes.ts
 features/svg-canvas/components/shapes/Path/NewVertexList/NewVertexList.tsx
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/shapes/Path/NewVertex/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
   features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/components/shapes/Path/NewVertexList/index.tsx
   features/svg-canvas/components/shapes/Path/NewVertexList/NewVertexList.tsx
 features/svg-canvas/components/shapes/Path/Path/Path.tsx
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/core/Outline/index.tsx
   features/svg-canvas/components/core/PositionLabel/index.tsx
   features/svg-canvas/components/shapes/Group/index.tsx
   features/svg-canvas/components/shapes/Path/NewVertexList/index.tsx
   features/svg-canvas/components/shapes/Path/Path/PathStyled.ts
   features/svg-canvas/components/shapes/Path/SegmentList/index.tsx
+  features/svg-canvas/hooks/useClick.ts
   features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/hooks/useSelect.ts
   features/svg-canvas/types/base/DiagramBaseData.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/PathData.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/types/events/DiagramClickEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramPointerEvent.ts
   features/svg-canvas/types/props/shapes/PathProps.ts
-  features/svg-canvas/utils/math/geometry/calcPointsOuterShape.ts
+  features/svg-canvas/utils/common/mergeProps.ts
+  features/svg-canvas/utils/math/geometry/calcOrientedShapeFromPoints.ts
   features/svg-canvas/utils/shapes/path/createArrowHeads.tsx
   features/svg-canvas/utils/shapes/path/createDValue.ts
   features/svg-canvas/utils/validation/isItemableData.ts
-features/svg-canvas/components/shapes/Path/Path/PathConstants.ts
-  features/svg-canvas/constants/Diagram.ts
-  features/svg-canvas/types/data/shapes/PathData.ts
 features/svg-canvas/components/shapes/Path/Path/PathStyled.ts
 features/svg-canvas/components/shapes/Path/Path/index.tsx
   features/svg-canvas/components/shapes/Path/Path/Path.tsx
-  features/svg-canvas/components/shapes/Path/Path/PathConstants.ts
 features/svg-canvas/components/shapes/Path/PathPoint/PathPoint.tsx
   features/svg-canvas/components/core/DragPoint/index.tsx
   features/svg-canvas/types/props/shapes/PathPointProps.ts
@@ -1209,8 +1219,8 @@ features/svg-canvas/components/shapes/Path/Segment/index.tsx
   features/svg-canvas/components/shapes/Path/Segment/Segment.tsx
   features/svg-canvas/components/shapes/Path/Segment/SegmentTypes.ts
 features/svg-canvas/components/shapes/Path/SegmentList/SegmentList.tsx
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/components/shapes/Path/Segment/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/types/events/DiagramClickEvent.ts
@@ -1222,6 +1232,7 @@ features/svg-canvas/components/shapes/Path/SegmentList/index.tsx
 features/svg-canvas/components/shapes/Path/index.tsx
   features/svg-canvas/components/shapes/Path/Path/index.tsx
   features/svg-canvas/components/shapes/Path/PathPoint/index.tsx
+  features/svg-canvas/constants/DefaultData.ts
 features/svg-canvas/components/shapes/Rectangle/Rectangle.tsx
   features/svg-canvas/components/core/Outline/index.tsx
   features/svg-canvas/components/core/PositionLabel/index.tsx
@@ -1229,48 +1240,42 @@ features/svg-canvas/components/shapes/Rectangle/Rectangle.tsx
   features/svg-canvas/components/core/Transformative/index.tsx
   features/svg-canvas/components/shapes/ConnectPoint/index.tsx
   features/svg-canvas/components/shapes/Rectangle/RectangleStyled.ts
+  features/svg-canvas/hooks/useClick.ts
   features/svg-canvas/hooks/useDrag.ts
   features/svg-canvas/hooks/useFileDrop.ts
+  features/svg-canvas/hooks/useHover.ts
+  features/svg-canvas/hooks/useSelect.ts
+  features/svg-canvas/hooks/useText.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramHoverEvent.ts
-  features/svg-canvas/types/events/DiagramPointerEvent.ts
+  features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
   features/svg-canvas/types/events/DiagramTransformEvent.ts
   features/svg-canvas/types/props/shapes/RectangleProps.ts
+  features/svg-canvas/utils/common/mergeProps.ts
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/shapes/common/createSvgTransform.ts
-features/svg-canvas/components/shapes/Rectangle/RectangleConstants.ts
-  features/svg-canvas/constants/Diagram.ts
-  features/svg-canvas/types/data/shapes/RectangleData.ts
 features/svg-canvas/components/shapes/Rectangle/RectangleStyled.ts
 features/svg-canvas/components/shapes/Rectangle/index.tsx
   features/svg-canvas/components/shapes/Rectangle/Rectangle.tsx
-  features/svg-canvas/components/shapes/Rectangle/RectangleConstants.ts
 features/svg-canvas/components/shapes/Svg/Svg.tsx
   features/svg-canvas/components/core/Outline/index.tsx
   features/svg-canvas/components/core/PositionLabel/index.tsx
   features/svg-canvas/components/core/Transformative/index.tsx
   features/svg-canvas/components/shapes/Svg/SvgStyled.ts
+  features/svg-canvas/hooks/useClick.ts
   features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/hooks/useSelect.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramPointerEvent.ts
   features/svg-canvas/types/props/shapes/SvgProps.ts
+  features/svg-canvas/utils/common/mergeProps.ts
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/shapes/common/createSvgTransform.ts
-features/svg-canvas/components/shapes/Svg/SvgConstants.ts
-  features/svg-canvas/constants/Diagram.ts
-  features/svg-canvas/types/data/shapes/SvgData.ts
-features/svg-canvas/components/shapes/Svg/SvgFunctions.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/Svg/SvgConstants.ts
-  features/svg-canvas/types/data/shapes/SvgData.ts
-  features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/components/shapes/Svg/SvgStyled.ts
 features/svg-canvas/components/shapes/Svg/index.tsx
   features/svg-canvas/components/shapes/Svg/Svg.tsx
-  features/svg-canvas/components/shapes/Svg/SvgFunctions.ts
-features/svg-canvas/constants/Diagram.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+features/svg-canvas/constants/Constants.ts
+features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/types/base/DiagramBaseData.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/core/FillableData.ts
   features/svg-canvas/types/data/core/ItemableData.ts
   features/svg-canvas/types/data/core/SelectableData.ts
@@ -1279,34 +1284,58 @@ features/svg-canvas/constants/Diagram.ts
   features/svg-canvas/types/data/core/TransformativeData.ts
   features/svg-canvas/types/data/shapes/ConnectPointData.ts
   features/svg-canvas/types/data/shapes/ConnectableData.ts
+  features/svg-canvas/types/data/shapes/EllipseData.ts
+  features/svg-canvas/types/data/shapes/ImageData.ts
+  features/svg-canvas/types/data/shapes/PathData.ts
+  features/svg-canvas/types/data/shapes/RectangleData.ts
+  features/svg-canvas/types/data/shapes/SvgData.ts
+features/svg-canvas/constants/EventNames.ts
+features/svg-canvas/context/EventBusContext.tsx
+  shared/event-bus/EventBus.ts
+features/svg-canvas/hooks/useClick.ts
+  features/svg-canvas/constants/Constants.ts
+  features/svg-canvas/types/events/DiagramClickEvent.ts
+  features/svg-canvas/utils/common/newEventId.ts
+  features/svg-canvas/utils/math/points/getSvgPoint.ts
 features/svg-canvas/hooks/useDrag.ts
+  features/svg-canvas/constants/Constants.ts
+  features/svg-canvas/constants/EventNames.ts
+  features/svg-canvas/context/EventBusContext.tsx
   features/svg-canvas/types/base/DiagramType.ts
   features/svg-canvas/types/base/Point.ts
-  features/svg-canvas/types/events/DiagramClickEvent.ts
   features/svg-canvas/types/events/DiagramDragDropEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramHoverEvent.ts
   features/svg-canvas/types/events/DiagramPointerEvent.ts
   features/svg-canvas/types/events/EventType.ts
   features/svg-canvas/types/events/SvgCanvasScrollEvent.ts
   features/svg-canvas/utils/common/newEventId.ts
+  features/svg-canvas/utils/math/points/getSvgPoint.ts
 features/svg-canvas/hooks/useExecutionChain.ts
-  features/svg-canvas/types/events/Constants.ts
+  features/svg-canvas/constants/EventNames.ts
   features/svg-canvas/types/events/ExecutionPropagationEvent.ts
 features/svg-canvas/hooks/useFileDrop.ts
   features/svg-canvas/types/events/FileDropEvent.ts
+  features/svg-canvas/utils/common/newEventId.ts
+features/svg-canvas/hooks/useHover.ts
+  features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
+  features/svg-canvas/utils/common/newEventId.ts
+features/svg-canvas/hooks/useSelect.ts
+  features/svg-canvas/types/events/DiagramSelectEvent.ts
+  features/svg-canvas/utils/common/newEventId.ts
+features/svg-canvas/hooks/useText.ts
+  features/svg-canvas/types/events/DiagramTextChangeEvent.ts
   features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/index.tsx
   features/svg-canvas/canvas/SvgCanvasTypes.ts
   features/svg-canvas/canvas/index.tsx
 features/svg-canvas/registry/DiagramDefinition.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/types/base/DiagramType.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
 features/svg-canvas/registry/DiagramRegistry.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/registry/DiagramDefinition.ts
   features/svg-canvas/types/base/DiagramType.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
 features/svg-canvas/registry/index.ts
   features/svg-canvas/registry/DiagramDefinition.ts
@@ -1396,6 +1425,17 @@ features/svg-canvas/types/base/Shape.ts
 features/svg-canvas/types/base/TextAlign.ts
 features/svg-canvas/types/base/TextableType.ts
 features/svg-canvas/types/base/VerticalAlign.ts
+features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/data/nodes/HubNodeData.ts
+  features/svg-canvas/types/data/shapes/ConnectLineData.ts
+  features/svg-canvas/types/data/shapes/ConnectPointData.ts
+  features/svg-canvas/types/data/shapes/EllipseData.ts
+  features/svg-canvas/types/data/shapes/GroupData.ts
+  features/svg-canvas/types/data/shapes/ImageData.ts
+  features/svg-canvas/types/data/shapes/PathData.ts
+  features/svg-canvas/types/data/shapes/PathPointData.ts
+  features/svg-canvas/types/data/shapes/RectangleData.ts
+  features/svg-canvas/types/data/shapes/SvgData.ts
 features/svg-canvas/types/data/core/FillableData.ts
 features/svg-canvas/types/data/core/ItemableData.ts
 features/svg-canvas/types/data/core/SelectableData.ts
@@ -1453,15 +1493,16 @@ features/svg-canvas/types/data/shapes/RectangleData.ts
   features/svg-canvas/types/data/shapes/CreateDataType.ts
 features/svg-canvas/types/data/shapes/SvgData.ts
   features/svg-canvas/types/data/shapes/CreateDataType.ts
+features/svg-canvas/types/events/AreaSelectionEvent.ts
+  features/svg-canvas/types/events/EventType.ts
 features/svg-canvas/types/events/ConnectNodesEvent.ts
 features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/types/base/Shape.ts
 features/svg-canvas/types/events/ConnectPointsMoveEvent.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/types/events/EventType.ts
-features/svg-canvas/types/events/Constants.ts
 features/svg-canvas/types/events/DiagramChangeData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
 features/svg-canvas/types/events/DiagramChangeEvent.ts
   features/svg-canvas/types/events/DiagramChangeData.ts
   features/svg-canvas/types/events/DiagramChangeEventType.ts
@@ -1470,16 +1511,19 @@ features/svg-canvas/types/events/DiagramChangeEventType.ts
 features/svg-canvas/types/events/DiagramClickEvent.ts
 features/svg-canvas/types/events/DiagramConnectEvent.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
+features/svg-canvas/types/events/DiagramConstraintChangeEvent.ts
 features/svg-canvas/types/events/DiagramDragDropEvent.ts
   features/svg-canvas/types/base/DiagramType.ts
 features/svg-canvas/types/events/DiagramDragEvent.ts
   features/svg-canvas/types/events/EventType.ts
-features/svg-canvas/types/events/DiagramHoverEvent.ts
+features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
 features/svg-canvas/types/events/DiagramPointerEvent.ts
 features/svg-canvas/types/events/DiagramSelectEvent.ts
+features/svg-canvas/types/events/DiagramStyleChangeEvent.ts
+  features/svg-canvas/types/base/TextAlign.ts
+  features/svg-canvas/types/base/VerticalAlign.ts
 features/svg-canvas/types/events/DiagramTextChangeEvent.ts
   features/svg-canvas/types/events/EventType.ts
-features/svg-canvas/types/events/DiagramTextEditEvent.ts
 features/svg-canvas/types/events/DiagramTransformEvent.ts
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/types/events/EventType.ts
@@ -1495,7 +1539,7 @@ features/svg-canvas/types/events/FileDropEvent.ts
 features/svg-canvas/types/events/NewDiagramEvent.ts
   features/svg-canvas/types/base/DiagramType.ts
 features/svg-canvas/types/events/NewItemEvent.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
 features/svg-canvas/types/events/StackOrderChangeEvent.ts
   features/svg-canvas/types/events/StackOrderChangeType.ts
 features/svg-canvas/types/events/StackOrderChangeType.ts
@@ -1516,7 +1560,7 @@ features/svg-canvas/types/props/core/DiagramBaseProps.ts
   features/svg-canvas/types/events/DiagramClickEvent.ts
   features/svg-canvas/types/events/DiagramDragDropEvent.ts
   features/svg-canvas/types/events/DiagramDragEvent.ts
-  features/svg-canvas/types/events/DiagramHoverEvent.ts
+  features/svg-canvas/types/events/DiagramHoverChangeEvent.ts
 features/svg-canvas/types/props/core/ExecutableProps.ts
   features/svg-canvas/types/events/ExecuteEvent.ts
 features/svg-canvas/types/props/core/FileDroppableProps.ts
@@ -1527,7 +1571,7 @@ features/svg-canvas/types/props/core/SelectableProps.ts
   features/svg-canvas/types/events/DiagramSelectEvent.ts
 features/svg-canvas/types/props/core/TextableProps.ts
   features/svg-canvas/types/events/DiagramChangeEvent.ts
-  features/svg-canvas/types/events/DiagramTextEditEvent.ts
+  features/svg-canvas/types/events/DiagramTextChangeEvent.ts
 features/svg-canvas/types/props/core/TransformativeProps.ts
   features/svg-canvas/types/events/DiagramTransformEvent.ts
 features/svg-canvas/types/props/nodes/AgentNodeProps.ts
@@ -1585,10 +1629,14 @@ features/svg-canvas/types/props/shapes/SvgProps.ts
   features/svg-canvas/types/data/shapes/SvgData.ts
   features/svg-canvas/types/props/core/CreateDiagramProps.ts
 features/svg-canvas/utils/common/deepCopy.ts
+features/svg-canvas/utils/common/getDiagramById.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
 features/svg-canvas/utils/common/getSelectedItems.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/utils/validation/isSelectableData.ts
+features/svg-canvas/utils/common/mergeProps.ts
 features/svg-canvas/utils/common/mimeToExtension.ts
 features/svg-canvas/utils/common/newEventId.ts
 features/svg-canvas/utils/debug/drawPoint.ts
@@ -1605,14 +1653,27 @@ features/svg-canvas/utils/math/geometry/calcEllipseVertices.ts
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/math/transform/affineTransformation.ts
-features/svg-canvas/utils/math/geometry/calcPointsOuterShape.ts
+features/svg-canvas/utils/math/geometry/calcItemBoundingBox.ts
+  features/svg-canvas/types/base/Box.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/math/common/degreesToRadians.ts
+  features/svg-canvas/utils/math/transform/affineTransformation.ts
+  features/svg-canvas/utils/validation/isShape.ts
+features/svg-canvas/utils/math/geometry/calcItemsBoundingBox.ts
+  features/svg-canvas/types/base/Box.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/math/geometry/calcItemBoundingBox.ts
+  features/svg-canvas/utils/shapes/group/calcGroupOrientedBox.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
+  features/svg-canvas/utils/validation/isTransformativeData.ts
+features/svg-canvas/utils/math/geometry/calcOrientedShapeFromPoints.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/utils/math/common/degreesToRadians.ts
   features/svg-canvas/utils/math/common/nanToZero.ts
   features/svg-canvas/utils/math/transform/affineTransformation.ts
   features/svg-canvas/utils/math/transform/inverseAffineTransformation.ts
-features/svg-canvas/utils/math/geometry/calcRectangleOuterBoxGeometry.ts
+features/svg-canvas/utils/math/geometry/calcRectangleBoundingBoxGeometry.ts
   features/svg-canvas/types/base/BoxGeometry.ts
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/utils/math/geometry/calcRectangleVertices.ts
@@ -1629,17 +1690,20 @@ features/svg-canvas/utils/math/geometry/createLinerY2xFunction.ts
 features/svg-canvas/utils/math/geometry/isLineIntersectingBoxGeometry.ts
   features/svg-canvas/types/base/BoxGeometry.ts
   features/svg-canvas/types/base/Point.ts
-  features/svg-canvas/utils/math/geometry/lineIntersects.ts
-features/svg-canvas/utils/math/geometry/lineIntersects.ts
+  features/svg-canvas/utils/math/geometry/segmentsIntersect.ts
+features/svg-canvas/utils/math/geometry/segmentsIntersect.ts
   features/svg-canvas/types/base/Point.ts
-features/svg-canvas/utils/math/points/calcDistance.ts
+features/svg-canvas/utils/math/points/calcEuclideanDistance.ts
+features/svg-canvas/utils/math/points/calcManhattanDistance.ts
 features/svg-canvas/utils/math/points/calcNearestCircleIntersectionPoint.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/utils/math/points/closerPoint.ts
 features/svg-canvas/utils/math/points/calcRadians.ts
 features/svg-canvas/utils/math/points/closerPoint.ts
   features/svg-canvas/types/base/Point.ts
-  features/svg-canvas/utils/math/points/calcDistance.ts
+  features/svg-canvas/utils/math/points/calcEuclideanDistance.ts
+features/svg-canvas/utils/math/points/getSvgPoint.ts
+  features/svg-canvas/types/base/Point.ts
 features/svg-canvas/utils/math/points/rotatePoint.ts
   features/svg-canvas/types/base/Point.ts
 features/svg-canvas/utils/math/transform/affineTransformation.ts
@@ -1669,41 +1733,44 @@ features/svg-canvas/utils/nodes/webSearchNode/createWebSearchNodeData.ts
 features/svg-canvas/utils/shapes/common/createSvgTransform.ts
 features/svg-canvas/utils/shapes/common/getCursorFromAngle.ts
 features/svg-canvas/utils/shapes/common/newId.ts
-features/svg-canvas/utils/shapes/connectPoint/addGridCrossPoint.ts
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+features/svg-canvas/utils/shapes/connectLine/refreshConnectLines.ts
+  features/svg-canvas/canvas/SvgCanvasTypes.ts
+  features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/types/data/shapes/ConnectLineData.ts
+  features/svg-canvas/utils/common/getDiagramById.ts
+  features/svg-canvas/utils/math/common/radiansToDegrees.ts
+  features/svg-canvas/utils/math/points/calcRadians.ts
+  features/svg-canvas/utils/shapes/common/newId.ts
+  features/svg-canvas/utils/shapes/connectPoint/generateOptimalShapeToShapeConnection.ts
+  features/svg-canvas/utils/validation/isConnectableData.ts
 features/svg-canvas/utils/shapes/connectPoint/addMarginToBoxGeometry.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
   features/svg-canvas/types/base/BoxGeometry.ts
 features/svg-canvas/utils/shapes/connectPoint/cleanPath.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
-features/svg-canvas/utils/shapes/connectPoint/createBestConnectPath.ts
+features/svg-canvas/utils/shapes/connectPoint/generateOptimalShapeToShapeConnection.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/types/base/Shape.ts
   features/svg-canvas/utils/math/common/closer.ts
-  features/svg-canvas/utils/math/geometry/calcRectangleOuterBoxGeometry.ts
+  features/svg-canvas/utils/math/geometry/calcRectangleBoundingBoxGeometry.ts
   features/svg-canvas/utils/math/geometry/isLineIntersectingBoxGeometry.ts
-  features/svg-canvas/utils/shapes/connectPoint/addGridCrossPoint.ts
+  features/svg-canvas/utils/shapes/connectPoint/addMarginToBoxGeometry.ts
   features/svg-canvas/utils/shapes/connectPoint/cleanPath.ts
-  features/svg-canvas/utils/shapes/connectPoint/createConnectPathOnDrag.ts
-  features/svg-canvas/utils/shapes/connectPoint/getBestPath.ts
+  features/svg-canvas/utils/shapes/connectPoint/generatePathFromShapeToPoint.ts
   features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
   features/svg-canvas/utils/shapes/connectPoint/getSecondConnectPoint.ts
   features/svg-canvas/utils/shapes/connectPoint/removeDuplicatePoints.ts
-features/svg-canvas/utils/shapes/connectPoint/createConnectPathOnDrag.ts
+  features/svg-canvas/utils/shapes/connectPoint/selectOptimalPathFromCandidates.ts
+features/svg-canvas/utils/shapes/connectPoint/generatePathFromShapeToPoint.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/types/base/BoxGeometry.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/utils/math/common/closer.ts
-  features/svg-canvas/utils/math/geometry/lineIntersects.ts
+  features/svg-canvas/utils/math/geometry/segmentsIntersect.ts
   features/svg-canvas/utils/shapes/connectPoint/addMarginToBoxGeometry.ts
   features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
-  features/svg-canvas/utils/shapes/connectPoint/isUpDown.ts
-features/svg-canvas/utils/shapes/connectPoint/getBestPath.ts
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
-  features/svg-canvas/types/base/Point.ts
-  features/svg-canvas/utils/math/points/calcDistance.ts
-  features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
 features/svg-canvas/utils/shapes/connectPoint/getDirection.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
   features/svg-canvas/utils/math/common/radiansToDegrees.ts
@@ -1713,16 +1780,19 @@ features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
   features/svg-canvas/utils/shapes/connectPoint/getDirection.ts
 features/svg-canvas/utils/shapes/connectPoint/getSecondConnectPoint.ts
   features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants.ts
+  features/svg-canvas/types/base/BoxGeometry.ts
   features/svg-canvas/types/base/Point.ts
   features/svg-canvas/types/base/Shape.ts
-  features/svg-canvas/utils/math/geometry/calcRectangleOuterBoxGeometry.ts
   features/svg-canvas/utils/shapes/connectPoint/getLineDirection.ts
 features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
   features/svg-canvas/types/base/Point.ts
-features/svg-canvas/utils/shapes/connectPoint/isUpDown.ts
-  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
 features/svg-canvas/utils/shapes/connectPoint/removeDuplicatePoints.ts
   features/svg-canvas/types/base/Point.ts
+features/svg-canvas/utils/shapes/connectPoint/selectOptimalPathFromCandidates.ts
+  features/svg-canvas/components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes.ts
+  features/svg-canvas/types/base/Point.ts
+  features/svg-canvas/utils/math/points/calcManhattanDistance.ts
+  features/svg-canvas/utils/shapes/connectPoint/isStraight.ts
 features/svg-canvas/utils/shapes/conversion/circleElementToDiagram.ts
   features/svg-canvas/types/data/shapes/EllipseData.ts
   features/svg-canvas/utils/shapes/ellipse/createEllipseData.ts
@@ -1730,7 +1800,7 @@ features/svg-canvas/utils/shapes/conversion/ellipseElementToDiagram.ts
   features/svg-canvas/types/data/shapes/EllipseData.ts
   features/svg-canvas/utils/shapes/ellipse/createEllipseData.ts
 features/svg-canvas/utils/shapes/conversion/lineElementToDiagram.ts
-  features/svg-canvas/components/shapes/Path/Path/PathConstants.ts
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/types/data/shapes/PathData.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
   features/svg-canvas/utils/shapes/common/newId.ts
@@ -1738,8 +1808,7 @@ features/svg-canvas/utils/shapes/conversion/rectElementToDiagram.ts
   features/svg-canvas/types/data/shapes/RectangleData.ts
   features/svg-canvas/utils/shapes/rectangle/createRectangleData.ts
 features/svg-canvas/utils/shapes/conversion/svgDataToDiagram.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
-  features/svg-canvas/components/shapes/Group/index.tsx
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/GroupData.ts
   features/svg-canvas/utils/math/common/nanToZero.ts
   features/svg-canvas/utils/shapes/common/newId.ts
@@ -1747,10 +1816,11 @@ features/svg-canvas/utils/shapes/conversion/svgDataToDiagram.ts
   features/svg-canvas/utils/shapes/conversion/ellipseElementToDiagram.ts
   features/svg-canvas/utils/shapes/conversion/lineElementToDiagram.ts
   features/svg-canvas/utils/shapes/conversion/rectElementToDiagram.ts
+  features/svg-canvas/utils/shapes/group/calcUnrotatedGroupBoundingBox.ts
 features/svg-canvas/utils/shapes/ellipse/calcEllipseConnectPointPosition.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/types/base/EllipseVertices.ts
   features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/utils/math/geometry/calcEllipseVertices.ts
   features/svg-canvas/utils/validation/isConnectableData.ts
@@ -1760,35 +1830,59 @@ features/svg-canvas/utils/shapes/ellipse/createEllipseConnectPoint.ts
   features/svg-canvas/utils/math/geometry/calcEllipseVertices.ts
   features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/utils/shapes/ellipse/createEllipseData.ts
-  features/svg-canvas/components/shapes/Ellipse/EllipseConstants.ts
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/types/base/TextAlign.ts
   features/svg-canvas/types/base/TextableType.ts
   features/svg-canvas/types/base/VerticalAlign.ts
   features/svg-canvas/types/data/shapes/EllipseData.ts
   features/svg-canvas/utils/shapes/common/newId.ts
   features/svg-canvas/utils/shapes/ellipse/createEllipseConnectPoint.ts
+features/svg-canvas/utils/shapes/group/calcGroupOrientedBox.ts
+  features/svg-canvas/types/base/Bounds.ts
+  features/svg-canvas/types/data/shapes/GroupData.ts
+  features/svg-canvas/utils/math/common/degreesToRadians.ts
+  features/svg-canvas/utils/math/common/nanToZero.ts
+  features/svg-canvas/utils/math/points/rotatePoint.ts
+  features/svg-canvas/utils/shapes/group/calcUnrotatedGroupBoundingBox.ts
+features/svg-canvas/utils/shapes/group/calcItemBoundingBoxInUnrotatedGroup.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/math/common/degreesToRadians.ts
+  features/svg-canvas/utils/math/common/nanToZero.ts
+  features/svg-canvas/utils/math/points/rotatePoint.ts
+  features/svg-canvas/utils/validation/isTransformativeData.ts
+features/svg-canvas/utils/shapes/group/calcUnrotatedGroupBoundingBox.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/shapes/group/calcItemBoundingBoxInUnrotatedGroup.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
+features/svg-canvas/utils/shapes/group/getChildDiagramById.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
+features/svg-canvas/utils/shapes/group/getSelectedChildDiagram.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/validation/isItemableData.ts
+  features/svg-canvas/utils/validation/isSelectableData.ts
 features/svg-canvas/utils/shapes/image/createImageData.ts
-  features/svg-canvas/components/shapes/Image/ImageConstants.ts
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/types/data/shapes/ImageData.ts
   features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/utils/shapes/image/imageToBlob.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/utils/validation/isImageData.ts
 features/svg-canvas/utils/shapes/path/createArrowHeads.tsx
   features/svg-canvas/components/core/ArrowHead/index.tsx
   features/svg-canvas/types/data/shapes/PathData.ts
   features/svg-canvas/utils/math/points/calcRadians.ts
 features/svg-canvas/utils/shapes/path/createDValue.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
 features/svg-canvas/utils/shapes/path/createPathData.ts
-  features/svg-canvas/components/shapes/Path/Path/PathConstants.ts
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/types/data/shapes/PathData.ts
   features/svg-canvas/types/data/shapes/PathPointData.ts
   features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/utils/shapes/rectangle/calcRectangleConnectPointPosition.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
   features/svg-canvas/types/base/RectangleVertices.ts
   features/svg-canvas/types/base/Shape.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/events/ConnectPointMoveData.ts
   features/svg-canvas/utils/math/geometry/calcRectangleVertices.ts
   features/svg-canvas/utils/validation/isConnectableData.ts
@@ -1798,13 +1892,24 @@ features/svg-canvas/utils/shapes/rectangle/createRectangleConnectPoint.ts
   features/svg-canvas/utils/math/geometry/calcRectangleVertices.ts
   features/svg-canvas/utils/shapes/common/newId.ts
 features/svg-canvas/utils/shapes/rectangle/createRectangleData.ts
-  features/svg-canvas/components/shapes/Rectangle/RectangleConstants.ts
+  features/svg-canvas/constants/DefaultData.ts
   features/svg-canvas/types/base/TextAlign.ts
   features/svg-canvas/types/base/TextableType.ts
   features/svg-canvas/types/base/VerticalAlign.ts
   features/svg-canvas/types/data/shapes/RectangleData.ts
   features/svg-canvas/utils/shapes/common/newId.ts
   features/svg-canvas/utils/shapes/rectangle/createRectangleConnectPoint.ts
+features/svg-canvas/utils/shapes/svg/createSvgData.ts
+  features/svg-canvas/constants/DefaultData.ts
+  features/svg-canvas/types/data/shapes/SvgData.ts
+  features/svg-canvas/utils/shapes/common/newId.ts
+features/svg-canvas/utils/shapes/svg/createSvgDataFromText.ts
+  features/svg-canvas/utils/shapes/svg/createSvgData.ts
+features/svg-canvas/utils/shapes/svg/isSvgData.ts
+  features/svg-canvas/types/data/shapes/SvgData.ts
+features/svg-canvas/utils/shapes/svg/svgToBlob.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
+  features/svg-canvas/utils/shapes/svg/isSvgData.ts
 features/svg-canvas/utils/validation/isConnectableData.ts
   features/svg-canvas/types/data/shapes/ConnectableData.ts
 features/svg-canvas/utils/validation/isExportable.ts
@@ -1813,7 +1918,7 @@ features/svg-canvas/utils/validation/isExportable.ts
 features/svg-canvas/utils/validation/isFillableData.ts
   features/svg-canvas/types/data/core/FillableData.ts
 features/svg-canvas/utils/validation/isImageData.ts
-  features/svg-canvas/catalog/DiagramTypes.ts
+  features/svg-canvas/types/data/catalog/Diagram.ts
   features/svg-canvas/types/data/shapes/ImageData.ts
 features/svg-canvas/utils/validation/isItemableData.ts
   features/svg-canvas/types/data/core/ItemableData.ts

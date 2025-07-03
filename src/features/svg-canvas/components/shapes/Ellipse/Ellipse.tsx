@@ -8,23 +8,24 @@ import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHover
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
 
-// SvgCanvas related components import
-import { PositionLabel } from "../../core/PositionLabel";
+// SvgCanvas components.
 import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
-import { useDrag } from "../../../hooks/useDrag";
 import { useClick } from "../../../hooks/useClick";
+import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
+import { useText } from "../../../hooks/useText";
 
 // Import utils.
+import { mergeProps } from "../../../utils/common/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-import { mergeProps } from "../../../utils/common/mergeProps";
 
 // Import local module files.
 import { EllipseElement } from "./EllipseStyled";
@@ -145,23 +146,13 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		setIsHovered(false);
 	}, []);
 
-	/**
-	 * Double click event handler
-	 */
-	const handleDoubleClick = useCallback(() => {
-		const { id, isSelected, isTextEditEnabled, onTextChange } = refBus.current;
-		if (!isTextEditEnabled) return;
-
-		if (!isSelected) return;
-
-		// Fire text editing event with Start eventType
-		onTextChange?.({
-			eventId: crypto.randomUUID(),
-			eventType: "Start",
-			id,
-			text: "",
-		});
-	}, []);
+	// Generate properties for text editing
+	const { onDoubleClick } = useText({
+		id,
+		isSelected,
+		isTextEditEnabled,
+		onTextChange,
+	});
 	// Generate drag properties
 	const dragProps = useDrag({
 		id,
@@ -247,7 +238,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 					isTransparent={isTransparent}
 					transform={transform}
 					ref={svgRef}
-					onDoubleClick={handleDoubleClick}
+					onDoubleClick={onDoubleClick}
 					{...composedProps}
 				/>
 			</g>

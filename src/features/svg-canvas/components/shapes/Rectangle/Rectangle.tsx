@@ -16,16 +16,15 @@ import { Transformative } from "../../core/Transformative";
 import { ConnectPoint } from "../ConnectPoint";
 
 // Import hooks.
-import { useDrag } from "../../../hooks/useDrag";
 import { useClick } from "../../../hooks/useClick";
+import { useDrag } from "../../../hooks/useDrag";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
+import { useText } from "../../../hooks/useText";
 
 // Import utils.
 import { mergeProps } from "../../../utils/common/mergeProps";
-
-// Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
@@ -149,23 +148,13 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		setIsHovered(false);
 	}, []);
 
-	/**
-	 * Double click event handler
-	 */
-	const handleDoubleClick = useCallback(() => {
-		const { id, isSelected, isTextEditEnabled, onTextChange } = refBus.current;
-		if (!isTextEditEnabled) return;
-
-		if (!isSelected) return;
-
-		// Fire text edit event with Start eventType
-		onTextChange?.({
-			eventId: crypto.randomUUID(),
-			eventType: "Start",
-			id,
-			text: "",
-		});
-	}, []);
+	// Generate properties for text editing
+	const { onDoubleClick } = useText({
+		id,
+		isSelected,
+		isTextEditEnabled,
+		onTextChange,
+	});
 	// Generate properties for dragging
 	const dragProps = useDrag({
 		id,
@@ -256,7 +245,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					isTransparent={isTransparent}
 					transform={transform}
 					ref={svgRef}
-					onDoubleClick={handleDoubleClick}
+					onDoubleClick={onDoubleClick}
 					{...composedProps}
 				/>
 			</g>
