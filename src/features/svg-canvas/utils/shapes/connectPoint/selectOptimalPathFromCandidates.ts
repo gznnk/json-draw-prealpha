@@ -17,21 +17,25 @@ const getMidPointScore = (point: Point, midPoint: GridPoint): number => {
 };
 
 /**
- * Selects the best path from a list of paths based on distance, turns, and score.
+ * Selects the optimal path from candidate paths based on distance, turns, and scoring.
+ * This function evaluates multiple path candidates and returns the best one by comparing:
+ * 1. Total path distance (shorter is better)
+ * 2. Number of turns (fewer is better)  
+ * 3. Score based on optimal waypoints (higher is better)
  *
- * @param pathList - List of paths to evaluate
+ * @param candidatePaths - List of candidate paths to evaluate
  * @param startPoint - Start point of the connection
  * @param endPoint - End point of the connection
- * @param midPoint - Mid point that provides scoring benefits
- * @returns The best path from the list
+ * @param optimalMidPoint - Optimal mid point that provides scoring benefits
+ * @returns The optimal path from the candidate list
  */
-export const getBestPath = (
-	pathList: Point[][],
+export const selectOptimalPathFromCandidates = (
+	candidatePaths: Point[][],
 	startPoint: Point,
 	endPoint: Point,
-	midPoint: GridPoint,
+	optimalMidPoint: GridPoint,
 ): Point[] => {
-	return pathList.reduce((bestPath, currentPath) => {
+	return candidatePaths.reduce((bestPath, currentPath) => {
 		// First, compare distances
 		const bestPathDistance = Math.round(
 			bestPath.reduce((totalDistance, point, index) => {
@@ -107,12 +111,12 @@ export const getBestPath = (
 
 		// If both distance and turns are equal, compare scores
 		const bestPathScore = bestPath.reduce(
-			(totalScore, point) => totalScore + getMidPointScore(point, midPoint),
+			(totalScore, point) => totalScore + getMidPointScore(point, optimalMidPoint),
 			0,
 		);
 
 		const currentPathScore = currentPath.reduce(
-			(totalScore, point) => totalScore + getMidPointScore(point, midPoint),
+			(totalScore, point) => totalScore + getMidPointScore(point, optimalMidPoint),
 			0,
 		);
 

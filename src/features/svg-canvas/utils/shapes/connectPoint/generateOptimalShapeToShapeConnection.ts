@@ -9,7 +9,7 @@ import { isLineIntersectingBoxGeometry } from "../../math/geometry/isLineInterse
 import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
 import { cleanPath } from "./cleanPath";
 import { generatePathFromShapeToPoint } from "./generatePathFromShapeToPoint";
-import { getBestPath } from "./getBestPath";
+import { selectOptimalPathFromCandidates } from "./selectOptimalPathFromCandidates";
 import { getLineDirection } from "./getLineDirection";
 import { getSecondConnectPoint } from "./getSecondConnectPoint";
 import { removeDuplicatePoints } from "./removeDuplicatePoints";
@@ -220,8 +220,18 @@ export const generateOptimalShapeToShapeConnection = (
 	// if no clean path is available
 	const bestPath =
 		nonIntersectingPaths.length !== 0
-			? getBestPath(nonIntersectingPaths, startPoint, endPoint, optimalMidPoint)
-			: getBestPath(intersectingPaths, startPoint, endPoint, optimalMidPoint);
+			? selectOptimalPathFromCandidates(
+					nonIntersectingPaths,
+					startPoint,
+					endPoint,
+					optimalMidPoint,
+				)
+			: selectOptimalPathFromCandidates(
+					intersectingPaths,
+					startPoint,
+					endPoint,
+					optimalMidPoint,
+				);
 
 	// Final cleanup to remove any remaining redundant points
 	return cleanPath(bestPath);
