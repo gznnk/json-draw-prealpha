@@ -2,6 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
@@ -252,27 +253,6 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 				};
 			});
 
-			// Update isAncestorSelected and showOutline state for all items.
-			items = applyFunctionRecursively(items, (item, ancestors) => {
-				if (!isSelectableData(item)) {
-					// Skip if the item is not selectable.
-					return item;
-				}
-
-				const isAncestorSelected = ancestors.some(
-					(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
-				);
-
-				// Show outline when the item is selected or when any ancestor is selected
-				const shouldShowOutline = item.isSelected || isAncestorSelected;
-
-				return {
-					...item,
-					isAncestorSelected,
-					showOutline: shouldShowOutline,
-				};
-			});
-
 			// Multi-selection logic.
 
 			// Get the selected diagrams from the updated state.
@@ -301,7 +281,84 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					}
 					return item; // If not selectable, return item unchanged.
 				});
+
+				// If all children of group are selected, set the group as selected.
+				// Use bottom-up processing to handle nested group selection properly
+				const processGroupSelection = (items: Diagram[]): Diagram[] => {
+					let hasChanges = false;
+					const processItem = (item: Diagram): Diagram => {
+						// First, recursively process all nested items (bottom-up approach)
+						if (isItemableData(item)) {
+							const updatedItems = item.items.map(processItem);
+
+							// After processing children, check if this group should be selected
+							if (
+								!item.isSelected && // Only process groups that are not already selected
+								updatedItems.length > 0 && // Ensure the group has children
+								updatedItems.every(
+									(child) => isSelectableData(child) && child.isSelected,
+								)
+							) {
+								hasChanges = true;
+								// Deselect all children when the group is selected
+								const deselectedItems = updatedItems.map((child) => {
+									if (isSelectableData(child)) {
+										return {
+											...child,
+											isSelected: false,
+											showTransformControls: false,
+											showOutline: true, // Keep outline visible for children of selected groups
+										};
+									}
+									return child;
+								});
+								return {
+									...item,
+									items: deselectedItems,
+									isSelected: true,
+									showTransformControls: true, // Show transform controls for the group.
+									showOutline: true, // Show outline for the group.
+								};
+							}
+
+							// If no selection change, return with updated items
+							return {
+								...item,
+								items: updatedItems,
+							};
+						}
+
+						return item;
+					};
+
+					const result = items.map(processItem);
+					// If there were changes, recursively process again for parent propagation
+					return hasChanges ? processGroupSelection(result) : result;
+				};
+
+				items = processGroupSelection(items);
 			}
+
+			// Update isAncestorSelected and showOutline state for all items.
+			items = applyFunctionRecursively(items, (item, ancestors) => {
+				if (!isSelectableData(item)) {
+					// Skip if the item is not selectable.
+					return item;
+				}
+
+				const isAncestorSelected = ancestors.some(
+					(ancestor) => isSelectableData(ancestor) && ancestor.isSelected,
+				);
+
+				// Show outline when the item is selected or when any ancestor is selected
+				const shouldShowOutline = item.isSelected || isAncestorSelected;
+
+				return {
+					...item,
+					isAncestorSelected,
+					showOutline: shouldShowOutline,
+				};
+			});
 
 			return {
 				...prevState,
