@@ -8,22 +8,29 @@ if %ERRORLEVEL% EQU 0 (
   git add .
 )
 
-REM 自動生成メッセージを使用
-echo Generating commit message based on changes...
-for /f "tokens=*" %%a in ('node "%~dp0generate-commit-message.cjs"') do (
-  set "AUTO_MSG=%%a"
-)
+REM コミットメッセージを取得
+set "COMMIT_MSG=%~1"
 
-REM 空のメッセージの場合はデフォルトを使用
-if "!AUTO_MSG!"=="" (
-  set "AUTO_MSG=Update files"
-  echo Using default message: !AUTO_MSG!
+REM 引数でメッセージが提供されていない場合は自動生成
+if "!COMMIT_MSG!"=="" (
+  echo No commit message provided, generating commit message based on changes...
+  for /f "tokens=*" %%a in ('node "%~dp0generate-commit-message.cjs"') do (
+    set "COMMIT_MSG=%%a"
+  )
+  
+  REM 空のメッセージの場合はデフォルトを使用
+  if "!COMMIT_MSG!"=="" (
+    set "COMMIT_MSG=Update files"
+    echo Using default message: !COMMIT_MSG!
+  ) else (
+    echo Using auto-generated message: !COMMIT_MSG!
+  )
 ) else (
-  echo Using auto-generated message: !AUTO_MSG!
+  echo Using provided message: !COMMIT_MSG!
 )
 
 REM コミット実行
-git commit -m "!AUTO_MSG!"
+git commit -m "!COMMIT_MSG!"
 
 REM コミットが成功した場合のみプッシュ
 if %ERRORLEVEL% EQU 0 (
