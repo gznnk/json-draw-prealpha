@@ -178,8 +178,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		y,
 	);
 
-	// Flag whether to show transform component
-	const showTransformative = showTransformControls && !isDragging;
 	// Flag whether to show connect points
 	const showConnectPointsFlag =
 		showConnectPoints && !isSelected && !isDragging && !isTransforming;
@@ -233,7 +231,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformative && (
+			{showTransformControls && (
 				<Transformative
 					id={id}
 					type="Ellipse"

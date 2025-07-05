@@ -15,6 +15,7 @@ import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointDa
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { isItemableData } from "../../../utils/validation/isItemableData";
+import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
@@ -42,10 +43,8 @@ export const useDrag = (props: CanvasHooksProps) => {
 	const startCanvasState = useRef<SvgCanvasState | undefined>(undefined);
 	// Reference to store selected item IDs at the start of drag for performance.
 	const selectedItemIds = useRef<Set<string>>(new Set());
-	// Reference to store initial positions of all items at the start of drag.
-	const initialItemPositions = useRef<Map<string, { x: number; y: number }>>(
-		new Map(),
-	);
+	// Reference to store initial items at the start of drag.
+	const initialItemsMap = useRef<Map<string, Diagram>>(new Map());
 
 	// Return a callback function to handle the drag event.
 	return useCallback((e: DiagramDragEvent) => {
@@ -57,8 +56,8 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 		// Update the canvas state based on the drag event.
 		setCanvasState((prevState) => {
-			// Determine if the item should be in dragging state
-			const isDraggingState =
+			// Check if currently dragging
+			const isDragging =
 				e.eventType === "Start" || e.eventType === "InProgress";
 
 			// Store the current canvas state for connect line updates on drag start
@@ -68,8 +67,8 @@ export const useDrag = (props: CanvasHooksProps) => {
 				// Store selected item IDs for performance
 				const selectedItems = getSelectedItems(prevState.items);
 				selectedItemIds.current = new Set(selectedItems.map((item) => item.id));
-				// Store initial positions of all items
-				initialItemPositions.current = createItemMap(prevState.items);
+				// Store initial items map
+				initialItemsMap.current = createItemMap(prevState.items);
 			}
 
 			// Calculate the movement delta
@@ -78,8 +77,8 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 			// Get selected item IDs from ref (stored at drag start)
 			const selectedIds = selectedItemIds.current;
-			// Get initial positions from ref (stored at drag start)
-			const initialPositions = initialItemPositions.current;
+			// Get initial items from ref (stored at drag start)
+			const initialItems = initialItemsMap.current;
 
 			// Collect all diagrams that will be moved (for connect point updates)
 			const movedDiagrams: Diagram[] = [];
@@ -105,18 +104,23 @@ export const useDrag = (props: CanvasHooksProps) => {
 				return items.map((item) => {
 					// If this item is selected, move it
 					if (selectedIds.has(item.id)) {
-						const initialPosition = initialPositions.get(item.id);
-						if (!initialPosition) {
-							// If no initial position found, return item unchanged
+						const initialItem = initialItems.get(item.id);
+						if (!initialItem) {
+							// If no initial item found, return item unchanged
 							return item;
 						}
 
 						const newItem = {
 							...item,
-							x: initialPosition.x + dx,
-							y: initialPosition.y + dy,
-							isDragging: isDraggingState,
+							x: initialItem.x + dx,
+							y: initialItem.y + dy,
+							isDragging,
 						};
+
+						// Hide transform controls during drag for transformative items
+						if (isTransformativeData(newItem) && isDragging) {
+							newItem.showTransformControls = false;
+						}
 
 						// Update connect points
 						updateConnectPoints(newItem);
@@ -128,16 +132,19 @@ export const useDrag = (props: CanvasHooksProps) => {
 								newItem.items,
 								(childItem) => {
 									// Move child items by the same delta
-									const childInitialPosition = initialPositions.get(
-										childItem.id,
-									);
-									if (childInitialPosition) {
+									const childInitialItem = initialItems.get(childItem.id);
+									if (childInitialItem) {
 										const newChildItem = {
 											...childItem,
-											x: childInitialPosition.x + dx,
-											y: childInitialPosition.y + dy,
-											isDragging: isDraggingState,
+											x: childInitialItem.x + dx,
+											y: childInitialItem.y + dy,
+											isDragging,
 										};
+
+										// Hide transform controls during drag for transformative items
+										if (isTransformativeData(newChildItem) && isDragging) {
+											newChildItem.showTransformControls = false;
+										}
 
 										// Update connect points
 										updateConnectPoints(newChildItem);
@@ -145,7 +152,7 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 										return newChildItem;
 									}
-									return childItem; // If no initial position, return unchanged
+									return childItem; // If no initial item, return unchanged
 								},
 							);
 						}
@@ -193,13 +200,26 @@ export const useDrag = (props: CanvasHooksProps) => {
 
 			// If the drag event is ended
 			if (e.eventType === "End") {
+				// Restore showTransformControls from initial state for transformative items
+				newState.items = applyFunctionRecursively(newState.items, (item) => {
+					if (selectedIds.has(item.id) && isTransformativeData(item)) {
+						const initialItem = initialItems.get(item.id);
+						if (initialItem && isTransformativeData(initialItem)) {
+							return {
+								...item,
+								showTransformControls: initialItem.showTransformControls,
+							};
+						}
+					}
+					return item;
+				});
 				// Update outline of all groups.
 				newState.items = updateOutlineOfAllGroups(newState.items);
 				// Clean up the canvas state reference.
 				startCanvasState.current = undefined;
-				// Clean up the selected item IDs and initial positions.
+				// Clean up the selected item IDs and initial items map.
 				selectedItemIds.current.clear();
-				initialItemPositions.current.clear();
+				initialItemsMap.current.clear();
 			}
 
 			return newState;

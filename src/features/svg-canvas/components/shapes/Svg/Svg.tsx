@@ -118,9 +118,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 		groupRef.current.appendChild(svgElement); // Append the new SVG element
 	}, [svgText, initialWidth, initialHeight]);
 
-	// Flag to show the transformative element.
-	const showTransformative = showTransformControls && !isDragging;
-
 	return (
 		<>
 			<g transform={transform}>
@@ -154,7 +151,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformative && (
+			{showTransformControls && (
 				<Transformative
 					id={id}
 					type="Rectangle"

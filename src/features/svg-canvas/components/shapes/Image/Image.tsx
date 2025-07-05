@@ -96,9 +96,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 		y,
 	);
 
-	// Flag to show the transformative element.
-	const showTransformative = showTransformControls && !isDragging;
-
 	return (
 		<>
 			<g transform={transform}>
@@ -126,7 +123,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformative && (
+			{showTransformControls && (
 				<Transformative
 					id={id}
 					type="Rectangle"

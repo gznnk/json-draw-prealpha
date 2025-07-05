@@ -183,8 +183,6 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		x,
 		y,
 	);
-	// Flag whether to show transform component
-	const showTransformative = showTransformControls && !isDragging;
 	// Flag whether to show connect points
 	const doShowConnectPoints =
 		showConnectPoints && !isSelected && !isDragging && !isTransforming;
@@ -240,7 +238,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformative && (
+			{showTransformControls && (
 				<Transformative
 					id={id}
 					type="Rectangle"
