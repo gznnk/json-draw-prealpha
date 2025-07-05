@@ -64,30 +64,27 @@ const GroupComponent: React.FC<GroupProps> = ({
 	/**
 	 * Change event handler for shapes within the group
 	 */
-	const handleChildDiagramChange = useCallback(
-		(e: DiagramChangeEvent) => {
-			const { id, isSelected, onDiagramChange, onDrag } = refBus.current;
+	const handleChildDiagramChange = useCallback((e: DiagramChangeEvent) => {
+		const { id, isSelected, onDiagramChange, onDrag } = refBus.current;
 
-			if (isSelected) {
-				// TODO: Check if this logic is necessary
-				// When group is selected, operations that come here are equivalent to drag operations, so convert to drag event and propagate
-				const dragEvent = {
-					eventType: e.eventType,
-					id,
-					startX: e.startDiagram.x,
-					startY: e.startDiagram.y,
-					endX: e.endDiagram.x,
-					endY: e.endDiagram.y,
-				} as DiagramDragEvent;
+		if (isSelected) {
+			// TODO: Check if this logic is necessary
+			// When group is selected, operations that come here are equivalent to drag operations, so convert to drag event and propagate
+			const dragEvent = {
+				eventType: e.eventType,
+				id,
+				startX: e.startDiagram.x,
+				startY: e.startDiagram.y,
+				endX: e.endDiagram.x,
+				endY: e.endDiagram.y,
+			} as DiagramDragEvent;
 
-				onDrag?.(dragEvent);
-			} else {
-				// When group is not selected, there is no impact on the group other than outline, so propagate the change event as is
-				onDiagramChange?.(e);
-			}
-		},
-		[],
-	);
+			onDrag?.(dragEvent);
+		} else {
+			// When group is not selected, there is no impact on the group other than outline, so propagate the change event as is
+			onDiagramChange?.(e);
+		}
+	}, []);
 	/**
 	 * Connection event handler for shapes within the group
 	 */

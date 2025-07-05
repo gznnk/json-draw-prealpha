@@ -4,6 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
+import type { EventType } from "../../../types/events/EventType";
 import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import hooks related to SvgCanvas.
@@ -50,7 +51,7 @@ const updateDiagramConnectPoints = (item: Diagram): void => {
  * Determines if an item should be in transforming state based on event type.
  * Pure function for consistent state management.
  */
-const getIsTransformingState = (eventType: DiagramTransformEvent["eventType"]): boolean => {
+const getIsTransformingState = (eventType: EventType): boolean => {
 	return eventType === "Start" || eventType === "InProgress";
 };
 

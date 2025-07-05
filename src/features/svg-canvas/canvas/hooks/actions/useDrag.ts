@@ -58,7 +58,8 @@ export const useDrag = (props: CanvasHooksProps) => {
 		// Update the canvas state based on the drag event.
 		setCanvasState((prevState) => {
 			// Determine if the item should be in dragging state
-			const isDraggingState = e.eventType === "Start" || e.eventType === "InProgress";
+			const isDraggingState =
+				e.eventType === "Start" || e.eventType === "InProgress";
 
 			// Store the current canvas state for connect line updates on drag start
 			if (e.eventType === "Start") {
