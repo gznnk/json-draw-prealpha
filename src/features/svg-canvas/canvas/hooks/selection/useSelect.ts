@@ -271,20 +271,8 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					prevState.multiSelectGroup?.keepProportion,
 				);
 
-				// Hide transform controls for all items.
-				items = applyFunctionRecursively(items, (item) => {
-					if (isSelectableData(item)) {
-						return {
-							...item,
-							showTransformControls: false,
-						};
-					}
-					return item; // If not selectable, return item unchanged.
-				});
-
-				// If all children of group are selected, set the group as selected.
-				// Use bottom-up processing to handle nested group selection properly
-				const processGroupSelection = (items: Diagram[]): Diagram[] => {
+				// Process group selection and handle transform controls in one pass
+				const processMultiSelectionLogic = (items: Diagram[]): Diagram[] => {
 					const processItem = (item: Diagram): Diagram => {
 						// First, recursively process all nested items (bottom-up approach)
 						if (isItemableData(item)) {
@@ -314,7 +302,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 									...item,
 									items: deselectedItems,
 									isSelected: true,
-									showTransformControls: true, // Show transform controls for the group.
+									showTransformControls: false,
 									showOutline: true, // Show outline for the group.
 								};
 							}
@@ -322,17 +310,21 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 							// If no selection change, return with updated items
 							return {
 								...item,
+								showTransformControls: false,
 								items: updatedItems,
 							};
 						}
 
-						return item;
+						return {
+							...item,
+							showTransformControls: false,
+						};
 					};
 
 					return items.map(processItem);
 				};
 
-				items = processGroupSelection(items);
+				items = processMultiSelectionLogic(items);
 			}
 
 			// Update isAncestorSelected and showOutline state for all items.
