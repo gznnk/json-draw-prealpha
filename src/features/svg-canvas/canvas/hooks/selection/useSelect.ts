@@ -285,7 +285,6 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 				// If all children of group are selected, set the group as selected.
 				// Use bottom-up processing to handle nested group selection properly
 				const processGroupSelection = (items: Diagram[]): Diagram[] => {
-					let hasChanges = false;
 					const processItem = (item: Diagram): Diagram => {
 						// First, recursively process all nested items (bottom-up approach)
 						if (isItemableData(item)) {
@@ -299,7 +298,6 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 									(child) => isSelectableData(child) && child.isSelected,
 								)
 							) {
-								hasChanges = true;
 								// Deselect all children when the group is selected
 								const deselectedItems = updatedItems.map((child) => {
 									if (isSelectableData(child)) {
@@ -331,9 +329,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 						return item;
 					};
 
-					const result = items.map(processItem);
-					// If there were changes, recursively process again for parent propagation
-					return hasChanges ? processGroupSelection(result) : result;
+					return items.map(processItem);
 				};
 
 				items = processGroupSelection(items);
