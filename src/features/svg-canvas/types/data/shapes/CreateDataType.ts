@@ -1,4 +1,4 @@
-import type { DiagramBaseData } from "../../base/DiagramBaseData";
+import type { DiagramBaseData } from "../DiagramBaseData";
 import type { FillableData } from "../core/FillableData";
 import type { ItemableData } from "../core/ItemableData";
 import type { SelectableData } from "../core/SelectableData";

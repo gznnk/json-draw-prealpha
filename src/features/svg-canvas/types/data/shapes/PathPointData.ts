@@ -1,4 +1,4 @@
-import type { DiagramBaseData } from "../../base/DiagramBaseData";
+import type { DiagramBaseData } from "../DiagramBaseData";
 
 /**
  * Data type for path vertices.
