@@ -260,9 +260,6 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 					// Update items selection with current selection bounds
 					updateItemsSelection(selectionState);
 
-					// Clear outline display for all items
-					clearOutlineDisplay();
-
 					// Reset selection state
 					setSelectionState({
 						isSelecting: false,
