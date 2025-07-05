@@ -15,6 +15,7 @@ import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
+import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
 
 /**
  * Custom hook to handle select events on the canvas.
@@ -315,7 +316,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 				items = processMultiSelectionLogic(items);
 			}
 
-			// Update isAncestorSelected and showOutline state for all items.
+			// After processing the selection, update the items to show outlines and transform controls based on selection state.
 			items = applyFunctionRecursively(items, (item, ancestors) => {
 				if (!isSelectableData(item)) {
 					// Skip if the item is not selectable.
@@ -334,6 +335,19 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 					isAncestorSelected,
 					showOutline: shouldShowOutline,
 				};
+			});
+
+			// If the item is not transformative, remove the showTransformControls property.
+			items = applyFunctionRecursively(items, (item) => {
+				if (!isTransformativeData(item) && "showTransformControls" in item) {
+					const { showTransformControls, ...rest } = item as Diagram & {
+						showTransformControls: boolean;
+					};
+					return {
+						...rest,
+					};
+				}
+				return item;
 			});
 
 			return {
