@@ -52,6 +52,10 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 			// Check if the selected ancestor is selected.
 			const isAncestorSelected = selectedAncestorIdx >= 0;
 
+			// Check if this is a ctrl+click deselection of an already selected item
+			const isCtrlClickDeselectCondition =
+				isCtrlPressed && e.isTriggeredByClick && e.isSelectedOnPointerDown;
+
 			// Calculate the new selection target ID based on the selection mode.
 			let newSelectionTargetId: string;
 			let newSelectionState = true;
@@ -61,11 +65,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 				if (!isEventTriggeredItemSelected) {
 					// If the item is not selected and not part of a group, select the item.
 					newSelectionTargetId = e.id;
-				} else if (
-					isCtrlPressed &&
-					e.isTriggeredByClick &&
-					e.isSelectedOnPointerDown
-				) {
+				} else if (isCtrlClickDeselectCondition) {
 					// If the item is already selected, deselect it.
 					newSelectionTargetId = e.id;
 					newSelectionState = false;
@@ -140,11 +140,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 						if (!isEventTriggeredItemSelected) {
 							// If the item is not selected and belongs to a group with selected items, select the item.
 							newSelectionTargetId = e.id;
-						} else if (
-							isCtrlPressed &&
-							e.isTriggeredByClick &&
-							e.isSelectedOnPointerDown
-						) {
+						} else if (isCtrlClickDeselectCondition) {
 							// If the item is already selected and Ctrl is pressed, deselect the item.
 							newSelectionTargetId = e.id;
 							newSelectionState = false;
@@ -176,11 +172,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 											commonAncestorOfSelectedItemIdx - 1
 										].id;
 								}
-							} else if (
-								isCtrlPressed &&
-								e.isTriggeredByClick &&
-								e.isSelectedOnPointerDown
-							) {
+							} else if (isCtrlClickDeselectCondition) {
 								// If the item is already selected and Ctrl is pressed, deselect the item.
 								newSelectionTargetId = e.id;
 								newSelectionState = false;
@@ -192,11 +184,7 @@ export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
 							if (!isEventTriggeredItemSelected) {
 								// If there is no common ancestor with selected items, select the first ancestor.
 								newSelectionTargetId = ancestorsOfSelectingItem[0].id;
-							} else if (
-								isCtrlPressed &&
-								e.isTriggeredByClick &&
-								e.isSelectedOnPointerDown
-							) {
+							} else if (isCtrlClickDeselectCondition) {
 								// If the item is already selected and Ctrl is pressed, deselect the item.
 								newSelectionTargetId = e.id;
 								newSelectionState = false;
