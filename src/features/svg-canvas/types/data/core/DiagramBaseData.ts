@@ -1,5 +1,5 @@
 // Import base types.
-import type { DiagramType } from "../base/DiagramType";
+import type { DiagramType } from "../../base/DiagramType";
 
 /**
  * Base data structure for all diagram elements.

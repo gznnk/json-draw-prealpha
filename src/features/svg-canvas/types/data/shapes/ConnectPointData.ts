@@ -1,4 +1,4 @@
-import type { DiagramBaseData } from "../DiagramBaseData";
+import type { DiagramBaseData } from "../core/DiagramBaseData";
 
 /**
  * Data type for connection points.

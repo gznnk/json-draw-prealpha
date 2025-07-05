@@ -4,7 +4,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
 import type { Diagram } from "../../../../types/data/catalog/Diagram";
-import type { DiagramBaseData } from "../../../../types/data/DiagramBaseData";
+import type { DiagramBaseData } from "../../../../types/data/core/DiagramBaseData";
 import type { PathData } from "../../../../types/data/shapes/PathData";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
