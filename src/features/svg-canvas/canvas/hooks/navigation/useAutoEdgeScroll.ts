@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
 import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/EventNames";
+
 import {
 	AUTO_SCROLL_INTERVAL_MS,
 	AUTO_SCROLL_STEP_SIZE,
@@ -33,6 +34,8 @@ const shouldStopAutoScroll = (canvasState: SvgCanvasState): boolean => {
  * @returns Function to adjust scroll position when cursor is near edges
  */
 export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
+	const { eventBus } = props;
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
@@ -121,14 +124,13 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 				clientY: adjustedClientY,
 			};
 
-			document.dispatchEvent(
+			eventBus.dispatchEvent(
 				new CustomEvent(EVENT_NAME_SVG_CANVAS_SCROLL, {
-					bubbles: true,
 					detail: scrollEvent,
 				}),
 			);
 		},
-		[],
+		[eventBus],
 	);
 
 	// Function to start continuous scrolling

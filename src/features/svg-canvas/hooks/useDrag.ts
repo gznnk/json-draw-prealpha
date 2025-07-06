@@ -530,9 +530,9 @@ export const useDrag = (props: DragProps) => {
 	 * Handle SvgCanvas scroll event.
 	 */
 	useEffect(() => {
-		let handleSvgCanvasScroll: (e: Event) => void;
+		let handleSvgCanvasScroll: (e: CustomEvent) => void;
 		if (isDragging) {
-			handleSvgCanvasScroll = (e: Event) => {
+			handleSvgCanvasScroll = (e: CustomEvent) => {
 				const { id, getPointOnDrag, onDrag } = refBus.current;
 
 				const customEvent = e as CustomEvent<SvgCanvasScrollEvent>;
@@ -560,22 +560,20 @@ export const useDrag = (props: DragProps) => {
 					cursorY: svgCursorPoint.y,
 				});
 			};
-			document.addEventListener(
+			eventBus.addEventListener(
 				EVENT_NAME_SVG_CANVAS_SCROLL,
 				handleSvgCanvasScroll,
-				true,
 			);
 		}
 		return () => {
 			if (handleSvgCanvasScroll) {
-				document.removeEventListener(
+				eventBus.removeEventListener(
 					EVENT_NAME_SVG_CANVAS_SCROLL,
 					handleSvgCanvasScroll,
-					true,
 				);
 			}
 		};
-	}, [isDragging, ref]);
+	}, [isDragging, eventBus, ref]);
 	return {
 		onPointerDown: handlePointerDown,
 		onPointerMove: handlePointerMove,
