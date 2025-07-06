@@ -277,7 +277,6 @@ export const useAreaSelection = (props: CanvasHooksProps) => {
 			onClearAllSelection,
 			updateItemsSelection,
 			updateOutlineDisplay,
-			clearOutlineDisplay,
 		],
 	);
 
