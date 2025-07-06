@@ -2,12 +2,15 @@
 import type React from "react";
 import { memo, useRef } from "react";
 
-// Import hooks
-import type { DragProps } from "../../../hooks/useDrag";
+// Import hooks.
 import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
 
-// Import types
+// Import types.
+import type { DiagramType } from "../../../types/base/DiagramType";
+import type { Point } from "../../../types/base/Point";
+import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 
 // Import local module files.
@@ -16,7 +19,11 @@ import { Circle } from "./DragPointStyled";
 /**
  * Props for the DragPoint component.
  */
-export type DragPointProps = Omit<DragProps, "ref"> & {
+export type DragPointProps = {
+	id: string;
+	type?: DiagramType;
+	x: number;
+	y: number;
 	radius?: number;
 	stroke?: string;
 	fill?: string;
@@ -24,7 +31,12 @@ export type DragPointProps = Omit<DragProps, "ref"> & {
 	outline?: string;
 	isTransparent?: boolean;
 	hidden?: boolean;
+	onDrag?: (e: DiagramDragEvent) => void;
+	onDragOver?: (e: DiagramDragDropEvent) => void;
+	onDragLeave?: (e: DiagramDragDropEvent) => void;
+	onDrop?: (e: DiagramDragDropEvent) => void;
 	onHoverChange?: (e: DiagramHoverChangeEvent) => void;
+	dragPositioningFunction?: (x: number, y: number) => Point;
 };
 
 /**
@@ -35,12 +47,6 @@ const DragPointComponent: React.FC<DragPointProps> = ({
 	type,
 	x,
 	y,
-	onDrag,
-	onDragOver,
-	onDragLeave,
-	onDrop,
-	onHoverChange,
-	dragPositioningFunction,
 	radius = 5,
 	stroke = "rgba(100, 149, 237, 0.8)",
 	fill = "rgba(100, 149, 237, 0.8)",
@@ -48,6 +54,12 @@ const DragPointComponent: React.FC<DragPointProps> = ({
 	outline = "1px rgba(100, 149, 237, 0.8) dashed",
 	isTransparent = false,
 	hidden = false,
+	onDrag,
+	onDragOver,
+	onDragLeave,
+	onDrop,
+	onHoverChange,
+	dragPositioningFunction,
 }) => {
 	const svgRef = useRef<SVGCircleElement>({} as SVGCircleElement);
 
