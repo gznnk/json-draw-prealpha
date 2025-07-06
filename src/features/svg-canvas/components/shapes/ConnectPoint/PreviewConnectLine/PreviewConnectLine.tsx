@@ -22,7 +22,9 @@ export type PreviewConnectLineProps = {
  * on top of all other shapes. It is positioned at the front of the render order
  * in SvgCanvas to achieve this visual layering effect.
  */
-const PreviewConnectLineComponent: React.FC<PreviewConnectLineProps> = ({ pathData }) => {
+const PreviewConnectLineComponent: React.FC<PreviewConnectLineProps> = ({
+	pathData,
+}) => {
 	if (!pathData) {
 		return null;
 	}

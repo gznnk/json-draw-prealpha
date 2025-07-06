@@ -73,6 +73,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	onSelect,
 	onTransform,
 	onConnect,
+	onPreviewConnectLine,
 	onTextChange,
 	onFileDrop,
 	onHoverChange,
@@ -295,6 +296,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				isVisible={doShowConnectPoints}
 				isActive={!isHovered || isDragging || isTransforming}
 				onConnect={onConnect}
+				onPreviewConnectLine={onPreviewConnectLine}
 			/>
 			{isSelected && isDragging && (
 				<PositionLabel

@@ -71,6 +71,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	onSelect,
 	onTransform,
 	onConnect,
+	onPreviewConnectLine,
 	onTextChange,
 	onHoverChange,
 }) => {
@@ -287,6 +288,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 				isVisible={showConnectPointsFlag}
 				isActive={!isHovered || isDragging || isTransforming}
 				onConnect={onConnect}
+				onPreviewConnectLine={onPreviewConnectLine}
 			/>
 			{isSelected && isDragging && (
 				<PositionLabel
