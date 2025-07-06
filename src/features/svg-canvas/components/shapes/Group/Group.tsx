@@ -89,6 +89,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 
 	const doShowConnectPoints =
 		showConnectPoints && !isSelected && !isDragging && !isTransforming;
+
 	// Create shapes within the group
 	const children = items.map((item) => {
 		// Ensure that item.type is of DiagramType

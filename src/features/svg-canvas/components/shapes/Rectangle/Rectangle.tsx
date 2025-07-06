@@ -143,6 +143,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		isTextEditEnabled,
 		onTextChange,
 	});
+
 	// Generate properties for dragging
 	const dragProps = useDrag({
 		id,
@@ -154,6 +155,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
 	});
+
 	// Generate properties for clicking
 	const clickProps = useClick({
 		id,
@@ -164,18 +166,22 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		ref: svgRef,
 		onClick,
 	});
+
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
 		onSelect,
 	});
+
 	// Generate properties for hovering
 	const hoverProps = useHover({
 		id,
 		onHoverChange: handleHover,
 	});
+
 	// Generate properties for file drop
 	const fileDropProps = useFileDrop({ id, onFileDrop });
+
 	// Compose props for RectangleElement
 	const composedProps = mergeProps(
 		dragProps,
@@ -200,6 +206,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		}),
 		[x, y, width, height, rotation, scaleX, scaleY],
 	);
+
 	// Generate rect transform attribute
 	const transform = createSvgTransform(
 		scaleX,
@@ -208,6 +215,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		x,
 		y,
 	);
+
 	// Flag whether to show connect points
 	const doShowConnectPoints =
 		showConnectPoints && !isSelected && !isDragging && !isTransforming;

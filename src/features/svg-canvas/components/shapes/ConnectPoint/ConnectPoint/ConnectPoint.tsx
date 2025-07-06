@@ -53,6 +53,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	const ownerBoundingBoxGeometry = calcRectangleBoundingBoxGeometry(ownerShape);
 	// Direction of the connect point
 	const direction = getLineDirection(ownerShape.x, ownerShape.y, x, y);
+
 	/**
 	 * Update connection line coordinates
 	 */
@@ -114,6 +115,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			items: newPathPoints,
 		});
 	};
+
 	// To avoid frequent handler generation, hold referenced values in useRef
 	const refBusVal = {
 		// Properties
@@ -130,6 +132,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
+
 	/**
 	 * Drag event handler for the connect point
 	 */
@@ -149,6 +152,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			triggerNewConnectLine(refBus.current.eventBus);
 		}
 	}, []);
+
 	/**
 	 * Event handler when an element is dragged over this connect point
 	 */
@@ -176,7 +180,9 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 				}),
 			);
 		}
-	}, []); /**
+	}, []);
+
+	/**
 	 * Event handler when an element is dragged away from this connect point
 	 */
 	const handleDragLeave = useCallback((e: DiagramDragDropEvent) => {
@@ -203,7 +209,9 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 				}),
 			);
 		}
-	}, []); /**
+	}, []);
+
+	/**
 	 * Event handler when an element is dropped on this connect point
 	 */
 	const handleDrop = useCallback((e: DiagramDragDropEvent) => {
@@ -231,6 +239,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		}
 		setIsHovered(false);
 	}, []);
+
 	/**
 	 * Hover state change event handler
 	 *
@@ -240,6 +249,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	const handleHover = useCallback((e: DiagramHoverChangeEvent) => {
 		setIsHovered(e.isHovered);
 	}, []);
+
 	useEffect(() => {
 		const handleConnection = (e: Event) => {
 			// Get referenced values via refBus

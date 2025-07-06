@@ -94,6 +94,7 @@ export const useDrag = (props: DragProps) => {
 		onDrop,
 		dragPositioningFunction,
 	} = props;
+
 	// Flag whether dragging
 	const [isDragging, setIsDragging] = useState(false);
 	// Flag whether pointer is pressed down in this drag area
@@ -108,6 +109,7 @@ export const useDrag = (props: DragProps) => {
 	// The offset between the center and the pointer.
 	const offsetXBetweenCenterAndPointer = useRef(0);
 	const offsetYBetweenCenterAndPointer = useRef(0);
+
 	/**
 	 * Get the drag area coordinates from the pointer position during dragging
 	 *
@@ -137,6 +139,7 @@ export const useDrag = (props: DragProps) => {
 			y: newY,
 		};
 	};
+
 	/**
 	 * Pointer down event handler within the drag area
 	 */
@@ -169,6 +172,7 @@ export const useDrag = (props: DragProps) => {
 			});
 		}
 	};
+
 	/**
 	 * Pointer move event handler within the drag area
 	 */
@@ -251,6 +255,7 @@ export const useDrag = (props: DragProps) => {
 			}),
 		);
 	};
+
 	/**
 	 * Pointer up event handler within the drag area
 	 */
@@ -309,7 +314,8 @@ export const useDrag = (props: DragProps) => {
 
 	/**
 	 * Key press event handler
-	 */ const handleKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
+	 */
+	const handleKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
 		// Do nothing while pointer is down
 		if (isPointerDown.current) {
 			return;
@@ -574,6 +580,7 @@ export const useDrag = (props: DragProps) => {
 			}
 		};
 	}, [isDragging, eventBus, ref]);
+
 	return {
 		onPointerDown: handlePointerDown,
 		onPointerMove: handlePointerMove,

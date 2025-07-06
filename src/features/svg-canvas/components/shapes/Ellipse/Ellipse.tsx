@@ -3,11 +3,11 @@ import type React from "react";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // Import types.
-import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
+import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
 
-// SvgCanvas components.
+// Import components.
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
@@ -141,6 +141,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		isTextEditEnabled,
 		onTextChange,
 	});
+
 	// Generate drag properties
 	const dragProps = useDrag({
 		id,
@@ -152,6 +153,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
 	});
+
 	// Generate properties for clicking
 	const clickProps = useClick({
 		id,
@@ -162,16 +164,19 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		ref: svgRef,
 		onClick,
 	});
+
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
 		onSelect,
 	});
+
 	// Generate properties for hovering
 	const hoverProps = useHover({
 		id,
 		onHoverChange: handleHover,
 	});
+
 	// Compose props for EllipseElement
 	const composedProps = mergeProps(
 		dragProps,
@@ -179,6 +184,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		selectProps,
 		hoverProps,
 	);
+
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
 	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
@@ -194,6 +200,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		}),
 		[x, y, width, height, rotation, scaleX, scaleY],
 	);
+
 	// Generate ellipse transform attribute
 	const transform = createSvgTransform(
 		scaleX,

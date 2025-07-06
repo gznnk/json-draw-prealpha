@@ -75,6 +75,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 		ref: svgRef,
 		onDrag,
 	});
+
 	// Generate properties for clicking
 	const clickProps = useClick({
 		id,
@@ -85,11 +86,13 @@ const SvgComponent: React.FC<SvgProps> = ({
 		ref: svgRef,
 		onClick,
 	});
+
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
 		onSelect,
 	});
+
 	// Compose props for SvgRectElement
 	const composedProps = mergeProps(dragProps, clickProps, selectProps);
 
