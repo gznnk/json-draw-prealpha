@@ -30,8 +30,6 @@
 		"markdown-it-link-attributes": "^4.0.1",
 		"openai": "^4.91.1",
 		"react": "^19.0.0",
-		"react-dnd": "^16.0.1",
-		"react-dnd-html5-backend": "^16.0.1",
 		"react-dom": "^19.0.0"
 	},
 	"devDependencies": {

@@ -134,10 +134,6 @@ npm test
 - **highlight.js**: シンタックスハイライト
 - **DOMPurify**: XSSプロテクション
 
-### ドラッグ&ドロップ
-- **react-dnd**: ドラッグ&ドロップ機能
-- **react-dnd-html5-backend**: HTML5 バックエンド
-
 ## 🎨 デザインシステム
 
 ### カラーパレット（ダークテーマ）
