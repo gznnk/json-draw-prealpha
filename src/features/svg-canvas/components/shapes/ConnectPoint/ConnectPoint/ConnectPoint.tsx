@@ -4,28 +4,28 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
 import type { Point } from "../../../../types/base/Point";
+import type { PathPointData } from "../../../../types/data/shapes/PathPointData";
 import type { DiagramDragDropEvent } from "../../../../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { DiagramHoverChangeEvent } from "../../../../types/events/DiagramHoverChangeEvent";
 import type { ConnectPointProps } from "../../../../types/props/shapes/ConnectPointProps";
-import type { PathPointData } from "../../../../types/data/shapes/PathPointData";
 
 // Import hooks
 import { useEventBus } from "../../../../context/EventBusContext";
 
-// Import components related to SvgCanvas
+// Import components.
 import { DragPoint } from "../../../core/DragPoint";
 
 // Import utils.
 import { calcRectangleBoundingBoxGeometry } from "../../../../utils/math/geometry/calcRectangleBoundingBoxGeometry";
 import { newId } from "../../../../utils/shapes/common/newId";
-
-// Imports related to this component.
-import { triggerNewConnectLine } from "../NewConnectLine";
-import { EVENT_NAME_CONNECTTION } from "./ConnectPointConstants";
 import { generateOptimalShapeToShapeConnection } from "../../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
 import { generatePathFromShapeToPoint } from "../../../../utils/shapes/connectPoint/generatePathFromShapeToPoint";
 import { getLineDirection } from "../../../../utils/shapes/connectPoint/getLineDirection";
+
+// Import local module files.
+import { triggerNewConnectLine } from "../NewConnectLine";
+import { EVENT_NAME_CONNECTTION } from "./ConnectPointConstants";
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
 
 /**

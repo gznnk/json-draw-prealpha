@@ -1,17 +1,27 @@
 // Import React.
 import { memo, useEffect, useState } from "react";
 
-// Import components related to SvgCanvas.
-import { Path } from "../../Path";
+// Import types.
 import type { PathData } from "../../../../types/data/shapes/PathData";
+
+// Import components.
+import { Path } from "../../Path";
+
+// Import constants.
+import { EVENT_NAME_NEW_CONNECT_LINE } from "../../../../constants/EventNames";
+
+// Import context.
 import { useEventBus } from "../../../../context/EventBusContext";
 
-// Import related to this component.
-import { EVENT_NAME_NEW_CONNECT_LINE } from "../../../../constants/EventNames";
+// Import local module files.
 import type { NewConnectLineEvent } from "./NewConnectLineTypes";
 
 /**
  * Component for rendering a new connection line.
+ *
+ * This component exists to ensure that the new connection line is rendered
+ * on top of all other shapes. It is positioned at the front of the render order
+ * in SvgCanvas to achieve this visual layering effect.
  */
 const NewConnectLineComponent: React.FC = () => {
 	const eventBus = useEventBus();
