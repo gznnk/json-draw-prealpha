@@ -12,7 +12,7 @@ import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
-import { ConnectPoint } from "../ConnectPoint";
+import { ConnectPoints } from "../ConnectPoint/ConnectPoints";
 
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";
@@ -288,20 +288,14 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 					onTransform={onTransform}
 				/>
 			)}
-			{doShowConnectPoints &&
-				connectPoints.map((cp) => (
-					<ConnectPoint
-						key={cp.id}
-						id={cp.id}
-						name={cp.name}
-						x={cp.x}
-						y={cp.y}
-						ownerId={id}
-						ownerShape={ownerShape}
-						isTransparent={!isHovered || isDragging || isTransforming}
-						onConnect={onConnect}
-					/>
-				))}
+			<ConnectPoints
+				ownerId={id}
+				ownerShape={ownerShape}
+				connectPoints={connectPoints}
+				isVisible={doShowConnectPoints}
+				isActive={!isHovered || isDragging || isTransforming}
+				onConnect={onConnect}
+			/>
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}
