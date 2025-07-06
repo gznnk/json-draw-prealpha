@@ -1,3 +1,3 @@
 * onDiagramChangeは座標系以外の更新とし、Group含め移動はDragイベント、変形はTransformイベントで行うようにする。
-* 回転された図形に接続している接続線の自動ルーティングの挙動がたまに変なのを修正
 * DiagramMenuコンポーネントのHookが本当に必要か確認
+* Scroll＆Drag時に一瞬図形がずれるのを修正する。１度のsetStateで更新するようにしたい。大変。
