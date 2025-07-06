@@ -109,24 +109,30 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	/**
 	 * Drag over event handler
 	 */
-	const handleDragOver = useCallback((e: DiagramDragDropEvent) => {
-		setIsHovered(true);
-		// Propagate drag enter event to canvas
-		if (onDragEnter) {
-			onDragEnter(e);
-		}
-	}, [onDragEnter]);
+	const handleDragOver = useCallback(
+		(e: DiagramDragDropEvent) => {
+			setIsHovered(true);
+			// Propagate drag enter event to canvas
+			if (onDragEnter) {
+				onDragEnter(e);
+			}
+		},
+		[onDragEnter],
+	);
 
 	/**
 	 * Drag leave event handler
 	 */
-	const handleDragLeave = useCallback((e: DiagramDragDropEvent) => {
-		setIsHovered(false);
-		// Propagate drag leave event to canvas
-		if (onDragLeave) {
-			onDragLeave(e);
-		}
-	}, [onDragLeave]);
+	const handleDragLeave = useCallback(
+		(e: DiagramDragDropEvent) => {
+			setIsHovered(false);
+			// Propagate drag leave event to canvas
+			if (onDragLeave) {
+				onDragLeave(e);
+			}
+		},
+		[onDragLeave],
+	);
 
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({

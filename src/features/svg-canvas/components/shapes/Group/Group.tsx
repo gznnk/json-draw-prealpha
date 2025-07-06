@@ -4,12 +4,10 @@ import React, { memo, useCallback, useRef } from "react";
 // Import types.
 import { DiagramRegistry } from "../../../registry";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
-import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { DiagramTextChangeEvent } from "../../../types/events/DiagramTextChangeEvent";
 import type { GroupProps } from "../../../types/props/shapes/GroupProps";
 
-// Import components related to SvgCanvas.
+// Import components.
 import { PositionLabel } from "../../core/PositionLabel";
 import { Outline } from "../../core/Outline";
 import { Transformative } from "../../core/Transformative";
@@ -38,6 +36,9 @@ const GroupComponent: React.FC<GroupProps> = ({
 	onClick,
 	onSelect,
 	onTransform,
+	onDragEnter,
+	onDragLeave,
+	onHoverChange,
 	onDiagramChange,
 	onConnect,
 	onTextChange,
@@ -85,27 +86,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onDiagramChange?.(e);
 		}
 	}, []);
-	/**
-	 * Connection event handler for shapes within the group
-	 */
-	const handleChildDiagramConnect = useCallback((e: DiagramConnectEvent) => {
-		const { onConnect } = refBus.current;
-
-		// Nothing special to do, just propagate as is
-		onConnect?.(e);
-	}, []);
-	/**
-	 * Text change event handler for shapes within the group
-	 */
-	const handleChildDiagramTextChange = useCallback(
-		(e: DiagramTextChangeEvent) => {
-			const { onTextChange } = refBus.current;
-
-			// Propagate the text change event for shapes within the group as is
-			onTextChange?.(e);
-		},
-		[],
-	);
 
 	const doShowConnectPoints =
 		showConnectPoints && !isSelected && !isDragging && !isTransforming;
@@ -129,9 +109,12 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onSelect,
 			onDrag,
 			onTransform,
+			onDragEnter,
+			onDragLeave,
+			onHoverChange,
 			onDiagramChange: handleChildDiagramChange,
-			onConnect: handleChildDiagramConnect,
-			onTextChange: handleChildDiagramTextChange,
+			onConnect,
+			onTextChange,
 			onExecute,
 		};
 

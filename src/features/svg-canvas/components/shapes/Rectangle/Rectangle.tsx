@@ -4,6 +4,7 @@ import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // Import types.
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
+import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
 import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
 
 // Import components.
@@ -66,12 +67,15 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
+	onDragEnter,
+	onDragLeave,
 	onClick,
 	onSelect,
 	onTransform,
 	onConnect,
 	onTextChange,
 	onFileDrop,
+	onHoverChange,
 }) => {
 	// Flag whether hovering
 	const [isHovered, setIsHovered] = useState(false);
@@ -93,23 +97,44 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	/**
 	 * Hover state change event handler
 	 */
-	const handleHover = useCallback((e: DiagramHoverChangeEvent) => {
-		setIsHovered(e.isHovered);
-	}, []);
+	const handleHover = useCallback(
+		(e: DiagramHoverChangeEvent) => {
+			setIsHovered(e.isHovered);
+			// Propagate hover change event to canvas
+			if (onHoverChange) {
+				onHoverChange(e);
+			}
+		},
+		[onHoverChange],
+	);
 
 	/**
 	 * Drag over event handler
 	 */
-	const handleDragOver = useCallback(() => {
-		setIsHovered(true);
-	}, []);
+	const handleDragOver = useCallback(
+		(e: DiagramDragDropEvent) => {
+			setIsHovered(true);
+			// Propagate drag enter event to canvas
+			if (onDragEnter) {
+				onDragEnter(e);
+			}
+		},
+		[onDragEnter],
+	);
 
 	/**
 	 * Drag leave event handler
 	 */
-	const handleDragLeave = useCallback(() => {
-		setIsHovered(false);
-	}, []);
+	const handleDragLeave = useCallback(
+		(e: DiagramDragDropEvent) => {
+			setIsHovered(false);
+			// Propagate drag leave event to canvas
+			if (onDragLeave) {
+				onDragLeave(e);
+			}
+		},
+		[onDragLeave],
+	);
 
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({
