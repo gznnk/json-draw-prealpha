@@ -28,9 +28,12 @@ import { useDiagramChange } from "./hooks/actions/useDiagramChange";
 import { useDiagramConstraintChange } from "./hooks/actions/useDiagramConstraintChange";
 import { useDiagramStyleChange } from "./hooks/actions/useDiagramStyleChange";
 import { useDrag } from "./hooks/actions/useDrag";
+import { useDragEnter } from "./hooks/actions/useDragEnter";
+import { useDragLeave } from "./hooks/actions/useDragLeave";
 import { useExecute } from "./hooks/actions/useExecute";
 import { useExport } from "./hooks/actions/useExport";
 import { useGroup } from "./hooks/actions/useGroup";
+import { useHoverChange } from "./hooks/actions/useHoverChange";
 import { useNewDiagram } from "./hooks/actions/useNewDiagram";
 import { usePaste } from "./hooks/actions/usePaste";
 import { useStackOrderChange } from "./hooks/actions/useStackOrderChange";
@@ -158,6 +161,15 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the text change event (includes text editing initiation).
 	const onTextChange = useTextChange(canvasHooksProps);
 
+	// Handler for the hover change event.
+	const onHoverChange = useHoverChange(canvasHooksProps);
+
+	// Handler for the drag enter event.
+	const onDragEnter = useDragEnter(canvasHooksProps);
+
+	// Handler for the drag leave event.
+	const onDragLeave = useDragLeave(canvasHooksProps);
+
 	// Handler for the group event.
 	const onGroup = useGroup(canvasHooksProps);
 
@@ -223,6 +235,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onDiagramStyleChange,
 		onDiagramConstraintChange,
 		onTextChange,
+		onHoverChange,
+		onDragEnter,
+		onDragLeave,
 		onGroup,
 		onUngroup,
 		onUndo,

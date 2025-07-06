@@ -4,6 +4,7 @@ import { memo, useCallback, useMemo, useRef, useState } from "react";
 
 // Import types.
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
+import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
 import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
 
 // SvgCanvas components.
@@ -64,11 +65,14 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
+	onDragEnter,
+	onDragLeave,
 	onClick,
 	onSelect,
 	onTransform,
 	onConnect,
 	onTextChange,
+	onHoverChange,
 }) => {
 	// Flag whether hovering
 	const [isHovered, setIsHovered] = useState(false);
@@ -91,23 +95,38 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	/**
 	 * Hover state change event handler
 	 */
-	const handleHover = useCallback((e: DiagramHoverChangeEvent) => {
-		setIsHovered(e.isHovered);
-	}, []);
+	const handleHover = useCallback(
+		(e: DiagramHoverChangeEvent) => {
+			setIsHovered(e.isHovered);
+			// Propagate hover change event to canvas
+			if (onHoverChange) {
+				onHoverChange(e);
+			}
+		},
+		[onHoverChange],
+	);
 
 	/**
 	 * Drag over event handler
 	 */
-	const handleDragOver = useCallback(() => {
+	const handleDragOver = useCallback((e: DiagramDragDropEvent) => {
 		setIsHovered(true);
-	}, []);
+		// Propagate drag enter event to canvas
+		if (onDragEnter) {
+			onDragEnter(e);
+		}
+	}, [onDragEnter]);
 
 	/**
 	 * Drag leave event handler
 	 */
-	const handleDragLeave = useCallback(() => {
+	const handleDragLeave = useCallback((e: DiagramDragDropEvent) => {
 		setIsHovered(false);
-	}, []);
+		// Propagate drag leave event to canvas
+		if (onDragLeave) {
+			onDragLeave(e);
+		}
+	}, [onDragLeave]);
 
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({
