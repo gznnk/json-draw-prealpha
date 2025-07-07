@@ -1,11 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Point } from "../../../types/base/Point";
 import type { Shape } from "../../../types/base/Shape";
-
-/**
- * Connect point direction
- */
-export type Direction = "up" | "down" | "left" | "right";
 
 export type ConnectionEvent = {
 	eventId: string;
@@ -26,8 +20,4 @@ export type ConnectingPoint = {
 	y: number;
 	onwerId: string;
 	ownerShape: Shape;
-};
-
-export type GridPoint = Point & {
-	score?: number;
 };

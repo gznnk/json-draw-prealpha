@@ -1,6 +1,6 @@
 import { calcRadians } from "../../math/points/calcRadians";
 import { getDirection } from "./getDirection";
-import type { Direction } from "../../../components/shapes/ConnectPoint/ConnectPointTypes";
+import type { Direction } from "../../../types/base/Direction";
 
 /**
  * Gets direction from two points coordinates.

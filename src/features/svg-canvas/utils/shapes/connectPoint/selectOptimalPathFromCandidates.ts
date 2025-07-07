@@ -1,7 +1,10 @@
 import type { Point } from "../../../types/base/Point";
-import type { GridPoint } from "../../../components/shapes/ConnectPoint/ConnectPointTypes";
 import { calcManhattanDistance } from "../../math/points/calcManhattanDistance";
 import { isStraight } from "./isStraight";
+
+export type GridPoint = Point & {
+	score?: number;
+};
 
 /**
  * Checks if a point matches the midPoint and returns its score.

@@ -1,6 +1,6 @@
 import type { BoxGeometry } from "../../../types/base/BoxGeometry";
 import type { Point } from "../../../types/base/Point";
-import type { Direction } from "../../../components/shapes/ConnectPoint/ConnectPointTypes";
+import type { Direction } from "../../../types/base/Direction";
 import { closer } from "../../math/common/closer";
 import { segmentsIntersect } from "../../math/geometry/segmentsIntersect";
 import { getLineDirection } from "./getLineDirection";
