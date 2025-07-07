@@ -12,7 +12,7 @@ import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
-import { ConnectPoints } from "../ConnectPoint/ConnectPoints";
+import { ConnectPoints } from "../ConnectPoints";
 
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";

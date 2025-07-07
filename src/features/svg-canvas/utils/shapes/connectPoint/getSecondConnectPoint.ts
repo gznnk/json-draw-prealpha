@@ -1,4 +1,4 @@
-import { CONNECT_LINE_MARGIN } from "../../../components/shapes/ConnectPoint/ConnectPoint/ConnectPointConstants";
+import { CONNECT_LINE_MARGIN } from "../../../components/shapes/ConnectPoint/ConnectPointConstants";
 import type { BoxGeometry } from "../../../types/base/BoxGeometry";
 import type { Point } from "../../../types/base/Point";
 import type { Shape } from "../../../types/base/Shape";

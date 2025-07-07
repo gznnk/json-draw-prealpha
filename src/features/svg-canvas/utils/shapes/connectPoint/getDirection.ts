@@ -1,5 +1,5 @@
 import { radiansToDegrees } from "../../math/common/radiansToDegrees";
-import type { Direction } from "../../../components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes";
+import type { Direction } from "../../../components/shapes/ConnectPoint/ConnectPointTypes";
 
 /**
  * Converts radians to direction based on angle degrees.

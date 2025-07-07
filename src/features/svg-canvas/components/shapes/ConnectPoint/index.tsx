@@ -1,5 +1,4 @@
-export { ConnectPoint } from "./ConnectPoint/ConnectPoint";
-export type { Direction } from "./ConnectPoint/ConnectPointTypes";
-export { ConnectPoints } from "./ConnectPoints";
-export type { ConnectPointsProps } from "./ConnectPoints/ConnectPointsTypes";
-export { PreviewConnectLine } from "./PreviewConnectLine";
+export { ConnectPoint } from "./ConnectPoint";
+export { generateOptimalShapeToShapeConnection } from "../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
+export { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDirection";
+export type { Direction } from "./ConnectPointTypes";

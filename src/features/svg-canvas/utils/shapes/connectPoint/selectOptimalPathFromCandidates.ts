@@ -1,5 +1,5 @@
 import type { Point } from "../../../types/base/Point";
-import type { GridPoint } from "../../../components/shapes/ConnectPoint/ConnectPoint/ConnectPointTypes";
+import type { GridPoint } from "../../../components/shapes/ConnectPoint/ConnectPointTypes";
 import { calcManhattanDistance } from "../../math/points/calcManhattanDistance";
 import { isStraight } from "./isStraight";
 
@@ -20,7 +20,7 @@ const getMidPointScore = (point: Point, midPoint: GridPoint): number => {
  * Selects the optimal path from candidate paths based on distance, turns, and scoring.
  * This function evaluates multiple path candidates and returns the best one by comparing:
  * 1. Total path distance (shorter is better)
- * 2. Number of turns (fewer is better)  
+ * 2. Number of turns (fewer is better)
  * 3. Score based on optimal waypoints (higher is better)
  *
  * @param candidatePaths - List of candidate paths to evaluate
@@ -111,12 +111,14 @@ export const selectOptimalPathFromCandidates = (
 
 		// If both distance and turns are equal, compare scores
 		const bestPathScore = bestPath.reduce(
-			(totalScore, point) => totalScore + getMidPointScore(point, optimalMidPoint),
+			(totalScore, point) =>
+				totalScore + getMidPointScore(point, optimalMidPoint),
 			0,
 		);
 
 		const currentPathScore = currentPath.reduce(
-			(totalScore, point) => totalScore + getMidPointScore(point, optimalMidPoint),
+			(totalScore, point) =>
+				totalScore + getMidPointScore(point, optimalMidPoint),
 			0,
 		);
 
