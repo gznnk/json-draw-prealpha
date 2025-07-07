@@ -3,30 +3,30 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { Point } from "../../../types/base/Point";
-import type { PathPointData } from "../../../types/data/shapes/PathPointData";
-import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
-import type { ConnectPointProps } from "../../../types/props/shapes/ConnectPointProps";
+import type { Point } from "../../../../types/base/Point";
+import type { PathPointData } from "../../../../types/data/shapes/PathPointData";
+import type { DiagramDragDropEvent } from "../../../../types/events/DiagramDragDropEvent";
+import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
+import type { DiagramHoverChangeEvent } from "../../../../types/events/DiagramHoverChangeEvent";
+import type { ConnectPointProps } from "../../../../types/props/shapes/ConnectPointProps";
 
 // Import hooks
-import { useEventBus } from "../../../context/EventBusContext";
+import { useEventBus } from "../../../../context/EventBusContext";
 
 // Import components.
-import { DragPoint } from "../../core/DragPoint";
+import { DragPoint } from "../../../core/DragPoint";
 
 // Import utils.
-import { calcRectangleBoundingBoxGeometry } from "../../../utils/math/geometry/calcRectangleBoundingBoxGeometry";
-import { newId } from "../../../utils/shapes/common/newId";
-import { generateOptimalShapeToShapeConnection } from "../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
-import { generatePathFromShapeToPoint } from "../../../utils/shapes/connectPoint/generatePathFromShapeToPoint";
-import { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDirection";
+import { calcRectangleBoundingBoxGeometry } from "../../../../utils/math/geometry/calcRectangleBoundingBoxGeometry";
+import { newId } from "../../../../utils/shapes/common/newId";
+import { generateOptimalShapeToShapeConnection } from "../../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
+import { generatePathFromShapeToPoint } from "../../../../utils/shapes/connectPoint/generatePathFromShapeToPoint";
+import { getLineDirection } from "../../../../utils/shapes/connectPoint/getLineDirection";
 
 // Import local module files.
-import { EVENT_NAME_CONNECTTION } from "../../../constants/EventNames";
-import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
-import type { EventType } from "../../../types/events/EventType";
+import { EVENT_NAME_CONNECTTION } from "../../../../constants/EventNames";
+import type { ConnectingPoint, ConnectionEvent } from "../ConnectPointTypes";
+import type { EventType } from "../../../../types/events/EventType";
 
 /**
  * Connect point component
