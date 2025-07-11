@@ -6,36 +6,45 @@ import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData
 import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utils.
 import { calcOrientedShapeFromPoints } from "../../../utils/math/geometry/calcOrientedShapeFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
-
-// Import hooks.
-import { dispatchNewItemEvent } from "../listeners/addNewItem";
+import { newEventId } from "../../../utils/common/newEventId";
+import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
+import { isConnectableData } from "../../../utils/validation/isConnectableData";
+import { addHistory } from "../../utils/addHistory";
 
 /**
  * Custom hook to handle connect events on the canvas.
  */
-export const useConnect = (_props: CanvasHooksProps) => {
-	return useCallback((e: DiagramConnectEvent) => {
-		const shape = calcOrientedShapeFromPoints(
-			e.points.map((p: PathPointData) => ({ x: p.x, y: p.y })),
-		);
+export const useConnect = (props: CanvasHooksProps) => {
+	return useCallback(
+		(e: DiagramConnectEvent) => {
+			const { setCanvasState } = props;
 
-		dispatchNewItemEvent({
-			eventId: e.eventId,
-			item: {
+			const shape = calcOrientedShapeFromPoints(
+				e.points.map((p: PathPointData) => ({ x: p.x, y: p.y })),
+			);
+
+			const newConnectLine: ConnectLineData = {
 				id: newId(),
 				type: "ConnectLine",
 				x: shape.x,
 				y: shape.y,
 				width: shape.width,
 				height: shape.height,
+				rotation: 0,
+				scaleX: 1,
+				scaleY: 1,
 				stroke: "#3A415C",
 				strokeWidth: "3px",
 				isSelected: false,
+				showOutline: false,
+				showTransformControls: false,
 				keepProportion: false,
+				isTransforming: false,
 				items: e.points.map((p: PathPointData) => ({
 					...p,
 					type: "PathPoint",
@@ -44,7 +53,39 @@ export const useConnect = (_props: CanvasHooksProps) => {
 				endOwnerId: e.endOwnerId,
 				autoRouting: true,
 				endArrowHead: "Circle",
-			} as ConnectLineData,
-		});
-	}, []);
+			};
+
+			setCanvasState((prevState) => {
+				// Update endOwnerId item to hide connect points
+				const items = applyFunctionRecursively(
+					prevState.items,
+					(item: Diagram) => {
+						if (item.id === e.endOwnerId && isConnectableData(item)) {
+							return {
+								...item,
+								showConnectPoints: false,
+							};
+						}
+						return item;
+					},
+				);
+
+				// Add the new ConnectLine to the items
+				const updatedItems = [...items, newConnectLine];
+
+				// Create new state with updated items
+				let newState = {
+					...prevState,
+					items: updatedItems,
+				};
+
+				// Add history entry
+				newState.lastHistoryEventId = newEventId();
+				newState = addHistory(prevState, newState);
+
+				return newState;
+			});
+		},
+		[props],
+	);
 };
