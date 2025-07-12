@@ -1,6 +1,7 @@
 import { getAncestorItemsById } from "../getAncestorItemsById";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { SvgCanvasState } from "../../SvgCanvasTypes";
+import { InteractionState } from "../../SvgCanvasTypes";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { DiagramType } from "../../../types/base/DiagramType";
 
@@ -77,6 +78,7 @@ const createMockCanvasState = (items: Diagram[] = []): SvgCanvasState => ({
 		fontWeight: "normal",
 		isActive: false,
 	},
+	interactionState: InteractionState.Normal,
 	items,
 });
 

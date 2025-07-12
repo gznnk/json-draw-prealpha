@@ -5,6 +5,7 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import { InteractionState } from "../../SvgCanvasTypes";
 
 // Import hooks related to SvgCanvas.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
@@ -172,6 +173,10 @@ export const useDrag = (props: CanvasHooksProps) => {
 				...prevState,
 				items: moveRecursively(prevState.items),
 				isDiagramChanging: isDiagramChangingEvent(e.eventType),
+				interactionState:
+					e.eventType === "Start" || e.eventType === "InProgress"
+						? InteractionState.Dragging
+						: InteractionState.Normal,
 			};
 
 			// If multiple items are selected, create a multi-select group

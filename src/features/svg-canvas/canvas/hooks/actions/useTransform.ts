@@ -6,6 +6,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventType } from "../../../types/events/EventType";
 import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import { InteractionState } from "../../SvgCanvasTypes";
 
 // Import hooks related to SvgCanvas.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
@@ -300,6 +301,10 @@ export const useTransform = (props: CanvasHooksProps) => {
 						topLevelGroupIds,
 					),
 					isDiagramChanging: isDiagramChangingEvent(e.eventType),
+					interactionState:
+						e.eventType === "Start" || e.eventType === "InProgress"
+							? InteractionState.Transforming
+							: InteractionState.Normal,
 					multiSelectGroup: prevState.multiSelectGroup
 						? ({
 								...prevState.multiSelectGroup,
