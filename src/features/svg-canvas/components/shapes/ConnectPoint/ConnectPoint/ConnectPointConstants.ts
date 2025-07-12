@@ -2,4 +2,4 @@
 export const CONNECT_LINE_MARGIN = 20;
 
 /** 接続イベントの名前 */
-export const EVENT_NAME_CONNECTTION = "Connection";
+export const EVENT_NAME_CONNECTION = "Connection";

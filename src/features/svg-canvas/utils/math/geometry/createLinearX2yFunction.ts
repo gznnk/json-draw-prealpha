@@ -9,7 +9,7 @@ import type { Point } from "../../../types/base/Point";
  * @param p2 - Second point on the line
  * @returns A function that takes X (and ignores Y) and returns a point with calculated Y
  */
-export const createLinerX2yFunction = (p1: Point, p2: Point) => {
+export const createLinearX2yFunction = (p1: Point, p2: Point) => {
 	const a = (p2.y - p1.y) / (p2.x - p1.x);
 	const b = p1.y - a * p1.x;
 

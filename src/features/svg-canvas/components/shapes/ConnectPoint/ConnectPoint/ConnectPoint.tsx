@@ -19,7 +19,7 @@ import { newId } from "../../../../utils/shapes/common/newId";
 
 // Imports related to this component.
 import { triggerNewConnectLine } from "../NewConnectLine";
-import { EVENT_NAME_CONNECTTION } from "./ConnectPointConstants";
+import { EVENT_NAME_CONNECTION } from "./ConnectPointConstants";
 import { createBestConnectPath } from "../../../../utils/shapes/connectPoint/createBestConnectPath";
 import { createConnectPathOnDrag } from "../../../../utils/shapes/connectPoint/createConnectPathOnDrag";
 import { getLineDirection } from "../../../../utils/shapes/connectPoint/getLineDirection";
@@ -157,7 +157,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 			// 接続元に情報を送信
 			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_CONNECTTION, {
+				new CustomEvent(EVENT_NAME_CONNECTION, {
 					detail: {
 						eventId: e.eventId,
 						type: "connecting",
@@ -185,7 +185,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 			// 接続元に情報を送信
 			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_CONNECTTION, {
+				new CustomEvent(EVENT_NAME_CONNECTION, {
 					detail: {
 						eventId: e.eventId,
 						type: "disconnect",
@@ -212,7 +212,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 			// 接続元に情報を送信
 			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_CONNECTTION, {
+				new CustomEvent(EVENT_NAME_CONNECTION, {
 					detail: {
 						eventId: e.eventId,
 						type: "connect",
@@ -296,11 +296,11 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			}
 		};
 
-		eventBus.addEventListener(EVENT_NAME_CONNECTTION, handleConnection);
+		eventBus.addEventListener(EVENT_NAME_CONNECTION, handleConnection);
 
 		return () => {
 			if (handleConnection) {
-				eventBus.removeEventListener(EVENT_NAME_CONNECTTION, handleConnection);
+				eventBus.removeEventListener(EVENT_NAME_CONNECTION, handleConnection);
 			}
 		};
 	}, [eventBus]);

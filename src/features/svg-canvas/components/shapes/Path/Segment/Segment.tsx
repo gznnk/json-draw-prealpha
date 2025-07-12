@@ -15,8 +15,8 @@ import type { EventBus } from "../../../../../../shared/event-bus/EventBus";
 // Import functions related to SvgCanvas.
 import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
 import { calcRadians } from "../../../../utils/math/points/calcRadians";
-import { createLinerX2yFunction } from "../../../../utils/math/geometry/createLinerX2yFunction";
-import { createLinerY2xFunction } from "../../../../utils/math/geometry/createLinerY2xFunction";
+import { createLinearX2yFunction } from "../../../../utils/math/geometry/createLinearX2yFunction";
+import { createLinearY2xFunction } from "../../../../utils/math/geometry/createLinearY2xFunction";
 import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
 import { rotatePoint } from "../../../../utils/math/points/rotatePoint";
 
@@ -82,8 +82,8 @@ const SegmentComponent: React.FC<SegmentProps> = ({
 		const degrees = radiansToDegrees(radian);
 		const isX2y = (degrees + 405) % 180 > 90;
 		return isX2y
-			? createLinerX2yFunction(rotateStartPoint, rotateEndPoint)(x, y)
-			: createLinerY2xFunction(rotateStartPoint, rotateEndPoint)(x, y);
+			? createLinearX2yFunction(rotateStartPoint, rotateEndPoint)(x, y)
+			: createLinearY2xFunction(rotateStartPoint, rotateEndPoint)(x, y);
 	}, []);
 
 	return (
