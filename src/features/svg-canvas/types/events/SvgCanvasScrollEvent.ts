@@ -3,4 +3,5 @@ export type SvgCanvasScrollEvent = {
 	minY: number;
 	clientX: number;
 	clientY: number;
+	isFromAutoEdgeScroll?: boolean;
 };

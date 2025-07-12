@@ -61,7 +61,7 @@ const getIsTransformingState = (eventType: EventType): boolean => {
  */
 export const useTransform = (props: CanvasHooksProps) => {
 	// Get the auto edge scroll function to handle canvas auto scrolling.
-	const autoEdgeScroll = useAutoEdgeScroll(props);
+	const { autoEdgeScroll } = useAutoEdgeScroll(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

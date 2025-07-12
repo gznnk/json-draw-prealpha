@@ -17,7 +17,7 @@ export const AUTO_SCROLL_THRESHOLD = 20;
 /**
  * The amount of space to scroll each time when auto-scrolling at canvas edge.
  */
-export const AUTO_SCROLL_STEP_SIZE = 10;
+export const AUTO_SCROLL_STEP_SIZE = 15;
 
 /**
  * Interval duration for continuous auto-scrolling when cursor is at edge (in milliseconds).

@@ -15,4 +15,5 @@ export type DiagramDragEvent = {
 	cursorY: number;
 	minX?: number;
 	minY?: number;
+	isFromAutoEdgeScroll?: boolean;
 };

@@ -1,5 +1,5 @@
 // Import React.
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
 import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
@@ -18,6 +18,16 @@ import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 type ScrollDirection = "left" | "top" | "right" | "bottom";
 
 /**
+ * Return type for useAutoEdgeScroll hook.
+ */
+export type UseAutoEdgeScrollReturn = {
+	/** Function to adjust scroll position when cursor is near edges */
+	autoEdgeScroll: (args: { cursorX: number; cursorY: number }) => void;
+	/** Flag indicating whether auto edge scroll is currently active */
+	isAutoScrolling: boolean;
+};
+
+/**
  * Determines if auto scrolling should be stopped based on canvas state.
  *
  * @param canvasState - Current canvas state
@@ -31,9 +41,11 @@ const shouldStopAutoScroll = (canvasState: SvgCanvasState): boolean => {
  * Custom hook to handle auto edge scrolling when cursor approaches canvas boundaries.
  *
  * @param props - Canvas hook props including canvas state and setter
- * @returns Function to adjust scroll position when cursor is near edges
+ * @returns Object containing auto scroll function and current scrolling state
  */
-export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
+export const useAutoEdgeScroll = (
+	props: CanvasHooksProps,
+): UseAutoEdgeScrollReturn => {
 	const { eventBus } = props;
 
 	// Create references bypass to avoid function creation in every render.
@@ -56,12 +68,16 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 		y: number;
 	}>({ x: 0, y: 0 });
 
+	// State to track if auto scrolling is currently active
+	const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+
 	// Function to clear the scroll interval
 	const clearScrollInterval = useCallback(() => {
 		if (scrollIntervalRef.current) {
 			clearInterval(scrollIntervalRef.current);
 			scrollIntervalRef.current = null;
 			lastScrollDirectionRef.current.direction = null;
+			setIsAutoScrolling(false);
 		}
 	}, []);
 
@@ -106,6 +122,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 				minY: newMinY,
 				clientX: adjustedClientX,
 				clientY: adjustedClientY,
+				isFromAutoEdgeScroll: true,
 			};
 
 			eventBus.dispatchEvent(
@@ -125,6 +142,9 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 
 			// Set the new direction
 			lastScrollDirectionRef.current.direction = direction;
+
+			// Set auto scrolling state to true
+			setIsAutoScrolling(true);
 
 			// Store current cursor position
 			currentCursorRef.current.x = cursorX;
@@ -197,7 +217,7 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 		};
 	}, [clearScrollInterval]);
 
-	return useCallback(
+	const autoEdgeScrollCallback = useCallback(
 		({
 			cursorX,
 			cursorY,
@@ -275,4 +295,9 @@ export const useAutoEdgeScroll = (props: CanvasHooksProps) => {
 		},
 		[clearScrollInterval, startScrollInterval],
 	);
+
+	return {
+		autoEdgeScroll: autoEdgeScrollCallback,
+		isAutoScrolling,
+	};
 };
