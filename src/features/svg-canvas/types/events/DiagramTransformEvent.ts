@@ -15,4 +15,5 @@ export type DiagramTransformEvent = {
 	cursorY: number;
 	minX?: number;
 	minY?: number;
+	isFromAutoEdgeScroll?: boolean;
 };

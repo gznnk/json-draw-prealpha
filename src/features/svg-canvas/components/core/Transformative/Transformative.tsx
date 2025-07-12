@@ -163,6 +163,7 @@ const TransformativeComponent: React.FC<Props> = ({
 		cursorY: number,
 		minX?: number,
 		minY?: number,
+		isFromAutoEdgeScroll?: boolean,
 	) => {
 		const event = {
 			eventId,
@@ -184,6 +185,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			cursorY,
 			minX,
 			minY,
+			isFromAutoEdgeScroll,
 		};
 
 		onTransform?.(event);
@@ -319,6 +321,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -390,6 +393,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -461,6 +465,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -532,6 +537,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -603,6 +609,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -679,6 +686,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -755,6 +763,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 
@@ -831,6 +840,7 @@ const TransformativeComponent: React.FC<Props> = ({
 			e.cursorY,
 			e.minX,
 			e.minY,
+			e.isFromAutoEdgeScroll,
 		);
 	}, []);
 

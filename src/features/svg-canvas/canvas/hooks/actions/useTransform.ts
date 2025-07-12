@@ -60,13 +60,14 @@ const getIsTransformingState = (eventType: EventType): boolean => {
  * Custom hook to handle transform events on the canvas.
  */
 export const useTransform = (props: CanvasHooksProps) => {
-	// Get the auto edge scroll function to handle canvas auto scrolling.
-	const { autoEdgeScroll } = useAutoEdgeScroll(props);
+	// Get the auto edge scroll function and scrolling state to handle canvas auto scrolling.
+	const { autoEdgeScroll, isAutoScrolling } = useAutoEdgeScroll(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
 		autoEdgeScroll,
+		isAutoScrolling,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -265,7 +266,19 @@ export const useTransform = (props: CanvasHooksProps) => {
 			const {
 				props: { setCanvasState, onDataChange },
 				autoEdgeScroll,
+				isAutoScrolling,
 			} = refBus.current;
+
+			// If auto scrolling is active and this event is not from auto edge scroll,
+			// ignore diagram transformation processing but continue auto edge scroll detection
+			if (isAutoScrolling && !e.isFromAutoEdgeScroll) {
+				// Auto scroll if the cursor is near the edges.
+				autoEdgeScroll({
+					cursorX: e.cursorX,
+					cursorY: e.cursorY,
+				});
+				return;
+			}
 
 			// Update the canvas state based on the transform event.
 			setCanvasState((prevState) => {
