@@ -22,7 +22,7 @@ export const AUTO_SCROLL_STEP_SIZE = 15;
 /**
  * Interval duration for continuous auto-scrolling when cursor is at edge (in milliseconds).
  */
-export const AUTO_SCROLL_INTERVAL_MS = 25;
+export const AUTO_SCROLL_INTERVAL_MS = 20;
 
 /**
  * Id of the group for multi-select elements.
