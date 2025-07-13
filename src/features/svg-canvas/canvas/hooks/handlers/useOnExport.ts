@@ -12,7 +12,7 @@ import { mimeToExtension } from "../../../utils/common/mimeToExtension";
 /**
  * Custom hook to handle export events on the canvas.
  */
-export const useExport = (props: SvgCanvasSubHooksProps) => {
+export const useOnExport = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

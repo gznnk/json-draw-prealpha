@@ -13,7 +13,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle diagram style change events on the canvas.
  */
-export const useDiagramStyleChange = (props: SvgCanvasSubHooksProps) => {
+export const useOnDiagramStyleChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

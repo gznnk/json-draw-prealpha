@@ -15,7 +15,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle stack order change events on the canvas.
  */
-export const useStackOrderChange = (props: SvgCanvasSubHooksProps) => {
+export const useOnStackOrderChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

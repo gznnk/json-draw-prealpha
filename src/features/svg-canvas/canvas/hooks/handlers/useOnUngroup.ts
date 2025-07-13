@@ -13,7 +13,7 @@ import { ungroupSelectedGroupsRecursive } from "../../utils/ungroupSelectedGroup
 /**
  * Custom hook to handle ungroup events on the canvas.
  */
-export const useUngroup = (props: SvgCanvasSubHooksProps) => {
+export const useOnUngroup = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
