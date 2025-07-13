@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
@@ -16,7 +16,7 @@ import { isItemableData } from "../../../utils/validation/isItemableData";
 /**
  * Custom hook to handle select all events on the canvas.
  */
-export const useSelectAll = (props: CanvasHooksProps) => {
+export const useSelectAll = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

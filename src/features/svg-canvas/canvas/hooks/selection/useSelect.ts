@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import utils.
 import { getDiagramById } from "../../../utils/common/getDiagramById";
@@ -20,7 +20,10 @@ import { isTransformativeData } from "../../../utils/validation/isTransformative
 /**
  * Custom hook to handle select events on the canvas.
  */
-export const useSelect = (props: CanvasHooksProps, isCtrlPressed?: boolean) => {
+export const useSelect = (
+	props: SvgCanvasSubHooksProps,
+	isCtrlPressed?: boolean,
+) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../../utils/common/newEventId";
@@ -12,7 +12,7 @@ import { ungroupSelectedGroupsRecursive } from "../../utils/ungroupSelectedGroup
 /**
  * Custom hook to handle ungroup events on the canvas.
  */
-export const useUngroup = (props: CanvasHooksProps) => {
+export const useUngroup = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

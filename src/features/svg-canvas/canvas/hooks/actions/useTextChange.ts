@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramTextChangeEvent } from "../../../types/events/DiagramTextChangeEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 import type { TextEditorState } from "../../../components/core/Textable/TextEditor/TextEditorTypes";
 
 // Import functions related to SvgCanvas.
@@ -16,7 +16,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
  * Custom hook to handle text change events on the canvas.
  * Handles both text editing initiation (Start) and text content changes (InProgress/End).
  */
-export const useTextChange = (props: CanvasHooksProps) => {
+export const useTextChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 // Import types.
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utilities.
@@ -15,7 +15,7 @@ import { isConnectableData } from "../../../utils/validation/isConnectableData";
  * This hook provides a centralized way to handle hover state changes
  * for diagram elements, enabling visual feedback and interactions.
  */
-export const useHoverChange = (props: CanvasHooksProps) => {
+export const useHoverChange = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramHoverChangeEvent) => {
 			const { setCanvasState } = props;

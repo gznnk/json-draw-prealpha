@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 // Import types.
 import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utilities.
@@ -15,7 +15,7 @@ import { isConnectableData } from "../../../utils/validation/isConnectableData";
  * This hook provides a centralized way to handle drag enter state
  * for diagram elements, enabling visual feedback during drag operations.
  */
-export const useDragEnter = (props: CanvasHooksProps) => {
+export const useDragEnter = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramDragDropEvent) => {
 			const { setCanvasState } = props;

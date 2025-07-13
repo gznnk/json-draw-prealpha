@@ -6,7 +6,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import components related to SvgCanvas.
 import { notifyConnectPointsMove } from "../../../components/shapes/ConnectLine";
@@ -32,7 +32,7 @@ import type { SvgCanvasState } from "../../SvgCanvasTypes";
 /**
  * Custom hook to handle diagram change events on the canvas.
  */
-export const useDiagramChange = (props: CanvasHooksProps) => {
+export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 	// Get the auto edge scroll function to handle canvas auto scrolling.
 	const { autoEdgeScroll } = useAutoEdgeScroll(props);
 

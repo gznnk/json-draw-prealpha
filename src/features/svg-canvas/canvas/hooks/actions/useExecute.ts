@@ -6,7 +6,7 @@ import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData
 import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../../constants/EventNames";
 import type { ExecuteEvent } from "../../../types/events/ExecuteEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { triggerFlashConnectLine } from "../../../components/shapes/ConnectLine";
@@ -14,7 +14,7 @@ import { triggerFlashConnectLine } from "../../../components/shapes/ConnectLine"
 /**
  * Custom hook to handle execute events on the canvas.
  */
-export const useExecute = (props: CanvasHooksProps) => {
+export const useExecute = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

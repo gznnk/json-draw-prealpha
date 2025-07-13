@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { DiagramConstraintChangeEvent } from "../../../types/events/DiagramConstraintChangeEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { addHistory } from "../../utils/addHistory";
@@ -13,7 +13,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle diagram constraint change events on the canvas.
  */
-export const useDiagramConstraintChange = (props: CanvasHooksProps) => {
+export const useDiagramConstraintChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

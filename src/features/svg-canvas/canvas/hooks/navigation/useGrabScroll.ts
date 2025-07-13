@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import hooks.
 import { useScroll } from "./useScroll";
@@ -22,7 +22,9 @@ type UseGrabScrollReturn = {
  * @param props - Configuration options for grab scrolling
  * @returns Object containing Ctrl state, drag state, and event handlers
  */
-export const useGrabScroll = (props: CanvasHooksProps): UseGrabScrollReturn => {
+export const useGrabScroll = (
+	props: SvgCanvasSubHooksProps,
+): UseGrabScrollReturn => {
 	const {
 		canvasState: { minX, minY, grabScrollState },
 		setCanvasState,

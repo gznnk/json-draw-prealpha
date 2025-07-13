@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { NewDiagramEvent } from "../../../types/events/NewDiagramEvent";
 import type { DiagramType } from "../../../types/core/DiagramType";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";
@@ -15,7 +15,7 @@ import { dispatchNewItemEvent } from "../listeners/addNewItem";
 /**
  * Custom hook to handle new diagram events on the canvas.
  */
-export const useNewDiagram = (props: CanvasHooksProps) => {
+export const useNewDiagram = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

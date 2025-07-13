@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";
@@ -12,7 +12,7 @@ import { mimeToExtension } from "../../../utils/common/mimeToExtension";
 /**
  * Custom hook to handle export events on the canvas.
  */
-export const useExport = (props: CanvasHooksProps) => {
+export const useExport = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

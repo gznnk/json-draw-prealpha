@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
 import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utils.
@@ -19,7 +19,7 @@ import { addHistory } from "../../utils/addHistory";
 /**
  * Custom hook to handle connect events on the canvas.
  */
-export const useConnect = (props: CanvasHooksProps) => {
+export const useConnect = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramConnectEvent) => {
 			const { setCanvasState } = props;

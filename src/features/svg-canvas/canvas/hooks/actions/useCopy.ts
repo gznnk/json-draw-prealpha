@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import utils.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";
@@ -52,7 +52,7 @@ const findConnectLinesWithBothEndsSelected = (
 /**
  * Custom hook to handle copy events on the canvas.
  */
-export const useCopy = (props: CanvasHooksProps) => {
+export const useCopy = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render
 	const refBusVal = {
 		props,

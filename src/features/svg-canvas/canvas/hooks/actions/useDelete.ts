@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types.
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import utils.
 import { newEventId } from "../../../utils/common/newEventId";
@@ -16,7 +16,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle delete events on the canvas.
  */
-export const useDelete = (props: CanvasHooksProps) => {
+export const useDelete = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

@@ -94,7 +94,7 @@ export interface SvgCanvasRef {
 /**
  * Type for canvas custom hooks.
  */
-export type CanvasHooksProps = {
+export type SvgCanvasSubHooksProps = {
 	canvasState: SvgCanvasState;
 	canvasRef?: SvgCanvasRef | null;
 	setCanvasState: React.Dispatch<React.SetStateAction<SvgCanvasState>>;

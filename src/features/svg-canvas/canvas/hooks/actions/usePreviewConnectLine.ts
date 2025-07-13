@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { PreviewConnectLineEvent } from "../../../types/events/PreviewConnectLineEvent";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
@@ -12,7 +12,7 @@ import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
  * Custom hook to handle preview connect line events on the canvas.
  * Updates the canvas state to show or hide the preview connection line.
  */
-export const usePreviewConnectLine = (props: CanvasHooksProps) => {
+export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

@@ -7,12 +7,12 @@ import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/EventNames";
 import { InteractionState } from "../../SvgCanvasTypes";
 
 // Import EventBus.
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 /**
  * Custom hook to handle scroll events on the canvas.
  */
-export const useScroll = (props: CanvasHooksProps) => {
+export const useScroll = (props: SvgCanvasSubHooksProps) => {
 	const { eventBus } = props;
 
 	// Create references bypass to avoid function creation in every render.

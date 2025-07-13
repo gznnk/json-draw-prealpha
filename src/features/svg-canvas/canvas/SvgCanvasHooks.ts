@@ -17,6 +17,7 @@ import type {
 	SvgCanvasData,
 	SvgCanvasRef,
 	SvgCanvasState,
+	SvgCanvasSubHooksProps,
 } from "./SvgCanvasTypes";
 import { InteractionState } from "./SvgCanvasTypes";
 
@@ -113,7 +114,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	});
 
 	// Create props for the canvas hooks.
-	const canvasHooksProps = {
+	const canvasHooksProps: SvgCanvasSubHooksProps = {
 		canvasState,
 		setCanvasState,
 		canvasRef: props.canvasRef.current,

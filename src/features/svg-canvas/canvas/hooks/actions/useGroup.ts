@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { GroupData } from "../../../types/data/shapes/GroupData";
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { newId } from "../../../utils/shapes/common/newId";
@@ -16,7 +16,7 @@ import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
 /**
  * Custom hook to handle group events on the canvas.
  */
-export const useGroup = (props: CanvasHooksProps) => {
+export const useGroup = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
@@ -10,7 +10,7 @@ import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
 /**
  * Custom hook to handle clear all selection events on the canvas.
  */
-export const useClearAllSelection = (props: CanvasHooksProps) => {
+export const useClearAllSelection = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

@@ -1,4 +1,4 @@
-Processed 536 files (3.5s) (2 warnings)
+Processed 544 files (3.6s) (2 warnings)
 
 1) features/svg-canvas/canvas/SvgCanvasTypes.ts > features/svg-canvas/canvas/hooks/selection/useAreaSelection.ts
 2) features/svg-canvas/canvas/SvgCanvasTypes.ts > features/svg-canvas/canvas/hooks/selection/useAreaSelection.ts > features/svg-canvas/canvas/hooks/selection/useClearAllSelection.ts

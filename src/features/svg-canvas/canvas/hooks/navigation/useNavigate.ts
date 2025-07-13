@@ -2,7 +2,7 @@
 import { useCallback } from "react";
 
 // Import types related to SvgCanvas.
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import hooks.
 import { useScroll } from "./useScroll";
@@ -11,7 +11,7 @@ import { useScroll } from "./useScroll";
  * Custom hook to handle navigation events using scroll functionality.
  * This provides a way to programmatically navigate to specific coordinates on the canvas.
  */
-export const useNavigate = (props: CanvasHooksProps) => {
+export const useNavigate = (props: SvgCanvasSubHooksProps) => {
 	// Get scroll handler
 	const onScroll = useScroll(props);
 

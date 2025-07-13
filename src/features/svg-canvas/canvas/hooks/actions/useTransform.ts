@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventType } from "../../../types/events/EventType";
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 import { InteractionState } from "../../SvgCanvasTypes";
 
 // Import hooks related to SvgCanvas.
@@ -59,7 +59,7 @@ const getIsTransformingState = (eventType: EventType): boolean => {
 /**
  * Custom hook to handle transform events on the canvas.
  */
-export const useTransform = (props: CanvasHooksProps) => {
+export const useTransform = (props: SvgCanvasSubHooksProps) => {
 	// Get the auto edge scroll function and scrolling state to handle canvas auto scrolling.
 	const { autoEdgeScroll, isAutoScrolling } = useAutoEdgeScroll(props);
 

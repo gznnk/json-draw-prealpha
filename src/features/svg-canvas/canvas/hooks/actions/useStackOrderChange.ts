@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { StackOrderChangeEvent } from "../../../types/events/StackOrderChangeEvent";
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../../utils/validation/isItemableData";
@@ -14,7 +14,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle stack order change events on the canvas.
  */
-export const useStackOrderChange = (props: CanvasHooksProps) => {
+export const useStackOrderChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

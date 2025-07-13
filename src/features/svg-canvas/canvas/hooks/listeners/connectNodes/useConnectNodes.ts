@@ -7,7 +7,7 @@ import type { PathPointData } from "../../../../types/data/shapes/PathPointData"
 import type { Diagram } from "../../../../types/data/catalog/Diagram";
 import type { ConnectableData } from "../../../../types/data/shapes/ConnectableData";
 import type { ConnectNodesEvent } from "../../../../types/events/ConnectNodesEvent";
-import type { CanvasHooksProps } from "../../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../../SvgCanvasTypes";
 import type { Shape } from "../../../../types/core/Shape";
 
 // Import functions related to SvgCanvas.
@@ -23,7 +23,7 @@ import { CONNECT_NODES_EVENT_NAME } from "./connectNodesConstants";
 /**
  * Hook that monitors ConnectNodes events and performs node connections.
  */
-export const useConnectNodes = (props: CanvasHooksProps) => {
+export const useConnectNodes = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBus = useRef({ props });
 	refBus.current = { props };

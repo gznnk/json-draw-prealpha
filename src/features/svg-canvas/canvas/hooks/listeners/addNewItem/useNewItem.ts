@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { NewItemEvent } from "../../../../types/events/NewItemEvent";
-import type { CanvasHooksProps, SvgCanvasState } from "../../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../../SvgCanvasTypes";
 
 // Import functions related to SvgCanvas.
 import { isSelectableData } from "../../../../utils/validation/isSelectableData";
@@ -16,7 +16,7 @@ import { ADD_NEW_ITEM_EVENT_NAME } from "./addNewItemConstants";
 /**
  * Custom hook to handle new item events on the canvas.
  */
-export const useNewItem = (props: CanvasHooksProps) => {
+export const useNewItem = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

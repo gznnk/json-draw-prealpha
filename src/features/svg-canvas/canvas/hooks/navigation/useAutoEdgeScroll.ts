@@ -10,7 +10,10 @@ import {
 	AUTO_SCROLL_STEP_SIZE,
 	AUTO_SCROLL_THRESHOLD,
 } from "../../SvgCanvasConstants";
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type {
+	SvgCanvasSubHooksProps,
+	SvgCanvasState,
+} from "../../SvgCanvasTypes";
 
 /**
  * Type definition for scroll directions.
@@ -44,7 +47,7 @@ const shouldStopAutoScroll = (canvasState: SvgCanvasState): boolean => {
  * @returns Object containing auto scroll function and current scrolling state
  */
 export const useAutoEdgeScroll = (
-	props: CanvasHooksProps,
+	props: SvgCanvasSubHooksProps,
 ): UseAutoEdgeScrollReturn => {
 	const { eventBus } = props;
 

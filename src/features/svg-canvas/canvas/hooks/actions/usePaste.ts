@@ -7,7 +7,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
 import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
-import type { CanvasHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
 
 // Import utils.
 import { getDiagramById } from "../../../utils/common/getDiagramById";
@@ -259,7 +259,7 @@ const processConnectLineForPaste = (
  * @param props - Canvas hook properties containing setCanvasState and other context
  * @returns A callback function that executes the paste operation
  */
-export const usePaste = (props: CanvasHooksProps) => {
+export const usePaste = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

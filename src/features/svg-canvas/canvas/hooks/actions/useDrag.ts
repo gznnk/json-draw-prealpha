@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { CanvasHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
 import { InteractionState } from "../../SvgCanvasTypes";
 
 // Import hooks related to SvgCanvas.
@@ -30,7 +30,7 @@ import { createItemMap } from "../../utils/createItemMap";
 /**
  * Custom hook to handle drag events on the canvas.
  */
-export const useDrag = (props: CanvasHooksProps) => {
+export const useDrag = (props: SvgCanvasSubHooksProps) => {
 	// Get the auto edge scroll function and scrolling state to handle canvas auto scrolling.
 	const { autoEdgeScroll, isAutoScrolling } = useAutoEdgeScroll(props);
 	// Create references bypass to avoid function creation in every render.
@@ -97,7 +97,7 @@ export const useDrag = (props: CanvasHooksProps) => {
 			// Collect all diagrams that will be moved (for connect point updates)
 			const movedDiagrams: Diagram[] = [];
 
-			// TODO: 関数化
+			// TODO: 関数匁E
 			// Function to update connect points of a moved item
 			const updateConnectPoints = (item: Diagram) => {
 				if (isConnectableData(item)) {
