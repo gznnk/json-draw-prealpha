@@ -44,5 +44,6 @@ export const createVectorStoreNodeData = ({
 		isSelected: false,
 		showOutline: false,
 		showTransformControls: false,
+		showConnectPoints: false,
 	} as VectorStoreNodeData;
 };

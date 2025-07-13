@@ -37,5 +37,6 @@ export const createAgentNodeData = ({
 		isSelected: false,
 		showOutline: false,
 		showTransformControls: false,
+		showConnectPoints: false,
 	} as AgentNodeData;
 };

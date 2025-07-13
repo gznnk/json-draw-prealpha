@@ -44,5 +44,6 @@ export const createImageGenNodeData = ({
 		isSelected: false,
 		showOutline: false,
 		showTransformControls: false,
+		showConnectPoints: false,
 	} as ImageGenNodeData;
 };
