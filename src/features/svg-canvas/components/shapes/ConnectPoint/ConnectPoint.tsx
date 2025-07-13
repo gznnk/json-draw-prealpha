@@ -24,7 +24,7 @@ import { generatePathFromShapeToPoint } from "../../../utils/shapes/connectPoint
 import { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDirection";
 
 // Import local module files.
-import { EVENT_NAME_CONNECTTION } from "../../../constants/EventNames";
+import { EVENT_NAME_CONNECTION } from "../../../constants/EventNames";
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
 import type { EventType } from "../../../types/events/EventType";
 
@@ -175,7 +175,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 			// Send notification to the connection destination
 			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_CONNECTTION, {
+				new CustomEvent(EVENT_NAME_CONNECTION, {
 					detail: {
 						eventId: e.eventId,
 						type: "connecting",
@@ -204,7 +204,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 			// Send notification to the connection destination
 			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_CONNECTTION, {
+				new CustomEvent(EVENT_NAME_CONNECTION, {
 					detail: {
 						eventId: e.eventId,
 						type: "disconnect",
@@ -232,7 +232,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 			// Send notification to the connection destination
 			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_CONNECTTION, {
+				new CustomEvent(EVENT_NAME_CONNECTION, {
 					detail: {
 						eventId: e.eventId,
 						type: "connect",
@@ -323,11 +323,11 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			}
 		};
 
-		eventBus.addEventListener(EVENT_NAME_CONNECTTION, handleConnection);
+		eventBus.addEventListener(EVENT_NAME_CONNECTION, handleConnection);
 
 		return () => {
 			if (handleConnection) {
-				eventBus.removeEventListener(EVENT_NAME_CONNECTTION, handleConnection);
+				eventBus.removeEventListener(EVENT_NAME_CONNECTION, handleConnection);
 			}
 		};
 	}, [eventBus]);
