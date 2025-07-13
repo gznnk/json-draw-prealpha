@@ -19,7 +19,7 @@ import { RotatePoint } from "../RotatePoint";
 
 // Import utils.
 import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
-import { calcNearestCircleIntersectionPoint } from "../../../utils/math/points/calcNearestCircleIntersectionPoint";
+import { calcClosestCircleIntersection } from "../../../utils/math/points/calcClosestCircleIntersection";
 import { calcRadians } from "../../../utils/math/points/calcRadians";
 import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
 import { createLinearX2yFunction } from "../../../utils/math/geometry/createLinearX2yFunction";
@@ -980,7 +980,7 @@ const TransformativeComponent: React.FC<Props> = ({
 	const dragFunctionRotationPoint = useCallback((rx: number, ry: number) => {
 		const { x, y, width } = refBus.current;
 
-		return calcNearestCircleIntersectionPoint(
+		return calcClosestCircleIntersection(
 			x,
 			y,
 			width / 2 + ROTATE_POINT_MARGIN,

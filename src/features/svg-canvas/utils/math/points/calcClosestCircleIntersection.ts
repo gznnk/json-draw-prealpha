@@ -5,7 +5,7 @@ import type { Point } from "../../../types/core/Point";
 import { closerPoint } from "./closerPoint";
 
 /**
- * Calculates the nearest intersection point between a circle and a line.
+ * Calculates the closest intersection point between a circle and a line.
  * Given a circle and a point, finds the intersection point of the circle with the line
  * connecting the circle's center and the point, that is closest to the given point.
  *
@@ -16,7 +16,7 @@ import { closerPoint } from "./closerPoint";
  * @param py - Y-coordinate of the reference point
  * @returns The intersection point closest to the reference point
  */
-export const calcNearestCircleIntersectionPoint = (
+export const calcClosestCircleIntersection = (
 	cx: number,
 	cy: number,
 	r: number,
