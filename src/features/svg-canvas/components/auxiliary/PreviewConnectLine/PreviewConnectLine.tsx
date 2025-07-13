@@ -2,18 +2,10 @@
 import { memo } from "react";
 
 // Import types.
-import type { PathData } from "../../../types/data/shapes/PathData";
+import type { PreviewConnectLineProps } from "./PreviewConnectLineTypes";
 
 // Import components.
-import { Path } from "../Path";
-
-/**
- * Props for PreviewConnectLine component.
- */
-export type PreviewConnectLineProps = {
-	/** The path data for the preview connection line. When undefined, nothing is rendered. */
-	pathData?: PathData;
-};
+import { Path } from "../../shapes/Path";
 
 /**
  * Component for rendering a preview connection line.

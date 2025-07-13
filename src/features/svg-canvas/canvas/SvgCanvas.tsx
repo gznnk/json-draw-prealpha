@@ -20,7 +20,7 @@ import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
 import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
 import { FlashConnectLine } from "../components/shapes/ConnectLine";
-import { PreviewConnectLine } from "../components/shapes/PreviewConnectLine";
+import { PreviewConnectLine } from "../components/auxiliary/PreviewConnectLine";
 import { Group } from "../components/shapes/Group";
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { MiniMap } from "../components/auxiliary/MiniMap";
