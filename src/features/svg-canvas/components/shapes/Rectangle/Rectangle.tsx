@@ -1,10 +1,8 @@
 // Import React.
 import type React from "react";
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 
 // Import types.
-import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
-import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
 import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
 
 // Import components.
@@ -67,7 +65,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
-	onDragEnter,
+	onDragOver,
 	onDragLeave,
 	onClick,
 	onSelect,
@@ -93,45 +91,6 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	/**
-	 * Hover state change event handler
-	 */
-	const handleHover = useCallback(
-		(e: DiagramHoverChangeEvent) => {
-			// Propagate hover change event to canvas
-			if (onHoverChange) {
-				onHoverChange(e);
-			}
-		},
-		[onHoverChange],
-	);
-
-	/**
-	 * Drag over event handler
-	 */
-	const handleDragOver = useCallback(
-		(e: DiagramDragDropEvent) => {
-			// Propagate drag enter event to canvas
-			if (onDragEnter) {
-				onDragEnter(e);
-			}
-		},
-		[onDragEnter],
-	);
-
-	/**
-	 * Drag leave event handler
-	 */
-	const handleDragLeave = useCallback(
-		(e: DiagramDragDropEvent) => {
-			// Propagate drag leave event to canvas
-			if (onDragLeave) {
-				onDragLeave(e);
-			}
-		},
-		[onDragLeave],
-	);
-
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({
 		id,
@@ -148,8 +107,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		y,
 		ref: svgRef,
 		onDrag,
-		onDragOver: handleDragOver,
-		onDragLeave: handleDragLeave,
+		onDragOver,
+		onDragLeave,
 	});
 
 	// Generate properties for clicking
@@ -172,7 +131,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	// Generate properties for hovering
 	const hoverProps = useHover({
 		id,
-		onHoverChange: handleHover,
+		onHoverChange,
 	});
 
 	// Generate properties for file drop

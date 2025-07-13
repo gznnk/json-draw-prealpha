@@ -28,7 +28,7 @@ import { useDiagramChange } from "./hooks/actions/useDiagramChange";
 import { useDiagramConstraintChange } from "./hooks/actions/useDiagramConstraintChange";
 import { useDiagramStyleChange } from "./hooks/actions/useDiagramStyleChange";
 import { useDrag } from "./hooks/actions/useDrag";
-import { useDragEnter } from "./hooks/actions/useDragEnter";
+import { useDragOver } from "./hooks/actions/useDragOver";
 import { useDragLeave } from "./hooks/actions/useDragLeave";
 import { useExecute } from "./hooks/actions/useExecute";
 import { useExport } from "./hooks/actions/useExport";
@@ -152,11 +152,11 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the drag event.
 	const onDrag = useDrag(canvasHooksProps);
 
-	// Handler for the drag enter event.
-	const onDragEnter = useDragEnter(canvasHooksProps);
-
 	// Handler for the drag leave event.
 	const onDragLeave = useDragLeave(canvasHooksProps);
+
+	// Handler for the drag over event.
+	const onDragOver = useDragOver(canvasHooksProps);
 
 	// Handler for the execute event.
 	const onExecute = useExecute(canvasHooksProps);
@@ -242,7 +242,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onDiagramStyleChange,
 		onDiagramConstraintChange,
 		onDrag,
-		onDragEnter,
+		onDragOver,
 		onDragLeave,
 		onExecute,
 		onExport,

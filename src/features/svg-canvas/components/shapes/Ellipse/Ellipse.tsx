@@ -1,10 +1,8 @@
 // Import React.
 import type React from "react";
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 
 // Import types.
-import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
-import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
 
 // Import components.
@@ -65,7 +63,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
-	onDragEnter,
+	onDragOver,
 	onDragLeave,
 	onClick,
 	onSelect,
@@ -91,45 +89,6 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	/**
-	 * Hover state change event handler
-	 */
-	const handleHover = useCallback(
-		(e: DiagramHoverChangeEvent) => {
-			// Propagate hover change event to canvas
-			if (onHoverChange) {
-				onHoverChange(e);
-			}
-		},
-		[onHoverChange],
-	);
-
-	/**
-	 * Drag over event handler
-	 */
-	const handleDragOver = useCallback(
-		(e: DiagramDragDropEvent) => {
-			// Propagate drag enter event to canvas
-			if (onDragEnter) {
-				onDragEnter(e);
-			}
-		},
-		[onDragEnter],
-	);
-
-	/**
-	 * Drag leave event handler
-	 */
-	const handleDragLeave = useCallback(
-		(e: DiagramDragDropEvent) => {
-			// Propagate drag leave event to canvas
-			if (onDragLeave) {
-				onDragLeave(e);
-			}
-		},
-		[onDragLeave],
-	);
-
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({
 		id,
@@ -146,8 +105,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 		y,
 		ref: svgRef,
 		onDrag,
-		onDragOver: handleDragOver,
-		onDragLeave: handleDragLeave,
+		onDragOver,
+		onDragLeave,
 	});
 
 	// Generate properties for clicking
@@ -170,7 +129,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	// Generate properties for hovering
 	const hoverProps = useHover({
 		id,
-		onHoverChange: handleHover,
+		onHoverChange,
 	});
 
 	// Compose props for EllipseElement

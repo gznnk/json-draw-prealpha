@@ -11,11 +11,11 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 
 /**
- * Custom hook to handle drag enter events on the canvas.
- * This hook provides a centralized way to handle drag enter state
+ * Custom hook to handle drag over events on the canvas.
+ * This hook provides a centralized way to handle drag over state
  * for diagram elements, enabling visual feedback during drag operations.
  */
-export const useDragEnter = (props: SvgCanvasSubHooksProps) => {
+export const useDragOver = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramDragDropEvent) => {
 			const { setCanvasState } = props;

@@ -11,7 +11,7 @@ export type DiagramBaseProps = {
 	isTransparent?: boolean;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
-	onDragEnter?: (e: DiagramDragDropEvent) => void;
+	onDragOver?: (e: DiagramDragDropEvent) => void;
 	onDragLeave?: (e: DiagramDragDropEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
 	onHoverChange?: (e: DiagramHoverChangeEvent) => void;
