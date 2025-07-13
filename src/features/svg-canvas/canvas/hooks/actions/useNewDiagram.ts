@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { NewDiagramEvent } from "../../../types/events/NewDiagramEvent";
 import type { DiagramType } from "../../../types/core/DiagramType";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";

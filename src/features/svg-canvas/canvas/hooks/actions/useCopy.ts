@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import utils.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";

@@ -6,7 +6,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import components related to SvgCanvas.
 import { notifyConnectPointsMove } from "../../../components/shapes/ConnectLine";
@@ -27,7 +27,7 @@ import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
 
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "../../SvgCanvasConstants";
-import type { SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
 /**
  * Custom hook to handle diagram change events on the canvas.

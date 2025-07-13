@@ -1,5 +1,5 @@
 import { newEventId } from "../../utils/common/newEventId";
-import type { SvgCanvasState } from "../SvgCanvasTypes";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 import { canvasStateToHistory } from "./canvasStateToHistory";
 
 /**

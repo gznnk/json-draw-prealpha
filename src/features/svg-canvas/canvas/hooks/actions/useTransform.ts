@@ -5,8 +5,9 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventType } from "../../../types/events/EventType";
-import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
-import { InteractionState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import { InteractionState } from "../../types/InteractionState";
 
 // Import hooks related to SvgCanvas.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
@@ -273,10 +274,10 @@ export const useTransform = (props: SvgCanvasSubHooksProps) => {
 			// ignore diagram transformation processing but continue auto edge scroll detection
 			if (isAutoScrolling && !e.isFromAutoEdgeScroll) {
 				// Auto scroll if the cursor is near the edges.
-					autoEdgeScroll({
-						cursorX: e.cursorX,
-						cursorY: e.cursorY,
-					});
+				autoEdgeScroll({
+					cursorX: e.cursorX,
+					cursorY: e.cursorY,
+				});
 				return;
 			}
 

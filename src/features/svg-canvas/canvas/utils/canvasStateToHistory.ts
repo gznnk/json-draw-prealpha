@@ -1,5 +1,6 @@
 import { deepCopy } from "../../utils/common/deepCopy";
-import type { SvgCanvasHistory, SvgCanvasState } from "../SvgCanvasTypes";
+import type { SvgCanvasHistory } from "../types/SvgCanvasHistory";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 
 /**
  * Convert the canvas state to history format.

@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
 import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utils.

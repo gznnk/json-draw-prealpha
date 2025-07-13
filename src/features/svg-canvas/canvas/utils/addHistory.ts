@@ -1,5 +1,5 @@
 import { MAX_HISTORY_SIZE } from "../SvgCanvasConstants";
-import type { SvgCanvasState } from "../SvgCanvasTypes";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 import { canvasStateToHistory } from "./canvasStateToHistory";
 
 /**

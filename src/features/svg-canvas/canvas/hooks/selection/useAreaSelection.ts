@@ -2,7 +2,7 @@
 import { useCallback, useRef, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import type { AreaSelectionEvent } from "../../../types/events/AreaSelectionEvent";
 
 // Import functions related to SvgCanvas.

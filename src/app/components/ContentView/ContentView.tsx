@@ -8,7 +8,7 @@ import { CanvasView } from "../CanvasView";
 // Import types and constants
 import { ContentType } from "../../types/ContentType";
 import type { ContentViewProps } from "./ContentViewTypes";
-import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/SvgCanvasTypes";
+import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/types/SvgCanvasData";
 import {
 	EMPTY_CONTENT_MESSAGE,
 	NO_SELECTION_MESSAGE,

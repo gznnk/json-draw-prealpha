@@ -10,10 +10,8 @@ import {
 	AUTO_SCROLL_STEP_SIZE,
 	AUTO_SCROLL_THRESHOLD,
 } from "../../SvgCanvasConstants";
-import type {
-	SvgCanvasSubHooksProps,
-	SvgCanvasState,
-} from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
 /**
  * Type definition for scroll directions.

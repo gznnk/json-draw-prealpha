@@ -4,8 +4,9 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
-import { InteractionState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import { InteractionState } from "../../types/InteractionState";
 
 // Import hooks related to SvgCanvas.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";

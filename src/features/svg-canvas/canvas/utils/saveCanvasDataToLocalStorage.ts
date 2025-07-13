@@ -1,4 +1,4 @@
-import type { SvgCanvasState } from "../SvgCanvasTypes";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 import { clearSelectedRecursive } from "./clearSelectedRecursive";
 
 /**

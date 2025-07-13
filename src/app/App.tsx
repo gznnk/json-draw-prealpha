@@ -12,7 +12,7 @@ import {
 	type SvgCanvasRepository,
 } from "./repository/svg-canvas";
 import type { SvgCanvas } from "./models/SvgCanvas";
-import type { SvgCanvasData } from "../features/svg-canvas/canvas/SvgCanvasTypes";
+import type { SvgCanvasData } from "../features/svg-canvas/canvas/types/SvgCanvasData";
 
 const svgCanvasRepository: SvgCanvasRepository = createSvgCanvasRepository();
 

@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 
 // Import SvgCanvas component and hooks
 import { SvgCanvas, useSvgCanvas } from "../../../features/svg-canvas";
-import type { SvgCanvasRef } from "../../../features/svg-canvas/canvas/SvgCanvasTypes";
+import type { SvgCanvasRef } from "../../../features/svg-canvas/canvas/types/SvgCanvasRef";
 
 // Import types
 import type { CanvasViewProps } from "./CanvasViewTypes";

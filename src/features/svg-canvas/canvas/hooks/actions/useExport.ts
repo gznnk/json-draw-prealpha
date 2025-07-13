@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";

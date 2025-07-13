@@ -36,7 +36,8 @@ import {
 	Viewport,
 	ViewportOverlay,
 } from "./SvgCanvasStyled";
-import type { SvgCanvasProps, SvgCanvasRef } from "./SvgCanvasTypes";
+import type { SvgCanvasProps } from "./types/SvgCanvasProps";
+import type { SvgCanvasRef } from "./types/SvgCanvasRef";
 
 // Import SvgCanvas context.
 import { EventBusProvider } from "../context/EventBusContext";

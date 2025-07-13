@@ -7,7 +7,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
 import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import utils.
 import { getDiagramById } from "../../../utils/common/getDiagramById";

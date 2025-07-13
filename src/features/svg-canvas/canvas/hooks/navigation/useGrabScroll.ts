@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import hooks.
 import { useScroll } from "./useScroll";

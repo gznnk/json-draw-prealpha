@@ -1,6 +1,6 @@
 import type { Diagram } from "../../types/data/catalog/Diagram";
 import { isItemableData } from "../../utils/validation/isItemableData";
-import type { SvgCanvasState } from "../SvgCanvasTypes";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 
 /**
  * Retrieves all ancestor items (groups) that contain the specified item.

@@ -1,4 +1,5 @@
-import type { SvgCanvasData, SvgCanvasState } from "../SvgCanvasTypes";
+import type { SvgCanvasData } from "../types/SvgCanvasData";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 
 /**
  * Conversion function from SvgCanvasState to SvgCanvasData.

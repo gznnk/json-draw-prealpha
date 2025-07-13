@@ -1,4 +1,4 @@
-import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/SvgCanvasTypes";
+import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/types/SvgCanvasData";
 
 /**
  * Property definitions for the CanvasView component.

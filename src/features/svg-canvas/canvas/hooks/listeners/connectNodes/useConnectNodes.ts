@@ -7,7 +7,7 @@ import type { PathPointData } from "../../../../types/data/shapes/PathPointData"
 import type { Diagram } from "../../../../types/data/catalog/Diagram";
 import type { ConnectableData } from "../../../../types/data/shapes/ConnectableData";
 import type { ConnectNodesEvent } from "../../../../types/events/ConnectNodesEvent";
-import type { SvgCanvasSubHooksProps } from "../../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../../types/SvgCanvasSubHooksProps";
 import type { Shape } from "../../../../types/core/Shape";
 
 // Import functions related to SvgCanvas.

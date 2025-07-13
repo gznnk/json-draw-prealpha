@@ -13,13 +13,11 @@ import { calcCanvasBounds } from "./utils/calcCanvasBounds";
 import { EventBus } from "../../../shared/event-bus/EventBus";
 
 // Imports related to this component.
-import type {
-	SvgCanvasData,
-	SvgCanvasRef,
-	SvgCanvasState,
-	SvgCanvasSubHooksProps,
-} from "./SvgCanvasTypes";
-import { InteractionState } from "./SvgCanvasTypes";
+import type { SvgCanvasData } from "./types/SvgCanvasData";
+import type { SvgCanvasRef } from "./types/SvgCanvasRef";
+import type { SvgCanvasState } from "./types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "./types/SvgCanvasSubHooksProps";
+import { InteractionState } from "./types/InteractionState";
 
 // Import canvas custom hooks.
 import { useAreaSelection } from "./hooks/selection/useAreaSelection";

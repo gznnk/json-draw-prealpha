@@ -4,7 +4,8 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { StackOrderChangeEvent } from "../../../types/events/StackOrderChangeEvent";
-import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../../utils/validation/isItemableData";

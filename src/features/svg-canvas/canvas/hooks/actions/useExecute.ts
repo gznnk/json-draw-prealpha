@@ -6,7 +6,7 @@ import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData
 import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../../constants/EventNames";
 import type { ExecuteEvent } from "../../../types/events/ExecuteEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
-import type { SvgCanvasSubHooksProps } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
 import { triggerFlashConnectLine } from "../../../components/shapes/ConnectLine";

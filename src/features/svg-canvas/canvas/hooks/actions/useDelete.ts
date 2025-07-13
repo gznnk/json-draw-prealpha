@@ -3,7 +3,8 @@ import { useCallback, useRef } from "react";
 
 // Import types.
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
 // Import utils.
 import { newEventId } from "../../../utils/common/newEventId";

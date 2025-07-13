@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { NewItemEvent } from "../../../../types/events/NewItemEvent";
-import type { SvgCanvasSubHooksProps, SvgCanvasState } from "../../../SvgCanvasTypes";
+import type { SvgCanvasSubHooksProps } from "../../../types/SvgCanvasSubHooksProps";
+import type { SvgCanvasState } from "../../../types/SvgCanvasState";
 
 // Import functions related to SvgCanvas.
 import { isSelectableData } from "../../../../utils/validation/isSelectableData";

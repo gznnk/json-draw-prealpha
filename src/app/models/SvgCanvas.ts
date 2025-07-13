@@ -1,4 +1,4 @@
-import type { SvgCanvasData } from "../../features/svg-canvas/canvas/SvgCanvasTypes";
+import type { SvgCanvasData } from "../../features/svg-canvas/canvas/types/SvgCanvasData";
 
 export type SvgCanvas = {
 	id: string;

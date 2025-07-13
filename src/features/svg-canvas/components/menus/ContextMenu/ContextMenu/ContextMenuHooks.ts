@@ -2,7 +2,7 @@
 import { useCallback, useState } from "react";
 
 // Import types related to SvgCanvas.
-import type { SvgCanvasProps } from "../../../../canvas/SvgCanvasTypes";
+import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
 
 // Import functions related to SvgCanvas.
 import { getSelectedItems } from "../../../../utils/common/getSelectedItems";

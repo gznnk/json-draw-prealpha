@@ -1,7 +1,7 @@
 import { getAncestorItemsById } from "../getAncestorItemsById";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
-import type { SvgCanvasState } from "../../SvgCanvasTypes";
-import { InteractionState } from "../../SvgCanvasTypes";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import { InteractionState } from "../../types/InteractionState";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { DiagramType } from "../../../types/core/DiagramType";
 
