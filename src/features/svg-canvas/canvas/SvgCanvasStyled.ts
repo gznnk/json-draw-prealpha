@@ -18,6 +18,7 @@ export const Container = styled.div`
     right: 0;
     bottom: 0;
     overflow: hidden;
+    background-color: #ffffff;
 `;
 
 /**
@@ -97,10 +98,10 @@ type SelectionRectProps = {
  * Styled selection rectangle for area selection.
  */
 export const SelectionRect = styled.rect<SelectionRectProps>`
-    fill: rgba(58, 121, 184, 0.1);
-    stroke: #3A79B8;
+    fill: rgba(24, 144, 255, 0.1);
+    stroke: rgba(24, 144, 255, 0.8);
     stroke-width: 1;
-    stroke-dasharray: 5,5;
+    stroke-dasharray: 4,2;
     pointer-events: none;
     visibility: ${(props) => (props.visible ? "visible" : "hidden")};
 `;

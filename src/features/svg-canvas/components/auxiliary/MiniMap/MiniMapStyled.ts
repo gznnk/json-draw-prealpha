@@ -9,7 +9,7 @@ export const MiniMapContainer = styled.div<{ width: number; height: number }>`
 	right: 16px;
 	width: ${(props) => props.width}px;
 	height: ${(props) => props.height}px;
-	background-color: #ffffff;
+	background-color: #fafafa;
 	border: 1px solid rgba(24, 144, 255, 0.15);
 	border-radius: 8px;
 	cursor: pointer;
@@ -44,7 +44,7 @@ export const MiniMapSvg = styled.svg`
  * Background rectangle for the minimap
  */
 export const MiniMapBackground = styled.rect`
-	fill: #fafafa;
+	fill: #ffffff;
 	stroke: rgba(24, 144, 255, 0.08);
 	stroke-width: 0.5;
 `;
