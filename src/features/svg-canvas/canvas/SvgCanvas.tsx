@@ -24,6 +24,8 @@ import { PreviewConnectLine } from "../components/auxiliary/PreviewConnectLine";
 import { Group } from "../components/shapes/Group";
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { MiniMap } from "../components/auxiliary/MiniMap";
+import { GridPattern } from "../components/auxiliary/GridPattern";
+import { GridBackground } from "../components/auxiliary/GridBackground";
 
 // Imports related to this component.
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
@@ -389,6 +391,15 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							onContextMenu={onContextMenu}
 						>
 							<title>{title}</title>
+							{/* Grid pattern definition */}
+							<GridPattern gridSize={20} />
+							{/* Grid background */}
+							<GridBackground
+								x={minX / zoom}
+								y={minY / zoom}
+								width={containerWidth / zoom}
+								height={containerHeight / zoom}
+							/>
 							{/* Render the items in the SvgCanvas. */}
 							{renderedItems}
 							{/* Dummy group for multi-select. */}

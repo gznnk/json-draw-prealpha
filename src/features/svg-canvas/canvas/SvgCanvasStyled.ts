@@ -33,7 +33,7 @@ type SvgProps = {
 export const Svg = styled.svg<SvgProps>`
     display: block;
     box-sizing: border-box;
-    background-color: #eeeeee;
+    background-color: #FFFFFF;
     outline: none;
     cursor: ${(props) => {
 			if (props.isGrabScrolling) return "grabbing";
