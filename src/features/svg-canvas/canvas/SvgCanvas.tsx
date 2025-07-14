@@ -392,7 +392,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						>
 							<title>{title}</title>
 							{/* Grid pattern definition */}
-							<GridPattern gridSize={20} />
+							<GridPattern gridSize={20} color="rgba(24, 144, 255, 0.1)" />
 							{/* Grid background */}
 							<GridBackground
 								x={minX / zoom}

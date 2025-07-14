@@ -2,6 +2,7 @@ import { memo } from "react";
 
 type GridPatternProps = {
 	gridSize?: number;
+	color?: string;
 };
 
 /**
@@ -9,6 +10,7 @@ type GridPatternProps = {
  */
 const GridPatternComponent = ({
 	gridSize = 20,
+	color = "rgba(24, 144, 255, 0.1)",
 }: GridPatternProps): React.JSX.Element => {
 	return (
 		<defs>
@@ -21,7 +23,7 @@ const GridPatternComponent = ({
 				<path
 					d={`M ${gridSize} 0 L 0 0 0 ${gridSize}`}
 					fill="none"
-					stroke="rgba(0, 0, 0, 0.1)"
+					stroke={color}
 					strokeWidth="1"
 				/>
 			</pattern>
