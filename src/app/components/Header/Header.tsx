@@ -37,7 +37,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({ height = 30, onSave }) => {
 						type="button"
 						onClick={onSave}
 						style={{
-							background: "#3A79B8",
+							background: "#1890ff",
 							color: "#FFFFFF",
 							border: "none",
 							borderRadius: "4px",
