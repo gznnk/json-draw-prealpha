@@ -150,6 +150,17 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 				onClick={() =>
 					onNewDiagram?.({
 						eventId: newEventId(),
+						diagramType: "PageDesignNode",
+						isSelected: true,
+					})
+				}
+			>
+				PD
+			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onNewDiagram?.({
+						eventId: newEventId(),
 						diagramType: "WebSearchNode",
 						isSelected: true,
 					})

@@ -16,6 +16,7 @@ import { AgentNode } from "../components/nodes/AgentNode";
 import { HubNode } from "../components/nodes/HubNode";
 import { ImageGenNode } from "../components/nodes/ImageGenNode";
 import { LLMNode } from "../components/nodes/LLMNode";
+import { PageDesignNode } from "../components/nodes/PageDesignNode";
 import { SvgToDiagramNode } from "../components/nodes/SvgToDiagramNode";
 import { TextAreaNode } from "../components/nodes/TextAreaNode";
 import { VectorStoreNode } from "../components/nodes/VectorStoreNode";
@@ -30,6 +31,7 @@ import { createAgentNodeData } from "../components/nodes/AgentNode/AgentNodeFunc
 import { createHubNodeData } from "../components/nodes/HubNode/HubNodeFunctions";
 import { createImageGenNodeData } from "../utils/nodes/imageGenNode/createImageGenNodeData";
 import { createLLMNodeData } from "../utils/nodes/llmNodeData/createLLMNodeData";
+import { createPageDesignNodeData } from "../components/nodes/PageDesignNode";
 import { createSvgToDiagramNodeData } from "../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeData";
 import { createTextAreaNodeData } from "../utils/nodes/textAreaNode/createTextAreaNodeData";
 import { createVectorStoreNodeData } from "../utils/nodes/vectorStoreNode/createVectorStoreNodeData";
@@ -154,6 +156,14 @@ export const initializeSvgCanvasDiagrams = (): void => {
 		component: LLMNode,
 		connectPointCalculator: calcRectangleConnectPointPosition,
 		createFunction: createLLMNodeData,
+		exportFunction: undefined,
+	});
+
+	DiagramRegistry.register({
+		type: "PageDesignNode",
+		component: PageDesignNode,
+		connectPointCalculator: calcRectangleConnectPointPosition,
+		createFunction: createPageDesignNodeData,
 		exportFunction: undefined,
 	});
 

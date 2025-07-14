@@ -17,8 +17,9 @@ export type DiagramType =
 	| "AgentNode"
 	| "HubNode"
 	| "ImageGenNode"
-	| "SvgToDiagramNode"
 	| "LLMNode"
+	| "PageDesignNode"
+	| "SvgToDiagramNode"
 	| "TextAreaNode"
 	| "VectorStoreNode"
 	| "WebSearchNode";
