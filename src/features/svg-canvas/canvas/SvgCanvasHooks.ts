@@ -143,10 +143,10 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onDiagramChange = useDiagramChange(canvasHooksProps);
 
 	// Handler for the diagram style change event.
-	const onStyleChange = useOnStyleChange(canvasHooksProps);
+	const onDiagramStyleChange = useOnStyleChange(canvasHooksProps);
 
 	// Handler for the diagram constraint change event.
-	const onConstraintChange = useOnConstraintChange(canvasHooksProps);
+	const onDiagramConstraintChange = useOnConstraintChange(canvasHooksProps);
 
 	// Handler for the drag event.
 	const onDrag = useOnDrag(canvasHooksProps);
@@ -238,8 +238,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onCopy,
 		onDelete,
 		onDiagramChange,
-		onStyleChange,
-		onConstraintChange,
+		onDiagramStyleChange,
+		onDiagramConstraintChange,
 		onDrag,
 		onDragOver,
 		onDragLeave,
