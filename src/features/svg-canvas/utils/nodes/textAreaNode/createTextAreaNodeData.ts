@@ -20,15 +20,15 @@ export const createTextAreaNodeData = ({
 		y,
 		width: 400,
 		height: 200,
-		radius: 0,
-		stroke: "transparent",
+		radius: 6,
+		stroke: "#d9d9d9",
 		strokeWidth: "1px",
-		fill: "#1A1E2F",
+		fill: "#ffffff",
 		textType: "markdown",
 		textAlign: "left",
 		verticalAlign: "top",
-		fontSize: 12,
-		fontColor: "#A0A4B0",
+		fontSize: 14,
+		fontColor: "rgba(0, 0, 0, 0.88)",
 	});
 
 	data.type = "TextAreaNode";

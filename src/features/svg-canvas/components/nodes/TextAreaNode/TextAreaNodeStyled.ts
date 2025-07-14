@@ -3,12 +3,17 @@ import styled from "@emotion/styled";
 
 export const TextAreaButton = styled.rect`
     cursor: pointer;
-    transition: filter 0.2s ease;
+    transition: opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                filter 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    
     &:hover {
-        opacity: 0.7;
+        opacity: 0.8;
+        filter: brightness(1.1);
     }
+    
     &:active {
-        filter: brightness(0.7);
+        filter: brightness(0.9);
+        transform: scale(0.98);
     }
 `;
 

@@ -96,16 +96,18 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 						y={props.y + props.height / 2 - 26}
 						width={32}
 						height={22}
-						rx="10"
-						ry="10"
-						fill="#2A3147"
+						rx="4"
+						ry="4"
+						fill="#1890ff"
+						stroke="#d9d9d9"
+						strokeWidth="1"
 						onClick={handleButtonClick}
 					/>
 					<TextAreaButtonText
 						x={props.x + props.width / 2 - 31}
 						y={props.y + props.height / 2 - 10}
 						fontSize="14px"
-						fill="#C0C4D2"
+						fill="#ffffff"
 						pointerEvents="none"
 					>
 						Go
