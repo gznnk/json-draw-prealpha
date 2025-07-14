@@ -14,7 +14,7 @@ import { triggerFlashConnectLine } from "../../../components/shapes/ConnectLine"
 /**
  * Custom hook to handle execute events on the canvas.
  */
-export const useOnExecute = (props: SvgCanvasSubHooksProps) => {
+export const useExecute = (props: SvgCanvasSubHooksProps) => {
 	// Get EventBus instance from props
 	const { eventBus } = props;
 

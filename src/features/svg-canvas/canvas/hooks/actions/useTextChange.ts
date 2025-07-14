@@ -16,7 +16,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
  * Custom hook to handle text change events on the canvas.
  * Handles both text editing initiation (Start) and text content changes (InProgress/End).
  */
-export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
+export const useTextChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

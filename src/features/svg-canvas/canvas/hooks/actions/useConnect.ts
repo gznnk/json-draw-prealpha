@@ -19,7 +19,7 @@ import { addHistory } from "../../utils/addHistory";
 /**
  * Custom hook to handle connect events on the canvas.
  */
-export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
+export const useConnect = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramConnectEvent) => {
 			const { setCanvasState } = props;

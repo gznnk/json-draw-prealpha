@@ -11,28 +11,28 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 
 /**
- * Custom hook to handle drag leave events on the canvas.
- * This hook provides a centralized way to handle drag leave state
+ * Custom hook to handle drag over events on the canvas.
+ * This hook provides a centralized way to handle drag over state
  * for diagram elements, enabling visual feedback during drag operations.
  */
-export const useOnDragLeave = (props: SvgCanvasSubHooksProps) => {
+export const useDragOver = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramDragDropEvent) => {
 			const { setCanvasState } = props;
 
-			// Hide connect points when ConnectPoint drag leaves
+			// Only show connect points if dragging a ConnectPoint
 			if (e.dropItem.type === "ConnectPoint") {
 				setCanvasState((prevState) => {
-					// Update items to hide connect points for connectable elements
+					// Update items to show connect points for connectable elements
 					const items = applyFunctionRecursively(
 						prevState.items,
 						(item: Diagram) => {
 							// Check if this item can have connect points
 							if (item.id === e.dropTargetItem.id && isConnectableData(item)) {
-								// Hide connect points when ConnectPoint drag leaves
+								// Show connect points when ConnectPoint is being dragged over
 								return {
 									...item,
-									showConnectPoints: false,
+									showConnectPoints: true,
 								};
 							}
 							return item;

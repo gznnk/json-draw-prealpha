@@ -15,7 +15,7 @@ import { isConnectableData } from "../../../utils/validation/isConnectableData";
  * This hook provides a centralized way to handle hover state changes
  * for diagram elements, enabling visual feedback and interactions.
  */
-export const useOnHoverChange = (props: SvgCanvasSubHooksProps) => {
+export const useHoverChange = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: DiagramHoverChangeEvent) => {
 			const { setCanvasState } = props;

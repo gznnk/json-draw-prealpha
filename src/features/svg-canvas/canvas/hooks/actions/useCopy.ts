@@ -52,7 +52,7 @@ const findConnectLinesWithBothEndsSelected = (
 /**
  * Custom hook to handle copy events on the canvas.
  */
-export const useOnCopy = (props: SvgCanvasSubHooksProps) => {
+export const useCopy = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render
 	const refBusVal = {
 		props,

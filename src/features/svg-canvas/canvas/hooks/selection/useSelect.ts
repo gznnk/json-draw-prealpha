@@ -20,7 +20,7 @@ import { isTransformativeData } from "../../../utils/validation/isTransformative
 /**
  * Custom hook to handle select events on the canvas.
  */
-export const useOnSelect = (
+export const useSelect = (
 	props: SvgCanvasSubHooksProps,
 	isCtrlPressed?: boolean,
 ) => {
@@ -302,8 +302,8 @@ export const useOnSelect = (
 							// If no selection change, return with updated items
 							return {
 								...item,
-								items: updatedItems,
 								showTransformControls: false,
+								items: updatedItems,
 							};
 						}
 

@@ -31,7 +31,7 @@ import { createItemMap } from "../../utils/createItemMap";
 /**
  * Custom hook to handle drag events on the canvas.
  */
-export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
+export const useDrag = (props: SvgCanvasSubHooksProps) => {
 	// Get the auto edge scroll function and scrolling state to handle canvas auto scrolling.
 	const { autoEdgeScroll, isAutoScrolling } = useAutoEdgeScroll(props);
 	// Create references bypass to avoid function creation in every render.

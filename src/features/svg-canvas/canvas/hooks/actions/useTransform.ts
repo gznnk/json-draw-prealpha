@@ -60,7 +60,7 @@ const getIsTransformingState = (eventType: EventType): boolean => {
 /**
  * Custom hook to handle transform events on the canvas.
  */
-export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
+export const useTransform = (props: SvgCanvasSubHooksProps) => {
 	// Get the auto edge scroll function and scrolling state to handle canvas auto scrolling.
 	const { autoEdgeScroll, isAutoScrolling } = useAutoEdgeScroll(props);
 

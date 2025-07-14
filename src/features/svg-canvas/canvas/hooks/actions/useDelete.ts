@@ -17,7 +17,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle delete events on the canvas.
  */
-export const useOnDelete = (props: SvgCanvasSubHooksProps) => {
+export const useDelete = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

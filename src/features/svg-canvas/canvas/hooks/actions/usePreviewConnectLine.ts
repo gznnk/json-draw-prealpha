@@ -12,7 +12,7 @@ import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
  * Custom hook to handle preview connect line events on the canvas.
  * Updates the canvas state to show or hide the preview connection line.
  */
-export const useOnPreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
+export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

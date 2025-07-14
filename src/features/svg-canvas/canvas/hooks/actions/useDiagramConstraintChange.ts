@@ -13,7 +13,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle diagram constraint change events on the canvas.
  */
-export const useOnDiagramConstraintChange = (props: SvgCanvasSubHooksProps) => {
+export const useDiagramConstraintChange = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
