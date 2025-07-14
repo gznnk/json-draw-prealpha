@@ -32,7 +32,7 @@ const RotatePointComponent: React.FC<RotatePointProps> = ({
 	onDrag,
 	dragPositioningFunction,
 	rotation = 0,
-	color = "rgba(100, 149, 237, 0.8)",
+	color = "rgba(24, 144, 255, 0.8)",
 	hidden = false,
 }) => {
 	const [isDragging, setIsDragging] = useState(false);
@@ -92,7 +92,7 @@ const RotatePointComponent: React.FC<RotatePointProps> = ({
 				<text
 					x={x + 16}
 					y={y + 4}
-					fill="#555555"
+					fill="rgba(24, 144, 255, 1)"
 					fontSize="12px"
 				>{`${rotation}˚`}</text>
 			)}
