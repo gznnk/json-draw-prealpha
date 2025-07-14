@@ -12,7 +12,7 @@ import { calcItemBoundingBox } from "../../../utils/math/geometry/calcItemBoundi
 import { newEventId } from "../../../utils/common/newEventId";
 
 // Import selection hooks
-import { useOnSelect } from "./useOnSelect";
+import { useOnSelect } from "../handlers/useOnSelect";
 import { useClearAllSelection } from "./useClearAllSelection";
 
 /**
