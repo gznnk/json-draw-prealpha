@@ -50,9 +50,9 @@ const OutlineComponent: React.FC<OutlineProps> = ({
 				width={width}
 				height={height}
 				fill="transparent"
-				stroke="rgb(100, 149, 237)"
+				stroke="rgba(24, 144, 255, 0.8)"
 				strokeWidth="1px"
-				strokeDasharray="3,3"
+				strokeDasharray="4,2"
 				pointerEvents="none"
 				transform={createSvgTransform(scaleX, scaleY, radians, x, y)}
 			/>
