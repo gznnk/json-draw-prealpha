@@ -2,6 +2,9 @@
 import type { Bounds } from "../../../types/core/Bounds";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 
+// Import constants.
+import { MINIMAP_VIEWPORT_MARGIN } from "../../../constants/Constants";
+
 // Import utils.
 import { calcItemsBoundingBox } from "../../../utils/math/geometry/calcItemsBoundingBox";
 
@@ -72,5 +75,57 @@ export const calculateCombinedCanvasBounds = (
 		y: combinedTop,
 		width: combinedRight - combinedLeft,
 		height: combinedBottom - combinedTop,
+	};
+};
+
+/**
+ * Constrain viewport position to stay within diagram bounds plus margin.
+ * This prevents the viewport from moving too far away from diagram content.
+ *
+ * @param newMinX - Proposed new viewport X position in pixels
+ * @param newMinY - Proposed new viewport Y position in pixels
+ * @param items - Array of diagram items to calculate content bounds
+ * @param containerWidth - The width of the viewport container in pixels
+ * @param containerHeight - The height of the viewport container in pixels
+ * @param zoom - The current zoom level (1.0 = 100%)
+ * @param margin - Fixed margin in canvas units (default: MINIMAP_VIEWPORT_MARGIN)
+ * @returns Constrained viewport position
+ */
+export const constrainViewportPosition = (
+	newMinX: number,
+	newMinY: number,
+	items: Diagram[],
+	containerWidth: number,
+	containerHeight: number,
+	zoom: number,
+	margin = MINIMAP_VIEWPORT_MARGIN,
+): { minX: number; minY: number } => {
+	if (items.length === 0) {
+		// If no items, don't constrain movement
+		return { minX: newMinX, minY: newMinY };
+	}
+
+	// Calculate bounds of all items
+	const itemBounds = calcItemsBoundingBox(items);
+
+	// Calculate allowed bounds for viewport position using fixed margin
+	const allowedLeft = (itemBounds.left - margin) * zoom;
+	const allowedTop = (itemBounds.top - margin) * zoom;
+	const allowedRight = (itemBounds.right + margin) * zoom - containerWidth;
+	const allowedBottom = (itemBounds.bottom + margin) * zoom - containerHeight;
+
+	// Constrain the proposed position
+	const constrainedMinX = Math.max(
+		allowedLeft,
+		Math.min(allowedRight, newMinX),
+	);
+	const constrainedMinY = Math.max(
+		allowedTop,
+		Math.min(allowedBottom, newMinY),
+	);
+
+	return {
+		minX: constrainedMinX,
+		minY: constrainedMinY,
 	};
 };

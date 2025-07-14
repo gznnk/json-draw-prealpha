@@ -12,6 +12,7 @@ import { EventBusProvider } from "../../../context/EventBusContext";
 import {
 	calculateCombinedCanvasBounds,
 	calculateCanvasViewportBounds,
+	constrainViewportPosition,
 } from "./MiniMapFunctions";
 import {
 	MiniMapBackground,
@@ -87,9 +88,19 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 			const newMinX = (svgX - viewportWidth / 2) * zoom;
 			const newMinY = (svgY - viewportHeight / 2) * zoom;
 
-			onNavigate(newMinX, newMinY);
+			// Apply viewport position constraints
+			const constrained = constrainViewportPosition(
+				newMinX,
+				newMinY,
+				items,
+				containerWidth,
+				containerHeight,
+				zoom,
+			);
+
+			onNavigate(constrained.minX, constrained.minY);
 		},
-		[onNavigate, canvasBounds, containerWidth, containerHeight, zoom],
+		[onNavigate, canvasBounds, containerWidth, containerHeight, zoom, items],
 	);
 
 	// State management for drag operations
@@ -163,8 +174,18 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 			const newMinX = adjustedX * zoom;
 			const newMinY = adjustedY * zoom;
 
+			// Apply viewport position constraints
+			const constrained = constrainViewportPosition(
+				newMinX,
+				newMinY,
+				items,
+				containerWidth,
+				containerHeight,
+				zoom,
+			);
+
 			if (onNavigate) {
-				onNavigate(newMinX, newMinY);
+				onNavigate(constrained.minX, constrained.minY);
 			}
 		},
 		[
@@ -174,6 +195,9 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 			canvasBounds,
 			zoom,
 			onNavigate,
+			items,
+			containerWidth,
+			containerHeight,
 		],
 	);
 
