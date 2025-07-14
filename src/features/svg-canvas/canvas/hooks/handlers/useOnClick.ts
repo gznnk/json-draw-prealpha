@@ -6,7 +6,7 @@ import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent"
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import hooks.
-import { useOnSelect } from "./useOnSelect";
+import { useOnSelect } from "../selection/useOnSelect";
 
 /**
  * Custom hook to handle click events on the canvas.

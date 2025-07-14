@@ -51,7 +51,7 @@ import { useNavigate } from "./hooks/navigation/useNavigate";
 import { useScroll } from "./hooks/navigation/useScroll";
 import { useZoom } from "./hooks/navigation/useZoom";
 import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
-import { useOnSelect } from "./hooks/handlers/useOnSelect";
+import { useOnSelect } from "./hooks/selection/useOnSelect";
 import { useSelectAll } from "./hooks/selection/useSelectAll";
 import { useOnClick } from "./hooks/handlers/useOnClick";
 
