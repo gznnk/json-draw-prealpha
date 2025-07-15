@@ -17,7 +17,7 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 /**
  * Custom hook to handle new diagram events on the canvas.
  */
-export const useAddDiagram = (props: SvgCanvasSubHooksProps) => {
+export const useOnAddDiagram = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,

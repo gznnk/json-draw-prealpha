@@ -3,7 +3,7 @@ import type { DiagramType } from "../core/DiagramType";
 /**
  * Event type for new diagram creation.
  */
-export type NewDiagramEvent = {
+export type AddDiagramByTypeEvent = {
 	eventId: string;
 	diagramType: DiagramType;
 	x?: number;

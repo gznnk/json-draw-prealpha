@@ -3,7 +3,7 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types related to SvgCanvas.
-import type { NewDiagramEvent } from "../../../../types/events/NewDiagramEvent";
+import type { AddDiagramByTypeEvent } from "../../../../types/events/AddDiagramByTypeEvent";
 
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../../../utils/common/newEventId";
@@ -13,15 +13,17 @@ import { CanvasMenuDiv } from "./CanvasMenuStyled";
 import { CanvasMenuItem } from "../CanvasMenuItem";
 
 type CanvasMenuProps = {
-	onNewDiagram?: (e: NewDiagramEvent) => void;
+	onAddDiagramByType?: (e: AddDiagramByTypeEvent) => void;
 };
 
-const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
+const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
+	onAddDiagramByType,
+}) => {
 	return (
 		<CanvasMenuDiv>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "Rectangle",
 						isSelected: true,
@@ -42,7 +44,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "Ellipse",
 						isSelected: true,
@@ -63,7 +65,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "Path",
 						isSelected: true,
@@ -82,7 +84,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "TextAreaNode",
 						isSelected: true,
@@ -93,7 +95,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "LLMNode",
 						isSelected: true,
@@ -104,7 +106,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "SvgToDiagramNode",
 						isSelected: true,
@@ -115,7 +117,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "HubNode",
 						isSelected: true,
@@ -126,7 +128,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "ImageGenNode",
 						isSelected: true,
@@ -137,7 +139,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "AgentNode",
 						isSelected: true,
@@ -148,7 +150,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "PageDesignNode",
 						isSelected: true,
@@ -159,7 +161,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "WebSearchNode",
 						isSelected: true,
@@ -170,7 +172,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({ onNewDiagram }) => {
 			</CanvasMenuItem>
 			<CanvasMenuItem
 				onClick={() =>
-					onNewDiagram?.({
+					onAddDiagramByType?.({
 						eventId: newEventId(),
 						diagramType: "VectorStoreNode",
 						isSelected: true,

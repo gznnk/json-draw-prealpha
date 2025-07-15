@@ -26,13 +26,13 @@ import { useDelete } from "./hooks/actions/useDelete";
 import { useDiagramChange } from "./hooks/actions/useDiagramChange";
 import { useExport } from "./hooks/actions/useExport";
 import { useGroup } from "./hooks/actions/useGroup";
-import { useNewDiagram } from "./hooks/actions/useNewDiagram";
+import { useAddDiagramByType } from "./hooks/actions/useAddDiagramByType";
 import { usePaste } from "./hooks/actions/usePaste";
 import { usePreviewConnectLine } from "./hooks/actions/usePreviewConnectLine";
 import { useStackOrderChange } from "./hooks/actions/useStackOrderChange";
 import { useStyleChange } from "./hooks/actions/useStyleChange";
 import { useUngroup } from "./hooks/actions/useUngroup";
-import { useAddDiagram } from "./hooks/diagram/useOnAddDiagram";
+import { useOnAddDiagram } from "./hooks/diagram/useOnAddDiagram";
 import { useOnClick } from "./hooks/diagram/useOnClick";
 import { useOnConnect } from "./hooks/diagram/useOnConnect";
 import { useOnDrag } from "./hooks/diagram/useOnDrag";
@@ -171,7 +171,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onHoverChange = useOnHoverChange(canvasHooksProps);
 
 	// Handler for the new diagram event.
-	const onNewDiagram = useNewDiagram(canvasHooksProps);
+	const onAddDiagramByType = useAddDiagramByType(canvasHooksProps);
 
 	// Handler for the paste event.
 	const onPaste = usePaste(canvasHooksProps);
@@ -227,7 +227,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	// Tool hooks
 	// Hooks for the add diagram tool.
-	useAddDiagram(canvasHooksProps);
+	useOnAddDiagram(canvasHooksProps);
 
 	// Hook for the connect nodes tool.
 	useOnConnectNodes(canvasHooksProps);
@@ -252,7 +252,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onExport,
 		onGroup,
 		onHoverChange,
-		onNewDiagram,
+		onAddDiagramByType,
 		onPaste,
 		onPreviewConnectLine,
 		onStackOrderChange,

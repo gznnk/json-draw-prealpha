@@ -77,7 +77,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onDragLeave,
 			onExecute,
 			onHoverChange,
-			onNewDiagram,
+			onAddDiagramByType,
 			onPaste,
 			onPreviewConnectLine,
 			onTextChange,
@@ -448,7 +448,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				</Container>
 				{/* Container for HTML elements fixed to the viewport. */}
 				<ViewportOverlay>
-					<CanvasMenu onNewDiagram={onNewDiagram} />
+					<CanvasMenu onAddDiagramByType={onAddDiagramByType} />
 					<UserMenu />
 					<ContextMenu {...contextMenuProps} />
 					<MiniMap
