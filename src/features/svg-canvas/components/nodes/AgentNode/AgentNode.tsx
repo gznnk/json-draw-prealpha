@@ -17,7 +17,7 @@ import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
+import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { newEventId } from "../../../utils/common/newEventId";
 import { createImageGenNodeData } from "../../../utils/nodes/imageGenNode/createImageGenNodeData";
 import { createLLMNodeData } from "../../../utils/nodes/llmNodeData/createLLMNodeData";
@@ -37,6 +37,7 @@ import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
 const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
+	const addDiagram = useAddDiagram();
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -158,10 +159,7 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 									y: functionCallArguments.y,
 									text: functionCallArguments.instructions,
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: llmNode,
-								});
+								addDiagram(llmNode);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
@@ -180,10 +178,7 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: textNode,
-								});
+								addDiagram(textNode);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
@@ -201,10 +196,7 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: svgNode,
-								});
+								addDiagram(svgNode);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
@@ -222,10 +214,7 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: node,
-								});
+								addDiagram(node);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",

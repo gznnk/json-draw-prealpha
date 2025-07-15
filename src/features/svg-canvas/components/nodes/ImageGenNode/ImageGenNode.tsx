@@ -20,7 +20,7 @@ import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import utils.
-import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
+import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { newEventId } from "../../../utils/common/newEventId";
 import { createImageData } from "../../../utils/shapes/image/createImageData";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
@@ -29,6 +29,7 @@ import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
  * ImageGenNode component.
  */
 const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
+	const addDiagram = useAddDiagram();
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
 
@@ -73,16 +74,15 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 						eventType: e.eventType,
 						data: { text: base64Image },
 					});
-					dispatchNewItemEvent({
-						eventId,
-						item: createImageData({
+					addDiagram(
+						createImageData({
 							x: props.x,
 							y: props.y,
 							width: 512,
 							height: 512,
 							base64Data: base64Image,
 						}),
-					});
+					);
 				} else {
 					alert("API response is empty.");
 				}

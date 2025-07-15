@@ -17,7 +17,7 @@ import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
-import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";
+import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { newEventId } from "../../../utils/common/newEventId";
 
 // Import utilities.
@@ -39,6 +39,7 @@ import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignN
  * PageDesignNode component.
  */
 const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
+	const addDiagram = useAddDiagram();
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
 
@@ -156,10 +157,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									strokeWidth: functionCallArguments.strokeWidth || 1,
 									rx: functionCallArguments.rx || 0,
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: rectangleShape,
-								});
+								addDiagram(rectangleShape);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
@@ -182,10 +180,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									stroke: functionCallArguments.stroke || "transparent",
 									strokeWidth: functionCallArguments.strokeWidth || 1,
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: circleShape,
-								});
+								addDiagram(circleShape);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
@@ -208,10 +203,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									fill: functionCallArguments.fill,
 									fontFamily: functionCallArguments.fontFamily || "Segoe UI",
 								});
-								dispatchNewItemEvent({
-									eventId,
-									item: textElement,
-								});
+								addDiagram(textElement);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
