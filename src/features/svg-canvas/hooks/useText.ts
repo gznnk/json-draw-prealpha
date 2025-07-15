@@ -2,10 +2,10 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { DiagramTextChangeEvent } from "../../types/events/DiagramTextChangeEvent";
+import type { DiagramTextChangeEvent } from "../types/events/DiagramTextChangeEvent";
 
 // Import utils.
-import { newEventId } from "../../utils/common/newEventId";
+import { newEventId } from "../utils/common/newEventId";
 
 export type UseTextProps = {
 	id: string;

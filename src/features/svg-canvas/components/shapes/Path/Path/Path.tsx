@@ -20,9 +20,9 @@ import { SegmentList } from "../SegmentList";
 import { PathElement } from "./PathStyled";
 
 // Import hooks.
-import { useDrag } from "../../../../hooks/diagram/useDrag";
-import { useClick } from "../../../../hooks/diagram/useClick";
-import { useSelect } from "../../../../hooks/diagram/useSelect";
+import { useDrag } from "../../../../hooks/useDrag";
+import { useClick } from "../../../../hooks/useClick";
+import { useSelect } from "../../../../hooks/useSelect";
 
 // Import utils.
 import { calcOrientedShapeFromPoints } from "../../../../utils/math/geometry/calcOrientedShapeFromPoints";

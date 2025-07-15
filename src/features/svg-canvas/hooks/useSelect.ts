@@ -2,10 +2,10 @@
 import type React from "react";
 
 // Import types.
-import type { DiagramSelectEvent } from "../../types/events/DiagramSelectEvent";
+import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
 
 // Import utils.
-import { newEventId } from "../../utils/common/newEventId";
+import { newEventId } from "../utils/common/newEventId";
 
 /**
  * Type definition for select props

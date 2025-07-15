@@ -17,7 +17,7 @@ import { Rectangle } from "../../shapes/Rectangle";
 import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
 
 // Import hooks.
-import { useExecutionChain } from "../../../hooks/diagram/useExecutionChain";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import utils.
 import { dispatchNewItemEvent } from "../../../canvas/hooks/listeners/addNewItem";

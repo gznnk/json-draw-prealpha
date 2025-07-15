@@ -12,9 +12,9 @@ import { Transformative } from "../../core/Transformative";
 import { ImageElement } from "./ImageStyled";
 
 // Import hooks.
-import { useDrag } from "../../../hooks/diagram/useDrag";
-import { useClick } from "../../../hooks/diagram/useClick";
-import { useSelect } from "../../../hooks/diagram/useSelect";
+import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
+import { useSelect } from "../../../hooks/useSelect";
 
 // Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";

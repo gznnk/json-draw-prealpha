@@ -3,14 +3,14 @@ import type React from "react";
 import { useRef } from "react";
 
 // Import types.
-import type { DiagramClickEvent } from "../../types/events/DiagramClickEvent";
+import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
 
 // Import utils.
-import { newEventId } from "../../utils/common/newEventId";
-import { getSvgPoint } from "../../utils/math/points/getSvgPoint";
+import { newEventId } from "../utils/common/newEventId";
+import { getSvgPoint } from "../utils/math/points/getSvgPoint";
 
 // Import constants.
-import { DRAG_DEAD_ZONE } from "../../constants/Constants";
+import { DRAG_DEAD_ZONE } from "../constants/Constants";
 
 /**
  * Type definition for click props

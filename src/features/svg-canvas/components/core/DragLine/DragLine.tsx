@@ -3,9 +3,9 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 // Import hooks.
-import type { DragProps } from "../../..//hooks/diagram/useDrag";
-import { useDrag } from "../../..//hooks/diagram/useDrag";
-import { useClick } from "../../..//hooks/diagram/useClick";
+import type { DragProps } from "../../../hooks/useDrag";
+import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
 
 // Import types.
 import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";

@@ -3,8 +3,8 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 // Import hooks.
-import { useDrag } from "../../../hooks/diagram/useDrag";
-import { useHover } from "../../../hooks/diagram/useHover";
+import { useDrag } from "../../../hooks/useDrag";
+import { useHover } from "../../../hooks/useHover";
 
 // Import types.
 import type { DiagramType } from "../../../types/core/DiagramType";

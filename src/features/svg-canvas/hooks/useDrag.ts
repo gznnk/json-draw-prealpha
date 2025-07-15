@@ -3,29 +3,29 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { DiagramType } from "../../types/core/DiagramType";
-import type { Point } from "../../types/core/Point";
-import type { DiagramDragDropEvent } from "../../types/events/DiagramDragDropEvent";
-import type { DiagramDragEvent } from "../../types/events/DiagramDragEvent";
-import type { DiagramPointerEvent } from "../../types/events/DiagramPointerEvent";
-import type { EventType } from "../../types/events/EventType";
-import type { SvgCanvasScrollEvent } from "../../types/events/SvgCanvasScrollEvent";
+import type { DiagramType } from "../types/core/DiagramType";
+import type { Point } from "../types/core/Point";
+import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
+import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
+import type { DiagramPointerEvent } from "../types/events/DiagramPointerEvent";
+import type { EventType } from "../types/events/EventType";
+import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
 
 // Import utils.
-import { newEventId } from "../../utils/common/newEventId";
-import { getSvgPoint } from "../../utils/math/points/getSvgPoint";
+import { newEventId } from "../utils/common/newEventId";
+import { getSvgPoint } from "../utils/math/points/getSvgPoint";
 
 // Import constants.
-import { DRAG_DEAD_ZONE } from "../../constants/Constants";
+import { DRAG_DEAD_ZONE } from "../constants/Constants";
 
 // Import EventBus.
-import { useEventBus } from "../../context/EventBusContext";
+import { useEventBus } from "../context/EventBusContext";
 
 // Import event names
 import {
 	EVENT_NAME_BROADCAST_DRAG,
 	EVENT_NAME_SVG_CANVAS_SCROLL,
-} from "../../constants/EventNames";
+} from "../constants/EventNames";
 
 /**
  * Type definition for broadcast drag event

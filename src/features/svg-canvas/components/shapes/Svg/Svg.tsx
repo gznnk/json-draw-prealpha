@@ -15,9 +15,9 @@ import { Transformative } from "../../core/Transformative";
 import { SvgGroupElement, SvgRectElement } from "./SvgStyled";
 
 // Import hooks.
-import { useDrag } from "../../../hooks/diagram/useDrag";
-import { useClick } from "../../../hooks/diagram/useClick";
-import { useSelect } from "../../../hooks/diagram/useSelect";
+import { useDrag } from "../../../hooks/useDrag";
+import { useClick } from "../../../hooks/useClick";
+import { useSelect } from "../../../hooks/useSelect";
 
 // Import utils.
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";

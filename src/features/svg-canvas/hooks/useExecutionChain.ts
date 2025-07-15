@@ -2,11 +2,11 @@
 import { useEffect, useRef } from "react";
 
 // Import types.
-import type { ExecutionPropagationEvent } from "../../types/events/ExecutionPropagationEvent";
-import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../constants/EventNames";
+import type { ExecutionPropagationEvent } from "../types/events/ExecutionPropagationEvent";
+import { EVENT_NAME_EXECUTION_PROPAGATION } from "../constants/EventNames";
 
 // Import EventBus.
-import { useEventBus } from "../../context/EventBusContext";
+import { useEventBus } from "../context/EventBusContext";
 
 type ExecutionChainProps = {
 	id: string;

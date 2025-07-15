@@ -13,11 +13,11 @@ import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../ConnectPoints";
 
 // Import hooks.
-import { useClick } from "../../../hooks/diagram/useClick";
-import { useDrag } from "../../../hooks/diagram/useDrag";
-import { useHover } from "../../../hooks/diagram/useHover";
-import { useSelect } from "../../../hooks/diagram/useSelect";
-import { useText } from "../../../hooks/diagram/useText";
+import { useClick } from "../../../hooks/useClick";
+import { useDrag } from "../../../hooks/useDrag";
+import { useHover } from "../../../hooks/useHover";
+import { useSelect } from "../../../hooks/useSelect";
+import { useText } from "../../../hooks/useText";
 
 // Import utils.
 import { mergeProps } from "../../../utils/common/mergeProps";

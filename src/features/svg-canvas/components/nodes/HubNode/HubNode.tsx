@@ -11,7 +11,7 @@ import { IconContainer } from "../../core/IconContainer";
 import { DEFAULT_ELLIPSE_DATA } from "../../../constants/DefaultData";
 
 // Import hooks related to SvgCanvas.
-import { useExecutionChain } from "../../../hooks/diagram/useExecutionChain";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Imports related to this component.
 import type { HubNodeProps } from "../../../types/props/nodes/HubNodeProps";
