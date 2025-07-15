@@ -18,14 +18,16 @@ import { getDiagramById } from "../../../utils/common/getDiagramById";
 import { calcOrientedShapeFromPoints } from "../../../utils/math/geometry/calcOrientedShapeFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
 import { generateOptimalShapeToShapeConnection } from "../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
-import { useAddDiagram } from "../../../hooks/useAddDiagram";
+
+// Import hooks.
+import { useAddDiagram } from "../actions/useAddDiagram";
 
 /**
  * Hook that monitors ConnectNodes events and performs node connections.
  */
 export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 	// Create a function to add a new diagram.
-	const addDiagram = useAddDiagram();
+	const addDiagram = useAddDiagram(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -96,22 +98,25 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 			})) as PathPointData[];
 
 			addDiagram({
-				id: newId(),
-				type: "ConnectLine",
-				x: shape.x,
-				y: shape.y,
-				width: shape.width,
-				height: shape.height,
-				stroke: "#3A415C",
-				strokeWidth: "3px",
-				isSelected: false,
-				keepProportion: false,
-				items: pathPoints,
-				startOwnerId: sourceNode.id,
-				endOwnerId: targetNode.id,
-				autoRouting: true,
-				endArrowHead: "Circle",
-			} as ConnectLineData);
+				eventId: event.eventId,
+				item: {
+					id: newId(),
+					type: "ConnectLine",
+					x: shape.x,
+					y: shape.y,
+					width: shape.width,
+					height: shape.height,
+					stroke: "#3A415C",
+					strokeWidth: "3px",
+					isSelected: false,
+					keepProportion: false,
+					items: pathPoints,
+					startOwnerId: sourceNode.id,
+					endOwnerId: targetNode.id,
+					autoRouting: true,
+					endArrowHead: "Circle",
+				} as ConnectLineData,
+			});
 		};
 
 		eventBus.addEventListener(EVENT_NAME_CONNECT_NODES, connectNodesListener);

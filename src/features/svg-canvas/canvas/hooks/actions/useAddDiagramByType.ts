@@ -1,24 +1,30 @@
 // Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
+// Import types.
+import type { DiagramType } from "../../../types/core/DiagramType";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { AddDiagramByTypeEvent } from "../../../types/events/AddDiagramByTypeEvent";
-import type { DiagramType } from "../../../types/core/DiagramType";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { DiagramRegistry } from "../../../registry";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
-import { dispatchNewItemEvent } from "../listeners/addNewItem";
+
+// Import hooks.
+import { useAddDiagram } from "./useAddDiagram";
 
 /**
  * Custom hook to handle new diagram events on the canvas.
  */
 export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
+	// Create a function to add a new diagram.
+	const addDiagram = useAddDiagram(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		addDiagram,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -27,6 +33,7 @@ export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
 		// Bypass references to avoid function creation in every render.
 		const {
 			props: { canvasState },
+			addDiagram,
 		} = refBus.current;
 
 		let x = 0;
@@ -35,6 +42,8 @@ export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
 			x = e.x;
 			y = e.y;
 		} else {
+			// TODO: Use a more appropriate default position.
+			// For now, center the new diagram in the viewport.
 			x = canvasState.minX + window.innerWidth / 2;
 			y = canvasState.minY + window.innerHeight / 2;
 		}
@@ -58,7 +67,7 @@ export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
 		}
 
 		if (data) {
-			dispatchNewItemEvent({
+			addDiagram({
 				eventId: e.eventId,
 				item: data,
 			});
