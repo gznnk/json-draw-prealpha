@@ -23,7 +23,7 @@ Returns a JSON object containing the node ID, node type and the size (width and 
  * Tool definition for adding an LLM node to the canvas.
  * Conforms to the llm-client ToolDefinition interface.
  */
-export const definition: ToolDefinition = {
+export const llmToolDefinition: ToolDefinition = {
 	name: "add_llm_node",
 	description: TOOL_DESCRIPTION,
 	parameters: [

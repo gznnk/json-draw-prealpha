@@ -1,2 +1,2 @@
-export * from "./definition";
-export * from "./hook";
+export { useAddLLMNodeTool } from "./hook";
+export { llmToolDefinition } from "./definition";

@@ -6,22 +6,16 @@ import type {
 } from "../../../../shared/llm-client/types";
 import { OpenAiKeyManager } from "../../../../utils/KeyManager";
 import {
-	definition as imageGenDefinition,
+	imageGenToolDefinition,
 	useAddImageGenNodeTool,
 } from "../add_image_gen_node";
+import { llmToolDefinition, useAddLLMNodeTool } from "../add_llm_node";
+import { textNodeToolDefinition, useAddTextNodeTool } from "../add_text_node";
 import {
-	definition as llmDefinition,
-	useAddLLMNodeTool,
-} from "../add_llm_node";
-import {
-	definition as textNodeDefinition,
-	useAddTextNodeTool,
-} from "../add_text_node";
-import {
-	definition as svgToCanvasDefinition,
+	svgToCanvasToolDefinition,
 	useAddSvgToCanvasNodeTool,
 } from "../add_svg_to_canvas_node";
-import { definition as connectNodesDefinition } from "../connect_nodes/definition";
+import { connectNodesToolDefinition } from "../connect_nodes/definition";
 import { useConnectNodesTool } from "../connect_nodes/hook";
 import AI_AGENT_INSTRUCTIONS from "./prompts/agent-instructions.md?raw";
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
@@ -43,11 +37,11 @@ export const useWorkflowAgentHandler = (
 	// handler本体はuseMemoで生成
 	return useMemo<FunctionCallHandler>(() => {
 		const AI_TOOLS = [
-			imageGenDefinition,
-			llmDefinition,
-			textNodeDefinition,
-			svgToCanvasDefinition,
-			connectNodesDefinition,
+			imageGenToolDefinition,
+			llmToolDefinition,
+			textNodeToolDefinition,
+			svgToCanvasToolDefinition,
+			connectNodesToolDefinition,
 		];
 		const functionHandlerMap = {
 			add_image_gen_node: addImageGenNodeHandler,

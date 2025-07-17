@@ -24,7 +24,7 @@ Returns a JSON object containing the node ID, node type and the size (width and 
  * Tool definition for adding an image generation node to the canvas.
  * Conforms to the llm-client ToolDefinition interface.
  */
-export const definition: ToolDefinition = {
+export const imageGenToolDefinition: ToolDefinition = {
 	name: "add_image_gen_node",
 	description: TOOL_DESCRIPTION,
 	parameters: [

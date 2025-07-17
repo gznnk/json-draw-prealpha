@@ -1,2 +1,2 @@
-export * from "./definition";
-export * from "./hook";
+export { useAddSvgToCanvasNodeTool } from "./hook";
+export { svgToCanvasToolDefinition } from "./definition";

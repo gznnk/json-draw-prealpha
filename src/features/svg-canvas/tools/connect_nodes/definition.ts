@@ -16,7 +16,7 @@ Returns a JSON object containing the IDs of the connected nodes (sourceNodeId an
  * Tool definition for connecting nodes on the canvas.
  * Conforms to the llm-client ToolDefinition interface.
  */
-export const definition: ToolDefinition = {
+export const connectNodesToolDefinition: ToolDefinition = {
 	name: "connect_nodes",
 	description: TOOL_DESCRIPTION,
 	parameters: [

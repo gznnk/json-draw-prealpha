@@ -1,5 +1,4 @@
-import { definition } from "./definition";
-
+import { connectNodesToolDefinition } from "./definition";
 export const connectNodes = {
-	definition: definition,
+	definition: connectNodesToolDefinition,
 };

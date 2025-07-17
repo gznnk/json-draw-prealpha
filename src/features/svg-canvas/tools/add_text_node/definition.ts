@@ -23,7 +23,7 @@ Returns a JSON object containing the node ID, node type and the size (width and 
  * Tool definition for adding a Text node to the canvas.
  * Conforms to the llm-client ToolDefinition interface.
  */
-export const definition: ToolDefinition = {
+export const textNodeToolDefinition: ToolDefinition = {
 	name: "add_text_node",
 	description: TOOL_DESCRIPTION,
 	parameters: [

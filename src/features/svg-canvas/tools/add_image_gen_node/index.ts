@@ -1,2 +1,2 @@
-export * from "./definition";
-export * from "./hook";
+export { useAddImageGenNodeTool } from "./hook";
+export { imageGenToolDefinition } from "./definition";
