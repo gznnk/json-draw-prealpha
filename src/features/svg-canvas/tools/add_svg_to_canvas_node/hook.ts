@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useAddDiagramForTools } from "../shared/useAddDiagramForTools";
+import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
 import { createSvgToDiagramNodeData } from "../../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeData";
 import type {
 	FunctionCallHandler,
@@ -10,7 +10,7 @@ import type { EventBus } from "../../../../shared/event-bus/EventBus";
 export const useAddSvgToCanvasNodeTool = (
 	eventBus: EventBus,
 ): FunctionCallHandler => {
-	const addDiagram = useAddDiagramForTools(eventBus);
+	const addDiagram = useAddDiagramWithBus(eventBus);
 	return useCallback(
 		(functionCall: FunctionCallInfo) => {
 			const args = functionCall.arguments as { x: number; y: number };

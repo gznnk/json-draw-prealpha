@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useAddDiagramForTools } from "../shared/useAddDiagramForTools";
+import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
 import { createTextAreaNodeData } from "../../utils/nodes/textAreaNode/createTextAreaNodeData";
 import type {
 	FunctionCallHandler,
@@ -15,7 +15,7 @@ import type { EventBus } from "../../../../shared/event-bus/EventBus";
  * @returns FunctionCallHandler for adding a Text node
  */
 export const useAddTextNodeTool = (eventBus: EventBus): FunctionCallHandler => {
-	const addDiagram = useAddDiagramForTools(eventBus);
+	const addDiagram = useAddDiagramWithBus(eventBus);
 	return useCallback(
 		(functionCall: FunctionCallInfo) => {
 			const args = functionCall.arguments as { x: number; y: number };
