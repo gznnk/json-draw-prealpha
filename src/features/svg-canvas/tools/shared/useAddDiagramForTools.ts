@@ -5,10 +5,10 @@ import type { AddDiagramEvent } from "../../types/events/AddDiagramEvent";
 import { newEventId } from "../../utils/common/newEventId";
 
 /**
- * Returns a callback to dispatch an AddDiagramEvent using the provided eventBus.
+ * Returns a callback for tool modules to dispatch an AddDiagramEvent using the provided eventBus.
  * @param eventBus - The EventBus instance to dispatch the event through
  */
-export const useAddDiagramWithBus = (eventBus: EventTarget | undefined) => {
+export const useAddDiagramForTools = (eventBus: EventTarget | undefined) => {
 	return useCallback(
 		(diagram: Diagram) => {
 			if (!eventBus) return;
