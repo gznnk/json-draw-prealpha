@@ -46,7 +46,6 @@ import { useOnTransform } from "./hooks/diagram/useOnTransform";
 import { useRedo } from "./hooks/history/useRedo";
 import { useUndo } from "./hooks/history/useUndo";
 import { useCtrl } from "./hooks/keyboard/useCtrl";
-import { useNewItem } from "./hooks/listeners/addNewItem";
 import { useGrabScroll } from "./hooks/navigation/useGrabScroll";
 import { useNavigate } from "./hooks/navigation/useNavigate";
 import { useScroll } from "./hooks/navigation/useScroll";
@@ -221,9 +220,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	// Handler for the select all event.
 	const onSelectAll = useSelectAll(canvasHooksProps);
-
-	// Observer for the new item event.
-	useNewItem(canvasHooksProps);
 
 	// Tool hooks
 	// Hooks for the add diagram tool.
