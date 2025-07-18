@@ -16,6 +16,7 @@ import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 
 /**
  * Offset amount when pasting shapes
@@ -313,17 +314,7 @@ export const usePaste = (props: SvgCanvasSubHooksProps) => {
 					// Update the canvas state with the pasted items
 					setCanvasState((prevState) => {
 						// Deselect all existing items
-						const updatedItems = prevState.items.map((item) => {
-							if (isSelectableData(item)) {
-								return {
-									...item,
-									isSelected: false,
-									showTransformControls: false,
-									showOutline: false,
-								};
-							}
-							return item;
-						});
+						const updatedItems = clearSelectionRecursively(prevState.items);
 
 						// Add all pasted items
 						let allItems = [...updatedItems, ...pastedNormalItems];

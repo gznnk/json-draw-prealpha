@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
-import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
+import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
@@ -39,7 +39,7 @@ export const useUndo = (props: SvgCanvasSubHooksProps) => {
 			};
 
 			// Clear the selected items.
-			ret.items = clearSelectedRecursive(ret.items);
+			ret.items = clearSelectionRecursively(ret.items);
 
 			// Notify the data change.
 			onDataChange?.(svgCanvasStateToData(ret));

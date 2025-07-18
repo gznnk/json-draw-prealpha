@@ -5,7 +5,7 @@ import { useCallback, useRef } from "react";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
-import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
+import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 
 /**
  * Custom hook to handle clear all selection events on the canvas.
@@ -24,7 +24,7 @@ export const useClearAllSelection = (props: SvgCanvasSubHooksProps) => {
 
 		setCanvasState((prevState) => ({
 			...prevState,
-			items: clearSelectedRecursive(prevState.items),
+			items: clearSelectionRecursively(prevState.items),
 			multiSelectGroup: undefined,
 		}));
 	}, []);

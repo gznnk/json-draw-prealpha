@@ -1,5 +1,5 @@
 import type { SvgCanvasState } from "../types/SvgCanvasState";
-import { clearSelectedRecursive } from "./clearSelectedRecursive";
+import { clearSelectionRecursively } from "./clearSelectionRecursively";
 
 /**
  * Save the current canvas state to local storage.
@@ -12,7 +12,7 @@ export const saveCanvasDataToLocalStorage = (
 	// Save the canvas state to local storage
 	const canvasData = {
 		...canvasState,
-		items: clearSelectedRecursive(canvasState.items), // Clear selected items before saving
+		items: clearSelectionRecursively(canvasState.items), // Clear selected items before saving
 		multiSelectGroup: undefined, // Exclude multiSelectGroup from local storage
 		history: undefined, // Exclude history from local storage
 		historyIndex: undefined, // Exclude history index from local storage

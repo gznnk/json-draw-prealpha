@@ -6,7 +6,7 @@ import type { PreviewConnectLineEvent } from "../../../types/events/PreviewConne
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
-import { clearSelectedRecursive } from "../../utils/clearSelectedRecursive";
+import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 
 /**
  * Custom hook to handle preview connect line events on the canvas.
@@ -32,7 +32,7 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 
 			// Clear all selections when connection preview starts
 			if (e.eventType === "Start") {
-				newState.items = clearSelectedRecursive(prevState.items);
+				newState.items = clearSelectionRecursively(prevState.items);
 				newState.multiSelectGroup = undefined;
 			}
 
