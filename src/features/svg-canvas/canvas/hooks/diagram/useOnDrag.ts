@@ -106,10 +106,7 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 						item.type,
 					);
 					if (calculator) {
-						item.connectPoints = calculator(item).map((c) => ({
-							...c,
-							type: "ConnectPoint",
-						})) as ConnectPointData[];
+						item.connectPoints = calculator(item);
 					}
 				}
 			};

@@ -4,12 +4,8 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
-import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import components related to SvgCanvas.
-import { notifyConnectPointsMove } from "../../../components/shapes/ConnectLine";
 
 // Import hooks related to SvgCanvas.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
@@ -22,7 +18,6 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
-import { updateConnectPointsAndCollectRecursive } from "../../utils/updateConnectPointsAndCollectRecursive";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
 
 // Imports related to this component.
@@ -55,8 +50,6 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			let items = prevState.items;
 			let multiSelectGroup: GroupData | undefined = prevState.multiSelectGroup;
 
-			const connectPointMoveDataList: ConnectPointMoveData[] = [];
-
 			if (e.id === MULTI_SELECT_GROUP) {
 				// The case of multi-select group change.
 
@@ -66,13 +59,7 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 					...e.endDiagram,
 				} as GroupData;
 
-				// Update the connect points of the multi-select group.
-				if (e.changeType !== "Appearance") {
-					updateConnectPointsAndCollectRecursive(
-						multiSelectGroup,
-						connectPointMoveDataList,
-					);
-				} // Propagate the multi-select group changes to the original diagrams.
+				// Propagate the multi-select group changes to the original diagrams.
 				items = applyFunctionRecursively(prevState.items, (item) => {
 					if (!isItemableData<Diagram>(e.endDiagram)) return item; // Type guard with Diagram type
 
@@ -109,14 +96,6 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 					// If the id matches, update the item with the new properties.
 					const newItem = { ...item, ...e.endDiagram };
 
-					// Update the diagram's connect points and collect their move data.
-					if (e.changeType !== "Appearance") {
-						updateConnectPointsAndCollectRecursive(
-							newItem,
-							connectPointMoveDataList,
-						);
-					}
-
 					// Return the updated item.
 					return newItem;
 				});
@@ -152,15 +131,6 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 
 				// Notify the data change.
 				onDataChange?.(svgCanvasStateToData(newState));
-			}
-
-			if (0 < connectPointMoveDataList.length) {
-				// Notify the connect points move event to the ConnectLine component.
-				notifyConnectPointsMove({
-					eventId: e.eventId,
-					eventType: e.eventType,
-					points: connectPointMoveDataList,
-				});
 			}
 
 			return newState;

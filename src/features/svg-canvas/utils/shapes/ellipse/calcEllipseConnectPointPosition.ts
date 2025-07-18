@@ -1,10 +1,11 @@
 // Import types.
-import type { Diagram } from "../../../types/data/catalog/Diagram";
-import type { ConnectPointMoveData } from "../../../types/events/ConnectPointMoveData";
 import type { EllipseVertices } from "../../../types/core/EllipseVertices";
 import type { Shape } from "../../../types/core/Shape";
+import type { Diagram } from "../../../types/data/catalog/Diagram";
+import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
 
 // Import utils.
+
 import { calcEllipseVertices } from "../../math/geometry/calcEllipseVertices";
 import { isConnectableData } from "../../validation/isConnectableData";
 
@@ -16,24 +17,14 @@ import { isConnectableData } from "../../validation/isConnectableData";
  */
 export const calcEllipseConnectPointPosition = (
 	diagram: Diagram,
-): ConnectPointMoveData[] => {
+): ConnectPointData[] => {
 	if (!isConnectableData(diagram)) return []; // Type guard.
-
-	const shape = {
-		x: diagram.x,
-		y: diagram.y,
-		width: diagram.width,
-		height: diagram.height,
-		rotation: diagram.rotation,
-		scaleX: diagram.scaleX,
-		scaleY: diagram.scaleY,
-	} as Shape;
 
 	// Calculate the vertices of the ellipse.
 	const vertices = calcEllipseVertices(diagram as Shape);
 
 	// Create connection point move data.
-	const newConnectPoints: ConnectPointMoveData[] = [];
+	const newConnectPoints: ConnectPointData[] = [];
 	for (const connectPointData of diagram.connectPoints) {
 		const vertex = (vertices as EllipseVertices)[
 			connectPointData.name as keyof EllipseVertices
@@ -41,11 +32,11 @@ export const calcEllipseConnectPointPosition = (
 
 		newConnectPoints.push({
 			id: connectPointData.id,
+			type: "ConnectPoint",
 			name: connectPointData.name,
 			x: vertex.x,
 			y: vertex.y,
-			ownerId: diagram.id,
-			ownerShape: shape,
+			isDragging: false,
 		});
 	}
 

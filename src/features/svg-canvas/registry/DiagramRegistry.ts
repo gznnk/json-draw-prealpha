@@ -1,7 +1,7 @@
-import type { DiagramDefinition } from "./DiagramDefinition";
 import type { DiagramType } from "../types/core/DiagramType";
-import type { ConnectPointMoveData } from "../types/events/ConnectPointMoveData";
 import type { Diagram } from "../types/data/catalog/Diagram";
+import type { ConnectPointData } from "../types/data/shapes/ConnectPointData";
+import type { DiagramDefinition } from "./DiagramDefinition";
 
 /**
  * Registry for managing diagram definitions.
@@ -48,7 +48,7 @@ class DiagramRegistryClass {
 	 */
 	getConnectPointCalculator(
 		type: DiagramType,
-	): ((diagram: Diagram) => ConnectPointMoveData[]) | undefined {
+	): ((diagram: Diagram) => ConnectPointData[]) | undefined {
 		return this.definitions.get(type)?.connectPointCalculator;
 	}
 	/**

@@ -14,7 +14,6 @@ import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
 
 // Import functions related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";
-import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { addHistory } from "../../utils/addHistory";
@@ -41,10 +40,7 @@ const updateDiagramConnectPoints = (item: Diagram): void => {
 		const calculator = DiagramRegistry.getConnectPointCalculator(item.type);
 		if (calculator) {
 			// Update the connect points of the item.
-			item.connectPoints = calculator(item).map((c) => ({
-				...c,
-				type: "ConnectPoint",
-			})) as ConnectPointData[];
+			item.connectPoints = calculator(item);
 		}
 	}
 };
