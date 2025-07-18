@@ -9,6 +9,7 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 // Import utils.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
+import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
@@ -28,23 +29,13 @@ export const useAddDiagram = (props: SvgCanvasSubHooksProps) => {
 
 		// Call the function to add a new item to the canvas.
 		setCanvasState((prevState) => {
+			let newItems = prevState.items;
+			if (isSelectableData(e.item) && e.item.isSelected) {
+				newItems = clearSelectionRecursively(prevState.items);
+			}
 			let newState = {
 				...prevState,
-				items: [
-					...prevState.items.map((i) => {
-						if (isSelectableData(i) && isSelectableData(e.item)) {
-							return {
-								...i,
-								// If the new item is selected, unselect other items.
-								isSelected: e.item.isSelected ? false : i.isSelected,
-							};
-						}
-						return i;
-					}),
-					{
-						...e.item,
-					},
-				],
+				items: [...newItems, e.item],
 			} as SvgCanvasState;
 
 			// Add a new history entry.
