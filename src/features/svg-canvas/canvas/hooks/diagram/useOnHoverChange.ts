@@ -1,14 +1,14 @@
 // Import React.
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 // Import types.
+import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utilities.
-import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
+import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 /**
  * Custom hook to handle hover change events on the canvas.
@@ -16,33 +16,38 @@ import { isConnectableData } from "../../../utils/validation/isConnectableData";
  * for diagram elements, enabling visual feedback and interactions.
  */
 export const useOnHoverChange = (props: SvgCanvasSubHooksProps) => {
-	return useCallback(
-		(e: DiagramHoverChangeEvent) => {
-			const { setCanvasState } = props;
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		props,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
 
-			setCanvasState((prevState) => {
-				// Update items to toggle showConnectPoints based on hover state
-				const items = applyFunctionRecursively(
-					prevState.items,
-					(item: Diagram) => {
-						// Check if this item's ID matches the hovered element
-						if (item.id === e.id && isConnectableData(item)) {
-							// Update showConnectPoints based on hover state
-							return {
-								...item,
-								showConnectPoints: e.isHovered,
-							};
-						}
-						return item;
-					},
-				);
+	return useCallback((e: DiagramHoverChangeEvent) => {
+		// Bypass references to avoid function creation in every render.
+		const { setCanvasState } = refBus.current.props;
 
-				return {
-					...prevState,
-					items,
-				};
-			});
-		},
-		[props],
-	);
+		setCanvasState((prevState) => {
+			// Update items to toggle showConnectPoints based on hover state
+			const items = applyFunctionRecursively(
+				prevState.items,
+				(item: Diagram) => {
+					// Check if this item's ID matches the hovered element
+					if (item.id === e.id && isConnectableData(item)) {
+						// Update showConnectPoints based on hover state
+						return {
+							...item,
+							showConnectPoints: e.isHovered,
+						};
+					}
+					return item;
+				},
+			);
+
+			return {
+				...prevState,
+				items,
+			};
+		});
+	}, []);
 };
