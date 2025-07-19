@@ -15,7 +15,6 @@ import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
@@ -120,7 +119,6 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			let newState = {
 				...prevState,
 				items,
-				isDiagramChanging: isDiagramChangingEvent(e.eventType),
 				multiSelectGroup,
 			} as SvgCanvasState;
 

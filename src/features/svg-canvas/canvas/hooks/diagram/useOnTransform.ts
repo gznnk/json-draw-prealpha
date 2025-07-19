@@ -17,7 +17,6 @@ import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshCo
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { addHistory } from "../../utils/addHistory";
 import { createItemMap } from "../../utils/createItemMap";
-import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { updateOutlineOfGroup } from "../../utils/updateOutlineOfGroup";
@@ -295,11 +294,10 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						[],
 						topLevelGroupIds,
 					),
-					isDiagramChanging: isDiagramChangingEvent(e.eventType),
 					interactionState:
 						e.eventType === "Start" || e.eventType === "InProgress"
 							? InteractionState.Transforming
-							: InteractionState.Normal,
+							: InteractionState.Idle,
 					multiSelectGroup: prevState.multiSelectGroup
 						? ({
 								...prevState.multiSelectGroup,

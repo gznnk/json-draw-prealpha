@@ -28,8 +28,8 @@ export const useScroll = (props: SvgCanvasSubHooksProps) => {
 			const { setCanvasState } = refBus.current.props;
 
 			setCanvasState((prevState) => {
-				// Only update state directly if interaction state is Normal
-				if (prevState.interactionState === InteractionState.Normal) {
+				// Only update state directly if interaction state is Idle
+				if (prevState.interactionState === InteractionState.Idle) {
 					return {
 						...prevState,
 						minX: e.minX,

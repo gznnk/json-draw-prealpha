@@ -97,7 +97,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		id: props.id,
 		items: props.items,
 		zoom: props.zoom,
-		isDiagramChanging: false,
 		history: [
 			{
 				...initialBounds,
@@ -108,7 +107,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		historyIndex: 0,
 		lastHistoryEventId: "",
 		textEditorState: { isActive: false } as TextEditorState,
-		interactionState: InteractionState.Normal,
+		interactionState: InteractionState.Idle,
 	});
 
 	// Create props for the canvas hooks.

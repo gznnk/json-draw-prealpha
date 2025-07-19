@@ -20,7 +20,6 @@ import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createItemMap } from "../../utils/createItemMap";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
-import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
@@ -172,11 +171,10 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			let newState: SvgCanvasState = {
 				...prevState,
 				items: moveRecursively(prevState.items),
-				isDiagramChanging: isDiagramChangingEvent(e.eventType),
 				interactionState:
 					e.eventType === "Start" || e.eventType === "InProgress"
 						? InteractionState.Dragging
-						: InteractionState.Normal,
+						: InteractionState.Idle,
 			};
 
 			// If the event has minX and minY, update the canvas state

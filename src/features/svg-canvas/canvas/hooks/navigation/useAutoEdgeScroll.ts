@@ -12,6 +12,7 @@ import {
 } from "../../SvgCanvasConstants";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import { InteractionState } from "../../types/InteractionState";
 
 /**
  * Return type for useAutoEdgeScroll hook.
@@ -30,7 +31,7 @@ export type UseAutoEdgeScrollReturn = {
  * @returns true if auto scrolling should stop, false otherwise
  */
 const shouldStopAutoScroll = (canvasState: SvgCanvasState): boolean => {
-	return !canvasState.isDiagramChanging;
+	return canvasState.interactionState === InteractionState.Idle;
 };
 
 /**
@@ -233,10 +234,8 @@ export const useAutoEdgeScroll = (
 			cursorX: number;
 			cursorY: number;
 		}) => {
-			const {
-				canvasState: { minX, minY, zoom, isDiagramChanging },
-				canvasRef,
-			} = refBus.current.props;
+			const { canvasState, canvasRef } = refBus.current.props;
+			const { minX, minY, zoom } = canvasState;
 
 			if (!canvasRef) return;
 
@@ -244,7 +243,7 @@ export const useAutoEdgeScroll = (
 			if (!containerRef.current) return;
 
 			// Stop scrolling if diagram is not changing
-			if (!isDiagramChanging) {
+			if (shouldStopAutoScroll(canvasState)) {
 				clearScrollInterval();
 				return;
 			}

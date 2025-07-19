@@ -29,10 +29,11 @@ import type {
 	DiagramMenuStateMap,
 	DiagramMenuType,
 } from "./DiagramMenuTypes";
+import { InteractionState } from "../../../../canvas/types/InteractionState";
 
 export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	// Extract properties from canvasProps.
-	const { items, isDiagramChanging, multiSelectGroup, zoom } = canvasProps;
+	const { items, interactionState, multiSelectGroup, zoom } = canvasProps;
 
 	// Diagram menu controls open/close state.
 	const [isBgColorPickerOpen, setIsBgColorPickerOpen] = useState(false);
@@ -71,7 +72,8 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 	// Get selected items and check if the diagram menu should be shown.
 	const selectedItems = getSelectedItems(items);
-	const showDiagramMenu = 0 < selectedItems.length && !isDiagramChanging;
+	const showDiagramMenu =
+		0 < selectedItems.length && interactionState === InteractionState.Idle;
 	const singleSelectedItem = selectedItems[0];
 
 	// If the diagram menu is not shown, close controls.

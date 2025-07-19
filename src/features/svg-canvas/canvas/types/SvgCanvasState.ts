@@ -13,7 +13,6 @@ import type { SvgCanvasHistory } from "./SvgCanvasHistory";
 export type SvgCanvasState = {
 	zoom: number;
 	multiSelectGroup?: GroupData;
-	isDiagramChanging: boolean;
 	history: SvgCanvasHistory[];
 	historyIndex: number;
 	lastHistoryEventId: string;
