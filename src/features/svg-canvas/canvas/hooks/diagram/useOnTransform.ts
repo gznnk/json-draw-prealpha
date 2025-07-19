@@ -5,15 +5,14 @@ import { useCallback, useRef } from "react";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventType } from "../../../types/events/EventType";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import { InteractionState } from "../../types/InteractionState";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import hooks related to SvgCanvas.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
 
 // Import functions related to SvgCanvas.
-import { DiagramRegistry } from "../../../registry";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { addHistory } from "../../utils/addHistory";
@@ -30,20 +29,7 @@ import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { rotatePoint } from "../../../utils/math/points/rotatePoint";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
-
-/**
- * Updates connect points of a diagram item if it's connectable.
- * This function can be generalized for future use.
- */
-const updateDiagramConnectPoints = (item: Diagram): void => {
-	if (isConnectableData(item)) {
-		const calculator = DiagramRegistry.getConnectPointCalculator(item.type);
-		if (calculator) {
-			// Update the connect points of the item.
-			item.connectPoints = calculator(item);
-		}
-	}
-};
+import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 
 /**
  * Determines if an item should be in transforming state based on event type.
@@ -149,7 +135,9 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				} as Diagram;
 
 				// Update the connect points of the transformed item.
-				updateDiagramConnectPoints(newItem);
+				newItem = updateDiagramConnectPoints(newItem);
+
+				// If the item is connectable, add it to the transformed diagrams.
 				if (isConnectableData(newItem)) {
 					transformedDiagrams.push(newItem);
 				}
@@ -184,10 +172,10 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 			return items.map((item) => {
 				if (item.id === e.id) {
 					// Apply the new shape to the item.
-					const newItem = {
+					let newItem = {
 						...item,
 						...e.endShape,
-					};
+					} as Diagram;
 
 					// Update isTransforming flag if it's transformative data
 					if (isTransformativeData(newItem)) {
@@ -207,10 +195,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					}
 
 					// Update the connect points of the transformed item.
-					updateDiagramConnectPoints(newItem);
-					if (isConnectableData(newItem)) {
-						transformedDiagrams.push(newItem);
-					}
+					newItem = updateDiagramConnectPoints(newItem);
 
 					// Add top-level group to the set if this is a transformed item and we have ancestors
 					if (ancestors.length > 0 && ancestors[0]) {

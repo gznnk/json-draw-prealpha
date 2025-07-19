@@ -4,29 +4,27 @@ import { useCallback, useRef } from "react";
 // Import types related to SvgCanvas.
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import { InteractionState } from "../../types/InteractionState";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
-// Import hooks related to SvgCanvas.
+// Import hooks.
 import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
 
-// Import functions related to SvgCanvas.
-import { DiagramRegistry } from "../../../registry";
-import type { ConnectPointData } from "../../../types/data/shapes/ConnectPointData";
+// Import utils.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";
-import { isConnectableData } from "../../../utils/validation/isConnectableData";
+import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
+import { createItemMap } from "../../utils/createItemMap";
+import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { isDiagramChangingEvent } from "../../utils/isDiagramChangingEvent";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
+import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
-import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
-import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
-import { createItemMap } from "../../utils/createItemMap";
 
 /**
  * Custom hook to handle drag events on the canvas.
@@ -98,19 +96,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			// Collect all diagrams that will be moved (for connect point updates)
 			const movedDiagrams: Diagram[] = [];
 
-			// TODO: 関数匁E
-			// Function to update connect points of a moved item
-			const updateConnectPoints = (item: Diagram) => {
-				if (isConnectableData(item)) {
-					const calculator = DiagramRegistry.getConnectPointCalculator(
-						item.type,
-					);
-					if (calculator) {
-						item.connectPoints = calculator(item);
-					}
-				}
-			};
-
 			// Function to recursively move items and update their positions
 			const moveRecursively = (items: Diagram[]): Diagram[] => {
 				return items.map((item) => {
@@ -122,12 +107,12 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 							return item;
 						}
 
-						const newItem = {
+						let newItem = {
 							...item,
 							x: initialItem.x + dx,
 							y: initialItem.y + dy,
 							isDragging,
-						};
+						} as Diagram;
 
 						// Hide transform controls during drag for transformative items
 						if (isTransformativeData(newItem) && isDragging) {
@@ -135,7 +120,9 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 						}
 
 						// Update connect points
-						updateConnectPoints(newItem);
+						newItem = updateDiagramConnectPoints(newItem);
+
+						// Add the moved item to the list
 						movedDiagrams.push(newItem);
 
 						// If the item has children, move them recursively
@@ -146,12 +133,12 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 									// Move child items by the same delta
 									const childInitialItem = initialItems.get(childItem.id);
 									if (childInitialItem) {
-										const newChildItem = {
+										let newChildItem = {
 											...childItem,
 											x: childInitialItem.x + dx,
 											y: childInitialItem.y + dy,
 											isDragging,
-										};
+										} as Diagram;
 
 										// Hide transform controls during drag for transformative items
 										if (isTransformativeData(newChildItem) && isDragging) {
@@ -159,7 +146,9 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 										}
 
 										// Update connect points
-										updateConnectPoints(newChildItem);
+										newChildItem = updateDiagramConnectPoints(newChildItem);
+
+										// Add the moved item to the list
 										movedDiagrams.push(newChildItem);
 
 										return newChildItem;
