@@ -111,21 +111,14 @@ export const useDrag = (props: DragProps) => {
 	const offsetYBetweenCenterAndPointer = useRef(0);
 
 	/**
-	 * Get the drag area coordinates from the pointer position during dragging
+	 * Get the drag area coordinates from the SVG point during dragging.
 	 *
-	 * @param {number} clientX X coordinate of the pointer on the browser window
-	 * @param {number} clientY Y coordinate of the pointer on the browser window
-	 * @returns {Point} Drag area coordinates
+	 * @param svgPoint - Pointer position in SVG coordinate system
+	 * @returns Drag area coordinates
 	 */
-	const getPointOnDrag = (clientX: number, clientY: number): Point => {
-		const svgPoint = getSvgPoint(clientX, clientY, ref.current);
-
-		let newX = svgPoint.x;
-		let newY = svgPoint.y;
-
-		// Adjust the coordinates by the offset between the center and the pointer
-		newX -= offsetXBetweenCenterAndPointer.current;
-		newY -= offsetYBetweenCenterAndPointer.current;
+	const getPointOnDrag = (svgPoint: Point): Point => {
+		let newX = svgPoint.x - offsetXBetweenCenterAndPointer.current;
+		let newY = svgPoint.y - offsetYBetweenCenterAndPointer.current;
 
 		// If a drag position transformation function is specified, apply that function
 		if (dragPositioningFunction) {
@@ -182,10 +175,10 @@ export const useDrag = (props: DragProps) => {
 			return;
 		}
 
-		// Get drag coordinates
-		const dragPoint = getPointOnDrag(e.clientX, e.clientY);
-		// Get cursor position in SVG coordinate system
+		// Calculate SVG coordinates first
 		const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
+		// Get drag coordinates
+		const dragPoint = getPointOnDrag(svgCursorPoint);
 		// Generate event ID
 		const eventId = newEventId();
 
@@ -266,10 +259,10 @@ export const useDrag = (props: DragProps) => {
 		const eventId = newEventId();
 
 		if (isDragging) {
-			// Get drag coordinates
-			const dragPoint = getPointOnDrag(e.clientX, e.clientY);
-			// Get cursor position in SVG coordinate system
+			// Calculate SVG coordinates first
 			const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
+			// Get drag coordinates
+			const dragPoint = getPointOnDrag(svgCursorPoint);
 
 			// Fire drag end event if dragging was in progress
 			onDrag?.({
@@ -550,17 +543,14 @@ export const useDrag = (props: DragProps) => {
 				const adjustedClientY =
 					customEvent.detail.clientY + customEvent.detail.deltaY;
 
-				// Get drag coordinates adjusted for scroll
-				const dragPoint = getPointOnDrag(
-					adjustedClientX, // Adjust drag point based on scroll
-					adjustedClientY, // Adjust drag point based on scroll
-				);
-				// Get cursor position in SVG coordinate system adjusted for scroll
+				// Calculate SVG coordinates first
 				const svgCursorPoint = getSvgPoint(
 					adjustedClientX,
 					adjustedClientY,
 					ref.current,
 				);
+				// Get drag coordinates adjusted for scroll
+				const dragPoint = getPointOnDrag(svgCursorPoint);
 
 				onDrag?.({
 					eventId: newEventId(),
