@@ -59,14 +59,14 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 				return;
 			}
 
-			const { minX, minY, clientX, clientY } = event.detail;
+			const { newMinX, newMinY, clientX, clientY } = event.detail;
 			const { x, y } = clientToCanvasCoords(clientX, clientY);
 
 			// Update the area selection state with new end coordinates
 			setCanvasState((prevState) => ({
 				...prevState,
-				minX,
-				minY,
+				minX: newMinX,
+				minY: newMinY,
 				areaSelectionState: {
 					...prevState.areaSelectionState,
 					endX: x,

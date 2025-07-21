@@ -274,10 +274,12 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			const { minX, minY, onScroll } = refBus.current;
 
 			onScroll?.({
-				minX: minX + e.deltaX,
-				minY: minY + e.deltaY,
-				clientX: e.clientX + e.deltaX, // TODO: ここで加算するのはわかりにくい
-				clientY: e.clientY + e.deltaY, // TODO: ここで加算するのはわかりにくい
+				newMinX: minX + e.deltaX,
+				newMinY: minY + e.deltaY,
+				clientX: e.clientX,
+				clientY: e.clientY,
+				deltaX: e.deltaX,
+				deltaY: e.deltaY,
 			});
 		}, []);
 

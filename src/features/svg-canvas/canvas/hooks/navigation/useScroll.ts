@@ -32,8 +32,8 @@ export const useScroll = (props: SvgCanvasSubHooksProps) => {
 				if (prevState.interactionState === InteractionState.Idle) {
 					return {
 						...prevState,
-						minX: e.minX,
-						minY: e.minY,
+						minX: e.newMinX,
+						minY: e.newMinY,
 					};
 				}
 

@@ -121,10 +121,12 @@ export const useAutoEdgeScroll = (
 
 			// Dispatch a custom event with scroll position to notify other components
 			const scrollEvent: SvgCanvasScrollEvent = {
-				minX: newMinX,
-				minY: newMinY,
+				newMinX,
+				newMinY,
 				clientX: adjustedClientX,
 				clientY: adjustedClientY,
+				deltaX: scrollDeltaX,
+				deltaY: scrollDeltaY,
 				isFromAutoEdgeScroll: true,
 			};
 

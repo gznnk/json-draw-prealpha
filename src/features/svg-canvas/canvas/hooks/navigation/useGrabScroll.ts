@@ -124,10 +124,13 @@ export const useGrabScroll = (
 
 			// Update scroll position
 			onScroll?.({
-				minX: newMinX,
-				minY: newMinY,
+				newMinX,
+				newMinY,
 				clientX: e.clientX,
 				clientY: e.clientY,
+				deltaX: totalDeltaX,
+				deltaY: totalDeltaY,
+				isFromAutoEdgeScroll: false,
 			});
 		},
 		[],
