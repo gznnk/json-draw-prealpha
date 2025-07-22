@@ -4,9 +4,6 @@ import { useCallback, useRef } from "react";
 // Import types.
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
-// Import hooks.
-import { useScroll } from "./useScroll";
-
 /**
  * Return type for the useGrabScroll hook
  */
@@ -38,16 +35,12 @@ export const useGrabScroll = (
 		minY: number;
 	} | null>(null);
 
-	// Get scroll handler
-	const onScroll = useScroll(props);
-
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		minX,
 		minY,
 		isGrabScrolling: grabScrollState?.isGrabScrolling,
 		setCanvasState,
-		onScroll,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -103,7 +96,7 @@ export const useGrabScroll = (
 			if (!dragStartState.current) return;
 
 			// Bypass references to avoid function creation in every render.
-			const { setCanvasState, onScroll } = refBus.current;
+			const { setCanvasState } = refBus.current;
 
 			// Calculate total movement from the start position
 			const totalDeltaX = e.clientX - dragStartState.current.clientX;
@@ -116,22 +109,13 @@ export const useGrabScroll = (
 			// Mark that grab scrolling occurred
 			setCanvasState((prevState) => ({
 				...prevState,
+				minX: newMinX,
+				minY: newMinY,
 				grabScrollState: {
 					isGrabScrolling: true,
 					grabScrollOccurred: true,
 				},
 			}));
-
-			// Update scroll position
-			onScroll?.({
-				newMinX,
-				newMinY,
-				clientX: e.clientX,
-				clientY: e.clientY,
-				deltaX: totalDeltaX,
-				deltaY: totalDeltaY,
-				isFromAutoEdgeScroll: false,
-			});
 		},
 		[],
 	);
