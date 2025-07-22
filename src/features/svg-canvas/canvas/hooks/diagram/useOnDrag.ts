@@ -62,6 +62,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			autoEdgeScroll({
 				cursorX: e.cursorX,
 				cursorY: e.cursorY,
+				clientX: e.clientX,
+				clientY: e.clientY,
 			});
 			return;
 		}
@@ -238,6 +240,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 		autoEdgeScroll({
 			cursorX: e.cursorX,
 			cursorY: e.cursorY,
+			clientX: e.clientX,
+			clientY: e.clientY,
 		});
 	}, []);
 };

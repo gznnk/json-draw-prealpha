@@ -193,6 +193,8 @@ export const useDrag = (props: DragProps) => {
 			endY: dragPoint.y,
 			cursorX: svgCursorPoint.x,
 			cursorY: svgCursorPoint.y,
+			clientX: e.clientX,
+			clientY: e.clientY,
 		} as DiagramDragEvent;
 
 		// Create broadcast drag event information
@@ -275,6 +277,8 @@ export const useDrag = (props: DragProps) => {
 				endY: dragPoint.y,
 				cursorX: svgCursorPoint.x,
 				cursorY: svgCursorPoint.y,
+				clientX: e.clientX,
+				clientY: e.clientY,
 			});
 			// Fire drag end event for handling by shapes without parent-child relationship
 			eventBus.dispatchEvent(
@@ -345,6 +349,8 @@ export const useDrag = (props: DragProps) => {
 				endY: newPoint.y,
 				cursorX: newPoint.x, // Use shape center as cursor position
 				cursorY: newPoint.y, // Use shape center as cursor position
+				clientX: 0, // No client coordinates for keyboard events
+				clientY: 0, // No client coordinates for keyboard events
 			} as DiagramDragEvent;
 
 			if (!isArrowDragging.current) {
@@ -391,6 +397,8 @@ export const useDrag = (props: DragProps) => {
 						endY: y,
 						cursorX: x, // Use shape center as cursor position
 						cursorY: y, // Use shape center as cursor position
+						clientX: 0, // No client coordinates for keyboard events
+						clientY: 0, // No client coordinates for keyboard events
 					});
 
 					// Mark arrow key drag as ended
@@ -422,6 +430,8 @@ export const useDrag = (props: DragProps) => {
 			endY: y,
 			cursorX: x, // Use shape center as cursor position
 			cursorY: y, // Use shape center as cursor position
+			clientX: 0, // No client coordinates for keyboard events
+			clientY: 0, // No client coordinates for keyboard events
 		} as DiagramDragEvent;
 
 		if (isArrowDragging.current) {
@@ -562,6 +572,8 @@ export const useDrag = (props: DragProps) => {
 					endY: dragPoint.y,
 					cursorX: svgCursorPoint.x,
 					cursorY: svgCursorPoint.y,
+					clientX: customEvent.detail.clientX,
+					clientY: customEvent.detail.clientY,
 					minX: customEvent.detail.newMinX,
 					minY: customEvent.detail.newMinY,
 					isFromAutoEdgeScroll: customEvent.detail.isFromAutoEdgeScroll,

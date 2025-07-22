@@ -15,6 +15,10 @@ export type DiagramTransformEvent = {
 	endShape: Shape;
 	cursorX: number;
 	cursorY: number;
+	/** The cursor's x position in client coordinates */
+	clientX: number;
+	/** The cursor's y position in client coordinates */
+	clientY: number;
 	minX?: number;
 	minY?: number;
 	isFromAutoEdgeScroll?: boolean;

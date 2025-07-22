@@ -139,6 +139,8 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			autoEdgeScroll({
 				cursorX: e.cursorX,
 				cursorY: e.cursorY,
+				clientX: e.clientX ?? 0,
+				clientY: e.clientY ?? 0,
 			});
 		}
 	}, []);

@@ -19,7 +19,12 @@ import { InteractionState } from "../../types/InteractionState";
  */
 export type UseAutoEdgeScrollReturn = {
 	/** Function to adjust scroll position when cursor is near edges */
-	autoEdgeScroll: (args: { cursorX: number; cursorY: number }) => void;
+	autoEdgeScroll: (args: {
+		cursorX: number;
+		cursorY: number;
+		clientX: number;
+		clientY: number;
+	}) => void;
 	/** Flag indicating whether auto edge scroll is currently active */
 	isAutoScrolling: boolean;
 };
@@ -60,8 +65,8 @@ export const useAutoEdgeScroll = (
 		vertical: "top" | "bottom" | null;
 	}>({ horizontal: null, vertical: null });
 
-	// Reference to store the current cursor position for continuous scrolling
-	const currentCursorRef = useRef<{
+	// Reference to store the current client position for continuous scrolling
+	const currentClientRef = useRef<{
 		x: number;
 		y: number;
 	}>({ x: 0, y: 0 });
@@ -142,8 +147,8 @@ export const useAutoEdgeScroll = (
 		(
 			horizontal: "left" | "right" | null,
 			vertical: "top" | "bottom" | null,
-			cursorX: number,
-			cursorY: number,
+			clientX: number,
+			clientY: number,
 		) => {
 			// Clear existing interval if any
 			clearScrollInterval();
@@ -155,28 +160,13 @@ export const useAutoEdgeScroll = (
 			// Set auto scrolling state to true
 			setIsAutoScrolling(true);
 
-			// Store current cursor position
-			currentCursorRef.current.x = cursorX;
-			currentCursorRef.current.y = cursorY;
+			// Store current client positions
+			currentClientRef.current.x = clientX;
+			currentClientRef.current.y = clientY;
 
-			// Convert initial cursor position to client coordinates
-			let initialClientX = 0;
-			let initialClientY = 0;
-
-			const { canvasRef } = refBus.current.props;
-			if (canvasRef?.svgRef?.current) {
-				const svgElement = canvasRef.svgRef.current;
-				const svgPoint = svgElement.createSVGPoint();
-				svgPoint.x = cursorX;
-				svgPoint.y = cursorY;
-
-				const screenCTM = svgElement.getScreenCTM();
-				if (screenCTM) {
-					const clientPoint = svgPoint.matrixTransform(screenCTM);
-					initialClientX = clientPoint.x;
-					initialClientY = clientPoint.y;
-				}
-			}
+			// Use provided client coordinates directly
+			const initialClientX = clientX;
+			const initialClientY = clientY;
 
 			// Perform initial scroll immediately
 			performScroll(horizontal, vertical, initialClientX, initialClientY);
@@ -190,29 +180,10 @@ export const useAutoEdgeScroll = (
 					return;
 				}
 
-				// Get current cursor position
-				const currentCursorX = currentCursorRef.current.x;
-				const currentCursorY = currentCursorRef.current.y;
+				// Use stored client coordinates for continuous scrolling
+				const currentClientX = currentClientRef.current.x;
+				const currentClientY = currentClientRef.current.y;
 
-				// Convert current cursor position to client coordinates
-				let currentClientX = 0;
-				let currentClientY = 0;
-
-				if (canvasRef?.svgRef?.current) {
-					const svgElement = canvasRef.svgRef.current;
-					const svgPoint = svgElement.createSVGPoint();
-					svgPoint.x = currentCursorX;
-					svgPoint.y = currentCursorY;
-
-					const screenCTM = svgElement.getScreenCTM();
-					if (screenCTM) {
-						const clientPoint = svgPoint.matrixTransform(screenCTM);
-						currentClientX = clientPoint.x;
-						currentClientY = clientPoint.y;
-					}
-				}
-
-				// Use current client coordinates for continuous scrolling
 				performScroll(horizontal, vertical, currentClientX, currentClientY);
 			}, AUTO_SCROLL_INTERVAL_MS);
 		},
@@ -230,9 +201,13 @@ export const useAutoEdgeScroll = (
 		({
 			cursorX,
 			cursorY,
+			clientX,
+			clientY,
 		}: {
 			cursorX: number;
 			cursorY: number;
+			clientX: number;
+			clientY: number;
 		}) => {
 			const { canvasState, canvasRef } = refBus.current.props;
 			const { minX, minY, zoom } = canvasState;
@@ -253,9 +228,9 @@ export const useAutoEdgeScroll = (
 			const containerWidth = containerRect.width;
 			const containerHeight = containerRect.height;
 
-			// Update current cursor position for continuous scrolling
-			currentCursorRef.current.x = cursorX;
-			currentCursorRef.current.y = cursorY;
+			// Update current client positions for continuous scrolling
+			currentClientRef.current.x = clientX;
+			currentClientRef.current.y = clientY;
 
 			// Calculate the viewBox boundaries considering zoom
 			const viewBoxX = minX / zoom;
@@ -303,7 +278,7 @@ export const useAutoEdgeScroll = (
 					clearScrollInterval();
 				} else {
 					// Cursor moved to a different edge or started near an edge
-					startScrollInterval(newHorizontal, newVertical, cursorX, cursorY);
+					startScrollInterval(newHorizontal, newVertical, clientX, clientY);
 				}
 			}
 		},

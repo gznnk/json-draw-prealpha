@@ -195,6 +195,9 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 
 					// Update the connect points of the transformed item.
 					newItem = updateDiagramConnectPoints(newItem);
+					if (isConnectableData(newItem)) {
+						transformedDiagrams.push(newItem);
+					}
 
 					// Add top-level group to the set if this is a transformed item and we have ancestors
 					if (ancestors.length > 0 && ancestors[0]) {
@@ -257,6 +260,8 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				autoEdgeScroll({
 					cursorX: e.cursorX,
 					cursorY: e.cursorY,
+					clientX: e.clientX,
+					clientY: e.clientY,
 				});
 				return;
 			}
@@ -350,8 +355,10 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 			// Auto scroll if the cursor is near the edges, but skip for rotation operations
 			if (e.transformationType !== "Rotation") {
 				autoEdgeScroll({
-					cursorX: e.cursorX ?? e.endShape.x,
-					cursorY: e.cursorY ?? e.endShape.y,
+					cursorX: e.cursorX,
+					cursorY: e.cursorY,
+					clientX: e.clientX,
+					clientY: e.clientY,
 				});
 			}
 		},

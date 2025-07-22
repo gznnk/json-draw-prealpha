@@ -304,8 +304,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 					// Update outline display for items within selection bounds
 					updateOutlineDisplay(newSelectionState);
 
-					// Trigger auto edge scroll based on current cursor position (use canvas coordinates)
-					refBus.current.autoEdgeScroll({ cursorX: x, cursorY: y });
+					// Trigger auto edge scroll based on current cursor position
+					refBus.current.autoEdgeScroll({ cursorX: x, cursorY: y, clientX, clientY });
 					break;
 				}
 
