@@ -227,58 +227,26 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		);
 
 		/**
-		 * Handle the pointer move event for grab scrolling and area selection.
+		 * Handle the pointer move event for grab scrolling.
+		 * Area selection is handled by PointerCaptureElement when pointer capture is active.
 		 */
 		const handlePointerMove = useCallback(
 			(e: React.PointerEvent<SVGSVGElement>) => {
-				// Handle area selection if active
-				if (
-					interactionState === InteractionState.AreaSelection &&
-					onAreaSelection
-				) {
-					onAreaSelection({
-						eventId: newEventId(),
-						eventType: "InProgress",
-						clientX: e.clientX,
-						clientY: e.clientY,
-					});
-					return;
-				}
-
 				// Call the grab move handler
 				refBus.current.onGrabMove?.(e);
 			},
-			[interactionState, onAreaSelection],
+			[],
 		);
 
 		/**
-		 * Handle the pointer up event to end grab scrolling and area selection.
+		 * Handle the pointer up event to end grab scrolling.
+		 * Area selection end is handled by PointerCaptureElement when pointer capture is active.
 		 */
 		const handlePointerUp = useCallback(
 			(e: React.PointerEvent<SVGSVGElement>) => {
-				// Handle area selection end
-				if (
-					interactionState === InteractionState.AreaSelection &&
-					onAreaSelection
-				) {
-					// Release pointer capture from dummy element
-					if (dummyElementRef.current && capturedPointerIdRef.current !== null) {
-						dummyElementRef.current.releasePointerCapture(capturedPointerIdRef.current);
-						capturedPointerIdRef.current = null;
-					}
-					
-					onAreaSelection({
-						eventId: newEventId(),
-						eventType: "End",
-						clientX: e.clientX,
-						clientY: e.clientY,
-					});
-					return;
-				}
-
 				refBus.current.onGrabEnd?.(e);
 			},
-			[interactionState, onAreaSelection],
+			[],
 		);
 
 		/**
