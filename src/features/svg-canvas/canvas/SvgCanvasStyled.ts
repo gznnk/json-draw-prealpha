@@ -98,10 +98,12 @@ type SelectionRectProps = {
  * Styled selection rectangle for area selection.
  */
 export const SelectionRect = styled.rect<SelectionRectProps>`
-    fill: rgba(24, 144, 255, 0.1);
-    stroke: rgba(24, 144, 255, 0.8);
-    stroke-width: 1;
-    stroke-dasharray: 4,2;
+    fill: rgba(22, 119, 255, 0.06);
+    stroke: #1677ff;
+    stroke-width: 1.5;
+    stroke-dasharray: 5,3;
     pointer-events: none;
     visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+    rx: 2;
+    ry: 2;
 `;
