@@ -26,6 +26,7 @@ import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { MiniMap } from "../components/auxiliary/MiniMap";
 import { GridPattern } from "../components/auxiliary/GridPattern";
 import { GridBackground } from "../components/auxiliary/GridBackground";
+import { PointerCaptureElement } from "../components/auxiliary/PointerCaptureElement";
 
 // Imports related to this component.
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
@@ -383,6 +384,54 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		const dummyElementRef = useRef<HTMLDivElement>(null);
 		const capturedPointerIdRef = useRef<number | null>(null);
 
+		/**
+		 * Handle pointer move events from the capture element
+		 */
+		const handleCaptureElementPointerMove = useCallback(
+			(e: React.PointerEvent<HTMLDivElement>) => {
+				// Forward pointer move events to area selection when captured
+				if (
+					interactionState === InteractionState.AreaSelection &&
+					onAreaSelection
+				) {
+					onAreaSelection({
+						eventId: newEventId(),
+						eventType: "InProgress",
+						clientX: e.clientX,
+						clientY: e.clientY,
+					});
+				}
+			},
+			[interactionState, onAreaSelection],
+		);
+
+		/**
+		 * Handle pointer up events from the capture element
+		 */
+		const handleCaptureElementPointerUp = useCallback(
+			(e: React.PointerEvent<HTMLDivElement>) => {
+				// Forward pointer up events to area selection when captured
+				if (
+					interactionState === InteractionState.AreaSelection &&
+					onAreaSelection
+				) {
+					// Release pointer capture from dummy element
+					if (dummyElementRef.current && capturedPointerIdRef.current !== null) {
+						dummyElementRef.current.releasePointerCapture(capturedPointerIdRef.current);
+						capturedPointerIdRef.current = null;
+					}
+					
+					onAreaSelection({
+						eventId: newEventId(),
+						eventType: "End",
+						clientX: e.clientX,
+						clientY: e.clientY,
+					});
+				}
+			},
+			[interactionState, onAreaSelection],
+		);
+
 		// Render diagrams
 		const renderedItems = items.map((item) => {
 			const component = DiagramRegistry.getComponent(item.type);
@@ -500,54 +549,12 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						zoom={zoom}
 						onNavigate={onNavigate}
 					/>
-					{/* Invisible dummy element for pointer capture during area selection */}
-					<div
-						ref={dummyElementRef}
-						style={{
-							position: "absolute",
-							top: 0,
-							left: 0,
-							width: "1px",
-							height: "1px",
-							opacity: 0,
-							pointerEvents: "auto",
-						}}
-						onPointerMove={(e) => {
-							// Forward pointer move events to area selection when captured
-							if (
-								capturedPointerIdRef.current === e.pointerId &&
-								interactionState === InteractionState.AreaSelection &&
-								onAreaSelection
-							) {
-								onAreaSelection({
-									eventId: newEventId(),
-									eventType: "InProgress",
-									clientX: e.clientX,
-									clientY: e.clientY,
-								});
-							}
-						}}
-						onPointerUp={(e) => {
-							// Forward pointer up events to area selection when captured
-							if (
-								capturedPointerIdRef.current === e.pointerId &&
-								interactionState === InteractionState.AreaSelection &&
-								onAreaSelection
-							) {
-								// Release pointer capture from dummy element
-								if (dummyElementRef.current && capturedPointerIdRef.current !== null) {
-									dummyElementRef.current.releasePointerCapture(capturedPointerIdRef.current);
-									capturedPointerIdRef.current = null;
-								}
-								
-								onAreaSelection({
-									eventId: newEventId(),
-									eventType: "End",
-									clientX: e.clientX,
-									clientY: e.clientY,
-								});
-							}
-						}}
+					{/* Pointer capture element for area selection */}
+					<PointerCaptureElement
+						elementRef={dummyElementRef}
+						capturedPointerId={capturedPointerIdRef.current}
+						onPointerMove={handleCaptureElementPointerMove}
+						onPointerUp={handleCaptureElementPointerUp}
 					/>
 				</ViewportOverlay>
 			</Viewport>
