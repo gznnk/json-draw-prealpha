@@ -194,17 +194,25 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					refBus.current;
 
 				if (e.target === e.currentTarget) {
-					// If grab scrolling is active, handle the grab start.
-					onGrabStart?.(e);
-
-					// Start area selection if not pressing right mouse button
-					if (e.button !== 2 && onAreaSelection) {
+					// Start area selection if left mouse button is pressed
+					if (e.button === 0 && onAreaSelection) {
+						// Use dummy element for pointer capture to enable auto-scroll when pointer is outside viewport
+						if (dummyElementRef.current) {
+							dummyElementRef.current.setPointerCapture(e.pointerId);
+							capturedPointerIdRef.current = e.pointerId;
+						}
+						
 						onAreaSelection({
 							eventId: newEventId(),
 							eventType: "Start",
 							clientX: e.clientX,
 							clientY: e.clientY,
 						});
+					}
+
+					// Handle grab start for right mouse button
+					if (e.button === 2) {
+						onGrabStart?.(e);
 					}
 
 					// Clear the selection when pointer is down on the canvas.
@@ -252,6 +260,12 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					interactionState === InteractionState.AreaSelection &&
 					onAreaSelection
 				) {
+					// Release pointer capture from dummy element
+					if (dummyElementRef.current && capturedPointerIdRef.current !== null) {
+						dummyElementRef.current.releasePointerCapture(capturedPointerIdRef.current);
+						capturedPointerIdRef.current = null;
+					}
+					
 					onAreaSelection({
 						eventId: newEventId(),
 						eventType: "End",
@@ -294,6 +308,15 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					interactionState === InteractionState.AreaSelection
 				) {
 					e.preventDefault();
+					// Release pointer capture from dummy element
+					if (dummyElementRef.current && capturedPointerIdRef.current !== null) {
+						try {
+							dummyElementRef.current.releasePointerCapture(capturedPointerIdRef.current);
+							capturedPointerIdRef.current = null;
+						} catch {
+							// Ignore errors if pointer capture wasn't set
+						}
+					}
 					if (onCancelAreaSelection) {
 						onCancelAreaSelection();
 					}
@@ -355,6 +378,10 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 				document.removeEventListener("wheel", onDocumentWheel, true);
 			};
 		}, []);
+
+		// Create a dummy element for pointer capture during area selection
+		const dummyElementRef = useRef<HTMLDivElement>(null);
+		const capturedPointerIdRef = useRef<number | null>(null);
 
 		// Render diagrams
 		const renderedItems = items.map((item) => {
@@ -472,6 +499,55 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						containerHeight={containerHeight}
 						zoom={zoom}
 						onNavigate={onNavigate}
+					/>
+					{/* Invisible dummy element for pointer capture during area selection */}
+					<div
+						ref={dummyElementRef}
+						style={{
+							position: "absolute",
+							top: 0,
+							left: 0,
+							width: "1px",
+							height: "1px",
+							opacity: 0,
+							pointerEvents: "auto",
+						}}
+						onPointerMove={(e) => {
+							// Forward pointer move events to area selection when captured
+							if (
+								capturedPointerIdRef.current === e.pointerId &&
+								interactionState === InteractionState.AreaSelection &&
+								onAreaSelection
+							) {
+								onAreaSelection({
+									eventId: newEventId(),
+									eventType: "InProgress",
+									clientX: e.clientX,
+									clientY: e.clientY,
+								});
+							}
+						}}
+						onPointerUp={(e) => {
+							// Forward pointer up events to area selection when captured
+							if (
+								capturedPointerIdRef.current === e.pointerId &&
+								interactionState === InteractionState.AreaSelection &&
+								onAreaSelection
+							) {
+								// Release pointer capture from dummy element
+								if (dummyElementRef.current && capturedPointerIdRef.current !== null) {
+									dummyElementRef.current.releasePointerCapture(capturedPointerIdRef.current);
+									capturedPointerIdRef.current = null;
+								}
+								
+								onAreaSelection({
+									eventId: newEventId(),
+									eventType: "End",
+									clientX: e.clientX,
+									clientY: e.clientY,
+								});
+							}
+						}}
 					/>
 				</ViewportOverlay>
 			</Viewport>
