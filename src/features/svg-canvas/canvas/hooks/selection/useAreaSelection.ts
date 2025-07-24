@@ -24,6 +24,70 @@ import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
 import { useClearAllSelection } from "./useClearAllSelection";
 
 /**
+ * Update items array with outline display based on selection bounds
+ */
+const updateItemsWithOutline = (
+	items: Diagram[],
+	selectionBounds: {
+		startX: number;
+		startY: number;
+		endX: number;
+		endY: number;
+	},
+) => {
+	// Calculate selection bounds in canvas coordinates
+	const minX = Math.min(selectionBounds.startX, selectionBounds.endX);
+	const maxX = Math.max(selectionBounds.startX, selectionBounds.endX);
+	const minY = Math.min(selectionBounds.startY, selectionBounds.endY);
+	const maxY = Math.max(selectionBounds.startY, selectionBounds.endY);
+
+	return applyFunctionRecursively(items, (item) => {
+		if (!isSelectableData(item)) return item;
+
+		// Calculate item bounding box using calcItemBoundingBox function
+		const itemBounds = calcItemBoundingBox(item);
+
+		// Check if item's bounding box is completely contained within selection rectangle
+		const isInSelection =
+			itemBounds.left >= minX &&
+			itemBounds.right <= maxX &&
+			itemBounds.top >= minY &&
+			itemBounds.bottom <= maxY;
+
+		return {
+			...item,
+			showOutline: isInSelection,
+		};
+	});
+};
+
+/**
+ * Convert client coordinates to SVG canvas coordinates using matrixTransform
+ */
+const clientToCanvasCoords = (
+	clientX: number,
+	clientY: number,
+	svgElement: SVGSVGElement | null,
+) => {
+	if (!svgElement) {
+		return { x: 0, y: 0 };
+	}
+
+	const svgPoint = svgElement.createSVGPoint();
+	svgPoint.x = clientX;
+	svgPoint.y = clientY;
+
+	const screenCTM = svgElement.getScreenCTM();
+	if (screenCTM) {
+		// Inverse transform to convert from client coordinates to SVG coordinates
+		const svgCoords = svgPoint.matrixTransform(screenCTM.inverse());
+		return { x: svgCoords.x, y: svgCoords.y };
+	}
+
+	return { x: 0, y: 0 };
+};
+
+/**
  * Custom hook to handle area selection on the canvas.
  */
 export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
@@ -34,7 +98,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 	const onClearAllSelection = useClearAllSelection(props);
 
 	// Get the auto edge scroll function, clear function, and scrolling state
-	const { autoEdgeScroll, clearAutoEdgeScroll, isAutoScrolling } = useAutoEdgeScroll(props);
+	const { autoEdgeScroll, clearAutoEdgeScroll, isAutoScrolling } =
+		useAutoEdgeScroll(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -44,47 +109,6 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
-
-	/**
-	 * Update items array with outline display based on selection bounds
-	 */
-	const updateItemsWithOutline = useCallback(
-		(
-			items: Diagram[],
-			selectionBounds: {
-				startX: number;
-				startY: number;
-				endX: number;
-				endY: number;
-			},
-		) => {
-			// Calculate selection bounds in canvas coordinates
-			const minX = Math.min(selectionBounds.startX, selectionBounds.endX);
-			const maxX = Math.max(selectionBounds.startX, selectionBounds.endX);
-			const minY = Math.min(selectionBounds.startY, selectionBounds.endY);
-			const maxY = Math.max(selectionBounds.startY, selectionBounds.endY);
-
-			return applyFunctionRecursively(items, (item) => {
-				if (!isSelectableData(item)) return item;
-
-				// Calculate item bounding box using calcItemBoundingBox function
-				const itemBounds = calcItemBoundingBox(item);
-
-				// Check if item's bounding box is completely contained within selection rectangle
-				const isInSelection =
-					itemBounds.left >= minX &&
-					itemBounds.right <= maxX &&
-					itemBounds.top >= minY &&
-					itemBounds.bottom <= maxY;
-
-				return {
-					...item,
-					showOutline: isInSelection,
-				};
-			});
-		},
-		[],
-	);
 
 	// Handle scroll events from auto edge scroll
 	useEffect(() => {
@@ -101,7 +125,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			}
 
 			const { newMinX, newMinY, clientX, clientY } = event.detail;
-			const { x, y } = clientToCanvasCoords(clientX, clientY);
+			const { canvasRef } = refBus.current.props;
+			const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
 
 			const newSelectionBounds = {
 				startX: canvasState.areaSelectionState.startX,
@@ -132,35 +157,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 				handleScrollEvent,
 			);
 		};
-	}, [updateItemsWithOutline]);
+	}, []);
 
-	/**
-	 * Convert client coordinates to SVG canvas coordinates using matrixTransform
-	 */
-	const clientToCanvasCoords = useCallback(
-		(clientX: number, clientY: number) => {
-			const { canvasRef } = refBus.current.props;
-
-			if (!canvasRef?.svgRef.current) {
-				return { x: 0, y: 0 };
-			}
-
-			const svgElement = canvasRef.svgRef.current;
-			const svgPoint = svgElement.createSVGPoint();
-			svgPoint.x = clientX;
-			svgPoint.y = clientY;
-
-			const screenCTM = svgElement.getScreenCTM();
-			if (screenCTM) {
-				// Inverse transform to convert from client coordinates to SVG coordinates
-				const svgCoords = svgPoint.matrixTransform(screenCTM.inverse());
-				return { x: svgCoords.x, y: svgCoords.y };
-			}
-
-			return { x: 0, y: 0 };
-		},
-		[],
-	);
 
 	/**
 	 * Update items selection based on the current selection state
@@ -236,28 +234,6 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 	);
 
 	/**
-	 * Update outline display for items within the selection bounds during area selection
-	 */
-	const updateOutlineDisplay = useCallback(
-		(selectionBounds: {
-			startX: number;
-			startY: number;
-			endX: number;
-			endY: number;
-		}) => {
-			const {
-				props: { setCanvasState },
-			} = refBus.current;
-
-			setCanvasState((prevState) => ({
-				...prevState,
-				items: updateItemsWithOutline(prevState.items, selectionBounds),
-			}));
-		},
-		[updateItemsWithOutline],
-	);
-
-	/**
 	 * Clear outline display for all items
 	 */
 	const clearOutlineDisplay = useCallback(() => {
@@ -287,7 +263,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 
 			// If isAutoScrolling, skip movement logic and only call autoEdgeScroll
 			if (isAutoScrolling) {
-				const { x, y } = clientToCanvasCoords(clientX, clientY);
+				const { canvasRef } = refBus.current.props;
+				const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
 				refBus.current.autoEdgeScroll({
 					cursorX: x,
 					cursorY: y,
@@ -299,7 +276,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 
 			switch (eventType) {
 				case "Start": {
-					const { x, y } = clientToCanvasCoords(clientX, clientY);
+					const { canvasRef } = refBus.current.props;
+					const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
 
 					// Clear existing selections when starting area selection
 					onClearAllSelection();
@@ -324,7 +302,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 						return;
 					}
 
-					const { x, y } = clientToCanvasCoords(clientX, clientY);
+					const { canvasRef } = refBus.current.props;
+					const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
 					const { areaSelectionState } = canvasState;
 
 					const newSelectionState = {
@@ -334,13 +313,12 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 						endY: y,
 					};
 
+					// Update both the area selection state and items outline in a single setCanvasState call
 					setCanvasState((prevState) => ({
 						...prevState,
+						items: updateItemsWithOutline(prevState.items, newSelectionState),
 						areaSelectionState: newSelectionState,
 					}));
-
-					// Update outline display for items within selection bounds
-					updateOutlineDisplay(newSelectionState);
 
 					// Trigger auto edge scroll based on current cursor position
 					refBus.current.autoEdgeScroll({
@@ -381,10 +359,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			}
 		},
 		[
-			clientToCanvasCoords,
 			onClearAllSelection,
 			updateItemsSelection,
-			updateOutlineDisplay,
 			clearAutoEdgeScroll,
 			isAutoScrolling,
 		],
