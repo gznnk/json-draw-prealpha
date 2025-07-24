@@ -124,9 +124,14 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 				return;
 			}
 
-			const { newMinX, newMinY, clientX, clientY } = event.detail;
+			const { newMinX, newMinY, clientX, clientY, deltaX, deltaY } =
+				event.detail;
 			const { canvasRef } = refBus.current.props;
-			const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
+			const { x, y } = clientToCanvasCoords(
+				clientX + deltaX,
+				clientY + deltaY,
+				canvasRef?.svgRef.current || null,
+			);
 
 			const newSelectionBounds = {
 				startX: canvasState.areaSelectionState.startX,
@@ -158,7 +163,6 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			);
 		};
 	}, []);
-
 
 	/**
 	 * Update items selection based on the current selection state
@@ -264,7 +268,11 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			// If isAutoScrolling, skip movement logic and only call autoEdgeScroll
 			if (isAutoScrolling) {
 				const { canvasRef } = refBus.current.props;
-				const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
+				const { x, y } = clientToCanvasCoords(
+					clientX,
+					clientY,
+					canvasRef?.svgRef.current || null,
+				);
 				refBus.current.autoEdgeScroll({
 					cursorX: x,
 					cursorY: y,
@@ -277,7 +285,11 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			switch (eventType) {
 				case "Start": {
 					const { canvasRef } = refBus.current.props;
-					const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
+					const { x, y } = clientToCanvasCoords(
+						clientX,
+						clientY,
+						canvasRef?.svgRef.current || null,
+					);
 
 					// Clear existing selections when starting area selection
 					onClearAllSelection();
@@ -303,7 +315,11 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 					}
 
 					const { canvasRef } = refBus.current.props;
-					const { x, y } = clientToCanvasCoords(clientX, clientY, canvasRef?.svgRef.current || null);
+					const { x, y } = clientToCanvasCoords(
+						clientX,
+						clientY,
+						canvasRef?.svgRef.current || null,
+					);
 					const { areaSelectionState } = canvasState;
 
 					const newSelectionState = {
