@@ -24,6 +24,10 @@ import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
 import { detectEdgeProximity } from "../../utils/detectEdgeProximity";
+import {
+        detectEdgeProximityChange,
+        type ScrollDirection,
+} from "../../utils/detectEdgeProximityChange";
 
 // Import hooks.
 import { useClearAllSelection } from "./useClearAllSelection";
@@ -108,10 +112,10 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 		y: number;
 	} | null>(null);
 	// Reference to store the last scroll direction for continuous scrolling
-	const lastScrollDirectionRef = useRef<{
-		horizontal: "left" | "right" | null;
-		vertical: "top" | "bottom" | null;
-	}>({ horizontal: null, vertical: null });
+        const lastScrollDirectionRef = useRef<ScrollDirection>({
+                horizontal: null,
+                vertical: null,
+        });
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -408,13 +412,16 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 					currentCursorPosRef.current = { x, y };
 
 					// Check if we need to start edge scrolling
-					const edgeProximity = detectEdgeProximity(refBus.current.props, x, y);
-					if (edgeProximity.isNearEdge) {
-						const isProximityChanged =
-							edgeProximity.horizontal !==
-								lastScrollDirectionRef.current.horizontal ||
-							edgeProximity.vertical !==
-								lastScrollDirectionRef.current.vertical;
+                                        const edgeProximity = detectEdgeProximity(
+                                                refBus.current.props,
+                                                x,
+                                                y,
+                                        );
+                                        if (edgeProximity.isNearEdge) {
+                                                const isProximityChanged = detectEdgeProximityChange(
+                                                        lastScrollDirectionRef.current as ScrollDirection,
+                                                        edgeProximity,
+                                                );
 
 						if (isProximityChanged) {
 							if (scrollIntervalRef.current) {
