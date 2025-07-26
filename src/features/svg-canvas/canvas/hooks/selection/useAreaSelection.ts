@@ -2,6 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
+import type { Box } from "../../../types/core/Box";
 import type { Diagram } from "../../../types/data/catalog/Diagram";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { AreaSelectionEvent } from "../../../types/events/AreaSelectionEvent";
@@ -37,6 +38,7 @@ const updateItemsWithOutline = (
 		endX: number;
 		endY: number;
 	},
+	cachedBoundingBoxes?: Map<string, Box>,
 ) => {
 	// Calculate selection bounds in canvas coordinates
 	const minX = Math.min(selectionBounds.startX, selectionBounds.endX);
@@ -48,8 +50,8 @@ const updateItemsWithOutline = (
 		if (!isSelectableData(item)) return item;
 		if (item.type === "ConnectLine") return item;
 
-		// Calculate item bounding box using calcItemBoundingBox function
-		const itemBounds = calcItemBoundingBox(item);
+		// Use cached bounding box if available, otherwise calculate
+		const itemBounds = cachedBoundingBoxes?.get(item.id) ?? calcItemBoundingBox(item);
 
 		// Check if item's bounding box is completely contained within selection rectangle
 		const isInSelection =
@@ -110,6 +112,9 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 		x: number;
 		y: number;
 	}>({ x: 0, y: 0 });
+	
+	// Reference to store cached bounding boxes for area selection
+	const cachedBoundingBoxesRef = useRef<Map<string, Box>>(new Map());
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -301,7 +306,7 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 				minX: prevState.minX + currentDeltaX,
 				minY: prevState.minY + currentDeltaY,
 				areaSelectionState: newSelectionBounds,
-				items: updateItemsWithOutline(prevState.items, newSelectionBounds),
+				items: updateItemsWithOutline(prevState.items, newSelectionBounds, cachedBoundingBoxesRef.current),
 			}));
 		};
 
@@ -334,6 +339,18 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 
 					// Clear existing selections when starting area selection
 					onClearAllSelection();
+
+					// Pre-calculate and cache bounding boxes for all selectable items
+					const { items } = canvasState;
+					cachedBoundingBoxesRef.current.clear();
+					
+					applyFunctionRecursively(items, (item) => {
+						if (isSelectableData(item) && item.type !== "ConnectLine") {
+							const boundingBox = calcItemBoundingBox(item);
+							cachedBoundingBoxesRef.current.set(item.id, boundingBox);
+						}
+						return item;
+					});
 
 					// Set interaction state to AreaSelection and initialize selection state
 					setCanvasState((prevState) => ({
@@ -398,7 +415,7 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 					// Update canvas state with new selection bounds
 					setCanvasState((prevState) => ({
 						...prevState,
-						items: updateItemsWithOutline(prevState.items, newSelectionState),
+						items: updateItemsWithOutline(prevState.items, newSelectionState, cachedBoundingBoxesRef.current),
 						areaSelectionState: newSelectionState,
 					}));
 					break;
@@ -412,6 +429,9 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 
 					// Clear edge scroll when area selection ends
 					clearEdgeScroll();
+
+					// Clear cached bounding boxes
+					cachedBoundingBoxesRef.current.clear();
 
 					// Update items selection based on current showOutline state
 					updateItemsSelection();
@@ -442,6 +462,9 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 	const onCancelAreaSelection = useCallback(() => {
 		// Clear edge scroll when area selection is cancelled
 		clearEdgeScroll();
+
+		// Clear cached bounding boxes
+		cachedBoundingBoxesRef.current.clear();
 
 		// Reset interaction state and remove outlines
 		const { setCanvasState } = refBus.current.props;
