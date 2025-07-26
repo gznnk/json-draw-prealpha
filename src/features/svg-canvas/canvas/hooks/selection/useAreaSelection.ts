@@ -247,25 +247,6 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 		});
 	}, []);
 
-	/**
-	 * Clear outline display for all items
-	 */
-	const clearOutlineDisplay = useCallback(() => {
-		const {
-			props: { setCanvasState },
-		} = refBus.current;
-
-		setCanvasState((prevState) => ({
-			...prevState,
-			items: applyFunctionRecursively(prevState.items, (item) => {
-				if (!isSelectableData(item)) return item;
-				return {
-					...item,
-					showOutline: false,
-				};
-			}),
-		}));
-	}, []);
 
 	/**
 	 * Clear edge scrolling interval and reset state
@@ -480,25 +461,29 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 	);
 
 	const onCancelAreaSelection = useCallback(() => {
-		// Clear outline display for all items
-		clearOutlineDisplay();
-
 		// Clear edge scroll when area selection is cancelled
 		clearEdgeScroll();
-
-		// Reset interaction state to Idle and selection state
+		
+		// Reset interaction state and remove outlines
 		const { setCanvasState } = refBus.current.props;
 		setCanvasState((prevState) => ({
 			...prevState,
-			interactionState: InteractionState.Idle,
-			areaSelectionState: {
-				startX: 0,
-				startY: 0,
-				endX: 0,
-				endY: 0,
-			},
-		}));
-	}, [clearOutlineDisplay, clearEdgeScroll]);
+			items: applyFunctionRecursively(prevState.items, (item) => {
+				if (!isSelectableData(item)) return item;
+				return {
+				...item,
+								showOutline: false,
+								};
+						}),
+						interactionState: InteractionState.Idle,
+						areaSelectionState: {
+								startX: 0,
+								startY: 0,
+								endX: 0,
+								endY: 0,
+						},
+				}));
+}, [clearEdgeScroll]);
 
 	return {
 		selectionState: props.canvasState.areaSelectionState,
