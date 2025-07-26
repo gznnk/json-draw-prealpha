@@ -274,7 +274,9 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 		}
 
 		isScrollingRef.current = true;
-		scrollIntervalRef.current = window.setInterval(() => {
+
+		// Execute scroll processing immediately
+		const executeScroll = () => {
 			const cursorPos = currentCursorPosRef.current;
 			if (!cursorPos) {
 				return;
@@ -306,7 +308,13 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 				areaSelectionState: newSelectionBounds,
 				items: updateItemsWithOutline(prevState.items, newSelectionBounds),
 			}));
-		}, AUTO_SCROLL_INTERVAL_MS);
+		};
+
+		// Execute immediately
+		executeScroll();
+
+		// Continue with interval
+		scrollIntervalRef.current = window.setInterval(executeScroll, AUTO_SCROLL_INTERVAL_MS);
 	}, []);
 
 	/**
