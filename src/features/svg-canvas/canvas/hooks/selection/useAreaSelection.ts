@@ -20,10 +20,6 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { calculateScrollDelta } from "../../utils/calculateScrollDelta";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { detectEdgeProximity } from "../../utils/detectEdgeProximity";
-import {
-	detectEdgeProximityChange,
-	type ScrollDirection,
-} from "../../utils/detectEdgeProximityChange";
 import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
 
@@ -109,11 +105,11 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 		x: number;
 		y: number;
 	} | null>(null);
-	// Reference to store the last scroll direction for continuous scrolling
-	const lastScrollDirectionRef = useRef<ScrollDirection>({
-		horizontal: null,
-		vertical: null,
-	});
+	// Reference to store the current delta values for continuous scrolling
+	const currentDeltaRef = useRef<{
+		x: number;
+		y: number;
+	}>({ x: 0, y: 0 });
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -258,21 +254,15 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			scrollIntervalRef.current = null;
 		}
 		isScrollingRef.current = false;
-		lastScrollDirectionRef.current = {
-			horizontal: null,
-			vertical: null,
-		};
 		currentCursorPosRef.current = null;
+		currentDeltaRef.current = { x: 0, y: 0 };
 	}, []);
 
 	/**
 	 * Start edge scrolling with calculated delta values
 	 */
-	const startEdgeScroll = useCallback((deltaX: number, deltaY: number) => {
-		if (scrollIntervalRef.current !== null) {
-			return; // Already scrolling
-		}
-
+	const startEdgeScroll = useCallback(() => {
+		// Mark scrolling as active
 		isScrollingRef.current = true;
 
 		// Execute scroll processing immediately
@@ -284,10 +274,15 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 
 			const { setCanvasState, canvasState } = refBus.current.props;
 
+			// Use stored delta values for continuous scrolling
+			const currentDeltaX = currentDeltaRef.current.x;
+			const currentDeltaY = currentDeltaRef.current.y;
+
 			// Update cursor position with deltas
+			const zoom = refBus.current.props.canvasState.zoom;
 			const newCursorPos = {
-				x: cursorPos.x + deltaX,
-				y: cursorPos.y + deltaY,
+				x: cursorPos.x + currentDeltaX / zoom,
+				y: cursorPos.y + currentDeltaY / zoom,
 			};
 
 			// Update current cursor position reference
@@ -303,8 +298,8 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			// Update canvas state with new scroll position and selection
 			setCanvasState((prevState) => ({
 				...prevState,
-				minX: prevState.minX + deltaX,
-				minY: prevState.minY + deltaY,
+				minX: prevState.minX + currentDeltaX,
+				minY: prevState.minY + currentDeltaY,
 				areaSelectionState: newSelectionBounds,
 				items: updateItemsWithOutline(prevState.items, newSelectionBounds),
 			}));
@@ -314,7 +309,10 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 		executeScroll();
 
 		// Continue with interval
-		scrollIntervalRef.current = window.setInterval(executeScroll, AUTO_SCROLL_INTERVAL_MS);
+		scrollIntervalRef.current = window.setInterval(
+			executeScroll,
+			AUTO_SCROLL_INTERVAL_MS,
+		);
 	}, []);
 
 	/**
@@ -378,31 +376,22 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 					// Check if we need to start edge scrolling
 					const edgeProximity = detectEdgeProximity(refBus.current.props, x, y);
 					if (edgeProximity.isNearEdge) {
-						const isProximityChanged = detectEdgeProximityChange(
-							lastScrollDirectionRef.current as ScrollDirection,
-							edgeProximity,
+						// Calculate scroll delta and start edge scrolling
+						const { deltaX, deltaY } = calculateScrollDelta(
+							edgeProximity.horizontal,
+							edgeProximity.vertical,
 						);
+						// Store new delta values
+						currentDeltaRef.current.x = deltaX;
+						currentDeltaRef.current.y = deltaY;
 
-						if (isProximityChanged) {
-							if (scrollIntervalRef.current) {
-								// Clear previous edge scroll if direction changed
-								clearEdgeScroll();
-							}
-							// Calculate scroll delta and start edge scrolling
-							const { deltaX, deltaY } = calculateScrollDelta(
-								edgeProximity.horizontal,
-								edgeProximity.vertical,
-							);
-							startEdgeScroll(deltaX, deltaY);
-
-							// Update last scroll direction
-							lastScrollDirectionRef.current = edgeProximity;
+						if (isScrollingRef.current) {
 							break;
 						}
-					}
-
-					// If edge proximity is not detected, clear edge scroll
-					if (!edgeProximity.isNearEdge && isScrollingRef.current) {
+						// If scrolling is not active, start edge scrolling
+						startEdgeScroll();
+					} else if (isScrollingRef.current) {
+						// If edge proximity is not detected, clear edge scroll
 						clearEdgeScroll();
 					}
 
