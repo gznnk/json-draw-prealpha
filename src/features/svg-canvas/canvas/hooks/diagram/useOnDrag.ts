@@ -37,15 +37,14 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 		x: number;
 		y: number;
 	} | null>(null);
-	const currentEndPosRef = useRef<{
-		x: number;
-		y: number;
-	} | null>(null);
-	// Reference to store the current delta values for continuous scrolling
-	const currentDeltaRef = useRef<{
-		x: number;
-		y: number;
-	}>({ x: 0, y: 0 });
+	// Combined reference for edge scrolling state to ensure consistency
+	const edgeScrollStateRef = useRef<{
+		endPos: { x: number; y: number } | null;
+		delta: { x: number; y: number };
+	}>({
+		endPos: null,
+		delta: { x: 0, y: 0 },
+	});
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -69,8 +68,7 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			scrollIntervalRef.current = null;
 		}
 		isScrollingRef.current = false;
-		currentEndPosRef.current = null;
-		currentDeltaRef.current = { x: 0, y: 0 };
+		edgeScrollStateRef.current = { endPos: null, delta: { x: 0, y: 0 } };
 	}, []);
 
 	/**
@@ -87,26 +85,22 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				return;
 			}
 
-			const endPos = currentEndPosRef.current;
+			const { endPos, delta } = edgeScrollStateRef.current;
 			if (!endPos) {
 				return;
 			}
 
 			const { setCanvasState } = refBus.current.props;
 
-			// Use stored delta values for continuous scrolling
-			const currentDeltaX = currentDeltaRef.current.x;
-			const currentDeltaY = currentDeltaRef.current.y;
-
 			// Update cursor position with deltas
 			const zoom = refBus.current.props.canvasState.zoom;
 			const newEndPos = {
-				x: endPos.x + currentDeltaX / zoom,
-				y: endPos.y + currentDeltaY / zoom,
+				x: endPos.x + delta.x / zoom,
+				y: endPos.y + delta.y / zoom,
 			};
 
-			// Update current cursor position reference
-			currentEndPosRef.current = newEndPos;
+			// Update edge scroll state atomically
+			edgeScrollStateRef.current = { endPos: newEndPos, delta };
 
 			const dx = newEndPos.x - startPos.x;
 			const dy = newEndPos.y - startPos.y;
@@ -122,8 +116,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			setCanvasState((prevState) => ({
 				...prevState,
 				...newState,
-				minX: prevState.minX + currentDeltaX,
-				minY: prevState.minY + currentDeltaY,
+				minX: prevState.minX + delta.x,
+				minY: prevState.minY + delta.y,
 			}));
 		};
 
@@ -272,16 +266,15 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			);
 
 			if (edgeProximity.isNearEdge) {
-				// Calculate scroll delta and start edge scrolling
+				// Calculate scroll delta and update edge scroll state atomically
 				const { deltaX, deltaY } = calculateScrollDelta(
 					edgeProximity.horizontal,
 					edgeProximity.vertical,
 				);
-				// Store new delta values
-				currentDeltaRef.current.x = deltaX;
-				currentDeltaRef.current.y = deltaY;
-				// Update the current end position reference
-				currentEndPosRef.current = { x: e.endX, y: e.endY };
+				edgeScrollStateRef.current = { 
+					endPos: { x: e.endX, y: e.endY }, 
+					delta: { x: deltaX, y: deltaY } 
+				};
 
 				if (!isScrollingRef.current) {
 					// If scrolling is not active, start edge scrolling
