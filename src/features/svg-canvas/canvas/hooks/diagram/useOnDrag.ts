@@ -323,6 +323,12 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				// Create the new state based on the dx and dy values
 				let newState = createDraggedState(prevState, dx, dy, isDragging);
 
+				// If the event has minX and minY, update the canvas state
+				if (e.minX !== undefined && e.minY !== undefined) {
+					newState.minX = e.minX;
+					newState.minY = e.minY;
+				}
+
 				// If the drag event is ended
 				if (e.eventType === "End") {
 					// Clear auto edge scroll when drag ends
