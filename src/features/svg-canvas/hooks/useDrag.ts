@@ -318,6 +318,8 @@ export const useDrag = (props: DragProps) => {
 			return;
 		}
 
+		// console.log("Pointer move in drag area");
+
 		// Calculate SVG coordinates first
 		const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
 		// Get drag coordinates
@@ -479,6 +481,9 @@ export const useDrag = (props: DragProps) => {
 		const eventId = newEventId();
 
 		if (isDragging) {
+			// Clear edge scroll if it exists
+			clearEdgeScroll();
+
 			// Calculate SVG coordinates first
 			const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
 			// Get drag coordinates
@@ -513,6 +518,20 @@ export const useDrag = (props: DragProps) => {
 						clientX: e.clientX,
 						clientY: e.clientY,
 					} as BroadcastDragEvent,
+				}),
+			);
+
+			eventBus.dispatchEvent(
+				new CustomEvent(EVENT_NAME_SVG_CANVAS_SCROLL, {
+					detail: {
+						newMinX: minXRef.current,
+						newMinY: minYRef.current,
+						clientX: e.clientX,
+						clientY: e.clientY,
+						deltaX: 0,
+						deltaY: 0,
+						isFromAutoEdgeScroll: false,
+					} as SvgCanvasScrollEvent,
 				}),
 			);
 		}
