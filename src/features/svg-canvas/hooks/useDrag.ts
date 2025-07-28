@@ -16,20 +16,17 @@ import { newEventId } from "../utils/common/newEventId";
 import { getSvgPoint } from "../utils/math/points/getSvgPoint";
 
 // Import constants.
-import {
-	AUTO_SCROLL_INTERVAL_MS,
-} from "../canvas/SvgCanvasConstants"; // TODO: Move to constants file
-import { DRAG_DEAD_ZONE } from "../constants/Constants";
+import { AUTO_SCROLL_INTERVAL_MS, DRAG_DEAD_ZONE } from "../constants/Constants";
 import {
 	EVENT_NAME_BROADCAST_DRAG,
 	EVENT_NAME_SVG_CANVAS_SCROLL,
 } from "../constants/EventNames";
 
 // Import EventBus.
-import { calculateScrollDelta } from "../canvas/utils/calculateScrollDelta";
-import { detectEdgeProximity } from "../canvas/utils/detectEdgeProximity";
 import { useEventBus } from "../context/EventBusContext";
 import { useSvgViewport } from "../context/SvgViewportContext";
+import { calculateScrollDelta } from "../utils/math/geometry/calculateScrollDelta";
+import { detectEdgeProximity } from "../utils/math/geometry/detectEdgeProximity";
 
 /**
  * Type definition for broadcast drag event

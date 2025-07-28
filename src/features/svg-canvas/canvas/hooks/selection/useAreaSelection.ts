@@ -10,17 +10,17 @@ import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import constants.
-import { AUTO_SCROLL_INTERVAL_MS } from "../../SvgCanvasConstants";
+import { AUTO_SCROLL_INTERVAL_MS } from "../../../constants/Constants";
 
 // Import utils.
 import { getSelectedItems } from "../../../utils/common/getSelectedItems";
 import { calcItemBoundingBox } from "../../../utils/math/geometry/calcItemBoundingBox";
+import { calculateScrollDelta } from "../../../utils/math/geometry/calculateScrollDelta";
+import { detectEdgeProximity } from "../../../utils/math/geometry/detectEdgeProximity";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-import { calculateScrollDelta } from "../../utils/calculateScrollDelta";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
-import { detectEdgeProximity } from "../../utils/detectEdgeProximity";
 import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
 
@@ -392,11 +392,12 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 
 					// Check if we need to start edge scrolling
 					const { zoom, minX, minY } = canvasState;
-					const containerRect = canvasRef?.containerRef?.current?.getBoundingClientRect();
+					const containerRect =
+						canvasRef?.containerRef?.current?.getBoundingClientRect();
 					if (!containerRect) {
 						return;
 					}
-					
+
 					const viewport = {
 						zoom,
 						minX,

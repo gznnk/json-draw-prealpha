@@ -1,4 +1,4 @@
-import { AUTO_SCROLL_STEP_SIZE } from "../SvgCanvasConstants";
+import { AUTO_SCROLL_STEP_SIZE } from "../../../constants/Constants";
 
 /**
  * Represents scroll delta values for x and y axes.

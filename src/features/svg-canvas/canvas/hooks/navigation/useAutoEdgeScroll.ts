@@ -9,7 +9,7 @@ import {
 	AUTO_SCROLL_INTERVAL_MS,
 	AUTO_SCROLL_STEP_SIZE,
 	AUTO_SCROLL_THRESHOLD,
-} from "../../SvgCanvasConstants";
+} from "../../../constants/Constants";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import { InteractionState } from "../../types/InteractionState";

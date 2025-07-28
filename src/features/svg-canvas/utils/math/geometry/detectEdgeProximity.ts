@@ -1,5 +1,5 @@
-import { AUTO_SCROLL_THRESHOLD } from "../SvgCanvasConstants";
-import type { SvgViewport } from "../../types/core/SvgViewport";
+import { AUTO_SCROLL_THRESHOLD } from "../../../constants/Constants";
+import type { SvgViewport } from "../../../types/core/SvgViewport";
 
 /**
  * Result type for edge proximity detection.
@@ -15,7 +15,7 @@ export type EdgeProximityResult = {
 
 /**
  * Detects if the cursor is near the edges of the canvas viewport.
- * 
+ *
  * @param viewport - SVG viewport information
  * @param cursorX - Cursor X position in SVG coordinates
  * @param cursorY - Cursor Y position in SVG coordinates
