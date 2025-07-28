@@ -232,13 +232,12 @@ export const useDrag = (props: DragProps) => {
 		const executeScroll = () => {
 			const { endPos, cursorPos, clientPos, delta } =
 				edgeScrollStateRef.current;
-			// console.log(endPos, cursorPos, clientPos, delta);
 			if (!endPos || !cursorPos || !clientPos) {
 				return;
 			}
 
 			// Bypass references to avoid function creation in every render
-			const { id, svgViewport, onDrag } = refBus.current;
+			const { id, svgViewport, onDrag, getPointOnDrag } = refBus.current;
 
 			// Auto edge scroll if the cursor is near the edges.
 			const zoom = svgViewport.current.zoom;
@@ -248,22 +247,19 @@ export const useDrag = (props: DragProps) => {
 			const deltaX = delta.x / zoom;
 			const deltaY = delta.y / zoom;
 
-			const newEndPos = {
-				x: endPos.x + deltaX,
-				y: endPos.y + deltaY,
-			};
-
 			const newCursorPos = {
 				x: cursorPos.x + deltaX,
 				y: cursorPos.y + deltaY,
 			};
+
+			const newEndPos = getPointOnDrag(newCursorPos);
 
 			// Update edgeScrollStateRef
 			edgeScrollStateRef.current = {
 				endPos: newEndPos,
 				cursorPos: newCursorPos,
 				clientPos: clientPos,
-				delta: { x: deltaX, y: deltaY },
+				delta,
 			};
 
 			// Calculate new scroll positions
@@ -309,8 +305,6 @@ export const useDrag = (props: DragProps) => {
 			// Do nothing if pointer is not pressed down in this drag area
 			return;
 		}
-
-		// console.log("Pointer move in drag area");
 
 		// Calculate SVG coordinates first
 		const svgCursorPoint = getSvgPoint(e.clientX, e.clientY, ref.current);
@@ -383,8 +377,6 @@ export const useDrag = (props: DragProps) => {
 		const cursorX = svgCursorPoint.x;
 		const cursorY = svgCursorPoint.y;
 
-		//console.log(minX, minY, zoom, containerWidth, containerHeight);
-
 		// Calculate the viewBox boundaries considering zoom
 
 		const viewBoxX = minX / zoom;
@@ -418,11 +410,6 @@ export const useDrag = (props: DragProps) => {
 		} else if (distFromBottom < adjustedThreshold) {
 			newVertical = "bottom";
 		}
-
-		// console.log({
-		// 	newHorizontal,
-		// 	newVertical,
-		// });
 
 		if (newHorizontal === null && newVertical === null) {
 			// Cursor moved away from all edges, stop scrolling

@@ -9,9 +9,6 @@ import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
-// Import hooks related to SvgCanvas.
-import { useAutoEdgeScroll } from "../navigation/useAutoEdgeScroll";
-
 // Import functions related to SvgCanvas.
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
@@ -42,16 +39,9 @@ const getIsTransformingState = (eventType: EventType): boolean => {
  * Custom hook to handle transform events on the canvas.
  */
 export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
-	// Get the auto edge scroll function, clear function, and scrolling state to handle canvas auto scrolling.
-	const { autoEdgeScroll, clearAutoEdgeScroll, isAutoScrolling } =
-		useAutoEdgeScroll(props);
-
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
-		autoEdgeScroll,
-		clearAutoEdgeScroll,
-		isAutoScrolling,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -251,23 +241,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 			// Bypass references to avoid function creation in every render.
 			const {
 				props: { setCanvasState, onDataChange },
-				autoEdgeScroll,
-				clearAutoEdgeScroll,
-				isAutoScrolling,
 			} = refBus.current;
-
-			// If auto scrolling is active and this event is not from auto edge scroll,
-			// ignore diagram transformation processing but continue auto edge scroll detection
-			if (isAutoScrolling && !e.isFromAutoEdgeScroll) {
-				// Auto scroll if the cursor is near the edges.
-				autoEdgeScroll({
-					cursorX: e.cursorX,
-					cursorY: e.cursorY,
-					clientX: e.clientX,
-					clientY: e.clientY,
-				});
-				return;
-			}
 
 			// Update the canvas state based on the transform event.
 			setCanvasState((prevState) => {
@@ -347,7 +321,6 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 
 				// Clean up the stored items at the end of transform
 				if (e.eventType === "End") {
-					clearAutoEdgeScroll();
 					startCanvasState.current = undefined;
 					initialItemsMap.current.clear();
 					multiSelectedItemIds.current.clear();
@@ -355,16 +328,6 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 
 				return newState;
 			});
-
-			// Auto scroll if the cursor is near the edges, but skip for rotation operations
-			if (e.transformationType !== "Rotation") {
-				autoEdgeScroll({
-					cursorX: e.cursorX,
-					cursorY: e.cursorY,
-					clientX: e.clientX,
-					clientY: e.clientY,
-				});
-			}
 		},
 		[transformRecursively],
 	);
