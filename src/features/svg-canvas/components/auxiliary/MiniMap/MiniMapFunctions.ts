@@ -6,7 +6,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 import { MINIMAP_VIEWPORT_MARGIN } from "../../../constants/Constants";
 
 // Import utils.
-import { calcItemsBoundingBox } from "../../../utils/math/geometry/calcItemsBoundingBox";
+import { calcDiagramsBoundingBox } from "../../../utils/math/geometry/calcDiagramsBoundingBox";
 
 /**
  * Calculate viewport bounds in canvas coordinates based on current view state
@@ -56,7 +56,7 @@ export const calculateCombinedCanvasBounds = (
 	}
 
 	// Calculate bounds of all items
-	const itemBounds = calcItemsBoundingBox(items);
+	const itemBounds = calcDiagramsBoundingBox(items);
 
 	// Combine item bounds with viewport bounds
 	const combinedLeft = Math.min(itemBounds.left, viewportBounds.x);
@@ -106,7 +106,7 @@ export const constrainViewportPosition = (
 	}
 
 	// Calculate bounds of all items
-	const itemBounds = calcItemsBoundingBox(items);
+	const itemBounds = calcDiagramsBoundingBox(items);
 
 	// Calculate allowed bounds for viewport position using fixed margin
 	const allowedLeft = (itemBounds.left - margin) * zoom;

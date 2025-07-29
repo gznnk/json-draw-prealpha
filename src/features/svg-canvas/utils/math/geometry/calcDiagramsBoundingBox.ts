@@ -9,12 +9,12 @@ import { isTransformativeData } from "../../../utils/validation/isTransformative
 import { calcDiagramBoundingBox } from "./calcDiagramBoundingBox";
 
 /**
- * Calculate the bounding box of all provided items.
+ * Calculate the bounding box of all provided diagrams.
  *
- * @param items - The list of items to calculate the bounding box for.
- * @returns The bounding box that encompasses all provided items.
+ * @param diagrams - The list of diagrams to calculate the bounding box for.
+ * @returns The bounding box that encompasses all provided diagrams.
  */
-export const calcItemsBoundingBox = (items: Diagram[]): Box => {
+export const calcDiagramsBoundingBox = (diagrams: Diagram[]): Box => {
 	const box = {
 		top: Number.MAX_VALUE,
 		left: Number.MAX_VALUE,
@@ -22,9 +22,9 @@ export const calcItemsBoundingBox = (items: Diagram[]): Box => {
 		bottom: Number.MIN_VALUE,
 	};
 
-	for (const item of items) {
-		if (isItemableData(item) && item.type === "Group") {
-			const groupOrientedBox = calcGroupOrientedBox(item);
+	for (const diagram of diagrams) {
+		if (isItemableData(diagram) && diagram.type === "Group") {
+			const groupOrientedBox = calcGroupOrientedBox(diagram);
 			box.top = Math.min(box.top, groupOrientedBox.y);
 			box.left = Math.min(box.left, groupOrientedBox.x);
 			box.right = Math.max(
@@ -35,12 +35,12 @@ export const calcItemsBoundingBox = (items: Diagram[]): Box => {
 				box.bottom,
 				groupOrientedBox.y + groupOrientedBox.height,
 			);
-		} else if (isTransformativeData(item)) {
-			const itemBox = calcDiagramBoundingBox(item);
-			box.top = Math.min(box.top, itemBox.top);
-			box.left = Math.min(box.left, itemBox.left);
-			box.right = Math.max(box.right, itemBox.right);
-			box.bottom = Math.max(box.bottom, itemBox.bottom);
+		} else if (isTransformativeData(diagram)) {
+			const diagramBox = calcDiagramBoundingBox(diagram);
+			box.top = Math.min(box.top, diagramBox.top);
+			box.left = Math.min(box.left, diagramBox.left);
+			box.right = Math.max(box.right, diagramBox.right);
+			box.bottom = Math.max(box.bottom, diagramBox.bottom);
 		}
 	}
 
