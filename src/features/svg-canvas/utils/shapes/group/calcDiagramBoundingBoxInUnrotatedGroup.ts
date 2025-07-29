@@ -8,16 +8,16 @@ import { rotatePoint } from "../../math/points/rotatePoint";
 import { isTransformativeData } from "../../validation/isTransformativeData";
 
 /**
- * Calculates the bounding box of a shape when the group rotation is removed.
+ * Calculates the bounding box of a diagram when the group rotation is removed.
  *
- * @param item - The shape item
+ * @param diagram - The diagram item
  * @param groupCenterX - Group center X coordinate
  * @param groupCenterY - Group center Y coordinate
  * @param groupRotation - Group rotation angle in degrees
- * @returns The shape's bounding box
+ * @returns The diagram's bounding box
  */
-export const calcItemBoundingBoxInUnrotatedGroup = (
-	item: Diagram,
+export const calcDiagramBoundingBoxInUnrotatedGroup = (
+	diagram: Diagram,
 	groupCenterX: number,
 	groupCenterY: number,
 	groupRotation: number,
@@ -25,24 +25,24 @@ export const calcItemBoundingBoxInUnrotatedGroup = (
 	const groupRadians = degreesToRadians(-groupRotation);
 
 	const inversedCenter = rotatePoint(
-		item.x,
-		item.y,
+		diagram.x,
+		diagram.y,
 		groupCenterX,
 		groupCenterY,
 		groupRadians,
 	);
 
-	if (isTransformativeData(item)) {
-		const halfWidth = nanToZero(item.width / 2);
-		const halfHeight = nanToZero(item.height / 2);
-		const itemRadians = degreesToRadians(item.rotation - groupRotation);
+	if (isTransformativeData(diagram)) {
+		const halfWidth = nanToZero(diagram.width / 2);
+		const halfHeight = nanToZero(diagram.height / 2);
+		const diagramRadians = degreesToRadians(diagram.rotation - groupRotation);
 
 		const leftTop = rotatePoint(
 			inversedCenter.x - halfWidth,
 			inversedCenter.y - halfHeight,
 			inversedCenter.x,
 			inversedCenter.y,
-			itemRadians,
+			diagramRadians,
 		);
 
 		const rightTop = rotatePoint(
@@ -50,7 +50,7 @@ export const calcItemBoundingBoxInUnrotatedGroup = (
 			inversedCenter.y - halfHeight,
 			inversedCenter.x,
 			inversedCenter.y,
-			itemRadians,
+			diagramRadians,
 		);
 
 		const leftBottom = rotatePoint(
@@ -58,7 +58,7 @@ export const calcItemBoundingBoxInUnrotatedGroup = (
 			inversedCenter.y + halfHeight,
 			inversedCenter.x,
 			inversedCenter.y,
-			itemRadians,
+			diagramRadians,
 		);
 
 		const rightBottom = rotatePoint(
@@ -66,7 +66,7 @@ export const calcItemBoundingBoxInUnrotatedGroup = (
 			inversedCenter.y + halfHeight,
 			inversedCenter.x,
 			inversedCenter.y,
-			itemRadians,
+			diagramRadians,
 		);
 
 		return {

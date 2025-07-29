@@ -3,7 +3,7 @@ import type { Diagram } from "../../../types/data/catalog/Diagram";
 
 // Import utils.
 import { isItemableData } from "../../validation/isItemableData";
-import { calcItemBoundingBoxInUnrotatedGroup } from "./calcItemBoundingBoxInUnrotatedGroup";
+import { calcDiagramBoundingBoxInUnrotatedGroup } from "./calcDiagramBoundingBoxInUnrotatedGroup";
 
 /**
  * Calculates the bounding box of a group when its rotation is reset
@@ -45,7 +45,7 @@ export const calcUnrotatedGroupBoundingBox = (
 			left = Math.min(left, groupBoundingBox.left);
 			right = Math.max(right, groupBoundingBox.right);
 		} else {
-			const boundingBox = calcItemBoundingBoxInUnrotatedGroup(
+			const boundingBox = calcDiagramBoundingBoxInUnrotatedGroup(
 				item.id === changeItem?.id ? changeItem : item,
 				groupCenterX,
 				groupCenterY,
