@@ -9,14 +9,9 @@ import type { AreaSelectionEvent } from "../../../types/events/AreaSelectionEven
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
-// Import constants.
-import { AUTO_SCROLL_INTERVAL_MS } from "../../../constants/Constants";
-
 // Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { calcDiagramBoundingBox } from "../../../utils/math/geometry/calcDiagramBoundingBox";
-import { calculateScrollDelta } from "../../../utils/math/geometry/calculateScrollDelta";
-import { detectEdgeProximity } from "../../../utils/math/geometry/detectEdgeProximity";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
@@ -25,6 +20,8 @@ import { removeNonTransformativeShowTransformControls } from "../../utils/remove
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
 
 // Import hooks.
+import type { DoStartEdgeScrollArgs } from "../../../hooks/useAutoEdgeScroll";
+import { useAutoEdgeScroll } from "../../../hooks/useAutoEdgeScroll";
 import { useClearAllSelection } from "./useClearAllSelection";
 
 /**
@@ -98,20 +95,13 @@ const clientToCanvasCoords = (
  * Custom hook to handle area selection on the canvas.
  */
 export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
+	const { canvasState, canvasRef } = props;
+
 	// Get the clear all selection function
 	const onClearAllSelection = useClearAllSelection(props);
 
-	// Internal state for edge scrolling
-	const scrollIntervalRef = useRef<number | null>(null);
-	const isScrollingRef = useRef(false);
-	// Combined reference for edge scrolling state to ensure consistency
-	const edgeScrollStateRef = useRef<{
-		cursorPos: { x: number; y: number } | null;
-		delta: { x: number; y: number };
-	}>({
-		cursorPos: null,
-		delta: { x: 0, y: 0 },
-	});
+	// Client position reference for edge scrolling
+	const clientPosRef = useRef<{ x: number; y: number } | null>(null);
 
 	// Reference to store cached bounding boxes for area selection
 	const cachedBoundingBoxesRef = useRef<Map<string, Box>>(new Map());
@@ -251,77 +241,48 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 	}, []);
 
 	/**
-	 * Clear edge scrolling interval and reset state
+	 * Handle edge scroll start with custom logic for area selection
 	 */
-	const clearEdgeScroll = useCallback(() => {
-		if (scrollIntervalRef.current !== null) {
-			clearInterval(scrollIntervalRef.current);
-			scrollIntervalRef.current = null;
-		}
-		isScrollingRef.current = false;
-		edgeScrollStateRef.current = { cursorPos: null, delta: { x: 0, y: 0 } };
+	const doStartEdgeScroll = useCallback((state: DoStartEdgeScrollArgs) => {
+		const {
+			setCanvasState,
+			canvasState: { areaSelectionState },
+		} = refBus.current.props;
 
-		return () => {
-			clearEdgeScroll();
-		};
-	}, []);
-
-	/**
-	 * Start edge scrolling with calculated delta values
-	 */
-	const startEdgeScroll = useCallback(() => {
-		// Mark scrolling as active
-		isScrollingRef.current = true;
-
-		// Execute scroll processing immediately
-		const executeScroll = () => {
-			const { cursorPos, delta } = edgeScrollStateRef.current;
-			if (!cursorPos) {
-				return;
-			}
-
-			const { setCanvasState, canvasState } = refBus.current.props;
-
-			// Update cursor position with deltas
-			const zoom = refBus.current.props.canvasState.zoom;
-			const newCursorPos = {
-				x: cursorPos.x + delta.x / zoom,
-				y: cursorPos.y + delta.y / zoom,
-			};
-
-			// Update edge scroll state atomically
-			edgeScrollStateRef.current = { cursorPos: newCursorPos, delta };
-
-			const newSelectionBounds = {
-				startX: canvasState.areaSelectionState.startX,
-				startY: canvasState.areaSelectionState.startY,
-				endX: newCursorPos.x,
-				endY: newCursorPos.y,
-			};
-
-			// Update canvas state with new scroll position and selection
-			setCanvasState((prevState) => ({
-				...prevState,
-				minX: prevState.minX + delta.x,
-				minY: prevState.minY + delta.y,
-				areaSelectionState: newSelectionBounds,
-				items: updateItemsWithOutline(
-					prevState.items,
-					newSelectionBounds,
-					cachedBoundingBoxesRef.current,
-				),
-			}));
+		const newSelectionBounds = {
+			startX: areaSelectionState.startX,
+			startY: areaSelectionState.startY,
+			endX: state.cursorPos.x,
+			endY: state.cursorPos.y,
 		};
 
-		// Execute immediately
-		executeScroll();
-
-		// Continue with interval
-		scrollIntervalRef.current = window.setInterval(
-			executeScroll,
-			AUTO_SCROLL_INTERVAL_MS,
-		);
+		// Update canvas state with new scroll position and selection
+		setCanvasState((prevState) => ({
+			...prevState,
+			minX: state.minX,
+			minY: state.minY,
+			areaSelectionState: newSelectionBounds,
+			items: updateItemsWithOutline(
+				prevState.items,
+				newSelectionBounds,
+				cachedBoundingBoxesRef.current,
+			),
+		}));
 	}, []);
+
+	// Use the shared auto edge scroll hook
+	const { autoEdgeScroll, clearEdgeScroll } = useAutoEdgeScroll(
+		{
+			zoom: canvasState.zoom,
+			minX: canvasState.minX,
+			minY: canvasState.minY,
+			containerWidth:
+				canvasRef?.containerRef?.current?.getBoundingClientRect()?.width ?? 0,
+			containerHeight:
+				canvasRef?.containerRef?.current?.getBoundingClientRect()?.height ?? 0,
+		},
+		doStartEdgeScroll,
+	);
 
 	/**
 	 * Handle area selection events
@@ -390,43 +351,12 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 						endY: y,
 					};
 
-					// Check if we need to start edge scrolling
-					const { zoom, minX, minY } = canvasState;
-					const containerRect =
-						canvasRef?.containerRef?.current?.getBoundingClientRect();
-					if (!containerRect) {
-						return;
-					}
+					// Update client position reference
+					clientPosRef.current = { x: clientX, y: clientY };
 
-					const viewport = {
-						zoom,
-						minX,
-						minY,
-						containerWidth: containerRect.width,
-						containerHeight: containerRect.height,
-					};
-					const edgeProximity = detectEdgeProximity(viewport, x, y);
-					if (edgeProximity.isNearEdge) {
-						// Calculate scroll delta and update edge scroll state atomically
-						const { deltaX, deltaY } = calculateScrollDelta(
-							edgeProximity.horizontal,
-							edgeProximity.vertical,
-						);
-						edgeScrollStateRef.current = {
-							cursorPos: { x, y },
-							delta: { x: deltaX, y: deltaY },
-						};
-
-						if (!isScrollingRef.current) {
-							// If scrolling is not active, start edge scrolling
-							startEdgeScroll();
-						}
+					// Use the shared auto edge scroll functionality
+					if (autoEdgeScroll({ x, y })) {
 						break;
-					}
-
-					if (isScrollingRef.current) {
-						// If edge proximity is not detected, clear edge scroll
-						clearEdgeScroll();
 					}
 
 					// Update canvas state with new selection bounds
@@ -476,7 +406,7 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			onClearAllSelection,
 			updateItemsSelection,
 			clearEdgeScroll,
-			startEdgeScroll,
+			autoEdgeScroll,
 		],
 	);
 
