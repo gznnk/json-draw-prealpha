@@ -11,7 +11,6 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 
 // Import utils.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
-import { addHistory } from "../../utils/addHistory";
 
 // Import hooks.
 import { useDataChange } from "../history/useDataChange";
@@ -64,12 +63,8 @@ export const useOnAddDiagram = (props: SvgCanvasSubHooksProps) => {
 					],
 				} as SvgCanvasState;
 
-				// Add a new history entry.
-				newState.lastHistoryEventId = event.eventId;
-				newState = addHistory(prevState, newState);
-
 				// Notify the data change.
-				onDataChange(newState);
+				onDataChange(event.eventId, newState);
 
 				return newState;
 			});

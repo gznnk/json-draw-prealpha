@@ -10,7 +10,6 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
-import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
@@ -122,12 +121,8 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			} as SvgCanvasState;
 
 			if (isHistoryEvent(e.eventType)) {
-				// Add a new history entry.
-				newState.lastHistoryEventId = e.eventId;
-				newState = addHistory(prevState, newState);
-
-				// Notify the data change.
-				onDataChange(newState);
+				// Set the history event ID and notify the data change.
+				onDataChange(e.eventId, newState);
 			}
 
 			return newState;

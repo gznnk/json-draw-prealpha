@@ -11,7 +11,6 @@ import { newEventId } from "../../../utils/core/newEventId";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { useDataChange } from "../history/useDataChange";
-import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 /**
@@ -86,18 +85,15 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 			});
 
 			// Create new state.
-			let newState = {
+			const eventId = newEventId();
+			const newState = {
 				...prevState,
 				items, // Apply new items after removing the selected items.
 				multiSelectGroup: undefined, // Hide the multi-select group because the selected items were deleted.
 			} as SvgCanvasState;
 
-			// Add a new history entry.
-			newState.lastHistoryEventId = newEventId();
-			newState = addHistory(prevState, newState);
-
 			// Notify the data change.
-			onDataChange(newState);
+			onDataChange(eventId, newState);
 
 			return newState;
 		});

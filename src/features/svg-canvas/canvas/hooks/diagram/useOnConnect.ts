@@ -13,8 +13,8 @@ import { newEventId } from "../../../utils/core/newEventId";
 import { calcOrientedShapeFromPoints } from "../../../utils/math/geometry/calcOrientedShapeFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
-import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
+import { useDataChange } from "../history/useDataChange";
 
 // Import constants.
 import { DEFAULT_CONNECT_LINE_DATA } from "../../../constants/DefaultData";
@@ -23,9 +23,13 @@ import { DEFAULT_CONNECT_LINE_DATA } from "../../../constants/DefaultData";
  * Custom hook to handle connect events on the canvas.
  */
 export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -33,6 +37,7 @@ export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: DiagramConnectEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const { setCanvasState } = refBus.current.props;
+		const { onDataChange } = refBus.current;
 
 		const shape = calcOrientedShapeFromPoints(
 			e.points.map((p: PathPointData) => ({ x: p.x, y: p.y })),
@@ -72,14 +77,14 @@ export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
 			const updatedItems = [...items, newConnectLine];
 
 			// Create new state with updated items
-			let newState = {
+			const newState = {
 				...prevState,
 				items: updatedItems,
 			};
 
-			// Add history entry
-			newState.lastHistoryEventId = newEventId();
-			newState = addHistory(prevState, newState);
+			// Generate event ID and notify the data change.
+			const eventId = newEventId();
+			onDataChange(eventId, newState);
 
 			return newState;
 		});

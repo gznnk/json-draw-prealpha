@@ -12,7 +12,6 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 // Import functions related to SvgCanvas.
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isConnectableData } from "../../../utils/validation/isConnectableData";
-import { addHistory } from "../../utils/addHistory";
 import { createItemMap } from "../../utils/createItemMap";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { updateOutlineOfGroup } from "../../utils/updateOutlineOfGroup";
@@ -318,12 +317,8 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				});
 
 				if (isHistoryEvent(e.eventType)) {
-					// Add a new history entry.
-					newState.lastHistoryEventId = e.eventId;
-					newState = addHistory(prevState, newState);
-
-					// Notify the data change.
-					onDataChange(newState);
+					// Set the history event ID and notify the data change.
+					onDataChange(e.eventId, newState);
 				}
 
 				// Clean up the stored items at the end of transform

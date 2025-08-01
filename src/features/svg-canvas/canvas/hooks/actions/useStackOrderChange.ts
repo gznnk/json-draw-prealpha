@@ -9,7 +9,7 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
 // Import functions related to SvgCanvas.
 import { isItemableData } from "../../../utils/validation/isItemableData";
-import { addHistory } from "../../utils/addHistory";
+
 
 // Import hooks.
 import { useDataChange } from "../history/useDataChange";
@@ -95,18 +95,14 @@ export const useStackOrderChange = (props: SvgCanvasSubHooksProps) => {
 				items = updateOrderRecursive(items);
 			}
 
-			// Add to history
-			let newState: SvgCanvasState = {
+			// Create new state
+			const newState: SvgCanvasState = {
 				...prevState,
 				items,
 			};
 
-			// Add a new history entry.
-			newState.lastHistoryEventId = e.eventId;
-			newState = addHistory(prevState, newState);
-
 			// Notify the data change.
-			onDataChange(newState);
+			onDataChange(e.eventId, newState);
 
 			return newState;
 		});

@@ -13,7 +13,6 @@ import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isTransformativeData } from "../../../utils/validation/isTransformativeData";
-import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createItemMap } from "../../utils/createItemMap";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
@@ -186,12 +185,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			);
 
 			if (isHistoryEvent(e.eventType)) {
-				// Add a new history entry.
-				newState.lastHistoryEventId = e.eventId;
-				newState = addHistory(prevState, newState);
-
-				// Notify the data change.
-				onDataChange(newState);
+				// Set the history event ID and notify the data change.
+				onDataChange(e.eventId, newState);
 			}
 
 			// If the drag event is ended

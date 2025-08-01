@@ -6,7 +6,6 @@ import type { DiagramConstraintChangeEvent } from "../../../types/events/Diagram
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
-import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 // Import hooks.
@@ -48,17 +47,13 @@ export const useConstraintChange = (props: SvgCanvasSubHooksProps) => {
 			});
 
 			// Create new state with updated items.
-			let newState = {
+			const newState = {
 				...prevState,
 				items,
 			};
 
-			// Add a new history entry.
-			newState.lastHistoryEventId = e.eventId;
-			newState = addHistory(prevState, newState);
-
 			// Notify the data change.
-			onDataChange(newState);
+			onDataChange(e.eventId, newState);
 
 			// Return new state with updated items.
 			return newState;

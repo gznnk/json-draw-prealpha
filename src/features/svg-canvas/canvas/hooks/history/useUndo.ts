@@ -5,28 +5,23 @@ import { useCallback, useRef } from "react";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import utils.
-import { useDataChange } from "./useDataChange";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
+import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
  * Custom hook to handle undo events on the canvas.
  */
 export const useUndo = (props: SvgCanvasSubHooksProps) => {
-	// Get the data change handler.
-	const onDataChange = useDataChange(props);
-
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
-		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
-		const { onDataChange } = refBus.current;
+		const { setCanvasState, onDataChange } = refBus.current.props;
 
 		setCanvasState((prevState) => {
 			// Get the previous state.
@@ -46,8 +41,8 @@ export const useUndo = (props: SvgCanvasSubHooksProps) => {
 			// Clear the selected items.
 			ret.items = clearSelectionRecursively(ret.items);
 
-			// Notify the data change.
-			onDataChange(ret);
+			// Notify the data change directly (no new history entry needed for undo).
+			onDataChange?.(svgCanvasStateToData(ret));
 
 			return ret;
 		});

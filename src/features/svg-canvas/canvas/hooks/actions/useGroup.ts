@@ -10,7 +10,7 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import { useDataChange } from "../history/useDataChange";
 import { newId } from "../../../utils/shapes/common/newId";
 import { newEventId } from "../../../utils/core/newEventId";
-import { addHistory } from "../../utils/addHistory";
+
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
 
@@ -68,19 +68,16 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 			// Add new group
 			items = [...items, group];
 
-			// Create new state
-			let newState = {
+			// Generate event ID and create new state
+			const eventId = newEventId();
+			const newState = {
 				...prevState,
 				items,
 				multiSelectGroup: undefined,
 			} as SvgCanvasState;
 
-			// Add a new history entry.
-			newState.lastHistoryEventId = newEventId();
-			newState = addHistory(prevState, newState);
-
 			// Notify the data change.
-			onDataChange(newState);
+			onDataChange(eventId, newState);
 
 			return newState;
 		});

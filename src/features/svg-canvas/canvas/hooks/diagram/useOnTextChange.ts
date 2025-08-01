@@ -8,7 +8,6 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 import type { TextEditorState } from "../../../components/core/Textable/TextEditor/TextEditorTypes";
 
 // Import functions related to SvgCanvas.
-import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 // Import hooks.
@@ -80,13 +79,9 @@ export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 				},
 			};
 
-			// Add a new history entry.
+			// Notify about data change.
 			if (e.eventType === "End") {
-				newState.lastHistoryEventId = e.eventId;
-				newState = addHistory(prevState, newState);
-
-				// Notify about data change.
-				onDataChange(newState);
+				onDataChange(e.eventId, newState);
 			}
 
 			return newState;
