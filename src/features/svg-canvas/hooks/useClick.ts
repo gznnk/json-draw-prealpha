@@ -98,7 +98,7 @@ export const useClick = (props: ClickProps) => {
 	/**
 	 * Pointer up event handler within the click area
 	 */
-	const handlePointerUp = (_e: React.PointerEvent<SVGElement>): void => {
+	const handlePointerUp = (): void => {
 		if (isPointerDown.current && !isDragging.current) {
 			// If pointer up after clicking (not dragging), notify click event
 			onClick?.({

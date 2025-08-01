@@ -5,22 +5,28 @@ import { useCallback, useRef } from "react";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import functions related to SvgCanvas.
+import { useDataChange } from "./useDataChange";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
  * Custom hook to handle redo events on the canvas.
  */
 export const useRedo = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
+
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState, onDataChange } = refBus.current.props;
+		const { setCanvasState } = refBus.current.props;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Get the next state in the history.
@@ -41,7 +47,7 @@ export const useRedo = (props: SvgCanvasSubHooksProps) => {
 			ret.items = clearSelectionRecursively(ret.items);
 
 			// Notify the data change.
-			onDataChange?.(svgCanvasStateToData(ret));
+			onDataChange(ret);
 
 			return ret;
 		});

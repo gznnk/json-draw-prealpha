@@ -8,15 +8,21 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 // Import functions related to SvgCanvas.
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 
 /**
  * Custom hook to handle diagram style change events on the canvas.
  */
 export const useStyleChange = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -24,8 +30,9 @@ export const useStyleChange = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: DiagramStyleChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { setCanvasState, onDataChange },
+			props: { setCanvasState },
 		} = refBus.current;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Update items with style changes.
@@ -34,7 +41,7 @@ export const useStyleChange = (props: SvgCanvasSubHooksProps) => {
 				if (item.id !== e.id) return item;
 
 				// Extract style properties from the event.
-				const { eventId, id, ...styleChanges } = e;
+				const { eventId: _eventId, id: _id, ...styleChanges } = e;
 
 				// If the id matches, update the item with the new style properties.
 				return { ...item, ...styleChanges };
@@ -51,7 +58,7 @@ export const useStyleChange = (props: SvgCanvasSubHooksProps) => {
 			newState = addHistory(prevState, newState);
 
 			// Notify the data change.
-			onDataChange?.(svgCanvasStateToData(newState));
+			onDataChange(newState);
 
 			// Return new state with updated items.
 			return newState;

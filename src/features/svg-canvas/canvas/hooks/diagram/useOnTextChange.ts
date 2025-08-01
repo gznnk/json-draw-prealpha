@@ -10,23 +10,30 @@ import type { TextEditorState } from "../../../components/core/Textable/TextEdit
 // Import functions related to SvgCanvas.
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 
 /**
  * Custom hook to handle text change events on the canvas.
  * Handles both text editing initiation (Start) and text content changes (InProgress/End).
  */
 export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	return useCallback((e: DiagramTextChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState, onDataChange } = refBus.current.props;
+		const { setCanvasState } = refBus.current.props;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Handle text editing initiation
@@ -79,7 +86,7 @@ export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 				newState = addHistory(prevState, newState);
 
 				// Notify about data change.
-				onDataChange?.(svgCanvasStateToData(newState));
+				onDataChange(newState);
 			}
 
 			return newState;

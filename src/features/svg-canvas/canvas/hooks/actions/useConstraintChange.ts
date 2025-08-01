@@ -8,15 +8,21 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 // Import functions related to SvgCanvas.
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 
 /**
  * Custom hook to handle diagram constraint change events on the canvas.
  */
 export const useConstraintChange = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -24,8 +30,9 @@ export const useConstraintChange = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: DiagramConstraintChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { setCanvasState, onDataChange },
+			props: { setCanvasState },
 		} = refBus.current;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Update items with constraint changes.
@@ -34,7 +41,7 @@ export const useConstraintChange = (props: SvgCanvasSubHooksProps) => {
 				if (item.id !== e.id) return item;
 
 				// Extract constraint properties from the event.
-				const { eventId, id, ...constraintChanges } = e;
+				const { eventId: _eventId, id: _id, ...constraintChanges } = e;
 
 				// If the id matches, update the item with the new constraint properties.
 				return { ...item, ...constraintChanges };
@@ -51,7 +58,7 @@ export const useConstraintChange = (props: SvgCanvasSubHooksProps) => {
 			newState = addHistory(prevState, newState);
 
 			// Notify the data change.
-			onDataChange?.(svgCanvasStateToData(newState));
+			onDataChange(newState);
 
 			// Return new state with updated items.
 			return newState;

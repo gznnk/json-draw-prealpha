@@ -16,7 +16,7 @@ export const removeNonTransformativeShowTransformControls = (
 ): Diagram[] => {
 	return applyFunctionRecursively(items, (item) => {
 		if (!isTransformativeData(item) && "showTransformControls" in item) {
-			const { showTransformControls, ...rest } = item as Diagram & {
+			const { showTransformControls: _showTransformControls, ...rest } = item as Diagram & {
 				showTransformControls: boolean;
 			};
 			return {

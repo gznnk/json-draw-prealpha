@@ -7,10 +7,10 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
 // Import functions related to SvgCanvas.
+import { useDataChange } from "../history/useDataChange";
 import { newId } from "../../../utils/shapes/common/newId";
 import { newEventId } from "../../../utils/core/newEventId";
 import { addHistory } from "../../utils/addHistory";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
 
@@ -18,16 +18,21 @@ import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
  * Custom hook to handle group events on the canvas.
  */
 export const useGroup = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState, onDataChange } = refBus.current.props;
+		const { setCanvasState } = refBus.current.props;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			const selectedItems = getSelectedDiagrams(prevState.items);
@@ -75,7 +80,7 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 			newState = addHistory(prevState, newState);
 
 			// Notify the data change.
-			onDataChange?.(svgCanvasStateToData(newState));
+			onDataChange(newState);
 
 			return newState;
 		});

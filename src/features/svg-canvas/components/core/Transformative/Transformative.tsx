@@ -530,9 +530,9 @@ const TransformativeComponent: React.FC<Props> = ({
 						startShape.current.topCenterPoint,
 					)(x, y)
 				: createLinearX2yFunction(
-						startShape.current.bottomCenterPoint,
-						startShape.current.topCenterPoint,
-					)(x, y),
+					startShape.current.bottomCenterPoint,
+					startShape.current.topCenterPoint,
+				)(x),
 		[],
 	);
 	// --- TopCenter End --- //
@@ -586,9 +586,9 @@ const TransformativeComponent: React.FC<Props> = ({
 		(x: number, y: number) =>
 			!refBus.current.isSwapped
 				? createLinearX2yFunction(
-						startShape.current.leftCenterPoint,
-						startShape.current.rightCenterPoint,
-					)(x, y)
+					startShape.current.leftCenterPoint,
+					startShape.current.rightCenterPoint,
+				)(x)
 				: createLinearY2xFunction(
 						startShape.current.leftCenterPoint,
 						startShape.current.rightCenterPoint,
@@ -646,9 +646,9 @@ const TransformativeComponent: React.FC<Props> = ({
 		(x: number, y: number) =>
 			!refBus.current.isSwapped
 				? createLinearX2yFunction(
-						startShape.current.leftCenterPoint,
-						startShape.current.rightCenterPoint,
-					)(x, y)
+					startShape.current.leftCenterPoint,
+					startShape.current.rightCenterPoint,
+				)(x)
 				: createLinearY2xFunction(
 						startShape.current.leftCenterPoint,
 						startShape.current.rightCenterPoint,
@@ -710,9 +710,9 @@ const TransformativeComponent: React.FC<Props> = ({
 						startShape.current.topCenterPoint,
 					)(x, y)
 				: createLinearX2yFunction(
-						startShape.current.bottomCenterPoint,
-						startShape.current.topCenterPoint,
-					)(x, y),
+					startShape.current.bottomCenterPoint,
+					startShape.current.topCenterPoint,
+				)(x),
 		[],
 	);
 	// --- BottomCenter End --- //

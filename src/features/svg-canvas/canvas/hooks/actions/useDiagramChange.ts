@@ -13,8 +13,10 @@ import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 
 // Imports related to this component.
 import { MULTI_SELECT_GROUP } from "../../SvgCanvasConstants";
@@ -24,9 +26,13 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
  * Custom hook to handle diagram change events on the canvas.
  */
 export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -34,8 +40,9 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: DiagramChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { setCanvasState, onDataChange },
+			props: { setCanvasState },
 		} = refBus.current;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			let items = prevState.items;
@@ -67,7 +74,7 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 
 					if (isSelectableData(changedItem)) {
 						// Remove the isSelected property that is not needed for the update.
-						const { isSelected, ...updateItem } = changedItem;
+						const { isSelected: _isSelected, ...updateItem } = changedItem;
 
 						// Apply the updated properties to the original item.
 						newItem = {
@@ -120,7 +127,7 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 				newState = addHistory(prevState, newState);
 
 				// Notify the data change.
-				onDataChange?.(svgCanvasStateToData(newState));
+				onDataChange(newState);
 			}
 
 			return newState;

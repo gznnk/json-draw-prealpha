@@ -15,8 +15,10 @@ import { isConnectableData } from "../../../utils/validation/isConnectableData";
 import { addHistory } from "../../utils/addHistory";
 import { createItemMap } from "../../utils/createItemMap";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { updateOutlineOfGroup } from "../../utils/updateOutlineOfGroup";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 
 // Import utility functions for transformation.
 import type { GroupData } from "../../../types/data/shapes/GroupData";
@@ -39,9 +41,13 @@ const getIsTransformingState = (eventType: EventType): boolean => {
  * Custom hook to handle transform events on the canvas.
  */
 export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -240,8 +246,9 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 		(e: DiagramTransformEvent) => {
 			// Bypass references to avoid function creation in every render.
 			const {
-				props: { setCanvasState, onDataChange },
+				props: { setCanvasState },
 			} = refBus.current;
+			const { onDataChange } = refBus.current;
 
 			// Update the canvas state based on the transform event.
 			setCanvasState((prevState) => {
@@ -316,7 +323,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					newState = addHistory(prevState, newState);
 
 					// Notify the data change.
-					onDataChange?.(svgCanvasStateToData(newState));
+					onDataChange(newState);
 				}
 
 				// Clean up the stored items at the end of transform

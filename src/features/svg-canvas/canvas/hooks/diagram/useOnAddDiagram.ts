@@ -12,15 +12,21 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 // Import utils.
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
 import { addHistory } from "../../utils/addHistory";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 
 /**
  * Custom hook to handle new diagram events on the canvas.
  */
 export const useOnAddDiagram = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -32,7 +38,8 @@ export const useOnAddDiagram = (props: SvgCanvasSubHooksProps) => {
 		// Listener for new diagram events.
 		const newDiagramListener = (e: Event) => {
 			// Bypass references to avoid function creation in every render.
-			const { setCanvasState, onDataChange } = refBus.current.props;
+			const { setCanvasState } = refBus.current.props;
+			const { onDataChange } = refBus.current;
 
 			const event = (e as CustomEvent<AddDiagramEvent>).detail;
 
@@ -62,7 +69,7 @@ export const useOnAddDiagram = (props: SvgCanvasSubHooksProps) => {
 				newState = addHistory(prevState, newState);
 
 				// Notify the data change.
-				onDataChange?.(svgCanvasStateToData(newState));
+				onDataChange(newState);
 
 				return newState;
 			});

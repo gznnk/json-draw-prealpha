@@ -10,17 +10,21 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import { newEventId } from "../../../utils/core/newEventId";
 import { isItemableData } from "../../../utils/validation/isItemableData";
 import { isSelectableData } from "../../../utils/validation/isSelectableData";
+import { useDataChange } from "../history/useDataChange";
 import { addHistory } from "../../utils/addHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
  * Custom hook to handle delete events on the canvas.
  */
 export const useDelete = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -28,7 +32,8 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 	// Return a callback function to handle the delete action.
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState, onDataChange } = refBus.current.props;
+		const { setCanvasState } = refBus.current.props;
+		const { onDataChange } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Collect IDs of items that will be deleted and remove selected items.
@@ -92,7 +97,7 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 			newState = addHistory(prevState, newState);
 
 			// Notify the data change.
-			onDataChange?.(svgCanvasStateToData(newState));
+			onDataChange(newState);
 
 			return newState;
 		});

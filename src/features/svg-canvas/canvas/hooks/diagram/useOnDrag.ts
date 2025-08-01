@@ -18,7 +18,9 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createItemMap } from "../../utils/createItemMap";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { isHistoryEvent } from "../../utils/isHistoryEvent";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
+
+// Import hooks.
+import { useDataChange } from "../history/useDataChange";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
 
@@ -26,9 +28,13 @@ import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
  * Custom hook to handle drag events on the canvas.
  */
 export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
+	// Get the data change handler.
+	const onDataChange = useDataChange(props);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		props,
+		onDataChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -43,8 +49,9 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: DiagramDragEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { setCanvasState, onDataChange },
+			props: { setCanvasState },
 		} = refBus.current;
+		const { onDataChange } = refBus.current;
 
 		// Update the canvas state based on the drag event.
 		setCanvasState((prevState) => {
@@ -184,7 +191,7 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				newState = addHistory(prevState, newState);
 
 				// Notify the data change.
-				onDataChange?.(svgCanvasStateToData(newState));
+				onDataChange(newState);
 			}
 
 			// If the drag event is ended
