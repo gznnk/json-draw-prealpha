@@ -22,7 +22,6 @@
 		"@anthropic-ai/sdk": "^0.50.3",
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.0",
-		"classnames": "^2.5.1",
 		"dompurify": "^3.2.5",
 		"highlight.js": "^11.11.1",
 		"katex": "^0.16.22",
