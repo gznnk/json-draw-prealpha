@@ -20,6 +20,8 @@ import { InteractionState } from "./types/InteractionState";
 import { GridBackground } from "../components/auxiliary/GridBackground";
 import { GridPattern } from "../components/auxiliary/GridPattern";
 import { MiniMap } from "../components/auxiliary/MiniMap";
+import { ZoomControls } from "../components/auxiliary/ZoomControls";
+import { getNextZoomLevel, getPreviousZoomLevel, getResetZoomLevel } from "./utils/zoomLevels";
 import { PointerCaptureElement } from "../components/auxiliary/PointerCaptureElement";
 import { PreviewConnectLine } from "../components/auxiliary/PreviewConnectLine";
 import { TextEditor } from "../components/core/Textable";
@@ -118,6 +120,9 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// Container dimensions state
 		const [containerWidth, setContainerWidth] = useState(0);
 		const [containerHeight, setContainerHeight] = useState(0);
+
+		// Track zoom method (wheel vs button) for display purposes
+		const [isWheelZoom, setIsWheelZoom] = useState(false);
 
 		// Reference of the SVG viewport
 		const viewportRef = useRef<SvgViewport>({
@@ -354,6 +359,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 					const delta = e.deltaY > 0 ? 0.9 : 1.1;
 					const newZoom = refBus.current.zoom * delta;
+					setIsWheelZoom(true);
 					refBus.current.onZoom?.(newZoom);
 				}
 			};
@@ -424,6 +430,25 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			},
 			[interactionState, onAreaSelection],
 		);
+
+		// Zoom control handlers
+		const handleZoomIn = useCallback(() => {
+			const nextLevel = getNextZoomLevel(zoom);
+			setIsWheelZoom(false);
+			onZoom?.(nextLevel);
+		}, [onZoom, zoom]);
+
+		const handleZoomOut = useCallback(() => {
+			const prevLevel = getPreviousZoomLevel(zoom);
+			setIsWheelZoom(false);
+			onZoom?.(prevLevel);
+		}, [onZoom, zoom]);
+
+		const handleZoomReset = useCallback(() => {
+			const resetLevel = getResetZoomLevel();
+			setIsWheelZoom(false);
+			onZoom?.(resetLevel);
+		}, [onZoom]);
 
 		// Render diagrams
 		const renderedItems = items.map((item) => {
@@ -541,6 +566,13 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					<CanvasMenu onAddDiagramByType={onAddDiagramByType} />
 					<UserMenu />
 					<ContextMenu {...contextMenuProps} />
+					<ZoomControls
+						zoom={zoom}
+						onZoomIn={handleZoomIn}
+						onZoomOut={handleZoomOut}
+						onZoomReset={handleZoomReset}
+						isWheelZoom={isWheelZoom}
+					/>
 					<MiniMap
 						items={items}
 						minX={minX}
