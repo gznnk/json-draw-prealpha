@@ -198,10 +198,14 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 								const textElement = createPageDesignText({
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
+									width: functionCallArguments.width,
+									height: functionCallArguments.height,
 									text: functionCallArguments.text,
 									fontSize: functionCallArguments.fontSize,
 									fill: functionCallArguments.fill,
 									fontFamily: functionCallArguments.fontFamily || "Segoe UI",
+									textAlign: functionCallArguments.textAlign || "center",
+									verticalAlign: functionCallArguments.verticalAlign || "center",
 								});
 								addDiagram(textElement);
 								input.push(event.item);
@@ -210,7 +214,9 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									call_id: event.item.call_id,
 									output: JSON.stringify({
 										id: textElement.id,
-										type: "Svg",
+										type: "Rectangle",
+										width: textElement.width,
+										height: textElement.height,
 										text: functionCallArguments.text,
 									}),
 								});

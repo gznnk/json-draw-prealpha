@@ -188,6 +188,14 @@ export const PAGE_DESIGN_TOOLS = [
 					type: "number",
 					description: "The Y coordinate of the top-left corner position for the text.",
 				},
+				width: {
+					type: "number",
+					description: "The width of the text box in pixels.",
+				},
+				height: {
+					type: "number",
+					description: "The height of the text box in pixels.",
+				},
 				text: {
 					type: "string",
 					description: "The text content to display.",
@@ -204,9 +212,19 @@ export const PAGE_DESIGN_TOOLS = [
 					type: "string",
 					description: "The font family for the text.",
 				},
+				textAlign: {
+					type: "string",
+					description: "Text horizontal alignment: 'left', 'center', or 'right'.",
+					enum: ["left", "center", "right"],
+				},
+				verticalAlign: {
+					type: "string",
+					description: "Text vertical alignment: 'top', 'center', or 'bottom'.",
+					enum: ["top", "center", "bottom"],
+				},
 			},
 			additionalProperties: false,
-			required: ["x", "y", "text", "fontSize", "fill", "fontFamily"],
+			required: ["x", "y", "width", "height", "text", "fontSize", "fill", "fontFamily", "textAlign", "verticalAlign"],
 		},
 		strict: true,
 	},
