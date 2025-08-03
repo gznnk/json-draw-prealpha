@@ -10,7 +10,7 @@ import { IconContainer } from "../../core/IconContainer";
 import { Rectangle } from "../../shapes/Rectangle";
 
 // Import constants.
-import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_RECTANGLE_STATE } from "../../../constants/DefaultState";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -132,7 +132,7 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 				/>
 			</IconContainer>
 			<Rectangle
-				{...DEFAULT_RECTANGLE_DATA}
+				{...DEFAULT_RECTANGLE_STATE}
 				{...props}
 				isTransparent
 				isTextEditing={false}

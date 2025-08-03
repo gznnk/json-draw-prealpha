@@ -9,7 +9,7 @@ import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import constants.
-import { DEFAULT_CONNECT_LINE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_CONNECT_LINE_STATE } from "../../../constants/DefaultState";
 
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
@@ -46,7 +46,7 @@ export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
 		);
 
 		const newConnectLine: ConnectLineData = {
-			...DEFAULT_CONNECT_LINE_DATA,
+			...DEFAULT_CONNECT_LINE_STATE,
 			id: newId(),
 			x: shape.x,
 			y: shape.y,

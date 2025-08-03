@@ -5,7 +5,7 @@ import type { ImageData } from "../../../types/data/shapes/ImageData";
 import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Image component.
-import { DEFAULT_IMAGE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_IMAGE_STATE } from "../../../constants/DefaultState";
 
 /**
  * Creates image data with the specified properties.
@@ -36,7 +36,7 @@ export const createImageData = ({
 	base64Data?: string;
 }): ImageData => {
 	return {
-		...DEFAULT_IMAGE_DATA,
+		...DEFAULT_IMAGE_STATE,
 		id: newId(),
 		x,
 		y,

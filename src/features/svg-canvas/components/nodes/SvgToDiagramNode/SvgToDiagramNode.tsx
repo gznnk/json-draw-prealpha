@@ -12,7 +12,7 @@ import { Gachapon } from "../../icons/Gachapon";
 import { Rectangle } from "../../shapes/Rectangle";
 
 // Import constants.
-import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_RECTANGLE_STATE } from "../../../constants/DefaultState";
 
 // Import hooks.
 import { useAddDiagram } from "../../../hooks/useAddDiagram";
@@ -64,7 +64,7 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 				<Gachapon width={props.width} height={props.height} />
 			</IconContainer>
 			<Rectangle
-				{...DEFAULT_RECTANGLE_DATA}
+				{...DEFAULT_RECTANGLE_STATE}
 				{...props}
 				isTransparent
 				isTextEditEnabled={false}

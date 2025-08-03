@@ -17,9 +17,9 @@ import type { RectangleState } from "../types/state/shapes/RectangleState";
 import type { SvgState } from "../types/state/shapes/SvgState";
 
 /**
- * Default diagram base data.
+ * Default diagram base state.
  */
-export const DEFAULT_DIAGRAM_BASE_DATA = {
+export const DEFAULT_DIAGRAM_BASE_STATE = {
 	id: "",
 	type: "Rectangle",
 	x: 0,
@@ -27,18 +27,18 @@ export const DEFAULT_DIAGRAM_BASE_DATA = {
 } as const satisfies DiagramBaseState;
 
 /**
- * Default selectable data.
+ * Default selectable state.
  */
-export const DEFAULT_SELECTABLE_DATA = {
+export const DEFAULT_SELECTABLE_STATE = {
 	isSelected: false,
 	isAncestorSelected: false,
 	showOutline: false,
 } as const satisfies SelectableState;
 
 /**
- * Default transformative data.
+ * Default transformative state.
  */
-export const DEFAULT_TRANSFORMATIVE_DATA = {
+export const DEFAULT_TRANSFORMATIVE_STATE = {
 	x: 50,
 	y: 50,
 	width: 100,
@@ -52,39 +52,39 @@ export const DEFAULT_TRANSFORMATIVE_DATA = {
 } as const satisfies TransformativeState;
 
 /**
- * Default itemable data.
+ * Default itemable state.
  */
-export const DEFAULT_ITEMABLE_DATA = {
+export const DEFAULT_ITEMABLE_STATE = {
 	items: [] as Diagram[],
 } as const satisfies ItemableState<Diagram>;
 
 /**
- * Default connectable data.
+ * Default connectable state.
  */
-export const DEFAULT_CONNECTABLE_DATA = {
+export const DEFAULT_CONNECTABLE_STATE = {
 	showConnectPoints: false,
 	connectPoints: [] as ConnectPointState[],
 } as const satisfies ConnectableState;
 
 /**
- * Default strokable data.
+ * Default strokable state.
  */
-export const DEFAULT_STROKABLE_DATA = {
+export const DEFAULT_STROKABLE_STATE = {
 	stroke: "transparent",
 	strokeWidth: "0",
 } as const satisfies StrokableState;
 
 /**
- * Default fillable data.
+ * Default fillable state.
  */
-export const DEFAULT_FILLABLE_DATA = {
+export const DEFAULT_FILLABLE_STATE = {
 	fill: "transparent",
 } as const satisfies FillableState;
 
 /**
- * Default textable data.
+ * Default textable state.
  */
-export const DEFAULT_TEXTABLE_DATA = {
+export const DEFAULT_TEXTABLE_STATE = {
 	text: "",
 	textType: "textarea",
 	fontColor: "#000000",
@@ -97,52 +97,52 @@ export const DEFAULT_TEXTABLE_DATA = {
 } as const satisfies TextableState;
 
 /**
- * Default rectangle data.
+ * Default rectangle state.
  */
-export const DEFAULT_RECTANGLE_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_CONNECTABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
-	...DEFAULT_FILLABLE_DATA,
-	...DEFAULT_TEXTABLE_DATA,
+export const DEFAULT_RECTANGLE_STATE = {
+	...DEFAULT_DIAGRAM_BASE_STATE,
+	...DEFAULT_SELECTABLE_STATE,
+	...DEFAULT_TRANSFORMATIVE_STATE,
+	...DEFAULT_CONNECTABLE_STATE,
+	...DEFAULT_STROKABLE_STATE,
+	...DEFAULT_FILLABLE_STATE,
+	...DEFAULT_TEXTABLE_STATE,
 	type: "Rectangle",
 	radius: 0,
 } as const satisfies RectangleState;
 
 /**
- * Default ellipse data.
+ * Default ellipse state.
  */
-export const DEFAULT_ELLIPSE_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_CONNECTABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
-	...DEFAULT_FILLABLE_DATA,
-	...DEFAULT_TEXTABLE_DATA,
+export const DEFAULT_ELLIPSE_STATE = {
+	...DEFAULT_DIAGRAM_BASE_STATE,
+	...DEFAULT_SELECTABLE_STATE,
+	...DEFAULT_TRANSFORMATIVE_STATE,
+	...DEFAULT_CONNECTABLE_STATE,
+	...DEFAULT_STROKABLE_STATE,
+	...DEFAULT_FILLABLE_STATE,
+	...DEFAULT_TEXTABLE_STATE,
 	type: "Ellipse",
 } as const satisfies EllipseState;
 
 /**
- * Default image data.
+ * Default image state.
  */
-export const DEFAULT_IMAGE_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
+export const DEFAULT_IMAGE_STATE = {
+	...DEFAULT_DIAGRAM_BASE_STATE,
+	...DEFAULT_SELECTABLE_STATE,
+	...DEFAULT_TRANSFORMATIVE_STATE,
 	type: "Image",
 	base64Data: "",
 } as const satisfies ImageState;
 
 /**
- * Default svg data.
+ * Default svg state.
  */
-export const DEFAULT_SVG_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
+export const DEFAULT_SVG_STATE = {
+	...DEFAULT_DIAGRAM_BASE_STATE,
+	...DEFAULT_SELECTABLE_STATE,
+	...DEFAULT_TRANSFORMATIVE_STATE,
 	type: "Svg",
 	initialWidth: 100,
 	initialHeight: 100,
@@ -150,26 +150,26 @@ export const DEFAULT_SVG_DATA = {
 } as const satisfies SvgState;
 
 /**
- * Default path data.
+ * Default path state.
  */
-export const DEFAULT_PATH_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_ITEMABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
+export const DEFAULT_PATH_STATE = {
+	...DEFAULT_DIAGRAM_BASE_STATE,
+	...DEFAULT_SELECTABLE_STATE,
+	...DEFAULT_TRANSFORMATIVE_STATE,
+	...DEFAULT_ITEMABLE_STATE,
+	...DEFAULT_STROKABLE_STATE,
 	type: "Path",
 } as const satisfies PathState;
 
 /**
- * Default connect line data.
+ * Default connect line state.
  */
-export const DEFAULT_CONNECT_LINE_DATA = {
-	...DEFAULT_DIAGRAM_BASE_DATA,
-	...DEFAULT_SELECTABLE_DATA,
-	...DEFAULT_TRANSFORMATIVE_DATA,
-	...DEFAULT_ITEMABLE_DATA,
-	...DEFAULT_STROKABLE_DATA,
+export const DEFAULT_CONNECT_LINE_STATE = {
+	...DEFAULT_DIAGRAM_BASE_STATE,
+	...DEFAULT_SELECTABLE_STATE,
+	...DEFAULT_TRANSFORMATIVE_STATE,
+	...DEFAULT_ITEMABLE_STATE,
+	...DEFAULT_STROKABLE_STATE,
 	type: "ConnectLine",
 	stroke: "#002766",
 	strokeWidth: "2px",

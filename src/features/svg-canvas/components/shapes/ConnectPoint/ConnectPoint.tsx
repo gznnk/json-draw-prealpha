@@ -25,7 +25,7 @@ import { generatePathFromShapeToPoint } from "../../../utils/shapes/connectPoint
 import { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDirection";
 
 // Import constants.
-import { DEFAULT_CONNECT_LINE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_CONNECT_LINE_STATE } from "../../../constants/DefaultState";
 import { EVENT_NAME_CONNECTION } from "../../../constants/EventNames";
 
 // Import local module files.
@@ -105,7 +105,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		onPreviewConnectLine?.({
 			eventType,
 			pathData: {
-				...DEFAULT_CONNECT_LINE_DATA,
+				...DEFAULT_CONNECT_LINE_STATE,
 				id: `${id}-connecting-path`,
 				x: 0,
 				y: 0,

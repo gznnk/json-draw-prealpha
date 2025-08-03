@@ -11,7 +11,7 @@ import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import constants.
-import { DEFAULT_CONNECT_LINE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_CONNECT_LINE_STATE } from "../../../constants/DefaultState";
 import { EVENT_NAME_CONNECT_NODES } from "../../../constants/EventNames";
 
 // Import utils.
@@ -104,7 +104,7 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 			addDiagram({
 				eventId: event.eventId,
 				item: {
-					...DEFAULT_CONNECT_LINE_DATA,
+					...DEFAULT_CONNECT_LINE_STATE,
 					id: newId(),
 					x: shape.x,
 					y: shape.y,

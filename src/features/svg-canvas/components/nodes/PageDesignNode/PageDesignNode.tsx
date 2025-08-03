@@ -11,7 +11,7 @@ import { PageDesign } from "../../icons/PageDesign";
 import { Rectangle } from "../../shapes/Rectangle";
 
 // Import constants.
-import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_RECTANGLE_STATE } from "../../../constants/DefaultState";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -253,7 +253,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 				/>
 			</IconContainer>
 			<Rectangle
-				{...DEFAULT_RECTANGLE_DATA}
+				{...DEFAULT_RECTANGLE_STATE}
 				{...props}
 				isTransparent
 				isTextEditing={false}

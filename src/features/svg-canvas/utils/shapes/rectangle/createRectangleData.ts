@@ -11,7 +11,7 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { createRectangleConnectPoint } from "./createRectangleConnectPoint";
 
 // Import constants from Rectangle component.
-import { DEFAULT_RECTANGLE_DATA } from "../../../constants/DefaultData";
+import { DEFAULT_RECTANGLE_STATE } from "../../../constants/DefaultState";
 
 /**
  * Creates rectangle data with the specified properties.
@@ -73,7 +73,7 @@ export const createRectangleData = ({
 	});
 
 	return {
-		...DEFAULT_RECTANGLE_DATA,
+		...DEFAULT_RECTANGLE_STATE,
 		id: newId(),
 		x,
 		y,
