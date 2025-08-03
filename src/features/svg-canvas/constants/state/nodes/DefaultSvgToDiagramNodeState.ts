@@ -1,7 +1,7 @@
-import { DefaultEllipseState } from "../shapes/DefaultEllipseState";
+import { DefaultRectangleState } from "../shapes/DefaultRectangleState";
 import type { SvgToDiagramNodeState } from "../../../types/state/nodes/SvgToDiagramNodeState";
 
 export const DefaultSvgToDiagramNodeState = {
-	...DefaultEllipseState,
+	...DefaultRectangleState,
 	type: "SvgToDiagramNode",
 } as const satisfies SvgToDiagramNodeState;

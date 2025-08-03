@@ -1,7 +1,7 @@
-import { DefaultEllipseState } from "../shapes/DefaultEllipseState";
+import { DefaultRectangleState } from "../shapes/DefaultRectangleState";
 import type { AgentNodeState } from "../../../types/state/nodes/AgentNodeState";
 
 export const DefaultAgentNodeState = {
-	...DefaultEllipseState,
+	...DefaultRectangleState,
 	type: "AgentNode",
 } as const satisfies AgentNodeState;

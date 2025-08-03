@@ -1,7 +1,7 @@
-import { DefaultEllipseState } from "../shapes/DefaultEllipseState";
+import { DefaultRectangleState } from "../shapes/DefaultRectangleState";
 import type { PageDesignNodeState } from "../../../types/state/nodes/PageDesignNodeState";
 
 export const DefaultPageDesignNodeState = {
-	...DefaultEllipseState,
+	...DefaultRectangleState,
 	type: "PageDesignNode",
 } as const satisfies PageDesignNodeState;

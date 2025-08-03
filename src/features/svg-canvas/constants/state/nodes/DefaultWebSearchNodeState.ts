@@ -1,7 +1,7 @@
-import { DefaultEllipseState } from "../shapes/DefaultEllipseState";
+import { DefaultRectangleState } from "../shapes/DefaultRectangleState";
 import type { WebSearchNodeState } from "../../../types/state/nodes/WebSearchNodeState";
 
 export const DefaultWebSearchNodeState = {
-	...DefaultEllipseState,
+	...DefaultRectangleState,
 	type: "WebSearchNode",
 } as const satisfies WebSearchNodeState;
