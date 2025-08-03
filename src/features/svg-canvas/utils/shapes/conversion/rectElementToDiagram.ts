@@ -1,17 +1,17 @@
 import { createRectangleState } from "../rectangle/createRectangleState";
 
 // Import types.
-import type { RectangleData } from "../../../types/data/shapes/RectangleData";
+import type { RectangleState } from "../../../types/state/shapes/RectangleState";
 
 /**
- * Converts an SVG Rectangle element to a Rectangle diagram data structure.
+ * Converts an SVG Rectangle element to a Rectangle diagram state structure.
  *
  * @param element - The SVG Rectangle element to convert
- * @returns The converted Rectangle diagram data
+ * @returns The converted Rectangle diagram state
  */
 export const rectElementToDiagram = (
 	element: SVGRectElement,
-): RectangleData => {
+): RectangleState => {
 	const x = Number(element.getAttribute("x"));
 	const y = Number(element.getAttribute("y"));
 	const width = Number(element.getAttribute("width"));

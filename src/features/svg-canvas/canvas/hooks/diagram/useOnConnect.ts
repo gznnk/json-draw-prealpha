@@ -2,8 +2,8 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import type { PathPointData } from "../../../types/data/shapes/PathPointData";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
+import type { PathPointState } from "../../../types/state/shapes/PathPointState";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
@@ -42,20 +42,20 @@ export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
 		const { onDataChange } = refBus.current;
 
 		const shape = calcOrientedShapeFromPoints(
-			e.points.map((p: PathPointData) => ({ x: p.x, y: p.y })),
+			e.points.map((p: PathPointState) => ({ x: p.x, y: p.y })),
 		);
 
-		const newConnectLine: ConnectLineData = {
+		const newConnectLine: ConnectLineState = {
 			...DEFAULT_CONNECT_LINE_STATE,
 			id: newId(),
 			x: shape.x,
 			y: shape.y,
 			width: shape.width,
 			height: shape.height,
-			items: e.points.map((p: PathPointData) => ({
+			items: e.points.map((p: PathPointState) => ({
 				...p,
 				type: "PathPoint",
-			})) as PathPointData[],
+			})) as PathPointState[],
 			startOwnerId: e.startOwnerId,
 			endOwnerId: e.endOwnerId,
 		};

@@ -1,4 +1,4 @@
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 import { calcRadians } from "../../math/points/calcRadians";
 import { radiansToDegrees } from "../../math/common/radiansToDegrees";
@@ -19,15 +19,15 @@ import { isConnectableState } from "../../validation/isConnectableState";
  * @returns Updated connect line with moved points, or null if update is not needed
  */
 export const updateManualConnectLinePath = (
-	connectLine: ConnectLineData,
+	connectLine: ConnectLineState,
 	startOwnerShape: Diagram,
 	endOwnerShape: Diagram,
-	originalConnectLine: ConnectLineData,
+	originalConnectLine: ConnectLineState,
 	originalStartOwner: Diagram,
 	originalEndOwner: Diagram,
 	startPointId: string,
 	endPointId: string,
-): ConnectLineData | null => {
+): ConnectLineState | null => {
 	// Check if current owner shapes have connect points
 	if (
 		!isConnectableState(startOwnerShape) ||
@@ -183,5 +183,5 @@ export const updateManualConnectLinePath = (
 	return {
 		...connectLine,
 		items: newItems,
-	} as ConnectLineData;
+	} as ConnectLineState;
 };

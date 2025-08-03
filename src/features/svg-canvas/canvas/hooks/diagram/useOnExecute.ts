@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../../constants/EventNames";
 import type { ExecuteEvent } from "../../../types/events/ExecuteEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
@@ -35,9 +35,9 @@ export const useOnExecute = (props: SvgCanvasSubHooksProps) => {
 			const lines = canvasState.items.filter((i) => {
 				if (i.type !== "ConnectLine") return false;
 
-				const connectLine = i as ConnectLineData;
+				const connectLine = i as ConnectLineState;
 				return connectLine.startOwnerId === e.id;
-			}) as ConnectLineData[];
+			}) as ConnectLineState[];
 
 			for (const line of lines) {
 				triggerFlashConnectLine(line);

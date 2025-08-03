@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 
@@ -75,7 +75,7 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 			// Remove ConnectLine components whose owner was deleted.
 			items = items.filter((item) => {
 				if (item.type === "ConnectLine") {
-					const connectLine = item as ConnectLineData;
+					const connectLine = item as ConnectLineState;
 					return (
 						!deletedItemIds.has(connectLine.startOwnerId) &&
 						!deletedItemIds.has(connectLine.endOwnerId)

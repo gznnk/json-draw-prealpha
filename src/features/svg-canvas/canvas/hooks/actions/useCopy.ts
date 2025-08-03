@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
@@ -38,10 +38,10 @@ const collectAllShapeIds = (items: Diagram[], idSet: Set<string>) => {
 const findConnectLinesWithBothEndsSelected = (
 	allItems: Diagram[],
 	selectedIds: Set<string>,
-): ConnectLineData[] => {
+): ConnectLineState[] => {
 	return allItems
 		.filter((item) => item.type === "ConnectLine")
-		.map((item) => item as ConnectLineData)
+		.map((item) => item as ConnectLineState)
 		.filter(
 			(connectLine) =>
 				selectedIds.has(connectLine.startOwnerId) &&

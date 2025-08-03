@@ -25,9 +25,13 @@ export const createPageDesignRectangle = ({
 	strokeWidth?: number;
 	rx?: number;
 }) => {
+	// Convert top-left coordinates to center coordinates
+	const centerX = x + width / 2;
+	const centerY = y + height / 2;
+	
 	return createRectangleState({
-		x,
-		y,
+		x: centerX,
+		y: centerY,
 		width,
 		height,
 		radius: rx,
@@ -37,7 +41,7 @@ export const createPageDesignRectangle = ({
 		text: "",
 		textType: "textarea",
 	});
-};
+};;
 
 /**
  * Creates a circle shape for page design with specified properties.
@@ -57,9 +61,14 @@ export const createPageDesignCircle = ({
 	stroke?: string;
 	strokeWidth?: number;
 }) => {
+	// Convert top-left coordinates to center coordinates
+	// cx, cy are now top-left coordinates of the circle's bounding box
+	const centerX = cx + r;
+	const centerY = cy + r;
+	
 	return createEllipseState({
-		x: cx,
-		y: cy,
+		x: centerX,
+		y: centerY,
 		width: r * 2,
 		height: r * 2,
 		fill,
@@ -68,7 +77,7 @@ export const createPageDesignCircle = ({
 		text: "",
 		textType: "textarea",
 	});
-};
+};;
 
 /**
  * Creates an SVG text element for page design.
@@ -88,9 +97,16 @@ export const createPageDesignText = ({
 	fill: string;
 	fontFamily?: string;
 }) => {
+	// Convert top-left coordinates to center coordinates
+	// Estimate text dimensions for center calculation
+	const estimatedWidth = text.length * fontSize * 0.6; // Rough estimation
+	const estimatedHeight = fontSize * 1.2;
+	const centerX = x + estimatedWidth / 2;
+	const centerY = y + estimatedHeight / 2;
+	
 	// Create a simple SVG text element
 	const svgContent = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
+		<svg xmlns="http://www.w3.org/2000/svg" width="${Math.max(estimatedWidth, 200)}" height="${Math.max(estimatedHeight, 50)}" viewBox="0 0 ${Math.max(estimatedWidth, 200)} ${Math.max(estimatedHeight, 50)}">
 			<text x="10" y="${fontSize + 5}" font-family="${fontFamily}" font-size="${fontSize}" fill="${fill}">
 				${text}
 			</text>
@@ -98,10 +114,10 @@ export const createPageDesignText = ({
 	`.trim();
 
 	return createSvgState({
-		x,
-		y,
-		width: 200,
-		height: 50,
+		x: centerX,
+		y: centerY,
+		width: Math.max(estimatedWidth, 200),
+		height: Math.max(estimatedHeight, 50),
 		svgText: svgContent,
 	});
-};
+};;

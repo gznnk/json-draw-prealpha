@@ -1,6 +1,6 @@
 // Import types.
 import type { SvgCanvasState } from "../../../canvas/types/SvgCanvasState";
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 
 // Import utils.
@@ -36,7 +36,7 @@ export const refreshConnectLines = (
 			return item;
 		}
 
-		const connectLine = item as ConnectLineData;
+		const connectLine = item as ConnectLineState;
 
 		// Check if either end of the connect line is connected to an updated diagram
 		const isStartOwnerUpdated = updatedDiagramIds.has(connectLine.startOwnerId);
@@ -119,7 +119,7 @@ export const refreshConnectLines = (
 			return {
 				...connectLine,
 				items: newItems,
-			} as ConnectLineData;
+			} as ConnectLineState;
 		}
 
 		// Auto-routing disabled: maintain manual drag behavior
@@ -132,7 +132,7 @@ export const refreshConnectLines = (
 		const originalConnectLine = getDiagramById(
 			startCanvasState.items,
 			connectLine.id,
-		) as ConnectLineData;
+		) as ConnectLineState;
 
 		if (!originalConnectLine) {
 			return item;

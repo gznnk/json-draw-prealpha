@@ -3,9 +3,9 @@ import { useEffect, useRef } from "react";
 
 // Import types.
 import type { Shape } from "../../../types/core/Shape";
-import type { ConnectableData } from "../../../types/data/shapes/ConnectableData";
-import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import type { PathPointData } from "../../../types/data/shapes/PathPointData";
+import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
+import type { PathPointState } from "../../../types/state/shapes/PathPointState";
 import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
@@ -64,11 +64,11 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 			}
 
 			const sourceConnectPoint = (
-				sourceNode as ConnectableData
+				sourceNode as ConnectableState
 			).connectPoints.find((p) => p.name === "bottomCenterPoint");
 
 			const targetConnectPoint = (
-				targetNode as ConnectableData
+				targetNode as ConnectableState
 			).connectPoints.find((p) => p.name === "topCenterPoint");
 
 			if (!sourceConnectPoint || !targetConnectPoint) {
@@ -99,7 +99,7 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 				...p,
 				id: newPathPointId(i),
 				type: "PathPoint",
-			})) as PathPointData[];
+			})) as PathPointState[];
 
 			addDiagram({
 				eventId: event.eventId,
@@ -113,7 +113,7 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 					items: pathPoints,
 					startOwnerId: sourceNode.id,
 					endOwnerId: targetNode.id,
-				} as ConnectLineData,
+				} as ConnectLineState,
 			});
 		};
 

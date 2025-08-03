@@ -60,6 +60,7 @@ Adds a rectangle shape to the canvas at the specified position.
 Use this extensively to create detailed page layouts including: content areas, headers, footers, cards, buttons, navigation items, form fields, sidebars, hero sections, and background elements.
 Create layered designs with multiple rectangles to achieve depth and modern visual appeal.
 IMPORTANT: Consider stacking order - add background rectangles first, then overlay elements. Later additions appear on top.
+Specify the top-left corner position (x, y) - the system will automatically calculate the center position.
 Returns a JSON object containing the shape ID, type, and dimensions.
 `;
 
@@ -76,6 +77,7 @@ Adds a text element to the canvas at the specified position.
 Use text elements extensively for: page titles, navigation labels, button text, section headings, content descriptions, form labels, and UI copy.
 Create comprehensive text hierarchies with varying sizes and styles to represent complete page content.
 IMPORTANT: Always add text elements LAST to ensure they appear on top of all other elements.
+Specify the top-left corner position (x, y) - the system will automatically calculate the center position for text alignment.
 Returns a JSON object containing the text element ID, content, and positioning.
 `;
 
@@ -89,11 +91,11 @@ export const PAGE_DESIGN_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the center of the rectangle.",
+					description: "The X coordinate of the top-left corner of the rectangle.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the center of the rectangle.",
+					description: "The Y coordinate of the top-left corner of the rectangle.",
 				},
 				width: {
 					type: "number",
@@ -143,11 +145,11 @@ export const PAGE_DESIGN_TOOLS = [
 			properties: {
 				cx: {
 					type: "number",
-					description: "The X coordinate of the center of the circle.",
+					description: "The X coordinate of the top-left corner of the circle's bounding box.",
 				},
 				cy: {
 					type: "number",
-					description: "The Y coordinate of the center of the circle.",
+					description: "The Y coordinate of the top-left corner of the circle's bounding box.",
 				},
 				r: {
 					type: "number",
@@ -180,11 +182,11 @@ export const PAGE_DESIGN_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the center position for the text.",
+					description: "The X coordinate of the top-left corner position for the text.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the center position for the text.",
+					description: "The Y coordinate of the top-left corner position for the text.",
 				},
 				text: {
 					type: "string",
