@@ -19,7 +19,7 @@ import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import utils.
-import { createSvgDataFromText } from "../../../utils/shapes/svg/createSvgDataFromText";
+import { createSvgStateFromText } from "../../../utils/shapes/svg/createSvgStateFromText";
 
 /**
  * SvgToDiagramNode component.
@@ -39,7 +39,7 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 				.replace("```xml", "")
 				.replace("```", "");
 
-			const svgData = createSvgDataFromText(data);
+			const svgData = createSvgStateFromText(data);
 			if (!svgData) return;
 
 			svgData.x = props.x + (Math.random() - 0.5) * 300;

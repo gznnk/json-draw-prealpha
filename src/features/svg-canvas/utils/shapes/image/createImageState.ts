@@ -1,5 +1,5 @@
 // Import types.
-import type { ImageData } from "../../../types/data/shapes/ImageData";
+import type { ImageState } from "../../../types/state/shapes/ImageState";
 
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";
@@ -8,12 +8,12 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { DEFAULT_IMAGE_STATE } from "../../../constants/DefaultState";
 
 /**
- * Creates image data with the specified properties.
+ * Creates image state with the specified properties.
  *
  * @param params - Image parameters including position, size and image data
- * @returns The created image data object
+ * @returns The created image state object
  */
-export const createImageData = ({
+export const createImageState = ({
 	x,
 	y,
 	width = 100,
@@ -34,7 +34,7 @@ export const createImageData = ({
 	scaleY?: number;
 	keepProportion?: boolean;
 	base64Data?: string;
-}): ImageData => {
+}): ImageState => {
 	return {
 		...DEFAULT_IMAGE_STATE,
 		id: newId(),
@@ -47,5 +47,5 @@ export const createImageData = ({
 		scaleY,
 		keepProportion,
 		base64Data,
-	} as ImageData;
+	} as ImageState;
 };

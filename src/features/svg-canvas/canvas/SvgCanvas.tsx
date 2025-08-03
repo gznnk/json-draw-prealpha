@@ -133,9 +133,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		const [containerWidth, setContainerWidth] = useState(0);
 		const [containerHeight, setContainerHeight] = useState(0);
 
-		// Track zoom method (wheel vs button) for display purposes
-		const [isWheelZoom, setIsWheelZoom] = useState(false);
-
 		// Reference of the SVG viewport
 		const viewportRef = useRef<SvgViewport>({
 			minX,
@@ -371,7 +368,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 					const delta = e.deltaY > 0 ? 0.9 : 1.1;
 					const newZoom = refBus.current.zoom * delta;
-					setIsWheelZoom(true);
 					refBus.current.onZoom?.(newZoom);
 				}
 			};
@@ -446,19 +442,16 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// Zoom control handlers
 		const handleZoomIn = useCallback(() => {
 			const nextLevel = getNextZoomLevel(zoom);
-			setIsWheelZoom(false);
 			onZoom?.(nextLevel);
 		}, [onZoom, zoom]);
 
 		const handleZoomOut = useCallback(() => {
 			const prevLevel = getPreviousZoomLevel(zoom);
-			setIsWheelZoom(false);
 			onZoom?.(prevLevel);
 		}, [onZoom, zoom]);
 
 		const handleZoomReset = useCallback(() => {
 			const resetLevel = getResetZoomLevel();
-			setIsWheelZoom(false);
 			onZoom?.(resetLevel);
 		}, [onZoom]);
 
@@ -583,7 +576,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						onZoomIn={handleZoomIn}
 						onZoomOut={handleZoomOut}
 						onZoomReset={handleZoomReset}
-						isWheelZoom={isWheelZoom}
 					/>
 					<MiniMap
 						items={items}

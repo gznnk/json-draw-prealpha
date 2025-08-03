@@ -1,6 +1,9 @@
 import { memo } from "react";
-import { ZoomControlsContainer, ZoomButton, ZoomDisplay } from "./ZoomControlsStyled";
-import { findNearestZoomLevel } from "../../../canvas/utils/zoomLevels";
+import {
+	ZoomControlsContainer,
+	ZoomButton,
+	ZoomDisplay,
+} from "./ZoomControlsStyled";
 
 export type ZoomControlsProps = {
 	/** Current zoom level (1.0 = 100%) */
@@ -11,8 +14,6 @@ export type ZoomControlsProps = {
 	onZoomOut: () => void;
 	/** Callback when zoom display is clicked to reset zoom */
 	onZoomReset: () => void;
-	/** Whether the zoom was changed by wheel (shows exact value) or buttons (shows nearest level) */
-	isWheelZoom?: boolean;
 };
 
 const ZoomControlsComponent = ({
@@ -20,11 +21,9 @@ const ZoomControlsComponent = ({
 	onZoomIn,
 	onZoomOut,
 	onZoomReset,
-	isWheelZoom = false,
 }: ZoomControlsProps) => {
-	// Show exact value for wheel zoom, nearest level for button zoom
-	const displayZoom = isWheelZoom ? zoom : findNearestZoomLevel(zoom);
-	const zoomPercentage = Math.round(displayZoom * 100);
+	// Display the actual zoom value as percentage
+	const zoomPercentage = Math.round(zoom * 100);
 
 	return (
 		<ZoomControlsContainer>

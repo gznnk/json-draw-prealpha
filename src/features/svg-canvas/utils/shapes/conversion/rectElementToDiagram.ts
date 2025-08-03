@@ -1,4 +1,4 @@
-import { createRectangleData } from "../rectangle/createRectangleData";
+import { createRectangleState } from "../rectangle/createRectangleState";
 
 // Import types.
 import type { RectangleData } from "../../../types/data/shapes/RectangleData";
@@ -26,7 +26,7 @@ export const rectElementToDiagram = (
 		throw new Error("Unsupported SVGRectElement attribute was found.");
 	}
 
-	return createRectangleData({
+	return createRectangleState({
 		x: x + width / 2,
 		y: y + height / 2,
 		width,

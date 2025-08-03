@@ -1,5 +1,5 @@
 // Import types.
-import type { PathData } from "../../../types/data/shapes/PathData";
+import type { PathState } from "../../../types/state/shapes/PathState";
 import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 
 // Import utils.
@@ -9,12 +9,12 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { DEFAULT_PATH_STATE } from "../../../constants/DefaultState";
 
 /**
- * Creates path data with the specified properties.
+ * Creates path state with the specified properties.
  *
  * @param params - Path parameters including position and styling
- * @returns The created path data object
+ * @returns The created path state object
  */
-export const createPathData = ({
+export const createPathState = ({
 	x = 0,
 	y = 0,
 	stroke = "black",
@@ -24,7 +24,7 @@ export const createPathData = ({
 	y?: number;
 	stroke?: string;
 	strokeWidth?: string;
-}): PathData => {
+}): PathState => {
 	return {
 		...DEFAULT_PATH_STATE,
 		id: newId(),

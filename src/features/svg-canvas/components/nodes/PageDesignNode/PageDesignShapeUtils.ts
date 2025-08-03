@@ -1,7 +1,7 @@
 // Import utils.
-import { createRectangleData } from "../../../utils/shapes/rectangle/createRectangleData";
-import { createEllipseData } from "../../../utils/shapes/ellipse/createEllipseData";
-import { createSvgData } from "../../../utils/shapes/svg/createSvgData";
+import { createRectangleState } from "../../../utils/shapes/rectangle/createRectangleState";
+import { createEllipseState } from "../../../utils/shapes/ellipse/createEllipseState";
+import { createSvgState } from "../../../utils/shapes/svg/createSvgState";
 
 /**
  * Creates a rectangle shape for page design with specified properties.
@@ -25,7 +25,7 @@ export const createPageDesignRectangle = ({
 	strokeWidth?: number;
 	rx?: number;
 }) => {
-	return createRectangleData({
+	return createRectangleState({
 		x,
 		y,
 		width,
@@ -57,7 +57,7 @@ export const createPageDesignCircle = ({
 	stroke?: string;
 	strokeWidth?: number;
 }) => {
-	return createEllipseData({
+	return createEllipseState({
 		x: cx,
 		y: cy,
 		width: r * 2,
@@ -97,7 +97,7 @@ export const createPageDesignText = ({
 		</svg>
 	`.trim();
 
-	return createSvgData({
+	return createSvgState({
 		x,
 		y,
 		width: 200,

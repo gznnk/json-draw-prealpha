@@ -1,30 +1,29 @@
 // Import types.
-import type { TextAlign } from "../../../types/core/TextAlign";
 import type { TextableType } from "../../../types/core/TextableType";
+import type { TextAlign } from "../../../types/core/TextAlign";
 import type { VerticalAlign } from "../../../types/core/VerticalAlign";
-import type { RectangleData } from "../../../types/data/shapes/RectangleData";
+import type { EllipseState } from "../../../types/state/shapes/EllipseState";
 
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";
 
 // Import related functions.
-import { createRectangleConnectPoint } from "./createRectangleConnectPoint";
+import { createEllipseConnectPoint } from "./createEllipseConnectPoint";
 
-// Import constants from Rectangle component.
-import { DEFAULT_RECTANGLE_STATE } from "../../../constants/DefaultState";
+// Import constants from Ellipse component.
+import { DEFAULT_ELLIPSE_STATE } from "../../../constants/DefaultState";
 
 /**
- * Creates rectangle data with the specified properties.
+ * Creates ellipse state with the specified properties.
  *
- * @param params - Rectangle parameters including position, size, style and text properties.
- * @returns The created rectangle data object.
+ * @param params - Ellipse parameters including position, size, style and text properties.
+ * @returns The created ellipse state object.
  */
-export const createRectangleData = ({
+export const createEllipseState = ({
 	x,
 	y,
 	width = 100,
 	height = 100,
-	radius = 0,
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
@@ -45,7 +44,6 @@ export const createRectangleData = ({
 	y: number;
 	width?: number;
 	height?: number;
-	radius?: number;
 	rotation?: number;
 	scaleX?: number;
 	scaleY?: number;
@@ -61,8 +59,9 @@ export const createRectangleData = ({
 	fontSize?: number;
 	fontFamily?: string;
 	fontWeight?: string;
-}): RectangleData => {
-	const connectPoints = createRectangleConnectPoint({
+}): EllipseState => {
+	// Generate connection points
+	const connectPoints = createEllipseConnectPoint({
 		x,
 		y,
 		width,
@@ -73,13 +72,12 @@ export const createRectangleData = ({
 	});
 
 	return {
-		...DEFAULT_RECTANGLE_STATE,
+		...DEFAULT_ELLIPSE_STATE,
 		id: newId(),
 		x,
 		y,
 		width,
 		height,
-		radius,
 		rotation,
 		scaleX,
 		scaleY,
@@ -96,5 +94,5 @@ export const createRectangleData = ({
 		fontFamily,
 		fontWeight,
 		connectPoints,
-	} as RectangleData;
+	} as EllipseState;
 };

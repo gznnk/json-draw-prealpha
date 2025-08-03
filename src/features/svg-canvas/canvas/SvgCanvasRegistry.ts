@@ -58,10 +58,10 @@ import { createSvgToDiagramNodeData } from "../utils/nodes/svgToDiagramNode/crea
 import { createTextAreaNodeData } from "../utils/nodes/textAreaNode/createTextAreaNodeData";
 import { createVectorStoreNodeData } from "../utils/nodes/vectorStoreNode/createVectorStoreNodeData";
 import { createWebSearchNodeData } from "../utils/nodes/webSearchNode/createWebSearchNodeData";
-import { createEllipseData } from "../utils/shapes/ellipse/createEllipseData";
-import { createImageData } from "../utils/shapes/image/createImageData";
-import { createPathData } from "../utils/shapes/path/createPathData";
-import { createRectangleData } from "../utils/shapes/rectangle/createRectangleData";
+import { createEllipseState } from "../utils/shapes/ellipse/createEllipseState";
+import { createImageState } from "../utils/shapes/image/createImageState";
+import { createPathState } from "../utils/shapes/path/createPathState";
+import { createRectangleState } from "../utils/shapes/rectangle/createRectangleState";
 
 // Import export functions
 import { imageToBlob } from "../utils/shapes/image/imageToBlob";
@@ -81,7 +81,7 @@ export const initializeSvgCanvasDiagrams = (): void => {
 		component: Rectangle,
 		minimapComponent: RectangleMinimap,
 		connectPointCalculator: calcRectangleConnectPointPosition,
-		createFunction: createRectangleData,
+		createFunction: createRectangleState,
 		exportFunction: undefined,
 	});
 
@@ -90,7 +90,7 @@ export const initializeSvgCanvasDiagrams = (): void => {
 		component: Ellipse,
 		minimapComponent: EllipseMinimap,
 		connectPointCalculator: calcEllipseConnectPointPosition,
-		createFunction: createEllipseData,
+		createFunction: createEllipseState,
 		exportFunction: undefined,
 	});
 
@@ -99,7 +99,7 @@ export const initializeSvgCanvasDiagrams = (): void => {
 		component: Image,
 		minimapComponent: ImageMinimap,
 		connectPointCalculator: () => [],
-		createFunction: createImageData,
+		createFunction: createImageState,
 		exportFunction: imageToBlob,
 	});
 
@@ -108,7 +108,7 @@ export const initializeSvgCanvasDiagrams = (): void => {
 		component: Path,
 		minimapComponent: PathMinimap,
 		connectPointCalculator: () => [],
-		createFunction: createPathData,
+		createFunction: createPathState,
 		exportFunction: undefined,
 	});
 

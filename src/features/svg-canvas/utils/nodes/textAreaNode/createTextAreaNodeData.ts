@@ -1,5 +1,5 @@
 // Import utils.
-import { createRectangleData } from "../../shapes/rectangle/createRectangleData";
+import { createRectangleState } from "../../shapes/rectangle/createRectangleState";
 
 /**
  * Creates data for a TextArea node with specified properties.
@@ -15,7 +15,7 @@ export const createTextAreaNodeData = ({
 	x: number;
 	y: number;
 }) => {
-	const data = createRectangleData({
+	const data = createRectangleState({
 		x,
 		y,
 		width: 400,

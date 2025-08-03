@@ -1,15 +1,15 @@
 // Import related functions.
-import { createSvgData } from "./createSvgData";
+import { createSvgState } from "./createSvgState";
 
 /**
- * Creates svg data from an SVG text string.
+ * Creates svg state from an SVG text string.
  *
  * @param data - The SVG text
- * @returns The created SvgData or undefined if parsing fails
+ * @returns The created SvgState or undefined if parsing fails
  */
-export const createSvgDataFromText = (data: string) => {
+export const createSvgStateFromText = (data: string) => {
     try {
-        return createSvgData({
+        return createSvgState({
             x: 0,
             y: 0,
             svgText: data,

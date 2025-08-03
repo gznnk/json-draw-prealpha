@@ -1,5 +1,5 @@
 // Import types.
-import type { SvgData } from "../../../types/data/shapes/SvgData";
+import type { SvgState } from "../../../types/state/shapes/SvgState";
 
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";
@@ -8,9 +8,9 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { DEFAULT_SVG_STATE } from "../../../constants/DefaultState";
 
 /**
- * Creates svg data with the specified properties.
+ * Creates svg state with the specified properties.
  */
-export const createSvgData = ({
+export const createSvgState = ({
 	x,
 	y,
 	svgText,
@@ -30,7 +30,7 @@ export const createSvgData = ({
 	scaleX?: number;
 	scaleY?: number;
 	keepProportion?: boolean;
-}): SvgData => {
+}): SvgState => {
 	return {
 		...DEFAULT_SVG_STATE,
 		id: newId(),
@@ -45,5 +45,5 @@ export const createSvgData = ({
 		keepProportion,
 		initialWidth: width,
 		initialHeight: height,
-	} as SvgData;
+	} as SvgState;
 };

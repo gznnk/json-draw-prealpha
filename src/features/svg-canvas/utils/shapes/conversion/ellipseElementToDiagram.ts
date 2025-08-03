@@ -1,4 +1,4 @@
-import { createEllipseData } from "../ellipse/createEllipseData";
+import { createEllipseState } from "../ellipse/createEllipseState";
 
 // Import types.
 import type { EllipseData } from "../../../types/data/shapes/EllipseData";
@@ -26,7 +26,7 @@ export const ellipseElementToDiagram = (
 		throw new Error("Unsupported SVGEllipseElement attribute was found.");
 	}
 
-	return createEllipseData({
+	return createEllipseState({
 		x: cx,
 		y: cy,
 		width: rx * 2,

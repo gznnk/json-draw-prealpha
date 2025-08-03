@@ -1,5 +1,5 @@
 // Import utils.
-import { createRectangleData } from "../../shapes/rectangle/createRectangleData";
+import { createRectangleState } from "../../shapes/rectangle/createRectangleState";
 
 /**
  * Creates data for an LLM node with specified properties.
@@ -18,7 +18,7 @@ export const createLLMNodeData = ({
 	y: number;
 	text?: string;
 }) => {
-	const data = createRectangleData({
+	const data = createRectangleState({
 		x,
 		y,
 		stroke: "transparent",

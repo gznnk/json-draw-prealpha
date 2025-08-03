@@ -22,7 +22,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 // Import utils.
 import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { newEventId } from "../../../utils/core/newEventId";
-import { createImageData } from "../../../utils/shapes/image/createImageData";
+import { createImageState } from "../../../utils/shapes/image/createImageState";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 /**
@@ -75,7 +75,7 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 						data: { text: base64Image },
 					});
 					addDiagram(
-						createImageData({
+						createImageState({
 							x: props.x,
 							y: props.y,
 							width: 512,
