@@ -11,7 +11,7 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { createEllipseConnectPoint } from "./createEllipseConnectPoint";
 
 // Import constants from Ellipse component.
-import { DEFAULT_ELLIPSE_STATE } from "../../../constants/DefaultState";
+import { DefaultEllipseState } from "../../../constants/state/shapes/DefaultEllipseState";
 
 /**
  * Creates ellipse state with the specified properties.
@@ -72,7 +72,7 @@ export const createEllipseState = ({
 	});
 
 	return {
-		...DEFAULT_ELLIPSE_STATE,
+		...DefaultEllipseState,
 		id: newId(),
 		x,
 		y,

@@ -6,7 +6,7 @@ import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Path component.
-import { DEFAULT_PATH_STATE } from "../../../constants/DefaultState";
+import { DefaultPathState } from "../../../constants/state/shapes/DefaultPathState";
 
 /**
  * Creates path state with the specified properties.
@@ -26,7 +26,7 @@ export const createPathState = ({
 	strokeWidth?: string;
 }): PathState => {
 	return {
-		...DEFAULT_PATH_STATE,
+		...DefaultPathState,
 		id: newId(),
 		x,
 		y,

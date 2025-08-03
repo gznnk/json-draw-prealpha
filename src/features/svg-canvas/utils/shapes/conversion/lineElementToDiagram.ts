@@ -6,7 +6,7 @@ import type { PathState } from "../../../types/state/shapes/PathState";
 import { newId } from "../common/newId";
 
 // Import constants.
-import { DEFAULT_PATH_STATE } from "../../../constants/DefaultState";
+import { DefaultPathState } from "../../../constants/state/shapes/DefaultPathState";
 
 /**
  * Converts an SVG Line element to a Path diagram state structure.
@@ -30,7 +30,7 @@ export const lineElementToDiagram = (element: SVGLineElement): PathState => {
 	}
 
 	return {
-		...DEFAULT_PATH_STATE,
+		...DefaultPathState,
 		id: newId(),
 		type: "Path",
 		x: (x1 + x2) / 2,
