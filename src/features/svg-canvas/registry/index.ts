@@ -1,2 +1,2 @@
 export { DiagramRegistry } from "./DiagramRegistry";
-export type { DiagramDefinition } from "./DiagramDefinition";
+export type { DiagramDefinition, StateToDataMapper } from "./DiagramDefinition";

@@ -2,7 +2,7 @@
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Diagram } from "../types/state/catalog/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
-import type { DiagramDefinition } from "./DiagramDefinition";
+import type { DiagramDefinition, StateToDataMapper } from "./DiagramDefinition";
 
 /**
  * Registry for managing diagram definitions.
@@ -86,6 +86,16 @@ class DiagramRegistryClass {
 		type: DiagramType,
 	): (((diagram: Diagram) => Blob | undefined) | undefined) | undefined {
 		return this.definitions.get(type)?.exportFunction;
+	}
+
+	/**
+	 * Get the state to data mapper function for a diagram type.
+	 *
+	 * @param type - The diagram type
+	 * @returns The state to data mapper function or undefined if not found
+	 */
+	getStateToDataMapper(type: DiagramType): StateToDataMapper | undefined {
+		return this.definitions.get(type)?.stateToDataMapper;
 	}
 
 	/**
