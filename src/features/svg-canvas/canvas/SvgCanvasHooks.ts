@@ -9,7 +9,8 @@ import type { DiagramData } from "../types/data/catalog/DiagramData";
 // Import functions related to SvgCanvas.
 import { deepCopy } from "../utils/core/deepCopy";
 import { calcCanvasBounds } from "./utils/calcCanvasBounds";
-import { svgCanvasDataToState } from "./utils/svgCanvasDataToState";
+import { mapDiagramDataToState } from "./utils/mapDiagramDataToState";
+import { applyFunctionRecursively } from "./utils/applyFunctionRecursively";
 
 // Import EventBus.
 import { EventBus } from "../../../shared/event-bus/EventBus";
@@ -81,12 +82,7 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const eventBusRef = useRef(new EventBus());
 
 	// Convert props.items from DiagramData[] to Diagram[] format
-	const stateItems: Diagram[] = svgCanvasDataToState({
-		id: props.id,
-		minX: props.minX,
-		minY: props.minY,
-		items: props.items,
-	});
+	const stateItems: Diagram[] = applyFunctionRecursively(props.items, mapDiagramDataToState);
 
 	// Calculate the initial bounds of the canvas.
 	let initialBounds = {
