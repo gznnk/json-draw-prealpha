@@ -33,7 +33,7 @@ export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: AddDiagramByTypeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { canvasState },
+			props: { canvasState, canvasRef },
 			addDiagram,
 		} = refBus.current;
 
@@ -43,10 +43,21 @@ export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
 			x = e.x;
 			y = e.y;
 		} else {
-			// TODO: Use a more appropriate default position.
-			// For now, center the new diagram in the viewport.
-			x = canvasState.minX + window.innerWidth / 2;
-			y = canvasState.minY + window.innerHeight / 2;
+			// Calculate center position considering zoom and actual container dimensions
+			const containerElement = canvasRef?.containerRef.current;
+			if (containerElement) {
+				const containerRect = containerElement.getBoundingClientRect();
+				const containerWidth = containerRect.width;
+				const containerHeight = containerRect.height;
+
+				// Calculate center position in canvas coordinates
+				x = (canvasState.minX + containerWidth / 2) / canvasState.zoom;
+				y = (canvasState.minY + containerHeight / 2) / canvasState.zoom;
+			} else {
+				// Fallback to using window dimensions if container is not available
+				x = (canvasState.minX + window.innerWidth / 2) / canvasState.zoom;
+				y = (canvasState.minY + window.innerHeight / 2) / canvasState.zoom;
+			}
 		}
 
 		const diagramType = e.diagramType as DiagramType;
