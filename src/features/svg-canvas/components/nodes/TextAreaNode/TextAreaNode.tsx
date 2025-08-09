@@ -62,7 +62,6 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					id: props.id,
 					eventId: e.eventId,
 					eventPhase: e.eventPhase,
-					changeType: "Appearance",
 					startDiagram: {
 						text: props.text,
 					},

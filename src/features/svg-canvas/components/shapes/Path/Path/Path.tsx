@@ -12,7 +12,7 @@ import type { PathProps } from "../../../../types/props/shapes/PathProps";
 import type { Diagram } from "../../../../types/state/catalog/Diagram";
 
 // Import components.
-import { Outline } from "../../../core/Outline";
+// import { Outline } from "../../../core/Outline";
 import { PositionLabel } from "../../../core/PositionLabel";
 import { Group } from "../../Group";
 import { NewVertexList } from "../NewVertexList";
@@ -106,7 +106,9 @@ const PathComponent: React.FC<PathProps> = ({
 		isVerticesMode,
 	};
 	const refBus = useRef(refBusVal);
-	refBus.current = refBusVal; /**
+	refBus.current = refBusVal;
+
+	/**
 	 * Polyline pointer down event handler
 	 */
 	const handlePointerDown = useCallback(() => {
@@ -120,6 +122,7 @@ const PathComponent: React.FC<PathProps> = ({
 			setIsSequentialSelection(true);
 		}
 	}, []);
+
 	/**
 	 * Polyline click event handler
 	 */
@@ -142,6 +145,7 @@ const PathComponent: React.FC<PathProps> = ({
 			isAncestorSelectedOnPointerDown: e.isAncestorSelectedOnPointerDown,
 		});
 	}, []);
+
 	// Polyline selection state control
 	useEffect(() => {
 		// Clear sequential selection flag when selection is removed from group
@@ -150,6 +154,7 @@ const PathComponent: React.FC<PathProps> = ({
 			setIsVerticesMode(false);
 		}
 	}, [isSelected]);
+
 	/**
 	 * Polyline drag event handler
 	 */
@@ -180,7 +185,6 @@ const PathComponent: React.FC<PathProps> = ({
 			onDiagramChange?.({
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
-				changeType: "Drag",
 				id,
 				startDiagram,
 				endDiagram: startDiagram,
@@ -201,7 +205,6 @@ const PathComponent: React.FC<PathProps> = ({
 		onDiagramChange?.({
 			eventId: e.eventId,
 			eventPhase: e.eventPhase,
-			changeType: "Drag",
 			id,
 			startDiagram: {
 				x: e.startX,
@@ -215,6 +218,7 @@ const PathComponent: React.FC<PathProps> = ({
 			},
 		});
 	}, []);
+
 	/**
 	 * Vertex drag event handler
 	 */
@@ -229,6 +233,7 @@ const PathComponent: React.FC<PathProps> = ({
 			setIsPathPointDragging(false);
 		}
 	}, []);
+
 	/**
 	 * Change event handler for line segments and new vertices
 	 */
@@ -263,6 +268,7 @@ const PathComponent: React.FC<PathProps> = ({
 		},
 		[],
 	);
+
 	// Generate properties for polyline drag element
 	const dragProps = useDrag({
 		id,
@@ -273,6 +279,7 @@ const PathComponent: React.FC<PathProps> = ({
 		onPointerDown: handlePointerDown,
 		onDrag: handleDrag,
 	});
+
 	// Generate properties for clicking
 	const clickProps = useClick({
 		id,
@@ -282,7 +289,9 @@ const PathComponent: React.FC<PathProps> = ({
 		isAncestorSelected,
 		ref: dragSvgRef,
 		onClick: handleClick,
-	}); // Generate properties for selection
+	});
+
+	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
 		onSelect,
@@ -307,6 +316,7 @@ const PathComponent: React.FC<PathProps> = ({
 		isVerticesMode &&
 		!isDragging &&
 		!isPathPointDragging;
+
 	// Display flag for new vertices
 	const showNewVertex =
 		newVertexEnabled &&
@@ -316,7 +326,7 @@ const PathComponent: React.FC<PathProps> = ({
 		!isPathPointDragging;
 
 	// Display flag for overall transform group
-	const showTransformGroup = showTransformControls;
+	const showTransformGroup = showTransformControls && !isVerticesMode;
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;
@@ -381,19 +391,6 @@ const PathComponent: React.FC<PathProps> = ({
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
-			{/* Outline for selection only */}
-			{!showTransformGroup && (
-				<Outline
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					showOutline={showOutline}
-				/>
-			)}
 			{/* Overall transform group */}
 			{showTransformGroup && (
 				<Group
@@ -402,7 +399,7 @@ const PathComponent: React.FC<PathProps> = ({
 					y={y}
 					isSelected={showTransformControls && !isVerticesMode}
 					showTransformControls={showTransformControls}
-					showOutline={showOutline}
+					showOutline={showOutline && !isVerticesMode}
 					width={width}
 					height={height}
 					rotation={rotation}

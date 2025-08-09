@@ -1,10 +1,10 @@
 // Import React.
-import React, { memo, useCallback, useRef } from "react";
+import React, { memo } from "react";
+
+// Import resistry.
+import { DiagramRegistry } from "../../../registry";
 
 // Import types.
-import { DiagramRegistry } from "../../../registry";
-import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { GroupProps } from "../../../types/props/shapes/GroupProps";
 
 // Import components.
@@ -44,50 +44,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 	onTextChange,
 	onExecute,
 }) => {
-	// To avoid frequent handler generation, hold referenced values in useRef
-	const refBusVal = {
-		// Properties
-		id,
-		x,
-		y,
-		width,
-		height,
-		isSelected,
-		items,
-		onDrag,
-		onDiagramChange,
-		onConnect,
-		onPreviewConnectLine,
-		onTextChange,
-	};
-	const refBus = useRef(refBusVal);
-	refBus.current = refBusVal;
-
-	/**
-	 * Change event handler for shapes within the group
-	 */
-	const handleChildDiagramChange = useCallback((e: DiagramChangeEvent) => {
-		const { id, isSelected, onDiagramChange, onDrag } = refBus.current;
-
-		if (isSelected) {
-			// TODO: Check if this logic is necessary
-			// When group is selected, operations that come here are equivalent to drag operations, so convert to drag event and propagate
-			const dragEvent = {
-				eventPhase: e.eventPhase,
-				id,
-				startX: e.startDiagram.x,
-				startY: e.startDiagram.y,
-				endX: e.endDiagram.x,
-				endY: e.endDiagram.y,
-			} as DiagramDragEvent;
-
-			onDrag?.(dragEvent);
-		} else {
-			// When group is not selected, there is no impact on the group other than outline, so propagate the change event as is
-			onDiagramChange?.(e);
-		}
-	}, []);
-
 	// Create shapes within the group
 	const children = items.map((item) => {
 		// Ensure that item.type is of DiagramType
@@ -110,7 +66,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onDragOver,
 			onDragLeave,
 			onHoverChange,
-			onDiagramChange: handleChildDiagramChange,
+			onDiagramChange,
 			onConnect,
 			onPreviewConnectLine,
 			onTextChange,
@@ -119,6 +75,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 
 		return React.createElement(component, props);
 	});
+
 	return (
 		<>
 			{children}
