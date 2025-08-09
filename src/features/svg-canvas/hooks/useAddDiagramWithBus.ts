@@ -2,7 +2,7 @@
 import { useCallback } from "react";
 
 // Import constants.
-import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../constants/EventNames";
+import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../constants/core/EventNames";
 import type { Diagram } from "../types/state/catalog/Diagram";
 
 // Import types.

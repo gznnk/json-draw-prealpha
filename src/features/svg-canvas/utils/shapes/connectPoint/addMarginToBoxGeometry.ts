@@ -1,5 +1,5 @@
 import type { BoxGeometry } from "../../../types/core/BoxGeometry";
-import { CONNECT_LINE_MARGIN } from "../../../constants/Constants";
+import { CONNECT_LINE_MARGIN } from "../../../constants/core/Constants";
 
 /**
  * Adds margin to a box geometry and returns a new box geometry with expanded boundaries.

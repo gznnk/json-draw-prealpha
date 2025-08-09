@@ -1,4 +1,4 @@
-import { AUTO_SCROLL_STEP_SIZE } from "../../../constants/Constants";
+import { AUTO_SCROLL_STEP_SIZE } from "../../../constants/core/Constants";
 
 /**
  * Represents scroll delta values for x and y axes.
@@ -14,7 +14,7 @@ export type ScrollDelta = {
  * Calculates scroll delta values based on edge proximity directions.
  * This is a pure function that determines how much to scroll in each direction
  * based on which edges the cursor is near.
- * 
+ *
  * @param horizontal - Horizontal edge proximity ("left" | "right" | null)
  * @param vertical - Vertical edge proximity ("top" | "bottom" | null)
  * @returns Object containing deltaX and deltaY scroll values

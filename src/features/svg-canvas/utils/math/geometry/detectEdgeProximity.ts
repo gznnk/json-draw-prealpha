@@ -1,4 +1,4 @@
-import { AUTO_SCROLL_THRESHOLD } from "../../../constants/Constants";
+import { AUTO_SCROLL_THRESHOLD } from "../../../constants/core/Constants";
 import type { SvgViewport } from "../../../types/core/SvgViewport";
 
 /**

@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import type { ConnectNodesEvent } from "../../types/events/ConnectNodesEvent";
 
 // Import constants.
-import { EVENT_NAME_CONNECT_NODES } from "../../constants/EventNames";
+import { EVENT_NAME_CONNECT_NODES } from "../../constants/core/EventNames";
 
 // Import utils.
 import { newEventId } from "../../utils/core/newEventId";

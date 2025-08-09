@@ -26,7 +26,7 @@ import { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDire
 
 // Import constants.
 import { DefaultConnectLineState } from "../../../constants/state/shapes/DefaultConnectLineState";
-import { EVENT_NAME_CONNECTION } from "../../../constants/EventNames";
+import { EVENT_NAME_CONNECTION } from "../../../constants/core/EventNames";
 
 // Import local module files.
 import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";

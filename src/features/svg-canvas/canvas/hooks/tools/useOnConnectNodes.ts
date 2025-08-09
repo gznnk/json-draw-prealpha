@@ -12,7 +12,7 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 
 // Import constants.
 import { DefaultConnectLineState } from "../../../constants/state/shapes/DefaultConnectLineState";
-import { EVENT_NAME_CONNECT_NODES } from "../../../constants/EventNames";
+import { EVENT_NAME_CONNECT_NODES } from "../../../constants/core/EventNames";
 
 // Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";

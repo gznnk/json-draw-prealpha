@@ -10,7 +10,7 @@ import { newEventId } from "../utils/core/newEventId";
 import { getSvgPoint } from "../utils/core/getSvgPoint";
 
 // Import constants.
-import { DRAG_DEAD_ZONE } from "../constants/Constants";
+import { DRAG_DEAD_ZONE } from "../constants/core/Constants";
 
 /**
  * Type definition for click props

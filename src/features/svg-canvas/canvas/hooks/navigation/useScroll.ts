@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
-import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/EventNames";
+import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/core/EventNames";
 import { InteractionState } from "../../types/InteractionState";
 
 // Import EventBus.

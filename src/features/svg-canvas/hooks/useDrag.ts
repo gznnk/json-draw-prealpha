@@ -16,11 +16,11 @@ import { newEventId } from "../utils/core/newEventId";
 import { getSvgPoint } from "../utils/core/getSvgPoint";
 
 // Import constants.
-import { DRAG_DEAD_ZONE } from "../constants/Constants";
+import { DRAG_DEAD_ZONE } from "../constants/core/Constants";
 import {
 	EVENT_NAME_BROADCAST_DRAG,
 	EVENT_NAME_SVG_CANVAS_SCROLL,
-} from "../constants/EventNames";
+} from "../constants/core/EventNames";
 
 // Import EventBus.
 import { useEventBus } from "../context/EventBusContext";

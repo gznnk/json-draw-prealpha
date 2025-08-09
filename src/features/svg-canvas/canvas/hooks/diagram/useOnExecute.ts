@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types related to SvgCanvas.
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
-import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../../constants/EventNames";
+import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../../constants/core/EventNames";
 import type { ExecuteEvent } from "../../../types/events/ExecuteEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";

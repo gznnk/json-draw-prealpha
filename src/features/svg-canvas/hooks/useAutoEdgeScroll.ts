@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import constants.
-import { AUTO_SCROLL_INTERVAL_MS } from "../constants/Constants";
+import { AUTO_SCROLL_INTERVAL_MS } from "../constants/core/Constants";
 
 // Import types.
 import type { SvgViewport } from "../types/core/SvgViewport";

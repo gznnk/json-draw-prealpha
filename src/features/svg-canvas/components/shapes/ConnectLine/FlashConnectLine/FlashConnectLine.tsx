@@ -13,7 +13,7 @@ import {
 } from "../../../../utils/shapes/path/createArrowHeads";
 
 // Import constants and styled components.
-import { EVENT_NAME_FLASH_CONNECT_LINE } from "../../../../constants/EventNames";
+import { EVENT_NAME_FLASH_CONNECT_LINE } from "../../../../constants/core/EventNames";
 import { FlashGroup } from "./FlashConnectLineStyled";
 
 export const FlashConnectLineComponent = () => {
