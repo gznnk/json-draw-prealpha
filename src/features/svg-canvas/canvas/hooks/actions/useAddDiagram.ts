@@ -12,14 +12,14 @@ import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 
 // Import hooks.
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle new diagram events on the canvas.
  */
 export const useAddDiagram = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

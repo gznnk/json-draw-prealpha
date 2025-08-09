@@ -10,7 +10,7 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import { newEventId } from "../../../utils/core/newEventId";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 /**
@@ -18,7 +18,7 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
  */
 export const useDelete = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

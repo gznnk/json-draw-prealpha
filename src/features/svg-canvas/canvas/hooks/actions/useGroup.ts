@@ -13,14 +13,14 @@ import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
 
 // Import hooks.
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle group events on the canvas.
  */
 export const useGroup = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

@@ -18,7 +18,7 @@ import { isHistoryEvent } from "../../utils/isHistoryEvent";
 import { updateOutlineOfGroup } from "../../utils/updateOutlineOfGroup";
 
 // Import hooks.
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 
 // Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
@@ -41,7 +41,7 @@ const getIsTransformingState = (eventPhase: EventPhase): boolean => {
  */
 export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

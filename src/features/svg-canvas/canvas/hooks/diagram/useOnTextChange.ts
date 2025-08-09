@@ -11,7 +11,7 @@ import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps"
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 // Import hooks.
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle text change events on the canvas.
@@ -19,7 +19,7 @@ import { useDataChange } from "../history/useDataChange";
  */
 export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

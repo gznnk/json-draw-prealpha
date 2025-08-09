@@ -13,11 +13,11 @@ import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { canvasStateToHistory } from "../../utils/canvasStateToHistory";
 
 /**
- * Custom hook to handle data changes in the canvas.
- * @param onDataChange - The callback function to handle data changes.
- * @returns A callback function to handle data changes.
+ * Custom hook to add history entries to the canvas.
+ * @param props - The sub hooks properties containing the onDataChange callback.
+ * @returns A callback function to add history entries.
  */
-export const useDataChange = (props: SvgCanvasSubHooksProps) => {
+export const useAddHistory = (props: SvgCanvasSubHooksProps) => {
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		onDataChange: props.onDataChange,

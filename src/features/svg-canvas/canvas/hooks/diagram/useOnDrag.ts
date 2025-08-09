@@ -21,14 +21,14 @@ import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoin
 import { updateOutlineOfAllGroups } from "../../utils/updateOutlineOfAllGroups";
 
 // Import hooks.
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle drag events on the canvas.
  */
 export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {

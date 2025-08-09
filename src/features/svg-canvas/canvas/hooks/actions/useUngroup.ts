@@ -8,14 +8,14 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../../utils/core/newEventId";
 import { ungroupSelectedGroupsRecursive } from "../../utils/ungroupSelectedGroupsRecursive";
-import { useDataChange } from "../history/useDataChange";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle ungroup events on the canvas.
  */
 export const useUngroup = (props: SvgCanvasSubHooksProps) => {
 	// Get the data change handler.
-	const onDataChange = useDataChange(props);
+	const onDataChange = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
