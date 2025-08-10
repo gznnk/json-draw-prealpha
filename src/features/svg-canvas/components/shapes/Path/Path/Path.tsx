@@ -9,7 +9,6 @@ import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeE
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { PathProps } from "../../../../types/props/shapes/PathProps";
-import type { Diagram } from "../../../../types/state/catalog/Diagram";
 
 // Import components.
 // import { Outline } from "../../../core/Outline";
@@ -82,8 +81,8 @@ const PathComponent: React.FC<PathProps> = ({
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
 	const [isVerticesMode, setIsVerticesMode] = useState(!transformEnabled);
 
-	const startItems = useRef<Diagram[]>(items);
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
+
 	// To avoid frequent handler generation, hold referenced values in useRef
 	const refBusVal = {
 		// Properties
@@ -108,13 +107,12 @@ const PathComponent: React.FC<PathProps> = ({
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	/**
-	 * Polyline pointer down event handler
-	 */
-	const handlePointerDown = useCallback(() => {
+	// Path pointer down event handler
+	const handlePathPointerDown = useCallback(() => {
 		const { isSelected, transformEnabled } = refBus.current;
 
 		if (!transformEnabled) {
+			// If transform is disabled, skip transform mode;
 			setIsVerticesMode(true);
 		}
 
@@ -123,44 +121,20 @@ const PathComponent: React.FC<PathProps> = ({
 		}
 	}, []);
 
-	/**
-	 * Polyline click event handler
-	 */
-	const handleClick = useCallback((e: DiagramClickEvent) => {
-		const {
-			id,
-			isSequentialSelection,
-			isVerticesMode,
-			transformEnabled,
-			onClick,
-		} = refBus.current;
+	// Path click event handler
+	const handlePathClick = useCallback((e: DiagramClickEvent) => {
+		const { isSequentialSelection, isVerticesMode, transformEnabled, onClick } =
+			refBus.current;
 
 		if (isSequentialSelection && transformEnabled) {
 			setIsVerticesMode(!isVerticesMode);
 		}
-		onClick?.({
-			eventId: e.eventId,
-			id,
-			isSelectedOnPointerDown: e.isSelectedOnPointerDown,
-			isAncestorSelectedOnPointerDown: e.isAncestorSelectedOnPointerDown,
-		});
+		onClick?.(e);
 	}, []);
 
-	// Polyline selection state control
-	useEffect(() => {
-		// Clear sequential selection flag when selection is removed from group
-		if (!isSelected) {
-			setIsSequentialSelection(false);
-			setIsVerticesMode(false);
-		}
-	}, [isSelected]);
-
-	/**
-	 * Polyline drag event handler
-	 */
-	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { id, dragEnabled, items, onDiagramChange, isVerticesMode } =
-			refBus.current;
+	// Path drag event handler
+	const handlePathDrag = useCallback((e: DiagramDragEvent) => {
+		const { dragEnabled, onDrag, isVerticesMode } = refBus.current;
 
 		// Disable dragging by suppressing event when drag is disabled
 		if (!dragEnabled) {
@@ -172,51 +146,52 @@ const PathComponent: React.FC<PathProps> = ({
 			return;
 		}
 
-		// Processing at drag start
-		if (e.eventPhase === "Started") {
-			startItems.current = items;
+		onDrag?.(e);
+	}, []);
 
-			const startDiagram = {
-				x: e.startX,
-				y: e.startY,
-				items: startItems.current,
-			};
-
-			onDiagramChange?.({
-				eventId: e.eventId,
-				eventPhase: e.eventPhase,
-				id,
-				startDiagram,
-				endDiagram: startDiagram,
-			});
-
-			return;
+	// Path selection state control
+	useEffect(() => {
+		// Clear sequential selection flag when selection is removed from group
+		if (!isSelected) {
+			setIsSequentialSelection(false);
+			setIsVerticesMode(false);
 		}
+	}, [isSelected]);
 
-		const dx = e.endX - e.startX;
-		const dy = e.endY - e.startY;
+	// Generate drag properties for path element.
+	const dragProps = useDrag({
+		id,
+		type: "Path",
+		x,
+		y,
+		ref: dragSvgRef,
+		onPointerDown: handlePathPointerDown,
+		onDrag: handlePathDrag,
+	});
 
-		const newItems = startItems.current.map((item) => {
-			const x = item.x + dx;
-			const y = item.y + dy;
-			return { ...item, x, y };
-		});
+	// Generate click properties for path element.
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		isSelected,
+		isAncestorSelected,
+		ref: dragSvgRef,
+		onClick: handlePathClick,
+	});
 
-		onDiagramChange?.({
-			eventId: e.eventId,
-			eventPhase: e.eventPhase,
-			id,
-			startDiagram: {
-				x: e.startX,
-				y: e.startY,
-				items: startItems.current,
-			},
-			endDiagram: {
-				x: e.endX,
-				y: e.endY,
-				items: newItems,
-			},
-		});
+	// Generate select properties for path element.
+	const selectProps = useSelect({
+		id,
+		onSelect,
+	});
+
+	// Compose props for path element
+	const composedProps = mergeProps(dragProps, clickProps, selectProps);
+
+	// Segment click event handler
+	const handleSegmentClick = useCallback(() => {
+		setIsVerticesMode(false);
 	}, []);
 
 	/**
@@ -268,36 +243,6 @@ const PathComponent: React.FC<PathProps> = ({
 		},
 		[],
 	);
-
-	// Generate properties for polyline drag element
-	const dragProps = useDrag({
-		id,
-		type: "Path",
-		x,
-		y,
-		ref: dragSvgRef,
-		onPointerDown: handlePointerDown,
-		onDrag: handleDrag,
-	});
-
-	// Generate properties for clicking
-	const clickProps = useClick({
-		id,
-		x,
-		y,
-		isSelected,
-		isAncestorSelected,
-		ref: dragSvgRef,
-		onClick: handleClick,
-	});
-
-	// Generate properties for selection
-	const selectProps = useSelect({
-		id,
-		onSelect,
-	});
-	// Compose props for path element
-	const composedProps = mergeProps(dragProps, clickProps, selectProps);
 
 	// Generate polyline d attribute value
 	const d = createDValue(items);
@@ -378,8 +323,7 @@ const PathComponent: React.FC<PathProps> = ({
 					rightAngleSegmentDrag={rightAngleSegmentDrag}
 					fixBothEnds={fixBothEnds}
 					items={items}
-					onPointerDown={handlePointerDown}
-					onClick={handleClick}
+					onClick={handleSegmentClick}
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}

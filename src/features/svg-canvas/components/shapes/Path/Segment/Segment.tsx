@@ -2,16 +2,16 @@
 import type React from "react";
 import { memo, useCallback, useRef } from "react";
 
-// Import components related to SvgCanvas.
+// Import components.
 import { DragLine } from "../../../core/DragLine";
 
-// Import types related to SvgCanvas.
+// Import types.
 import type { Point } from "../../../../types/core/Point";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
 
-// Import functions related to SvgCanvas.
+// Import utils.
 import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
 import { calcRadians } from "../../../../utils/math/points/calcRadians";
 import { createLinearX2yFunction } from "../../../../utils/math/geometry/createLinearX2yFunction";
@@ -19,7 +19,7 @@ import { createLinearY2xFunction } from "../../../../utils/math/geometry/createL
 import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
 import { rotatePoint } from "../../../../utils/math/points/rotatePoint";
 
-// Imports related to this component.
+// Import local modules.
 import type { SegmentData } from "./SegmentTypes";
 
 /**
@@ -43,7 +43,6 @@ const SegmentComponent: React.FC<SegmentProps> = ({
 	endX,
 	endY,
 	rightAngleSegmentDrag,
-	onPointerDown,
 	onClick,
 	onDrag,
 }) => {
@@ -62,6 +61,7 @@ const SegmentComponent: React.FC<SegmentProps> = ({
 	const cursor = rightAngleSegmentDrag
 		? getCursorFromAngle(radiansToDegrees(radian))
 		: "move";
+
 	// Use ref to hold referenced values to avoid frequent handler generation
 	const refBusVal = {
 		// State variables and functions
@@ -92,7 +92,6 @@ const SegmentComponent: React.FC<SegmentProps> = ({
 			endX={endX}
 			endY={endY}
 			cursor={cursor}
-			onPointerDown={onPointerDown}
 			onClick={onClick}
 			onDrag={onDrag}
 			dragPositioningFunction={

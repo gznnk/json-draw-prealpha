@@ -37,7 +37,6 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 	rightAngleSegmentDrag,
 	fixBothEnds,
 	items,
-	onPointerDown,
 	onClick,
 	onDiagramChange,
 }) => {
@@ -227,7 +226,6 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 			key={item.id}
 			{...item}
 			rightAngleSegmentDrag={rightAngleSegmentDrag}
-			onPointerDown={onPointerDown}
 			onClick={onClick}
 			onDrag={handleSegmentDrag}
 		/>
