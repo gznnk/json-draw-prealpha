@@ -9,9 +9,11 @@ import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeE
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { PathProps } from "../../../../types/props/shapes/PathProps";
+import type { PathState } from "../../../../types/state/shapes/PathState";
+import type { PathMode } from "./PathTypes";
 
 // Import components.
-// import { Outline } from "../../../core/Outline";
+import { Outline } from "../../../core/Outline";
 import { PositionLabel } from "../../../core/PositionLabel";
 import { Group } from "../../Group";
 import { NewVertexList } from "../NewVertexList";
@@ -65,9 +67,8 @@ const PathComponent: React.FC<PathProps> = ({
 	items = [],
 	dragEnabled = true,
 	transformEnabled = true,
-	segmentDragEnabled = true,
+	verticesModeEnabled = true,
 	rightAngleSegmentDrag = false,
-	newVertexEnabled = true,
 	fixBothEnds = false,
 	startArrowHead = "None",
 	endArrowHead = "None",
@@ -79,9 +80,11 @@ const PathComponent: React.FC<PathProps> = ({
 }) => {
 	const [isPathPointDragging, setIsPathPointDragging] = useState(false);
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
-	const [isVerticesMode, setIsVerticesMode] = useState(!transformEnabled);
+	const [mode, setMode] = useState<PathMode>("Inactive");
 
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
+
+	const startDiagram = useRef<Partial<PathState> | null>(null);
 
 	// To avoid frequent handler generation, hold referenced values in useRef
 	const refBusVal = {
@@ -89,12 +92,15 @@ const PathComponent: React.FC<PathProps> = ({
 		id,
 		x,
 		y,
+		width,
+		height,
 		rotation,
 		scaleX,
 		scaleY,
 		isSelected,
-		transformEnabled,
 		dragEnabled,
+		transformEnabled,
+		verticesModeEnabled,
 		items,
 		onDrag,
 		onSelect,
@@ -102,19 +108,14 @@ const PathComponent: React.FC<PathProps> = ({
 		onDiagramChange,
 		// Internal variables and functions
 		isSequentialSelection,
-		isVerticesMode,
+		mode,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
 	// Path pointer down event handler
 	const handlePathPointerDown = useCallback(() => {
-		const { isSelected, transformEnabled } = refBus.current;
-
-		if (!transformEnabled) {
-			// If transform is disabled, skip transform mode;
-			setIsVerticesMode(true);
-		}
+		const { isSelected } = refBus.current;
 
 		if (isSelected) {
 			setIsSequentialSelection(true);
@@ -123,26 +124,26 @@ const PathComponent: React.FC<PathProps> = ({
 
 	// Path click event handler
 	const handlePathClick = useCallback((e: DiagramClickEvent) => {
-		const { isSequentialSelection, isVerticesMode, transformEnabled, onClick } =
+		const { isSequentialSelection, verticesModeEnabled, onClick } =
 			refBus.current;
 
-		if (isSequentialSelection && transformEnabled) {
-			setIsVerticesMode(!isVerticesMode);
+		if (isSequentialSelection && verticesModeEnabled) {
+			setMode("Vertices");
 		}
 		onClick?.(e);
 	}, []);
 
 	// Path drag event handler
 	const handlePathDrag = useCallback((e: DiagramDragEvent) => {
-		const { dragEnabled, onDrag, isVerticesMode } = refBus.current;
+		const { dragEnabled, onDrag, mode } = refBus.current;
 
 		// Disable dragging by suppressing event when drag is disabled
 		if (!dragEnabled) {
 			return;
 		}
 
-		// Disable dragging by suppressing event when in vertices mode
-		if (isVerticesMode) {
+		// Disable dragging by suppressing event when not in transform mode
+		if (mode !== "Transform") {
 			return;
 		}
 
@@ -151,12 +152,18 @@ const PathComponent: React.FC<PathProps> = ({
 
 	// Path selection state control
 	useEffect(() => {
-		// Clear sequential selection flag when selection is removed from group
-		if (!isSelected) {
+		if (isSelected) {
+			if (transformEnabled) {
+				setMode("Transform");
+			} else {
+				// If transform is disabled, skip transform mode;
+				setMode("Vertices");
+			}
+		} else {
 			setIsSequentialSelection(false);
-			setIsVerticesMode(false);
+			setMode("Inactive");
 		}
-	}, [isSelected]);
+	}, [isSelected, transformEnabled]);
 
 	// Generate drag properties for path element.
 	const dragProps = useDrag({
@@ -189,25 +196,53 @@ const PathComponent: React.FC<PathProps> = ({
 	// Compose props for path element
 	const composedProps = mergeProps(dragProps, clickProps, selectProps);
 
-	// Segment click event handler
-	const handleSegmentClick = useCallback(() => {
-		setIsVerticesMode(false);
-	}, []);
-
 	/**
 	 * Vertex drag event handler
 	 */
 	const handlePathPointDrag = useCallback((e: DiagramDragEvent) => {
+		const { id, items, onDiagramChange } = refBus.current;
+
 		if (e.eventPhase === "Started") {
 			setIsPathPointDragging(true);
+			startDiagram.current = {
+				items,
+			};
 		}
 
-		refBus.current.onDrag?.(e);
+		if (startDiagram.current === null) return;
+
+		onDiagramChange?.({
+			id,
+			eventId: e.eventId,
+			eventPhase: e.eventPhase,
+			startDiagram: startDiagram.current,
+			endDiagram: {
+				items: items.map((item) => {
+					if (e.id === item.id) {
+						return {
+							...item,
+							x: e.endX,
+							y: e.endY,
+						};
+					}
+					return item;
+				}),
+			},
+			minX: e.minX,
+			minY: e.minY,
+		});
 
 		if (e.eventPhase === "Ended") {
 			setIsPathPointDragging(false);
 		}
 	}, []);
+
+	// Segment click event handler
+	const handleSegmentClick = useCallback(() => {
+		if (transformEnabled) {
+			setMode("Transform");
+		}
+	}, [transformEnabled]);
 
 	/**
 	 * Change event handler for line segments and new vertices
@@ -251,27 +286,20 @@ const PathComponent: React.FC<PathProps> = ({
 	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;
 	const linePoints = items.map((item, idx) => ({
 		...item,
-		hidden: !isVerticesMode || isDragging || (fixBothEnds && isBothEnds(idx)),
+		hidden: mode !== "Vertices" || (fixBothEnds && isBothEnds(idx)),
 	}));
 
 	// Display flag for dragging line segments
 	const showSegmentList =
-		segmentDragEnabled &&
-		isSelected &&
-		isVerticesMode &&
-		!isDragging &&
-		!isPathPointDragging;
+		isSelected && mode === "Vertices" && !isDragging && !isPathPointDragging;
 
 	// Display flag for new vertices
 	const showNewVertex =
-		newVertexEnabled &&
+		verticesModeEnabled &&
 		isSelected &&
-		isVerticesMode &&
+		mode === "Vertices" &&
 		!isDragging &&
 		!isPathPointDragging;
-
-	// Display flag for overall transform group
-	const showTransformGroup = showTransformControls && !isVerticesMode;
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;
@@ -335,15 +363,26 @@ const PathComponent: React.FC<PathProps> = ({
 					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
 				/>
 			)}
+			{/* Outline for the path */}
+			<Outline
+				x={x}
+				y={y}
+				width={width}
+				height={height}
+				rotation={rotation}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				showOutline={showOutline && mode !== "Vertices"}
+			/>
 			{/* Overall transform group */}
-			{showTransformGroup && (
+			{isSelected && (
 				<Group
 					id={id}
 					x={x}
 					y={y}
-					isSelected={showTransformControls && !isVerticesMode}
-					showTransformControls={showTransformControls}
-					showOutline={showOutline && !isVerticesMode}
+					isSelected={false}
+					showTransformControls={showTransformControls && mode === "Transform"}
+					showOutline={false}
 					width={width}
 					height={height}
 					rotation={rotation}
@@ -354,7 +393,6 @@ const PathComponent: React.FC<PathProps> = ({
 					isTransforming={isTransforming}
 					onDrag={handlePathPointDrag}
 					onTransform={onTransform}
-					onDiagramChange={onDiagramChange}
 				/>
 			)}
 			{/* Position label. */}

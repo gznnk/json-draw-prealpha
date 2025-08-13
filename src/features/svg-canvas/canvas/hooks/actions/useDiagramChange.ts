@@ -53,6 +53,12 @@ export const useDiagramChange = (props: SvgCanvasSubHooksProps) => {
 
 			newState.items = updateOutlineOfAllGroups(newState.items);
 
+			// If the event has minX and minY, update the canvas state
+			if (e.minX !== undefined && e.minY !== undefined) {
+				newState.minX = e.minX;
+				newState.minY = e.minY;
+			}
+
 			if (isHistoryEvent(e.eventPhase)) {
 				// Set the history event ID and notify the data change.
 				addHistory(e.eventId, newState);

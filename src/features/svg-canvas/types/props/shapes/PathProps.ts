@@ -15,8 +15,7 @@ export type PathProps = CreateDiagramProps<
 > & {
 	dragEnabled?: boolean;
 	transformEnabled?: boolean;
-	segmentDragEnabled?: boolean;
+	verticesModeEnabled?: boolean;
 	rightAngleSegmentDrag?: boolean;
-	newVertexEnabled?: boolean;
 	fixBothEnds?: boolean;
 };

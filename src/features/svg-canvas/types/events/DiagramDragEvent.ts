@@ -23,6 +23,8 @@ export type DiagramDragEvent = {
 	clientX: number;
 	/** The cursor's y position in client coordinates */
 	clientY: number;
+	/** The canvas's min x position */
 	minX?: number;
+	/** The canvas's min y position */
 	minY?: number;
 };

@@ -15,4 +15,8 @@ export type DiagramChangeEvent = {
 	cursorY?: number;
 	clientX?: number;
 	clientY?: number;
+	/** The canvas's min x position */
+	minX?: number;
+	/** The canvas's min y position */
+	minY?: number;
 };
