@@ -31,8 +31,10 @@ export const useAddDiagram = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback((e: AddDiagramEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
-		const { addHistory } = refBus.current;
+		const {
+			props: { setCanvasState },
+			addHistory,
+		} = refBus.current;
 
 		// Call the function to add a new item to the canvas.
 		setCanvasState((prevState) => {

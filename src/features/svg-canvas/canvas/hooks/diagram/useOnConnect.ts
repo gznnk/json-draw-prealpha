@@ -38,8 +38,10 @@ export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback((e: DiagramConnectEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
-		const { addHistory } = refBus.current;
+		const {
+			props: { setCanvasState },
+			addHistory,
+		} = refBus.current;
 
 		const shape = calcOrientedShapeFromPoints(
 			e.points.map((p: PathPointState) => ({ x: p.x, y: p.y })),

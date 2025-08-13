@@ -31,8 +31,10 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 	// Return a callback function to handle the delete action.
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
-		const { addHistory } = refBus.current;
+		const {
+			props: { setCanvasState },
+			addHistory,
+		} = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Collect IDs of items that will be deleted and remove selected items.

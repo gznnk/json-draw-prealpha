@@ -27,8 +27,10 @@ export const useUngroup = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback(() => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
-		const { addHistory } = refBus.current;
+		const {
+			props: { setCanvasState },
+			addHistory,
+		} = refBus.current;
 
 		setCanvasState((prevState) => {
 			const newItems = ungroupSelectedGroupsRecursive(prevState.items);

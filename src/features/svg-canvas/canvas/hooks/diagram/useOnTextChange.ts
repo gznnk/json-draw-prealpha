@@ -31,8 +31,10 @@ export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback((e: DiagramTextChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const { setCanvasState } = refBus.current.props;
-		const { addHistory } = refBus.current;
+		const {
+			props: { setCanvasState },
+			addHistory,
+		} = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Handle text editing initiation
