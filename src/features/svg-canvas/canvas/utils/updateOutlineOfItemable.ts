@@ -18,11 +18,6 @@ export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
 		return itemable;
 	}
 
-	// Skip ConnectLine types as they have different boundary calculation logic
-	if (itemable.type === "ConnectLine") {
-		return itemable;
-	}
-
 	// Calculate the bounds of the itemable.
 	const box = calcGroupOrientedBox(itemable);
 
@@ -32,7 +27,7 @@ export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
 
 	if (itemable.items) {
 		const newItems = itemable.items.map((item) => {
-			if (isItemableState(item) && item.type !== "ConnectLine") {
+			if (isItemableState(item)) {
 				const updatedItem = updateOutlineOfItemable(item);
 				if (updatedItem !== item) {
 					itemsChanged = true;
