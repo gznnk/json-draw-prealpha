@@ -20,13 +20,13 @@ import type { DiagramBaseProps } from "../core/DiagramBaseTypes";
 import type { SelectableProps } from "../core/SelectableTypes";
 import type { TransformativeProps } from "../core/TransformativeTypes";
 import type { ItemableProps } from "../core/ItemableTypes";
-import type { ConnectableProps } from "../core/ConnectableTypes";
+import type { ConnectableProps } from "./ConnectableTypes";
 import type { TextableProps } from "../core/TextableTypes";
 import type { ExecutableProps } from "../core/ExecutableTypes";
 import type { FileDroppableProps } from "../core/FileDroppableTypes";
 
 // Import local types.
-import type { ConnectableData, ConnectableState } from "./ConnectTypes";
+import type { ConnectableData, ConnectableState } from "./ConnectableTypes";
 
 /**
  * Options for creating diagram data types.

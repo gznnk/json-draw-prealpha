@@ -1,4 +1,4 @@
-import type { ConnectableData } from "../../../types/diagrams/shapes/ConnectTypes";
+import type { ConnectableData } from "../../../types/diagrams/shapes/ConnectableTypes";
 
 /**
  * Default connectable data template.

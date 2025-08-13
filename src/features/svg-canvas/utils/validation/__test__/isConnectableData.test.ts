@@ -1,4 +1,4 @@
-import type { ConnectableState } from "../../../types/diagrams/shapes/ConnectTypes";
+import type { ConnectableState } from "../../../types/diagrams/shapes/ConnectableTypes";
 import type { ConnectPointState } from "../../../types/diagrams/shapes/ConnectTypes";
 import { isConnectableState } from "../isConnectableState";
 

@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 // Import types.
 import type { Shape } from "../../../types/core/Shape";
-import type { ConnectableState } from "../../../types/diagrams/shapes/ConnectTypes";
+import type { ConnectableState } from "../../../types/diagrams/shapes/ConnectableTypes";
 import type { ConnectLineState } from "../../../types/diagrams/shapes/ConnectTypes";
 import type { PathPointState } from "../../../types/diagrams/shapes/PathTypes";
 import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";

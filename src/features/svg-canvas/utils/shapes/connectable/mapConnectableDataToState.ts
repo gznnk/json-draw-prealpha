@@ -3,7 +3,7 @@ import { DefaultConnectableState } from "../../../constants/state/core/DefaultCo
 import type {
 	ConnectableData,
 	ConnectableState,
-} from "../../../types/diagrams/shapes/ConnectTypes";
+} from "../../../types/diagrams/shapes/ConnectableTypes";
 
 export const mapConnectableDataToState =
 	createDataToStateMapper<ConnectableState>(DefaultConnectableState);

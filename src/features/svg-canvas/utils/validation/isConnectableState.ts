@@ -1,5 +1,5 @@
 // Import types.
-import type { ConnectableState } from "../../types/diagrams/shapes/ConnectTypes";
+import type { ConnectableState } from "../../types/diagrams/shapes/ConnectableTypes";
 
 /**
  * Check if an object is ConnectableState.
