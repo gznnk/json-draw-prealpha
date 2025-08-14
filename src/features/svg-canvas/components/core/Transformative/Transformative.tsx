@@ -7,6 +7,7 @@ import type { DiagramType } from "../../../types/core/DiagramType";
 import type { Point } from "../../../types/core/Point";
 import type { TransformationType } from "../../../types/core/TransformationType";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import type { TransformativeProps } from "../../../types/props/core/TransformativeProps";
 import type { TransformativeState } from "../../../types/state/core/TransformativeState";
@@ -60,6 +61,7 @@ const TransformativeComponent: React.FC<Props> = ({
 	keepProportion,
 	showTransformControls,
 	onTransform,
+	onClick,
 }) => {
 	const [isResizing, setIsResizing] = useState(false);
 	const [isRotating, setIsRotating] = useState(false);
@@ -848,6 +850,22 @@ const TransformativeComponent: React.FC<Props> = ({
 		);
 	}, []);
 
+	/**
+	 * Handle click events from drag lines and points.
+	 * Forwards the click event with the correct id to the parent component.
+	 */
+	const handleClick = useCallback(
+		(e: DiagramClickEvent) => {
+			if (onClick) {
+				onClick({
+					...e,
+					id,
+				});
+			}
+		},
+		[id, onClick],
+	);
+
 	// Don't render if the component is not selected.
 	if (!showTransformControls) {
 		return null;
@@ -880,6 +898,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endY={vertices.topRightPoint.y}
 						cursor={cursors.topCenter}
 						onDrag={handleDragTopCenter}
+						onClick={handleClick}
 						dragPositioningFunction={linearDragFunctionTopCenter}
 					/>
 					{/* Left DragLine */}
@@ -893,6 +912,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endY={vertices.bottomLeftPoint.y}
 						cursor={cursors.leftCenter}
 						onDrag={handleDragLeftCenter}
+						onClick={handleClick}
 						dragPositioningFunction={linearDragFunctionLeftCenter}
 					/>
 					{/* Right DragLine */}
@@ -906,6 +926,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endY={vertices.bottomRightPoint.y}
 						cursor={cursors.rightCenter}
 						onDrag={handleDragRightCenter}
+						onClick={handleClick}
 						dragPositioningFunction={linearDragFunctionRightCenter}
 					/>
 					{/* Bottom DragLine */}
@@ -919,6 +940,7 @@ const TransformativeComponent: React.FC<Props> = ({
 						endY={vertices.bottomRightPoint.y}
 						cursor={cursors.bottomCenter}
 						onDrag={handleDragBottomCenter}
+						onClick={handleClick}
 						dragPositioningFunction={linearDragFunctionBottomCenter}
 					/>
 					{/* Top left DragPoint */}

@@ -1,4 +1,5 @@
 import type { DiagramTransformEvent } from "../../events/DiagramTransformEvent";
+import type { DiagramClickEvent } from "../../events/DiagramClickEvent";
 
 /**
  * Properties for transformable diagram elements.
@@ -6,4 +7,5 @@ import type { DiagramTransformEvent } from "../../events/DiagramTransformEvent";
  */
 export type TransformativeProps = {
 	onTransform?: (e: DiagramTransformEvent) => void;
+	onClick?: (e: DiagramClickEvent) => void;
 };
