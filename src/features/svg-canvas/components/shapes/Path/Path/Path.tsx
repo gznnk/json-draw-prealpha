@@ -291,16 +291,19 @@ const PathComponent: React.FC<PathProps> = ({
 	}));
 
 	// Display flag for dragging line segments
-	const showSegmentList =
-		isSelected && mode === "Vertices" && !isDragging && !isPathPointDragging;
+	const showSegmentList = mode === "Vertices" && !isPathPointDragging;
 
 	// Display flag for new vertices
-	const showNewVertex =
-		verticesModeEnabled &&
-		isSelected &&
-		mode === "Vertices" &&
-		!isDragging &&
-		!isPathPointDragging;
+	const showNewVertex = mode === "Vertices" && !isPathPointDragging;
+
+	// Display flag for outline
+	const doShowOutline = showOutline && mode !== "Vertices";
+
+	// Display flag for path points
+	const showPathPoints = mode === "Vertices";
+
+	// Display flag for transformative
+	const showTransformative = mode === "Transform";
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;
@@ -373,10 +376,10 @@ const PathComponent: React.FC<PathProps> = ({
 				rotation={rotation}
 				scaleX={scaleX}
 				scaleY={scaleY}
-				showOutline={showOutline && mode !== "Vertices"}
+				showOutline={doShowOutline}
 			/>
 			{/* Path points for vertices mode */}
-			{mode === "Vertices" &&
+			{showPathPoints &&
 				linePoints.map((point) => (
 					<PathPoint
 						key={point.id}
@@ -388,7 +391,7 @@ const PathComponent: React.FC<PathProps> = ({
 					/>
 				))}
 			{/* Transformative for transform mode */}
-			{mode === "Transform" && (
+			{showTransformative && (
 				<Transformative
 					id={id}
 					type="Path"
