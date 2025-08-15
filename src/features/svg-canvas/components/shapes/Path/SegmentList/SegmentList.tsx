@@ -156,6 +156,8 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 					endDiagram: {
 						items: newItems,
 					},
+					minX: e.minX,
+					minY: e.minY,
 				});
 			}
 
@@ -205,6 +207,8 @@ const SegmentListComponent: React.FC<SegmentListProps> = ({
 					return item;
 				}),
 			},
+			minX: e.minX,
+			minY: e.minY,
 		});
 
 		if (e.eventPhase === "Ended") {

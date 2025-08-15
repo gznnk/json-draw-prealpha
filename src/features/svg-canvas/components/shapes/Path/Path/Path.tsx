@@ -248,13 +248,13 @@ const PathComponent: React.FC<PathProps> = ({
 	/**
 	 * Change event handler for line segments and new vertices
 	 */
-	const handleDiagramChangeBySegumentAndNewVertex = useCallback(
+	const handleDiagramChangeForVertexAndSegmentDrag = useCallback(
 		(e: DiagramChangeEvent) => {
 			if (!isItemableState<DiagramBaseData>(e.endDiagram)) return; // Type guard with DiagramBaseData
 
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 			if (e.eventPhase === "Ended") {
-				// Calculate new shape of Path's bounding box when new vertex and line segment dragging is completed
+				// Calculate new shape of Path's bounding box when new vertex and segment dragging is completed
 				const newShape = calcOrientedShapeFromPoints(
 					(e.endDiagram.items ?? []).map((p) => ({ x: p.x, y: p.y })),
 					rotation,
@@ -356,7 +356,7 @@ const PathComponent: React.FC<PathProps> = ({
 					fixBothEnds={fixBothEnds}
 					items={items}
 					onClick={handleSegmentClick}
-					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
+					onDiagramChange={handleDiagramChangeForVertexAndSegmentDrag}
 				/>
 			)}
 			{/* New vertices */}
@@ -364,7 +364,7 @@ const PathComponent: React.FC<PathProps> = ({
 				<NewVertexList
 					id={id}
 					items={items}
-					onDiagramChange={handleDiagramChangeBySegumentAndNewVertex}
+					onDiagramChange={handleDiagramChangeForVertexAndSegmentDrag}
 				/>
 			)}
 			{/* Outline for the path */}
