@@ -282,10 +282,9 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						[],
 						topLevelGroupIds,
 					),
-					interactionState:
-						e.eventPhase === "Started" || e.eventPhase === "InProgress"
-							? InteractionState.Transforming
-							: InteractionState.Idle,
+					interactionState: getIsTransformingState(e.eventPhase)
+						? InteractionState.Transforming
+						: InteractionState.Idle,
 					multiSelectGroup: prevState.multiSelectGroup
 						? ({
 								...prevState.multiSelectGroup,

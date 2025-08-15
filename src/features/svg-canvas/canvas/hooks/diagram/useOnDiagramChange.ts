@@ -3,7 +3,9 @@ import { useCallback, useRef } from "react";
 
 // Import types.
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
+import type { EventPhase } from "../../../types/events/EventPhase";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import { InteractionState } from "../../types/InteractionState";
 
 // Import utils.
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
@@ -12,6 +14,14 @@ import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItema
 
 // Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
+
+/**
+ * Determines if an item should be in changing state based on event phase.
+ * Pure function for consistent state management.
+ */
+const getIsChangingState = (eventPhase: EventPhase): boolean => {
+	return eventPhase === "Started" || eventPhase === "InProgress";
+};
 
 /**
  * Custom hook to handle diagram change events on the canvas.
@@ -49,6 +59,9 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 					// Return the updated item.
 					return newItem;
 				}),
+				interactionState: getIsChangingState(e.eventPhase)
+					? InteractionState.Changing
+					: InteractionState.Idle,
 			};
 
 			newState.items = updateOutlineOfAllItemables(newState.items);
