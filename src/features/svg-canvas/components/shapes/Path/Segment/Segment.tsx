@@ -12,12 +12,12 @@ import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent
 import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
 
 // Import utils.
-import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
-import { calcRadians } from "../../../../utils/math/points/calcRadians";
+import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
 import { createLinearX2yFunction } from "../../../../utils/math/geometry/createLinearX2yFunction";
 import { createLinearY2xFunction } from "../../../../utils/math/geometry/createLinearY2xFunction";
-import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
+import { calcRadians } from "../../../../utils/math/points/calcRadians";
 import { rotatePoint } from "../../../../utils/math/points/rotatePoint";
+import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
 
 // Import local modules.
 import type { SegmentData } from "./SegmentTypes";
