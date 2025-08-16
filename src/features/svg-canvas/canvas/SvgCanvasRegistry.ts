@@ -16,12 +16,12 @@ import { Rectangle } from "../components/shapes/Rectangle";
 import { Svg } from "../components/shapes/Svg";
 
 // Import minimap shape components
-import { ConnectLineMinimap } from "../components/shapes/ConnectLine/ConnectLineMinimap";
+import { ConnectLineMinimap } from "../components/shapes/ConnectLine";
 import { ConnectPointMinimap } from "../components/shapes/ConnectPoint/ConnectPointMinimap";
 import { EllipseMinimap } from "../components/shapes/Ellipse/EllipseMinimap";
 import { GroupMinimap } from "../components/shapes/Group/GroupMinimap";
 import { ImageMinimap } from "../components/shapes/Image/ImageMinimap";
-import { PathMinimap } from "../components/shapes/Path/PathMinimap";
+import { PathMinimap } from "../components/shapes/Path";
 import { PathPointMinimap } from "../components/shapes/Path/PathPoint/PathPointMinimap";
 import { RectangleMinimap } from "../components/shapes/Rectangle/RectangleMinimap";
 import { SvgMinimap } from "../components/shapes/Svg/SvgMinimap";

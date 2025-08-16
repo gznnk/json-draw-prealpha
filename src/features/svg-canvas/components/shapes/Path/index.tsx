@@ -1,2 +1,2 @@
-export { Path } from "./Path";
+export { Path, PathMinimap } from "./Path";
 export { PathPoint } from "./PathPoint";

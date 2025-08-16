@@ -3,10 +3,10 @@ import type React from "react";
 import { memo } from "react";
 
 // Import types.
-import type { ConnectLineProps } from "../../../types/props/shapes/ConnectLineProps";
+import type { ConnectLineProps } from "../../../../types/props/shapes/ConnectLineProps";
 
 // Import components.
-import { PathMinimap } from "../Path/PathMinimap";
+import { PathMinimap } from "../../Path";
 
 /**
  * ConnectLine minimap component - lightweight version without outlines, controls, and labels.
