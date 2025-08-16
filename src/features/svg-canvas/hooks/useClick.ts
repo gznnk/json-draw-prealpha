@@ -98,7 +98,7 @@ export const useClick = (props: ClickProps) => {
 	/**
 	 * Pointer up event handler within the click area
 	 */
-	const handlePointerUp = (): void => {
+	const handlePointerUp = (e: React.PointerEvent<SVGElement>): void => {
 		if (isPointerDown.current && !isDragging.current) {
 			// If pointer up after clicking (not dragging), notify click event
 			onClick?.({
@@ -107,6 +107,8 @@ export const useClick = (props: ClickProps) => {
 				isSelectedOnPointerDown: isSelectedOnPointerDown.current,
 				isAncestorSelectedOnPointerDown:
 					isAncestorSelectedOnPointerDown.current,
+				clientX: e.clientX,
+				clientY: e.clientY,
 			});
 		}
 

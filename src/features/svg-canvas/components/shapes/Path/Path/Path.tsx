@@ -29,6 +29,7 @@ import { useSelect } from "../../../../hooks/useSelect";
 // Import utils.
 import { mergeProps } from "../../../../utils/core/mergeProps";
 import { calcOrientedShapeFromPoints } from "../../../../utils/math/geometry/calcOrientedShapeFromPoints";
+import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
 import {
 	createEndPointArrowHead,
 	createStartPointArrowHead,
@@ -36,16 +37,8 @@ import {
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
 
-// TODO: Cannot enter vertex editing mode when overlapping with border
 /**
- * Polyline component
- * Features:
- * - Polyline drawing
- * - Entire polyline dragging
- * - Polyline selection
- * - Polyline transformation
- * - Line segment dragging
- * - Adding new vertices to polyline
+ * Path component
  */
 const PathComponent: React.FC<PathProps> = ({
 	id,
@@ -280,6 +273,19 @@ const PathComponent: React.FC<PathProps> = ({
 		[],
 	);
 
+	// Transformative click event handler
+	const handleTransformativeClick = useCallback(
+		(e: DiagramClickEvent) => {
+			if (
+				verticesModeEnabled &&
+				isPointerOver(dragSvgRef, e.clientX, e.clientY)
+			) {
+				setMode("Vertices");
+			}
+		},
+		[verticesModeEnabled],
+	);
+
 	// Generate polyline d attribute value
 	const d = createDValue(items);
 
@@ -406,6 +412,7 @@ const PathComponent: React.FC<PathProps> = ({
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}
+					onClick={handleTransformativeClick}
 				/>
 			)}
 			{/* Position label. */}

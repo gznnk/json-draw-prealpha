@@ -12,8 +12,9 @@ import type { EventPhase } from "../types/events/EventPhase";
 import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
 
 // Import utils.
-import { newEventId } from "../utils/core/newEventId";
 import { getSvgPoint } from "../utils/core/getSvgPoint";
+import { newEventId } from "../utils/core/newEventId";
+import { isPointerOver } from "../utils/shapes/common/isPointerOver";
 
 // Import constants.
 import { DRAG_DEAD_ZONE } from "../constants/core/Constants";
@@ -22,11 +23,13 @@ import {
 	EVENT_NAME_SVG_CANVAS_SCROLL,
 } from "../constants/core/EventNames";
 
-// Import EventBus.
+// Import hooks.
+import type { DoStartEdgeScrollArgs } from "./useAutoEdgeScroll";
+import { useAutoEdgeScroll } from "./useAutoEdgeScroll";
+
+// Import context.
 import { useEventBus } from "../context/EventBusContext";
 import { useSvgViewport } from "../context/SvgViewportContext";
-import { useAutoEdgeScroll } from "./useAutoEdgeScroll";
-import type { DoStartEdgeScrollArgs } from "./useAutoEdgeScroll";
 
 /**
  * Type definition for broadcast drag event
@@ -666,42 +669,4 @@ export const useDrag = (props: DragProps) => {
 		onKeyDown: handleKeyDown,
 		onKeyUp: handleKeyUp,
 	};
-};
-
-/**
- * Determine whether the pointer is over this drag area
- * When pointer is captured, pointer-related events do not fire on other elements, so we need to check manually
- *
- * @param {React.RefObject<SVGElement>} ref Reference to the drag area
- * @param {number} clientX Pointer X coordinate
- * @param {number} clientY Pointer Y coordinate
- * @returns {boolean} Whether the pointer is over this drag area
- */
-const isPointerOver = (
-	ref: React.RefObject<SVGElement>,
-	clientX: number,
-	clientY: number,
-): boolean => {
-	const svgCanvas = ref.current?.ownerSVGElement as SVGSVGElement;
-	if (!svgCanvas) {
-		return false;
-	}
-	const svgPoint = svgCanvas.createSVGPoint();
-
-	if (svgPoint) {
-		svgPoint.x = clientX;
-		svgPoint.y = clientY;
-		const svg = ref.current;
-
-		if (svg instanceof SVGGeometryElement) {
-			const transformedPoint = svgPoint.matrixTransform(
-				svg.getScreenCTM()?.inverse(),
-			);
-			return (
-				svg.isPointInFill(transformedPoint) ||
-				svg.isPointInStroke(transformedPoint)
-			);
-		}
-	}
-	return false;
 };

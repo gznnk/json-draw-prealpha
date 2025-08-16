@@ -6,4 +6,6 @@ export type DiagramClickEvent = {
 	id: string;
 	isSelectedOnPointerDown: boolean;
 	isAncestorSelectedOnPointerDown: boolean;
+	clientX: number;
+	clientY: number;
 };
