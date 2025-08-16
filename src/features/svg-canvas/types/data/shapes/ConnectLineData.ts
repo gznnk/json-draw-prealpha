@@ -1,4 +1,5 @@
 import type { ArrowHeadType } from "../../core/ArrowHeadType";
+import type { PathType } from "../../core/PathType";
 import type { CreateDataType } from "./CreateDataType";
 
 /**
@@ -10,6 +11,7 @@ export type ConnectLineData = CreateDataType<{
 	itemable: true;
 	strokable: true;
 }> & {
+	pathType: PathType;
 	startOwnerId: string;
 	endOwnerId: string;
 	autoRouting: boolean;

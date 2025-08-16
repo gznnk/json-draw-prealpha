@@ -16,6 +16,7 @@ const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 	stroke = "black",
 	strokeWidth = "1px",
 	items = [],
+	pathType,
 	startArrowHead,
 	endArrowHead,
 }) => {
@@ -29,6 +30,7 @@ const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 			rotation={0}
 			scaleX={1}
 			scaleY={1}
+			pathType={pathType}
 			items={items}
 			stroke={stroke}
 			strokeWidth={strokeWidth}

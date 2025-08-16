@@ -14,6 +14,7 @@ export const ConnectLineDefaultData = {
 	...ItemableDefaultData,
 	...StrokableDefaultData,
 	type: "ConnectLine",
+	pathType: "Linear",
 	stroke: "#002766",
 	strokeWidth: "2px",
 	startOwnerId: "",

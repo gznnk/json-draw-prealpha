@@ -1,5 +1,6 @@
 import type { CreateDataType } from "./CreateDataType";
 import type { ArrowHeadType } from "../../core/ArrowHeadType";
+import type { PathType } from "../../core/PathType";
 
 /**
  * Data type for polyline/path elements.
@@ -10,6 +11,7 @@ export type PathData = CreateDataType<{
 	itemable: true;
 	strokable: true;
 }> & {
+	pathType: PathType;
 	startArrowHead?: ArrowHeadType;
 	endArrowHead?: ArrowHeadType;
 };

@@ -14,4 +14,5 @@ export const PathDefaultData = {
 	...ItemableDefaultData,
 	...StrokableDefaultData,
 	type: "Path",
+	pathType: "Linear",
 } as const satisfies PathData;

@@ -12,4 +12,5 @@ export const DefaultPathState = {
 	...DefaultItemableState,
 	...DefaultStrokableState,
 	type: "Path",
+	pathType: "Linear",
 } as const satisfies PathState;

@@ -35,6 +35,7 @@ import {
 	createStartPointArrowHead,
 } from "../../../../utils/shapes/path/createArrowHeads";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
+import { createBezierDValue } from "../../../../utils/shapes/path/createBezierDValue";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
 
 /**
@@ -59,6 +60,7 @@ const PathComponent: React.FC<PathProps> = ({
 	showTransformControls = false,
 	isTransforming = false,
 	items = [],
+	pathType,
 	dragEnabled = true,
 	transformEnabled = true,
 	verticesModeEnabled = true,
@@ -72,7 +74,9 @@ const PathComponent: React.FC<PathProps> = ({
 	onTransform,
 	onDiagramChange,
 }) => {
-	const [isPathPointDragging, setIsPathPointDragging] = useState(false);
+	const [draggingPathPointId, setDraggingPathPointId] = useState<string | null>(
+		null,
+	);
 	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
 	const [mode, setMode] = useState<PathMode>("Inactive");
 
@@ -197,7 +201,7 @@ const PathComponent: React.FC<PathProps> = ({
 		const { id, items, onDiagramChange } = refBus.current;
 
 		if (e.eventPhase === "Started") {
-			setIsPathPointDragging(true);
+			setDraggingPathPointId(e.id);
 			startDiagram.current = {
 				items,
 			};
@@ -227,7 +231,7 @@ const PathComponent: React.FC<PathProps> = ({
 		});
 
 		if (e.eventPhase === "Ended") {
-			setIsPathPointDragging(false);
+			setDraggingPathPointId(null);
 		}
 	}, []);
 
@@ -287,20 +291,24 @@ const PathComponent: React.FC<PathProps> = ({
 	);
 
 	// Generate polyline d attribute value
-	const d = createDValue(items);
+	const d = pathType === "Bezier" ? createBezierDValue(items) : createDValue(items);
 
 	// Generate vertex information
 	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;
+
 	const linePoints = items.map((item, idx) => ({
 		...item,
-		hidden: mode !== "Vertices" || (fixBothEnds && isBothEnds(idx)),
+		hidden:
+			mode !== "Vertices" ||
+			(fixBothEnds && isBothEnds(idx)) ||
+			Boolean(draggingPathPointId && item.id !== draggingPathPointId),
 	}));
 
 	// Display flag for dragging line segments
-	const showSegmentList = mode === "Vertices" && !isPathPointDragging;
+	const showSegmentList = mode === "Vertices" && !draggingPathPointId;
 
 	// Display flag for new vertices
-	const showNewVertex = mode === "Vertices" && !isPathPointDragging;
+	const showNewVertex = mode === "Vertices" && !draggingPathPointId;
 
 	// Display flag for outline
 	const doShowOutline = showOutline && mode !== "Vertices";
@@ -310,6 +318,9 @@ const PathComponent: React.FC<PathProps> = ({
 
 	// Display flag for transformative
 	const showTransformative = mode === "Transform";
+
+	// Display flag for dashed guide lines (Bézier mode + Vertices mode)
+	const showDashedGuideLines = pathType === "Bezier" && mode === "Vertices" && !draggingPathPointId;
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;
@@ -350,6 +361,17 @@ const PathComponent: React.FC<PathProps> = ({
 				ref={dragSvgRef}
 				{...composedProps}
 			/>
+			{/* Dashed guide lines for Bézier curves in vertices mode */}
+			{showDashedGuideLines && (
+				<path
+					d={createDValue(items)}
+					fill="none"
+					stroke="rgba(24, 144, 255, 0.8)"
+					strokeWidth="1px"
+					strokeDasharray="4,2"
+					pointerEvents="none"
+				/>
+			)}
 			{/* Start point arrow head. */}
 			{startArrowHeadComp}
 			{/* End point arrow head. */}
