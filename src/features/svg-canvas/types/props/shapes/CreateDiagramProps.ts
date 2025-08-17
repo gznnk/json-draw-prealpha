@@ -7,27 +7,16 @@ import type { TextableProps } from "../core/TextableProps";
 import type { ExecutableProps } from "../core/ExecutableProps";
 import type { FileDroppableProps } from "../core/FileDroppableProps";
 
-/**
- * Options for diagram properties creation.
- * Controls which feature interfaces should be included in the resulting component props.
- */
-export type DiagramPropsOptions = {
-	selectable?: boolean;
-	transformative?: boolean;
-	itemable?: boolean;
-	connectable?: boolean;
-	textable?: boolean;
-	executable?: boolean;
-	itemCreatable?: boolean;
-	fileDroppable?: boolean;
-};
+
+// Import the new unified features type
+import type { DiagramFeatures } from "../../core/DiagramFeatures";
 
 /**
- * Create diagram props type.
- * This type conditionally merges different props interfaces based on specified options,
+ * Create diagram props type with unified features.
+ * This type conditionally merges different props interfaces based on specified features,
  * allowing components to selectively inherit specific behaviors and event handlers.
  */
-export type CreateDiagramProps<T, U extends DiagramPropsOptions> = Omit<
+export type CreateDiagramProps<T, U extends DiagramFeatures> = Omit<
 	T,
 	"type"
 > &
@@ -39,3 +28,5 @@ export type CreateDiagramProps<T, U extends DiagramPropsOptions> = Omit<
 	(U["textable"] extends true ? TextableProps : object) &
 	(U["executable"] extends true ? ExecutableProps : object) &
 	(U["fileDroppable"] extends true ? FileDroppableProps : object);
+
+
