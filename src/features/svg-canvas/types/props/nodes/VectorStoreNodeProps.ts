@@ -1,16 +1,12 @@
-// Import types related to SvgCanvas.
-import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
+// Import types.
+import type { VectorStoreNodeFeatures } from "../../data/nodes/VectorStoreNodeData";
 import type { VectorStoreNodeState } from "../../state/nodes/VectorStoreNodeState";
+import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 
 /**
  * Type of the VectorStoreNode component props.
  */
 export type VectorStoreNodeProps = CreateDiagramProps<
 	VectorStoreNodeState,
-	{
-		selectable: true;
-		transformative: true;
-		connectable: true;
-		executable: true;
-	}
+	typeof VectorStoreNodeFeatures
 >;

@@ -1,17 +1,12 @@
-// Import types related to SvgCanvas.
-import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
+// Import types.
+import type { TextAreaNodeFeatures } from "../../data/nodes/TextAreaNodeData";
 import type { TextAreaNodeState } from "../../state/nodes/TextAreaNodeState";
+import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 
 /**
  * Type of the TextAreaNode component props.
  */
 export type TextAreaNodeProps = CreateDiagramProps<
 	TextAreaNodeState,
-	{
-		selectable: true;
-		transformative: true;
-		connectable: true;
-		textable: true;
-		executable: true;
-	}
+	typeof TextAreaNodeFeatures
 >;

@@ -1,15 +1,11 @@
 import type { HubNodeData } from "../../../types/data/nodes/HubNodeData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ConnectableDefaultData } from "../shapes/ConnectableDefaultData";
+import { RectangleDefaultData } from "../shapes/RectangleDefaultData";
 
 /**
  * Default hub node data template.
  * Used for State to Data conversion mapping.
  */
 export const HubNodeDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
-	...ConnectableDefaultData,
+	...RectangleDefaultData,
 	type: "HubNode",
 } as const satisfies HubNodeData;

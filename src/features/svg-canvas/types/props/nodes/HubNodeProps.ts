@@ -1,16 +1,12 @@
-// Import types related to SvgCanvas.
-import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
+// Import types.
+import type { HubNodeFeatures } from "../../data/nodes/HubNodeData";
 import type { HubNodeState } from "../../state/nodes/HubNodeState";
+import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 
 /**
  * Type of the hub node component props.
  */
 export type HubNodeProps = CreateDiagramProps<
 	HubNodeState,
-	{
-		selectable: true;
-		transformative: true;
-		connectable: true;
-		executable: true;
-	}
+	typeof HubNodeFeatures
 >;

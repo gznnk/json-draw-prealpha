@@ -1,16 +1,12 @@
 // Import types.
-import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
+import type { PageDesignNodeFeatures } from "../../data/nodes/PageDesignNodeData";
 import type { PageDesignNodeState } from "../../state/nodes/PageDesignNodeState";
+import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 
 /**
  * Type of the PageDesignNode component props.
  */
 export type PageDesignNodeProps = CreateDiagramProps<
 	PageDesignNodeState,
-	{
-		selectable: true;
-		transformative: true;
-		connectable: true;
-		executable: true;
-	}
+	typeof PageDesignNodeFeatures
 >;

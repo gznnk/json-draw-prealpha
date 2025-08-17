@@ -1,12 +1,7 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ConnectableDefaultState } from "../shapes/ConnectableDefaultState";
-import { HubNodeDefaultData } from "../../data/nodes/HubNodeDefaultData";
 import type { HubNodeState } from "../../../types/state/nodes/HubNodeState";
+import { RectangleDefaultState } from "../shapes/RectangleDefaultState";
 
 export const HubNodeDefaultState = {
-	...HubNodeDefaultData,
-	...SelectableDefaultState,
-	...TransformativeDefaultState,
-	...ConnectableDefaultState,
+	...RectangleDefaultState,
+	type: "HubNode",
 } as const satisfies HubNodeState;
