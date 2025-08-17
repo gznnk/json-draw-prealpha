@@ -11,7 +11,7 @@ import { VectorStore } from "../../icons/VectorStore";
 import { Rectangle } from "../../shapes/Rectangle";
 
 // Import constants.
-import { DefaultRectangleState } from "../../../constants/state/shapes/DefaultRectangleState";
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -146,7 +146,7 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 				/>
 			</IconContainer>
 			<Rectangle
-				{...DefaultRectangleState}
+				{...RectangleDefaultState}
 				{...props}
 				isTransparent
 				isTextEditing={false}

@@ -2,7 +2,7 @@
 import { createRectangleState } from "../../shapes/rectangle/createRectangleState";
 
 // Import constants.
-import { DefaultLLMNodeState } from "../../../constants/state/nodes/DefaultLLMNodeState";
+import { LLMNodeDefaultState } from "../../../constants/state/nodes/LLMNodeDefaultState";
 
 /**
  * Creates state for an LLM node with specified properties.
@@ -24,15 +24,15 @@ export const createLLMNodeState = ({
 	const state = createRectangleState({
 		x,
 		y,
-		stroke: DefaultLLMNodeState.stroke,
-		fill: DefaultLLMNodeState.fill,
-		textType: DefaultLLMNodeState.textType,
-		textAlign: DefaultLLMNodeState.textAlign,
-		verticalAlign: DefaultLLMNodeState.verticalAlign,
-		fontColor: DefaultLLMNodeState.fontColor,
-		fontSize: DefaultLLMNodeState.fontSize,
-		text: text ?? DefaultLLMNodeState.text,
-		keepProportion: DefaultLLMNodeState.keepProportion,
+		stroke: LLMNodeDefaultState.stroke,
+		fill: LLMNodeDefaultState.fill,
+		textType: LLMNodeDefaultState.textType,
+		textAlign: LLMNodeDefaultState.textAlign,
+		verticalAlign: LLMNodeDefaultState.verticalAlign,
+		fontColor: LLMNodeDefaultState.fontColor,
+		fontSize: LLMNodeDefaultState.fontSize,
+		text: text ?? LLMNodeDefaultState.text,
+		keepProportion: LLMNodeDefaultState.keepProportion,
 	});
 
 	state.type = "LLMNode";

@@ -6,7 +6,7 @@ import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 // Import constants.
-import { DefaultAgentNodeState } from "../../../constants/state/nodes/DefaultAgentNodeState";
+import { AgentNodeDefaultState } from "../../../constants/state/nodes/AgentNodeDefaultState";
 
 export const createAgentNodeState = ({
 	x,
@@ -18,15 +18,15 @@ export const createAgentNodeState = ({
 	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
-		width: DefaultAgentNodeState.width,
-		height: DefaultAgentNodeState.height,
-		rotation: DefaultAgentNodeState.rotation,
-		scaleX: DefaultAgentNodeState.scaleX,
-		scaleY: DefaultAgentNodeState.scaleY,
+		width: AgentNodeDefaultState.width,
+		height: AgentNodeDefaultState.height,
+		rotation: AgentNodeDefaultState.rotation,
+		scaleX: AgentNodeDefaultState.scaleX,
+		scaleY: AgentNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultAgentNodeState,
+		...AgentNodeDefaultState,
 		id: newId(),
 		x,
 		y,

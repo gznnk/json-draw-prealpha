@@ -6,7 +6,7 @@ import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 // Import constants.
-import { DefaultImageGenNodeState } from "../../../constants/state/nodes/DefaultImageGenNodeState";
+import { ImageGenNodeDefaultState } from "../../../constants/state/nodes/ImageGenNodeDefaultState";
 
 /**
  * Creates state for an ImageGen node with specified properties.
@@ -25,15 +25,15 @@ export const createImageGenNodeState = ({
 	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
-		width: DefaultImageGenNodeState.width,
-		height: DefaultImageGenNodeState.height,
-		rotation: DefaultImageGenNodeState.rotation,
-		scaleX: DefaultImageGenNodeState.scaleX,
-		scaleY: DefaultImageGenNodeState.scaleY,
+		width: ImageGenNodeDefaultState.width,
+		height: ImageGenNodeDefaultState.height,
+		rotation: ImageGenNodeDefaultState.rotation,
+		scaleX: ImageGenNodeDefaultState.scaleX,
+		scaleY: ImageGenNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultImageGenNodeState,
+		...ImageGenNodeDefaultState,
 		id: newId(),
 		x,
 		y,

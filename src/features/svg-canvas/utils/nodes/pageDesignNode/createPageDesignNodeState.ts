@@ -6,7 +6,7 @@ import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 // Import constants.
-import { DefaultPageDesignNodeState } from "../../../constants/state/nodes/DefaultPageDesignNodeState";
+import { PageDesignNodeDefaultState } from "../../../constants/state/nodes/PageDesignNodeDefaultState";
 
 export const createPageDesignNodeState = ({
 	x,
@@ -18,15 +18,15 @@ export const createPageDesignNodeState = ({
 	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
-		width: DefaultPageDesignNodeState.width,
-		height: DefaultPageDesignNodeState.height,
-		rotation: DefaultPageDesignNodeState.rotation,
-		scaleX: DefaultPageDesignNodeState.scaleX,
-		scaleY: DefaultPageDesignNodeState.scaleY,
+		width: PageDesignNodeDefaultState.width,
+		height: PageDesignNodeDefaultState.height,
+		rotation: PageDesignNodeDefaultState.rotation,
+		scaleX: PageDesignNodeDefaultState.scaleX,
+		scaleY: PageDesignNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultPageDesignNodeState,
+		...PageDesignNodeDefaultState,
 		id: newId(),
 		x,
 		y,

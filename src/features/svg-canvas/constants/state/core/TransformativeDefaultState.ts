@@ -1,7 +1,7 @@
 import { TransformativeDefaultData } from "../../data/core/TransformativeDefaultData";
 import type { TransformativeState } from "../../../types/state/core/TransformativeState";
 
-export const DefaultTransformativeState = {
+export const TransformativeDefaultState = {
 	...TransformativeDefaultData,
 	showTransformControls: false,
 	isTransforming: false,

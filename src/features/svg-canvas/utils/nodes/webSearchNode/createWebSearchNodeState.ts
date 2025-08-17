@@ -6,7 +6,7 @@ import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 // Import constants.
-import { DefaultWebSearchNodeState } from "../../../constants/state/nodes/DefaultWebSearchNodeState";
+import { WebSearchNodeDefaultState } from "../../../constants/state/nodes/WebSearchNodeDefaultState";
 
 /**
  * Creates state for a WebSearch node with specified properties.
@@ -25,15 +25,15 @@ export const createWebSearchNodeState = ({
 	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
-		width: DefaultWebSearchNodeState.width,
-		height: DefaultWebSearchNodeState.height,
-		rotation: DefaultWebSearchNodeState.rotation,
-		scaleX: DefaultWebSearchNodeState.scaleX,
-		scaleY: DefaultWebSearchNodeState.scaleY,
+		width: WebSearchNodeDefaultState.width,
+		height: WebSearchNodeDefaultState.height,
+		rotation: WebSearchNodeDefaultState.rotation,
+		scaleX: WebSearchNodeDefaultState.scaleX,
+		scaleY: WebSearchNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultWebSearchNodeState,
+		...WebSearchNodeDefaultState,
 		id: newId(),
 		x,
 		y,

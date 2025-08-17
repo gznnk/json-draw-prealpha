@@ -14,7 +14,7 @@ import { Picture } from "../../icons/Picture";
 import { Rectangle } from "../../shapes/Rectangle";
 
 // Import constants.
-import { DefaultRectangleState } from "../../../constants/state/shapes/DefaultRectangleState";
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
 
 // Import hooks.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -113,7 +113,7 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 				/>
 			</IconContainer>
 			<Rectangle
-				{...DefaultRectangleState}
+				{...RectangleDefaultState}
 				{...props}
 				isTransparent
 				isTextEditing={false}

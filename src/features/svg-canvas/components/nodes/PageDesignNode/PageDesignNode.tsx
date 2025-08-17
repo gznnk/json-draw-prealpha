@@ -11,7 +11,7 @@ import { PageDesign } from "../../icons/PageDesign";
 import { Rectangle } from "../../shapes/Rectangle";
 
 // Import constants.
-import { DefaultRectangleState } from "../../../constants/state/shapes/DefaultRectangleState";
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
 
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -205,7 +205,8 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									fill: functionCallArguments.fill,
 									fontFamily: functionCallArguments.fontFamily || "Segoe UI",
 									textAlign: functionCallArguments.textAlign || "center",
-									verticalAlign: functionCallArguments.verticalAlign || "center",
+									verticalAlign:
+										functionCallArguments.verticalAlign || "center",
 								});
 								addDiagram(textElement);
 								input.push(event.item);
@@ -259,7 +260,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 				/>
 			</IconContainer>
 			<Rectangle
-				{...DefaultRectangleState}
+				{...RectangleDefaultState}
 				{...props}
 				isTransparent
 				isTextEditing={false}

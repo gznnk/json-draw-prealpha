@@ -6,7 +6,7 @@ import { newId } from "../../shapes/common/newId";
 import { createEllipseConnectPoint } from "../../shapes/ellipse/createEllipseConnectPoint";
 
 // Import constants.
-import { DefaultHubNodeState } from "../../../constants/state/nodes/DefaultHubNodeState";
+import { HubNodeDefaultState } from "../../../constants/state/nodes/HubNodeDefaultState";
 
 export const createHubNodeState = ({
 	x,
@@ -18,15 +18,15 @@ export const createHubNodeState = ({
 	const connectPoints = createEllipseConnectPoint({
 		x,
 		y,
-		width: DefaultHubNodeState.width,
-		height: DefaultHubNodeState.height,
-		rotation: DefaultHubNodeState.rotation,
-		scaleX: DefaultHubNodeState.scaleX,
-		scaleY: DefaultHubNodeState.scaleY,
+		width: HubNodeDefaultState.width,
+		height: HubNodeDefaultState.height,
+		rotation: HubNodeDefaultState.rotation,
+		scaleX: HubNodeDefaultState.scaleX,
+		scaleY: HubNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultHubNodeState,
+		...HubNodeDefaultState,
 		id: newId(),
 		x,
 		y,

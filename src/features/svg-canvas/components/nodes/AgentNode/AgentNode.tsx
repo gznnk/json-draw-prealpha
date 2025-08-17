@@ -5,7 +5,7 @@ import { memo, useState } from "react";
 import { IconContainer } from "../../core/IconContainer";
 import { Agent } from "../../icons/Agent";
 import { Rectangle } from "../../shapes/Rectangle";
-import { DefaultRectangleState } from "../../../constants/state/shapes/DefaultRectangleState";
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
 import { useEventBus } from "../../../context/EventBusContext";
@@ -83,7 +83,7 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 				/>
 			</IconContainer>
 			<Rectangle
-				{...DefaultRectangleState}
+				{...RectangleDefaultState}
 				{...props}
 				isTransparent
 				isTextEditing={false}

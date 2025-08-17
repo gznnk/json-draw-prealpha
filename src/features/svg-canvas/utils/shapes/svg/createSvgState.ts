@@ -5,7 +5,7 @@ import type { SvgState } from "../../../types/state/shapes/SvgState";
 import { newId } from "../../../utils/shapes/common/newId";
 
 // Import constants from Svg component.
-import { DefaultSvgState } from "../../../constants/state/shapes/DefaultSvgState";
+import { SvgDefaultState } from "../../../constants/state/shapes/SvgDefaultState";
 
 /**
  * Creates svg state with the specified properties.
@@ -32,7 +32,7 @@ export const createSvgState = ({
 	keepProportion?: boolean;
 }): SvgState => {
 	return {
-		...DefaultSvgState,
+		...SvgDefaultState,
 		id: newId(),
 		x,
 		y,

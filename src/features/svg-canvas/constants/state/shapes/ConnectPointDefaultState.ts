@@ -1,8 +1,8 @@
-import { DefaultSelectableState } from "../core/DefaultSelectableState";
+import { SelectableDefaultState } from "../core/SelectableDefaultState";
 import { ConnectPointDefaultData } from "../../data/shapes/ConnectPointDefaultData";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 
-export const DefaultConnectPointState = {
+export const ConnectPointDefaultState = {
 	...ConnectPointDefaultData,
-	...DefaultSelectableState,
+	...SelectableDefaultState,
 } as const satisfies ConnectPointState;;

@@ -6,7 +6,7 @@ import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 // Import constants.
-import { DefaultVectorStoreNodeState } from "../../../constants/state/nodes/DefaultVectorStoreNodeState";
+import { VectorStoreNodeDefaultState } from "../../../constants/state/nodes/VectorStoreNodeDefaultState";
 
 /**
  * Creates state for a VectorStore node with specified properties.
@@ -25,15 +25,15 @@ export const createVectorStoreNodeState = ({
 	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
-		width: DefaultVectorStoreNodeState.width,
-		height: DefaultVectorStoreNodeState.height,
-		rotation: DefaultVectorStoreNodeState.rotation,
-		scaleX: DefaultVectorStoreNodeState.scaleX,
-		scaleY: DefaultVectorStoreNodeState.scaleY,
+		width: VectorStoreNodeDefaultState.width,
+		height: VectorStoreNodeDefaultState.height,
+		rotation: VectorStoreNodeDefaultState.rotation,
+		scaleX: VectorStoreNodeDefaultState.scaleX,
+		scaleY: VectorStoreNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultVectorStoreNodeState,
+		...VectorStoreNodeDefaultState,
 		id: newId(),
 		x,
 		y,

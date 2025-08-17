@@ -1,10 +1,10 @@
 import { createDataToStateMapper } from "../../core/createDataToStateMapper";
-import { DefaultConnectableState } from "../../../constants/state/shapes/DefaultConnectableState";
+import { ConnectableDefaultState } from "../../../constants/state/shapes/ConnectableDefaultState";
 import type { ConnectableData } from "../../../types/data/shapes/ConnectableData";
 import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
 
 export const mapConnectableDataToState =
-	createDataToStateMapper<ConnectableState>(DefaultConnectableState);
+	createDataToStateMapper<ConnectableState>(ConnectableDefaultState);
 
 export const connectableDataToState = (
 	data: ConnectableData,

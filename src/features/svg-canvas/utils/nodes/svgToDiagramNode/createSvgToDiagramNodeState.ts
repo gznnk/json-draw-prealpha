@@ -6,7 +6,7 @@ import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectan
 import { newId } from "../../shapes/common/newId";
 
 // Import constants.
-import { DefaultSvgToDiagramNodeState } from "../../../constants/state/nodes/DefaultSvgToDiagramNodeState";
+import { SvgToDiagramNodeDefaultState } from "../../../constants/state/nodes/SvgToDiagramNodeDefaultState";
 
 /**
  * Creates state for a SvgToDiagram node with specified properties.
@@ -25,15 +25,15 @@ export const createSvgToDiagramNodeState = ({
 	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
-		width: DefaultSvgToDiagramNodeState.width,
-		height: DefaultSvgToDiagramNodeState.height,
-		rotation: DefaultSvgToDiagramNodeState.rotation,
-		scaleX: DefaultSvgToDiagramNodeState.scaleX,
-		scaleY: DefaultSvgToDiagramNodeState.scaleY,
+		width: SvgToDiagramNodeDefaultState.width,
+		height: SvgToDiagramNodeDefaultState.height,
+		rotation: SvgToDiagramNodeDefaultState.rotation,
+		scaleX: SvgToDiagramNodeDefaultState.scaleX,
+		scaleY: SvgToDiagramNodeDefaultState.scaleY,
 	});
 
 	return {
-		...DefaultSvgToDiagramNodeState,
+		...SvgToDiagramNodeDefaultState,
 		id: newId(),
 		x,
 		y,
