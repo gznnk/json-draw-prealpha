@@ -13,7 +13,11 @@ export const CanvasMenuDiv = styled.div`
     padding: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
     border-radius: 6px;
-    pointer-events: auto;
+    pointer-events: none;
     user-select: none;
     z-index: 1000;
+
+    & * {
+        user-select: none;
+    }
 `;

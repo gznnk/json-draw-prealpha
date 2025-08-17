@@ -7,6 +7,7 @@ import type { RectangleVertices } from "../../../types/core/RectangleVertices";
 
 // Import components.
 import { calcBottomLabelPosition } from "../BottomLabel";
+import { StyledText } from "./PositionLabelStyled";
 
 // Import utils.
 import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
@@ -57,7 +58,7 @@ const PositionLabelComponent: React.FC<PositionLabelProps> = ({
 	}
 
 	return (
-		<text
+		<StyledText
 			x={labelX}
 			y={labelY}
 			fill="#555555" // Font color
@@ -65,7 +66,7 @@ const PositionLabelComponent: React.FC<PositionLabelProps> = ({
 			textAnchor="middle"
 		>
 			{`(${Math.round(left)}, ${Math.round(top)})`}
-		</text>
+		</StyledText>
 	);
 };
 

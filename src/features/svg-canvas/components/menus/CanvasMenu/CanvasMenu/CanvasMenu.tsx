@@ -20,7 +20,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 	onAddDiagramByType,
 }) => {
 	return (
-		<CanvasMenuDiv>
+		<CanvasMenuDiv draggable={false}>
 			<CanvasMenuItem
 				onClick={() =>
 					onAddDiagramByType?.({

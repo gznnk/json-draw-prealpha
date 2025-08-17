@@ -81,6 +81,7 @@ export const ViewportOverlay = styled.div`
     bottom: 0;
     overflow: hidden;
     pointer-events: none;
+    user-select: none;
 `;
 
 /**
