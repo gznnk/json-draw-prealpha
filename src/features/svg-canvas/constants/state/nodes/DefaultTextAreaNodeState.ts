@@ -3,7 +3,7 @@ import { DefaultStrokableState } from "../core/DefaultStrokableState";
 import { DefaultFillableState } from "../core/DefaultFillableState";
 import { DefaultTextableState } from "../core/DefaultTextableState";
 import { DefaultTransformativeState } from "../core/DefaultTransformativeState";
-import { DefaultConnectableState } from "../core/DefaultConnectableState";
+import { DefaultConnectableState } from "../shapes/DefaultConnectableState";
 import { TextAreaNodeDefaultData } from "../../data/nodes/TextAreaNodeDefaultData";
 import type { TextAreaNodeState } from "../../../types/state/nodes/TextAreaNodeState";
 

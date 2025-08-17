@@ -3,7 +3,7 @@ import { DefaultStrokableState } from "../core/DefaultStrokableState";
 import { DefaultFillableState } from "../core/DefaultFillableState";
 import { DefaultTextableState } from "../core/DefaultTextableState";
 import { DefaultTransformativeState } from "../core/DefaultTransformativeState";
-import { DefaultConnectableState } from "../core/DefaultConnectableState";
+import { DefaultConnectableState } from "../shapes/DefaultConnectableState";
 import { LLMNodeDefaultData } from "../../data/nodes/LLMNodeDefaultData";
 import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
 
@@ -15,4 +15,4 @@ export const DefaultLLMNodeState = {
 	...DefaultTextableState,
 	...DefaultTransformativeState,
 	...DefaultConnectableState,
-} as const satisfies LLMNodeState;;
+} as const satisfies LLMNodeState;
