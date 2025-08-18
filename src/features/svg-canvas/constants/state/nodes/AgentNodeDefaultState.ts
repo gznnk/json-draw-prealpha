@@ -1,18 +1,19 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { StrokableDefaultState } from "../core/StrokableDefaultState";
-import { FillableDefaultState } from "../core/FillableDefaultState";
-import { TextableDefaultState } from "../core/TextableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ConnectableDefaultState } from "../shapes/ConnectableDefaultState";
-import { AgentNodeDefaultData } from "../../data/nodes/AgentNodeDefaultData";
+// Import types.
+import { AgentNodeFeatures } from "../../../types/data/nodes/AgentNodeData";
 import type { AgentNodeState } from "../../../types/state/nodes/AgentNodeState";
 
-export const AgentNodeDefaultState = {
-	...AgentNodeDefaultData,
-	...SelectableDefaultState,
-	...StrokableDefaultState,
-	...FillableDefaultState,
-	...TextableDefaultState,
-	...TransformativeDefaultState,
-	...ConnectableDefaultState,
-} as const satisfies AgentNodeState;
+// Import constants.
+import { AgentNodeDefaultData } from "../../data/nodes/AgentNodeDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "../shapes/CreateDefaultState";
+
+/**
+ * Default agent node state template.
+ */
+export const AgentNodeDefaultState = CreateDefaultState<AgentNodeState>({
+	type: "AgentNode",
+	options: AgentNodeFeatures,
+	baseData: AgentNodeDefaultData,
+	properties: {},
+});

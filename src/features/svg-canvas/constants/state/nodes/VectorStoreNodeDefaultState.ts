@@ -1,18 +1,20 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { StrokableDefaultState } from "../core/StrokableDefaultState";
-import { FillableDefaultState } from "../core/FillableDefaultState";
-import { TextableDefaultState } from "../core/TextableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ConnectableDefaultState } from "../shapes/ConnectableDefaultState";
-import { VectorStoreNodeDefaultData } from "../../data/nodes/VectorStoreNodeDefaultData";
+// Import types.
+import { VectorStoreNodeFeatures } from "../../../types/data/nodes/VectorStoreNodeData";
 import type { VectorStoreNodeState } from "../../../types/state/nodes/VectorStoreNodeState";
 
-export const VectorStoreNodeDefaultState = {
-	...VectorStoreNodeDefaultData,
-	...SelectableDefaultState,
-	...StrokableDefaultState,
-	...FillableDefaultState,
-	...TextableDefaultState,
-	...TransformativeDefaultState,
-	...ConnectableDefaultState,
-} as const satisfies VectorStoreNodeState;
+// Import constants.
+import { VectorStoreNodeDefaultData } from "../../data/nodes/VectorStoreNodeDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "../shapes/CreateDefaultState";
+
+/**
+ * Default vector store node state template.
+ */
+export const VectorStoreNodeDefaultState =
+	CreateDefaultState<VectorStoreNodeState>({
+		type: "VectorStoreNode",
+		options: VectorStoreNodeFeatures,
+		baseData: VectorStoreNodeDefaultData,
+		properties: {},
+	});

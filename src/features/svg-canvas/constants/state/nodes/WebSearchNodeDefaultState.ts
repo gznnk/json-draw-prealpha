@@ -1,18 +1,21 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { StrokableDefaultState } from "../core/StrokableDefaultState";
-import { FillableDefaultState } from "../core/FillableDefaultState";
-import { TextableDefaultState } from "../core/TextableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ConnectableDefaultState } from "../shapes/ConnectableDefaultState";
-import { WebSearchNodeDefaultData } from "../../data/nodes/WebSearchNodeDefaultData";
+// Import types.
+import { WebSearchNodeFeatures } from "../../../types/data/nodes/WebSearchNodeData";
 import type { WebSearchNodeState } from "../../../types/state/nodes/WebSearchNodeState";
 
-export const WebSearchNodeDefaultState = {
-	...WebSearchNodeDefaultData,
-	...SelectableDefaultState,
-	...StrokableDefaultState,
-	...FillableDefaultState,
-	...TextableDefaultState,
-	...TransformativeDefaultState,
-	...ConnectableDefaultState,
-} as const satisfies WebSearchNodeState;
+// Import constants.
+import { WebSearchNodeDefaultData } from "../../data/nodes/WebSearchNodeDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "../shapes/CreateDefaultState";
+
+/**
+ * Default web search node state template.
+ */
+export const WebSearchNodeDefaultState = CreateDefaultState<WebSearchNodeState>(
+	{
+		type: "WebSearchNode",
+		options: WebSearchNodeFeatures,
+		baseData: WebSearchNodeDefaultData,
+		properties: {},
+	},
+);

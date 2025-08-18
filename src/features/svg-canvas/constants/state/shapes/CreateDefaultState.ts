@@ -1,4 +1,8 @@
+// Import types.
+import type { DiagramType } from "../../../types/core/DiagramType";
 import type { DiagramFeatures } from "../../../types/core/DiagramFeatures";
+
+// Import constants.
 import { DiagramBaseDefaultState } from "../core/DiagramBaseDefaultState";
 import { SelectableDefaultState } from "../core/SelectableDefaultState";
 import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
@@ -9,88 +13,34 @@ import { FillableDefaultState } from "../core/FillableDefaultState";
 import { TextableDefaultState } from "../core/TextableDefaultState";
 
 /**
- * Configuration for creating shape default state.
- */
-export type DefaultStateConfig<P extends Record<string, unknown>> = {
-  /** Shape type name (e.g., "Rectangle", "Circle") */
-  type: string;
-  /** Feature options for the shape */
-  options: DiagramFeatures;
-  /** Additional properties specific to this shape */
-  properties: P;
-  /** Base data properties to include in state */
-  baseData: Record<string, unknown>;
-};
-
-/**
  * Creates default state for a shape by combining feature-specific defaults.
- * This helper function simplifies the process of defining new shape default state
- * by automatically combining the appropriate default state objects based on the feature options.
- * 
- * @param config - Configuration for the shape state
+ * Uses conditional types to include only the required defaults based on features.
+ *
+ * @param config - Configuration for the shape
  * @returns Default state object for the shape
- * 
- * @example
- * ```typescript
- * export const CircleDefaultState = CreateDefaultState({
- *   type: "Circle",
- *   options: {
- *     selectable: true,
- *     transformative: true,
- *     connectable: true,
- *     strokable: true,
- *     fillable: true,
- *   },
- *   properties: {
- *     radius: 50,
- *   },
- *   baseData: CircleDefaultData,
- * });
- * ```
  */
-export const CreateDefaultState = <P extends Record<string, unknown>>(
-  config: DefaultStateConfig<P>
-) => {
-  const { type, options, properties, baseData } = config;
+export function CreateDefaultState<T>(config: {
+	type: DiagramType;
+	options: DiagramFeatures;
+	baseData: Record<string, unknown>;
+	properties?: Record<string, unknown>;
+}): T {
+	const { type, options, baseData, properties } = config;
 
-  // Start with base data and base state
-  let defaultState: Record<string, unknown> = {
-    ...baseData,
-    ...DiagramBaseDefaultState,
-  };
+	// Build default state by combining base data and state with feature-specific defaults
+	const result = {
+		...baseData,
+		...DiagramBaseDefaultState,
+		...(options.selectable ? SelectableDefaultState : {}),
+		...(options.transformative ? TransformativeDefaultState : {}),
+		...(options.itemable ? ItemableDefaultState : {}),
+		...(options.connectable ? ConnectableDefaultState : {}),
+		...(options.strokable ? StrokableDefaultState : {}),
+		...(options.fillable ? FillableDefaultState : {}),
+		...(options.textable ? TextableDefaultState : {}),
+		...(properties ? properties : {}),
+		type,
+	} as const;
 
-  if (options.selectable) {
-    defaultState = { ...defaultState, ...SelectableDefaultState };
-  }
-
-  if (options.transformative) {
-    defaultState = { ...defaultState, ...TransformativeDefaultState };
-  }
-
-  if (options.itemable) {
-    defaultState = { ...defaultState, ...ItemableDefaultState };
-  }
-
-  if (options.connectable) {
-    defaultState = { ...defaultState, ...ConnectableDefaultState };
-  }
-
-  if (options.strokable) {
-    defaultState = { ...defaultState, ...StrokableDefaultState };
-  }
-
-  if (options.fillable) {
-    defaultState = { ...defaultState, ...FillableDefaultState };
-  }
-
-  if (options.textable) {
-    defaultState = { ...defaultState, ...TextableDefaultState };
-  }
-
-  // Add shape-specific properties (override if needed)
-  return {
-    ...defaultState,
-    ...properties,
-    type,
-  } as const;
-};
+	return result as T;
+}

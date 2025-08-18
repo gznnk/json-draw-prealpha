@@ -1,7 +1,19 @@
+// Import types.
+import { HubNodeFeatures } from "../../../types/data/nodes/HubNodeData";
 import type { HubNodeState } from "../../../types/state/nodes/HubNodeState";
-import { RectangleDefaultState } from "../shapes/RectangleDefaultState";
 
-export const HubNodeDefaultState = {
-	...RectangleDefaultState,
+// Import constants.
+import { HubNodeDefaultData } from "../../data/nodes/HubNodeDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "../shapes/CreateDefaultState";
+
+/**
+ * Default hub node state template.
+ */
+export const HubNodeDefaultState = CreateDefaultState<HubNodeState>({
 	type: "HubNode",
-} as const satisfies HubNodeState;
+	options: HubNodeFeatures,
+	baseData: HubNodeDefaultData,
+	properties: {},
+});

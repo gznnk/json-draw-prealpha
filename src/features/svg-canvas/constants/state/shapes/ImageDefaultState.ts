@@ -1,10 +1,15 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ImageDefaultData } from "../../data/shapes/ImageDefaultData";
+// Import types.
 import type { ImageState } from "../../../types/state/shapes/ImageState";
+import { ImageFeatures } from "../../../types/data/shapes/ImageData";
 
-export const ImageDefaultState = {
-	...ImageDefaultData,
-	...SelectableDefaultState,
-	...TransformativeDefaultState,
-} as const satisfies ImageState;;
+// Import constants.
+import { ImageDefaultData } from "../../data/shapes/ImageDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "./CreateDefaultState";
+
+export const ImageDefaultState = CreateDefaultState<ImageState>({
+	type: "Image",
+	options: ImageFeatures,
+	baseData: ImageDefaultData,
+});

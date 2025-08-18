@@ -1,18 +1,19 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { StrokableDefaultState } from "../core/StrokableDefaultState";
-import { FillableDefaultState } from "../core/FillableDefaultState";
-import { TextableDefaultState } from "../core/TextableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ConnectableDefaultState } from "../shapes/ConnectableDefaultState";
-import { TextAreaNodeDefaultData } from "../../data/nodes/TextAreaNodeDefaultData";
+// Import types.
+import { TextAreaNodeFeatures } from "../../../types/data/nodes/TextAreaNodeData";
 import type { TextAreaNodeState } from "../../../types/state/nodes/TextAreaNodeState";
 
-export const TextAreaNodeDefaultState = {
-	...TextAreaNodeDefaultData,
-	...SelectableDefaultState,
-	...StrokableDefaultState,
-	...FillableDefaultState,
-	...TextableDefaultState,
-	...TransformativeDefaultState,
-	...ConnectableDefaultState,
-} as const satisfies TextAreaNodeState;
+// Import constants.
+import { TextAreaNodeDefaultData } from "../../data/nodes/TextAreaNodeDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "../shapes/CreateDefaultState";
+
+/**
+ * Default text area node state template.
+ */
+export const TextAreaNodeDefaultState = CreateDefaultState<TextAreaNodeState>({
+	type: "TextAreaNode",
+	options: TextAreaNodeFeatures,
+	baseData: TextAreaNodeDefaultData,
+	properties: {},
+});

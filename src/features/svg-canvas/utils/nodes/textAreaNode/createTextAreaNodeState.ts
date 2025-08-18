@@ -19,22 +19,10 @@ export const createTextAreaNodeState = ({
 	y: number;
 }) => {
 	const state = createRectangleState({
+		...TextAreaNodeDefaultState,
 		x,
 		y,
-		width: TextAreaNodeDefaultState.width,
-		height: TextAreaNodeDefaultState.height,
-		radius: TextAreaNodeDefaultState.radius,
-		stroke: TextAreaNodeDefaultState.stroke,
-		strokeWidth: TextAreaNodeDefaultState.strokeWidth,
-		fill: TextAreaNodeDefaultState.fill,
-		textType: TextAreaNodeDefaultState.textType,
-		textAlign: TextAreaNodeDefaultState.textAlign,
-		verticalAlign: TextAreaNodeDefaultState.verticalAlign,
-		fontSize: TextAreaNodeDefaultState.fontSize,
-		fontColor: TextAreaNodeDefaultState.fontColor,
 	});
-
-	state.type = "TextAreaNode";
 
 	return state;
 };

@@ -1,14 +1,15 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { TextableDefaultState } from "../core/TextableDefaultState";
-import { ConnectableDefaultState } from "./ConnectableDefaultState";
+// Import types.
+import { EllipseFeatures } from "../../../types/data/shapes/EllipseData";
 import { EllipseDefaultData } from "../../data/shapes/EllipseDefaultData";
+
+// Import constants.
 import type { EllipseState } from "../../../types/state/shapes/EllipseState";
 
-export const EllipseDefaultState = {
-	...EllipseDefaultData,
-	...SelectableDefaultState,
-	...TransformativeDefaultState,
-	...TextableDefaultState,
-	...ConnectableDefaultState,
-} as const satisfies EllipseState;
+// Import helpers.
+import { CreateDefaultState } from "./CreateDefaultState";
+
+export const EllipseDefaultState = CreateDefaultState<EllipseState>({
+	type: "Ellipse",
+	options: EllipseFeatures,
+	baseData: EllipseDefaultData,
+});

@@ -4,14 +4,12 @@ import type { TextableType } from "../../../types/core/TextableType";
 import type { VerticalAlign } from "../../../types/core/VerticalAlign";
 import type { RectangleState } from "../../../types/state/shapes/RectangleState";
 
+// Import constants.
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";
-
-// Import related functions.
 import { createRectangleConnectPoint } from "./createRectangleConnectPoint";
-
-// Import constants from Rectangle component.
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
 
 /**
  * Creates rectangle state with the specified properties.

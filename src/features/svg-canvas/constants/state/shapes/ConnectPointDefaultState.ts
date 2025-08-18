@@ -5,4 +5,4 @@ import type { ConnectPointState } from "../../../types/state/shapes/ConnectPoint
 export const ConnectPointDefaultState = {
 	...ConnectPointDefaultData,
 	...SelectableDefaultState,
-} as const satisfies ConnectPointState;;
+} as const satisfies ConnectPointState;

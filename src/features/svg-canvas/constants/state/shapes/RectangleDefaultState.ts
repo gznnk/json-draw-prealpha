@@ -1,14 +1,18 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { TextableDefaultState } from "../core/TextableDefaultState";
-import { ConnectableDefaultState } from "./ConnectableDefaultState";
-import { RectangleDefaultData } from "../../data/shapes/RectangleDefaultData";
+// Import types.
 import type { RectangleState } from "../../../types/state/shapes/RectangleState";
+import { RectangleFeatures } from "../../../types/data/shapes/RectangleData";
 
-export const RectangleDefaultState = {
-	...RectangleDefaultData,
-	...SelectableDefaultState,
-	...TransformativeDefaultState,
-	...TextableDefaultState,
-	...ConnectableDefaultState,
-} as const satisfies RectangleState;
+// Import constants.
+import { RectangleDefaultData } from "../../data/shapes/RectangleDefaultData";
+
+// Import helpers.
+import { CreateDefaultState } from "./CreateDefaultState";
+
+/**
+ * Default rectangle state template.
+ */
+export const RectangleDefaultState = CreateDefaultState<RectangleState>({
+	type: "Rectangle",
+	options: RectangleFeatures,
+	baseData: RectangleDefaultData,
+});

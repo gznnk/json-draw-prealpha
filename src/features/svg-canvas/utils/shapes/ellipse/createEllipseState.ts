@@ -4,14 +4,12 @@ import type { TextAlign } from "../../../types/core/TextAlign";
 import type { VerticalAlign } from "../../../types/core/VerticalAlign";
 import type { EllipseState } from "../../../types/state/shapes/EllipseState";
 
+// Import constants.
+import { EllipseDefaultState } from "../../../constants/state/shapes/EllipseDefaultState";
+
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";
-
-// Import related functions.
 import { createEllipseConnectPoint } from "./createEllipseConnectPoint";
-
-// Import constants from Ellipse component.
-import { EllipseDefaultState } from "../../../constants/state/shapes/EllipseDefaultState";
 
 /**
  * Creates ellipse state with the specified properties.

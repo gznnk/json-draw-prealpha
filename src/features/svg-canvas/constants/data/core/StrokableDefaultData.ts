@@ -5,6 +5,6 @@ import type { StrokableData } from "../../../types/data/core/StrokableData";
  * Used for State to Data conversion mapping.
  */
 export const StrokableDefaultData = {
-	stroke: "transparent",
-	strokeWidth: "0",
+	stroke: "#000000",
+	strokeWidth: "1px",
 } as const satisfies StrokableData;

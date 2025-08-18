@@ -12,18 +12,6 @@ import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
 import { ConnectableDefaultData } from "./ConnectableDefaultData";
 
 /**
- * Configuration for creating shape default data.
- */
-export type DefaultDataConfig<P extends Record<string, unknown>> = {
-	/** Shape type name (e.g., "Rectangle", "Circle") */
-	type: string;
-	/** Feature options for the shape */
-	options: DiagramFeatures;
-	/** Additional properties specific to this shape */
-	properties: P;
-};
-
-/**
  * Creates default data for a shape by combining feature-specific defaults.
  * Uses conditional types to include only the required defaults based on features.
  *

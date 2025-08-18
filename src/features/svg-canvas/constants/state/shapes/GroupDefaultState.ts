@@ -1,10 +1,15 @@
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { GroupDefaultData } from "../../data/shapes/GroupDefaultData";
+// Import types.
+import { GroupFeatures } from "../../../types/data/shapes/GroupData";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 
-export const GroupDefaultState = {
-	...GroupDefaultData,
-	...SelectableDefaultState,
-	...TransformativeDefaultState,
-} as const satisfies GroupState;;
+// Import constants.
+import { GroupDefaultData } from "../../data/shapes/GroupDefaultData";
+
+// Import helpers
+import { CreateDefaultState } from "./CreateDefaultState";
+
+export const GroupDefaultState = CreateDefaultState<GroupState>({
+	type: "Group",
+	options: GroupFeatures,
+	baseData: GroupDefaultData,
+});
