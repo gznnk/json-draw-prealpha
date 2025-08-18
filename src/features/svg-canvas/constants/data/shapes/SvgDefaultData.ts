@@ -1,16 +1,20 @@
+// Import types.
 import type { SvgData } from "../../../types/data/shapes/SvgData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
+import { SvgFeatures } from "../../../types/data/shapes/SvgData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default SVG data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper.
  */
-export const SvgDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
+export const SvgDefaultData = CreateDefaultData<SvgData>({
 	type: "Svg",
-	initialWidth: 100,
-	initialHeight: 100,
-	svgText: "",
-} as const satisfies SvgData;
+	options: SvgFeatures,
+	properties: {
+		initialWidth: 100,
+		initialHeight: 100,
+		svgText: "",
+	},
+});

@@ -1,14 +1,18 @@
+// Import types.
 import type { ImageData } from "../../../types/data/shapes/ImageData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
+import { ImageFeatures } from "../../../types/data/shapes/ImageData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default image data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper.
  */
-export const ImageDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
+export const ImageDefaultData = CreateDefaultData<ImageData>({
 	type: "Image",
-	base64Data: "",
-} as const satisfies ImageData;
+	options: ImageFeatures,
+	properties: {
+		base64Data: "",
+	},
+});

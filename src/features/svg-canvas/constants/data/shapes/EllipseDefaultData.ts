@@ -1,21 +1,15 @@
+// Import types.
 import type { EllipseData } from "../../../types/data/shapes/EllipseData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ConnectableDefaultData } from "./ConnectableDefaultData";
-import { StrokableDefaultData } from "../core/StrokableDefaultData";
-import { FillableDefaultData } from "../core/FillableDefaultData";
-import { TextableDefaultData } from "../core/TextableDefaultData";
+import { EllipseFeatures } from "../../../types/data/shapes/EllipseData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default ellipse data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper.
  */
-export const EllipseDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
-	...ConnectableDefaultData,
-	...StrokableDefaultData,
-	...FillableDefaultData,
-	...TextableDefaultData,
+export const EllipseDefaultData = CreateDefaultData<EllipseData>({
 	type: "Ellipse",
-} as const satisfies EllipseData;
+	options: EllipseFeatures,
+});

@@ -1,15 +1,15 @@
+// Import types.
 import type { GroupData } from "../../../types/data/shapes/GroupData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ItemableDefaultData } from "../core/ItemableDefaultData";
+import { GroupFeatures } from "../../../types/data/shapes/GroupData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default group data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper.
  */
-export const GroupDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
-	...ItemableDefaultData,
+export const GroupDefaultData = CreateDefaultData<GroupData>({
 	type: "Group",
-} as const satisfies GroupData;
+	options: GroupFeatures,
+});

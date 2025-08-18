@@ -1,22 +1,18 @@
+// Import types.
 import type { RectangleData } from "../../../types/data/shapes/RectangleData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ConnectableDefaultData } from "./ConnectableDefaultData";
-import { StrokableDefaultData } from "../core/StrokableDefaultData";
-import { FillableDefaultData } from "../core/FillableDefaultData";
-import { TextableDefaultData } from "../core/TextableDefaultData";
+import { RectangleFeatures } from "../../../types/data/shapes/RectangleData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default rectangle data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper with explicit typing.
  */
-export const RectangleDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
-	...ConnectableDefaultData,
-	...StrokableDefaultData,
-	...FillableDefaultData,
-	...TextableDefaultData,
+export const RectangleDefaultData = CreateDefaultData<RectangleData>({
 	type: "Rectangle",
-	radius: 0,
-} as const satisfies RectangleData;
+	options: RectangleFeatures,
+	properties: {
+		radius: 0,
+	},
+});

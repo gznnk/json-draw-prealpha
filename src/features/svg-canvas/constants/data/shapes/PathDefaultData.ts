@@ -1,18 +1,18 @@
+// Import types.
 import type { PathData } from "../../../types/data/shapes/PathData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ItemableDefaultData } from "../core/ItemableDefaultData";
-import { StrokableDefaultData } from "../core/StrokableDefaultData";
+import { PathFeatures } from "../../../types/data/shapes/PathData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default path data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper.
  */
-export const PathDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
-	...ItemableDefaultData,
-	...StrokableDefaultData,
+export const PathDefaultData = CreateDefaultData<PathData>({
 	type: "Path",
-	pathType: "Linear",
-} as const satisfies PathData;
+	options: PathFeatures,
+	properties: {
+		pathType: "Linear",
+	},
+});

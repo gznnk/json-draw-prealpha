@@ -1,24 +1,24 @@
+// Import types.
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
-import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
-import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ItemableDefaultData } from "../core/ItemableDefaultData";
-import { StrokableDefaultData } from "../core/StrokableDefaultData";
+import { ConnectLineFeatures } from "../../../types/data/shapes/ConnectLineData";
+
+// Import helpers.
+import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default connect line data template.
- * Used for State to Data conversion mapping.
+ * Generated using Features definition and CreateDefaultData helper.
  */
-export const ConnectLineDefaultData = {
-	...DiagramBaseDefaultData,
-	...TransformativeDefaultData,
-	...ItemableDefaultData,
-	...StrokableDefaultData,
+export const ConnectLineDefaultData = CreateDefaultData<ConnectLineData>({
 	type: "ConnectLine",
-	pathType: "Linear",
-	stroke: "#002766",
-	strokeWidth: "2px",
-	startOwnerId: "",
-	endOwnerId: "",
-	autoRouting: true,
-	endArrowHead: "Circle",
-} as const satisfies ConnectLineData;
+	options: ConnectLineFeatures,
+	properties: {
+		pathType: "Linear",
+		stroke: "#002766",
+		strokeWidth: "2px",
+		startOwnerId: "",
+		endOwnerId: "",
+		autoRouting: true,
+		endArrowHead: "Circle",
+	},
+});
