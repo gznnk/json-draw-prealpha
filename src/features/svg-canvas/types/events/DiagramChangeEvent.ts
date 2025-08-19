@@ -1,6 +1,11 @@
 // Import types.
+import type { Diagram } from "../state/catalog/Diagram";
 import type { EventPhase } from "./EventPhase";
-import type { DiagramChangeData } from "./DiagramChangeData";
+
+/**
+ * Data structure for diagram change events
+ */
+export type DiagramChangeData = Partial<Diagram>;
 
 /**
  * Event fired when a diagram's properties are changed

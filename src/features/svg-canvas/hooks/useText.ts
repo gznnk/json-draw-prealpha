@@ -1,7 +1,7 @@
 // Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
+// Import types.
 import type { DiagramTextChangeEvent } from "../types/events/DiagramTextChangeEvent";
 
 // Import utils.
