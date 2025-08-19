@@ -1,31 +1,16 @@
 // Import types.
-import type { TextableType } from "../../../../types/core/TextableType";
-import type { TextAlign } from "../../../../types/core/TextAlign";
-import type { VerticalAlign } from "../../../../types/core/VerticalAlign";
+import type { Shape } from "../../../../types/core/Shape";
+import type { TextableData } from "../../../../types/data/core/TextableData";
 import type { DiagramTextChangeEvent } from "../../../../types/events/DiagramTextChangeEvent";
 
 /**
  * Type for the state of the TextEditor.
  */
-export type TextEditorState = {
-	id: string;
-	text: string;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	scaleX: number;
-	scaleY: number;
-	rotation: number;
-	textType: TextableType;
-	textAlign: TextAlign;
-	verticalAlign: VerticalAlign;
-	fontColor: string;
-	fontSize: number;
-	fontFamily: string;
-	fontWeight: string;
-	isActive: boolean;
-};
+export type TextEditorState = Shape &
+	TextableData & {
+		id: string;
+		isActive: boolean;
+	};
 
 /**
  * Props for the TextEditor component.
