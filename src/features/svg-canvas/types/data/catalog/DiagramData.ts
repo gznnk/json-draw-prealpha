@@ -9,6 +9,7 @@ import type { PathData } from "../shapes/PathData";
 import type { PathPointData } from "../shapes/PathPointData";
 import type { RectangleData } from "../shapes/RectangleData";
 import type { SvgData } from "../shapes/SvgData";
+import type { TextData } from "../shapes/TextData";
 import type { ButtonData } from "../diagrams/ButtonData";
 
 /**
@@ -26,6 +27,7 @@ export type DiagramData =
 	| PathPointData
 	| RectangleData
 	| SvgData
+	| TextData
 	// Diagrams
 	| ButtonData
 	// Nodes

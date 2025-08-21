@@ -9,6 +9,7 @@ import type { PathPointState } from "../shapes/PathPointState";
 import type { PathState } from "../shapes/PathState";
 import type { RectangleState } from "../shapes/RectangleState";
 import type { SvgState } from "../shapes/SvgState";
+import type { TextState } from "../shapes/TextState";
 import type { ButtonState } from "../diagrams/ButtonState";
 
 /**
@@ -26,6 +27,7 @@ export type Diagram =
 	| PathPointState
 	| RectangleState
 	| SvgState
+	| TextState
 	// Diagrams
 	| ButtonState
 	// Nodes

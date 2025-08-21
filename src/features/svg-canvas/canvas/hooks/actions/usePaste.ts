@@ -15,6 +15,7 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
+import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 
@@ -87,17 +88,23 @@ const setSelectionState = (
 				// Only set isSelected to true for top-level items
 				// This ensures only top-level groups are selected in multi-select mode
 				newItem.isSelected = true;
-				newItem.showTransformControls = true;
+				if (isTransformativeState(newItem)) {
+					newItem.showTransformControls = true;
+				}
 			} else {
 				// Child elements are not selected
 				newItem.isSelected = false;
-				newItem.showTransformControls = false;
+				if (isTransformativeState(newItem)) {
+					newItem.showTransformControls = false;
+				}
 			}
 		} else {
 			// For single selection mode
 			// Only set isSelected to true if it's a top-level item
 			newItem.isSelected = isTopLevel;
-			newItem.showTransformControls = isTopLevel;
+			if (isTransformativeState(newItem)) {
+				newItem.showTransformControls = isTopLevel;
+			}
 		}
 	}
 

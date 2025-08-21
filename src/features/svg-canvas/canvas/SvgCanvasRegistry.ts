@@ -14,6 +14,7 @@ import { Image } from "../components/shapes/Image";
 import { Path, PathPoint } from "../components/shapes/Path";
 import { Rectangle } from "../components/shapes/Rectangle";
 import { Svg } from "../components/shapes/Svg";
+import { Text } from "../components/shapes/Text";
 
 // Import diagram components
 import { Button } from "../components/diagrams/Button";
@@ -28,6 +29,7 @@ import { PathMinimap } from "../components/shapes/Path";
 import { PathPointMinimap } from "../components/shapes/Path/PathPoint";
 import { RectangleMinimap } from "../components/shapes/Rectangle";
 import { SvgMinimap } from "../components/shapes/Svg";
+import { TextMinimap } from "../components/shapes/Text";
 
 // Import diagram minimap components
 import { ButtonMinimap } from "../components/diagrams/Button";
@@ -73,6 +75,7 @@ import { createEllipseState } from "../utils/shapes/ellipse/createEllipseState";
 import { createImageState } from "../utils/shapes/image/createImageState";
 import { createPathState } from "../utils/shapes/path/createPathState";
 import { createRectangleState } from "../utils/shapes/rectangle/createRectangleState";
+import { createTextState } from "../utils/shapes/text/createTextState";
 import { createButtonState } from "../utils/diagrams/button/createButtonState";
 
 // Import export functions
@@ -98,6 +101,7 @@ import { pathPointStateToData } from "../utils/shapes/path/mapPathPointStateToDa
 import { pathStateToData } from "../utils/shapes/path/mapPathStateToData";
 import { rectangleStateToData } from "../utils/shapes/rectangle/mapRectangleStateToData";
 import { svgStateToData } from "../utils/shapes/svg/mapSvgStateToData";
+import { textStateToData } from "../utils/shapes/text/mapTextStateToData";
 import { mapButtonStateToData } from "../utils/diagrams/button/mapButtonStateToData";
 
 // Import data to state mapping functions
@@ -119,6 +123,7 @@ import { mapPathDataToState } from "../utils/shapes/path/mapPathDataToState";
 import { mapPathPointDataToState } from "../utils/shapes/path/mapPathPointDataToState";
 import { mapRectangleDataToState } from "../utils/shapes/rectangle/mapRectangleDataToState";
 import { mapSvgDataToState } from "../utils/shapes/svg/mapSvgDataToState";
+import { mapTextDataToState } from "../utils/shapes/text/mapTextDataToState";
 import { mapButtonDataToState } from "../utils/diagrams/button/mapButtonDataToState";
 
 /**
@@ -139,6 +144,17 @@ export const initializeSvgCanvasDiagrams = (): void => {
 		exportFunction: undefined,
 		stateToDataMapper: rectangleStateToData as StateToDataMapper,
 		dataToStateMapper: mapRectangleDataToState as DataToStateMapper,
+	});
+
+	DiagramRegistry.register({
+		type: "Text",
+		component: Text,
+		minimapComponent: TextMinimap,
+		connectPointCalculator: () => [],
+		createFunction: createTextState,
+		exportFunction: undefined,
+		stateToDataMapper: textStateToData as StateToDataMapper,
+		dataToStateMapper: mapTextDataToState as DataToStateMapper,
 	});
 
 	DiagramRegistry.register({
