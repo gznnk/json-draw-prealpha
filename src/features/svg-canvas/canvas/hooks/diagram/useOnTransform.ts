@@ -317,10 +317,8 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				if (e.eventPhase === "Ended") {
 					// Add history and get updated state
 					newState = addHistory(e.eventId, newState);
-				}
 
-				// Clean up the stored items at the end of transform
-				if (e.eventPhase === "Ended") {
+					// Clean up the stored items at the end of transform
 					startCanvasState.current = undefined;
 					initialItemsMap.current.clear();
 					multiSelectedItemIds.current.clear();

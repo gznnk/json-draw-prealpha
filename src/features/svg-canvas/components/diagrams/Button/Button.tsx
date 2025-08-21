@@ -94,6 +94,24 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({
 		id,
+		// TODO: 例として書いてるだけで不要なので消す
+		attributes: {
+			x,
+			y,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+			text,
+			textType,
+			fontColor,
+			fontSize,
+			fontFamily,
+			fontWeight,
+			textAlign,
+			verticalAlign,
+		},
 		isSelected,
 		isTextEditEnabled,
 		onTextChange,
