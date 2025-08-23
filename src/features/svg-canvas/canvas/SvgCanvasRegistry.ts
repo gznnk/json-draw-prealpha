@@ -1,131 +1,31 @@
 // Import registry
 import { DiagramRegistry } from "../registry";
-import type {
-	DataToStateMapper,
-	StateToDataMapper,
-} from "../registry/DiagramDefinition";
 
-// Import shape components and their functions
-import { ConnectLine } from "../components/shapes/ConnectLine";
-import { ConnectPoint } from "../components/shapes/ConnectPoint";
-import { Ellipse } from "../components/shapes/Ellipse";
-import { Group } from "../components/shapes/Group";
-import { Image } from "../components/shapes/Image";
-import { Path, PathPoint } from "../components/shapes/Path";
-
-import { Svg } from "../components/shapes/Svg";
-import { Text } from "../components/shapes/Text";
-
-// Import diagram components
-import { Button } from "../components/diagrams/Button";
-
-// Import minimap shape components
-import { ConnectLineMinimap } from "../components/shapes/ConnectLine";
-import { ConnectPointMinimap } from "../components/shapes/ConnectPoint";
-import { EllipseMinimap } from "../components/shapes/Ellipse";
-import { GroupMinimap } from "../components/shapes/Group";
-import { ImageMinimap } from "../components/shapes/Image";
-import { PathMinimap } from "../components/shapes/Path";
-import { PathPointMinimap } from "../components/shapes/Path/PathPoint";
-
-import { SvgMinimap } from "../components/shapes/Svg";
-import { TextMinimap } from "../components/shapes/Text";
-
-// Import diagram minimap components
-import { ButtonMinimap } from "../components/diagrams/Button";
-
-// Import node components and their functions
-import { AgentNode } from "../components/nodes/AgentNode";
-import { HubNode } from "../components/nodes/HubNode";
-import { ImageGenNode } from "../components/nodes/ImageGenNode";
-import { LLMNode } from "../components/nodes/LLMNode";
-import { PageDesignNode } from "../components/nodes/PageDesignNode";
-import { SvgToDiagramNode } from "../components/nodes/SvgToDiagramNode";
-import { TextAreaNode } from "../components/nodes/TextAreaNode";
-import { VectorStoreNode } from "../components/nodes/VectorStoreNode";
-import { WebSearchNode } from "../components/nodes/WebSearchNode";
-
-// Import minimap node components
-import { AgentNodeMinimap } from "../components/nodes/AgentNode";
-import { HubNodeMinimap } from "../components/nodes/HubNode";
-import { ImageGenNodeMinimap } from "../components/nodes/ImageGenNode";
-import { LLMNodeMinimap } from "../components/nodes/LLMNode";
-import { PageDesignNodeMinimap } from "../components/nodes/PageDesignNode";
-import { SvgToDiagramNodeMinimap } from "../components/nodes/SvgToDiagramNode";
-import { TextAreaNodeMinimap } from "../components/nodes/TextAreaNode";
-import { VectorStoreNodeMinimap } from "../components/nodes/VectorStoreNode";
-import { WebSearchNodeMinimap } from "../components/nodes/WebSearchNode";
-
-// Import connect point calculators
-import { calcEllipseConnectPointPosition } from "../utils/shapes/ellipse/calcEllipseConnectPointPosition";
+// Import Atlas objects
+import { ConnectLineAtlas } from "../atlas/shapes/ConnectLineAtlas";
+import { ConnectPointAtlas } from "../atlas/shapes/ConnectPointAtlas";
+import { EllipseAtlas } from "../atlas/shapes/EllipseAtlas";
+import { GroupAtlas } from "../atlas/shapes/GroupAtlas";
+import { ImageAtlas } from "../atlas/shapes/ImageAtlas";
+import { PathAtlas } from "../atlas/shapes/PathAtlas";
+import { PathPointAtlas } from "../atlas/shapes/PathPointAtlas";
 import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
-import { calcRectangleConnectPointPosition } from "../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { calcButtonConnectPointPosition } from "../utils/diagrams/button/calcButtonConnectPointPosition";
+import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
+import { TextAtlas } from "../atlas/shapes/TextAtlas";
 
-// Import create functions
-import { createAgentNodeState } from "../utils/nodes/agentNode/createAgentNodeState";
-import { createHubNodeState } from "../utils/nodes/hubNode/createHubNodeState";
-import { createImageGenNodeState } from "../utils/nodes/imageGenNode/createImageGenNodeState";
-import { createLLMNodeState } from "../utils/nodes/llmNodeData/createLLMNodeState";
-import { createPageDesignNodeState } from "../utils/nodes/pageDesignNode/createPageDesignNodeState";
-import { createSvgToDiagramNodeState } from "../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeState";
-import { createTextAreaNodeState } from "../utils/nodes/textAreaNode/createTextAreaNodeState";
-import { createVectorStoreNodeState } from "../utils/nodes/vectorStoreNode/createVectorStoreNodeState";
-import { createWebSearchNodeState } from "../utils/nodes/webSearchNode/createWebSearchNodeState";
-import { createEllipseState } from "../utils/shapes/ellipse/createEllipseState";
-import { createImageState } from "../utils/shapes/image/createImageState";
-import { createPathState } from "../utils/shapes/path/createPathState";
+// Import Diagram Atlas objects
+import { ButtonAtlas } from "../atlas/diagrams/ButtonAtlas";
 
-import { createTextState } from "../utils/shapes/text/createTextState";
-import { createButtonState } from "../utils/diagrams/button/createButtonState";
-
-// Import export functions
-import { imageToBlob } from "../utils/shapes/image/imageToBlob";
-import { svgToBlob } from "../utils/shapes/svg/svgToBlob";
-
-// Import state to data mapping functions
-import { agentNodeStateToData } from "../utils/nodes/agentNode/mapAgentNodeStateToData";
-import { hubNodeStateToData } from "../utils/nodes/hubNode/mapHubNodeStateToData";
-import { imageGenNodeStateToData } from "../utils/nodes/imageGenNode/mapImageGenNodeStateToData";
-import { llmNodeStateToData } from "../utils/nodes/llmNodeData/mapLLMNodeStateToData";
-import { pageDesignNodeStateToData } from "../utils/nodes/pageDesignNode/mapPageDesignNodeStateToData";
-import { svgToDiagramNodeStateToData } from "../utils/nodes/svgToDiagramNode/mapSvgToDiagramNodeStateToData";
-import { textAreaNodeStateToData } from "../utils/nodes/textAreaNode/mapTextAreaNodeStateToData";
-import { vectorStoreNodeStateToData } from "../utils/nodes/vectorStoreNode/mapVectorStoreNodeStateToData";
-import { webSearchNodeStateToData } from "../utils/nodes/webSearchNode/mapWebSearchNodeStateToData";
-import { connectLineStateToData } from "../utils/shapes/connectLine/mapConnectLineStateToData";
-import { connectPointStateToData } from "../utils/shapes/connectPoint/mapConnectPointStateToData";
-import { ellipseStateToData } from "../utils/shapes/ellipse/mapEllipseStateToData";
-import { groupStateToData } from "../utils/shapes/group/mapGroupStateToData";
-import { imageStateToData } from "../utils/shapes/image/mapImageStateToData";
-import { pathPointStateToData } from "../utils/shapes/path/mapPathPointStateToData";
-import { pathStateToData } from "../utils/shapes/path/mapPathStateToData";
-
-import { svgStateToData } from "../utils/shapes/svg/mapSvgStateToData";
-import { textStateToData } from "../utils/shapes/text/mapTextStateToData";
-import { mapButtonStateToData } from "../utils/diagrams/button/mapButtonStateToData";
-
-// Import data to state mapping functions
-import { mapAgentNodeDataToState } from "../utils/nodes/agentNode/mapAgentNodeDataToState";
-import { mapHubNodeDataToState } from "../utils/nodes/hubNode/mapHubNodeDataToState";
-import { mapImageGenNodeDataToState } from "../utils/nodes/imageGenNode/mapImageGenNodeDataToState";
-import { mapLLMNodeDataToState } from "../utils/nodes/llmNodeData/mapLLMNodeDataToState";
-import { mapPageDesignNodeDataToState } from "../utils/nodes/pageDesignNode/mapPageDesignNodeDataToState";
-import { mapSvgToDiagramNodeDataToState } from "../utils/nodes/svgToDiagramNode/mapSvgToDiagramNodeDataToState";
-import { mapTextAreaNodeDataToState } from "../utils/nodes/textAreaNode/mapTextAreaNodeDataToState";
-import { mapVectorStoreNodeDataToState } from "../utils/nodes/vectorStoreNode/mapVectorStoreNodeDataToState";
-import { mapWebSearchNodeDataToState } from "../utils/nodes/webSearchNode/mapWebSearchNodeDataToState";
-import { mapConnectLineDataToState } from "../utils/shapes/connectLine/mapConnectLineDataToState";
-import { mapConnectPointDataToState } from "../utils/shapes/connectPoint/mapConnectPointDataToState";
-import { mapEllipseDataToState } from "../utils/shapes/ellipse/mapEllipseDataToState";
-import { mapGroupDataToState } from "../utils/shapes/group/mapGroupDataToState";
-import { mapImageDataToState } from "../utils/shapes/image/mapImageDataToState";
-import { mapPathDataToState } from "../utils/shapes/path/mapPathDataToState";
-import { mapPathPointDataToState } from "../utils/shapes/path/mapPathPointDataToState";
-
-import { mapSvgDataToState } from "../utils/shapes/svg/mapSvgDataToState";
-import { mapTextDataToState } from "../utils/shapes/text/mapTextDataToState";
-import { mapButtonDataToState } from "../utils/diagrams/button/mapButtonDataToState";
+// Import Node Atlas objects
+import { AgentNodeAtlas } from "../atlas/nodes/AgentNodeAtlas";
+import { HubNodeAtlas } from "../atlas/nodes/HubNodeAtlas";
+import { ImageGenNodeAtlas } from "../atlas/nodes/ImageGenNodeAtlas";
+import { LLMNodeAtlas } from "../atlas/nodes/LLMNodeAtlas";
+import { PageDesignNodeAtlas } from "../atlas/nodes/PageDesignNodeAtlas";
+import { SvgToDiagramNodeAtlas } from "../atlas/nodes/SvgToDiagramNodeAtlas";
+import { TextAreaNodeAtlas } from "../atlas/nodes/TextAreaNodeAtlas";
+import { VectorStoreNodeAtlas } from "../atlas/nodes/VectorStoreNodeAtlas";
+import { WebSearchNodeAtlas } from "../atlas/nodes/WebSearchNodeAtlas";
 
 /**
  * Initialize all diagram registrations for the SvgCanvas.
@@ -135,216 +35,35 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// Clear existing registrations to avoid duplicates
 	DiagramRegistry.clear();
 
-	// Register shape diagrams
+	// ============================================================================
+	// Shape Atlas Registration
+	// ============================================================================
+	DiagramRegistry.register(ConnectLineAtlas);
+	DiagramRegistry.register(ConnectPointAtlas);
+	DiagramRegistry.register(EllipseAtlas);
+	DiagramRegistry.register(GroupAtlas);
+	DiagramRegistry.register(ImageAtlas);
+	DiagramRegistry.register(PathAtlas);
+	DiagramRegistry.register(PathPointAtlas);
 	DiagramRegistry.register(RectangleAtlas);
+	DiagramRegistry.register(SvgAtlas);
+	DiagramRegistry.register(TextAtlas);
 
-	DiagramRegistry.register({
-		type: "Text",
-		component: Text,
-		minimapComponent: TextMinimap,
-		calcConnectPointPosition: () => [],
-		createState: createTextState,
-		export: undefined,
-		stateToData: textStateToData as StateToDataMapper,
-		dataToState: mapTextDataToState as DataToStateMapper,
-	});
+	// ============================================================================
+	// Diagram Atlas Registration
+	// ============================================================================
+	DiagramRegistry.register(ButtonAtlas);
 
-	DiagramRegistry.register({
-		type: "Button",
-		component: Button,
-		minimapComponent: ButtonMinimap,
-		calcConnectPointPosition: calcButtonConnectPointPosition,
-		createState: createButtonState,
-		export: undefined,
-		stateToData: mapButtonStateToData as StateToDataMapper,
-		dataToState: mapButtonDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "Ellipse",
-		component: Ellipse,
-		minimapComponent: EllipseMinimap,
-		calcConnectPointPosition: calcEllipseConnectPointPosition,
-		createState: createEllipseState,
-		export: undefined,
-		stateToData: ellipseStateToData as StateToDataMapper,
-		dataToState: mapEllipseDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "Image",
-		component: Image,
-		minimapComponent: ImageMinimap,
-		calcConnectPointPosition: () => [],
-		createState: createImageState,
-		export: imageToBlob,
-		stateToData: imageStateToData as StateToDataMapper,
-		dataToState: mapImageDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "Path",
-		component: Path,
-		minimapComponent: PathMinimap,
-		calcConnectPointPosition: () => [],
-		createState: createPathState,
-		export: undefined,
-		stateToData: pathStateToData as StateToDataMapper,
-		dataToState: mapPathDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "PathPoint",
-		component: PathPoint,
-		minimapComponent: PathPointMinimap,
-		calcConnectPointPosition: () => [],
-		createState: () => undefined,
-		export: undefined,
-		stateToData: pathPointStateToData as StateToDataMapper,
-		dataToState: mapPathPointDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "Svg",
-		component: Svg,
-		minimapComponent: SvgMinimap,
-		calcConnectPointPosition: () => [],
-		createState: () => undefined,
-		export: svgToBlob,
-		stateToData: svgStateToData as StateToDataMapper,
-		dataToState: mapSvgDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "ConnectLine",
-		component: ConnectLine,
-		minimapComponent: ConnectLineMinimap,
-		calcConnectPointPosition: () => [],
-		createState: () => undefined,
-		export: undefined,
-		stateToData: connectLineStateToData as StateToDataMapper,
-		dataToState: mapConnectLineDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "ConnectPoint",
-		component: ConnectPoint,
-		minimapComponent: ConnectPointMinimap,
-		calcConnectPointPosition: () => [],
-		createState: () => undefined,
-		export: undefined,
-		stateToData: connectPointStateToData as StateToDataMapper,
-		dataToState: mapConnectPointDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "Group",
-		component: Group,
-		minimapComponent: GroupMinimap,
-		calcConnectPointPosition: () => [],
-		createState: () => undefined,
-		export: undefined,
-		stateToData: groupStateToData as StateToDataMapper,
-		dataToState: mapGroupDataToState as DataToStateMapper,
-	});
-
-	// Register node diagrams
-	DiagramRegistry.register({
-		type: "AgentNode",
-		component: AgentNode,
-		minimapComponent: AgentNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createAgentNodeState,
-		export: undefined,
-		stateToData: agentNodeStateToData as StateToDataMapper,
-		dataToState: mapAgentNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "HubNode",
-		component: HubNode,
-		minimapComponent: HubNodeMinimap,
-		calcConnectPointPosition: calcEllipseConnectPointPosition,
-		createState: createHubNodeState,
-		export: undefined,
-		stateToData: hubNodeStateToData as StateToDataMapper,
-		dataToState: mapHubNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "ImageGenNode",
-		component: ImageGenNode,
-		minimapComponent: ImageGenNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createImageGenNodeState,
-		export: undefined,
-		stateToData: imageGenNodeStateToData as StateToDataMapper,
-		dataToState: mapImageGenNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "LLMNode",
-		component: LLMNode,
-		minimapComponent: LLMNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createLLMNodeState,
-		export: undefined,
-		stateToData: llmNodeStateToData as StateToDataMapper,
-		dataToState: mapLLMNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "PageDesignNode",
-		component: PageDesignNode,
-		minimapComponent: PageDesignNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createPageDesignNodeState,
-		export: undefined,
-		stateToData: pageDesignNodeStateToData as StateToDataMapper,
-		dataToState: mapPageDesignNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "SvgToDiagramNode",
-		component: SvgToDiagramNode,
-		minimapComponent: SvgToDiagramNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createSvgToDiagramNodeState,
-		export: undefined,
-		stateToData: svgToDiagramNodeStateToData as StateToDataMapper,
-		dataToState: mapSvgToDiagramNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "TextAreaNode",
-		component: TextAreaNode,
-		minimapComponent: TextAreaNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createTextAreaNodeState,
-		export: undefined,
-		stateToData: textAreaNodeStateToData as StateToDataMapper,
-		dataToState: mapTextAreaNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "VectorStoreNode",
-		component: VectorStoreNode,
-		minimapComponent: VectorStoreNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createVectorStoreNodeState,
-		export: undefined,
-		stateToData: vectorStoreNodeStateToData as StateToDataMapper,
-		dataToState: mapVectorStoreNodeDataToState as DataToStateMapper,
-	});
-
-	DiagramRegistry.register({
-		type: "WebSearchNode",
-		component: WebSearchNode,
-		minimapComponent: WebSearchNodeMinimap,
-		calcConnectPointPosition: calcRectangleConnectPointPosition,
-		createState: createWebSearchNodeState,
-		export: undefined,
-		stateToData: webSearchNodeStateToData as StateToDataMapper,
-		dataToState: mapWebSearchNodeDataToState as DataToStateMapper,
-	});
+	// ============================================================================
+	// Node Atlas Registration
+	// ============================================================================
+	DiagramRegistry.register(AgentNodeAtlas);
+	DiagramRegistry.register(HubNodeAtlas);
+	DiagramRegistry.register(ImageGenNodeAtlas);
+	DiagramRegistry.register(LLMNodeAtlas);
+	DiagramRegistry.register(PageDesignNodeAtlas);
+	DiagramRegistry.register(SvgToDiagramNodeAtlas);
+	DiagramRegistry.register(TextAreaNodeAtlas);
+	DiagramRegistry.register(VectorStoreNodeAtlas);
+	DiagramRegistry.register(WebSearchNodeAtlas);
 };
