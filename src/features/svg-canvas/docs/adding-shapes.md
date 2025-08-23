@@ -595,32 +595,147 @@ export { MyShape } from "./MyShape";
 export { MyShapeMinimap } from "./MyShapeMinimap";
 ```
 
-### Step 9: Register the Shape
+### Step 9: Create Atlas Object
 
-Add your shape to the registry in `src/features/svg-canvas/canvas/SvgCanvasRegistry.ts`:
+Create an Atlas object for your shape/node. 
+
+**For Shapes**, create in `src/features/svg-canvas/atlas/shapes/MyShapeAtlas.ts`:  
+**For Workflow Nodes**, create in `src/features/svg-canvas/atlas/nodes/MyNodeAtlas.ts`:
 
 ```typescript
-// Import your shape components and utilities
-import { MyShape, MyShapeMinimap } from "../components/shapes/MyShape";
-import { calcMyShapeConnectPointPosition } from "../utils/shapes/myShape/calcMyShapeConnectPointPosition";
-import { createMyShapeState } from "../utils/shapes/myShape/createMyShapeState";
-import { mapMyShapeDataToState } from "../utils/shapes/myShape/mapMyShapeDataToState";
-import { mapMyShapeStateToData } from "../utils/shapes/myShape/mapMyShapeStateToData";
+/**
+ * MyShape Atlas (or MyNode Atlas for workflow nodes)
+ *
+ * Complete index and registry for MyShape-related components.
+ * This atlas provides centralized access to all MyShape-related types,
+ * default values, components, and utility functions.
+ */
+// ============================================================================
+// Types
+// ============================================================================
+import type {
+	DiagramAtlas,
+	DataToStateMapper,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+import type { MyShapeData } from "../../types/data/shapes/MyShapeData";
+import type { MyShapeState } from "../../types/state/shapes/MyShapeState";
+import type { MyShapeProps } from "../../types/props/shapes/MyShapeProps";
+import { MyShapeFeatures } from "../../types/data/shapes/MyShapeData";
 
-// Register in the initialization function
-DiagramRegistry.register({
+// ============================================================================
+// Defaults
+// ============================================================================
+import { MyShapeDefaultData } from "../../constants/data/shapes/MyShapeDefaultData";
+import { MyShapeDefaultState } from "../../constants/state/shapes/MyShapeDefaultState";
+
+// ============================================================================
+// Components
+// ============================================================================
+import { MyShape, MyShapeMinimap } from "../../components/shapes/MyShape";
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
+import { createMyShapeState } from "../../utils/shapes/myShape/createMyShapeState";
+import { calcMyShapeConnectPointPosition } from "../../utils/shapes/myShape/calcMyShapeConnectPointPosition";
+import { mapMyShapeDataToState } from "../../utils/shapes/myShape/mapMyShapeDataToState";
+import { mapMyShapeStateToData } from "../../utils/shapes/myShape/mapMyShapeStateToData";
+
+/**
+ * MyShape Atlas Type Definition
+ */
+type MyShapeAtlas = DiagramAtlas<
+	MyShapeData,
+	MyShapeState,
+	MyShapeProps
+>;
+
+/**
+ * MyShape Atlas Implementation
+ */
+export const MyShapeAtlas: MyShapeAtlas = {
+	// ============================================================================
+	// Types
+	// ============================================================================
+
 	type: "MyShape",
+	features: MyShapeFeatures,
+
+	// ============================================================================
+	// Defaults
+	// ============================================================================
+
+	defaultData: MyShapeDefaultData,
+	defaultState: MyShapeDefaultState,
+
+	// ============================================================================
+	// Components
+	// ============================================================================
+
 	component: MyShape,
 	minimapComponent: MyShapeMinimap,
-	connectPointCalculator: calcMyShapeConnectPointPosition,
-	createFunction: createMyShapeState,
-	exportFunction: undefined, // Optional: implement if shape can be exported
-	stateToDataMapper: mapMyShapeStateToData as StateToDataMapper,
-	dataToStateMapper: mapMyShapeDataToState as DataToStateMapper,
-});
+
+	// ============================================================================
+	// Utility Functions
+	// ============================================================================
+
+	createState: createMyShapeState,
+	export: undefined, // Optional: implement if shape can be exported
+	calcConnectPointPosition: calcMyShapeConnectPointPosition,
+	dataToState: mapMyShapeDataToState as DataToStateMapper,
+	stateToData: mapMyShapeStateToData as StateToDataMapper,
+};
 ```
 
-### Step 10: Update Type Definitions
+**Note for Workflow Nodes**: Replace `shapes/` paths with `nodes/` and use appropriate node-specific imports (e.g., `calcRectangleConnectPointPosition` for most nodes).
+
+### Step 10: Register the Atlas
+
+Add your Atlas to the registry in `src/features/svg-canvas/canvas/SvgCanvasRegistry.ts`:
+
+```typescript
+// Import your Atlas object
+import { MyShapeAtlas } from "../atlas/shapes/MyShapeAtlas";
+// OR for nodes: import { MyNodeAtlas } from "../atlas/nodes/MyNodeAtlas";
+
+// Register your Atlas in the appropriate category (maintain alphabetical order)
+export const initializeSvgCanvasDiagrams = (): void => {
+	// Clear existing registrations to avoid duplicates
+	DiagramRegistry.clear();
+
+	// ============================================================================
+	// Shape Atlas Registration
+	// ============================================================================
+	DiagramRegistry.register(ConnectLineAtlas);
+	DiagramRegistry.register(ConnectPointAtlas);
+	DiagramRegistry.register(EllipseAtlas);
+	DiagramRegistry.register(GroupAtlas);
+	DiagramRegistry.register(ImageAtlas);
+	DiagramRegistry.register(MyShapeAtlas); // Add your shape Atlas here (alphabetical order)
+	DiagramRegistry.register(PathAtlas);
+	DiagramRegistry.register(PathPointAtlas);
+	DiagramRegistry.register(RectangleAtlas);
+	DiagramRegistry.register(SvgAtlas);
+	DiagramRegistry.register(TextAtlas);
+
+	// ============================================================================
+	// Node Atlas Registration
+	// ============================================================================
+	DiagramRegistry.register(AgentNodeAtlas);
+	DiagramRegistry.register(HubNodeAtlas);
+	DiagramRegistry.register(ImageGenNodeAtlas);
+	DiagramRegistry.register(LLMNodeAtlas);
+	DiagramRegistry.register(MyNodeAtlas); // OR add your node Atlas here (alphabetical order)
+	DiagramRegistry.register(PageDesignNodeAtlas);
+	DiagramRegistry.register(SvgToDiagramNodeAtlas);
+	DiagramRegistry.register(TextAreaNodeAtlas);
+	DiagramRegistry.register(VectorStoreNodeAtlas);
+	DiagramRegistry.register(WebSearchNodeAtlas);
+};
+```
+
+### Step 11: Update Type Definitions
 
 Add your shape type to the DiagramType union in `src/features/svg-canvas/types/core/DiagramType.ts`:
 
@@ -632,7 +747,7 @@ export type DiagramType =
 	// ... other types
 ```
 
-### Step 11: Update Catalog Type Unions
+### Step 12: Update Catalog Type Unions
 
 **IMPORTANT**: You must add your new type to the catalog union types:
 
@@ -690,7 +805,7 @@ export type Diagram =
 	// | MyNodeState  // OR add your node state type here
 ```
 
-### Step 12: Update Default Data Constants
+### Step 13: Update Default Data Constants
 
 Add your shape's default data to `src/features/svg-canvas/constants/data/shapes/CreateDefaultData.ts`:
 
@@ -727,7 +842,7 @@ export const CreateDefaultState = {
 } as const;
 ```
 
-### Step 13: Verify All Exports
+### Step 14: Verify All Exports
 
 Ensure all your new files are properly exported through their respective index files:
 
@@ -784,14 +899,38 @@ Ensure all your new files are properly exported through their respective index f
 
 ## Common Pitfalls
 
-1. **Missing exports**: Ensure all new files are properly exported through index files
-2. **Type mismatches**: Verify that your data, state, and props types align correctly
-3. **Registry registration**: Don't forget to register your shape in the registry
-4. **Catalog union types**: Must add your types to both `DiagramData.ts` and `Diagram.ts` unions
-5. **DiagramType union**: Must add your type string to the `DiagramType` union
-6. **Default value consistency**: Ensure default data and state values are consistent
-7. **Transform center**: Remember that shapes are positioned from their center, not top-left
-8. **Feature consistency**: Make sure your component implementation matches declared features
-9. **Folder structure**: Use `shapes/` for basic elements, `nodes/` for workflow nodes
+1. **Missing Atlas creation**: Don't forget to create the Atlas object for your shape/node
+2. **Missing Atlas registration**: Ensure your Atlas is registered in SvgCanvasRegistry
+3. **Atlas organization**: Put shape Atlas in `atlas/shapes/`, node Atlas in `atlas/nodes/`
+4. **Alphabetical ordering**: Maintain alphabetical order in registry and import statements
+5. **Missing exports**: Ensure all new files are properly exported through index files
+6. **Type mismatches**: Verify that your data, state, and props types align correctly
+7. **Catalog union types**: Must add your types to both `DiagramData.ts` and `Diagram.ts` unions
+8. **DiagramType union**: Must add your type string to the `DiagramType` union
+9. **Default value consistency**: Ensure default data and state values are consistent
+10. **Transform center**: Remember that shapes are positioned from their center, not top-left
+11. **Feature consistency**: Make sure your component implementation matches declared features
+12. **Folder structure**: Use `shapes/` for basic elements, `nodes/` for workflow nodes
+13. **Atlas imports**: Use proper import paths in your Atlas files (../../types/, ../../components/, etc.)
 
 By following this guide, you'll create a shape that integrates seamlessly with the existing SVG canvas architecture while maintaining consistency and performance.
+
+## Atlas System Benefits
+
+The new Atlas system provides several advantages:
+
+1. **Centralized Organization**: All shape/node-related code is organized in one place
+2. **Type Safety**: Atlas objects ensure consistent type definitions across all components
+3. **Developer Reference**: Atlas files serve as comprehensive documentation
+4. **Maintainability**: Changes to a diagram type only require updating the Atlas file
+5. **Consistency**: Uniform structure across all diagram types
+6. **Discovery**: Easy to find all components, utilities, and types for a diagram type
+
+Each Atlas object consolidates:
+- Type definitions (Data, State, Props, Features)
+- Default values (DefaultData, DefaultState)
+- React components (Component, MinimapComponent)
+- Utility functions (createState, mappers, calculators)
+- Export functions (if applicable)
+
+This makes the system more maintainable and easier to understand for developers working with the SVG canvas.
