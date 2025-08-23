@@ -14,20 +14,14 @@ import { TextAreaNodeDefaultState } from "../../../constants/state/nodes/TextAre
 export const createTextAreaNodeState = ({
 	x,
 	y,
-	width = 200,
-	height = 100,
 }: {
 	x: number;
 	y: number;
-	width: number;
-	height: number;
 }) => {
 	const state = createRectangleState({
 		...TextAreaNodeDefaultState,
 		x,
 		y,
-		width,
-		height,
 	});
 
 	state.type = "TextAreaNode";
