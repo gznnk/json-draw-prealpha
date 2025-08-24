@@ -2,7 +2,7 @@
 import type { Diagram } from "../../types/state/catalog/Diagram";
 
 // Import utils.
-import { calcGroupOrientedBox } from "../../utils/shapes/group/calcGroupOrientedBox";
+import { calcItemableOrientedBox } from "../../utils/core/calcItemableOrientedBox";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**
@@ -19,7 +19,7 @@ export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
 	}
 
 	// Calculate the bounds of the itemable.
-	const box = calcGroupOrientedBox(itemable);
+	const box = calcItemableOrientedBox(itemable);
 
 	// Update child itemables recursively
 	let updatedItems = itemable.items;

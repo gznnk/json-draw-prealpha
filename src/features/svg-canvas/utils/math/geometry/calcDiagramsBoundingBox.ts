@@ -3,7 +3,7 @@ import type { Box } from "../../../types/core/Box";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 
 // Import utils.
-import { calcGroupOrientedBox } from "../../../utils/shapes/group/calcGroupOrientedBox";
+import { calcItemableOrientedBox } from "../../core/calcItemableOrientedBox";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { calcDiagramBoundingBox } from "./calcDiagramBoundingBox";
@@ -23,8 +23,8 @@ export const calcDiagramsBoundingBox = (diagrams: Diagram[]): Box => {
 	};
 
 	for (const diagram of diagrams) {
-		if (isItemableState(diagram) && diagram.type === "Group") {
-			const groupOrientedBox = calcGroupOrientedBox(diagram);
+		if (isItemableState(diagram)) {
+			const groupOrientedBox = calcItemableOrientedBox(diagram);
 			box.top = Math.min(box.top, groupOrientedBox.y);
 			box.left = Math.min(box.left, groupOrientedBox.x);
 			box.right = Math.max(
