@@ -16,28 +16,28 @@ import type {
 	DataToStateMapper,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { TextData } from "../../types/data/shapes/TextData";
-import type { TextState } from "../../types/state/shapes/TextState";
-import type { TextProps } from "../../types/props/shapes/TextProps";
-import { TextFeatures } from "../../types/data/shapes/TextData";
+import type { TextData } from "../../types/data/elements/TextData";
+import type { TextState } from "../../types/state/elements/TextState";
+import type { TextProps } from "../../types/props/elements/TextProps";
+import { TextFeatures } from "../../types/data/elements/TextData";
 
 // ============================================================================
 // Defaults
 // ============================================================================
-import { TextDefaultData } from "../../constants/data/shapes/TextDefaultData";
-import { TextDefaultState } from "../../constants/state/shapes/TextDefaultState";
+import { TextDefaultData } from "../../constants/data/elements/TextDefaultData";
+import { TextDefaultState } from "../../constants/state/elements/TextDefaultState";
 
 // ============================================================================
 // Components
 // ============================================================================
-import { Text, TextMinimap } from "../../components/shapes/Text";
+import { Text, TextMinimap } from "../../components/elements/Text";
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
-import { createTextState } from "../../utils/shapes/text/createTextState";
-import { textStateToData } from "../../utils/shapes/text/mapTextStateToData";
-import { mapTextDataToState } from "../../utils/shapes/text/mapTextDataToState";
+import { createTextState } from "../../utils/elements/text/createTextState";
+import { textStateToData } from "../../utils/elements/text/mapTextStateToData";
+import { mapTextDataToState } from "../../utils/elements/text/mapTextDataToState";
 
 /**
  * Text Shape Atlas Type Definition

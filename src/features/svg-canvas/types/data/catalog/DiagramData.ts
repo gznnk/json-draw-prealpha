@@ -18,7 +18,7 @@ import type { PathData } from "../shapes/PathData";
 import type { PathPointData } from "../shapes/PathPointData";
 import type { RectangleData } from "../shapes/RectangleData";
 import type { SvgData } from "../shapes/SvgData";
-import type { TextData } from "../shapes/TextData";
+import type { TextData } from "../elements/TextData";
 
 /**
  * Union type representing all diagram data types.

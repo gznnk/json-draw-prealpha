@@ -7,6 +7,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  */
 export const TextAreaNodeFeatures = {
 	transformative: true,
+	itemable: true,
 	connectable: true,
 	strokable: true,
 	fillable: true,

@@ -2,8 +2,8 @@
 import type {
 	TextData,
 	TextFeatures,
-} from "../../data/shapes/TextData";
-import type { CreateStateType } from "./CreateStateType";
+} from "../../data/elements/TextData";
+import type { CreateStateType } from "../shapes/CreateStateType";
 
 /**
  * State type for Text shapes.

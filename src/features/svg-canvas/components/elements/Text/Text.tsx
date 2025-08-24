@@ -3,7 +3,7 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 // Import types.
-import type { TextProps } from "../../../types/props/shapes/TextProps";
+import type { TextProps } from "../../../types/props/elements/TextProps";
 
 // Import components.
 import { Outline } from "../../core/Outline";

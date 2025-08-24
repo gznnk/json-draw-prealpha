@@ -2,10 +2,10 @@
 import type { TextAlign } from "../../../types/core/TextAlign";
 import type { TextableType } from "../../../types/core/TextableType";
 import type { VerticalAlign } from "../../../types/core/VerticalAlign";
-import type { TextState } from "../../../types/state/shapes/TextState";
+import type { TextState } from "../../../types/state/elements/TextState";
 
 // Import constants.
-import { TextDefaultState } from "../../../constants/state/shapes/TextDefaultState";
+import { TextDefaultState } from "../../../constants/state/elements/TextDefaultState";
 
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";

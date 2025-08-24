@@ -11,7 +11,7 @@ import { PathAtlas } from "../atlas/shapes/PathAtlas";
 import { PathPointAtlas } from "../atlas/shapes/PathPointAtlas";
 import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
 import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
-import { TextAtlas } from "../atlas/shapes/TextAtlas";
+import { TextAtlas } from "../atlas/elements/TextAtlas";
 
 // Import Diagram Atlas objects
 import { ButtonAtlas } from "../atlas/diagrams/ButtonAtlas";

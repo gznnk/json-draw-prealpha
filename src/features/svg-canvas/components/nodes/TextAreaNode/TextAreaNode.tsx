@@ -89,7 +89,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		<>
 			<Rectangle {...props} text={text} textType="markdown" radius={0} />
 			{!props.isTextEditing && (
-				<>
+				<g>
 					<TextAreaButton
 						x={props.x + props.width / 2 - 38}
 						y={props.y + props.height / 2 - 26}
@@ -111,7 +111,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					>
 						Go
 					</TextAreaButtonText>
-				</>
+				</g>
 			)}
 		</>
 	);

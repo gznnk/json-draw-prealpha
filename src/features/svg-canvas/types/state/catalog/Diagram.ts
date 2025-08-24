@@ -18,7 +18,7 @@ import type { PathPointState } from "../shapes/PathPointState";
 import type { PathState } from "../shapes/PathState";
 import type { RectangleState } from "../shapes/RectangleState";
 import type { SvgState } from "../shapes/SvgState";
-import type { TextState } from "../shapes/TextState";
+import type { TextState } from "../elements/TextState";
 
 /**
  * Union type representing all diagram state types.
