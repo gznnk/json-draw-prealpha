@@ -24,8 +24,6 @@ describe("calcItemableOrientedBox", () => {
 			rotation,
 			scaleX: 1,
 			scaleY: 1,
-			keepProportion: false,
-			showTransformControls: false,
 			items,
 		}) as Shape & ItemableState<Diagram>;
 
@@ -378,7 +376,7 @@ describe("calcItemableOrientedBox", () => {
 		it("should handle complex rotated group with mixed rotations", () => {
 			// Create child items with different rotations
 			const mockItems: Diagram[] = [
-				createMockShape(20, 10, 30, 20, 0) as Diagram,   // Child 1: no rotation (0°)
+				createMockShape(20, 10, 30, 20, 0) as Diagram, // Child 1: no rotation (0°)
 				createMockShape(-15, -5, 25, 15, 45) as Diagram, // Child 2: 45° rotation
 			];
 
