@@ -1,17 +1,25 @@
 // Import React.
 import type React from "react";
-import { memo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 
 // Import types.
 import type { FrameProps } from "../../../types/props/elements/FrameProps";
+
+// Import components.
+import { Outline } from "../../core/Outline";
+import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
+import { useSelect } from "../../../hooks/useSelect";
 
 // Import utils.
 import { mergeProps } from "../../../utils/core/mergeProps";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
  * Frame component - a simple rectangular frame element
@@ -22,26 +30,34 @@ const FrameComponent: React.FC<FrameProps> = ({
 	y,
 	width,
 	height,
+	rotation,
+	scaleX,
+	scaleY,
+	keepProportion,
 	fill = "transparent",
 	stroke = "black",
 	strokeWidth = 1,
+	isSelected,
+	isAncestorSelected = false,
+	connectPoints,
+	showConnectPoints = false,
+	isDragging = false,
+	showOutline = false,
+	showTransformControls = false,
+	isTransforming = false,
+	children,
 	onDrag,
 	onDragOver,
 	onDragLeave,
 	onClick,
+	onSelect,
+	onTransform,
+	onConnect,
+	onPreviewConnectLine,
 	onHoverChange,
 }) => {
 	// Reference to the SVG element to be transformed
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
-
-	// To avoid frequent handler generation, hold referenced values in useRef
-	const refBusVal = {
-		// Properties
-		id,
-		onDrag,
-	};
-	const refBus = useRef(refBusVal);
-	refBus.current = refBusVal;
 
 	// Generate properties for dragging
 	const dragProps = useDrag({
@@ -60,10 +76,16 @@ const FrameComponent: React.FC<FrameProps> = ({
 		id,
 		x,
 		y,
-		isSelected: false, // Frame is not selectable
-		isAncestorSelected: false,
+		isSelected,
+		isAncestorSelected,
 		ref: svgRef,
 		onClick,
+	});
+
+	// Generate properties for selection
+	const selectProps = useSelect({
+		id,
+		onSelect,
 	});
 
 	// Generate properties for hovering
@@ -73,15 +95,45 @@ const FrameComponent: React.FC<FrameProps> = ({
 	});
 
 	// Compose props for the SVG element
-	const composedProps = mergeProps(dragProps, clickProps, hoverProps);
+	const composedProps = mergeProps(
+		dragProps,
+		clickProps,
+		selectProps,
+		hoverProps,
+	);
+
+	// Suppress ConnectPoint re-rendering by memoization
+	// If separated by key and passed as individual props, each ConnectPoint side
+	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
+	const ownerShape = useMemo(
+		() => ({
+			x,
+			y,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		}),
+		[x, y, width, height, rotation, scaleX, scaleY],
+	);
+
+	// Generate rect transform attribute
+	const transform = createSvgTransform(
+		scaleX,
+		scaleY,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
 
 	return (
 		<>
 			{/* Main frame rectangle */}
 			<rect
 				id={id}
-				x={x - width / 2}
-				y={y - height / 2}
+				x={-width / 2}
+				y={-height / 2}
 				width={width}
 				height={height}
 				fill={fill}
@@ -89,8 +141,46 @@ const FrameComponent: React.FC<FrameProps> = ({
 				strokeWidth={strokeWidth}
 				tabIndex={0}
 				cursor="move"
+				transform={transform}
 				ref={svgRef}
 				{...composedProps}
+			/>
+			<g transform={transform}>{children}</g>
+			<Outline
+				x={x}
+				y={y}
+				width={width}
+				height={height}
+				rotation={rotation}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				showOutline={showOutline}
+			/>
+			{showTransformControls && (
+				<Transformative
+					id={id}
+					type="Frame"
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+					keepProportion={keepProportion}
+					showTransformControls={showTransformControls}
+					isTransforming={isTransforming}
+					onTransform={onTransform}
+				/>
+			)}
+			<ConnectPoints
+				ownerId={id}
+				ownerShape={ownerShape}
+				connectPoints={connectPoints}
+				showConnectPoints={showConnectPoints}
+				shouldRender={!isDragging && !isTransforming && !isSelected}
+				onConnect={onConnect}
+				onPreviewConnectLine={onPreviewConnectLine}
 			/>
 		</>
 	);

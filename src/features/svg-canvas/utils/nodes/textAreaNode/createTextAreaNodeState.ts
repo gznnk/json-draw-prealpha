@@ -1,12 +1,12 @@
-// Import utils.
-import { createRectangleState } from "../../shapes/rectangle/createRectangleState";
-
 // Import types.
 import type { TextAreaNodeState } from "../../../types/state/nodes/TextAreaNodeState";
 
 // Import constants.
 import { TextAreaNodeDefaultState } from "../../../constants/state/nodes/TextAreaNodeDefaultState";
+
+// Import utils.
 import { createTextState } from "../../elements/text/createTextState";
+import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 /**
  * Creates state for a TextArea node with specified properties.
@@ -18,32 +18,43 @@ import { createTextState } from "../../elements/text/createTextState";
 export const createTextAreaNodeState = ({
 	x,
 	y,
+	width = 100,
+	height = 100,
+	rotation = 0,
+	scaleX = 1,
+	scaleY = 1,
 }: {
 	x: number;
 	y: number;
+	width?: number;
+	height?: number;
+	rotation?: number;
+	scaleX?: number;
+	scaleY?: number;
 }) => {
+	const connectPoints = createRectangleConnectPoint({
+		x,
+		y,
+		width,
+		height,
+		rotation,
+		scaleX,
+		scaleY,
+	});
+
 	const state = {
-		...createRectangleState({
-			...TextAreaNodeDefaultState,
-			x,
-			y,
-		}),
-		type: "TextAreaNode",
+		...TextAreaNodeDefaultState,
+		x,
+		y,
 		items: [
-			createRectangleState({
+			createTextState({
 				x,
-				y,
+				y: y + 20,
+				width: TextAreaNodeDefaultState.width - 10,
+				height: TextAreaNodeDefaultState.height - 30,
 			}),
-			{
-				...createTextState({
-					x,
-					y: y + 20,
-					width: TextAreaNodeDefaultState.width - 10,
-					height: TextAreaNodeDefaultState.height - 30,
-					text: "Text Area",
-				}),
-			},
 		],
+		connectPoints,
 	} as TextAreaNodeState;
 
 	return state;

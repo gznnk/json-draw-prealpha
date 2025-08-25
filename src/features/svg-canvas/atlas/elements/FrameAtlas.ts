@@ -38,6 +38,7 @@ import { Frame, FrameMinimap } from "../../components/elements/Frame";
 import { createFrameState } from "../../utils/elements/frame/createFrameState";
 import { frameStateToData } from "../../utils/elements/frame/mapFrameStateToData";
 import { mapFrameDataToState } from "../../utils/elements/frame/mapFrameDataToState";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * Frame Element Atlas Type Definition
@@ -79,7 +80,7 @@ export const FrameAtlas: FrameAtlas = {
 
 	createState: createFrameState,
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: calcRectangleConnectPointPosition,
 	dataToState: mapFrameDataToState as DataToStateMapper,
 	stateToData: frameStateToData as StateToDataMapper,
 };

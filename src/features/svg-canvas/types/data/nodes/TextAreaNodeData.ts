@@ -9,10 +9,10 @@ export const TextAreaNodeFeatures = {
 	transformative: true,
 	itemable: true,
 	connectable: true,
-	strokable: true,
-	fillable: true,
+	strokable: false,
+	fillable: false,
 	selectable: true,
-	textable: true,
+	textable: false,
 	executable: true,
 } as const satisfies DiagramFeatures;
 

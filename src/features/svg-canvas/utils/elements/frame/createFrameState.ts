@@ -6,6 +6,7 @@ import { FrameDefaultState } from "../../../constants/state/elements/FrameDefaul
 
 // Import utils.
 import { newId } from "../../../utils/shapes/common/newId";
+import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 /**
  * Creates frame state with the specified properties.
@@ -18,12 +19,28 @@ export const createFrameState = ({
 	y,
 	width = 100,
 	height = 100,
+	rotation = 0,
+	scaleX = 1,
+	scaleY = 1,
 }: {
 	x: number;
 	y: number;
 	width?: number;
 	height?: number;
+	rotation?: number;
+	scaleX?: number;
+	scaleY?: number;
 }): FrameState => {
+	const connectPoints = createRectangleConnectPoint({
+		x,
+		y,
+		width,
+		height,
+		rotation,
+		scaleX,
+		scaleY,
+	});
+
 	return {
 		...FrameDefaultState,
 		id: newId(),
@@ -31,5 +48,9 @@ export const createFrameState = ({
 		y,
 		width,
 		height,
+		rotation,
+		scaleX,
+		scaleY,
+		connectPoints,
 	} as FrameState;
 };

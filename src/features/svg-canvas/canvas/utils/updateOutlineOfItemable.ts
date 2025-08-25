@@ -14,7 +14,7 @@ import { isItemableState } from "../../utils/validation/isItemableState";
  * @returns {Diagram} - The updated itemable diagram with outline updated.
  */
 export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
-	if (!isItemableState(itemable)) {
+	if (!isItemableState(itemable) || itemable.itemableType !== "concrete") {
 		return itemable;
 	}
 
@@ -27,7 +27,7 @@ export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
 
 	if (itemable.items) {
 		const newItems = itemable.items.map((item) => {
-			if (isItemableState(item)) {
+			if (isItemableState(item) && item.itemableType === "concrete") {
 				const updatedItem = updateOutlineOfItemable(item);
 				if (updatedItem !== item) {
 					itemsChanged = true;

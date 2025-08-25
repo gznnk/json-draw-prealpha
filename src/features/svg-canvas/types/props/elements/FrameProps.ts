@@ -9,4 +9,6 @@ import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 export type FrameProps = CreateDiagramProps<
 	FrameState,
 	typeof FrameFeatures
->;
+> & {
+	children: React.ReactNode;
+};

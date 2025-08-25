@@ -11,5 +11,11 @@ import { FrameFeatures } from "../../../types/data/elements/FrameData";
 export const FrameDefaultData: FrameData = CreateDefaultData<FrameData>({
 	type: "Frame",
 	options: FrameFeatures,
-	properties: {},
+	properties: {
+		width: 100,
+		height: 100,
+		rotation: 0,
+		scaleX: 1,
+		scaleY: 1,
+	},
 });

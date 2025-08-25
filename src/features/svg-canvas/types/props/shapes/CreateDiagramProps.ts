@@ -7,7 +7,6 @@ import type { TextableProps } from "../core/TextableProps";
 import type { ExecutableProps } from "../core/ExecutableProps";
 import type { FileDroppableProps } from "../core/FileDroppableProps";
 
-
 // Import the new unified features type
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 
@@ -18,7 +17,7 @@ import type { DiagramFeatures } from "../../core/DiagramFeatures";
  */
 export type CreateDiagramProps<T, U extends DiagramFeatures> = Omit<
 	T,
-	"type"
+	"type" | "itemableType"
 > &
 	DiagramBaseProps &
 	(U["selectable"] extends true ? SelectableProps : object) &
@@ -28,5 +27,3 @@ export type CreateDiagramProps<T, U extends DiagramFeatures> = Omit<
 	(U["textable"] extends true ? TextableProps : object) &
 	(U["executable"] extends true ? ExecutableProps : object) &
 	(U["fileDroppable"] extends true ? FileDroppableProps : object);
-
-

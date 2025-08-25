@@ -16,7 +16,7 @@ describe("calcItemableOrientedBox", () => {
 	): ItemableState<Diagram> =>
 		({
 			id: "test-shape",
-			type: "Rectangle",
+			type: "Group",
 			x,
 			y,
 			width,
@@ -24,6 +24,7 @@ describe("calcItemableOrientedBox", () => {
 			rotation,
 			scaleX: 1,
 			scaleY: 1,
+			itemableType: "abstract",
 			items,
 		}) as Shape & ItemableState<Diagram>;
 
@@ -35,9 +36,10 @@ describe("calcItemableOrientedBox", () => {
 	): ItemableState<Diagram> =>
 		({
 			id: "test-point",
-			type: "Point",
+			type: "Group",
 			x,
 			y,
+			itemableType: "abstract",
 			items,
 			name: "Test Point",
 		}) as ItemableState<Diagram>;
