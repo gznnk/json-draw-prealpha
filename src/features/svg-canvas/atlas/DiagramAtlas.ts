@@ -72,3 +72,17 @@ export type DiagramAtlas<
 	dataToState: (data: DiagramData) => Diagram;
 	stateToData: (state: Diagram) => DiagramData;
 };
+
+/**
+ * Dummy implementation for unsupported functions
+ */
+export const dummyImplementation = () => {
+	throw new Error("Not supported");
+};
+
+/**
+ * Dummy implementation for unsupported components
+ */
+export const DummyComponent = () => {
+	throw new Error("Not supported");
+};

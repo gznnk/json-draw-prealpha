@@ -6,6 +6,7 @@ import { TextAreaNodeDefaultState } from "../../../constants/state/nodes/TextAre
 
 // Import utils.
 import { createTextState } from "../../elements/text/createTextState";
+import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 /**
@@ -44,6 +45,7 @@ export const createTextAreaNodeState = ({
 
 	const state = {
 		...TextAreaNodeDefaultState,
+		id: newId(),
 		x,
 		y,
 		items: [

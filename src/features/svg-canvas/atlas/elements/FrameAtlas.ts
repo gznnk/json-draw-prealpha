@@ -11,15 +11,11 @@
 // ============================================================================
 // Types
 // ============================================================================
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
-} from "../DiagramAtlas";
 import type { FrameData } from "../../types/data/elements/FrameData";
-import type { FrameState } from "../../types/state/elements/FrameState";
-import type { FrameProps } from "../../types/props/elements/FrameProps";
 import { FrameFeatures } from "../../types/data/elements/FrameData";
+import type { FrameProps } from "../../types/props/elements/FrameProps";
+import type { FrameState } from "../../types/state/elements/FrameState";
+import type { DiagramAtlas } from "../DiagramAtlas";
 
 // ============================================================================
 // Defaults
@@ -30,24 +26,18 @@ import { FrameDefaultState } from "../../constants/state/elements/FrameDefaultSt
 // ============================================================================
 // Components
 // ============================================================================
-import { Frame, FrameMinimap } from "../../components/elements/Frame";
+import { Frame } from "../../components/elements/Frame";
+import { DummyComponent } from "../DiagramAtlas";
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
-import { createFrameState } from "../../utils/elements/frame/createFrameState";
-import { frameStateToData } from "../../utils/elements/frame/mapFrameStateToData";
-import { mapFrameDataToState } from "../../utils/elements/frame/mapFrameDataToState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import { dummyImplementation } from "../DiagramAtlas";
 
 /**
  * Frame Element Atlas Type Definition
  */
-type FrameAtlas = DiagramAtlas<
-	FrameData,
-	FrameState,
-	FrameProps
->;
+type FrameAtlas = DiagramAtlas<FrameData, FrameState, FrameProps>;
 
 /**
  * Frame Element Atlas Implementation
@@ -72,15 +62,15 @@ export const FrameAtlas: FrameAtlas = {
 	// ============================================================================
 
 	component: Frame,
-	minimapComponent: FrameMinimap,
+	minimapComponent: DummyComponent,
 
 	// ============================================================================
 	// Utility Functions
 	// ============================================================================
 
-	createState: createFrameState,
+	createState: dummyImplementation,
 	export: undefined,
-	calcConnectPointPosition: calcRectangleConnectPointPosition,
-	dataToState: mapFrameDataToState as DataToStateMapper,
-	stateToData: frameStateToData as StateToDataMapper,
+	calcConnectPointPosition: dummyImplementation,
+	dataToState: dummyImplementation,
+	stateToData: dummyImplementation,
 };
