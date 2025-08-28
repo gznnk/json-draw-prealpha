@@ -20,6 +20,7 @@ import { Frame } from "../../elements/Frame";
 import { rotatePoint } from "../../../utils/math/points/rotatePoint";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
+import { Button } from "../../elements/Button";
 
 /**
  * TextAreaNode component.
@@ -86,8 +87,6 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		});
 	}, []);
 
-	// console.log(handleButtonClick);
-
 	// Handle execution events for the TextArea node.
 	useExecutionChain({
 		id,
@@ -132,7 +131,13 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 
 	return (
 		<>
-			<Frame {...props} stroke="black" strokeWidth="1px" fill="white" cornerRadius={6}>
+			<Frame
+				{...props}
+				stroke="black"
+				strokeWidth="1px"
+				fill="white"
+				cornerRadius={6}
+			>
 				<>
 					<rect
 						x={-width / 2 + 10}
@@ -145,14 +150,35 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 						rx={6}
 						ry={6}
 					/>
-					<rect
-						x={width / 2 - 50}
-						y={height / 2 - 30}
-						width={40}
-						height={20}
-						fill="transparent"
-						stroke="black"
-						strokeWidth={1}
+					<Button
+						id={`${id}-button`}
+						x={width / 2 - 45}
+						y={height / 2 - 25}
+						width={70}
+						height={30}
+						scaleX={1}
+						scaleY={1}
+						rotation={0}
+						keepProportion={true}
+						isSelected={false}
+						isAncestorSelected={false}
+						showOutline={false}
+						isTransforming={false}
+						showTransformControls={false}
+						cornerRadius={6}
+						fill="#1677ff"
+						stroke="#1677ff"
+						strokeWidth="1px"
+						text="Submit"
+						fontSize={14}
+						fontColor="#ffffff"
+						fontWeight="normal"
+						fontFamily="Arial"
+						textAlign="center"
+						verticalAlign="center"
+						textType="text"
+						isTextEditing={false}
+						onClick={handleButtonClick}
 					/>
 				</>
 			</Frame>
