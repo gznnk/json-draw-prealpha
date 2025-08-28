@@ -38,15 +38,12 @@ import { Text, TextMinimap } from "../../components/elements/Text";
 import { createTextState } from "../../utils/elements/text/createTextState";
 import { textStateToData } from "../../utils/elements/text/mapTextStateToData";
 import { mapTextDataToState } from "../../utils/elements/text/mapTextDataToState";
+import { dummyImplementation } from "../DiagramAtlas";
 
 /**
  * Text Shape Atlas Type Definition
  */
-type TextAtlas = DiagramAtlas<
-	TextData,
-	TextState,
-	TextProps
->;
+type TextAtlas = DiagramAtlas<TextData, TextState, TextProps>;
 
 /**
  * Text Shape Atlas Implementation
@@ -79,7 +76,7 @@ export const TextAtlas: TextAtlas = {
 
 	createState: createTextState,
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	dataToState: mapTextDataToState as DataToStateMapper,
 	stateToData: textStateToData as StateToDataMapper,
 };

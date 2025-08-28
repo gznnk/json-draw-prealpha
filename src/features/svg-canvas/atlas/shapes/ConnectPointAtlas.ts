@@ -81,7 +81,7 @@ export const ConnectPointAtlas: ConnectPointAtlas = {
 
 	createState: dummyImplementation,
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	dataToState: mapConnectPointDataToState as DataToStateMapper,
 	stateToData: connectPointStateToData as StateToDataMapper,
 };
