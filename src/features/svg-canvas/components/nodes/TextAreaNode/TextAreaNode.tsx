@@ -136,7 +136,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	// Center position of Text component
 	const textCenter = rotatePoint(
 		x,
-		y - height / 2 + 10 + (height - 60) / 2,
+		y - height / 2 + 16 + (height - 72) / 2,
 		x,
 		y,
 		degreesToRadians(rotation),
@@ -146,7 +146,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		<>
 			<Frame
 				{...props}
-				stroke="black"
+				stroke="#E5E6EB"
 				strokeWidth="1px"
 				fill="white"
 				cornerRadius={6}
@@ -154,22 +154,22 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			>
 				<>
 					<rect
-						x={-width / 2 + 10}
-						y={-height / 2 + 10}
-						width={width - 20}
-						height={height - 60}
-						fill="#f0f0f0"
-						stroke="black"
+						x={-width / 2 + 16}
+						y={-height / 2 + 16}
+						width={width - 32}
+						height={height - 72}
+						fill="#FFFFFF"
+						stroke="#D9D9D9"
 						strokeWidth={1}
 						rx={6}
 						ry={6}
 					/>
 					<Button
 						id={`${id}-button`}
-						x={width / 2 - 45}
-						y={height / 2 - 25}
+						x={width / 2 - 51}
+						y={height / 2 - 27}
 						width={70}
-						height={30}
+						height={32}
 						scaleX={1}
 						scaleY={1}
 						rotation={0}
@@ -183,7 +183,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 						fill="#1677ff"
 						stroke="#1677ff"
 						strokeWidth="1px"
-						text="Submit"
+						text="Send"
 						fontSize={14}
 						fontColor="#ffffff"
 						fontWeight="normal"

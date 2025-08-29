@@ -34,6 +34,7 @@ const FrameComponent: React.FC<FrameProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
+	cornerRadius,
 	keepProportion,
 	fill = "transparent",
 	stroke = "black",
@@ -147,6 +148,8 @@ const FrameComponent: React.FC<FrameProps> = ({
 				y={-height / 2}
 				width={width}
 				height={height}
+				rx={cornerRadius}
+				ry={cornerRadius}
 				fill={fill}
 				stroke={stroke}
 				strokeWidth={strokeWidth}
