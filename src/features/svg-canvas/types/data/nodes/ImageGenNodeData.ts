@@ -6,6 +6,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for ImageGen nodes.
  */
 export const ImageGenNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
 	cornerRoundable: false,

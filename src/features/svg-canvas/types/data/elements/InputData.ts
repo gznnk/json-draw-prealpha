@@ -1,12 +1,12 @@
 // Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
-import type { Frame } from "../../core/Frame";
 
 /**
  * Diagram features for Input shapes.
  */
 export const InputFeatures = {
+	frameable: true,
 	transformative: false,
 	connectable: false,
 	strokable: false,
@@ -21,4 +21,4 @@ export const InputFeatures = {
  * Data type for Input shapes.
  * Contains properties specific to Input diagram elements.
  */
-export type InputData = CreateDataType<typeof InputFeatures> & Frame;
+export type InputData = CreateDataType<typeof InputFeatures>;

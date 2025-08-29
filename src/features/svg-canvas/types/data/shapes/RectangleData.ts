@@ -6,6 +6,7 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for Rectangle shapes.
  */
 export const RectangleFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
 	strokable: true,

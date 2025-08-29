@@ -8,6 +8,7 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for ConnectLine shapes.
  */
 export const ConnectLineFeatures = {
+	frameable: true,
 	transformative: true,
 	itemable: true,
 	strokable: true,

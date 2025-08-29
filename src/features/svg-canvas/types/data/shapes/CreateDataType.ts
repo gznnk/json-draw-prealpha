@@ -1,7 +1,8 @@
 // Import types.
-import type { DiagramBaseData } from "../core/DiagramBaseData";
 import type { CornerRoundableData } from "../core/CornerRoundableData";
+import type { DiagramBaseData } from "../core/DiagramBaseData";
 import type { FillableData } from "../core/FillableData";
+import type { FrameableData } from "../core/FrameableData";
 import type { ItemableData } from "../core/ItemableData";
 import type { StrokableData } from "../core/StrokableData";
 import type { TextableData } from "../core/TextableData";
@@ -16,6 +17,7 @@ import type { DiagramFeatures } from "../../core/DiagramFeatures";
  * Conditionally includes feature interfaces based on provided features.
  */
 export type CreateDataType<T extends DiagramFeatures> = DiagramBaseData &
+	(T["frameable"] extends true ? FrameableData : object) &
 	(T["transformative"] extends true ? TransformativeData : object) &
 	(T["itemable"] extends true ? ItemableData<DiagramBaseData> : object) &
 	(T["connectable"] extends true ? ConnectableData : object) &

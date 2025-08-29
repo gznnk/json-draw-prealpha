@@ -1,12 +1,12 @@
 // Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
-import type { Frame } from "../../core/Frame";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
 /**
  * Diagram features for Frame elements.
  */
 export const FrameFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
 	strokable: true,
@@ -21,4 +21,4 @@ export const FrameFeatures = {
  * Data type for frame elements.
  * Contains properties specific to frame diagram elements.
  */
-export type FrameData = CreateDataType<typeof FrameFeatures> & Frame;
+export type FrameData = CreateDataType<typeof FrameFeatures>;

@@ -5,6 +5,7 @@ import type { DiagramFeatures } from "../../core/DiagramFeatures";
  * Diagram features for Svg shapes.
  */
 export const SvgFeatures = {
+	frameable: true,
 	transformative: true,
 	cornerRoundable: false,
 	selectable: true,

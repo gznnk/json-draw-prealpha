@@ -6,6 +6,7 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for Image shapes.
  */
 export const ImageFeatures = {
+	frameable: true,
 	transformative: true,
 	cornerRoundable: false,
 	selectable: true,

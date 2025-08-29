@@ -6,6 +6,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for Agent nodes.
  */
 export const AgentNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
 	strokable: true,

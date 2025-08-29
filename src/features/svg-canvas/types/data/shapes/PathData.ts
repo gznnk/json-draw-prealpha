@@ -8,6 +8,7 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for Path shapes.
  */
 export const PathFeatures = {
+	frameable: true,
 	transformative: true,
 	itemable: true,
 	strokable: true,

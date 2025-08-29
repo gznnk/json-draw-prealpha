@@ -6,6 +6,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for Hub nodes.
  */
 export const HubNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
 	strokable: true,

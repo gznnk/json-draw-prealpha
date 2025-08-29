@@ -4,6 +4,8 @@
  * Used across data, state, and props type creation.
  */
 export type DiagramFeatures = {
+	/** Frame properties (position, size, rotation, scale) */
+	frameable?: boolean;
 	/** Basic selection capability */
 	selectable?: boolean;
 	/** Position, size, and rotation transformation */

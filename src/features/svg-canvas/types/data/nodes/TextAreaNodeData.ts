@@ -6,6 +6,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for TextArea nodes.
  */
 export const TextAreaNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	itemable: true,
 	connectable: true,
