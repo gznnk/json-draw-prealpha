@@ -5,7 +5,7 @@ import type { Diagram } from "../../types/state/catalog/Diagram";
 import { degreesToRadians } from "../math/common/degreesToRadians";
 import { nanToZero } from "../math/common/nanToZero";
 import { rotatePoint } from "../math/points/rotatePoint";
-import { isShape } from "../validation/isShape";
+import { isFrame } from "../validation/isFrame";
 
 /**
  * Calculates the bounding box of a diagram when the group rotation is removed.
@@ -32,7 +32,7 @@ export const calcDiagramBoundingBoxInUnrotatedGroup = (
 		groupRadians,
 	);
 
-	if (isShape(diagram)) {
+	if (isFrame(diagram)) {
 		const halfWidth = nanToZero(diagram.width / 2);
 		const halfHeight = nanToZero(diagram.height / 2);
 		const diagramRadians = degreesToRadians(diagram.rotation - groupRotation);

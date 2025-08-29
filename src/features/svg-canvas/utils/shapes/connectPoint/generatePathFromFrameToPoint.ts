@@ -7,20 +7,20 @@ import { getLineDirection } from "./getLineDirection";
 import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
 
 /**
- * Generates connection path points from a shape to an arbitrary point.
- * This function creates a path that avoids overlapping with the source shape
- * by creating intermediate points that route around the shape's bounding box.
+ * Generates connection path points from a frame to an arbitrary point.
+ * This function creates a path that avoids overlapping with the source frame
+ * by creating intermediate points that route around the frame's bounding box.
  * Typically used during drag operations or when connecting to temporary points.
  *
- * @param startX - Start point x coordinate on the shape
- * @param startY - Start point y coordinate on the shape
- * @param startDirection - Direction from start shape (up/down/left/right)
- * @param startOwnerBoundingBoxGeometry - Bounding box geometry of start shape
+ * @param startX - Start point x coordinate on the frame
+ * @param startY - Start point y coordinate on the frame
+ * @param startDirection - Direction from start frame (up/down/left/right)
+ * @param startOwnerBoundingBoxGeometry - Bounding box geometry of start frame
  * @param endX - Target point x coordinate (can be anywhere)
  * @param endY - Target point y coordinate (can be anywhere)
  * @returns Array of points representing the connection path
  */
-export const generatePathFromShapeToPoint = (
+export const generatePathFromFrameToPoint = (
 	startX: number,
 	startY: number,
 	startDirection: Direction,

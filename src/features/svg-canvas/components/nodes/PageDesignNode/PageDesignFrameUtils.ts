@@ -3,7 +3,7 @@ import { createRectangleState } from "../../../utils/shapes/rectangle/createRect
 import { createEllipseState } from "../../../utils/shapes/ellipse/createEllipseState";
 
 /**
- * Creates a rectangle shape for page design with specified properties.
+ * Creates a rectangle frame for page design with specified properties.
  */
 export const createPageDesignRectangle = ({
 	x,
@@ -43,7 +43,7 @@ export const createPageDesignRectangle = ({
 };
 
 /**
- * Creates a circle shape for page design with specified properties.
+ * Creates a circle frame for page design with specified properties.
  */
 export const createPageDesignCircle = ({
 	cx,
@@ -125,4 +125,4 @@ export const createPageDesignText = ({
 		textAlign,
 		verticalAlign,
 	});
-};;
+};

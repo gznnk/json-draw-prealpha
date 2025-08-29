@@ -28,7 +28,7 @@ import { useSelect } from "../../../../hooks/useSelect";
 
 // Import utils.
 import { mergeProps } from "../../../../utils/core/mergeProps";
-import { calcOrientedShapeFromPoints } from "../../../../utils/math/geometry/calcOrientedShapeFromPoints";
+import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
 import {
 	createEndPointArrowHead,
@@ -252,7 +252,7 @@ const PathComponent: React.FC<PathProps> = ({
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 			if (e.eventPhase === "Ended") {
 				// Calculate new shape of Path's bounding box when new vertex and segment dragging is completed
-				const newShape = calcOrientedShapeFromPoints(
+				const newFrame = calcOrientedFrameFromPoints(
 					(e.endDiagram.items ?? []).map((p) => ({ x: p.x, y: p.y })),
 					rotation,
 					scaleX,
@@ -264,10 +264,10 @@ const PathComponent: React.FC<PathProps> = ({
 					...e,
 					endDiagram: {
 						...e.endDiagram,
-						x: newShape.x,
-						y: newShape.y,
-						width: newShape.width,
-						height: newShape.height,
+						x: newFrame.x,
+						y: newFrame.y,
+						width: newFrame.width,
+						height: newFrame.height,
 					},
 				});
 			} else {
@@ -291,7 +291,8 @@ const PathComponent: React.FC<PathProps> = ({
 	);
 
 	// Generate polyline d attribute value
-	const d = pathType === "Bezier" ? createBezierDValue(items) : createDValue(items);
+	const d =
+		pathType === "Bezier" ? createBezierDValue(items) : createDValue(items);
 
 	// Generate vertex information
 	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;
@@ -320,7 +321,8 @@ const PathComponent: React.FC<PathProps> = ({
 	const showTransformative = mode === "Transform";
 
 	// Display flag for dashed guide lines (Bézier mode + Vertices mode)
-	const showDashedGuideLines = pathType === "Bezier" && mode === "Vertices" && !draggingPathPointId;
+	const showDashedGuideLines =
+		pathType === "Bezier" && mode === "Vertices" && !draggingPathPointId;
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;

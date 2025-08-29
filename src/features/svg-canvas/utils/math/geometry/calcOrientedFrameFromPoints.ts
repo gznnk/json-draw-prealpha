@@ -1,6 +1,6 @@
 // Import types.
 import type { Point } from "../../../types/core/Point";
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
@@ -9,23 +9,24 @@ import { affineTransformation } from "../transform/affineTransformation";
 import { inverseAffineTransformation } from "../transform/inverseAffineTransformation";
 
 /**
- * Calculates the oriented bounding shape for a path defined by a set of points.
+ * Calculates an oriented bounding box for a series of points.
+ * This is useful for computing the bounding frame that encompasses all points
+ * while maintaining rotation and scale properties.
  *
- * This function derives a Shape object (including rotation and scale)
- * that tightly bounds the given path based on its rotated and scaled coordinates.
+ * This function derives a Frame object (including rotation and scale)
+ * that represents the minimum bounding box containing all given points.
+ * It's particularly useful for path-based shapes where you need to determine
+ * the overall frame properties from the constituent points.
  *
- * @param points - The array of points representing a path (already transformed by rotation and scale)
- * @param rotation - The rotation angle of the path in degrees (default: 0)
- * @param scaleX - The scale factor along the X-axis (default: 1)
- * @param scaleY - The scale factor along the Y-axis (default: 1)
- * @returns A Shape object representing the oriented bounding box of the path
+ * @param points - Array of points to calculate the bounding box for
+ * @returns A Frame object representing the oriented bounding box of the path
  */
-export const calcOrientedShapeFromPoints = (
+export const calcOrientedFrameFromPoints = (
 	points: Point[],
-	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
-): Shape => {
+	rotation = 0,
+): Frame => {
 	const left = Math.min(...points.map((p) => p.x));
 	const top = Math.min(...points.map((p) => p.y));
 	const right = Math.max(...points.map((p) => p.x));

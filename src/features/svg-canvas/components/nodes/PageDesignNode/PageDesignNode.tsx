@@ -32,7 +32,7 @@ import {
 	createPageDesignRectangle,
 	createPageDesignCircle,
 	createPageDesignText,
-} from "./PageDesignShapeUtils";
+} from "./PageDesignFrameUtils";
 import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
 
 /**
@@ -147,7 +147,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 							const functionCallArguments = JSON.parse(event.item.arguments);
 
 							if (functionName === "add_rectangle_shape") {
-								const rectangleShape = createPageDesignRectangle({
+								const rectangleFrame = createPageDesignRectangle({
 									x: functionCallArguments.x,
 									y: functionCallArguments.y,
 									width: functionCallArguments.width,
@@ -157,22 +157,22 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									strokeWidth: functionCallArguments.strokeWidth || 1,
 									rx: functionCallArguments.rx || 0,
 								});
-								addDiagram(rectangleShape);
+								addDiagram(rectangleFrame);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
 									call_id: event.item.call_id,
 									output: JSON.stringify({
-										id: rectangleShape.id,
+										id: rectangleFrame.id,
 										type: "Rectangle",
-										width: rectangleShape.width,
-										height: rectangleShape.height,
+										width: rectangleFrame.width,
+										height: rectangleFrame.height,
 									}),
 								});
 							}
 
 							if (functionName === "add_circle_shape") {
-								const circleShape = createPageDesignCircle({
+								const circleFrame = createPageDesignCircle({
 									cx: functionCallArguments.cx,
 									cy: functionCallArguments.cy,
 									r: functionCallArguments.r,
@@ -180,16 +180,16 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									stroke: functionCallArguments.stroke || "transparent",
 									strokeWidth: functionCallArguments.strokeWidth || 1,
 								});
-								addDiagram(circleShape);
+								addDiagram(circleFrame);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
 									call_id: event.item.call_id,
 									output: JSON.stringify({
-										id: circleShape.id,
+										id: circleFrame.id,
 										type: "Ellipse",
-										width: circleShape.width,
-										height: circleShape.height,
+										width: circleFrame.width,
+										height: circleFrame.height,
 									}),
 								});
 							}

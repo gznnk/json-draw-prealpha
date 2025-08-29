@@ -13,7 +13,7 @@ import type { ConnectPointsProps } from "./ConnectPointsTypes";
  */
 const ConnectPointsComponent: React.FC<ConnectPointsProps> = ({
 	ownerId,
-	ownerShape,
+	ownerFrame,
 	connectPoints,
 	showConnectPoints,
 	shouldRender,
@@ -35,7 +35,7 @@ const ConnectPointsComponent: React.FC<ConnectPointsProps> = ({
 					x={cp.x}
 					y={cp.y}
 					ownerId={ownerId}
-					ownerShape={ownerShape}
+					ownerFrame={ownerFrame}
 					alwaysVisible={showConnectPoints}
 					onConnect={onConnect}
 					onPreviewConnectLine={onPreviewConnectLine}

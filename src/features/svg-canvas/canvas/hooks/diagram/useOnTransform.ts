@@ -70,42 +70,42 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				// If the item is not found in the initial items map, return the child item as is.
 				return item;
 			}
-			const groupScaleX = e.endShape.width / e.startShape.width;
-			const groupScaleY = e.endShape.height / e.startShape.height;
+			const groupScaleX = e.endFrame.width / e.startFrame.width;
+			const groupScaleY = e.endFrame.height / e.startFrame.height;
 			const inversedItemCenter = rotatePoint(
 				initialItem.x,
 				initialItem.y,
-				e.startShape.x,
-				e.startShape.y,
-				degreesToRadians(-e.startShape.rotation),
+				e.startFrame.x,
+				e.startFrame.y,
+				degreesToRadians(-e.startFrame.rotation),
 			);
 			const dx =
-				(inversedItemCenter.x - e.startShape.x) *
-				e.startShape.scaleX *
-				e.endShape.scaleX;
+				(inversedItemCenter.x - e.startFrame.x) *
+				e.startFrame.scaleX *
+				e.endFrame.scaleX;
 			const dy =
-				(inversedItemCenter.y - e.startShape.y) *
-				e.startShape.scaleY *
-				e.endShape.scaleY;
+				(inversedItemCenter.y - e.startFrame.y) *
+				e.startFrame.scaleY *
+				e.endFrame.scaleY;
 
 			const newDx = dx * groupScaleX;
 			const newDy = dy * groupScaleY;
 
 			let newCenter = {
-				x: e.endShape.x + newDx,
-				y: e.endShape.y + newDy,
+				x: e.endFrame.x + newDx,
+				y: e.endFrame.y + newDy,
 			};
 			newCenter = rotatePoint(
 				newCenter.x,
 				newCenter.y,
-				e.endShape.x,
-				e.endShape.y,
-				degreesToRadians(e.endShape.rotation),
+				e.endFrame.x,
+				e.endFrame.y,
+				degreesToRadians(e.endFrame.rotation),
 			);
 
 			let newItem: Diagram;
 			if (isTransformativeState(initialItem)) {
-				const rotationDiff = e.endShape.rotation - e.startShape.rotation;
+				const rotationDiff = e.endFrame.rotation - e.startFrame.rotation;
 				const newRotation = initialItem.rotation + rotationDiff;
 				newItem = {
 					...item,
@@ -114,8 +114,8 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					width: initialItem.width * groupScaleX,
 					height: initialItem.height * groupScaleY,
 					rotation: newRotation,
-					scaleX: e.endShape.scaleX,
-					scaleY: e.endShape.scaleY,
+					scaleX: e.endFrame.scaleX,
+					scaleY: e.endFrame.scaleY,
 					isTransforming: getIsTransformingState(e.eventPhase),
 					items: isItemableState(initialItem)
 						? transformRecursively(
@@ -169,7 +169,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					// Apply the new shape to the item.
 					let newItem = {
 						...item,
-						...e.endShape,
+						...e.endFrame,
 					} as Diagram;
 
 					// Update isTransforming flag if it's transformative data
@@ -288,7 +288,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						? ({
 								...prevState.multiSelectGroup,
 								// Update the multi-select group with the new shape.
-								...e.endShape,
+								...e.endFrame,
 							} as GroupState)
 						: undefined,
 				} as SvgCanvasState;

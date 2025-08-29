@@ -7,7 +7,7 @@ import type { Diagram } from "../../../types/state/catalog/Diagram";
 import { getDiagramById } from "../../core/getDiagramById";
 import { isConnectableState } from "../../validation/isConnectableState";
 import { newId } from "../common/newId";
-import { generateOptimalShapeToShapeConnection } from "../connectPoint/generateOptimalShapeToShapeConnection";
+import { generateOptimalFrameToFrameConnection } from "../connectPoint/generateOptimalFrameToFrameConnection";
 import { updateManualConnectLinePath } from "../connectPoint/updateManualConnectLinePath";
 
 /**
@@ -47,24 +47,24 @@ export const refreshConnectLines = (
 		}
 
 		// Find the start and end owner shapes using getDiagramById for recursive search
-		const startOwnerShape = getDiagramById(
+		const startOwnerFrame = getDiagramById(
 			updatingCanvasState.items,
 			connectLine.startOwnerId,
 		) as Diagram;
-		const endOwnerShape = getDiagramById(
+		const endOwnerFrame = getDiagramById(
 			updatingCanvasState.items,
 			connectLine.endOwnerId,
 		) as Diagram;
 
 		// Skip if either owner shape is not found
-		if (!startOwnerShape || !endOwnerShape) {
+		if (!startOwnerFrame || !endOwnerFrame) {
 			return item;
 		}
 
 		// Skip if either owner shape doesn't have connect points
 		if (
-			!isConnectableState(startOwnerShape) ||
-			!isConnectableState(endOwnerShape)
+			!isConnectableState(startOwnerFrame) ||
+			!isConnectableState(endOwnerFrame)
 		) {
 			return item;
 		}
@@ -79,10 +79,10 @@ export const refreshConnectLines = (
 		const endPointId = currentItems[currentItems.length - 1].id;
 
 		// Find the connect points from the owner shapes using the point IDs
-		const startConnectPoint = startOwnerShape.connectPoints.find(
+		const startConnectPoint = startOwnerFrame.connectPoints.find(
 			(cp) => cp.id === startPointId,
 		);
-		const endConnectPoint = endOwnerShape.connectPoints.find(
+		const endConnectPoint = endOwnerFrame.connectPoints.find(
 			(cp) => cp.id === endPointId,
 		);
 
@@ -93,13 +93,13 @@ export const refreshConnectLines = (
 
 		if (connectLine.autoRouting) {
 			// Auto-routing enabled: recalculate the optimal path
-			const newPath = generateOptimalShapeToShapeConnection(
+			const newPath = generateOptimalFrameToFrameConnection(
 				startConnectPoint.x,
 				startConnectPoint.y,
-				startOwnerShape,
+				startOwnerFrame,
 				endConnectPoint.x,
 				endConnectPoint.y,
-				endOwnerShape,
+				endOwnerFrame,
 			);
 
 			// Create new path point data
@@ -155,8 +155,8 @@ export const refreshConnectLines = (
 		// Update the manual connect line path using the extracted function
 		const updatedConnectLine = updateManualConnectLinePath(
 			connectLine,
-			startOwnerShape,
-			endOwnerShape,
+			startOwnerFrame,
+			endOwnerFrame,
 			originalConnectLine,
 			originalStartOwner,
 			originalEndOwner,

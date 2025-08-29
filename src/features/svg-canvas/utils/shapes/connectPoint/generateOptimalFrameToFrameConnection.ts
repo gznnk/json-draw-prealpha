@@ -1,6 +1,6 @@
 // Import types.
 import type { Point } from "../../../types/core/Point";
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 
 // Import utils.
 import { closer } from "../../math/common/closer";
@@ -8,7 +8,7 @@ import { calcRectangleBoundingBoxGeometry } from "../../math/geometry/calcRectan
 import { isLineIntersectingBoxGeometry } from "../../math/geometry/isLineIntersectingBoxGeometry";
 import { addMarginToBoxGeometry } from "./addMarginToBoxGeometry";
 import { cleanPath } from "./cleanPath";
-import { generatePathFromShapeToPoint } from "./generatePathFromShapeToPoint";
+import { generatePathFromFrameToPoint } from "./generatePathFromFrameToPoint";
 import { selectOptimalPathFromCandidates } from "./selectOptimalPathFromCandidates";
 import { getLineDirection } from "./getLineDirection";
 import { getSecondConnectPoint } from "./getSecondConnectPoint";
@@ -60,46 +60,46 @@ const addCandidatePointWithIntersections = (
  * @param endX - End point x coordinate on the second shape
  * @param endY - End point y coordinate on the second shape
  * @param endOwnerShape - Second shape in the connection
- * @returns Array of points representing the optimal shape-to-shape connection path
+ * @returns Array of points representing the optimal frame-to-frame connection path
  */
-export const generateOptimalShapeToShapeConnection = (
+export const generateOptimalFrameToFrameConnection = (
 	startX: number,
 	startY: number,
-	startOwnerShape: Shape,
+	startOwnerFrame: Frame,
 	endX: number,
 	endY: number,
-	endOwnerShape: Shape,
+	endOwnerFrame: Frame,
 ): Point[] => {
 	// Calculate the direction from shape center to connection point
 	// This determines which side of the shape the connection starts/ends
 	const startDirection = getLineDirection(
-		startOwnerShape.x,
-		startOwnerShape.y,
+		startOwnerFrame.x,
+		startOwnerFrame.y,
 		startX,
 		startY,
 	);
 	const endDirection = getLineDirection(
-		endOwnerShape.x,
-		endOwnerShape.y,
+		endOwnerFrame.x,
+		endOwnerFrame.y,
 		endX,
 		endY,
 	);
 
-	// Get bounding box geometries for both shapes to calculate connection points
-	const startShapeBounds = calcRectangleBoundingBoxGeometry(startOwnerShape);
-	const endShapeBounds = calcRectangleBoundingBoxGeometry(endOwnerShape);
+	// Get bounding box geometries for both frames to calculate connection points
+	const startFrameBounds = calcRectangleBoundingBoxGeometry(startOwnerFrame);
+	const endFrameBounds = calcRectangleBoundingBoxGeometry(endOwnerFrame);
 
-	// Calculate secondary connection points that extend from the shape edges
-	// These points help create cleaner connection paths that avoid overlapping with shapes
+	// Calculate secondary connection points that extend from the frame edges
+	// These points help create cleaner connection paths that avoid overlapping with frames
 	const startSecondaryPoint = getSecondConnectPoint(
-		startOwnerShape,
-		startShapeBounds,
+		startOwnerFrame,
+		startFrameBounds,
 		startX,
 		startY,
 	);
 	const endSecondaryPoint = getSecondConnectPoint(
-		endOwnerShape,
-		endShapeBounds,
+		endOwnerFrame,
+		endFrameBounds,
 		endX,
 		endY,
 	);
@@ -112,23 +112,23 @@ export const generateOptimalShapeToShapeConnection = (
 	// This helps determine optimal intermediate routing points
 	const startCloserX = closer(
 		secondaryMidX,
-		startShapeBounds.left,
-		startShapeBounds.right,
+		startFrameBounds.left,
+		startFrameBounds.right,
 	);
 	const startCloserY = closer(
 		secondaryMidY,
-		startShapeBounds.top,
-		startShapeBounds.bottom,
+		startFrameBounds.top,
+		startFrameBounds.bottom,
 	);
 	const endCloserX = closer(
 		secondaryMidX,
-		endShapeBounds.left,
-		endShapeBounds.right,
+		endFrameBounds.left,
+		endFrameBounds.right,
 	);
 	const endCloserY = closer(
 		secondaryMidY,
-		endShapeBounds.top,
-		endShapeBounds.bottom,
+		endFrameBounds.top,
+		endFrameBounds.bottom,
 	);
 
 	// Calculate optimal intermediate point for connection routing
@@ -150,26 +150,26 @@ export const generateOptimalShapeToShapeConnection = (
 	const intersectingPaths: Point[][] = [];
 
 	// Add margin to shape bounds to prevent paths from getting too close to shapes
-	const startShapeWithMargin = addMarginToBoxGeometry(startShapeBounds);
-	const endShapeWithMargin = addMarginToBoxGeometry(endShapeBounds);
+	const startShapeWithMargin = addMarginToBoxGeometry(startFrameBounds);
+	const endShapeWithMargin = addMarginToBoxGeometry(endFrameBounds);
 
 	for (const candidatePoint of candidatePoints) {
 		// Route from connection source to center candidate
-		const startToCenter = generatePathFromShapeToPoint(
+		const startToCenter = generatePathFromFrameToPoint(
 			startX,
 			startY,
 			startDirection,
-			startShapeBounds,
+			startFrameBounds,
 			candidatePoint.x,
 			candidatePoint.y,
 		);
 
 		// Route from connection destination to center candidate
-		const endToCenter = generatePathFromShapeToPoint(
+		const endToCenter = generatePathFromFrameToPoint(
 			endX,
 			endY,
 			endDirection,
-			endShapeBounds,
+			endFrameBounds,
 			candidatePoint.x,
 			candidatePoint.y,
 		);

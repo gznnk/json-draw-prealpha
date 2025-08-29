@@ -9,8 +9,8 @@ import { isConnectableState } from "../../validation/isConnectableState";
  * Preserves vertical/horizontal line constraints when applicable and handles endpoint movements.
  *
  * @param connectLine - The connect line to update
- * @param startOwnerShape - Current start owner shape with updated connect points
- * @param endOwnerShape - Current end owner shape with updated connect points
+ * @param startOwnerFrame - Current start owner frame with updated connect points
+ * @param endOwnerFrame - Current end owner frame with updated connect points
  * @param originalConnectLine - Original connect line from start state
  * @param originalStartOwner - Original start owner shape from start state
  * @param originalEndOwner - Original end owner shape from start state
@@ -20,8 +20,8 @@ import { isConnectableState } from "../../validation/isConnectableState";
  */
 export const updateManualConnectLinePath = (
 	connectLine: ConnectLineState,
-	startOwnerShape: Diagram,
-	endOwnerShape: Diagram,
+	startOwnerFrame: Diagram,
+	endOwnerFrame: Diagram,
 	originalConnectLine: ConnectLineState,
 	originalStartOwner: Diagram,
 	originalEndOwner: Diagram,
@@ -30,17 +30,17 @@ export const updateManualConnectLinePath = (
 ): ConnectLineState | null => {
 	// Check if current owner shapes have connect points
 	if (
-		!isConnectableState(startOwnerShape) ||
-		!isConnectableState(endOwnerShape)
+		!isConnectableState(startOwnerFrame) ||
+		!isConnectableState(endOwnerFrame)
 	) {
 		return null;
 	}
 
 	// Find current connect points
-	const startConnectPoint = startOwnerShape.connectPoints.find(
+	const startConnectPoint = startOwnerFrame.connectPoints.find(
 		(cp) => cp.id === startPointId,
 	);
-	const endConnectPoint = endOwnerShape.connectPoints.find(
+	const endConnectPoint = endOwnerFrame.connectPoints.find(
 		(cp) => cp.id === endPointId,
 	);
 

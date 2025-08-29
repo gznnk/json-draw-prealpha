@@ -1,6 +1,6 @@
 // Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
-import type { Shape } from "../../core/Shape";
+import type { Frame } from "../../core/Frame";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
 /**
@@ -21,4 +21,4 @@ export const TextFeatures = {
  * Data type for text shapes.
  * Contains properties specific to text diagram elements.
  */
-export type TextData = CreateDataType<typeof TextFeatures> & Shape;
+export type TextData = CreateDataType<typeof TextFeatures> & Frame;

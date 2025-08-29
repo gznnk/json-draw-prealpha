@@ -10,7 +10,7 @@ import { nanToZero } from "../math/common/nanToZero";
 import { rotatePoint } from "../math/points/rotatePoint";
 import { calcUnrotatedItemableBoundingBox } from "./calcUnrotatedItemableBoundingBox";
 import { isPoint } from "../validation/isPoint";
-import { isShape } from "../validation/isShape";
+import { isFrame } from "../validation/isFrame";
 
 /**
  * Calculates the oriented bounding box of a group shape.
@@ -26,14 +26,14 @@ export const calcItemableOrientedBox = (
 		throw new Error("Unsupported itemable state");
 	}
 	const { x, y } = itemable;
-	const rotation = isShape(itemable) ? itemable.rotation : 0;
+	const rotation = isFrame(itemable) ? itemable.rotation : 0;
 	const { items } = itemable;
 	const radians = degreesToRadians(rotation);
 
 	// Calculate bounding box without rotation applied
 	let boundingBox: Box;
 	if (items.length === 0) {
-		if (isShape(itemable)) {
+		if (isFrame(itemable)) {
 			const halfWidth = itemable.width / 2;
 			const halfHeight = itemable.height / 2;
 			boundingBox = {

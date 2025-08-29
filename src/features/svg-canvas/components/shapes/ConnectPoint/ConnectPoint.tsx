@@ -20,8 +20,8 @@ import { DragPoint } from "../../core/DragPoint";
 // Import utils.
 import { calcRectangleBoundingBoxGeometry } from "../../../utils/math/geometry/calcRectangleBoundingBoxGeometry";
 import { newId } from "../../../utils/shapes/common/newId";
-import { generateOptimalShapeToShapeConnection } from "../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
-import { generatePathFromShapeToPoint } from "../../../utils/shapes/connectPoint/generatePathFromShapeToPoint";
+import { generateOptimalFrameToFrameConnection } from "../../../utils/shapes/connectPoint/generateOptimalFrameToFrameConnection";
+import { generatePathFromFrameToPoint } from "../../../utils/shapes/connectPoint/generatePathFromFrameToPoint";
 import { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDirection";
 
 // Import constants.
@@ -39,7 +39,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	x,
 	y,
 	ownerId,
-	ownerShape,
+	ownerFrame,
 	alwaysVisible,
 	onConnect,
 	onPreviewConnectLine,
@@ -54,9 +54,9 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	// Connecting point
 	const connectingPoint = useRef<ConnectingPoint | undefined>(undefined);
 	// Bounding box geometry of the connect point's owner
-	const ownerBoundingBoxGeometry = calcRectangleBoundingBoxGeometry(ownerShape);
+	const ownerBoundingBoxGeometry = calcRectangleBoundingBoxGeometry(ownerFrame);
 	// Direction of the connect point
-	const direction = getLineDirection(ownerShape.x, ownerShape.y, x, y);
+	const direction = getLineDirection(ownerFrame.x, ownerFrame.y, x, y);
 
 	/**
 	 * Update connection line coordinates
@@ -70,7 +70,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 		if (!connectingPoint.current) {
 			// Connection line during dragging
-			newPoints = generatePathFromShapeToPoint(
+			newPoints = generatePathFromFrameToPoint(
 				x,
 				y,
 				direction,
@@ -80,13 +80,13 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			);
 		} else {
 			// Connection line when there is a connecting point
-			newPoints = generateOptimalShapeToShapeConnection(
+			newPoints = generateOptimalFrameToFrameConnection(
 				x,
 				y,
-				ownerShape,
+				ownerFrame,
 				connectingPoint.current.x, // X coordinate of the connection destination
 				connectingPoint.current.y, // Y coordinate of the connection destination
-				connectingPoint.current.ownerShape, // Shape of the connection destination's owner
+				connectingPoint.current.ownerFrame, // Shape of the connection destination's owner
 			);
 		}
 
@@ -123,7 +123,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		x,
 		y,
 		ownerId,
-		ownerShape,
+		ownerFrame,
 		onConnect,
 		onPreviewConnectLine,
 		eventBus,
@@ -163,7 +163,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		if (e.dropItem.type === "ConnectPoint") {
 			setIsHovered(true);
 
-			const { id, x, y, ownerId, ownerShape, eventBus } = refBus.current;
+			const { id, x, y, ownerId, ownerFrame, eventBus } = refBus.current;
 
 			// Send notification to the connection destination
 			eventBus.dispatchEvent(
@@ -178,7 +178,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 						endX: x,
 						endY: y,
 						endOwnerId: ownerId,
-						endOwnerShape: ownerShape,
+						endOwnerFrame: ownerFrame,
 					},
 				}),
 			);
@@ -192,7 +192,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		setIsHovered(false);
 		// Processing when connection is cancelled
 		if (e.dropItem.type === "ConnectPoint") {
-			const { id, x, y, ownerId, ownerShape, eventBus } = refBus.current;
+			const { id, x, y, ownerId, ownerFrame, eventBus } = refBus.current;
 
 			// Send notification to the connection destination
 			eventBus.dispatchEvent(
@@ -207,7 +207,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 						endX: x,
 						endY: y,
 						endOwnerId: ownerId,
-						endOwnerShape: ownerShape,
+						endOwnerFrame: ownerFrame,
 					},
 				}),
 			);
@@ -220,7 +220,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	const handleDrop = useCallback((e: DiagramDragDropEvent) => {
 		// Processing when dropped
 		if (e.dropItem.type === "ConnectPoint") {
-			const { id, x, y, ownerId, ownerShape, eventBus } = refBus.current;
+			const { id, x, y, ownerId, ownerFrame, eventBus } = refBus.current;
 
 			// Send notification to the connection destination
 			eventBus.dispatchEvent(
@@ -235,7 +235,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 						endX: x,
 						endY: y,
 						endOwnerId: ownerId,
-						endOwnerShape: ownerShape,
+						endOwnerFrame: ownerFrame,
 					},
 				}),
 			);
@@ -269,7 +269,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 						x: customEvent.detail.endX,
 						y: customEvent.detail.endY,
 						onwerId: customEvent.detail.endOwnerId,
-						ownerShape: customEvent.detail.endOwnerShape,
+						ownerFrame: customEvent.detail.endOwnerFrame,
 					};
 
 					// Recalculate path points so that the line connects to the connection destination point

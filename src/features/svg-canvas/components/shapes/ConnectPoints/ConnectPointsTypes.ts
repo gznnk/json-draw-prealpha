@@ -1,5 +1,5 @@
 // Import types.
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { PreviewConnectLineEvent } from "../../../types/events/PreviewConnectLineEvent";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
@@ -11,7 +11,7 @@ export type ConnectPointsProps = {
 	/** Owner shape ID */
 	ownerId: string;
 	/** Owner shape properties */
-	ownerShape: Shape;
+	ownerFrame: Frame;
 	/** Array of connect points to render */
 	connectPoints: ConnectPointState[];
 	/** Whether to show all connect points */

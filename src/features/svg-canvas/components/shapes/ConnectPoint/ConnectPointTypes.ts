@@ -1,5 +1,5 @@
 // Import types related to SvgCanvas.
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 
 export type ConnectionEvent = {
 	eventId: string;
@@ -11,7 +11,7 @@ export type ConnectionEvent = {
 	endX: number;
 	endY: number;
 	endOwnerId: string;
-	endOwnerShape: Shape;
+	endOwnerFrame: Frame;
 };
 
 export type ConnectingPoint = {
@@ -19,5 +19,5 @@ export type ConnectingPoint = {
 	x: number;
 	y: number;
 	onwerId: string;
-	ownerShape: Shape;
+	ownerFrame: Frame;
 };

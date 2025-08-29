@@ -149,7 +149,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
 	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
-	const ownerShape = useMemo(
+	const ownerFrame = useMemo(
 		() => ({
 			x,
 			y,
@@ -239,7 +239,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 			)}
 			<ConnectPoints
 				ownerId={id}
-				ownerShape={ownerShape}
+				ownerFrame={ownerFrame}
 				connectPoints={connectPoints}
 				showConnectPoints={showConnectPoints}
 				shouldRender={!isDragging && !isTransforming && !isSelected}

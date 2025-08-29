@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
@@ -210,8 +210,8 @@ const processConnectLineForPaste = (
 	}
 
 	// Get the new connection target shapes
-	const startOwner = getDiagramById(items, newStartOwnerId) as Shape;
-	const endOwner = getDiagramById(items, newEndOwnerId) as Shape;
+	const startOwner = getDiagramById(items, newStartOwnerId) as Frame;
+	const endOwner = getDiagramById(items, newEndOwnerId) as Frame;
 
 	// Return null if either shape is not found
 	if (!startOwner || !endOwner) {
