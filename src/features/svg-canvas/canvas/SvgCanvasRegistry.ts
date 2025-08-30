@@ -3,7 +3,6 @@ import { DiagramRegistry } from "../registry";
 
 // Import Atlas objects
 import { ConnectLineAtlas } from "../atlas/shapes/ConnectLineAtlas";
-import { ConnectPointAtlas } from "../atlas/shapes/ConnectPointAtlas";
 import { EllipseAtlas } from "../atlas/shapes/EllipseAtlas";
 import { GroupAtlas } from "../atlas/shapes/GroupAtlas";
 import { ImageAtlas } from "../atlas/shapes/ImageAtlas";
@@ -13,10 +12,9 @@ import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
 import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
 
 // Import Element Atlas objects
-import { FrameAtlas } from "../atlas/elements/FrameAtlas";
+import { ButtonAtlas } from "../atlas/elements/ButtonAtlas";
 
 // Import Diagram Atlas objects
-import { ButtonAtlas } from "../atlas/elements/ButtonAtlas";
 
 // Import Node Atlas objects
 import { AgentNodeAtlas } from "../atlas/nodes/AgentNodeAtlas";
@@ -41,7 +39,6 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// Shape Atlas Registration
 	// ============================================================================
 	DiagramRegistry.register(ConnectLineAtlas);
-	DiagramRegistry.register(ConnectPointAtlas);
 	DiagramRegistry.register(EllipseAtlas);
 	DiagramRegistry.register(GroupAtlas);
 	DiagramRegistry.register(ImageAtlas);
@@ -53,7 +50,6 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// ============================================================================
 	// Element Atlas Registration
 	// ============================================================================
-	DiagramRegistry.register(FrameAtlas);
 	DiagramRegistry.register(ButtonAtlas);
 
 	// ============================================================================

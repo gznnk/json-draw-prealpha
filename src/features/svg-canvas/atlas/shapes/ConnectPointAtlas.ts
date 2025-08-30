@@ -11,14 +11,10 @@
 // ============================================================================
 // Types
 // ============================================================================
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
-} from "../DiagramAtlas";
 import type { ConnectPointData } from "../../types/data/shapes/ConnectPointData";
-import type { ConnectPointState } from "../../types/state/shapes/ConnectPointState";
 import type { ConnectPointProps } from "../../types/props/shapes/ConnectPointProps";
+import type { ConnectPointState } from "../../types/state/shapes/ConnectPointState";
+import type { DiagramAtlas } from "../DiagramAtlas";
 
 // ============================================================================
 // Defaults
@@ -29,16 +25,12 @@ import { ConnectPointDefaultState } from "../../constants/state/shapes/ConnectPo
 // ============================================================================
 // Components
 // ============================================================================
-import {
-	ConnectPoint,
-	ConnectPointMinimap,
-} from "../../components/shapes/ConnectPoint";
+import { ConnectPoint } from "../../components/shapes/ConnectPoint";
+import { DummyComponent } from "../DiagramAtlas";
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
-import { connectPointStateToData } from "../../utils/shapes/connectPoint/mapConnectPointStateToData";
-import { mapConnectPointDataToState } from "../../utils/shapes/connectPoint/mapConnectPointDataToState";
 import { dummyImplementation } from "../DiagramAtlas";
 
 /**
@@ -73,7 +65,7 @@ export const ConnectPointAtlas: ConnectPointAtlas = {
 	// ============================================================================
 
 	component: ConnectPoint,
-	minimapComponent: ConnectPointMinimap,
+	minimapComponent: DummyComponent,
 
 	// ============================================================================
 	// Utility Functions
@@ -82,6 +74,6 @@ export const ConnectPointAtlas: ConnectPointAtlas = {
 	createState: dummyImplementation,
 	export: undefined,
 	calcConnectPointPosition: dummyImplementation,
-	dataToState: mapConnectPointDataToState as DataToStateMapper,
-	stateToData: connectPointStateToData as StateToDataMapper,
+	dataToState: dummyImplementation,
+	stateToData: dummyImplementation,
 };

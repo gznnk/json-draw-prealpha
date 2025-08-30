@@ -6,7 +6,7 @@ import type { DiagramTextChangeEvent } from "../../events/DiagramTextChangeEvent
  * Provides properties to control text editing behavior and associated event handlers.
  */
 export type TextableProps = {
-	isTextEditEnabled?: boolean;
+	isTextEditEnabled?: boolean; // TODO: 廃止予定
 	onTextChange?: (e: DiagramTextChangeEvent) => void;
 	onDiagramChange?: (e: DiagramChangeEvent) => void;
 };
