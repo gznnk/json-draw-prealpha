@@ -50,6 +50,7 @@ const InputComponent: React.FC<InputProps> = ({
 	onDragOver,
 	onDragLeave,
 	onClick,
+	onSelect,
 	onTextChange,
 	onHoverChange,
 }) => {
@@ -118,7 +119,7 @@ const InputComponent: React.FC<InputProps> = ({
 	// Generate properties for selection
 	const selectProps = useSelect({
 		id,
-		onSelect: undefined,
+		onSelect,
 	});
 
 	// Generate properties for hovering

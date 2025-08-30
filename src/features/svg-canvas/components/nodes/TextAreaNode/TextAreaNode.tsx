@@ -199,6 +199,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				stroke="#D9D9D9"
 				strokeWidth="1px"
 				onDrag={handleDrag}
+				onSelect={handleSelect}
 				onTextChange={onTextChange}
 			/>
 		</>

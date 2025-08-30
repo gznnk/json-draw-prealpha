@@ -1,9 +1,11 @@
 // Import types.
 import type { InputFeatures } from "../../data/elements/InputData";
 import type { InputState } from "../../state/elements/InputState";
+import type { SelectableProps } from "../core/SelectableProps";
 import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 
 /**
  * Props for Input component
  */
-export type InputProps = CreateDiagramProps<InputState, typeof InputFeatures>;
+export type InputProps = CreateDiagramProps<InputState, typeof InputFeatures> &
+	SelectableProps;
