@@ -1,9 +1,9 @@
 // Import types.
 import type { ButtonState } from "../../../types/state/elements/ButtonState";
 
+import { ButtonFeatures } from "../../../types/data/elements/ButtonData";
 // Import constants.
 import { ButtonDefaultData } from "../../data/elements/ButtonDefaultData";
-import { ButtonFeatures } from "../../../types/data/elements/ButtonData";
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**
@@ -14,15 +14,18 @@ export const ButtonDefaultState: ButtonState = CreateDefaultState<ButtonState>({
 	options: ButtonFeatures,
 	baseData: ButtonDefaultData,
 	properties: {
-		cornerRadius: 6,
 		width: 88,
 		height: 32,
+		cornerRadius: 6,
 		fill: "#1677ff",
 		stroke: "#1677ff",
-		strokeWidth: 1,
-		text: "Button",
+		strokeWidth: "1px",
 		fontSize: 14,
 		fontColor: "#ffffff",
 		fontWeight: "normal",
+		fontFamily: "Segoe UI",
+		textAlign: "center",
+		verticalAlign: "center",
+		textType: "text",
 	},
 });

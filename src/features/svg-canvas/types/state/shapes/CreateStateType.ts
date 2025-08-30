@@ -1,6 +1,8 @@
+// Import types.
+import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { DiagramBaseData } from "../../data/core/DiagramBaseData";
-import type { DiagramBaseState } from "../core/DiagramBaseState";
 import type { CornerRoundableState } from "../core/CornerRoundableState";
+import type { DiagramBaseState } from "../core/DiagramBaseState";
 import type { FillableState } from "../core/FillableState";
 import type { ItemableState } from "../core/ItemableState";
 import type { SelectableState } from "../core/SelectableState";
@@ -9,8 +11,8 @@ import type { TextableState } from "../core/TextableState";
 import type { TransformativeState } from "../core/TransformativeState";
 import type { ConnectableState } from "./ConnectableState";
 
-// Import the new unified features type
-import type { DiagramFeatures } from "../../core/DiagramFeatures";
+// Import shared modules.
+import type { Prettify } from "../../../../../shared/utility-types";
 
 /**
  * Create state type with unified features.
@@ -20,13 +22,15 @@ import type { DiagramFeatures } from "../../core/DiagramFeatures";
 export type CreateStateType<
 	T extends DiagramBaseData,
 	U extends DiagramFeatures,
-> = T &
-	DiagramBaseState &
-	(U["selectable"] extends true ? SelectableState : object) &
-	(U["transformative"] extends true ? TransformativeState : object) &
-	(U["itemable"] extends true ? ItemableState<DiagramBaseState> : object) &
-	(U["connectable"] extends true ? ConnectableState : object) &
-	(U["strokable"] extends true ? StrokableState : object) &
-	(U["fillable"] extends true ? FillableState : object) &
-	(U["cornerRoundable"] extends true ? CornerRoundableState : object) &
-	(U["textable"] extends true ? TextableState : object);
+> = Prettify<
+	T &
+		DiagramBaseState &
+		(U["selectable"] extends true ? SelectableState : object) &
+		(U["transformative"] extends true ? TransformativeState : object) &
+		(U["itemable"] extends true ? ItemableState<DiagramBaseState> : object) &
+		(U["connectable"] extends true ? ConnectableState : object) &
+		(U["strokable"] extends true ? StrokableState : object) &
+		(U["fillable"] extends true ? FillableState : object) &
+		(U["cornerRoundable"] extends true ? CornerRoundableState : object) &
+		(U["textable"] extends true ? TextableState : object)
+>;

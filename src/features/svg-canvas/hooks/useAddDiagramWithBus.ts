@@ -9,7 +9,7 @@ import type { Diagram } from "../types/state/catalog/Diagram";
 import type { AddDiagramEvent } from "../types/events/AddDiagramEvent";
 import { newEventId } from "../utils/core/newEventId";
 
-// Import shared module files.
+// Import shared modules.
 import type { EventBus } from "../../../shared/event-bus/EventBus";
 
 /**

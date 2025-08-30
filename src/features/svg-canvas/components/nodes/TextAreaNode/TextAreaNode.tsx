@@ -3,11 +3,11 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
 import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
 import type { InputState } from "../../../types/state/elements/InputState";
-
 
 // Import components.
 import { Button } from "../../elements/Button";
@@ -20,7 +20,6 @@ import { newEventId } from "../../../utils/core/newEventId";
 // Import local modules.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { rotatePoint } from "../../../utils/math/points/rotatePoint";
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 
 /**
  * TextAreaNode component.
@@ -161,27 +160,15 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					scaleX={1}
 					scaleY={1}
 					rotation={0}
-					keepProportion={true}
+					keepProportion={false}
 					isSelected={false}
 					isAncestorSelected={false}
 					showOutline={false}
 					isTransforming={false}
 					showTransformControls={false}
-					cornerRadius={6}
-					fill="#1677ff"
-					stroke="#1677ff"
-					strokeWidth="1px"
 					text="Send"
-					fontSize={14}
-					fontColor="#ffffff"
-					fontWeight="normal"
-					fontFamily="Arial"
-					textAlign="center"
-					verticalAlign="center"
-					textType="text"
 					isTextEditing={false}
 					onDrag={handleDrag}
-					onSelect={handleSelect}
 					onClick={handleButtonClick}
 				/>
 			</Frame>

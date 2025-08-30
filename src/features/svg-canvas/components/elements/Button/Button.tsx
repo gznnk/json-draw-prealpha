@@ -23,6 +23,7 @@ import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
+import { ButtonDefaultState } from "../../../constants/state/elements/ButtonDefaultState";
 // Import styled components.
 import { ButtonElement } from "./ButtonStyled";
 
@@ -35,24 +36,24 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	y,
 	width,
 	height,
-	cornerRadius,
+	cornerRadius = ButtonDefaultState.cornerRadius,
 	rotation,
 	scaleX,
 	scaleY,
 	keepProportion,
-	fill,
-	stroke,
-	strokeWidth,
+	fill = ButtonDefaultState.fill,
+	stroke = ButtonDefaultState.stroke,
+	strokeWidth = ButtonDefaultState.strokeWidth,
 	isSelected,
 	isAncestorSelected = false,
 	text,
-	textType,
-	fontColor,
-	fontSize,
-	fontFamily,
-	fontWeight,
-	textAlign,
-	verticalAlign,
+	textType = ButtonDefaultState.textType,
+	fontColor = ButtonDefaultState.fontColor,
+	fontSize = ButtonDefaultState.fontSize,
+	fontFamily = ButtonDefaultState.fontFamily,
+	fontWeight = ButtonDefaultState.fontWeight,
+	textAlign = ButtonDefaultState.textAlign,
+	verticalAlign = ButtonDefaultState.verticalAlign,
 	isTextEditing,
 	isTextEditEnabled = true,
 	isDragging = false,
@@ -210,7 +211,6 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 					onTransform={onTransform}
 				/>
 			)}
-
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}
