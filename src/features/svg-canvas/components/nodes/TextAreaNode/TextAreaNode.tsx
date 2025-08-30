@@ -6,7 +6,8 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
 import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
-import type { TextState } from "../../../types/state/elements/TextState";
+import type { InputState } from "../../../types/state/elements/InputState";
+
 
 // Import components.
 import { Button } from "../../elements/Button";
@@ -42,14 +43,14 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onExecute,
 	} = props;
 
-	const textState = items[0] as TextState;
+	const inputState = items[0] as InputState;
 	// State to manage the text content of the TextArea node.
-	const [text, setText] = useState<string>(textState.text);
+	const [text, setText] = useState<string>(inputState.text);
 
 	// Apply the props.text to the state when the component mounts or when props.text changes.
 	useEffect(() => {
-		setText(textState.text);
-	}, [textState]);
+		setText(inputState.text);
+	}, [inputState]);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -59,7 +60,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onSelect,
 		onExecute,
 		onDiagramChange,
-		textState,
+		inputState,
 		setText,
 	};
 	const refBus = useRef(refBusVal);
@@ -101,13 +102,13 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 
 	// Handle propagation events from child components
 	const onPropagation = useCallback((e: ExecutionPropagationEvent) => {
-		const { id, text, textState, onDiagramChange, onExecute, setText } =
+		const { id, text, inputState, onDiagramChange, onExecute, setText } =
 			refBus.current;
 
 		if (e.eventPhase === "Ended") {
 			// Update the text state with the new text from the event data.
 			onDiagramChange?.({
-				id: textState.id,
+				id: inputState.id,
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
 				startDiagram: {
@@ -185,7 +186,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				/>
 			</Frame>
 			<Input
-				{...textState}
+				{...inputState}
 				x={inputCenter.x}
 				y={inputCenter.y}
 				width={width - 32}

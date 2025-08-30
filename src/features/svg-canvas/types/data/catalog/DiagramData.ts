@@ -20,7 +20,6 @@ import type { RectangleData } from "../shapes/RectangleData";
 import type { SvgData } from "../shapes/SvgData";
 
 // Import element data types.
-import type { TextData } from "../elements/TextData";
 import type { FrameData } from "../elements/FrameData";
 
 /**
@@ -39,7 +38,6 @@ export type DiagramData =
 	| RectangleData
 	| SvgData
 	// Elements
-	| TextData
 	| FrameData
 	// Diagrams
 	| ButtonData

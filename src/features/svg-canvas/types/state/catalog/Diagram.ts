@@ -20,7 +20,6 @@ import type { RectangleState } from "../shapes/RectangleState";
 import type { SvgState } from "../shapes/SvgState";
 
 // Import element state types.
-import type { TextState } from "../elements/TextState";
 import type { FrameState } from "../elements/FrameState";
 
 /**
@@ -39,7 +38,6 @@ export type Diagram =
 	| RectangleState
 	| SvgState
 	// Elements
-	| TextState
 	| FrameState
 	// Diagrams
 	| ButtonState

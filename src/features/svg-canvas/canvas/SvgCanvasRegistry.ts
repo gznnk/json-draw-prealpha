@@ -13,7 +13,6 @@ import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
 import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
 
 // Import Element Atlas objects
-import { TextAtlas } from "../atlas/elements/TextAtlas";
 import { FrameAtlas } from "../atlas/elements/FrameAtlas";
 
 // Import Diagram Atlas objects
@@ -54,13 +53,12 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// ============================================================================
 	// Element Atlas Registration
 	// ============================================================================
-	DiagramRegistry.register(TextAtlas);
 	DiagramRegistry.register(FrameAtlas);
+	DiagramRegistry.register(ButtonAtlas);
 
 	// ============================================================================
 	// Diagram Atlas Registration
 	// ============================================================================
-	DiagramRegistry.register(ButtonAtlas);
 
 	// ============================================================================
 	// Node Atlas Registration
