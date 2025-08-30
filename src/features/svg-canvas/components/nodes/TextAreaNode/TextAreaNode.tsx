@@ -153,9 +153,9 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			>
 				<Button
 					id={`${id}-button`}
-					x={width / 2 - 51}
+					x={width / 2 - 56}
 					y={height / 2 - 27}
-					width={70}
+					width={80}
 					height={32}
 					scaleX={1}
 					scaleY={1}
