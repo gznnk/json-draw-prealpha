@@ -49,6 +49,8 @@ const InputComponent: React.FC<InputProps> = ({
 	verticalAlign = InputDefaultData.verticalAlign,
 	isTextEditing,
 	isTextEditEnabled = true,
+	isSelected,
+	isAncestorSelected = false,
 	onDrag,
 	onDragOver,
 	onDragLeave,
@@ -64,6 +66,7 @@ const InputComponent: React.FC<InputProps> = ({
 	const refBusVal = {
 		// Properties
 		id,
+		isSelected,
 		isTextEditEnabled,
 		onDrag,
 		onTextChange,
@@ -74,26 +77,9 @@ const InputComponent: React.FC<InputProps> = ({
 	// Generate properties for text editing
 	const { onDoubleClick } = useText({
 		id,
-		isSelected: isTextEditEnabled,
+		isSelected,
 		isTextEditEnabled,
 		onTextChange,
-		attributes: {
-			x,
-			y,
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
-			text,
-			textType,
-			fontColor,
-			fontSize,
-			fontFamily,
-			fontWeight,
-			textAlign,
-			verticalAlign,
-		},
 	});
 
 	// Generate properties for dragging
@@ -113,8 +99,8 @@ const InputComponent: React.FC<InputProps> = ({
 		id,
 		x,
 		y,
-		isSelected: false, // Input is not selectable
-		isAncestorSelected: false,
+		isSelected,
+		isAncestorSelected,
 		ref: svgRef,
 		onClick,
 	});

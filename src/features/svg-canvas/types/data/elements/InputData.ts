@@ -13,7 +13,7 @@ export const InputFeatures = {
 	fillable: true,
 	cornerRoundable: true,
 	textable: true,
-	selectable: false,
+	selectable: true,
 	fileDroppable: false,
 } as const satisfies DiagramFeatures;
 
