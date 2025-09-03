@@ -201,6 +201,9 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				text={text}
 				isSelected={isSelected}
 				isAncestorSelected={isSelected}
+				showOutline={false}
+				isTransforming={false}
+				showTransformControls={false}
 				onDrag={handleDrag}
 				onSelect={handleSelect}
 				onTextChange={onTextChange}

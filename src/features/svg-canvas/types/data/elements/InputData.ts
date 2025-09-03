@@ -7,7 +7,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  */
 export const InputFeatures = {
 	frameable: true,
-	transformative: false,
+	transformative: true,
 	connectable: false,
 	strokable: true,
 	fillable: true,

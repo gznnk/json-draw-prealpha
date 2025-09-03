@@ -9,7 +9,9 @@ import type { InputProps } from "../../../types/props/elements/InputProps";
 import { InputDefaultData } from "../../../constants/data/elements/InputDefaultData";
 
 // Import components.
+import { Outline } from "../../core/Outline";
 import { Textable } from "../../core/Textable";
+import { Transformative } from "../../core/Transformative";
 
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";
@@ -35,6 +37,7 @@ const InputComponent: React.FC<InputProps> = ({
 	scaleX,
 	scaleY,
 	rotation,
+	keepProportion,
 	fill = InputDefaultData.fill,
 	stroke = InputDefaultData.stroke,
 	strokeWidth = InputDefaultData.strokeWidth,
@@ -51,11 +54,15 @@ const InputComponent: React.FC<InputProps> = ({
 	isTextEditEnabled = true,
 	isSelected,
 	isAncestorSelected = false,
+	showOutline = false,
+	showTransformControls = false,
+	isTransforming = false,
 	onDrag,
 	onDragOver,
 	onDragLeave,
 	onClick,
 	onSelect,
+	onTransform,
 	onTextChange,
 	onHoverChange,
 }) => {
@@ -189,6 +196,33 @@ const InputComponent: React.FC<InputProps> = ({
 					textAlign={textAlign}
 					verticalAlign={verticalAlign}
 					isTextEditing={isTextEditing}
+				/>
+			)}
+			<Outline
+				x={x}
+				y={y}
+				width={width}
+				height={height}
+				rotation={rotation}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				showOutline={showOutline}
+			/>
+			{showTransformControls && (
+				<Transformative
+					id={id}
+					type="Input"
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+					keepProportion={keepProportion}
+					showTransformControls={showTransformControls}
+					isTransforming={isTransforming}
+					onTransform={onTransform}
 				/>
 			)}
 		</>
