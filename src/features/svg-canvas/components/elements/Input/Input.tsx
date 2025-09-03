@@ -24,6 +24,9 @@ import { useSvgViewport } from "../../../context/SvgViewportContext";
 // Import utils.
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { radiansToDegrees } from "../../../utils/math/common/radiansToDegrees";
+import { signNonZero } from "../../../utils/math/common/signNonZero";
+import { decomposeMatrix } from "../../../utils/math/transform/decomposeMatrix";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
@@ -108,14 +111,18 @@ const InputComponent: React.FC<InputProps> = ({
 			);
 			console.log("Transformed Point:", transformedPoint);
 
+			const matrix = zeroOrigin.multiply(domMatrix2);
+			const transform = decomposeMatrix(matrix);
+			console.log("Decomposed Transform:", transform);
+
 			return {
 				x: transformedPoint.x,
 				y: transformedPoint.y,
 				width,
 				height,
-				scaleX,
-				scaleY,
-				rotation,
+				scaleX: signNonZero(transform.sx),
+				scaleY: signNonZero(transform.sy),
+				rotation: radiansToDegrees(transform.theta),
 				text,
 				textType,
 				textAlign,
