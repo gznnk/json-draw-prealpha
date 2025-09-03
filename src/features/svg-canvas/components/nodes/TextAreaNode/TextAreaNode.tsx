@@ -8,11 +8,13 @@ import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEven
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
 import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
 import type { InputState } from "../../../types/state/elements/InputState";
+import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
 
 // Import components.
 import { Button } from "../../elements/Button";
 import { Frame } from "../../elements/Frame";
 import { Input } from "../../elements/Input";
+import { NodeHeader } from "../../elements/NodeHeader";
 
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
@@ -26,6 +28,9 @@ import {
 	BUTTON_MARGIN_BOTTOM,
 	BUTTON_MARGIN_TOP,
 	BUTTON_WIDTH,
+	HEADER_HEIGHT,
+	HEADER_MARGIN_BOTTOM,
+	HEADER_MARGIN_TOP,
 } from "./TextAreaConstants";
 
 /**
@@ -50,7 +55,8 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onExecute,
 	} = props;
 
-	const inputState = items[0] as InputState;
+	const nodeHeaderState = items[0] as NodeHeaderState;
+	const inputState = items[1] as InputState;
 	// State to manage the text content of the TextArea node.
 	const [text, setText] = useState<string>(inputState.text);
 
@@ -140,11 +146,32 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 
 	const inputHeight =
 		height -
-		(BASE_MARGIN + BUTTON_HEIGHT + BUTTON_MARGIN_TOP + BUTTON_MARGIN_BOTTOM);
+		(HEADER_MARGIN_TOP +
+			HEADER_HEIGHT +
+			HEADER_MARGIN_BOTTOM +
+			BUTTON_HEIGHT +
+			BUTTON_MARGIN_TOP +
+			BUTTON_MARGIN_BOTTOM);
+
+	const headerCenter = affineTransformation(
+		0,
+		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
+		scaleX,
+		scaleY,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
 
 	const inputCenter = affineTransformation(
 		0,
-		-(height / 2 - (inputHeight / 2 + BASE_MARGIN)),
+		-(
+			height / 2 -
+			(inputHeight / 2 +
+				HEADER_MARGIN_TOP +
+				HEADER_HEIGHT +
+				HEADER_MARGIN_BOTTOM)
+		),
 		scaleX,
 		scaleY,
 		degreesToRadians(rotation),
@@ -160,7 +187,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			<Frame
 				{...props}
 				minWidth={200}
-				minHeight={100}
+				minHeight={200}
 				stroke="#E5E6EB"
 				strokeWidth="1px"
 				fill="white"
@@ -189,6 +216,21 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					onClick={handleButtonClick}
 				/>
 			</Frame>
+			<NodeHeader
+				{...nodeHeaderState}
+				x={headerCenter.x}
+				y={headerCenter.y}
+				width={width - BASE_MARGIN * 2}
+				height={HEADER_HEIGHT}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				rotation={rotation}
+				isSelected={isSelected}
+				isAncestorSelected={isSelected}
+				onDrag={handleDrag}
+				onSelect={handleSelect}
+				onTextChange={onTextChange}
+			/>
 			<Input
 				{...inputState}
 				x={inputCenter.x}

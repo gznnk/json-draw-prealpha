@@ -17,6 +17,7 @@ export type DiagramType =
 	| "Frame"
 	| "Button"
 	| "Input"
+	| "NodeHeader"
 	// Nodes
 	| "AgentNode"
 	| "HubNode"

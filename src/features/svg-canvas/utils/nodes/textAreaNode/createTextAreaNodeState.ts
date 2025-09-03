@@ -6,6 +6,7 @@ import { TextAreaNodeDefaultState } from "../../../constants/state/nodes/TextAre
 
 // Import utils.
 import { createInputState } from "../../elements/input/createInputState";
+import { createNodeHeaderState } from "../../elements/nodeHeader/createNodeHeaderState";
 import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
@@ -19,8 +20,8 @@ import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectan
 export const createTextAreaNodeState = ({
 	x,
 	y,
-	width = 200,
-	height = 100,
+	width = TextAreaNodeDefaultState.width,
+	height = TextAreaNodeDefaultState.height,
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
@@ -54,6 +55,11 @@ export const createTextAreaNodeState = ({
 		scaleX,
 		scaleY,
 		items: [
+			createNodeHeaderState({
+				x,
+				y,
+				text: "Text",
+			}),
 			createInputState({
 				x,
 				y,

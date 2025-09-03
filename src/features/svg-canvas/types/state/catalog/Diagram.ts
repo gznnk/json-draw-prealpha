@@ -1,5 +1,6 @@
 // Import types.
 import type { ButtonState } from "../elements/ButtonState";
+import type { NodeHeaderState } from "../elements/NodeHeaderState";
 import type { AgentNodeState } from "../nodes/AgentNodeState";
 import type { HubNodeState } from "../nodes/HubNodeState";
 import type { ImageGenNodeState } from "../nodes/ImageGenNodeState";
@@ -39,8 +40,9 @@ export type Diagram =
 	| SvgState
 	// Elements
 	| FrameState
-	// Diagrams
 	| ButtonState
+	| NodeHeaderState
+	// Diagrams
 	// Nodes
 	| AgentNodeState
 	| HubNodeState

@@ -1,5 +1,6 @@
 // Import data types.
 import type { ButtonData } from "../elements/ButtonData";
+import type { NodeHeaderData } from "../elements/NodeHeaderData";
 import type { AgentNodeData } from "../nodes/AgentNodeData";
 import type { HubNodeData } from "../nodes/HubNodeData";
 import type { ImageGenNodeData } from "../nodes/ImageGenNodeData";
@@ -39,8 +40,9 @@ export type DiagramData =
 	| SvgData
 	// Elements
 	| FrameData
-	// Diagrams
 	| ButtonData
+	| NodeHeaderData
+	// Diagrams
 	// Nodes
 	| AgentNodeData
 	| HubNodeData
