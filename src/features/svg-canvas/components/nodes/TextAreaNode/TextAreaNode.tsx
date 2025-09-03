@@ -16,6 +16,7 @@ import { Input } from "../../elements/Input";
 
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
+import { drawPoint } from "../../../utils/debug/drawPoint";
 
 // Import local modules.
 
@@ -125,6 +126,10 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			setText(e.data.text);
 		}
 	}, []);
+
+	console.log("frame x,y", props.x, props.y);
+	drawPoint("origin", { x: 0, y: 0 }, "black");
+	drawPoint("frame", { x: props.x, y: props.y }, "red");
 
 	return (
 		<>

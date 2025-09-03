@@ -23,6 +23,7 @@ import { useSvgViewport } from "../../../context/SvgViewportContext";
 
 // Import utils.
 import { mergeProps } from "../../../utils/core/mergeProps";
+import { drawPoint } from "../../../utils/debug/drawPoint";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { radiansToDegrees } from "../../../utils/math/common/radiansToDegrees";
 import { signNonZero } from "../../../utils/math/common/signNonZero";
@@ -83,6 +84,8 @@ const InputComponent: React.FC<InputProps> = ({
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
+	console.log("input x,y", x, y);
+
 	// Generate properties for text editing with coordinate transformation
 	const { onDoubleClick } = useText({
 		id,
@@ -90,34 +93,37 @@ const InputComponent: React.FC<InputProps> = ({
 		isTextEditEnabled,
 		onTextChange,
 		attributes: () => {
-			const domMatrix = svgRef.current?.getScreenCTM();
-			console.log("SVG Element DOMMatrix:", domMatrix);
-			const domMatrix2 = svgRef.current?.getCTM();
-			console.log("SVG Element CTM:", domMatrix2);
+			const ctmMatrix = svgRef.current?.getCTM();
+
+			if (!ctmMatrix) {
+				return undefined;
+			}
+
 			const zeroOrigin = new DOMMatrix().translate(
 				viewportRef.current.minX,
 				viewportRef.current.minY,
 			);
-			if (!domMatrix2) {
-				return undefined;
-			}
 
-			// const domMatrix3 = zeroOrigin.multiply(domMatrix2.inverse());
-			// console.log("SVG Element Transformed CTM:", domMatrix3);
-
-			const p = new DOMPoint(x, y);
+			const p = new DOMPoint(width / 2, height / 2);
 			const transformedPoint = p.matrixTransform(
-				zeroOrigin.multiply(domMatrix2),
+				zeroOrigin.multiply(ctmMatrix),
 			);
-			console.log("Transformed Point:", transformedPoint);
 
-			const matrix = zeroOrigin.multiply(domMatrix2);
+			console.log("transformedPoint", transformedPoint);
+
+			drawPoint("input", { x: x, y: y }, "blue");
+			drawPoint(
+				"transformedPoint",
+				{ x: transformedPoint.x, y: transformedPoint.y },
+				"green",
+			);
+
+			const matrix = zeroOrigin.multiply(ctmMatrix);
 			const transform = decomposeMatrix(matrix);
-			console.log("Decomposed Transform:", transform);
 
 			return {
-				x: transformedPoint.x,
-				y: transformedPoint.y,
+				x: matrix.e,
+				y: matrix.f,
 				width,
 				height,
 				scaleX: signNonZero(transform.sx),
