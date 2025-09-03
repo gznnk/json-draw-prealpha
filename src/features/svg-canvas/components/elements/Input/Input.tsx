@@ -18,16 +18,9 @@ import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
 
-// Import context.
-import { useSvgViewport } from "../../../context/SvgViewportContext";
-
 // Import utils.
 import { mergeProps } from "../../../utils/core/mergeProps";
-import { drawPoint } from "../../../utils/debug/drawPoint";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { radiansToDegrees } from "../../../utils/math/common/radiansToDegrees";
-import { signNonZero } from "../../../utils/math/common/signNonZero";
-import { decomposeMatrix } from "../../../utils/math/transform/decomposeMatrix";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
@@ -69,9 +62,6 @@ const InputComponent: React.FC<InputProps> = ({
 	// Reference to the SVG element to be transformed
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
 
-	// Get viewport information for coordinate conversion
-	const viewportRef = useSvgViewport();
-
 	// To avoid frequent handler generation, hold referenced values in useRef
 	const refBusVal = {
 		// Properties
@@ -84,60 +74,28 @@ const InputComponent: React.FC<InputProps> = ({
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	console.log("input x,y", x, y);
-
 	// Generate properties for text editing with coordinate transformation
 	const { onDoubleClick } = useText({
 		id,
 		isSelected,
 		isTextEditEnabled,
 		onTextChange,
-		attributes: () => {
-			const ctmMatrix = svgRef.current?.getCTM();
-
-			if (!ctmMatrix) {
-				return undefined;
-			}
-
-			const zeroOrigin = new DOMMatrix().translate(
-				viewportRef.current.minX,
-				viewportRef.current.minY,
-			);
-
-			const p = new DOMPoint(width / 2, height / 2);
-			const transformedPoint = p.matrixTransform(
-				zeroOrigin.multiply(ctmMatrix),
-			);
-
-			console.log("transformedPoint", transformedPoint);
-
-			drawPoint("input", { x: x, y: y }, "blue");
-			drawPoint(
-				"transformedPoint",
-				{ x: transformedPoint.x, y: transformedPoint.y },
-				"green",
-			);
-
-			const matrix = zeroOrigin.multiply(ctmMatrix);
-			const transform = decomposeMatrix(matrix);
-
-			return {
-				x: matrix.e,
-				y: matrix.f,
-				width,
-				height,
-				scaleX: signNonZero(transform.sx),
-				scaleY: signNonZero(transform.sy),
-				rotation: radiansToDegrees(transform.theta),
-				text,
-				textType,
-				textAlign,
-				verticalAlign,
-				fontColor,
-				fontSize,
-				fontFamily,
-				fontWeight,
-			};
+		attributes: {
+			x,
+			y,
+			width,
+			height,
+			scaleX,
+			scaleY,
+			rotation,
+			text,
+			textType,
+			fontColor,
+			fontSize,
+			fontFamily,
+			fontWeight,
+			textAlign,
+			verticalAlign,
 		},
 	});
 

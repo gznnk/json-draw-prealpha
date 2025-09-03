@@ -16,9 +16,8 @@ import { Input } from "../../elements/Input";
 
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
-import { drawPoint } from "../../../utils/debug/drawPoint";
-
-// Import local modules.
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
 
 /**
  * TextAreaNode component.
@@ -26,8 +25,13 @@ import { drawPoint } from "../../../utils/debug/drawPoint";
 const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	const {
 		id,
+		x,
+		y,
 		width,
 		height,
+		scaleX,
+		scaleY,
+		rotation,
 		items,
 		isSelected,
 		onDrag,
@@ -127,9 +131,15 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		}
 	}, []);
 
-	console.log("frame x,y", props.x, props.y);
-	drawPoint("origin", { x: 0, y: 0 }, "black");
-	drawPoint("frame", { x: props.x, y: props.y }, "red");
+	const textCenter = affineTransformation(
+		0,
+		-(height / 2 - ((height - 72) / 2 + 16)),
+		scaleX,
+		scaleY,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
 
 	return (
 		<>
@@ -143,46 +153,44 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				cornerRadius={6}
 				onPropagation={onPropagation}
 			>
-				<>
-					<Input
-						{...inputState}
-						x={0}
-						y={-(height / 2 - ((height - 72) / 2 + 16))}
-						width={width - 32}
-						height={height - 72}
-						scaleX={1}
-						scaleY={1}
-						rotation={0}
-						text={text}
-						isSelected={isSelected}
-						isAncestorSelected={isSelected}
-						onDrag={handleDrag}
-						onSelect={handleSelect}
-						onTextChange={onTextChange}
-					/>
-					<Button
-						id={`${id}-button`}
-						x={width / 2 - 56}
-						y={height / 2 - 27}
-						width={80}
-						height={32}
-						scaleX={1}
-						scaleY={1}
-						rotation={0}
-						keepProportion={false}
-						isSelected={false}
-						isAncestorSelected={false}
-						showOutline={false}
-						isTransforming={false}
-						showTransformControls={false}
-						text="Send"
-						isTextEditing={false}
-						effectsEnabled
-						onDrag={handleDrag}
-						onClick={handleButtonClick}
-					/>
-				</>
+				<Button
+					id={`${id}-button`}
+					x={width / 2 - 56}
+					y={height / 2 - 27}
+					width={80}
+					height={32}
+					scaleX={1}
+					scaleY={1}
+					rotation={0}
+					keepProportion={false}
+					isSelected={false}
+					isAncestorSelected={false}
+					showOutline={false}
+					isTransforming={false}
+					showTransformControls={false}
+					text="Send"
+					isTextEditing={false}
+					effectsEnabled
+					onDrag={handleDrag}
+					onClick={handleButtonClick}
+				/>
 			</Frame>
+			<Input
+				{...inputState}
+				x={textCenter.x}
+				y={textCenter.y}
+				width={width - 32}
+				height={height - 72}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				rotation={rotation}
+				text={text}
+				isSelected={isSelected}
+				isAncestorSelected={isSelected}
+				onDrag={handleDrag}
+				onSelect={handleSelect}
+				onTextChange={onTextChange}
+			/>
 		</>
 	);
 };
