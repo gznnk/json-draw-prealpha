@@ -7,6 +7,7 @@ import type { FrameProps } from "../../../types/props/elements/FrameProps";
 
 // Import components.
 import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel/PositionLabel";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../../shapes/ConnectPoints";
 
@@ -200,6 +201,17 @@ const FrameComponent: React.FC<FrameProps> = ({
 				onConnect={onConnect}
 				onPreviewConnectLine={onPreviewConnectLine}
 			/>
+			{isDragging && isSelected && (
+				<PositionLabel
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+				/>
+			)}
 		</>
 	);
 };
