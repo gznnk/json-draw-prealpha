@@ -33,7 +33,6 @@ import {
 	HEADER_HEIGHT,
 	HEADER_MARGIN_BOTTOM,
 	HEADER_MARGIN_TOP,
-	INPUT_MARGIN_BOTTOM,
 } from "./LLMNodeConstants";
 
 /**
@@ -192,7 +191,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		(HEADER_MARGIN_TOP +
 			HEADER_HEIGHT +
 			HEADER_MARGIN_BOTTOM +
-			INPUT_MARGIN_BOTTOM);
+			BASE_MARGIN);
 
 	const headerCenter = affineTransformation(
 		0,
@@ -231,9 +230,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				fill="white"
 				cornerRadius={6}
 				onPropagation={onPropagation}
-			>
-				{null}
-			</Frame>
+			/>
 			<NodeHeader
 				{...nodeHeaderState}
 				x={headerCenter.x}

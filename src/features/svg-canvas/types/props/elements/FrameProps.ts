@@ -11,6 +11,6 @@ export type FrameProps = CreateDiagramProps<
 	FrameState,
 	typeof FrameFeatures
 > & {
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	onPropagation?: (e: ExecutionPropagationEvent) => void;
 };
