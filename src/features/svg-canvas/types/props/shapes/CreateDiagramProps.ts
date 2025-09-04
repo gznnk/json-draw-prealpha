@@ -17,7 +17,16 @@ import type { Prettify } from "../../../../../shared/utility-types";
  * This type conditionally merges different props interfaces based on specified features,
  * allowing components to selectively inherit specific behaviors and event handlers.
  */
-export type CreateDiagramProps<T, U extends DiagramFeatures> = Prettify<
+/**
+ * Create diagram props type with unified features.
+ * This type conditionally merges different props interfaces based on specified features,
+ * allowing components to selectively inherit specific behaviors and event handlers.
+ * 
+ * @template T - State type
+ * @template U - DiagramFeatures configuration
+ * @template P - Additional properties type (optional)
+ */
+export type CreateDiagramProps<T, U extends DiagramFeatures, P = object> = Prettify<
 	Omit<T, "type" | "itemableType"> &
 		DiagramBaseProps &
 		(U["selectable"] extends true ? SelectableProps : object) &
@@ -26,5 +35,6 @@ export type CreateDiagramProps<T, U extends DiagramFeatures> = Prettify<
 		(U["connectable"] extends true ? ConnectableProps : object) &
 		(U["textable"] extends true ? TextableProps : object) &
 		(U["executable"] extends true ? ExecutableProps : object) &
-		(U["fileDroppable"] extends true ? FileDroppableProps : object)
+		(U["fileDroppable"] extends true ? FileDroppableProps : object) &
+		P
 >;

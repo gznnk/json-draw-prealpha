@@ -19,9 +19,19 @@ import type { Prettify } from "../../../../../shared/utility-types";
  * This type conditionally merges different state interfaces based on specified features,
  * allowing components to selectively inherit specific behaviors and state properties.
  */
+/**
+ * Create state type with unified features.
+ * This type conditionally merges different state interfaces based on specified features,
+ * allowing components to selectively inherit specific behaviors and state properties.
+ * 
+ * @template T - DiagramBaseData type
+ * @template U - DiagramFeatures configuration
+ * @template P - Additional properties type (optional)
+ */
 export type CreateStateType<
 	T extends DiagramBaseData,
 	U extends DiagramFeatures,
+	P = object,
 > = Prettify<
 	T &
 		DiagramBaseState &
@@ -32,5 +42,6 @@ export type CreateStateType<
 		(U["strokable"] extends true ? StrokableState : object) &
 		(U["fillable"] extends true ? FillableState : object) &
 		(U["cornerRoundable"] extends true ? CornerRoundableState : object) &
-		(U["textable"] extends true ? TextableState : object)
+		(U["textable"] extends true ? TextableState : object) &
+		P
 >;

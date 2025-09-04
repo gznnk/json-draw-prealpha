@@ -6,10 +6,10 @@ import type { CreateDiagramProps } from "./CreateDiagramProps";
 /**
  * Props for Path component
  */
-export type PathProps = CreateDiagramProps<PathState, typeof PathFeatures> & {
+export type PathProps = CreateDiagramProps<PathState, typeof PathFeatures, {
 	dragEnabled?: boolean;
 	transformEnabled?: boolean;
 	verticesModeEnabled?: boolean;
 	rightAngleSegmentDrag?: boolean;
 	fixBothEnds?: boolean;
-};
+}>;

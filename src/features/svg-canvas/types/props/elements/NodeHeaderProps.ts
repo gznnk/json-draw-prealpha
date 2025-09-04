@@ -8,9 +8,9 @@ import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
  * Props for NodeHeader component
  */
 export type NodeHeaderProps = Optional<
-	CreateDiagramProps<NodeHeaderState, typeof NodeHeaderFeatures> & {
+	CreateDiagramProps<NodeHeaderState, typeof NodeHeaderFeatures, {
 		icon: React.ReactNode;
-	},
+	}>,
 	| "height"
 	| "fontColor"
 	| "fontSize"
