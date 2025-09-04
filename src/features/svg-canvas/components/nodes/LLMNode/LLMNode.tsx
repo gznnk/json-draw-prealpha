@@ -33,6 +33,7 @@ import {
 	HEADER_HEIGHT,
 	HEADER_MARGIN_BOTTOM,
 	HEADER_MARGIN_TOP,
+	INPUT_MARGIN_BOTTOM,
 } from "./LLMNodeConstants";
 
 /**
@@ -53,32 +54,28 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		onDrag,
 		onSelect,
 		onTextChange,
-		onDiagramChange,
 		onExecute,
 	} = props;
 
 	const nodeHeaderState = items[0] as NodeHeaderState;
 	const inputState = items[1] as InputState;
-	
+
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
-	const [text, setText] = useState<string>(inputState.text);
+	const [instructions, setInstructions] = useState<string>(inputState.text);
 
 	// Apply the props.text to the state when the component mounts or when props.text changes.
 	useEffect(() => {
-		setText(inputState.text);
+		setInstructions(inputState.text);
 	}, [inputState.text]);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		id,
-		text,
+		instructions,
 		onDrag,
 		onSelect,
 		onExecute,
-		onDiagramChange,
-		inputState,
-		setText,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -109,102 +106,93 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		});
 	}, []);
 
-	// Handle propagation events from child components
-	const onPropagation = useCallback((e: ExecutionPropagationEvent) => {
-		const { text, inputState, onDiagramChange, setText } =
-			refBus.current;
+	const handleExecution = useCallback(
+		async (inputText: string) => {
+			if (inputText === "") return;
 
-		if (e.eventPhase === "Ended") {
-			// Handle execution
-			handleExecution(e.data.text);
+			const { id, instructions, onExecute } = refBus.current;
 
-			// Update the text state
-			onDiagramChange?.({
-				id: inputState.id,
-				eventId: e.eventId,
-				eventPhase: e.eventPhase,
-				startDiagram: {
-					text,
-				},
-				endDiagram: {
-					text: e.data.text,
-				},
-			});
-		} else {
-			setText(e.data.text);
-		}
-	}, []);
+			const processId = newEventId();
+			setProcessIdList((prev) => [...prev, processId]);
 
-	const handleExecution = useCallback(async (inputText: string) => {
-		if (inputText === "") return;
-
-		const processId = newEventId();
-		setProcessIdList((prev) => [...prev, processId]);
-		
-		const openai = new OpenAI({
-			apiKey: apiKey,
-			dangerouslyAllowBrowser: true,
-		});
-
-		try {
-			const stream = await openai.responses.create({
-				model: "gpt-4o",
-				instructions: nodeHeaderState.text || "",
-				input: inputText,
-				stream: true,
+			const openai = new OpenAI({
+				apiKey: apiKey,
+				dangerouslyAllowBrowser: true,
 			});
 
-			let fullOutput = "";
-			const eventId = newEventId();
+			try {
+				const stream = await openai.responses.create({
+					model: "gpt-4o",
+					instructions,
+					input: inputText,
+					stream: true,
+				});
 
-			refBus.current.onExecute?.({
-				id: refBus.current.id,
-				eventId,
-				eventPhase: "Started",
-				data: {
-					text: "",
-				},
-			});
+				let fullOutput = "";
+				const eventId = newEventId();
 
-			for await (const event of stream) {
-				if (event.type === "response.output_text.delta") {
-					const delta = event.delta;
-					fullOutput += delta;
+				onExecute?.({
+					id,
+					eventId,
+					eventPhase: "Started",
+					data: {
+						text: "",
+					},
+				});
 
-					refBus.current.onExecute?.({
-						id: refBus.current.id,
-						eventId,
-						eventPhase: "InProgress",
-						data: {
-							text: fullOutput,
-						},
-					});
+				for await (const event of stream) {
+					if (event.type === "response.output_text.delta") {
+						const delta = event.delta;
+						fullOutput += delta;
+
+						onExecute?.({
+							id,
+							eventId,
+							eventPhase: "InProgress",
+							data: {
+								text: fullOutput,
+							},
+						});
+					}
+
+					if (event.type === "response.output_text.done") {
+						onExecute?.({
+							id,
+							eventId,
+							eventPhase: "Ended",
+							data: {
+								text: fullOutput,
+							},
+						});
+					}
 				}
-
-				if (event.type === "response.output_text.done") {
-					refBus.current.onExecute?.({
-						id: refBus.current.id,
-						eventId,
-						eventPhase: "Ended",
-						data: {
-							text: fullOutput,
-						},
-					});
-				}
+			} catch (error) {
+				console.error("Error fetching data from OpenAI API:", error);
+				alert("An error occurred during the API request.");
 			}
-		} catch (error) {
-			console.error("Error fetching data from OpenAI API:", error);
-			alert("An error occurred during the API request.");
-		}
 
-		setProcessIdList((prev) => prev.filter((id) => id !== processId));
-	}, [apiKey, nodeHeaderState.text]);
+			setProcessIdList((prev) => prev.filter((id) => id !== processId));
+		},
+		[apiKey],
+	);
+
+	// Handle propagation events from child components
+	const onPropagation = useCallback(
+		(e: ExecutionPropagationEvent) => {
+			if (e.eventPhase === "Ended") {
+				// Handle execution
+				handleExecution(e.data.text);
+			}
+		},
+		[handleExecution],
+	);
 
 	const inputHeight =
 		height -
 		(HEADER_MARGIN_TOP +
 			HEADER_HEIGHT +
-			HEADER_MARGIN_BOTTOM);
+			HEADER_MARGIN_BOTTOM +
+			INPUT_MARGIN_BOTTOM);
 
 	const headerCenter = affineTransformation(
 		0,
@@ -244,43 +232,44 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				cornerRadius={6}
 				onPropagation={onPropagation}
 			>
-				<NodeHeader
-					{...nodeHeaderState}
-					x={headerCenter.x}
-					y={headerCenter.y}
-					width={width - BASE_MARGIN * 2}
-					height={HEADER_HEIGHT}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					rotation={rotation}
-					isSelected={isSelected}
-					isAncestorSelected={isSelected}
-					icon={<LLM fill="#ffffff" />}
-					iconBackgroundColor={processIdList.length > 0 ? "#10B981" : "#8B5CF6"}
-					onDrag={handleDrag}
-					onSelect={handleSelect}
-					onTextChange={onTextChange}
-				/>
-				<Input
-					{...inputState}
-					x={inputCenter.x}
-					y={inputCenter.y}
-					width={width - BASE_MARGIN * 2}
-					height={inputHeight}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					rotation={rotation}
-					text={text}
-					isSelected={isSelected}
-					isAncestorSelected={isSelected}
-					showOutline={false}
-					isTransforming={false}
-					showTransformControls={false}
-					onDrag={handleDrag}
-					onSelect={handleSelect}
-					onTextChange={onTextChange}
-				/>
+				{null}
 			</Frame>
+			<NodeHeader
+				{...nodeHeaderState}
+				x={headerCenter.x}
+				y={headerCenter.y}
+				width={width - BASE_MARGIN * 2}
+				height={HEADER_HEIGHT}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				rotation={rotation}
+				isSelected={isSelected}
+				isAncestorSelected={isSelected}
+				icon={<LLM fill="#ffffff" />}
+				iconBackgroundColor={processIdList.length > 0 ? "#10B981" : "#8B5CF6"}
+				onDrag={handleDrag}
+				onSelect={handleSelect}
+				onTextChange={onTextChange}
+			/>
+			<Input
+				{...inputState}
+				x={inputCenter.x}
+				y={inputCenter.y}
+				width={width - BASE_MARGIN * 2}
+				height={inputHeight}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				rotation={rotation}
+				text={instructions}
+				isSelected={isSelected}
+				isAncestorSelected={isSelected}
+				showOutline={false}
+				isTransforming={false}
+				showTransformControls={false}
+				onDrag={handleDrag}
+				onSelect={handleSelect}
+				onTextChange={onTextChange}
+			/>
 		</>
 	);
 };
