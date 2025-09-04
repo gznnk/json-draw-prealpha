@@ -5,9 +5,6 @@ import { memo } from "react";
 // Import types.
 import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
 
-// Import components related to SvgCanvas.
-// import { RectangleMinimap } from "../../shapes/Rectangle/RectangleMinimap";
-
 /**
  * TextAreaNode minimap component - lightweight version without outlines, controls, and labels.
  */
@@ -29,7 +26,7 @@ const TextAreaNodeMinimapComponent: React.FC<TextAreaNodeProps> = (props) => {
 				strokeWidth="1"
 				rx="6"
 			/>
-			
+
 			{/* Header area with icon */}
 			<g transform={`translate(0, ${-height / 2 + 20})`}>
 				{/* Icon background (blue color) */}
@@ -41,11 +38,10 @@ const TextAreaNodeMinimapComponent: React.FC<TextAreaNodeProps> = (props) => {
 					fill="#1890ff"
 					rx="4"
 				/>
-				
+
 				{/* TextArea icon representation (simplified white lines) */}
-				
 			</g>
-			
+
 			{/* Input area */}
 			<g transform={`translate(0, ${-10})`}>
 				<rect
@@ -59,21 +55,13 @@ const TextAreaNodeMinimapComponent: React.FC<TextAreaNodeProps> = (props) => {
 					rx="2"
 				/>
 			</g>
-			
+
 			{/* Send button */}
 			<g transform={`translate(${width / 2 - 40}, ${height / 2 - 20})`}>
-				<rect
-					x={-20}
-					y={-8}
-					width={40}
-					height={16}
-					fill="#1890ff"
-					rx="2"
-				/>
-
+				<rect x={-20} y={-8} width={40} height={16} fill="#1890ff" rx="2" />
 			</g>
 		</g>
 	);
-};;
+};
 
 export const TextAreaNodeMinimap = memo(TextAreaNodeMinimapComponent);
