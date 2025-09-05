@@ -207,6 +207,8 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					keepProportion={false}
 					isSelected={false}
 					isAncestorSelected={false}
+					showConnectPoints={false}
+					connectEnabled={false}
 					showOutline={false}
 					isTransforming={false}
 					showTransformControls={false}

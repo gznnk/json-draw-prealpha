@@ -8,7 +8,7 @@ import type { CreateDataType } from "../shapes/CreateDataType";
 export const ButtonFeatures = {
 	frameable: true,
 	transformative: true,     // Can be transformed (resize, rotate)
-	connectable: false,        // Can connect to other shapes
+	connectable: true,        // Can connect to other shapes
 	strokable: true,          // Has stroke properties
 	fillable: true,           // Has fill properties
 	cornerRoundable: true,    // Has corner radius properties

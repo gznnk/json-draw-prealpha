@@ -13,6 +13,7 @@ export type ButtonProps = Optional<
 	| "fill"
 	| "stroke"
 	| "strokeWidth"
+	| "connectPoints"
 	| "fontSize"
 	| "fontColor"
 	| "fontWeight"

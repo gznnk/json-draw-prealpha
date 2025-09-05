@@ -1,3 +1,7 @@
+import type { ButtonData } from "../../types/data/elements/ButtonData";
+import { ButtonFeatures } from "../../types/data/elements/ButtonData";
+import type { ButtonProps } from "../../types/props/elements/ButtonProps";
+import type { ButtonState } from "../../types/state/elements/ButtonState";
 /**
  * Button Diagram Atlas
  *
@@ -12,14 +16,10 @@
 // Types
 // ============================================================================
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { ButtonData } from "../../types/data/elements/ButtonData";
-import type { ButtonState } from "../../types/state/elements/ButtonState";
-import type { ButtonProps } from "../../types/props/elements/ButtonProps";
-import { ButtonFeatures } from "../../types/data/elements/ButtonData";
 
 // ============================================================================
 // Defaults
@@ -36,9 +36,9 @@ import { Button, ButtonMinimap } from "../../components/elements/Button";
 // Utility Functions
 // ============================================================================
 import { createButtonState } from "../../utils/elements/button/createButtonState";
-import { mapButtonStateToData } from "../../utils/elements/button/mapButtonStateToData";
 import { mapButtonDataToState } from "../../utils/elements/button/mapButtonDataToState";
-import { dummyImplementation } from "../DiagramAtlas";
+import { mapButtonStateToData } from "../../utils/elements/button/mapButtonStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * Button Diagram Atlas Type Definition
@@ -76,7 +76,7 @@ export const ButtonAtlas: ButtonAtlas = {
 
 	createState: createButtonState,
 	export: undefined,
-	calcConnectPointPosition: dummyImplementation,
+	calcConnectPointPosition: calcRectangleConnectPointPosition,
 	dataToState: mapButtonDataToState as DataToStateMapper,
 	stateToData: mapButtonStateToData as StateToDataMapper,
 };

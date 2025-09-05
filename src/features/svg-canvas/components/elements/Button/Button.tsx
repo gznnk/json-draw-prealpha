@@ -1,6 +1,6 @@
 // Import React.
 import type React from "react";
-import { memo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 
 // Import types.
 import type { ButtonProps } from "../../../types/props/elements/ButtonProps";
@@ -13,6 +13,7 @@ import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";
@@ -48,6 +49,9 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	strokeWidth = ButtonDefaultState.strokeWidth,
 	isSelected,
 	isAncestorSelected = false,
+	connectPoints = [],
+	showConnectPoints = false,
+	connectEnabled = true,
 	text,
 	textType = ButtonDefaultState.textType,
 	fontColor = ButtonDefaultState.fontColor,
@@ -70,6 +74,8 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	onClick,
 	onSelect,
 	onTransform,
+	onConnect,
+	onPreviewConnectLine,
 	onTextChange,
 	onHoverChange,
 }) => {
@@ -137,6 +143,22 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 		clickProps,
 		selectProps,
 		hoverProps,
+	);
+
+	// Suppress ConnectPoint re-rendering by memoization
+	// If separated by key and passed as individual props, each ConnectPoint side
+	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
+	const ownerFrame = useMemo(
+		() => ({
+			x,
+			y,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		}),
+		[x, y, width, height, rotation, scaleX, scaleY],
 	);
 
 	// Generate rect transform attribute
@@ -215,6 +237,16 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 					onTransform={onTransform}
 				/>
 			)}
+			<ConnectPoints
+				ownerId={id}
+				ownerFrame={ownerFrame}
+				connectPoints={connectPoints}
+				showConnectPoints={showConnectPoints}
+				shouldRender={!isDragging && !isTransforming && !isSelected}
+				connectEnabled={connectEnabled}
+				onConnect={onConnect}
+				onPreviewConnectLine={onPreviewConnectLine}
+			/>
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}
