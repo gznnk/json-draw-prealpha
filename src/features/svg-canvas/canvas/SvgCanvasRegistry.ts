@@ -13,6 +13,7 @@ import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
 
 // Import Element Atlas objects
 import { ButtonAtlas } from "../atlas/elements/ButtonAtlas";
+import { InputAtlas } from "../atlas/elements/InputAtlas";
 
 // Import Diagram Atlas objects
 
@@ -51,6 +52,7 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// Element Atlas Registration
 	// ============================================================================
 	DiagramRegistry.register(ButtonAtlas);
+	DiagramRegistry.register(InputAtlas);
 
 	// ============================================================================
 	// Diagram Atlas Registration

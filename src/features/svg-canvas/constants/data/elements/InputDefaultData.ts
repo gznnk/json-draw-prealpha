@@ -12,6 +12,8 @@ export const InputDefaultData: InputData = CreateDefaultData<InputData>({
 	type: "Input",
 	options: InputFeatures,
 	properties: {
+		width: 200,
+		height: 40,
 		fill: "#FFFFFF",
 		stroke: "#D9D9D9",
 		strokeWidth: "1px",
@@ -21,6 +23,6 @@ export const InputDefaultData: InputData = CreateDefaultData<InputData>({
 		fontFamily: "Segoe UI",
 		fontWeight: "normal",
 		textAlign: "left",
-		verticalAlign: "top",
+		verticalAlign: "center",
 	},
 });
