@@ -1,6 +1,6 @@
 // Import React.
 import type React from "react";
-import { memo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 
 // Import types.
 import type { InputProps } from "../../../types/props/elements/InputProps";
@@ -12,6 +12,7 @@ import { InputDefaultData } from "../../../constants/data/elements/InputDefaultD
 import { Outline } from "../../core/Outline";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";
@@ -54,6 +55,10 @@ const InputComponent: React.FC<InputProps> = ({
 	isTextEditEnabled = true,
 	isSelected,
 	isAncestorSelected = false,
+	isDragging = false,
+	connectPoints = [],
+	showConnectPoints = false,
+	connectEnabled = true,
 	showOutline = false,
 	showTransformControls = false,
 	isTransforming = false,
@@ -63,6 +68,8 @@ const InputComponent: React.FC<InputProps> = ({
 	onClick,
 	onSelect,
 	onTransform,
+	onConnect,
+	onPreviewConnectLine,
 	onTextChange,
 	onHoverChange,
 }) => {
@@ -149,6 +156,22 @@ const InputComponent: React.FC<InputProps> = ({
 		hoverProps,
 	);
 
+	// Suppress ConnectPoint re-rendering by memoization
+	// If separated by key and passed as individual props, each ConnectPoint side
+	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
+	const ownerFrame = useMemo(
+		() => ({
+			x,
+			y,
+			width,
+			height,
+			rotation,
+			scaleX,
+			scaleY,
+		}),
+		[x, y, width, height, rotation, scaleX, scaleY],
+	);
+
 	// Generate rect transform attribute
 	const transform = createSvgTransform(
 		scaleX,
@@ -225,6 +248,16 @@ const InputComponent: React.FC<InputProps> = ({
 					onTransform={onTransform}
 				/>
 			)}
+			<ConnectPoints
+				ownerId={id}
+				ownerFrame={ownerFrame}
+				connectPoints={connectPoints}
+				showConnectPoints={showConnectPoints}
+				shouldRender={!isDragging && !isTransforming && !isSelected}
+				connectEnabled={connectEnabled}
+				onConnect={onConnect}
+				onPreviewConnectLine={onPreviewConnectLine}
+			/>
 		</>
 	);
 };

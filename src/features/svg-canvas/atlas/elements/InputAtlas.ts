@@ -38,6 +38,7 @@ import { Input, InputMinimap } from "../../components/elements/Input";
 import { createInputState } from "../../utils/elements/input/createInputState";
 import { inputStateToData } from "../../utils/elements/input/mapInputStateToData";
 import { mapInputDataToState } from "../../utils/elements/input/mapInputDataToState";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * Input Shape Atlas Type Definition
@@ -79,7 +80,7 @@ export const InputAtlas: InputAtlas = {
 
 	createState: createInputState,
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: calcRectangleConnectPointPosition,
 	dataToState: mapInputDataToState as DataToStateMapper,
 	stateToData: inputStateToData as StateToDataMapper,
 };

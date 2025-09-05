@@ -13,6 +13,7 @@ export type InputProps = Optional<
 	| "stroke"
 	| "strokeWidth"
 	| "cornerRadius"
+	| "connectPoints"
 	| "fontColor"
 	| "fontSize"
 	| "fontFamily"

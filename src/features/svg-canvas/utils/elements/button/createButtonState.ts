@@ -6,7 +6,7 @@ import { ButtonDefaultState } from "../../../constants/state/elements/ButtonDefa
 
 // Import utils.
 import { newId } from "../../shapes/common/newId";
-import { createButtonConnectPoint } from "./createButtonConnectPoint";
+import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 
 /**
  * Create Button state
@@ -29,7 +29,7 @@ export const createButtonState = ({
 	scaleY?: number;
 }): ButtonState => {
 	// Create connect points for the button
-	const connectPoints = createButtonConnectPoint({
+	const connectPoints = createRectangleConnectPoint({
 		x,
 		y,
 		width,
