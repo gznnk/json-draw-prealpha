@@ -17,6 +17,7 @@ import { ConnectPoints } from "../../shapes/ConnectPoints";
 // Import hooks.
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
@@ -71,6 +72,7 @@ const InputComponent: React.FC<InputProps> = ({
 	onConnect,
 	onPreviewConnectLine,
 	onTextChange,
+	onDiagramChange,
 	onHoverChange,
 }) => {
 	// Reference to the SVG element to be transformed
@@ -146,6 +148,27 @@ const InputComponent: React.FC<InputProps> = ({
 	const hoverProps = useHover({
 		id,
 		onHoverChange,
+	});
+
+	// Handle execution chain propagation to update text
+	useExecutionChain({
+		id,
+		onPropagation: (e) => {
+			if (e.eventPhase === "Ended" && e.data.text) {
+				// Update the diagram state with the new text
+				onDiagramChange?.({
+					id,
+					eventId: e.eventId,
+					eventPhase: e.eventPhase,
+					startDiagram: {
+						text,
+					},
+					endDiagram: {
+						text: e.data.text,
+					},
+				});
+			}
+		},
 	});
 
 	// Compose props for the SVG element
