@@ -105,6 +105,14 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onExecute?.({
 			id,
 			eventId: newEventId(),
+			eventPhase: "Started",
+			data: {
+				text: "",
+			},
+		});
+		onExecute?.({
+			id,
+			eventId: newEventId(),
 			eventPhase: "Ended",
 			data: {
 				text,
