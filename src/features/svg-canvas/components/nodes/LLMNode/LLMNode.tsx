@@ -51,9 +51,12 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		items,
 		isSelected,
 		onDrag,
+		onDragOver,
+		onDragLeave,
 		onSelect,
 		onTextChange,
 		onExecute,
+		onDiagramChange,
 	} = props;
 
 	const nodeHeaderState = items[0] as NodeHeaderState;
@@ -261,8 +264,11 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				isTransforming={false}
 				showTransformControls={false}
 				onDrag={handleDrag}
+				onDragOver={onDragOver}
+				onDragLeave={onDragLeave}
 				onSelect={handleSelect}
 				onTextChange={onTextChange}
+				onDiagramChange={onDiagramChange}
 			/>
 		</>
 	);

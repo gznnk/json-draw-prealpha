@@ -162,6 +162,8 @@ const InputComponent: React.FC<InputProps> = ({
 	useExecutionChain({
 		id,
 		onPropagation: (e) => {
+			setInternalText(e.data.text);
+
 			if (e.eventPhase === "Ended") {
 				// Update the diagram state with the new text
 				onDiagramChange?.({
@@ -175,8 +177,6 @@ const InputComponent: React.FC<InputProps> = ({
 						text: e.data.text,
 					},
 				});
-			} else {
-				setInternalText(e.data.text);
 			}
 		},
 	});

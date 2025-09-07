@@ -102,9 +102,10 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	const handleButtonClick = useCallback(() => {
 		// Bypass references to avoid function creation in every render.
 		const { text, id, onExecute } = refBus.current;
+		const eventId = newEventId();
 		onExecute?.({
 			id,
-			eventId: newEventId(),
+			eventId,
 			eventPhase: "Started",
 			data: {
 				text: "",
@@ -112,7 +113,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		});
 		onExecute?.({
 			id,
-			eventId: newEventId(),
+			eventId,
 			eventPhase: "Ended",
 			data: {
 				text,
