@@ -81,6 +81,7 @@ export const WebSearchNodeAtlas: WebSearchNodeAtlas = {
 	createState: createWebSearchNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapWebSearchNodeDataToState as DataToStateMapper,
 	stateToData: webSearchNodeStateToData as StateToDataMapper,
 };

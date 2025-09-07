@@ -77,6 +77,7 @@ export const ButtonAtlas: ButtonAtlas = {
 	createState: createButtonState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapButtonDataToState as DataToStateMapper,
 	stateToData: mapButtonStateToData as StateToDataMapper,
 };

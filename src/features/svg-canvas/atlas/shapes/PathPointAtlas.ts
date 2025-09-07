@@ -83,6 +83,7 @@ export const PathPointAtlas: PathPointAtlas = {
 	}),
 	export: undefined,
 	calcConnectPointPosition: () => [],
+	transformItems: undefined,
 	dataToState: mapPathPointDataToState as DataToStateMapper,
 	stateToData: pathPointStateToData as StateToDataMapper,
 };

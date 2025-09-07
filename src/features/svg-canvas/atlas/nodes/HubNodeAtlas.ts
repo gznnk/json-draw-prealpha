@@ -81,6 +81,7 @@ export const HubNodeAtlas: HubNodeAtlas = {
 	createState: createHubNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcEllipseConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapHubNodeDataToState as DataToStateMapper,
 	stateToData: hubNodeStateToData as StateToDataMapper,
 };

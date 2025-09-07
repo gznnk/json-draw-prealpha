@@ -4,12 +4,13 @@
  */
 import type { DiagramFeatures } from "../types/core/DiagramFeatures";
 import type { DiagramType } from "../types/core/DiagramType";
+import { Frame } from "../types/core/Frame";
 import type { DiagramData } from "../types/data/catalog/DiagramData";
 import type { Diagram } from "../types/state/catalog/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 export type {
 	DataToStateMapper,
-	StateToDataMapper,
+	StateToDataMapper
 } from "../registry/DiagramDefinition";
 
 /**
@@ -67,6 +68,9 @@ export type DiagramAtlas<
 
 	/** Calculator Functions */
 	calcConnectPointPosition: (state: Diagram) => ConnectPointState[];
+
+	/** Transform Functions */
+	transformItems: ((ownerFrame: Frame, items: Diagram[]) => Diagram[]) | undefined;
 
 	/** Mapper Functions */
 	dataToState: (data: DiagramData) => Diagram;

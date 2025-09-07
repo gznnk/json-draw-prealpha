@@ -81,6 +81,7 @@ export const PageDesignNodeAtlas: PageDesignNodeAtlas = {
 	createState: createPageDesignNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapPageDesignNodeDataToState as DataToStateMapper,
 	stateToData: pageDesignNodeStateToData as StateToDataMapper,
 };

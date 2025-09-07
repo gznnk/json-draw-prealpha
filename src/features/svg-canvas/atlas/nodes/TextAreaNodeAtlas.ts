@@ -81,6 +81,7 @@ export const TextAreaNodeAtlas: TextAreaNodeAtlas = {
 	createState: createTextAreaNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapTextAreaNodeDataToState as DataToStateMapper,
 	stateToData: textAreaNodeStateToData as StateToDataMapper,
 };

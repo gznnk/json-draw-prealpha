@@ -71,6 +71,7 @@ export const FrameAtlas: FrameAtlas = {
 	createState: dummyImplementation,
 	export: undefined,
 	calcConnectPointPosition: dummyImplementation,
+	transformItems: undefined,
 	dataToState: dummyImplementation,
 	stateToData: dummyImplementation,
 };

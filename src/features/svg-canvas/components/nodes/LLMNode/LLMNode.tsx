@@ -31,7 +31,6 @@ import { affineTransformation } from "../../../utils/math/transform/affineTransf
 import {
 	BASE_MARGIN,
 	HEADER_HEIGHT,
-	HEADER_MARGIN_BOTTOM,
 	HEADER_MARGIN_TOP,
 } from "./LLMNodeConstants";
 
@@ -189,29 +188,9 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		[handleExecution],
 	);
 
-	const inputHeight =
-		height -
-		(HEADER_MARGIN_TOP + HEADER_HEIGHT + HEADER_MARGIN_BOTTOM + BASE_MARGIN);
-
 	const headerCenter = affineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
-		scaleX,
-		scaleY,
-		degreesToRadians(rotation),
-		x,
-		y,
-	);
-
-	const inputCenter = affineTransformation(
-		0,
-		-(
-			height / 2 -
-			(inputHeight / 2 +
-				HEADER_MARGIN_TOP +
-				HEADER_HEIGHT +
-				HEADER_MARGIN_BOTTOM)
-		),
 		scaleX,
 		scaleY,
 		degreesToRadians(rotation),
@@ -250,13 +229,6 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 			/>
 			<Input
 				{...inputState}
-				x={inputCenter.x}
-				y={inputCenter.y}
-				width={width - BASE_MARGIN * 2}
-				height={inputHeight}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				rotation={rotation}
 				text={instructions}
 				isSelected={isSelected}
 				isAncestorSelected={isSelected}

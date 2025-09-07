@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
+import { ConnectLineFeatures } from "../../types/data/shapes/ConnectLineData";
+import type { ConnectLineProps } from "../../types/props/shapes/ConnectLineProps";
+import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
-import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
-import type { ConnectLineProps } from "../../types/props/shapes/ConnectLineProps";
-import { ConnectLineFeatures } from "../../types/data/shapes/ConnectLineData";
 
 // ============================================================================
 // Defaults
@@ -35,8 +35,8 @@ import { ConnectLine, ConnectLineMinimap } from "../../components/shapes/Connect
 // ============================================================================
 // Utility Functions
 // ============================================================================
-import { connectLineStateToData } from "../../utils/shapes/connectLine/mapConnectLineStateToData";
 import { mapConnectLineDataToState } from "../../utils/shapes/connectLine/mapConnectLineDataToState";
+import { connectLineStateToData } from "../../utils/shapes/connectLine/mapConnectLineStateToData";
 
 /**
  * ConnectLine Shape Atlas Type Definition
@@ -83,6 +83,7 @@ export const ConnectLineAtlas: ConnectLineAtlas = {
 	}),
 	export: undefined,
 	calcConnectPointPosition: () => [],
+	transformItems: undefined,
 	dataToState: mapConnectLineDataToState as DataToStateMapper,
 	stateToData: connectLineStateToData as StateToDataMapper,
 };

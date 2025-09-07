@@ -81,6 +81,7 @@ export const EllipseAtlas: EllipseAtlas = {
 	createState: createEllipseState,
 	export: undefined,
 	calcConnectPointPosition: calcEllipseConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapEllipseDataToState as DataToStateMapper,
 	stateToData: ellipseStateToData as StateToDataMapper,
 };

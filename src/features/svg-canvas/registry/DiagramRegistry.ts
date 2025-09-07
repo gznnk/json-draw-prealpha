@@ -1,8 +1,13 @@
 // Import types.
 import type { DiagramType } from "../types/core/DiagramType";
+import { Frame } from "../types/core/Frame";
 import type { Diagram } from "../types/state/catalog/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
-import type { DiagramDefinition, StateToDataMapper, DataToStateMapper } from "./DiagramDefinition";
+import type {
+	DataToStateMapper,
+	DiagramDefinition,
+	StateToDataMapper,
+} from "./DiagramDefinition";
 
 /**
  * Registry for managing diagram definitions.
@@ -86,6 +91,18 @@ class DiagramRegistryClass {
 		type: DiagramType,
 	): (((diagram: Diagram) => Blob | undefined) | undefined) | undefined {
 		return this.definitions.get(type)?.export;
+	}
+
+	/**
+	 * Get the transform items function for a diagram type.
+	 *
+	 * @param type - The diagram type
+	 * @returns The transform items function or undefined if not found
+	 */
+	getTransformItemsFunction(
+		type: DiagramType,
+	): (((ownerFrame: Frame, items: Diagram[]) => Diagram[]) | undefined) | undefined {
+		return this.definitions.get(type)?.transformItems;
 	}
 
 	/**

@@ -81,6 +81,7 @@ export const VectorStoreNodeAtlas: VectorStoreNodeAtlas = {
 	createState: createVectorStoreNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapVectorStoreNodeDataToState as DataToStateMapper,
 	stateToData: vectorStoreNodeStateToData as StateToDataMapper,
 };

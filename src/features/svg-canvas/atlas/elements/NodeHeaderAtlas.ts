@@ -29,16 +29,20 @@ import { NodeHeaderDefaultState } from "../../constants/state/elements/NodeHeade
 import { NodeHeaderMinimap } from "../../components/elements/NodeHeader";
 import { DummyComponent } from "../DiagramAtlas";
 
+import { createNodeHeaderState } from "../../utils/elements/nodeHeader/createNodeHeaderState";
 // ============================================================================
 // Utility Functions
 // ============================================================================
 import { dummyImplementation } from "../DiagramAtlas";
-import { createNodeHeaderState } from "../../utils/elements/nodeHeader/createNodeHeaderState";
 
 /**
  * NodeHeader Element Atlas Type Definition
  */
-type NodeHeaderAtlas = DiagramAtlas<NodeHeaderData, NodeHeaderState, NodeHeaderProps>;
+type NodeHeaderAtlas = DiagramAtlas<
+	NodeHeaderData,
+	NodeHeaderState,
+	NodeHeaderProps
+>;
 
 /**
  * NodeHeader Element Atlas Implementation
@@ -72,6 +76,7 @@ export const NodeHeaderAtlas: NodeHeaderAtlas = {
 	createState: createNodeHeaderState,
 	export: undefined,
 	calcConnectPointPosition: dummyImplementation,
+	transformItems: undefined,
 	dataToState: dummyImplementation,
 	stateToData: dummyImplementation,
 };

@@ -19,6 +19,7 @@ import { updateOutlineOfItemable } from "../../utils/updateOutlineOfItemable";
 // Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
+import { DiagramRegistry } from "../../../registry";
 // Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -107,8 +108,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 			if (isTransformativeState(initialItem)) {
 				const rotationDiff = e.endFrame.rotation - e.startFrame.rotation;
 				const newRotation = initialItem.rotation + rotationDiff;
-				newItem = {
-					...item,
+				const newItemFrame = {
 					x: newCenter.x,
 					y: newCenter.y,
 					width: initialItem.width * groupScaleX,
@@ -116,17 +116,40 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					rotation: newRotation,
 					scaleX: e.endFrame.scaleX,
 					scaleY: e.endFrame.scaleY,
+				};
+
+				let newItems: Diagram[] | undefined;
+				if (isItemableState(initialItem)) {
+					const transformFunction = DiagramRegistry.getTransformItemsFunction(
+						item.type,
+					);
+					if (transformFunction) {
+						newItems = transformFunction(newItemFrame, initialItem.items);
+						newItems = newItems.map((child) => {
+							if (isConnectableState(child)) {
+								const updatedChild = updateDiagramConnectPoints(child);
+								transformedDiagrams.push(updatedChild);
+								return updatedChild;
+							}
+							return child;
+						});
+					} else {
+						newItems = transformRecursively(
+							initialItem.items ?? [],
+							e,
+							transformedDiagrams,
+							true,
+							[...ancestors, item.id],
+							topLevelGroupIds,
+						);
+					}
+				}
+
+				newItem = {
+					...item,
+					...newItemFrame,
 					isTransforming: getIsTransformingState(e.eventPhase),
-					items: isItemableState(initialItem)
-						? transformRecursively(
-								initialItem.items ?? [],
-								e,
-								transformedDiagrams,
-								true,
-								[...ancestors, item.id],
-								topLevelGroupIds,
-							)
-						: undefined,
+					items: newItems,
 				} as Diagram;
 
 				// Update the connect points of the transformed item.
@@ -179,14 +202,29 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 
 					// Transform its children recursively.
 					if (isItemableState(newItem)) {
-						newItem.items = transformRecursively(
-							newItem.items ?? [],
-							e,
-							transformedDiagrams,
-							true,
-							[...ancestors, item.id],
-							topLevelGroupIds,
+						const transformFunction = DiagramRegistry.getTransformItemsFunction(
+							item.type,
 						);
+						if (transformFunction) {
+							newItem.items = transformFunction(e.endFrame, newItem.items);
+							newItem.items = newItem.items.map((child) => {
+								if (isConnectableState(child)) {
+									const updatedChild = updateDiagramConnectPoints(child);
+									transformedDiagrams.push(updatedChild);
+									return updatedChild;
+								}
+								return child;
+							});
+						} else {
+							newItem.items = transformRecursively(
+								newItem.items ?? [],
+								e,
+								transformedDiagrams,
+								true,
+								[...ancestors, item.id],
+								topLevelGroupIds,
+							);
+						}
 					}
 
 					// Update the connect points of the transformed item.

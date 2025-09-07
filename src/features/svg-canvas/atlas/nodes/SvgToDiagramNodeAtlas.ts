@@ -81,6 +81,7 @@ export const SvgToDiagramNodeAtlas: SvgToDiagramNodeAtlas = {
 	createState: createSvgToDiagramNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapSvgToDiagramNodeDataToState as DataToStateMapper,
 	stateToData: svgToDiagramNodeStateToData as StateToDataMapper,
 };

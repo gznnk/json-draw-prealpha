@@ -81,6 +81,7 @@ export const SvgAtlas: SvgAtlas = {
 	createState: (props: { x: number; y: number }) => createSvgState({ ...props, svgText: "" }),
 	export: svgToBlob,
 	calcConnectPointPosition: () => [],
+	transformItems: undefined,
 	dataToState: mapSvgDataToState as DataToStateMapper,
 	stateToData: svgStateToData as StateToDataMapper,
 };
