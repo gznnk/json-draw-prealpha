@@ -8,9 +8,9 @@ import type { ItemableState } from "../../types/state/core/ItemableState";
 import { degreesToRadians } from "../math/common/degreesToRadians";
 import { nanToZero } from "../math/common/nanToZero";
 import { rotatePoint } from "../math/points/rotatePoint";
-import { calcUnrotatedItemableBoundingBox } from "./calcUnrotatedItemableBoundingBox";
-import { isPoint } from "../validation/isPoint";
 import { isFrame } from "../validation/isFrame";
+import { isPoint } from "../validation/isPoint";
+import { calcUnrotatedItemableBoundingBox } from "./calcUnrotatedItemableBoundingBox";
 
 /**
  * Calculates the oriented bounding box of a group shape.
@@ -32,7 +32,7 @@ export const calcItemableOrientedBox = (
 
 	// Calculate bounding box without rotation applied
 	let boundingBox: Box;
-	if (items.length === 0) {
+	if (items.length === 0 || itemable.itemableType === "concrete") {
 		if (isFrame(itemable)) {
 			const halfWidth = itemable.width / 2;
 			const halfHeight = itemable.height / 2;

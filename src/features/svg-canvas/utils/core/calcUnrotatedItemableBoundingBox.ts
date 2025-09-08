@@ -36,7 +36,11 @@ export const calcUnrotatedItemableBoundingBox = (
 		const itemItems = isItemableState<Diagram>(item)
 			? (item.items ?? []).filter((i) => i.type !== "ConnectPoint")
 			: [];
-		if (itemItems.length > 0) {
+		if (
+			0 < itemItems.length &&
+			isItemableState(item) &&
+			item.itemableType === "abstract"
+		) {
 			const groupBoundingBox = calcUnrotatedItemableBoundingBox(
 				itemItems,
 				groupCenterX,

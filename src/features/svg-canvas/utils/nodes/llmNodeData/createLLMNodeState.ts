@@ -4,10 +4,10 @@ import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
 // Import utils.
 import { createInputState } from "../../elements/input/createInputState";
 import { createNodeHeaderState } from "../../elements/nodeHeader/createNodeHeaderState";
+import { degreesToRadians } from "../../math/common/degreesToRadians";
+import { affineTransformation } from "../../math/transform/affineTransformation";
 import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
-import { affineTransformation } from "../../math/transform/affineTransformation";
-import { degreesToRadians } from "../../math/common/degreesToRadians";
 import { createLLMNodeInputFrame } from "./createLLMNodeInputFrame";
 
 import {
@@ -107,7 +107,6 @@ export const createLLMNodeState = ({
 					text,
 					verticalAlign: "top",
 				}),
-				//connectPoints: [],
 			},
 		],
 		connectPoints,
