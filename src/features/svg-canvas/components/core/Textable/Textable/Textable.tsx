@@ -8,6 +8,9 @@ import { renderMarkdown } from "../../../../../../shared/markdown";
 // Import types.
 import type { TextableState } from "../../../../types/state/core/TextableState";
 
+// Import utils.
+import { negativeToZero } from "../../../../utils/math/common/negativeToZero";
+
 // Import local module files.
 import { ForeignObjectElement, Text, TextWrapper } from "./TextableStyled";
 
@@ -59,8 +62,8 @@ const TextableComponent: React.FC<TextableProps> = ({
 		<ForeignObjectElement
 			x={x}
 			y={y}
-			width={width}
-			height={height}
+			width={negativeToZero(width)}
+			height={negativeToZero(height)}
 			transform={transform}
 			pointerEvents="none"
 			isTransparent={false}

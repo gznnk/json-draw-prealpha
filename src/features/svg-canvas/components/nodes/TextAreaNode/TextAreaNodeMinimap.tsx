@@ -5,6 +5,9 @@ import { memo } from "react";
 // Import types.
 import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
 
+// Import utils.
+import { negativeToZero } from "../../../utils/math/common/negativeToZero";
+
 /**
  * TextAreaNode minimap component - lightweight version without outlines, controls, and labels.
  */
@@ -19,8 +22,8 @@ const TextAreaNodeMinimapComponent: React.FC<TextAreaNodeProps> = (props) => {
 			<rect
 				x={-width / 2}
 				y={-height / 2}
-				width={width}
-				height={height}
+				width={negativeToZero(width)}
+				height={negativeToZero(height)}
 				fill="white"
 				stroke="#E5E6EB"
 				strokeWidth="1"
@@ -47,8 +50,8 @@ const TextAreaNodeMinimapComponent: React.FC<TextAreaNodeProps> = (props) => {
 				<rect
 					x={-width / 2 + 16}
 					y={-height / 2 + 60}
-					width={width - 32}
-					height={height - 120}
+					width={negativeToZero(width - 32)}
+					height={negativeToZero(height - 120)}
 					fill="#fafafa"
 					stroke="#d9d9d9"
 					strokeWidth="1"

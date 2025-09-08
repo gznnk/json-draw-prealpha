@@ -25,6 +25,7 @@ import { useText } from "../../../hooks/useText";
 // Import utils.
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { negativeToZero } from "../../../utils/math/common/negativeToZero";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
@@ -222,8 +223,8 @@ const InputComponent: React.FC<InputProps> = ({
 				id={id}
 				x={-width / 2}
 				y={-height / 2}
-				width={width}
-				height={height}
+				width={negativeToZero(width)}
+				height={negativeToZero(height)}
 				rx={cornerRadius}
 				ry={cornerRadius}
 				fill={fill}
