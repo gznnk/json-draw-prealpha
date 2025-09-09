@@ -3,7 +3,7 @@ import { useRef, useState, type RefObject } from "react";
 
 // Import types related to SvgCanvas.
 import type { TextEditorState } from "../components/core/Textable";
-import type { DiagramData } from "../types/data/catalog/DiagramData";
+import type { DiagramData } from "../types/data/core/DiagramData";
 import type { Diagram } from "../types/state/core/Diagram";
 import { InteractionState } from "./types/InteractionState";
 import type { SvgCanvasData } from "./types/SvgCanvasData";

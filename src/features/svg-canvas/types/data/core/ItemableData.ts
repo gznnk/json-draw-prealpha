@@ -1,4 +1,4 @@
-import type { DiagramData } from "../catalog/DiagramData";
+import type { DiagramData } from "./DiagramData";
 
 /**
  * Interface for diagram elements that can contain child elements.

@@ -3,7 +3,7 @@ import { GroupDefaultData } from "../../../constants/data/shapes/GroupDefaultDat
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapGroupStateToData =
 	createStateToDataMapper<GroupData>(GroupDefaultData);

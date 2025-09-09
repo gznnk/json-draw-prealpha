@@ -3,7 +3,7 @@ import { WebSearchNodeDefaultData } from "../../../constants/data/nodes/WebSearc
 import type { WebSearchNodeData } from "../../../types/data/nodes/WebSearchNodeData";
 import type { WebSearchNodeState } from "../../../types/state/nodes/WebSearchNodeState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapWebSearchNodeStateToData =
 	createStateToDataMapper<WebSearchNodeData>(WebSearchNodeDefaultData);

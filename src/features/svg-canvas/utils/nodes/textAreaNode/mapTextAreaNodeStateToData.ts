@@ -3,7 +3,7 @@ import { TextAreaNodeDefaultData } from "../../../constants/data/nodes/TextAreaN
 import type { TextAreaNodeData } from "../../../types/data/nodes/TextAreaNodeData";
 import type { TextAreaNodeState } from "../../../types/state/nodes/TextAreaNodeState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapTextAreaNodeStateToData =
 	createStateToDataMapper<TextAreaNodeData>(TextAreaNodeDefaultData);

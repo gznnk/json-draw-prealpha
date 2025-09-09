@@ -1,5 +1,5 @@
 import { AgentNodeDefaultData } from "../../../constants/data/nodes/AgentNodeDefaultData";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 import type { AgentNodeData } from "../../../types/data/nodes/AgentNodeData";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import { createStateToDataMapper } from "../../core/createStateToDataMapper";

@@ -1,5 +1,5 @@
 import { HubNodeDefaultData } from "../../../constants/data/nodes/HubNodeDefaultData";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 import type { HubNodeData } from "../../../types/data/nodes/HubNodeData";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { HubNodeState } from "../../../types/state/nodes/HubNodeState";

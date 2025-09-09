@@ -3,7 +3,7 @@ import { ImageDefaultData } from "../../../constants/data/shapes/ImageDefaultDat
 import type { ImageData } from "../../../types/data/shapes/ImageData";
 import type { ImageState } from "../../../types/state/shapes/ImageState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapImageStateToData =
 	createStateToDataMapper<ImageData>(ImageDefaultData);

@@ -3,7 +3,7 @@ import { PageDesignNodeDefaultData } from "../../../constants/data/nodes/PageDes
 import type { PageDesignNodeData } from "../../../types/data/nodes/PageDesignNodeData";
 import type { PageDesignNodeState } from "../../../types/state/nodes/PageDesignNodeState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapPageDesignNodeStateToData =
 	createStateToDataMapper<PageDesignNodeData>(PageDesignNodeDefaultData);

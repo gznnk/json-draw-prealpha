@@ -3,7 +3,7 @@ import { VectorStoreNodeDefaultData } from "../../../constants/data/nodes/Vector
 import type { VectorStoreNodeData } from "../../../types/data/nodes/VectorStoreNodeData";
 import type { VectorStoreNodeState } from "../../../types/state/nodes/VectorStoreNodeState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapVectorStoreNodeStateToData =
 	createStateToDataMapper<VectorStoreNodeData>(VectorStoreNodeDefaultData);

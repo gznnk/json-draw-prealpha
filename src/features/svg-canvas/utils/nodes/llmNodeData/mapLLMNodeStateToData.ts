@@ -3,7 +3,7 @@ import { LLMNodeDefaultData } from "../../../constants/data/nodes/LLMNodeDefault
 import type { LLMNodeData } from "../../../types/data/nodes/LLMNodeData";
 import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapLLMNodeStateToData =
 	createStateToDataMapper<LLMNodeData>(LLMNodeDefaultData);

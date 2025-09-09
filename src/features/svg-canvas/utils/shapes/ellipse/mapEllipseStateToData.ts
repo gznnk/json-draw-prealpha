@@ -3,7 +3,7 @@ import { EllipseDefaultData } from "../../../constants/data/shapes/EllipseDefaul
 import type { EllipseData } from "../../../types/data/shapes/EllipseData";
 import type { EllipseState } from "../../../types/state/shapes/EllipseState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapEllipseStateToData =
 	createStateToDataMapper<EllipseData>(EllipseDefaultData);

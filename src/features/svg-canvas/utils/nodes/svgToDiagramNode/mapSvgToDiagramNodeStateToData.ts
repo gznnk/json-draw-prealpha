@@ -3,7 +3,7 @@ import { SvgToDiagramNodeDefaultData } from "../../../constants/data/nodes/SvgTo
 import type { SvgToDiagramNodeData } from "../../../types/data/nodes/SvgToDiagramNodeData";
 import type { SvgToDiagramNodeState } from "../../../types/state/nodes/SvgToDiagramNodeState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { DiagramData } from "../../../types/data/catalog/DiagramData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 
 export const mapSvgToDiagramNodeStateToData =
 	createStateToDataMapper<SvgToDiagramNodeData>(SvgToDiagramNodeDefaultData);
