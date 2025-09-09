@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types.
 import type { TextEditorState } from "../../../components/core/Textable/TextEditor/TextEditorTypes";
 import type { DiagramTextChangeEvent } from "../../../types/events/DiagramTextChangeEvent";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 // Import utils.

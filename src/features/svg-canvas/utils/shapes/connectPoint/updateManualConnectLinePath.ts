@@ -1,5 +1,5 @@
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import { calcRadians } from "../../math/points/calcRadians";
 import { radiansToDegrees } from "../../math/common/radiansToDegrees";
 import { isConnectableState } from "../../validation/isConnectableState";

@@ -1,6 +1,6 @@
 // Import types.
 import type { Box } from "../../../types/core/Box";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 
 // Import utils.
 import { isFrame } from "../../validation/isFrame";

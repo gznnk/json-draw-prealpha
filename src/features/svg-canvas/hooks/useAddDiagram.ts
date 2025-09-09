@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../constants/core/EventNames";
 
 // Import types.
-import type { Diagram } from "../types/state/catalog/Diagram";
+import type { Diagram } from "../types/state/core/Diagram";
 import type { AddDiagramEvent } from "../types/events/AddDiagramEvent";
 
 // Import utils.

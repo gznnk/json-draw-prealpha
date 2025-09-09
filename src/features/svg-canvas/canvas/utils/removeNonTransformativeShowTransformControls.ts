@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { isTransformativeState } from "../../utils/validation/isTransformativeState";

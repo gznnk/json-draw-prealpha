@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 // Import types.
 import type { Frame } from "../../../types/core/Frame";
 import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
 import type { PathPointState } from "../../../types/state/shapes/PathPointState";

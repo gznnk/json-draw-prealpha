@@ -1,6 +1,6 @@
 import type { Bounds } from "../../../types/core/Bounds";
 import type { Frame } from "../../../types/core/Frame";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { ItemableState } from "../../../types/state/core/ItemableState";
 import { calcItemableOrientedBox } from "../calcItemableOrientedBox";
 

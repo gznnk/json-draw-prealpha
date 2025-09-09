@@ -1,7 +1,7 @@
 // Import types.
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Frame } from "../types/core/Frame";
-import type { Diagram } from "../types/state/catalog/Diagram";
+import type { Diagram } from "../types/state/core/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 import type {
 	DataToStateMapper,

@@ -1,7 +1,7 @@
 import type { Frame } from "../../../types/core/Frame";
 // Import types.
 import type { RectangleVertices } from "../../../types/core/RectangleVertices";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 
 // Import utils.

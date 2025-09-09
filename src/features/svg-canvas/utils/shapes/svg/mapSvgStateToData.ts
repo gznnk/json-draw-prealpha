@@ -1,7 +1,7 @@
 import { SvgDefaultData } from "../../../constants/data/shapes/SvgDefaultData";
 import type { DiagramData } from "../../../types/data/catalog/DiagramData";
 import type { SvgData } from "../../../types/data/shapes/SvgData";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 
 export const mapSvgStateToData =

@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../state/catalog/Diagram";
+import type { Diagram } from "../state/core/Diagram";
 
 /**
  * Event for adding a new diagram to the canvas.

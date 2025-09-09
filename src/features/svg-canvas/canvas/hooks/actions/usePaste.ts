@@ -2,7 +2,7 @@
 import { useCallback, useRef } from "react";
 
 // Import types.
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { GroupState } from "../../../types/state/shapes/GroupState";

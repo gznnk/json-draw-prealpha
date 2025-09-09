@@ -2,7 +2,7 @@
 import { DiagramRegistry } from "../../registry";
 
 // Import types.
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { isConnectableState } from "../../utils/validation/isConnectableState";
