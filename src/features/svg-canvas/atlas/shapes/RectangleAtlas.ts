@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { RectangleData } from "../../types/data/shapes/RectangleData";
+import { RectangleFeatures } from "../../types/data/shapes/RectangleData";
+import type { RectangleProps } from "../../types/props/shapes/RectangleProps";
+import type { RectangleState } from "../../types/state/shapes/RectangleState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { RectangleData } from "../../types/data/shapes/RectangleData";
-import type { RectangleState } from "../../types/state/shapes/RectangleState";
-import type { RectangleProps } from "../../types/props/shapes/RectangleProps";
-import { RectangleFeatures } from "../../types/data/shapes/RectangleData";
 
 // ============================================================================
 // Defaults
@@ -32,11 +32,11 @@ import { RectangleDefaultState } from "../../constants/state/shapes/RectangleDef
 // ============================================================================
 import { Rectangle, RectangleMinimap } from "../../components/shapes/Rectangle";
 
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 // ============================================================================
 // Utility Functions
 // ============================================================================
 import { createRectangleState } from "../../utils/shapes/rectangle/createRectangleState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 import { rectangleDataToState } from "../../utils/shapes/rectangle/mapRectangleDataToState";
 import { rectangleStateToData } from "../../utils/shapes/rectangle/mapRectangleStateToData";
 

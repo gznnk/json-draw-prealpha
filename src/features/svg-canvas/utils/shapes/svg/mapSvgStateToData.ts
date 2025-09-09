@@ -1,11 +1,11 @@
-import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 import { SvgDefaultData } from "../../../constants/data/shapes/SvgDefaultData";
+import type { DiagramData } from "../../../types/data/catalog/DiagramData";
 import type { SvgData } from "../../../types/data/shapes/SvgData";
-import type { SvgState } from "../../../types/state/shapes/SvgState";
+import type { Diagram } from "../../../types/state/catalog/Diagram";
+import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 
-export const mapSvgStateToData = createStateToDataMapper<SvgData>(
-	SvgDefaultData,
-);
+export const mapSvgStateToData =
+	createStateToDataMapper<SvgData>(SvgDefaultData);
 
-export const svgStateToData = (state: SvgState): SvgData =>
-	mapSvgStateToData(state);
+export const svgStateToData = (state: Diagram): DiagramData =>
+	mapSvgStateToData(state as SvgData);

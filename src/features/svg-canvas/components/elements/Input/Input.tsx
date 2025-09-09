@@ -4,6 +4,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 
 // Import types.
 import type { InputProps } from "../../../types/props/elements/InputProps";
+import type { InputState } from "../../../types/state/elements/InputState";
 
 // Import constants.
 import { InputDefaultData } from "../../../constants/data/elements/InputDefaultData";
@@ -174,10 +175,10 @@ const InputComponent: React.FC<InputProps> = ({
 					eventPhase: e.eventPhase,
 					startDiagram: {
 						text,
-					},
+					} as InputState,
 					endDiagram: {
 						text: e.data.text,
-					},
+					} as InputState,
 				});
 			}
 		},

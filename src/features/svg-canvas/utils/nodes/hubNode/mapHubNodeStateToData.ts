@@ -1,11 +1,12 @@
-import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 import { HubNodeDefaultData } from "../../../constants/data/nodes/HubNodeDefaultData";
+import type { DiagramData } from "../../../types/data/catalog/DiagramData";
 import type { HubNodeData } from "../../../types/data/nodes/HubNodeData";
+import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { HubNodeState } from "../../../types/state/nodes/HubNodeState";
+import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 
-export const mapHubNodeStateToData = createStateToDataMapper<HubNodeData>(
-	HubNodeDefaultData,
-);
+export const mapHubNodeStateToData =
+	createStateToDataMapper<HubNodeData>(HubNodeDefaultData);
 
-export const hubNodeStateToData = (state: HubNodeState): HubNodeData =>
-	mapHubNodeStateToData(state);
+export const hubNodeStateToData = (state: Diagram): DiagramData =>
+	mapHubNodeStateToData(state as HubNodeState);

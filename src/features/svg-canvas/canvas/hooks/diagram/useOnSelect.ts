@@ -297,7 +297,7 @@ export const useOnSelect = (
 									isSelected: true,
 									showTransformControls: false,
 									showOutline: true, // Show outline for the group.
-								};
+								} as Diagram;
 							}
 
 							// If no selection change, return with updated items
@@ -305,13 +305,13 @@ export const useOnSelect = (
 								...item,
 								showTransformControls: false,
 								items: updatedItems,
-							};
+							} as Diagram;
 						}
 
 						return {
 							...item,
 							showTransformControls: false,
-						};
+						} as Diagram;
 					};
 
 					return items.map(processItem);

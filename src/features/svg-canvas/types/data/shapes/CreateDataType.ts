@@ -24,7 +24,7 @@ export type CreateDataType<T extends DiagramFeatures, P = object> = Prettify<
 	DiagramBaseData &
 		(T["frameable"] extends true ? FrameableData : object) &
 		(T["transformative"] extends true ? TransformativeData : object) &
-		(T["itemable"] extends true ? ItemableData<DiagramBaseData> : object) &
+		(T["itemable"] extends true ? ItemableData : object) &
 		(T["connectable"] extends true ? ConnectableData : object) &
 		(T["strokable"] extends true ? StrokableData : object) &
 		(T["fillable"] extends true ? FillableData : object) &

@@ -3,9 +3,9 @@ import type { Box } from "../../../types/core/Box";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 
 // Import utils.
-import { calcItemableOrientedBox } from "../../core/calcItemableOrientedBox";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
+import { calcItemableOrientedBox } from "../../core/calcItemableOrientedBox";
 import { calcDiagramBoundingBox } from "./calcDiagramBoundingBox";
 
 /**

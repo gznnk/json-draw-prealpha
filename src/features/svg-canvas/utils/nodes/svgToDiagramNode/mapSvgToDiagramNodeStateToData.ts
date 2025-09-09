@@ -2,10 +2,12 @@ import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 import { SvgToDiagramNodeDefaultData } from "../../../constants/data/nodes/SvgToDiagramNodeDefaultData";
 import type { SvgToDiagramNodeData } from "../../../types/data/nodes/SvgToDiagramNodeData";
 import type { SvgToDiagramNodeState } from "../../../types/state/nodes/SvgToDiagramNodeState";
+import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { DiagramData } from "../../../types/data/catalog/DiagramData";
 
 export const mapSvgToDiagramNodeStateToData = createStateToDataMapper<SvgToDiagramNodeData>(
 	SvgToDiagramNodeDefaultData,
 );
 
-export const svgToDiagramNodeStateToData = (state: SvgToDiagramNodeState): SvgToDiagramNodeData =>
-	mapSvgToDiagramNodeStateToData(state);
+export const svgToDiagramNodeStateToData = (state: Diagram): DiagramData =>
+	mapSvgToDiagramNodeStateToData(state as SvgToDiagramNodeState);

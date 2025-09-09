@@ -1,12 +1,13 @@
+import type { Frame } from "../../../types/core/Frame";
 // Import types.
 import type { RectangleVertices } from "../../../types/core/RectangleVertices";
-import type { Frame } from "../../../types/core/Frame";
-import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 
 // Import utils.
 import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
 import { isConnectableState } from "../../validation/isConnectableState";
+import { isFrame } from "../../validation/isFrame";
 
 /**
  * Calculate the position of the connection points of the rectangle.
@@ -17,6 +18,7 @@ import { isConnectableState } from "../../validation/isConnectableState";
 export const calcRectangleConnectPointPosition = (
 	diagram: Diagram,
 ): ConnectPointState[] => {
+	if (!isFrame(diagram)) return []; // Type guard.
 	if (!isConnectableState(diagram)) return []; // Type guard.
 
 	// Calculate the vertices of the rectangle.

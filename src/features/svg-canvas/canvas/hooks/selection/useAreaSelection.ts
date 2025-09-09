@@ -179,13 +179,13 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 								items: deselectedItems,
 								isSelected: true,
 								showOutline: true,
-							};
+							} as Diagram;
 						}
 						// Return group with updated children
 						return {
 							...item,
 							items: updatedItems,
-						};
+						} as Diagram;
 					}
 					return item;
 				};

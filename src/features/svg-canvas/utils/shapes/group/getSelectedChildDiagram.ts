@@ -18,7 +18,7 @@ export const getSelectedChildDiagram = (
 		if (isSelectableState(diagram) && diagram.isSelected) {
 			return diagram;
 		}
-		if (isItemableState<Diagram>(diagram)) {
+		if (isItemableState(diagram)) {
 			const ret = getSelectedChildDiagram(diagram.items || []);
 			if (ret) {
 				return ret;

@@ -19,7 +19,7 @@ export const updateDiagramConnectPoints = (item: Diagram): Diagram => {
 			return {
 				...item,
 				connectPoints: calculator(item),
-			};
+			} as Diagram;
 		}
 	}
 	return item;

@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { SvgData } from "../../types/data/shapes/SvgData";
+import { SvgFeatures } from "../../types/data/shapes/SvgData";
+import type { SvgProps } from "../../types/props/shapes/SvgProps";
+import type { SvgState } from "../../types/state/shapes/SvgState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { SvgData } from "../../types/data/shapes/SvgData";
-import type { SvgState } from "../../types/state/shapes/SvgState";
-import type { SvgProps } from "../../types/props/shapes/SvgProps";
-import { SvgFeatures } from "../../types/data/shapes/SvgData";
 
 // ============================================================================
 // Defaults
@@ -36,18 +36,14 @@ import { Svg, SvgMinimap } from "../../components/shapes/Svg";
 // Utility Functions
 // ============================================================================
 import { createSvgState } from "../../utils/shapes/svg/createSvgState";
-import { svgToBlob } from "../../utils/shapes/svg/svgToBlob";
-import { svgStateToData } from "../../utils/shapes/svg/mapSvgStateToData";
 import { mapSvgDataToState } from "../../utils/shapes/svg/mapSvgDataToState";
+import { svgStateToData } from "../../utils/shapes/svg/mapSvgStateToData";
+import { svgToBlob } from "../../utils/shapes/svg/svgToBlob";
 
 /**
  * Svg Shape Atlas Type Definition
  */
-type SvgAtlas = DiagramAtlas<
-	SvgData,
-	SvgState,
-	SvgProps
->;
+type SvgAtlas = DiagramAtlas<SvgData, SvgState, SvgProps>;
 
 /**
  * Svg Shape Atlas Implementation
@@ -78,7 +74,8 @@ export const SvgAtlas: SvgAtlas = {
 	// Utility Functions
 	// ============================================================================
 
-	createState: (props: { x: number; y: number }) => createSvgState({ ...props, svgText: "" }),
+	createState: (props: { x: number; y: number }) =>
+		createSvgState({ ...props, svgText: "" }),
 	export: svgToBlob,
 	calcConnectPointPosition: () => [],
 	transformItems: undefined,

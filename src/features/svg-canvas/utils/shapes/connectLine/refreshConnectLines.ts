@@ -1,11 +1,12 @@
 // Import types.
 import type { SvgCanvasState } from "../../../canvas/types/SvgCanvasState";
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 
 // Import utils.
 import { getDiagramById } from "../../core/getDiagramById";
 import { isConnectableState } from "../../validation/isConnectableState";
+import { isFrame } from "../../validation/isFrame";
 import { newId } from "../common/newId";
 import { generateOptimalFrameToFrameConnection } from "../connectPoint/generateOptimalFrameToFrameConnection";
 import { updateManualConnectLinePath } from "../connectPoint/updateManualConnectLinePath";
@@ -58,6 +59,11 @@ export const refreshConnectLines = (
 
 		// Skip if either owner shape is not found
 		if (!startOwnerFrame || !endOwnerFrame) {
+			return item;
+		}
+
+		// Skip if either owner shape is not a Frame
+		if (!isFrame(startOwnerFrame) || !isFrame(endOwnerFrame)) {
 			return item;
 		}
 

@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { ImageGenNodeData } from "../../types/data/nodes/ImageGenNodeData";
+import { ImageGenNodeFeatures } from "../../types/data/nodes/ImageGenNodeData";
+import type { ImageGenNodeProps } from "../../types/props/nodes/ImageGenNodeProps";
+import type { ImageGenNodeState } from "../../types/state/nodes/ImageGenNodeState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { ImageGenNodeData } from "../../types/data/nodes/ImageGenNodeData";
-import type { ImageGenNodeState } from "../../types/state/nodes/ImageGenNodeState";
-import type { ImageGenNodeProps } from "../../types/props/nodes/ImageGenNodeProps";
-import { ImageGenNodeFeatures } from "../../types/data/nodes/ImageGenNodeData";
 
 // ============================================================================
 // Defaults
@@ -30,15 +30,18 @@ import { ImageGenNodeDefaultState } from "../../constants/state/nodes/ImageGenNo
 // ============================================================================
 // Components
 // ============================================================================
-import { ImageGenNode, ImageGenNodeMinimap } from "../../components/nodes/ImageGenNode";
+import {
+	ImageGenNode,
+	ImageGenNodeMinimap,
+} from "../../components/nodes/ImageGenNode";
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
 import { createImageGenNodeState } from "../../utils/nodes/imageGenNode/createImageGenNodeState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { imageGenNodeStateToData } from "../../utils/nodes/imageGenNode/mapImageGenNodeStateToData";
 import { mapImageGenNodeDataToState } from "../../utils/nodes/imageGenNode/mapImageGenNodeDataToState";
+import { imageGenNodeStateToData } from "../../utils/nodes/imageGenNode/mapImageGenNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * ImageGenNode Atlas Type Definition

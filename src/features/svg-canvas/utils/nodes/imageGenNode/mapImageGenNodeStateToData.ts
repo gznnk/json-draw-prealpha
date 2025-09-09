@@ -1,11 +1,12 @@
-import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 import { ImageGenNodeDefaultData } from "../../../constants/data/nodes/ImageGenNodeDefaultData";
+import type { DiagramData } from "../../../types/data/catalog/DiagramData";
 import type { ImageGenNodeData } from "../../../types/data/nodes/ImageGenNodeData";
+import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { ImageGenNodeState } from "../../../types/state/nodes/ImageGenNodeState";
+import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 
-export const mapImageGenNodeStateToData = createStateToDataMapper<ImageGenNodeData>(
-	ImageGenNodeDefaultData,
-);
+export const mapImageGenNodeStateToData =
+	createStateToDataMapper<ImageGenNodeData>(ImageGenNodeDefaultData);
 
-export const imageGenNodeStateToData = (state: ImageGenNodeState): ImageGenNodeData =>
-	mapImageGenNodeStateToData(state);
+export const imageGenNodeStateToData = (state: Diagram): DiagramData =>
+	mapImageGenNodeStateToData(state as ImageGenNodeState);

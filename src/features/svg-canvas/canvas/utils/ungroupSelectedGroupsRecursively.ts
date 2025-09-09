@@ -26,10 +26,10 @@ export const ungroupSelectedGroupsRecursively = (items: Diagram[]) => {
 					ungroupedItems.push(groupItem);
 				}
 			} else {
-				const updatedGroup: Diagram = {
+				const updatedGroup = {
 					...item,
 					items: ungroupSelectedGroupsRecursively(item.items),
-				};
+				} as Diagram;
 				ungroupedItems.push(updatedGroup);
 			}
 		} else {

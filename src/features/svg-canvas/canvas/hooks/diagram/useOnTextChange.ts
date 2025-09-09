@@ -67,7 +67,7 @@ export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 				} else {
 					// If no initial attributes are provided, use the target item's attributes.
 					newState.textEditorState = {
-						...(targetItem as Diagram),
+						...(targetItem as object),
 						isActive: true,
 					} as TextEditorState;
 				}

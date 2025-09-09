@@ -19,7 +19,7 @@ export const getChildDiagramById = (
 		if (diagram.id === id) {
 			return diagram;
 		}
-		if (isItemableState<Diagram>(diagram)) {
+		if (isItemableState(diagram)) {
 			const ret = getChildDiagramById(diagram.items || [], id);
 			if (ret) {
 				return ret;

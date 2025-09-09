@@ -1,7 +1,6 @@
 // Import types.
 import type { Bounds } from "../../types/core/Bounds";
 import type { Box } from "../../types/core/Box";
-import type { Diagram } from "../../types/state/catalog/Diagram";
 import type { ItemableState } from "../../types/state/core/ItemableState";
 
 // Import utils.
@@ -19,9 +18,7 @@ import { calcUnrotatedItemableBoundingBox } from "./calcUnrotatedItemableBoundin
  * @param itemable - The itemable data containing items, position, and rotation
  * @returns The oriented bounding box with center position and original dimensions
  */
-export const calcItemableOrientedBox = (
-	itemable: ItemableState<Diagram>,
-): Bounds => {
+export const calcItemableOrientedBox = (itemable: ItemableState): Bounds => {
 	if (!isPoint(itemable)) {
 		throw new Error("Unsupported itemable state");
 	}

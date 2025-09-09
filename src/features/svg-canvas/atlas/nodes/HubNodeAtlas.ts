@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { HubNodeData } from "../../types/data/nodes/HubNodeData";
+import { HubNodeFeatures } from "../../types/data/nodes/HubNodeData";
+import type { HubNodeProps } from "../../types/props/nodes/HubNodeProps";
+import type { HubNodeState } from "../../types/state/nodes/HubNodeState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { HubNodeData } from "../../types/data/nodes/HubNodeData";
-import type { HubNodeState } from "../../types/state/nodes/HubNodeState";
-import type { HubNodeProps } from "../../types/props/nodes/HubNodeProps";
-import { HubNodeFeatures } from "../../types/data/nodes/HubNodeData";
 
 // ============================================================================
 // Defaults
@@ -36,18 +36,14 @@ import { HubNode, HubNodeMinimap } from "../../components/nodes/HubNode";
 // Utility Functions
 // ============================================================================
 import { createHubNodeState } from "../../utils/nodes/hubNode/createHubNodeState";
-import { calcEllipseConnectPointPosition } from "../../utils/shapes/ellipse/calcEllipseConnectPointPosition";
-import { hubNodeStateToData } from "../../utils/nodes/hubNode/mapHubNodeStateToData";
 import { mapHubNodeDataToState } from "../../utils/nodes/hubNode/mapHubNodeDataToState";
+import { hubNodeStateToData } from "../../utils/nodes/hubNode/mapHubNodeStateToData";
+import { calcEllipseConnectPointPosition } from "../../utils/shapes/ellipse/calcEllipseConnectPointPosition";
 
 /**
  * HubNode Atlas Type Definition
  */
-type HubNodeAtlas = DiagramAtlas<
-	HubNodeData,
-	HubNodeState,
-	HubNodeProps
->;
+type HubNodeAtlas = DiagramAtlas<HubNodeData, HubNodeState, HubNodeProps>;
 
 /**
  * HubNode Atlas Implementation

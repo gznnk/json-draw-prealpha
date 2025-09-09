@@ -33,9 +33,8 @@ import {
 	createEndPointArrowHead,
 	createStartPointArrowHead,
 } from "../../../../utils/shapes/path/createArrowHeads";
-import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { createBezierDValue } from "../../../../utils/shapes/path/createBezierDValue";
-import type { DiagramData } from "../../../../types/data/catalog/DiagramData";
+import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
 
 /**
@@ -225,7 +224,7 @@ const PathComponent: React.FC<PathProps> = ({
 					}
 					return item;
 				}),
-			},
+			} as PathState,
 			minX: e.minX,
 			minY: e.minY,
 		});
@@ -247,7 +246,7 @@ const PathComponent: React.FC<PathProps> = ({
 	 */
 	const handleDiagramChangeForVertexAndSegmentDrag = useCallback(
 		(e: DiagramChangeEvent) => {
-			if (!isItemableData<DiagramData>(e.endDiagram)) return; // Type guard with DiagramBaseData
+			if (!isItemableData(e.endDiagram)) return; // Type guard with DiagramBaseData
 
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 			if (e.eventPhase === "Ended") {
@@ -268,7 +267,7 @@ const PathComponent: React.FC<PathProps> = ({
 						y: newFrame.y,
 						width: newFrame.width,
 						height: newFrame.height,
-					},
+					} as PathState,
 				});
 			} else {
 				onDiagramChange?.(e);

@@ -33,7 +33,7 @@ export const calcUnrotatedItemableBoundingBox = (
 	let right = Number.NEGATIVE_INFINITY;
 	for (const item of items) {
 		// Exclude ConnectPoint from shape calculations
-		const itemItems = isItemableState<Diagram>(item)
+		const itemItems = isItemableState(item)
 			? (item.items ?? []).filter((i) => i.type !== "ConnectPoint")
 			: [];
 		if (

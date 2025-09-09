@@ -1,3 +1,7 @@
+import type { PathData } from "../../types/data/shapes/PathData";
+import { PathFeatures } from "../../types/data/shapes/PathData";
+import type { PathProps } from "../../types/props/shapes/PathProps";
+import type { PathState } from "../../types/state/shapes/PathState";
 /**
  * Path Shape Atlas
  *
@@ -12,14 +16,10 @@
 // Types
 // ============================================================================
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { PathData } from "../../types/data/shapes/PathData";
-import type { PathState } from "../../types/state/shapes/PathState";
-import type { PathProps } from "../../types/props/shapes/PathProps";
-import { PathFeatures } from "../../types/data/shapes/PathData";
 
 // ============================================================================
 // Defaults
@@ -36,17 +36,13 @@ import { Path, PathMinimap } from "../../components/shapes/Path";
 // Utility Functions
 // ============================================================================
 import { createPathState } from "../../utils/shapes/path/createPathState";
-import { pathStateToData } from "../../utils/shapes/path/mapPathStateToData";
 import { mapPathDataToState } from "../../utils/shapes/path/mapPathDataToState";
+import { pathStateToData } from "../../utils/shapes/path/mapPathStateToData";
 
 /**
  * Path Shape Atlas Type Definition
  */
-type PathAtlas = DiagramAtlas<
-	PathData,
-	PathState,
-	PathProps
->;
+type PathAtlas = DiagramAtlas<PathData, PathState, PathProps>;
 
 /**
  * Path Shape Atlas Implementation

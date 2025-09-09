@@ -1,3 +1,7 @@
+import type { TextAreaNodeData } from "../../types/data/nodes/TextAreaNodeData";
+import { TextAreaNodeFeatures } from "../../types/data/nodes/TextAreaNodeData";
+import type { TextAreaNodeProps } from "../../types/props/nodes/TextAreaNodeProps";
+import type { TextAreaNodeState } from "../../types/state/nodes/TextAreaNodeState";
 /**
  * TextAreaNode Atlas
  *
@@ -12,14 +16,10 @@
 // Types
 // ============================================================================
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { TextAreaNodeData } from "../../types/data/nodes/TextAreaNodeData";
-import type { TextAreaNodeState } from "../../types/state/nodes/TextAreaNodeState";
-import type { TextAreaNodeProps } from "../../types/props/nodes/TextAreaNodeProps";
-import { TextAreaNodeFeatures } from "../../types/data/nodes/TextAreaNodeData";
 
 // ============================================================================
 // Defaults
@@ -30,15 +30,18 @@ import { TextAreaNodeDefaultState } from "../../constants/state/nodes/TextAreaNo
 // ============================================================================
 // Components
 // ============================================================================
-import { TextAreaNode, TextAreaNodeMinimap } from "../../components/nodes/TextAreaNode";
+import {
+	TextAreaNode,
+	TextAreaNodeMinimap,
+} from "../../components/nodes/TextAreaNode";
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
 import { createTextAreaNodeState } from "../../utils/nodes/textAreaNode/createTextAreaNodeState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { textAreaNodeStateToData } from "../../utils/nodes/textAreaNode/mapTextAreaNodeStateToData";
 import { mapTextAreaNodeDataToState } from "../../utils/nodes/textAreaNode/mapTextAreaNodeDataToState";
+import { textAreaNodeStateToData } from "../../utils/nodes/textAreaNode/mapTextAreaNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * TextAreaNode Atlas Type Definition

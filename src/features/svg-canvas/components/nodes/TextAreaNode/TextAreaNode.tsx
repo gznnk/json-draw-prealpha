@@ -161,10 +161,10 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				eventPhase: e.eventPhase,
 				startDiagram: {
 					text,
-				},
+				} as InputState,
 				endDiagram: {
 					text: e.data.text,
-				},
+				} as InputState,
 			});
 
 			// Propagate the event.

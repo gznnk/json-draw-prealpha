@@ -1,6 +1,6 @@
 // Import types.
 import type { DiagramType } from "../types/core/DiagramType";
-import { Frame } from "../types/core/Frame";
+import type { Frame } from "../types/core/Frame";
 import type { DiagramData } from "../types/data/catalog/DiagramData";
 import type { Diagram } from "../types/state/catalog/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
@@ -37,7 +37,9 @@ export type DiagramDefinition = {
 	calcConnectPointPosition: (diagram: Diagram) => ConnectPointState[];
 
 	/** Transform Items Functions */
-	transformItems: ((ownerFrame: Frame, items: Diagram[]) => Diagram[]) | undefined;
+	transformItems:
+		| ((ownerFrame: Frame, items: Diagram[]) => Diagram[])
+		| undefined;
 
 	/** Function to create a new instance of the diagram */
 	createState: (props: { x: number; y: number }) => Diagram | undefined;
