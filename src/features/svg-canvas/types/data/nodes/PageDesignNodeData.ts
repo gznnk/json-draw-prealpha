@@ -6,8 +6,10 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for PageDesign nodes.
  */
 export const PageDesignNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
+	cornerRoundable: false,
 	selectable: true,
 	executable: true,
 } as const satisfies DiagramFeatures;
@@ -15,6 +17,6 @@ export const PageDesignNodeFeatures = {
 /**
  * Type of the PageDesignNode data.
  */
-export type PageDesignNodeData = CreateDataType<typeof PageDesignNodeFeatures> & {
+export type PageDesignNodeData = CreateDataType<typeof PageDesignNodeFeatures, {
 	type: "PageDesignNode";
-};
+}>;

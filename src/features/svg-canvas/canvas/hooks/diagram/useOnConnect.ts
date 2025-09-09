@@ -13,7 +13,7 @@ import { ConnectLineDefaultState } from "../../../constants/state/shapes/Connect
 
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
-import { calcOrientedShapeFromPoints } from "../../../utils/math/geometry/calcOrientedShapeFromPoints";
+import { calcOrientedFrameFromPoints } from "../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
@@ -43,17 +43,17 @@ export const useOnConnect = (props: SvgCanvasSubHooksProps) => {
 			addHistory,
 		} = refBus.current;
 
-		const shape = calcOrientedShapeFromPoints(
+		const frame = calcOrientedFrameFromPoints(
 			e.points.map((p: PathPointState) => ({ x: p.x, y: p.y })),
 		);
 
 		const newConnectLine: ConnectLineState = {
 			...ConnectLineDefaultState,
 			id: newId(),
-			x: shape.x,
-			y: shape.y,
-			width: shape.width,
-			height: shape.height,
+			x: frame.x,
+			y: frame.y,
+			width: frame.width,
+			height: frame.height,
 			items: e.points.map((p: PathPointState) => ({
 				...p,
 				type: "PathPoint",

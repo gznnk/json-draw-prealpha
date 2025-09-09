@@ -13,7 +13,7 @@ import {
 	calculateCombinedCanvasBounds,
 	calculateCanvasViewportBounds,
 	constrainViewportPosition,
-} from "./MiniMapFunctions";
+} from "./MiniMapUtils";
 import {
 	MiniMapBackground,
 	MiniMapContainer,

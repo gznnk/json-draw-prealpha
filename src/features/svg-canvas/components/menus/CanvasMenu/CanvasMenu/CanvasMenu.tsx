@@ -99,6 +99,37 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 				onClick={() =>
 					onAddDiagramByType?.({
 						eventId: newEventId(),
+						diagramType: "Input",
+						isSelected: true,
+					})
+				}
+			>
+				<svg width="20" height="20" viewBox="0 0 24 24">
+					<title>Add Input</title>
+					<rect
+						x="2"
+						y="9"
+						width="20"
+						height="6"
+						rx="1"
+						ry="1"
+						fill="none"
+						stroke="#D0D4E0"
+					/>
+					<line
+						x1="4"
+						y1="12"
+						x2="4"
+						y2="12"
+						stroke="#D0D4E0"
+						strokeWidth="1"
+					/>
+				</svg>
+			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onAddDiagramByType?.({
+						eventId: newEventId(),
 						diagramType: "Path",
 						isSelected: true,
 					})

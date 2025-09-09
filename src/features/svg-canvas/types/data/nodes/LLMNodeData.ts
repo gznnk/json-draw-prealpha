@@ -6,18 +6,24 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for LLM nodes.
  */
 export const LLMNodeFeatures = {
+	frameable: true,
 	transformative: true,
+	itemable: true,
 	connectable: true,
-	strokable: true,
-	fillable: true,
-	textable: true,
+	strokable: false,
+	fillable: false,
+	cornerRoundable: false,
 	selectable: true,
+	textable: false,
 	executable: true,
 } as const satisfies DiagramFeatures;
 
 /**
  * Type of the LLM node data.
  */
-export type LLMNodeData = CreateDataType<typeof LLMNodeFeatures> & {
-	type: "LLMNode";
-};
+export type LLMNodeData = CreateDataType<
+	typeof LLMNodeFeatures,
+	{
+		type: "LLMNode";
+	}
+>;

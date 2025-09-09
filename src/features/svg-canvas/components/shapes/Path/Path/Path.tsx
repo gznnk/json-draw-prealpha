@@ -3,7 +3,6 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
-import type { DiagramBaseData } from "../../../../types/data/core/DiagramBaseData";
 import type { PathData } from "../../../../types/data/shapes/PathData";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
@@ -28,7 +27,7 @@ import { useSelect } from "../../../../hooks/useSelect";
 
 // Import utils.
 import { mergeProps } from "../../../../utils/core/mergeProps";
-import { calcOrientedShapeFromPoints } from "../../../../utils/math/geometry/calcOrientedShapeFromPoints";
+import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
 import {
 	createEndPointArrowHead,
@@ -36,7 +35,8 @@ import {
 } from "../../../../utils/shapes/path/createArrowHeads";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { createBezierDValue } from "../../../../utils/shapes/path/createBezierDValue";
-import { isItemableState } from "../../../../utils/validation/isItemableState";
+import type { DiagramData } from "../../../../types/data/catalog/DiagramData";
+import { isItemableData } from "../../../../utils/validation/isItemableData";
 
 /**
  * Path component
@@ -247,12 +247,12 @@ const PathComponent: React.FC<PathProps> = ({
 	 */
 	const handleDiagramChangeForVertexAndSegmentDrag = useCallback(
 		(e: DiagramChangeEvent) => {
-			if (!isItemableState<DiagramBaseData>(e.endDiagram)) return; // Type guard with DiagramBaseData
+			if (!isItemableData<DiagramData>(e.endDiagram)) return; // Type guard with DiagramBaseData
 
 			const { rotation, scaleX, scaleY, onDiagramChange } = refBus.current;
 			if (e.eventPhase === "Ended") {
 				// Calculate new shape of Path's bounding box when new vertex and segment dragging is completed
-				const newShape = calcOrientedShapeFromPoints(
+				const newFrame = calcOrientedFrameFromPoints(
 					(e.endDiagram.items ?? []).map((p) => ({ x: p.x, y: p.y })),
 					rotation,
 					scaleX,
@@ -264,10 +264,10 @@ const PathComponent: React.FC<PathProps> = ({
 					...e,
 					endDiagram: {
 						...e.endDiagram,
-						x: newShape.x,
-						y: newShape.y,
-						width: newShape.width,
-						height: newShape.height,
+						x: newFrame.x,
+						y: newFrame.y,
+						width: newFrame.width,
+						height: newFrame.height,
 					},
 				});
 			} else {
@@ -291,7 +291,8 @@ const PathComponent: React.FC<PathProps> = ({
 	);
 
 	// Generate polyline d attribute value
-	const d = pathType === "Bezier" ? createBezierDValue(items) : createDValue(items);
+	const d =
+		pathType === "Bezier" ? createBezierDValue(items) : createDValue(items);
 
 	// Generate vertex information
 	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;
@@ -320,7 +321,8 @@ const PathComponent: React.FC<PathProps> = ({
 	const showTransformative = mode === "Transform";
 
 	// Display flag for dashed guide lines (Bézier mode + Vertices mode)
-	const showDashedGuideLines = pathType === "Bezier" && mode === "Vertices" && !draggingPathPointId;
+	const showDashedGuideLines =
+		pathType === "Bezier" && mode === "Vertices" && !draggingPathPointId;
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;

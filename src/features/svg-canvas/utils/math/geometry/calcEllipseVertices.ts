@@ -1,6 +1,6 @@
 // Import types.
 import type { EllipseVertices } from "../../../types/core/EllipseVertices";
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
@@ -12,8 +12,8 @@ import { affineTransformation } from "../transform/affineTransformation";
  * @param shape - The shape parameters (position, dimensions, rotation, scale)
  * @returns The coordinates of the ellipse vertices
  */
-export const calcEllipseVertices = (shape: Shape): EllipseVertices => {
-	const { x, y, width, height, rotation, scaleX, scaleY } = shape;
+export const calcEllipseVertices = (frame: Frame): EllipseVertices => {
+	const { x, y, width, height, rotation, scaleX, scaleY } = frame;
 
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;

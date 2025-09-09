@@ -110,6 +110,9 @@ The SVG canvas is the core feature with complex state management:
 - **Event System**: Custom event bus for component communication
 - **Registry Pattern**: Diagram types registered in `features/svg-canvas/registry/`
 
+### Shape Management
+For adding, modifying, or deleting shapes on the canvas, refer to the `adding-shapes.md` documentation which provides detailed guidance on shape operations.
+
 Key canvas capabilities:
 - Multi-select with area selection
 - Undo/redo history

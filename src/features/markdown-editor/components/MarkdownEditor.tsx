@@ -28,7 +28,7 @@ import { SafeHtmlPreview } from "./SafeHtmlPreview";
 import {
 	adjustScrollBasedOnCaret,
 	syncScroll,
-} from "./MarkdownEditorFunctions";
+} from "./MarkdownEditorUtils";
 
 const MarkdownEditorComponent = ({
 	markdown = "",

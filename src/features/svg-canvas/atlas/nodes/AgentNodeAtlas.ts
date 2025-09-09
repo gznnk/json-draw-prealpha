@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { AgentNodeData } from "../../types/data/nodes/AgentNodeData";
+import { AgentNodeFeatures } from "../../types/data/nodes/AgentNodeData";
+import type { AgentNodeProps } from "../../types/props/nodes/AgentNodeProps";
+import type { AgentNodeState } from "../../types/state/nodes/AgentNodeState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { AgentNodeData } from "../../types/data/nodes/AgentNodeData";
-import type { AgentNodeState } from "../../types/state/nodes/AgentNodeState";
-import type { AgentNodeProps } from "../../types/props/nodes/AgentNodeProps";
-import { AgentNodeFeatures } from "../../types/data/nodes/AgentNodeData";
 
 // ============================================================================
 // Defaults
@@ -36,9 +36,9 @@ import { AgentNode, AgentNodeMinimap } from "../../components/nodes/AgentNode";
 // Utility Functions
 // ============================================================================
 import { createAgentNodeState } from "../../utils/nodes/agentNode/createAgentNodeState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { agentNodeStateToData } from "../../utils/nodes/agentNode/mapAgentNodeStateToData";
 import { mapAgentNodeDataToState } from "../../utils/nodes/agentNode/mapAgentNodeDataToState";
+import { agentNodeStateToData } from "../../utils/nodes/agentNode/mapAgentNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * AgentNode Atlas Type Definition
@@ -81,6 +81,7 @@ export const AgentNodeAtlas: AgentNodeAtlas = {
 	createState: createAgentNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapAgentNodeDataToState as DataToStateMapper,
 	stateToData: agentNodeStateToData as StateToDataMapper,
 };

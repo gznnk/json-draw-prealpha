@@ -1,2 +1,2 @@
 export { FlashConnectLine } from "./FlashConnectLine";
-export { triggerFlashConnectLine } from "./FlashConnectLineFunctions";
+export { triggerFlashConnectLine } from "./FlashConnectLineUtils";

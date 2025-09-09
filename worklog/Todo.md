@@ -1,3 +1,2 @@
-* onDiagramChangeは座標系以外の更新とし、Group含め移動はDragイベント、変形はTransformイベントで行うようにする。
 * DiagramMenuコンポーネントのHookが本当に必要か確認
-* Scroll＆Drag時に一瞬図形がずれるのを修正する。１度のsetStateで更新するようにしたい。大変。
+* stateToMap、mapToStateがネストしたアイテムに対応していない

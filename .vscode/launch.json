@@ -15,6 +15,16 @@
 			"runtimeArgs": [
 				"--load-extension=${workspaceFolder}/chrome_extensions/react-developer-tools/6.1.1_0"
 			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Jest Tests",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "test", "--"],
+			"args": ["--runInBand", "--watchAll=false"],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
 		}
 	]
 }

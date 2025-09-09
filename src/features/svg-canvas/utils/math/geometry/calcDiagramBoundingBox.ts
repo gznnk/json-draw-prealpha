@@ -3,7 +3,7 @@ import type { Box } from "../../../types/core/Box";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 
 // Import utils.
-import { isShape } from "../../validation/isShape";
+import { isFrame } from "../../validation/isFrame";
 import { degreesToRadians } from "../common/degreesToRadians";
 import { affineTransformation } from "../transform/affineTransformation";
 
@@ -19,7 +19,7 @@ export const calcDiagramBoundingBox = (diagram: Diagram): Box => {
 	const { x, y } = diagram;
 
 	// For non-shape diagrams (points, etc.), return a point box
-	if (!isShape(diagram)) {
+	if (!isFrame(diagram)) {
 		return {
 			top: y,
 			left: x,

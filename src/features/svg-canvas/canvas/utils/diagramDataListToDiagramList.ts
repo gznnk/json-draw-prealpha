@@ -3,7 +3,8 @@ import type { DiagramData } from "../../types/data/catalog/DiagramData";
 import type { Diagram } from "../../types/state/catalog/Diagram";
 
 // Import utils.
-import { applyFunctionRecursively } from "./applyFunctionRecursively";
+import { isItemableData } from "../../utils/validation/isItemableData";
+import { isItemableState } from "../../utils/validation/isItemableState";
 import { mapDiagramDataToState } from "./mapDiagramDataToState";
 
 /**
@@ -16,5 +17,16 @@ import { mapDiagramDataToState } from "./mapDiagramDataToState";
 export const diagramDataListToDiagramList = (
 	items: DiagramData[],
 ): Diagram[] => {
-	return applyFunctionRecursively(items, mapDiagramDataToState);
+	return items.map((item) => {
+		const mappedItem = mapDiagramDataToState(item);
+
+		// If the original data item has nested items, process them recursively
+		if (isItemableData(item) && isItemableState(mappedItem)) {
+			const mappedNestedItems = diagramDataListToDiagramList(item.items);
+			// Assign the recursively processed items to the mapped item
+			mappedItem.items = mappedNestedItems;
+		}
+
+		return mappedItem;
+	});
 };

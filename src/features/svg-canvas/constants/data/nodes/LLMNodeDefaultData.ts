@@ -12,5 +12,8 @@ import { CreateDefaultData } from "../shapes/CreateDefaultData";
 export const LLMNodeDefaultData = CreateDefaultData<LLMNodeData>({
 	type: "LLMNode",
 	options: LLMNodeFeatures,
-	properties: {},
+	properties: {
+		width: 200,
+		height: 200,
+	},
 });

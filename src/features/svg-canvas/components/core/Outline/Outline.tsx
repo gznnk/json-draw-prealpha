@@ -3,8 +3,9 @@ import type React from "react";
 import { memo } from "react";
 
 // Import utils.
-import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { negativeToZero } from "../../../utils/math/common/negativeToZero";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
  * Props for the Outline component.
@@ -46,8 +47,8 @@ const OutlineComponent: React.FC<OutlineProps> = ({
 		<rect
 			x={-width / 2}
 			y={-height / 2}
-			width={width}
-			height={height}
+			width={negativeToZero(width)}
+			height={negativeToZero(height)}
 			fill="transparent"
 			stroke="rgba(24, 144, 255, 0.8)"
 			strokeWidth="1px"

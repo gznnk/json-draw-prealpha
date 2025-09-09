@@ -6,8 +6,10 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for WebSearch nodes.
  */
 export const WebSearchNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
+	cornerRoundable: false,
 	selectable: true,
 	executable: true,
 } as const satisfies DiagramFeatures;
@@ -15,6 +17,6 @@ export const WebSearchNodeFeatures = {
 /**
  * Type of the WebSearchNode data.
  */
-export type WebSearchNodeData = CreateDataType<typeof WebSearchNodeFeatures> & {
+export type WebSearchNodeData = CreateDataType<typeof WebSearchNodeFeatures, {
 	type: "WebSearchNode";
-};
+}>;

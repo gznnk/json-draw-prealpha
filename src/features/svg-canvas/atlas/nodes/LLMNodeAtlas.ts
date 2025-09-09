@@ -11,15 +11,15 @@
 // ============================================================================
 // Types
 // ============================================================================
+import type { LLMNodeData } from "../../types/data/nodes/LLMNodeData";
+import { LLMNodeFeatures } from "../../types/data/nodes/LLMNodeData";
+import type { LLMNodeProps } from "../../types/props/nodes/LLMNodeProps";
+import type { LLMNodeState } from "../../types/state/nodes/LLMNodeState";
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { LLMNodeData } from "../../types/data/nodes/LLMNodeData";
-import type { LLMNodeState } from "../../types/state/nodes/LLMNodeState";
-import type { LLMNodeProps } from "../../types/props/nodes/LLMNodeProps";
-import { LLMNodeFeatures } from "../../types/data/nodes/LLMNodeData";
 
 // ============================================================================
 // Defaults
@@ -36,9 +36,10 @@ import { LLMNode, LLMNodeMinimap } from "../../components/nodes/LLMNode";
 // Utility Functions
 // ============================================================================
 import { createLLMNodeState } from "../../utils/nodes/llmNodeData/createLLMNodeState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { llmNodeStateToData } from "../../utils/nodes/llmNodeData/mapLLMNodeStateToData";
 import { mapLLMNodeDataToState } from "../../utils/nodes/llmNodeData/mapLLMNodeDataToState";
+import { llmNodeStateToData } from "../../utils/nodes/llmNodeData/mapLLMNodeStateToData";
+import { transformLLMNodeItems } from "../../utils/nodes/llmNodeData/transformLLMNodeItems";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * LLMNode Atlas Type Definition
@@ -81,6 +82,7 @@ export const LLMNodeAtlas: LLMNodeAtlas = {
 	createState: createLLMNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: transformLLMNodeItems,
 	dataToState: mapLLMNodeDataToState as DataToStateMapper,
 	stateToData: llmNodeStateToData as StateToDataMapper,
 };

@@ -11,6 +11,7 @@ import type { Point } from "../../types/core/Point";
  */
 export const drawPoint = (id: string, point: Point, color = "red"): void => {
 	const svg = document.getElementsByTagName("svg")[0];
+	if (!svg) return;
 	const elm = svg.getElementById(id);
 	if (elm) {
 		elm.setAttribute("cx", point.x.toString());

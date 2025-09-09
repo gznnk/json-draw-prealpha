@@ -3,10 +3,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 // Import types.
 import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
+import type { CornerRoundableData } from "../../../../types/data/core/CornerRoundableData";
 import type { FillableData } from "../../../../types/data/core/FillableData";
 import type { StrokableData } from "../../../../types/data/core/StrokableData";
 import type { TextableData } from "../../../../types/data/core/TextableData";
-import type { RectangleData } from "../../../../types/data/shapes/RectangleData";
+
 import type { DiagramStyleChangeEvent } from "../../../../types/events/DiagramStyleChangeEvent";
 import type { Diagram } from "../../../../types/state/catalog/Diagram";
 
@@ -20,11 +21,11 @@ import { isTransformativeState } from "../../../../utils/validation/isTransforma
 // Imports related to this component.
 import { InteractionState } from "../../../../canvas/types/InteractionState";
 import {
-	findFirstBorderRadiusRecursive,
+	findFirstCornerRoundableRecursive,
 	findFirstFillableRecursive,
 	findFirstStrokableRecursive,
 	findFirstTextableRecursive,
-} from "./DiagramMenuFunctions";
+} from "./DiagramMenuUtils";
 import type {
 	DiagramMenuProps,
 	DiagramMenuStateMap,
@@ -117,10 +118,10 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 		// Find the first border radius item in the selected items.
 		// This is used to determine the border radius menu state.
-		const firstRectangleItem = findFirstBorderRadiusRecursive(selectedItems) as
-			| RectangleData
+		const firstCornerRoundableItem = findFirstCornerRoundableRecursive(selectedItems) as
+			| CornerRoundableData
 			| undefined;
-		if (firstRectangleItem) {
+		if (firstCornerRoundableItem) {
 			menuStateMap.BorderRadius = "Show";
 
 			if (isBorderRadiusSelectorOpen) {
@@ -228,7 +229,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 				menuStateMap,
 				bgColor: firstFillableItem?.fill || "transparent",
 				borderColor: firstStrokableItem?.stroke || "transparent",
-				borderRadius: firstRectangleItem?.radius || 0,
+				borderRadius: firstCornerRoundableItem?.cornerRadius || 0,
 				fontSize: firstTextableItem?.fontSize || 0,
 				fontColor: firstTextableItem?.fontColor || "transparent",
 			} as DiagramMenuProps;
@@ -248,7 +249,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 					menuStateMap,
 					bgColor: firstFillableItem?.fill || "transparent",
 					borderColor: firstStrokableItem?.stroke || "transparent",
-					borderRadius: firstRectangleItem?.radius || 0,
+					borderRadius: firstCornerRoundableItem?.cornerRadius || 0,
 					fontSize: firstTextableItem?.fontSize ?? 0,
 					fontColor: firstTextableItem?.fontColor || "transparent",
 				} as DiagramMenuProps;
@@ -489,7 +490,7 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 			const { selectedItems, changeItemsStyle } = refBus.current;
 
 			changeItemsStyle(selectedItems, {
-				radius: borderRadius,
+				cornerRadius: borderRadius,
 			});
 		},
 		[],

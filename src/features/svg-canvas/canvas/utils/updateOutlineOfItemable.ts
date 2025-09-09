@@ -2,7 +2,7 @@
 import type { Diagram } from "../../types/state/catalog/Diagram";
 
 // Import utils.
-import { calcGroupOrientedBox } from "../../utils/shapes/group/calcGroupOrientedBox";
+import { calcItemableOrientedBox } from "../../utils/core/calcItemableOrientedBox";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**
@@ -14,12 +14,12 @@ import { isItemableState } from "../../utils/validation/isItemableState";
  * @returns {Diagram} - The updated itemable diagram with outline updated.
  */
 export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
-	if (!isItemableState(itemable)) {
+	if (!isItemableState(itemable) || itemable.itemableType === "concrete") {
 		return itemable;
 	}
 
 	// Calculate the bounds of the itemable.
-	const box = calcGroupOrientedBox(itemable);
+	const box = calcItemableOrientedBox(itemable);
 
 	// Update child itemables recursively
 	let updatedItems = itemable.items;
@@ -27,7 +27,7 @@ export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
 
 	if (itemable.items) {
 		const newItems = itemable.items.map((item) => {
-			if (isItemableState(item)) {
+			if (isItemableState(item) && item.itemableType === "abstract") {
 				const updatedItem = updateOutlineOfItemable(item);
 				if (updatedItem !== item) {
 					itemsChanged = true;

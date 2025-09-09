@@ -4,7 +4,7 @@ This document defines the separation rules for React components and their utilit
 
 ## Separation Criteria
 
-### Utility Functions File ([ComponentName]Functions.ts)
+### Utility Functions File ([ComponentName]Utils.ts)
 
 Place logic in utility functions when it meets these criteria:
 
@@ -85,7 +85,7 @@ const miniMapItems = useMemo(() => {
 ```
 ComponentName/
 ├── ComponentName.tsx           # React component with hooks and JSX
-├── ComponentNameFunctions.ts   # Pure utility functions
+├── ComponentNameUtils.ts       # Pure utility functions
 ├── ComponentNameTypes.ts       # Type definitions
 ├── ComponentNameStyled.ts      # Styled components
 └── index.tsx                   # Re-exports

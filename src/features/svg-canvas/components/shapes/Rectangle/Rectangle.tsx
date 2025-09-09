@@ -37,7 +37,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	y,
 	width,
 	height,
-	radius,
+	cornerRadius,
 	rotation,
 	scaleX,
 	scaleY,
@@ -149,7 +149,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
 	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
-	const ownerShape = useMemo(
+	const ownerFrame = useMemo(
 		() => ({
 			x,
 			y,
@@ -179,8 +179,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				y={-height / 2}
 				width={width}
 				height={height}
-				rx={radius}
-				ry={radius}
+				rx={cornerRadius}
+				ry={cornerRadius}
 				fill={fill}
 				stroke={stroke}
 				strokeWidth={strokeWidth}
@@ -239,7 +239,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 			)}
 			<ConnectPoints
 				ownerId={id}
-				ownerShape={ownerShape}
+				ownerFrame={ownerFrame}
 				connectPoints={connectPoints}
 				showConnectPoints={showConnectPoints}
 				shouldRender={!isDragging && !isTransforming && !isSelected}

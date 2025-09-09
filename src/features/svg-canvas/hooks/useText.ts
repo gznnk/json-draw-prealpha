@@ -14,7 +14,7 @@ export type UseTextProps = {
 	id: string;
 	isSelected: boolean;
 	isTextEditEnabled?: boolean;
-	attributes?: TextEditorAttributes;
+	attributes?: TextEditorAttributes | (() => TextEditorAttributes | undefined);
 	onTextChange?: (e: DiagramTextChangeEvent) => void;
 };
 
@@ -56,12 +56,16 @@ export const useText = (props: UseTextProps): UseTextReturn => {
 			return;
 		}
 
+		// Get attributes - if it's a function, call it, otherwise use directly
+		const resolvedAttributes =
+			typeof attributes === "function" ? attributes() : attributes;
+
 		const textChangeEvent: DiagramTextChangeEvent = {
 			eventId: newEventId(),
 			eventPhase: "Started",
 			id,
 			text: "",
-			initializeAttributes: attributes,
+			initializeAttributes: resolvedAttributes,
 		};
 		onTextChange(textChangeEvent);
 	}, []);

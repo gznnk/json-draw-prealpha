@@ -5,6 +5,7 @@ import type { DiagramType } from "../../../types/core/DiagramType";
 // Import constants.
 import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
 import { FillableDefaultData } from "../core/FillableDefaultData";
+import { FrameableDefaultData } from "../core/FrameableDefaultData";
 import { ItemableDefaultData } from "../core/ItemableDefaultData";
 import { StrokableDefaultData } from "../core/StrokableDefaultData";
 import { TextableDefaultData } from "../core/TextableDefaultData";
@@ -28,6 +29,7 @@ export function CreateDefaultData<T>(config: {
 	// Build default data by combining base data with feature-specific defaults
 	const result = {
 		...DiagramBaseDefaultData,
+		...(options.frameable ? FrameableDefaultData : {}),
 		...(options.transformative ? TransformativeDefaultData : {}),
 		...(options.itemable ? ItemableDefaultData : {}),
 		...(options.connectable ? ConnectableDefaultData : {}),

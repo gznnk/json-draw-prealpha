@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 
 // Import types.
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { PathPointState } from "../../../types/state/shapes/PathPointState";
@@ -16,9 +16,9 @@ import { EVENT_NAME_CONNECT_NODES } from "../../../constants/core/EventNames";
 
 // Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";
-import { calcOrientedShapeFromPoints } from "../../../utils/math/geometry/calcOrientedShapeFromPoints";
+import { calcOrientedFrameFromPoints } from "../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
-import { generateOptimalShapeToShapeConnection } from "../../../utils/shapes/connectPoint/generateOptimalShapeToShapeConnection";
+import { generateOptimalFrameToFrameConnection } from "../../../utils/shapes/connectPoint/generateOptimalFrameToFrameConnection";
 
 // Import hooks.
 import { useAddDiagram } from "../actions/useAddDiagram";
@@ -76,16 +76,16 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 				return;
 			}
 
-			const points = generateOptimalShapeToShapeConnection(
+			const points = generateOptimalFrameToFrameConnection(
 				sourceConnectPoint.x,
 				sourceConnectPoint.y,
-				sourceNode as Shape,
+				sourceNode as Frame,
 				targetConnectPoint.x,
 				targetConnectPoint.y,
-				targetNode as Shape,
+				targetNode as Frame,
 			);
 
-			const shape = calcOrientedShapeFromPoints(
+			const frame = calcOrientedFrameFromPoints(
 				points.map((p) => ({ x: p.x, y: p.y })),
 			);
 
@@ -106,10 +106,10 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 				item: {
 					...ConnectLineDefaultState,
 					id: newId(),
-					x: shape.x,
-					y: shape.y,
-					width: shape.width,
-					height: shape.height,
+					x: frame.x,
+					y: frame.y,
+					width: frame.width,
+					height: frame.height,
 					items: pathPoints,
 					startOwnerId: sourceNode.id,
 					endOwnerId: targetNode.id,

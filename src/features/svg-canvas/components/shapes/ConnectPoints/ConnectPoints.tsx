@@ -13,15 +13,20 @@ import type { ConnectPointsProps } from "./ConnectPointsTypes";
  */
 const ConnectPointsComponent: React.FC<ConnectPointsProps> = ({
 	ownerId,
-	ownerShape,
+	ownerFrame,
 	connectPoints,
 	showConnectPoints,
 	shouldRender,
+	connectEnabled = true,
+	connectType = "both",
 	onConnect,
 	onPreviewConnectLine,
 }) => {
-	// Don't render if connect points should not be shown
 	if (!shouldRender) {
+		return null;
+	}
+
+	if (connectEnabled === false) {
 		return null;
 	}
 
@@ -35,8 +40,9 @@ const ConnectPointsComponent: React.FC<ConnectPointsProps> = ({
 					x={cp.x}
 					y={cp.y}
 					ownerId={ownerId}
-					ownerShape={ownerShape}
+					ownerFrame={ownerFrame}
 					alwaysVisible={showConnectPoints}
+					connectType={connectType}
 					onConnect={onConnect}
 					onPreviewConnectLine={onPreviewConnectLine}
 				/>

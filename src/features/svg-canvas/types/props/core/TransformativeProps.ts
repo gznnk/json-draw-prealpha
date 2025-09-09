@@ -8,4 +8,6 @@ import type { DiagramClickEvent } from "../../events/DiagramClickEvent";
 export type TransformativeProps = {
 	onTransform?: (e: DiagramTransformEvent) => void;
 	onClick?: (e: DiagramClickEvent) => void;
+	minWidth?: number;
+	minHeight?: number;
 };

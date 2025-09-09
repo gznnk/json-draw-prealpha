@@ -143,7 +143,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	// Suppress ConnectPoint re-rendering by memoization
 	// If separated by key and passed as individual props, each ConnectPoint side
 	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
-	const ownerShape = useMemo(
+	const ownerFrame = useMemo(
 		() => ({
 			x,
 			y,
@@ -231,7 +231,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			)}
 			<ConnectPoints
 				ownerId={id}
-				ownerShape={ownerShape}
+				ownerFrame={ownerFrame}
 				connectPoints={connectPoints}
 				showConnectPoints={showConnectPoints}
 				shouldRender={!isDragging && !isTransforming && !isSelected}

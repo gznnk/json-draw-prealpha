@@ -6,10 +6,12 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for Ellipse shapes.
  */
 export const EllipseFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
 	strokable: true,
 	fillable: true,
+	cornerRoundable: false,
 	textable: true,
 	selectable: true,
 	fileDroppable: true,

@@ -22,7 +22,7 @@ export const createRectangleState = ({
 	y,
 	width = 100,
 	height = 100,
-	radius = 0,
+	cornerRadius = 0,
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
@@ -43,7 +43,7 @@ export const createRectangleState = ({
 	y: number;
 	width?: number;
 	height?: number;
-	radius?: number;
+	cornerRadius?: number;
 	rotation?: number;
 	scaleX?: number;
 	scaleY?: number;
@@ -77,7 +77,7 @@ export const createRectangleState = ({
 		y,
 		width,
 		height,
-		radius,
+		cornerRadius,
 		rotation,
 		scaleX,
 		scaleY,

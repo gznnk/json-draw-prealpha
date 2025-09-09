@@ -13,6 +13,7 @@ export const isItemableState = <T = unknown>(
 	return (
 		obj !== null &&
 		typeof obj === "object" &&
+		"itemableType" in obj &&
 		"items" in obj &&
 		Array.isArray((obj as ItemableState<T>).items)
 	);

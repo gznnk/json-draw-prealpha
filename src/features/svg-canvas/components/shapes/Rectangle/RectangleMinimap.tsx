@@ -24,7 +24,7 @@ const RectangleMinimapComponent: React.FC<RectangleProps> = ({
 	y,
 	width,
 	height,
-	radius,
+	cornerRadius,
 	rotation,
 	scaleX,
 	scaleY,
@@ -59,8 +59,8 @@ const RectangleMinimapComponent: React.FC<RectangleProps> = ({
 				y={-height / 2}
 				width={width}
 				height={height}
-				rx={radius}
-				ry={radius}
+				rx={cornerRadius}
+				ry={cornerRadius}
 				fill={fill}
 				stroke={stroke}
 				strokeWidth={strokeWidth}

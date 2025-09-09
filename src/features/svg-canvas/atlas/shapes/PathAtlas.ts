@@ -80,6 +80,7 @@ export const PathAtlas: PathAtlas = {
 	createState: createPathState,
 	export: undefined,
 	calcConnectPointPosition: () => [],
+	transformItems: undefined,
 	dataToState: mapPathDataToState as DataToStateMapper,
 	stateToData: pathStateToData as StateToDataMapper,
 };

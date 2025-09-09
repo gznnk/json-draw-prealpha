@@ -3,7 +3,6 @@ import { DiagramRegistry } from "../registry";
 
 // Import Atlas objects
 import { ConnectLineAtlas } from "../atlas/shapes/ConnectLineAtlas";
-import { ConnectPointAtlas } from "../atlas/shapes/ConnectPointAtlas";
 import { EllipseAtlas } from "../atlas/shapes/EllipseAtlas";
 import { GroupAtlas } from "../atlas/shapes/GroupAtlas";
 import { ImageAtlas } from "../atlas/shapes/ImageAtlas";
@@ -11,10 +10,12 @@ import { PathAtlas } from "../atlas/shapes/PathAtlas";
 import { PathPointAtlas } from "../atlas/shapes/PathPointAtlas";
 import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
 import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
-import { TextAtlas } from "../atlas/shapes/TextAtlas";
+
+// Import Element Atlas objects
+import { ButtonAtlas } from "../atlas/elements/ButtonAtlas";
+import { InputAtlas } from "../atlas/elements/InputAtlas";
 
 // Import Diagram Atlas objects
-import { ButtonAtlas } from "../atlas/diagrams/ButtonAtlas";
 
 // Import Node Atlas objects
 import { AgentNodeAtlas } from "../atlas/nodes/AgentNodeAtlas";
@@ -39,7 +40,6 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// Shape Atlas Registration
 	// ============================================================================
 	DiagramRegistry.register(ConnectLineAtlas);
-	DiagramRegistry.register(ConnectPointAtlas);
 	DiagramRegistry.register(EllipseAtlas);
 	DiagramRegistry.register(GroupAtlas);
 	DiagramRegistry.register(ImageAtlas);
@@ -47,12 +47,16 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	DiagramRegistry.register(PathPointAtlas);
 	DiagramRegistry.register(RectangleAtlas);
 	DiagramRegistry.register(SvgAtlas);
-	DiagramRegistry.register(TextAtlas);
+
+	// ============================================================================
+	// Element Atlas Registration
+	// ============================================================================
+	DiagramRegistry.register(ButtonAtlas);
+	DiagramRegistry.register(InputAtlas);
 
 	// ============================================================================
 	// Diagram Atlas Registration
 	// ============================================================================
-	DiagramRegistry.register(ButtonAtlas);
 
 	// ============================================================================
 	// Node Atlas Registration

@@ -1,13 +1,15 @@
+import type { DiagramFeatures } from "../../core/DiagramFeatures";
 // Import types.
 import type { CreateDataType } from "./CreateDataType";
-import type { DiagramFeatures } from "../../core/DiagramFeatures";
 
 /**
  * Diagram features for Group shapes.
  */
 export const GroupFeatures = {
+	frameable: true,
 	transformative: true,
 	itemable: true,
+	cornerRoundable: false,
 	selectable: true,
 } as const satisfies DiagramFeatures;
 

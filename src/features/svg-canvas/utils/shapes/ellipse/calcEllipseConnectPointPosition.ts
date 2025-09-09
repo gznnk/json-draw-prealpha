@@ -6,7 +6,7 @@ import type { ConnectPointState } from "../../../types/state/shapes/ConnectPoint
 // Import utils.
 import { calcEllipseVertices } from "../../math/geometry/calcEllipseVertices";
 import { isConnectableState } from "../../validation/isConnectableState";
-import { isShape } from "../../validation/isShape";
+import { isFrame } from "../../validation/isFrame";
 
 /**
  * Calculate the position of the connection points of the ellipse.
@@ -17,7 +17,7 @@ import { isShape } from "../../validation/isShape";
 export const calcEllipseConnectPointPosition = (
 	diagram: Diagram,
 ): ConnectPointState[] => {
-	if (!isConnectableState(diagram) || !isShape(diagram)) return []; // Type guard.
+	if (!isConnectableState(diagram) || !isFrame(diagram)) return []; // Type guard.
 
 	// Calculate the vertices of the ellipse.
 	const vertices = calcEllipseVertices(diagram);

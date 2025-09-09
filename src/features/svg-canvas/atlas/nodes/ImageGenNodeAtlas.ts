@@ -81,6 +81,7 @@ export const ImageGenNodeAtlas: ImageGenNodeAtlas = {
 	createState: createImageGenNodeState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: mapImageGenNodeDataToState as DataToStateMapper,
 	stateToData: imageGenNodeStateToData as StateToDataMapper,
 };

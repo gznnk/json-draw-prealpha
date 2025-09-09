@@ -8,17 +8,19 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for Path shapes.
  */
 export const PathFeatures = {
+	frameable: true,
 	transformative: true,
 	itemable: true,
 	strokable: true,
+	cornerRoundable: false,
 	selectable: true,
 } as const satisfies DiagramFeatures;
 
 /**
  * Data type for polyline/path elements.
  */
-export type PathData = CreateDataType<typeof PathFeatures> & {
+export type PathData = CreateDataType<typeof PathFeatures, {
 	pathType: PathType;
 	startArrowHead?: ArrowHeadType;
 	endArrowHead?: ArrowHeadType;
-};
+}>;

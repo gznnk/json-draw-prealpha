@@ -5,6 +5,6 @@ import type { PathPointState } from "../../state/shapes/PathPointState";
 /**
  * Props for PathPoint component
  */
-export type PathPointProps = CreateDiagramProps<PathPointState, object> & {
+export type PathPointProps = CreateDiagramProps<PathPointState, object, {
 	hidden?: boolean;
-};
+}>;

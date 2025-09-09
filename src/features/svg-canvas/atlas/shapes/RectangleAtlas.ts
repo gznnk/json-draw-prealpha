@@ -81,6 +81,7 @@ export const RectangleAtlas: RectangleAtlas = {
 	createState: createRectangleState,
 	export: undefined,
 	calcConnectPointPosition: calcRectangleConnectPointPosition,
+	transformItems: undefined,
 	dataToState: rectangleDataToState as DataToStateMapper,
 	stateToData: rectangleStateToData as StateToDataMapper,
 };

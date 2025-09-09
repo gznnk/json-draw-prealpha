@@ -83,6 +83,7 @@ export const GroupAtlas: GroupAtlas = {
 	}),
 	export: undefined,
 	calcConnectPointPosition: () => [],
+	transformItems: undefined,
 	dataToState: mapGroupDataToState as DataToStateMapper,
 	stateToData: groupStateToData as StateToDataMapper,
 };

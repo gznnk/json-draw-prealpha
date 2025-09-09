@@ -1,5 +1,5 @@
 import type { EventPhase } from "./EventPhase";
-import type { Shape } from "../core/Shape";
+import type { Frame } from "../core/Frame";
 import type { TransformationType } from "../core/TransformationType";
 
 /**
@@ -11,8 +11,8 @@ export type DiagramTransformEvent = {
 	id: string;
 	eventPhase: EventPhase;
 	transformationType: TransformationType;
-	startShape: Shape;
-	endShape: Shape;
+	startFrame: Frame;
+	endFrame: Frame;
 	cursorX: number;
 	cursorY: number;
 	/** The cursor's x position in client coordinates */

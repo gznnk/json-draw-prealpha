@@ -6,8 +6,10 @@ import type { CreateDataType } from "../shapes/CreateDataType";
  * Diagram features for VectorStore nodes.
  */
 export const VectorStoreNodeFeatures = {
+	frameable: true,
 	transformative: true,
 	connectable: true,
+	cornerRoundable: false,
 	selectable: true,
 	executable: true,
 } as const satisfies DiagramFeatures;
@@ -15,6 +17,6 @@ export const VectorStoreNodeFeatures = {
 /**
  * Type of the VectorStoreNode data.
  */
-export type VectorStoreNodeData = CreateDataType<typeof VectorStoreNodeFeatures> & {
+export type VectorStoreNodeData = CreateDataType<typeof VectorStoreNodeFeatures, {
 	type: "VectorStoreNode";
-};
+}>;

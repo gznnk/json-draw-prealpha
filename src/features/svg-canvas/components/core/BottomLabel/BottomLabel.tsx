@@ -6,7 +6,7 @@ import { memo } from "react";
 import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
 
 // Import local module files.
-import { calcBottomLabelPosition } from "./BottomLabelFunctions";
+import { calcBottomLabelPosition } from "./BottomLabelUtils";
 
 /**
  * Props for BottomLabel component.

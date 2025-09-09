@@ -15,5 +15,7 @@ export const TextAreaNodeDefaultState = CreateDefaultState<TextAreaNodeState>({
 	type: "TextAreaNode",
 	options: TextAreaNodeFeatures,
 	baseData: TextAreaNodeDefaultData,
-	properties: {},
+	properties: {
+		itemableType: "concrete",
+	},
 });

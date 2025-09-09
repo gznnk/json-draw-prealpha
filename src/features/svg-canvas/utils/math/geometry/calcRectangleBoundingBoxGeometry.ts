@@ -1,6 +1,6 @@
 // Import types.
 import type { BoxGeometry } from "../../../types/core/BoxGeometry";
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 
 // Import utils.
 import { calcRectangleVertices } from "./calcRectangleVertices";
@@ -12,9 +12,9 @@ import { calcRectangleVertices } from "./calcRectangleVertices";
  * @param shape - Rectangle shape parameters
  * @returns The bounding box geometry
  */
-export const calcRectangleBoundingBoxGeometry = (shape: Shape): BoxGeometry => {
+export const calcRectangleBoundingBoxGeometry = (frame: Frame): BoxGeometry => {
 	const { topLeftPoint, bottomLeftPoint, topRightPoint, bottomRightPoint } =
-		calcRectangleVertices(shape);
+		calcRectangleVertices(frame);
 
 	const left = Math.min(
 		topLeftPoint.x,

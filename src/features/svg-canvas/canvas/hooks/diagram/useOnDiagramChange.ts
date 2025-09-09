@@ -41,8 +41,8 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 		// Bypass references to avoid function creation in every render.
 		const {
 			props: { setCanvasState },
+			addHistory,
 		} = refBus.current;
-		const { addHistory } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Create a new state with the updated items and multi-select group.

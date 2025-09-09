@@ -5,7 +5,7 @@ import type { GroupState } from "../../../types/state/shapes/GroupState";
 // Import utils.
 import { nanToZero } from "../../math/common/nanToZero";
 import { newId } from "../common/newId";
-import { calcUnrotatedGroupBoundingBox } from "../group/calcUnrotatedGroupBoundingBox";
+import { calcUnrotatedItemableBoundingBox } from "../../core/calcUnrotatedItemableBoundingBox";
 
 // Import conversion functions.
 import { circleElementToDiagram } from "./circleElementToDiagram";
@@ -45,7 +45,7 @@ export const svgDataToDiagram = (data: string): GroupState => {
 		}
 	}
 
-	const boundingBox = calcUnrotatedGroupBoundingBox(newData);
+	const boundingBox = calcUnrotatedItemableBoundingBox(newData);
 
 	const ret = {
 		id: newId(),

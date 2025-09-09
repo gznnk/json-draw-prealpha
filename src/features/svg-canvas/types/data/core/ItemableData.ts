@@ -1,5 +1,3 @@
-// Direct import of Diagram removed to avoid circular references
-
 /**
  * Interface for diagram elements that can contain child elements.
  * Used for composite elements like groups that can hold other diagrams.

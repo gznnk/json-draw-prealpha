@@ -6,12 +6,14 @@ import type { GroupState } from "../../../types/state/shapes/GroupState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
+import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
 import { newId } from "../../../utils/shapes/common/newId";
-import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
 
+import { isSelectableState } from "../../../utils/validation/isSelectableState";
+import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 // Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
@@ -60,11 +62,18 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 				type: "Group",
 				isSelected: true,
 				showOutline: true,
-				items: selectedItems.map((item) => ({
-					...item,
-					isSelected: false,
-					showOutline: false,
-				})),
+				items: applyFunctionRecursively(selectedItems, (childItem) => {
+					if (!isSelectableState(childItem)) {
+						// Ignore non-selectable child items.
+						return childItem;
+					}
+					return {
+						...childItem,
+						isSelected: false,
+						isAncestorSelected: true,
+						showOutline: true,
+					};
+				}),
 			};
 			// Remove grouped shapes from the shape array
 			let items = removeGroupedRecursive(prevState.items);

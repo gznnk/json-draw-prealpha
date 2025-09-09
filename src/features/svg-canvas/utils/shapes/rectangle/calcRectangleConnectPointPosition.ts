@@ -1,6 +1,6 @@
 // Import types.
 import type { RectangleVertices } from "../../../types/core/RectangleVertices";
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 
@@ -20,7 +20,7 @@ export const calcRectangleConnectPointPosition = (
 	if (!isConnectableState(diagram)) return []; // Type guard.
 
 	// Calculate the vertices of the rectangle.
-	const vertices = calcRectangleVertices(diagram as Shape);
+	const vertices = calcRectangleVertices(diagram as Frame);
 
 	// Create connection point move data.
 	const newConnectPoints: ConnectPointState[] = [];

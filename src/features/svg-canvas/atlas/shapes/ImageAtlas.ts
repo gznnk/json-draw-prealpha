@@ -81,6 +81,7 @@ export const ImageAtlas: ImageAtlas = {
 	createState: createImageState,
 	export: imageToBlob,
 	calcConnectPointPosition: () => [],
+	transformItems: undefined,
 	dataToState: mapImageDataToState as DataToStateMapper,
 	stateToData: imageStateToData as StateToDataMapper,
 };

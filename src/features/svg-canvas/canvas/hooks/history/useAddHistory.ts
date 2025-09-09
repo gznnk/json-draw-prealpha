@@ -28,6 +28,9 @@ export const useAddHistory = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback(
 		(eventId: string, canvasState: SvgCanvasState): SvgCanvasState => {
+			// Bypass references to avoid function creation in every render.
+			const { onDataChange } = refBus.current;
+
 			let newHistory: SvgCanvasHistory[];
 
 			// When the last history event ID is the same as the new state, overwrite the history.
@@ -54,7 +57,7 @@ export const useAddHistory = (props: SvgCanvasSubHooksProps) => {
 				historyIndex: newHistory.length - 1,
 			};
 
-			refBus.current.onDataChange?.(svgCanvasStateToData(newCanvasState));
+			onDataChange?.(svgCanvasStateToData(newCanvasState));
 
 			return newCanvasState;
 		},

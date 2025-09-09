@@ -1,6 +1,6 @@
 // Import types.
 import type { RectangleVertices } from "../../../types/core/RectangleVertices";
-import type { Shape } from "../../../types/core/Shape";
+import type { Frame } from "../../../types/core/Frame";
 
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
@@ -13,8 +13,8 @@ import { affineTransformation } from "../transform/affineTransformation";
  * @param shape - The shape parameters (position, dimensions, rotation, scale)
  * @returns The coordinates of the rectangle vertices
  */
-export const calcRectangleVertices = (shape: Shape): RectangleVertices => {
-	const { x, y, width, height, rotation, scaleX, scaleY } = shape;
+export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
+	const { x, y, width, height, rotation, scaleX, scaleY } = frame;
 
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;

@@ -185,9 +185,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 
 			// If the drag event is ended
 			if (e.eventPhase === "Ended") {
-				// Add history and get updated state
-				newState = addHistory(e.eventId, newState);
-
 				// Restore showTransformControls from initial state for transformative items
 				newState.items = applyFunctionRecursively(newState.items, (item) => {
 					if (selectedIds.has(item.id) && isTransformativeState(item)) {
@@ -203,6 +200,10 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				});
 				// Update outline of all groups.
 				newState.items = updateOutlineOfAllItemables(newState.items);
+
+				// Add history and get updated state
+				newState = addHistory(e.eventId, newState);
+
 				// Clean up the canvas state reference.
 				startCanvasState.current = undefined;
 				// Clean up the selected item IDs and initial items map.

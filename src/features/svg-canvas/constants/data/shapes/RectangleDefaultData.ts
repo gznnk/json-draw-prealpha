@@ -13,6 +13,6 @@ export const RectangleDefaultData = CreateDefaultData<RectangleData>({
 	type: "Rectangle",
 	options: RectangleFeatures,
 	properties: {
-		radius: 0,
+		cornerRadius: 0,
 	},
 });

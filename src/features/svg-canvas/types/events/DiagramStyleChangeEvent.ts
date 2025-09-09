@@ -4,7 +4,7 @@ import type { VerticalAlign } from "../core/VerticalAlign";
 export type DiagramStyleChangeEvent = {
 	eventId: string;
 	id: string;
-	radius?: number;
+	cornerRadius?: number;
 	stroke?: string;
 	strokeWidth?: string;
 	fill?: string;

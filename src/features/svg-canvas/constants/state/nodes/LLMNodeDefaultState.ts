@@ -15,5 +15,7 @@ export const LLMNodeDefaultState = CreateDefaultState<LLMNodeState>({
 	type: "LLMNode",
 	options: LLMNodeFeatures,
 	baseData: LLMNodeDefaultData,
-	properties: {},
+	properties: {
+		itemableType: "concrete",
+	},
 });

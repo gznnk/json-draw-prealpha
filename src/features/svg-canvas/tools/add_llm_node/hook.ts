@@ -1,11 +1,11 @@
 import { useCallback } from "react";
-import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
-import { createLLMNodeState } from "../../utils/nodes/llmNodeData/createLLMNodeState";
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
+import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
+import { createLLMNodeState } from "../../utils/nodes/llmNodeData/createLLMNodeState";
 
 export const useAddLLMNodeTool = (eventBus: EventBus): FunctionCallHandler => {
 	const addDiagram = useAddDiagramWithBus(eventBus);

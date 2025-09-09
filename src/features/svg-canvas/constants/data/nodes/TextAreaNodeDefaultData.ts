@@ -12,5 +12,8 @@ import { CreateDefaultData } from "../shapes/CreateDefaultData";
 export const TextAreaNodeDefaultData = CreateDefaultData<TextAreaNodeData>({
 	type: "TextAreaNode",
 	options: TextAreaNodeFeatures,
-	properties: {},
+	properties: {
+		width: 200,
+		height: 200,
+	},
 });

@@ -1,12 +1,12 @@
 // Import types.
-import type { Shape } from "../core/Shape";
+import type { Frame } from "../core/Frame";
 import type { TextableData } from "../data/core/TextableData";
 import type { EventPhase } from "./EventPhase";
 
 /**
  * Attributes for the text editor component.
  */
-export type TextEditorAttributes = Shape & TextableData;
+export type TextEditorAttributes = Frame & TextableData;
 
 /**
  * Event fired when text content is changed on a diagram
