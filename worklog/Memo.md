@@ -18,3 +18,4 @@
 
 # その他
 * itemableTypeが"abstract"の時以外は、DefaultStateでitemableTypeを設定する必要あり
+* AGPL-3.0-only
