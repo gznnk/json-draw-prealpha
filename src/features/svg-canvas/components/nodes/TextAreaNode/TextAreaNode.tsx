@@ -23,7 +23,6 @@ import { TextArea } from "../../icons/TextArea";
 import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
-import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
 
 // Import constants.
 import {
@@ -72,14 +71,6 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onDiagramChange,
 		onExecute,
 	} = props;
-
-	// Calculate effective dimensions using minimums if provided
-	const { effectiveWidth, effectiveHeight } = calculateEffectiveDimensions(
-		width,
-		height,
-		minWidth,
-		minHeight,
-	);
 
 	const nodeHeaderState = items[0] as NodeHeaderState;
 	const inputState = items[1] as InputState;
@@ -200,7 +191,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	}, []);
 
 	const inputHeight =
-		effectiveHeight -
+		height -
 		(HEADER_MARGIN_TOP +
 			HEADER_HEIGHT +
 			HEADER_MARGIN_BOTTOM +
@@ -210,7 +201,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 
 	const headerCenter = affineTransformation(
 		0,
-		-(effectiveHeight / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
+		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,
 		scaleY,
 		degreesToRadians(rotation),
@@ -221,7 +212,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	const inputCenter = affineTransformation(
 		0,
 		-(
-			effectiveHeight / 2 -
+			height / 2 -
 			(inputHeight / 2 +
 				HEADER_MARGIN_TOP +
 				HEADER_HEIGHT +
@@ -234,15 +225,15 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		y,
 	);
 
-	const buttonX = effectiveWidth / 2 - BUTTON_WIDTH / 2 - BASE_MARGIN;
-	const buttonY = effectiveHeight / 2 - BUTTON_HEIGHT / 2 - BUTTON_MARGIN_BOTTOM;
+	const buttonX = width / 2 - BUTTON_WIDTH / 2 - BASE_MARGIN;
+	const buttonY = height / 2 - BUTTON_HEIGHT / 2 - BUTTON_MARGIN_BOTTOM;
 
 	return (
 		<>
 			<Frame
 				{...props}
-				width={effectiveWidth}
-				height={effectiveHeight}
+				width={width}
+				height={height}
 				minWidth={minWidth}
 				minHeight={minHeight}
 				stroke={BORDER_COLOR}
@@ -279,7 +270,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				{...nodeHeaderState}
 				x={headerCenter.x}
 				y={headerCenter.y}
-				width={effectiveWidth - BASE_MARGIN * 2}
+				width={width - BASE_MARGIN * 2}
 				height={HEADER_HEIGHT}
 				scaleX={scaleX}
 				scaleY={scaleY}
@@ -298,7 +289,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				{...inputState}
 				x={inputCenter.x}
 				y={inputCenter.y}
-				width={effectiveWidth - BASE_MARGIN * 2}
+				width={width - BASE_MARGIN * 2}
 				height={inputHeight}
 				scaleX={scaleX}
 				scaleY={scaleY}
