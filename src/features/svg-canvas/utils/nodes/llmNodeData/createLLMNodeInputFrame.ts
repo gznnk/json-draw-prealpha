@@ -4,6 +4,7 @@ import type { Frame } from "../../../types/core/Frame";
 // Import utils.
 import { affineTransformation } from "../../math/transform/affineTransformation";
 import { degreesToRadians } from "../../math/common/degreesToRadians";
+import { calculateEffectiveDimensions } from "../../math/geometry/calculateEffectiveDimensions";
 
 // Import constants.
 import {
@@ -20,6 +21,8 @@ import {
  * @param y - The y coordinate of the node
  * @param width - Width of the node
  * @param height - Height of the node
+ * @param minWidth - Minimum width constraint (optional)
+ * @param minHeight - Minimum height constraint (optional)
  * @param rotation - Rotation of the node in degrees
  * @param scaleX - X scale of the node
  * @param scaleY - Y scale of the node
@@ -30,6 +33,8 @@ export const createLLMNodeInputFrame = ({
 	y,
 	width,
 	height,
+	minWidth,
+	minHeight,
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
@@ -38,21 +43,31 @@ export const createLLMNodeInputFrame = ({
 	y: number;
 	width: number;
 	height: number;
+	minWidth?: number;
+	minHeight?: number;
 	rotation?: number;
 	scaleX?: number;
 	scaleY?: number;
 }): Frame => {
+	// Calculate effective dimensions using minimums if provided
+	const { effectiveWidth, effectiveHeight } = calculateEffectiveDimensions(
+		width,
+		height,
+		minWidth,
+		minHeight,
+	);
+
 	// Calculate input dimensions
 	const inputHeight =
-		height -
+		effectiveHeight -
 		(HEADER_MARGIN_TOP + HEADER_HEIGHT + HEADER_MARGIN_BOTTOM + BASE_MARGIN);
-	const inputWidth = width - BASE_MARGIN * 2;
+	const inputWidth = effectiveWidth - BASE_MARGIN * 2;
 
 	// Calculate center position with affine transformation
 	const inputCenter = affineTransformation(
 		0,
 		-(
-			height / 2 -
+			effectiveHeight / 2 -
 			(inputHeight / 2 +
 				HEADER_MARGIN_TOP +
 				HEADER_HEIGHT +

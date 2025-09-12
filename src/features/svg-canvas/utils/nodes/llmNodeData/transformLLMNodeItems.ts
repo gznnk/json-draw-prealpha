@@ -18,6 +18,8 @@ export const transformLLMNodeItems = (
 			...input,
 			...createLLMNodeInputFrame({
 				...ownerFrame,
+				minWidth: 200,
+				minHeight: 200,
 			}),
 		},
 	];
