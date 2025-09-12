@@ -24,17 +24,26 @@ import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
 
-// Import local modules.
+// Import constants.
 import {
 	BASE_MARGIN,
+	HEADER_HEIGHT,
+	HEADER_MARGIN_BOTTOM,
+	HEADER_MARGIN_TOP,
+} from "../../../constants/styling/core/LayoutStyling";
+import {
+	BACKGROUND_COLOR,
+	BORDER_COLOR,
+	BORDER_WIDTH,
 	BUTTON_HEIGHT,
 	BUTTON_MARGIN_BOTTOM,
 	BUTTON_MARGIN_TOP,
 	BUTTON_WIDTH,
-	HEADER_HEIGHT,
-	HEADER_MARGIN_BOTTOM,
-	HEADER_MARGIN_TOP,
-} from "./TextAreaConstants";
+	CORNER_RADIUS,
+	ICON_COLOR,
+	MIN_HEIGHT,
+	MIN_WIDTH,
+} from "../../../constants/styling/nodes/TextAreaNodeStyling";
 
 /**
  * TextAreaNode component.
@@ -221,12 +230,12 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		<>
 			<Frame
 				{...props}
-				minWidth={200}
-				minHeight={200}
-				stroke="#E5E6EB"
-				strokeWidth="1px"
-				fill="white"
-				cornerRadius={6}
+				minWidth={MIN_WIDTH}
+				minHeight={MIN_HEIGHT}
+				stroke={BORDER_COLOR}
+				strokeWidth={BORDER_WIDTH}
+				fill={BACKGROUND_COLOR}
+				cornerRadius={CORNER_RADIUS}
 				onPropagation={onPropagation}
 			>
 				<Button
@@ -265,7 +274,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
 				icon={<TextArea fill="#ffffff" />}
-				iconBackgroundColor="#1890ff"
+				iconBackgroundColor={ICON_COLOR}
 				onDrag={handleDrag}
 				onSelect={handleSelect}
 				onClick={handleClick}
