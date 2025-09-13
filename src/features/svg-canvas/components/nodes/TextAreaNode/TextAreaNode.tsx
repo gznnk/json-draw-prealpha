@@ -68,7 +68,6 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onClick,
 		onHoverChange,
 		onTextChange,
-		onDiagramChange,
 		onExecute,
 	} = props;
 
@@ -90,8 +89,8 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onSelect,
 		onClick,
 		onHoverChange,
+		onTextChange,
 		onExecute,
-		onDiagramChange,
 		inputState,
 		setText,
 	};
@@ -159,23 +158,17 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 
 	// Handle propagation events from child components
 	const onPropagation = useCallback((e: ExecutionPropagationEvent) => {
-		const { id, text, inputState, onDiagramChange, onExecute, setText } =
-			refBus.current;
+		const { id, inputState, onTextChange, onExecute, setText } = refBus.current;
 
 		setText(e.data.text);
 
 		if (e.eventPhase === "Ended") {
 			// Update the text state with the new text from the event data.
-			onDiagramChange?.({
+			onTextChange?.({
 				id: inputState.id,
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
-				startDiagram: {
-					text,
-				} as InputState,
-				endDiagram: {
-					text: e.data.text,
-				} as InputState,
+				text: e.data.text,
 			});
 
 			// Propagate the event.

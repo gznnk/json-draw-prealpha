@@ -41,7 +41,7 @@ export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 			if (e.eventPhase === "Started") {
 				let targetItem: Diagram | undefined = undefined;
 
-				const newState = {
+				const nextState = {
 					...prevState,
 					items: applyFunctionRecursively(prevState.items, (item) => {
 						if (item.id === e.id) {
@@ -57,46 +57,51 @@ export const useOnTextChange = (props: SvgCanvasSubHooksProps) => {
 
 				if (!targetItem) return prevState;
 
-				if (e.initializeAttributes) {
-					// If initial attributes are provided, use them to create the text editor state.
-					newState.textEditorState = {
-						id: e.id,
-						...e.initializeAttributes,
-						isActive: true,
-					} as TextEditorState;
-				} else {
-					// If no initial attributes are provided, use the target item's attributes.
-					newState.textEditorState = {
-						...(targetItem as object),
-						isActive: true,
-					} as TextEditorState;
+				if (e.activateEditor) {
+					if (e.initializeAttributes) {
+						// If initial attributes are provided, use them to create the text editor state.
+						nextState.textEditorState = {
+							id: e.id,
+							...e.initializeAttributes,
+							isActive: true,
+						} as TextEditorState;
+					} else {
+						// If no initial attributes are provided, use the target item's attributes.
+						nextState.textEditorState = {
+							...(targetItem as object),
+							isActive: true,
+						} as TextEditorState;
+					}
 				}
 
-				return newState;
+				return nextState;
 			}
 
 			// Handle text content changes
 			const isTextEditing = e.eventPhase !== "Ended";
 
 			// Create a new state with the updated text.
-			let newState = {
+			let nextState = {
 				...prevState,
 				items: applyFunctionRecursively(prevState.items, (item) =>
 					item.id === e.id ? { ...item, text: e.text, isTextEditing } : item,
 				),
-				textEditorState: {
+			};
+
+			if (nextState.textEditorState.isActive) {
+				nextState.textEditorState = {
 					...prevState.textEditorState,
 					text: e.text,
 					isActive: isTextEditing,
-				},
-			};
+				};
+			}
 
 			// Notify about data change.
 			if (e.eventPhase === "Ended") {
-				newState = addHistory(e.eventId, newState);
+				nextState = addHistory(e.eventId, nextState);
 			}
 
-			return newState;
+			return nextState;
 		});
 	}, []);
 };

@@ -72,7 +72,6 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		onHoverChange,
 		onTextChange,
 		onExecute,
-		onDiagramChange,
 	} = props;
 
 	const nodeHeaderState = items[0] as NodeHeaderState;
@@ -286,7 +285,6 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				onSelect={handleSelect}
 				onClick={handleClick}
 				onTextChange={onTextChange}
-				onDiagramChange={onDiagramChange}
 			/>
 		</>
 	);

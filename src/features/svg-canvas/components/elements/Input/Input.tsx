@@ -4,7 +4,6 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 
 // Import types.
 import type { InputProps } from "../../../types/props/elements/InputProps";
-import type { InputState } from "../../../types/state/elements/InputState";
 
 // Import constants.
 import { InputDefaultData } from "../../../constants/data/elements/InputDefaultData";
@@ -77,7 +76,6 @@ const InputComponent: React.FC<InputProps> = ({
 	onConnect,
 	onPreviewConnectLine,
 	onTextChange,
-	onDiagramChange,
 	onHoverChange,
 }) => {
 	// Internal text state
@@ -171,16 +169,11 @@ const InputComponent: React.FC<InputProps> = ({
 
 			if (e.eventPhase === "Ended") {
 				// Update the diagram state with the new text
-				onDiagramChange?.({
+				onTextChange?.({
 					id,
 					eventId: e.eventId,
 					eventPhase: e.eventPhase,
-					startDiagram: {
-						text,
-					} as InputState,
-					endDiagram: {
-						text: e.data.text,
-					} as InputState,
+					text: e.data.text,
 				});
 			}
 		},
