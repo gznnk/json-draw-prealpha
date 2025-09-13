@@ -12,8 +12,8 @@ import { newEventId } from "../../../utils/core/newEventId";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import { cleanupGroups } from "../../utils/cleanupGroups";
-import { useAddHistory } from "../history/useAddHistory";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle delete events on the canvas.
@@ -58,11 +58,12 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 			};
 
 			/**
-			 * Recursively process items and filter out selected ones.
-			 * @param items - Array of items to process
-			 * @returns Filtered array of items
+			 * Recursively removes selected items and collects their IDs for deletion tracking.
+			 * Also processes abstract itemable containers to remove selected children.
+			 * @param items - Array of diagram items to process
+			 * @returns Filtered array with selected items removed
 			 */
-			const processItems = (items: Diagram[]): Diagram[] => {
+			const removeSelectedItems = (items: Diagram[]): Diagram[] => {
 				const result = [];
 
 				for (const item of items) {
@@ -70,16 +71,20 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 						// If item is selected, add it to deleted IDs
 						deletedItemIds.add(item.id);
 						// If it has child items, collect all child IDs as deleted
-						if (isItemableState(item) && item.items) {
+						if (isItemableState(item)) {
 							collectDeletedItemIds(item.items);
 						}
 						// Don't include this item in the result (delete it)
 						continue;
 					}
 
-					if (isItemableState(item) && item.items) {
+					if (
+						isItemableState(item) &&
+						0 < item.items.length &&
+						item.itemableType === "abstract"
+					) {
 						// If item is not selected but has children, process children recursively
-						const processedChildItems = processItems(item.items);
+						const processedChildItems = removeSelectedItems(item.items);
 						result.push({
 							...item,
 							items: processedChildItems,
@@ -93,37 +98,39 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 				return result;
 			};
 
-			let items = processItems(prevState.items);
+			const selectedItemsRemovedItems = removeSelectedItems(prevState.items);
 
 			// Remove ConnectLine components whose owner was deleted.
-			items = items.filter((item) => {
-				if (item.type === "ConnectLine") {
-					const connectLine = item as ConnectLineState;
-					return (
-						!deletedItemIds.has(connectLine.startOwnerId) &&
-						!deletedItemIds.has(connectLine.endOwnerId)
-					);
-				}
-				return true;
-			});
+			const orphanedConnectionsRemovedItems = selectedItemsRemovedItems.filter(
+				(item) => {
+					if (item.type === "ConnectLine") {
+						const connectLine = item as ConnectLineState;
+						return (
+							!deletedItemIds.has(connectLine.startOwnerId) &&
+							!deletedItemIds.has(connectLine.endOwnerId)
+						);
+					}
+					return true;
+				},
+			);
 
-			// Apply group cleanup to the items
-			items = cleanupGroups(items);
+			const groupsCleanedUpItems = cleanupGroups(
+				orphanedConnectionsRemovedItems,
+			);
 
-			items = updateOutlineOfAllItemables(items);
+			const outlineUpdatedItems =
+				updateOutlineOfAllItemables(groupsCleanedUpItems);
 
-			// Create new state.
-			let newState = {
+			let nextState = {
 				...prevState,
-				items, // Apply new items after removing the selected items and cleaning up groups.
+				items: outlineUpdatedItems,
 				multiSelectGroup: undefined, // Hide the multi-select group because the selected items were deleted.
 			} as SvgCanvasState;
 
-			// Add history
 			const eventId = newEventId();
-			newState = addHistory(eventId, newState);
+			nextState = addHistory(eventId, nextState);
 
-			return newState;
+			return nextState;
 		});
 	}, []);
 };
