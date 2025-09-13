@@ -110,6 +110,10 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 
 					let foundFunctionCall = false;
 
+					// 追加：直近の reasoning アイテムを覚えておく
+					let lastReasoningItem: OpenAI.Responses.ResponseOutputItem | null =
+						null;
+
 					for await (const event of stream) {
 						console.log(event);
 
@@ -138,6 +142,14 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 							});
 						}
 
+						// ★ reasoning を捕捉
+						if (
+							event.type === "response.output_item.done" &&
+							event.item?.type === "reasoning"
+						) {
+							lastReasoningItem = event.item; // 次の function_call 用に保持
+						}
+
 						if (
 							event.type === "response.output_item.done" &&
 							event.item?.type === "function_call"
@@ -145,6 +157,9 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 							foundFunctionCall = true;
 							const functionName = event.item.name;
 							const functionCallArguments = JSON.parse(event.item.arguments);
+							// ▼ 次リクエストの input に戻す順序が重要
+							// 1) reasoning（必須）
+							if (lastReasoningItem) input.push(lastReasoningItem);
 
 							if (functionName === "add_rectangle_shape") {
 								const rectangleFrame = createPageDesignRectangle({
