@@ -18,6 +18,12 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import functions related to SvgCanvas.
 import { useAddDiagram } from "../../../hooks/useAddDiagram";
+
+// Import tools.
+import { useGroupShapesTool } from "../../../tools/group_shapes";
+
+// Import context.
+import { useEventBus } from "../../../context/EventBusContext";
 import { newEventId } from "../../../utils/core/newEventId";
 
 // Import utilities.
@@ -40,6 +46,8 @@ import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignN
  */
 const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 	const addDiagram = useAddDiagram();
+	const eventBus = useEventBus();
+	const groupShapes = useGroupShapesTool(eventBus);
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
 
@@ -242,6 +250,20 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 										height: textElement.height,
 										text: functionCallArguments.text,
 									}),
+								});
+							}
+
+							if (functionName === "group_shapes") {
+								const result = groupShapes({
+									name: "group_shapes",
+									callId: event.item.call_id,
+									arguments: functionCallArguments,
+								});
+								input.push(event.item);
+								input.push({
+									type: "function_call_output",
+									call_id: event.item.call_id,
+									output: JSON.stringify(result || { success: true, groupedShapes: functionCallArguments.shapeIds }),
 								});
 							}
 						}

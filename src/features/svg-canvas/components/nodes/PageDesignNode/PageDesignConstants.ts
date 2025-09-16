@@ -61,8 +61,22 @@ CRITICAL GUIDELINES:
 2. **Layering Order**: Background elements first, interactive elements with text second, standalone text last
 3. **Professional Appearance**: Use rectangle text combinations to create cohesive, integrated UI elements
 4. **Text vs Shapes**: Reserve add_text_element only for standalone headings and descriptions without background shapes
+5. **Strategic Grouping**: After creating logical UI components, use group_shapes to organize related elements:
+   - Group navigation sections (nav background + menu items)
+   - Group card components (card background + content + text)
+   - Group form sections (form background + fields + labels + buttons)
+   - Group header/footer areas (background + content)
+   - Group button sets and interactive element clusters
+   - Group hero sections (background + headlines + CTAs)
+
+WORKFLOW APPROACH:
+1. Create all elements for a logical UI component (e.g., navigation, card, form section)
+2. Immediately group those related elements using group_shapes
+3. Continue with the next logical component
+4. This creates well-organized, maintainable designs with clear component boundaries
 
 Use overlapping and layering strategically to create modern, professional designs with depth and visual hierarchy.
+Always group logically related elements to create professional, organized layouts.
 Respond in the same language as the user's input.
 `;
 
@@ -107,6 +121,32 @@ Appropriate use cases:
 IMPORTANT: Always add text elements LAST to ensure they appear on top of all other elements.
 Specify the top-left corner position (x, y) - the system will automatically calculate the center position for text alignment.
 Returns a JSON object containing the text element ID, content, and positioning.
+`;
+
+export const GROUP_SHAPES_DESCRIPTION = `
+Groups multiple shapes together by their IDs to create logical UI components.
+Use this tool to organize related elements into cohesive units for better design structure and management.
+
+STRATEGIC GROUPING - Group elements that form logical UI components:
+- **Navigation sections**: Group navigation background, menu items, and navigation text together
+- **Card components**: Group card background, content areas, and card text elements
+- **Button sets**: Group multiple related buttons (like CTA button groups, form buttons)
+- **Header/Footer sections**: Group background areas with their content elements
+- **Form sections**: Group form background, input fields, labels, and submit buttons
+- **Hero sections**: Group hero background, headline text, and CTA elements
+- **Content blocks**: Group content background with related text and interactive elements
+
+TIMING: Use group_shapes AFTER creating all related elements for a component section.
+This ensures proper organization and makes the design more maintainable.
+
+BENEFITS:
+- Creates logical design structure
+- Enables easier manipulation of component sections
+- Improves design organization and maintainability
+- Allows users to move entire UI sections as units
+
+Use this tool strategically to create well-organized, professional layouts with clear component boundaries.
+Returns a JSON object confirming the grouping operation with the affected shape IDs.
 `;
 
 export const PAGE_DESIGN_TOOLS = [
@@ -290,6 +330,26 @@ export const PAGE_DESIGN_TOOLS = [
 			},
 			additionalProperties: false,
 			required: ["x", "y", "width", "height", "text", "fontSize", "fill", "fontFamily", "textAlign", "verticalAlign"],
+		},
+		strict: true,
+	},
+	{
+		type: "function",
+		name: "group_shapes",
+		description: GROUP_SHAPES_DESCRIPTION,
+		parameters: {
+			type: "object",
+			properties: {
+				shapeIds: {
+					type: "array",
+					items: {
+						type: "string",
+					},
+					description: "Array of shape IDs to be grouped together. Must contain at least 2 shape IDs that represent a logical UI component.",
+				},
+			},
+			additionalProperties: false,
+			required: ["shapeIds"],
 		},
 		strict: true,
 	},

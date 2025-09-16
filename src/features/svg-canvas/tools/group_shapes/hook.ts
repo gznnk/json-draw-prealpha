@@ -9,6 +9,7 @@ import { EVENT_NAME_GROUP_SHAPES } from "../../constants/core/EventNames";
 
 // Import utils.
 import { newEventId } from "../../utils/core/newEventId";
+import { newId } from "../../utils/shapes/common/newId";
 
 // Import context.
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
@@ -37,9 +38,11 @@ export const useGroupShapesTool = (
 				args.shapeIds.length >= 2 &&
 				args.shapeIds.every((id) => typeof id === "string")
 			) {
+				const groupId = newId();
 				const event = {
 					eventId: newEventId(),
 					shapeIds: args.shapeIds,
+					groupId: groupId,
 				} as GroupShapesEvent;
 
 				const customEvent = new CustomEvent(EVENT_NAME_GROUP_SHAPES, {
@@ -50,6 +53,7 @@ export const useGroupShapesTool = (
 				// Return the grouping data
 				return {
 					shapeIds: args.shapeIds,
+					groupId: groupId,
 					success: true,
 				};
 			}

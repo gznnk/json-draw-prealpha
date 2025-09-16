@@ -4,4 +4,5 @@
 export type GroupShapesEvent = {
 	eventId: string;
 	shapeIds: string[];
+	groupId: string;
 };
