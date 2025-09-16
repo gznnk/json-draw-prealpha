@@ -78,4 +78,9 @@ export type LLMClientOptions = {
 	 * プロバイダー固有の形式のメッセージを受け取ります.
 	 */
 	initialMessages?: unknown[];
+
+	/**
+	 * 関数コールの最大試行回数. デフォルトは10.
+	 */
+	maxAttempts?: number;
 };

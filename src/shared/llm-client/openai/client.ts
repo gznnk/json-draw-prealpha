@@ -17,6 +17,7 @@ export class OpenAIClient implements LLMClient {
 	private readonly systemPrompt?: string;
 	private readonly tools?: ToolDefinition[];
 	private readonly functionHandlers: FunctionHandlerMap = {};
+	private readonly maxAttempts: number;
 	private messages: OpenAI.Responses.ResponseInput = [];
 	/**
 	 * OpenAIクライアントを初期化します.
@@ -27,6 +28,7 @@ export class OpenAIClient implements LLMClient {
 	constructor(apiKey: string, options?: LLMClientOptions) {
 		this.openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 		this.tools = options?.tools;
+		this.maxAttempts = options?.maxAttempts ?? 10;
 
 		// 関数ハンドラが指定されていれば登録
 		if (options?.functionHandlers) {
@@ -89,13 +91,12 @@ export class OpenAIClient implements LLMClient {
 		})) as OpenAI.Responses.Tool[];
 
 		let assistantMessage = "";
-		const maxAttempts = 10; // 最大ループ回数を制限
 
 		// 関数コールを処理するためのループ（複数回の関数コールをサポート）
-		for (let attempts = 0; attempts < maxAttempts; attempts++) {
+		for (let attempts = 0; attempts < this.maxAttempts; attempts++) {
 			// ストリーミングレスポンスの作成
 			const stream = await this.openai.responses.create({
-				model: "gpt-4o",
+				model: "gpt-5",
 				instructions: this.systemPrompt,
 				input: this.messages,
 				tools: openaiTools,
@@ -104,6 +105,9 @@ export class OpenAIClient implements LLMClient {
 
 			let foundFunctionCall = false;
 
+			// 直近の reasoning アイテムを覚えておく
+			let lastReasoningItem: OpenAI.Responses.ResponseOutputItem | null = null;
+
 			// イベントタイプに基づいてストリームからチャンクを処理
 			for await (const event of stream) {
 				// テキストデルタイベント - テキストチャンクを処理
@@ -111,6 +115,14 @@ export class OpenAIClient implements LLMClient {
 					const delta = event.delta;
 					assistantMessage += delta;
 					onTextChunk(delta);
+				}
+
+				// reasoning を捕捉
+				if (
+					event.type === "response.output_item.done" &&
+					event.item?.type === "reasoning"
+				) {
+					lastReasoningItem = event.item; // 次の function_call 用に保持
 				}
 
 				// 関数呼び出しイベント - 関数ハンドラマップを使って処理
@@ -136,6 +148,11 @@ export class OpenAIClient implements LLMClient {
 							if (result !== null) {
 								// 関数コール情報をコンソールに出力
 								console.log(`Function called: ${functionCall.name}`);
+
+								// 関数コールの前に reasoning アイテムを追加
+								if (lastReasoningItem) {
+									this.messages.push(lastReasoningItem);
+								}
 
 								// 関数呼び出しメッセージ
 								this.messages.push(event.item);

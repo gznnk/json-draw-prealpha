@@ -102,5 +102,6 @@ export const useWorkflowAgentHandler = (
 		addTextNodeHandler,
 		addSvgToCanvasNodeHandler,
 		connectNodesHandler,
+		groupShapesHandler,
 	]);
 };
