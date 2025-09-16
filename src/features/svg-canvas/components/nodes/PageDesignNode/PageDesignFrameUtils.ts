@@ -39,6 +39,7 @@ export const createPageDesignRectangle = ({
 		strokeWidth: `${strokeWidth}px`,
 		text: "",
 		textType: "textarea",
+		connectEnabled: false,
 	});
 };
 
@@ -75,6 +76,7 @@ export const createPageDesignCircle = ({
 		strokeWidth: `${strokeWidth}px`,
 		text: "",
 		textType: "textarea",
+		connectEnabled: false,
 	});
 };
 
@@ -107,7 +109,7 @@ export const createPageDesignText = ({
 	// Convert top-left coordinates to center coordinates
 	const centerX = x + width / 2;
 	const centerY = y + height / 2;
-	
+
 	return createRectangleState({
 		x: centerX,
 		y: centerY,
@@ -124,5 +126,6 @@ export const createPageDesignText = ({
 		fontColor: fill,
 		textAlign,
 		verticalAlign,
+		connectEnabled: false,
 	});
 };

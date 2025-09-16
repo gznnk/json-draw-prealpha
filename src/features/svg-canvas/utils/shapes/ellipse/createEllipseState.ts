@@ -37,6 +37,7 @@ export const createEllipseState = ({
 	fontSize = 16,
 	fontFamily = "Segoe UI",
 	fontWeight = "normal",
+	connectEnabled = true,
 }: {
 	x: number;
 	y: number;
@@ -57,17 +58,20 @@ export const createEllipseState = ({
 	fontSize?: number;
 	fontFamily?: string;
 	fontWeight?: string;
+	connectEnabled?: boolean;
 }): EllipseState => {
 	// Generate connection points
-	const connectPoints = createEllipseConnectPoint({
-		x,
-		y,
-		width,
-		height,
-		rotation,
-		scaleX,
-		scaleY,
-	});
+	const connectPoints = connectEnabled
+		? createEllipseConnectPoint({
+				x,
+				y,
+				width,
+				height,
+				rotation,
+				scaleX,
+				scaleY,
+			})
+		: [];
 
 	return {
 		...EllipseDefaultState,
@@ -91,6 +95,7 @@ export const createEllipseState = ({
 		fontSize,
 		fontFamily,
 		fontWeight,
+		connectEnabled,
 		connectPoints,
 	} as EllipseState;
 };

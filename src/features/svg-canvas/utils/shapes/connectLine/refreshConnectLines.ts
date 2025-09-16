@@ -27,7 +27,14 @@ export const refreshConnectLines = (
 ): SvgCanvasState => {
 	// Create a set of updated diagram IDs for efficient lookup
 	const updatedDiagramIds = new Set(
-		updatedDiagrams.filter((d) => isConnectableState(d)).map((d) => d.id),
+		updatedDiagrams
+			.filter(
+				(d) =>
+					isConnectableState(d) &&
+					d.connectEnabled &&
+					0 < d.connectPoints.length,
+			)
+			.map((d) => d.id),
 	);
 
 	// Find all connect lines that need to be updated

@@ -5,5 +5,6 @@ import type { ConnectableData } from "../../../types/data/shapes/ConnectableData
  * Used for State to Data conversion mapping.
  */
 export const ConnectableDefaultData = {
+	connectEnabled: true,
 	connectPoints: [],
 } as const satisfies ConnectableData;

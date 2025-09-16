@@ -6,5 +6,6 @@ import type { ConnectPointData } from "./ConnectPointData";
  * This type is used for elements that can connect to other elements via connection points.
  */
 export type ConnectableData = {
+	connectEnabled: boolean;
 	connectPoints: ConnectPointData[];
 };
