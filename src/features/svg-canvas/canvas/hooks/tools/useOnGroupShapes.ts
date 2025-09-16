@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 // Import types.
 import type { GroupShapesEvent } from "../../../types/events/GroupShapesEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
@@ -15,10 +14,9 @@ import { EVENT_NAME_GROUP_SHAPES } from "../../../constants/core/EventNames";
 // Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { calcUnrotatedItemableBoundingBox } from "../../../utils/core/calcUnrotatedItemableBoundingBox";
-import { isConnectLineState } from "../../../utils/validation/isConnectLineState";
 import { cleanupGroups } from "../../utils/cleanupGroups";
-import { collectDiagramIds } from "../../utils/collectDiagramIds";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
+import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 
 // Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
@@ -91,26 +89,7 @@ export const useOnGroupShapes = (props: SvgCanvasSubHooksProps) => {
 				const mergedItems = [...groupsCleanedUpItems, group];
 
 				// Bring connect lines forward that are connected to grouped components.
-				const groupedDiagramIds = collectDiagramIds(targetDiagrams);
-				const targetConnectLines: ConnectLineState[] = [];
-				for (const diagram of mergedItems) {
-					if (
-						isConnectLineState(diagram) &&
-						(groupedDiagramIds.includes(diagram.startOwnerId) ||
-							groupedDiagramIds.includes(diagram.endOwnerId))
-					) {
-						targetConnectLines.push(diagram);
-					}
-				}
-				const orderedItems = [
-					...mergedItems.filter(
-						(item) =>
-							!targetConnectLines.some(
-								(connectLine) => connectLine.id === item.id,
-							),
-					),
-					...targetConnectLines,
-				];
+				const orderedItems = bringConnectLinesForward(mergedItems, targetDiagrams);
 
 				const outlineUpdatedItems = updateOutlineOfAllItemables(orderedItems);
 
