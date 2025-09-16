@@ -26,19 +26,24 @@ Design principles to follow:
 - Use strategic layering to create depth effects, shadows, and visual hierarchy
 - Add background shapes before foreground details to ensure proper visual composition
 
-Shape usage guidelines:
+Shape and text usage guidelines:
 - LAYERING STRATEGY: Add elements in this order for proper visual stacking:
   1. Background shapes and containers (large rectangles for sections)
   2. Content area backgrounds (cards, panels, form backgrounds)
-  3. Decorative elements and borders
-  4. Content elements (smaller rectangles for buttons, form fields)
-  5. Text elements and labels (always added last to appear on top)
-- Use many rectangles of different sizes for content areas, cards, buttons, navigation items
+  3. Interactive elements with text (buttons, form fields, navigation items using add_rectangle_shape with text parameters)
+  4. Standalone text elements (headings, descriptions using add_text_element)
+  
+TEXT PLACEMENT STRATEGY - CRITICAL:
+- **Use add_rectangle_shape with text parameters for:** buttons, cards, badges, labels, form fields, navigation items, tabs, and any text that needs a background shape
+- **Use add_text_element only for:** standalone headings, paragraphs, descriptions, and text that appears without a background shape
+- **ALWAYS prefer add_rectangle_shape with text when creating interactive elements** like buttons, cards, or any element that combines a shape with text
+- When creating buttons, navigation items, or cards, use add_rectangle_shape and specify the text, textAlign, verticalAlign, fontColor, fontSize, fontFamily, and fontWeight parameters
+- This approach creates properly integrated text-shape combinations that look professional and maintain proper alignment
+
+- Use many rectangles with text for interactive elements: buttons, navigation items, form fields, cards with titles
 - Create depth with layered rectangles in different shades (darker backgrounds first, lighter overlays later)
-- Use circles for avatars, icons, decorative elements, and buttons (add after background rectangles)
-- Add text elements for headings, labels, navigation items, and content (always last in the sequence)
-- Create button groups, card layouts, and complex navigation structures with proper layering
-- Build complete page sections with multiple interactive elements in correct stacking order
+- Use circles for avatars, icons, decorative elements, and profile buttons
+- Build complete page sections with multiple interactive elements using rectangle text combinations
 - Use overlapping elements strategically to create modern shadow effects and depth
 
 Color selection:
@@ -50,16 +55,32 @@ Color selection:
 
 Always create comprehensive, detailed designs with 15-30+ elements per page section.
 Make designs that look production-ready and could be implemented directly.
-CRITICAL: Plan element creation order carefully - background elements first, content next, text last for proper visual layering.
+
+CRITICAL GUIDELINES:
+1. **Text Integration**: Always use add_rectangle_shape with text parameters for buttons, cards, navigation items, form fields, and interactive elements
+2. **Layering Order**: Background elements first, interactive elements with text second, standalone text last
+3. **Professional Appearance**: Use rectangle text combinations to create cohesive, integrated UI elements
+4. **Text vs Shapes**: Reserve add_text_element only for standalone headings and descriptions without background shapes
+
 Use overlapping and layering strategically to create modern, professional designs with depth and visual hierarchy.
 Respond in the same language as the user's input.
 `;
 
 export const ADD_RECTANGLE_SHAPE_DESCRIPTION = `
-Adds a rectangle shape to the canvas at the specified position.
+Adds a rectangle shape to the canvas at the specified position with optional text content.
+PREFERRED METHOD for creating buttons, cards, navigation items, form fields, badges, and any interactive element that combines a shape with text.
 Use this extensively to create detailed page layouts including: content areas, headers, footers, cards, buttons, navigation items, form fields, sidebars, hero sections, and background elements.
+
+TEXT INTEGRATION: Always use the text parameters (text, textAlign, verticalAlign, fontColor, fontSize, fontFamily, fontWeight) when creating:
+- Buttons with labels
+- Navigation menu items
+- Card titles and content
+- Form field labels
+- Badges and tags
+- Interactive elements
+
 Create layered designs with multiple rectangles to achieve depth and modern visual appeal.
-IMPORTANT: Consider stacking order - add background rectangles first, then overlay elements. Later additions appear on top.
+IMPORTANT: Consider stacking order - add background rectangles first, then interactive elements with text.
 Specify the top-left corner position (x, y) - the system will automatically calculate the center position.
 Returns a JSON object containing the shape ID, type, and dimensions.
 `;
@@ -73,9 +94,16 @@ Returns a JSON object containing the shape ID, type, and dimensions.
 `;
 
 export const ADD_TEXT_ELEMENT_DESCRIPTION = `
-Adds a text element to the canvas at the specified position.
-Use text elements extensively for: page titles, navigation labels, button text, section headings, content descriptions, form labels, and UI copy.
-Create comprehensive text hierarchies with varying sizes and styles to represent complete page content.
+Adds a standalone text element to the canvas at the specified position.
+USE ONLY FOR: standalone headings, paragraphs, descriptions, and text that appears WITHOUT a background shape.
+DO NOT USE FOR: button text, navigation items, card titles, or any text that should have a background - use add_rectangle_shape with text parameters instead.
+
+Appropriate use cases:
+- Page headings and titles
+- Standalone paragraphs and descriptions  
+- Copyright notices and footnotes
+- Standalone labels that don't need backgrounds
+
 IMPORTANT: Always add text elements LAST to ensure they appear on top of all other elements.
 Specify the top-left corner position (x, y) - the system will automatically calculate the center position for text alignment.
 Returns a JSON object containing the text element ID, content, and positioning.
@@ -121,6 +149,36 @@ export const PAGE_DESIGN_TOOLS = [
 					type: "number",
 					description: "The border radius for rounded corners.",
 				},
+				text: {
+					type: "string",
+					description: "The text content to display inside the rectangle.",
+				},
+				textAlign: {
+					type: "string",
+					enum: ["left", "center", "right"],
+					description: "Horizontal text alignment within the rectangle.",
+				},
+				verticalAlign: {
+					type: "string",
+					enum: ["top", "center", "bottom"],
+					description: "Vertical text alignment within the rectangle.",
+				},
+				fontColor: {
+					type: "string",
+					description: "The color of the text (hex color code).",
+				},
+				fontSize: {
+					type: "number",
+					description: "The font size of the text in pixels.",
+				},
+				fontFamily: {
+					type: "string",
+					description: "The font family for the text.",
+				},
+				fontWeight: {
+					type: "string",
+					description: "The font weight (normal, bold, etc.).",
+				},
 			},
 			additionalProperties: false,
 			required: [
@@ -132,6 +190,13 @@ export const PAGE_DESIGN_TOOLS = [
 				"stroke",
 				"strokeWidth",
 				"rx",
+				"text",
+				"textAlign",
+				"verticalAlign",
+				"fontColor",
+				"fontSize",
+				"fontFamily",
+				"fontWeight",
 			],
 		},
 		strict: true,
@@ -145,11 +210,11 @@ export const PAGE_DESIGN_TOOLS = [
 			properties: {
 				cx: {
 					type: "number",
-					description: "The X coordinate of the top-left corner of the circle's bounding box.",
+					description: "The X coordinate of the center of the circle.",
 				},
 				cy: {
 					type: "number",
-					description: "The Y coordinate of the top-left corner of the circle's bounding box.",
+					description: "The Y coordinate of the center of the circle.",
 				},
 				r: {
 					type: "number",

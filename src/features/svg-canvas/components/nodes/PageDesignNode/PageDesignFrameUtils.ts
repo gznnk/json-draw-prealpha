@@ -14,6 +14,13 @@ export const createPageDesignRectangle = ({
 	stroke = "transparent",
 	strokeWidth = 1,
 	rx = 0,
+	text = "",
+	textAlign = "center",
+	verticalAlign = "center",
+	fontColor = "black",
+	fontSize = 16,
+	fontFamily = "Segoe UI",
+	fontWeight = "normal",
 }: {
 	x: number;
 	y: number;
@@ -23,6 +30,13 @@ export const createPageDesignRectangle = ({
 	stroke?: string;
 	strokeWidth?: number;
 	rx?: number;
+	text?: string;
+	textAlign?: "left" | "center" | "right";
+	verticalAlign?: "top" | "center" | "bottom";
+	fontColor?: string;
+	fontSize?: number;
+	fontFamily?: string;
+	fontWeight?: string;
 }) => {
 	// Convert top-left coordinates to center coordinates
 	const centerX = x + width / 2;
@@ -37,11 +51,17 @@ export const createPageDesignRectangle = ({
 		fill,
 		stroke,
 		strokeWidth: `${strokeWidth}px`,
-		text: "",
+		text,
 		textType: "textarea",
+		textAlign,
+		verticalAlign,
+		fontColor,
+		fontSize,
+		fontFamily,
+		fontWeight,
 		connectEnabled: false,
 	});
-};
+};;
 
 /**
  * Creates a circle frame for page design with specified properties.
@@ -61,14 +81,10 @@ export const createPageDesignCircle = ({
 	stroke?: string;
 	strokeWidth?: number;
 }) => {
-	// Convert top-left coordinates to center coordinates
-	// cx, cy are now top-left coordinates of the circle's bounding box
-	const centerX = cx + r;
-	const centerY = cy + r;
-
+	// cx, cy are now center coordinates of the circle
 	return createEllipseState({
-		x: centerX,
-		y: centerY,
+		x: cx,
+		y: cy,
 		width: r * 2,
 		height: r * 2,
 		fill,
@@ -78,7 +94,7 @@ export const createPageDesignCircle = ({
 		textType: "textarea",
 		connectEnabled: false,
 	});
-};
+};;
 
 /**
  * Creates a text element for page design using a transparent rectangle with text.

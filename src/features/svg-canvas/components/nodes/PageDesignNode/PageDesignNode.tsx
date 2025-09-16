@@ -171,6 +171,13 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 									stroke: functionCallArguments.stroke || "transparent",
 									strokeWidth: functionCallArguments.strokeWidth || 1,
 									rx: functionCallArguments.rx || 0,
+									text: functionCallArguments.text || "",
+									textAlign: functionCallArguments.textAlign || "center",
+									verticalAlign: functionCallArguments.verticalAlign || "center",
+									fontColor: functionCallArguments.fontColor || "black",
+									fontSize: functionCallArguments.fontSize || 16,
+									fontFamily: functionCallArguments.fontFamily || "Segoe UI",
+									fontWeight: functionCallArguments.fontWeight || "normal",
 								});
 								addDiagram(rectangleFrame);
 								input.push(event.item);
