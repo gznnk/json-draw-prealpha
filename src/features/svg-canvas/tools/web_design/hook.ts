@@ -11,6 +11,12 @@ import { circleShapeToolDefinition } from "../add_circle_shape";
 import { textElementToolDefinition } from "../add_text_element";
 import { groupShapesToolDefinition } from "../group_shapes";
 
+// Import web design specific descriptions
+import { ADD_RECTANGLE_SHAPE_DESCRIPTION } from "./prompts/add-rectangle-description";
+import { ADD_CIRCLE_SHAPE_DESCRIPTION } from "./prompts/add-circle-description";
+import { ADD_TEXT_ELEMENT_DESCRIPTION } from "./prompts/add-text-description";
+import { GROUP_SHAPES_DESCRIPTION } from "./prompts/group-shapes-description";
+
 import { useAddRectangleShapeTool } from "../add_rectangle_shape";
 import { useAddCircleShapeTool } from "../add_circle_shape";
 import { useAddTextElementTool } from "../add_text_element";
@@ -33,10 +39,22 @@ export const useWebDesignTool = (eventBus: EventBus): FunctionCallHandler => {
 	// handler本体をuseMemoで生成
 	return useMemo<FunctionCallHandler>(() => {
 		const WEB_DESIGN_TOOLS = [
-			rectangleShapeToolDefinition,
-			circleShapeToolDefinition,
-			textElementToolDefinition,
-			groupShapesToolDefinition,
+			{
+				...rectangleShapeToolDefinition,
+				description: ADD_RECTANGLE_SHAPE_DESCRIPTION,
+			},
+			{
+				...circleShapeToolDefinition,
+				description: ADD_CIRCLE_SHAPE_DESCRIPTION,
+			},
+			{
+				...textElementToolDefinition,
+				description: ADD_TEXT_ELEMENT_DESCRIPTION,
+			},
+			{
+				...groupShapesToolDefinition,
+				description: GROUP_SHAPES_DESCRIPTION,
+			},
 		];
 
 		const functionHandlerMap = {
