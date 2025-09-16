@@ -5,7 +5,7 @@ import type { Frame } from "../../../types/core/Frame";
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";
-import { affineTransformation } from "../transform/affineTransformation";
+import { efficientAffineTransformation } from "../transform/efficientAffineTransformation";
 
 /**
  * Calculates the vertices of a rectangle.
@@ -38,7 +38,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 
 	const radians = degreesToRadians(rotation);
 
-	const topLeftPoint = affineTransformation(
+	const topLeftPoint = efficientAffineTransformation(
 		-halfWidth,
 		-halfHeight,
 		scaleX,
@@ -48,7 +48,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 		ty,
 	);
 
-	const bottomLeftPoint = affineTransformation(
+	const bottomLeftPoint = efficientAffineTransformation(
 		-halfWidth,
 		halfHeight,
 		scaleX,
@@ -58,7 +58,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 		ty,
 	);
 
-	const topRightPoint = affineTransformation(
+	const topRightPoint = efficientAffineTransformation(
 		halfWidth,
 		-halfHeight,
 		scaleX,
@@ -68,7 +68,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 		ty,
 	);
 
-	const bottomRightPoint = affineTransformation(
+	const bottomRightPoint = efficientAffineTransformation(
 		halfWidth,
 		halfHeight,
 		scaleX,

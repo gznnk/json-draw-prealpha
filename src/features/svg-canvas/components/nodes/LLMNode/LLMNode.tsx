@@ -27,7 +27,7 @@ import { LLM } from "../../icons/LLM";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 
 // Import constants.
 import {
@@ -225,7 +225,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		[handleExecution],
 	);
 
-	const headerCenter = affineTransformation(
+	const headerCenter = efficientAffineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,

@@ -22,7 +22,7 @@ import { TextArea } from "../../icons/TextArea";
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 
 // Import constants.
 import {
@@ -192,7 +192,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			BUTTON_MARGIN_TOP +
 			BUTTON_MARGIN_BOTTOM);
 
-	const headerCenter = affineTransformation(
+	const headerCenter = efficientAffineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,
@@ -202,7 +202,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		y,
 	);
 
-	const inputCenter = affineTransformation(
+	const inputCenter = efficientAffineTransformation(
 		0,
 		-(
 			height / 2 -

@@ -5,7 +5,7 @@ import type { Frame } from "../../../types/core/Frame";
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";
-import { affineTransformation } from "../transform/affineTransformation";
+import { efficientAffineTransformation } from "../transform/efficientAffineTransformation";
 import { inverseAffineTransformation } from "../transform/inverseAffineTransformation";
 
 /**
@@ -46,7 +46,7 @@ export const calcOrientedFrameFromPoints = (
 	const inverseRight = Math.max(...inversePoints.map((p) => p.x));
 	const inverseBottom = Math.max(...inversePoints.map((p) => p.y));
 
-	const originalCenter = affineTransformation(
+	const originalCenter = efficientAffineTransformation(
 		nanToZero((inverseLeft + inverseRight) / 2),
 		nanToZero((inverseTop + inverseBottom) / 2),
 		scaleX,

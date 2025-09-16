@@ -5,7 +5,7 @@ import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
 import { createInputState } from "../../elements/input/createInputState";
 import { createNodeHeaderState } from "../../elements/nodeHeader/createNodeHeaderState";
 import { degreesToRadians } from "../../math/common/degreesToRadians";
-import { affineTransformation } from "../../math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../math/transform/efficientAffineTransformation";
 import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 import { createLLMNodeInputFrame } from "./createLLMNodeInputFrame";
@@ -66,7 +66,7 @@ export const createLLMNodeState = ({
 	});
 
 	// Calculate dimensions and positions for child elements
-	const headerCenter = affineTransformation(
+	const headerCenter = efficientAffineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,

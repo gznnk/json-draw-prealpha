@@ -5,7 +5,7 @@ import type { Diagram } from "../../../types/state/core/Diagram";
 // Import utils.
 import { isFrame } from "../../validation/isFrame";
 import { degreesToRadians } from "../common/degreesToRadians";
-import { affineTransformation } from "../transform/affineTransformation";
+import { efficientAffineTransformation } from "../transform/efficientAffineTransformation";
 
 /**
  * Calculates the bounding box of a diagram.
@@ -38,7 +38,7 @@ export const calcDiagramBoundingBox = (diagram: Diagram): Box => {
 		const radians = degreesToRadians(rotation);
 
 		// Calculate all four corners
-		const topLeft = affineTransformation(
+		const topLeft = efficientAffineTransformation(
 			-halfWidth,
 			-halfHeight,
 			scaleX,
@@ -48,7 +48,7 @@ export const calcDiagramBoundingBox = (diagram: Diagram): Box => {
 			y,
 		);
 
-		const bottomLeft = affineTransformation(
+		const bottomLeft = efficientAffineTransformation(
 			-halfWidth,
 			halfHeight,
 			scaleX,
@@ -58,7 +58,7 @@ export const calcDiagramBoundingBox = (diagram: Diagram): Box => {
 			y,
 		);
 
-		const topRight = affineTransformation(
+		const topRight = efficientAffineTransformation(
 			halfWidth,
 			-halfHeight,
 			scaleX,
@@ -68,7 +68,7 @@ export const calcDiagramBoundingBox = (diagram: Diagram): Box => {
 			y,
 		);
 
-		const bottomRight = affineTransformation(
+		const bottomRight = efficientAffineTransformation(
 			halfWidth,
 			halfHeight,
 			scaleX,

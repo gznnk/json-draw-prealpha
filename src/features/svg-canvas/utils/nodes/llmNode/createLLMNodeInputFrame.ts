@@ -2,7 +2,7 @@
 import type { Frame } from "../../../types/core/Frame";
 
 // Import utils.
-import { affineTransformation } from "../../math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../math/transform/efficientAffineTransformation";
 import { degreesToRadians } from "../../math/common/degreesToRadians";
 import { calculateEffectiveDimensions } from "../../math/geometry/calculateEffectiveDimensions";
 
@@ -64,7 +64,7 @@ export const createLLMNodeInputFrame = ({
 	const inputWidth = effectiveWidth - BASE_MARGIN * 2;
 
 	// Calculate center position with affine transformation
-	const inputCenter = affineTransformation(
+	const inputCenter = efficientAffineTransformation(
 		0,
 		-(
 			effectiveHeight / 2 -

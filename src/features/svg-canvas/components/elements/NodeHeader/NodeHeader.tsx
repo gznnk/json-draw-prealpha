@@ -13,7 +13,7 @@ import { Input } from "../Input";
 
 // Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 // Import local modules.
@@ -54,7 +54,7 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 	const iconSize = height;
 	const iconX = -width / 2 + iconSize / 2; // No left padding
 	const textWidth = width - iconSize - ICON_TEXT_MARGIN; // Remaining width minus margin ; // Margin from icon
-	const textCenter = affineTransformation(
+	const textCenter = efficientAffineTransformation(
 		textWidth / 2 - (width / 2 - iconSize - ICON_TEXT_MARGIN),
 		0,
 		scaleX,

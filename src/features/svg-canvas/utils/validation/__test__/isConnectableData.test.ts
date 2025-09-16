@@ -13,6 +13,7 @@ describe("isConnectableState", () => {
 	};
 
 	const validConnectableState: ConnectableState = {
+		connectEnabled: true,
 		showConnectPoints: true,
 		connectPoints: [validConnectPointState],
 	};
@@ -24,6 +25,7 @@ describe("isConnectableState", () => {
 
 		it("should return true for valid ConnectableState with showConnectPoints false", () => {
 			const data: ConnectableState = {
+				connectEnabled: true,
 				showConnectPoints: false,
 				connectPoints: [validConnectPointState],
 			};
@@ -32,6 +34,7 @@ describe("isConnectableState", () => {
 
 		it("should return true for valid ConnectableState with empty connectPoints array", () => {
 			const data: ConnectableState = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: [],
 			};
@@ -40,6 +43,7 @@ describe("isConnectableState", () => {
 
 		it("should return true for valid ConnectableState with multiple connectPoints", () => {
 			const data: ConnectableState = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: [
 					validConnectPointState,
@@ -179,6 +183,7 @@ describe("isConnectableState", () => {
 		it("should validate all required properties of ConnectableState type", () => {
 			// This test creates an object that should match ConnectableState exactly
 			const completeValidData: ConnectableState = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: [validConnectPointState],
 			} as const satisfies ConnectableState;
@@ -239,6 +244,7 @@ describe("isConnectableState", () => {
 		it("should handle future ConnectableState extensions", () => {
 			// Create a type-safe object that satisfies current ConnectableState
 			const currentValidData: ConnectableState = {
+				connectEnabled: true,
 				showConnectPoints: false,
 				connectPoints: [],
 			};
