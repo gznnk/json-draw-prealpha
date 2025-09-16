@@ -21,6 +21,7 @@ import { useAddDiagram } from "../../../hooks/useAddDiagram";
 
 // Import tools.
 import { useGroupShapesTool } from "../../../tools/group_shapes";
+import { useAddRectangleShapeTool } from "../../../tools/add_rectangle_shape";
 
 // Import context.
 import { useEventBus } from "../../../context/EventBusContext";
@@ -35,7 +36,6 @@ import {
 	PAGE_DESIGN_TOOLS,
 } from "./PageDesignConstants";
 import {
-	createPageDesignRectangle,
 	createPageDesignCircle,
 	createPageDesignText,
 } from "./PageDesignFrameUtils";
@@ -48,6 +48,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 	const addDiagram = useAddDiagram();
 	const eventBus = useEventBus();
 	const groupShapes = useGroupShapesTool(eventBus);
+	const addRectangleShape = useAddRectangleShapeTool(eventBus);
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
 
@@ -170,34 +171,16 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 							if (lastReasoningItem) input.push(lastReasoningItem);
 
 							if (functionName === "add_rectangle_shape") {
-								const rectangleFrame = createPageDesignRectangle({
-									x: functionCallArguments.x,
-									y: functionCallArguments.y,
-									width: functionCallArguments.width,
-									height: functionCallArguments.height,
-									fill: functionCallArguments.fill,
-									stroke: functionCallArguments.stroke || "transparent",
-									strokeWidth: functionCallArguments.strokeWidth || 1,
-									rx: functionCallArguments.rx || 0,
-									text: functionCallArguments.text || "",
-									textAlign: functionCallArguments.textAlign || "center",
-									verticalAlign: functionCallArguments.verticalAlign || "center",
-									fontColor: functionCallArguments.fontColor || "black",
-									fontSize: functionCallArguments.fontSize || 16,
-									fontFamily: functionCallArguments.fontFamily || "Segoe UI",
-									fontWeight: functionCallArguments.fontWeight || "normal",
+								const result = addRectangleShape({
+									name: functionName,
+									arguments: functionCallArguments,
+									callId: event.item.call_id,
 								});
-								addDiagram(rectangleFrame);
 								input.push(event.item);
 								input.push({
 									type: "function_call_output",
 									call_id: event.item.call_id,
-									output: JSON.stringify({
-										id: rectangleFrame.id,
-										type: "Rectangle",
-										width: rectangleFrame.width,
-										height: rectangleFrame.height,
-									}),
+									output: JSON.stringify(result),
 								});
 							}
 

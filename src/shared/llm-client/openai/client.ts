@@ -64,10 +64,17 @@ export class OpenAIClient implements LLMClient {
 				type: "object",
 				properties: tool.parameters.reduce(
 					(acc, param) => {
-						acc[param.name] = {
+						const property: Record<string, unknown> = {
 							type: param.type,
 							description: param.description,
 						};
+
+						// enumが指定されている場合は追加
+						if (param.enum) {
+							property.enum = param.enum;
+						}
+
+						acc[param.name] = property;
 						return acc;
 					},
 					{} as Record<string, unknown>,

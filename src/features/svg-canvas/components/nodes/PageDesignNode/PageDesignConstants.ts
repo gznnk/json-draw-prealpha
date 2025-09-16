@@ -159,11 +159,13 @@ export const PAGE_DESIGN_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the top-left corner of the rectangle.",
+					description:
+						"The X coordinate of the top-left corner of the rectangle.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the top-left corner of the rectangle.",
+					description:
+						"The Y coordinate of the top-left corner of the rectangle.",
 				},
 				width: {
 					type: "number",
@@ -287,11 +289,13 @@ export const PAGE_DESIGN_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the top-left corner position for the text.",
+					description:
+						"The X coordinate of the top-left corner position for the text.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the top-left corner position for the text.",
+					description:
+						"The Y coordinate of the top-left corner position for the text.",
 				},
 				width: {
 					type: "number",
@@ -319,7 +323,8 @@ export const PAGE_DESIGN_TOOLS = [
 				},
 				textAlign: {
 					type: "string",
-					description: "Text horizontal alignment: 'left', 'center', or 'right'.",
+					description:
+						"Text horizontal alignment: 'left', 'center', or 'right'.",
 					enum: ["left", "center", "right"],
 				},
 				verticalAlign: {
@@ -329,7 +334,18 @@ export const PAGE_DESIGN_TOOLS = [
 				},
 			},
 			additionalProperties: false,
-			required: ["x", "y", "width", "height", "text", "fontSize", "fill", "fontFamily", "textAlign", "verticalAlign"],
+			required: [
+				"x",
+				"y",
+				"width",
+				"height",
+				"text",
+				"fontSize",
+				"fill",
+				"fontFamily",
+				"textAlign",
+				"verticalAlign",
+			],
 		},
 		strict: true,
 	},
@@ -345,7 +361,8 @@ export const PAGE_DESIGN_TOOLS = [
 					items: {
 						type: "string",
 					},
-					description: "Array of shape IDs to be grouped together. Must contain at least 2 shape IDs that represent a logical UI component.",
+					description:
+						"Array of shape IDs to be grouped together. Must contain at least 2 shape IDs that represent a logical UI component.",
 				},
 			},
 			additionalProperties: false,
