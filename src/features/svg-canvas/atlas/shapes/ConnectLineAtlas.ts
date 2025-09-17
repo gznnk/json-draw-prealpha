@@ -30,7 +30,10 @@ import { ConnectLineDefaultState } from "../../constants/state/shapes/ConnectLin
 // ============================================================================
 // Components
 // ============================================================================
-import { ConnectLine, ConnectLineMinimap } from "../../components/shapes/ConnectLine";
+import {
+	ConnectLine,
+	ConnectLineMinimap,
+} from "../../components/shapes/ConnectLine";
 
 // ============================================================================
 // Utility Functions

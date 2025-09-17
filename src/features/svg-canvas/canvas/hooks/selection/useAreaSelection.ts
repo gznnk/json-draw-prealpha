@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types.
 import type { Box } from "../../../types/core/Box";
 import type { AreaSelectionEvent } from "../../../types/events/AreaSelectionEvent";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
@@ -43,9 +43,17 @@ const updateItemsWithOutline = (
 	const minY = Math.min(selectionBounds.startY, selectionBounds.endY);
 	const maxY = Math.max(selectionBounds.startY, selectionBounds.endY);
 
-	return applyFunctionRecursively(items, (item) => {
+	return applyFunctionRecursively(items, (item, ancestors) => {
 		if (!isSelectableState(item)) return item;
 		if (item.type === "ConnectLine") return item;
+		if (
+			ancestors.some(
+				(ancestor) =>
+					isItemableState(ancestor) && ancestor.itemableType === "concrete",
+			)
+		) {
+			return item;
+		}
 
 		// Use cached bounding box if available, otherwise calculate
 		const itemBounds =
@@ -179,13 +187,13 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 								items: deselectedItems,
 								isSelected: true,
 								showOutline: true,
-							};
+							} as Diagram;
 						}
 						// Return group with updated children
 						return {
 							...item,
 							items: updatedItems,
-						};
+						} as Diagram;
 					}
 					return item;
 				};

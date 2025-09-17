@@ -1,11 +1,7 @@
 // Import libraries.
 import type { ToolDefinition } from "../../../../shared/llm-client/types";
 
-// Import shared descriptions.
-import {
-	X_PARAM_DESCRIPTION,
-	Y_PARAM_DESCRIPTION,
-} from "../shared/descriptions";
+
 
 /**
  * Description text for the add_llm_node tool.
@@ -30,12 +26,12 @@ export const llmToolDefinition: ToolDefinition = {
 		{
 			name: "x",
 			type: "number",
-			description: X_PARAM_DESCRIPTION,
+			description: "The X coordinate of the center of the node on the canvas.",
 		},
 		{
 			name: "y",
 			type: "number",
-			description: Y_PARAM_DESCRIPTION,
+			description: "The Y coordinate of the center of the node on the canvas.",
 		},
 		{
 			name: "instructions",

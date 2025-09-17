@@ -27,14 +27,24 @@ import { LLM } from "../../icons/LLM";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 
-// Import local modules.
+// Import constants.
 import {
 	BASE_MARGIN,
 	HEADER_HEIGHT,
 	HEADER_MARGIN_TOP,
-} from "./LLMNodeConstants";
+} from "../../../constants/styling/core/LayoutStyling";
+import {
+	BACKGROUND_COLOR,
+	BORDER_COLOR,
+	BORDER_WIDTH,
+	CORNER_RADIUS,
+	ICON_COLOR_IDLE,
+	ICON_COLOR_PROCESSING,
+	MIN_HEIGHT,
+	MIN_WIDTH,
+} from "../../../constants/styling/nodes/LLMNodeStyling";
 
 /**
  * LLMNode component.
@@ -52,6 +62,8 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		items,
 		isSelected,
 		isAncestorSelected,
+		minWidth = MIN_WIDTH,
+		minHeight = MIN_HEIGHT,
 		onDrag,
 		onDragOver,
 		onDragLeave,
@@ -60,7 +72,6 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		onHoverChange,
 		onTextChange,
 		onExecute,
-		onDiagramChange,
 	} = props;
 
 	const nodeHeaderState = items[0] as NodeHeaderState;
@@ -214,7 +225,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		[handleExecution],
 	);
 
-	const headerCenter = affineTransformation(
+	const headerCenter = efficientAffineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,
@@ -228,12 +239,14 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 		<>
 			<Frame
 				{...props}
-				minWidth={200}
-				minHeight={200}
-				stroke="#E5E6EB"
-				strokeWidth="1px"
-				fill="white"
-				cornerRadius={6}
+				width={width}
+				height={height}
+				minWidth={minWidth}
+				minHeight={minHeight}
+				stroke={BORDER_COLOR}
+				strokeWidth={BORDER_WIDTH}
+				fill={BACKGROUND_COLOR}
+				cornerRadius={CORNER_RADIUS}
 				onPropagation={onPropagation}
 			/>
 			<NodeHeader
@@ -248,7 +261,9 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
 				icon={<LLM fill="#ffffff" />}
-				iconBackgroundColor={processIdList.length > 0 ? "#10B981" : "#8B5CF6"}
+				iconBackgroundColor={
+					processIdList.length > 0 ? ICON_COLOR_PROCESSING : ICON_COLOR_IDLE
+				}
 				onDrag={handleDrag}
 				onSelect={handleSelect}
 				onClick={handleClick}
@@ -270,7 +285,6 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				onSelect={handleSelect}
 				onClick={handleClick}
 				onTextChange={onTextChange}
-				onDiagramChange={onDiagramChange}
 			/>
 		</>
 	);

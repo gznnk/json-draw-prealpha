@@ -5,7 +5,7 @@ import type {
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
 import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
-import { createLLMNodeState } from "../../utils/nodes/llmNodeData/createLLMNodeState";
+import { createLLMNodeState } from "../../utils/nodes/llmNode/createLLMNodeState";
 
 export const useAddLLMNodeTool = (eventBus: EventBus): FunctionCallHandler => {
 	const addDiagram = useAddDiagramWithBus(eventBus);

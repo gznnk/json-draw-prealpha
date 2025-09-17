@@ -4,7 +4,7 @@ import { memo } from "react";
 
 // Import types.
 import type { SvgToDiagramNodeProps } from "../../../types/props/nodes/SvgToDiagramNodeProps";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 
 // Import components.
 import { IconContainer } from "../../core/IconContainer";

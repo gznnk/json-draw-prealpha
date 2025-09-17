@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 // Import types.
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
@@ -19,7 +19,9 @@ import { updateOutlineOfItemable } from "../../utils/updateOutlineOfItemable";
 // Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
+// Import resistry.
 import { DiagramRegistry } from "../../../registry";
+
 // Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -27,6 +29,7 @@ import { rotatePoint } from "../../../utils/math/points/rotatePoint";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
+import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
 
 /**
  * Determines if an item should be in transforming state based on event type.
@@ -117,6 +120,17 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					scaleX: e.endFrame.scaleX,
 					scaleY: e.endFrame.scaleY,
 				};
+
+				// Apply minWidth and minHeight constraints
+				const { effectiveWidth, effectiveHeight } =
+					calculateEffectiveDimensions(
+						newItemFrame.width,
+						newItemFrame.height,
+						initialItem.minWidth,
+						initialItem.minHeight,
+					);
+				newItemFrame.width = effectiveWidth;
+				newItemFrame.height = effectiveHeight;
 
 				let newItems: Diagram[] | undefined;
 				if (isItemableState(initialItem)) {

@@ -1,3 +1,4 @@
+// Import types.
 import type { ConnectType } from "../../core/ConnectType";
 import type { DiagramConnectEvent } from "../../events/DiagramConnectEvent";
 import type { PreviewConnectLineEvent } from "../../events/PreviewConnectLineEvent";
@@ -14,9 +15,6 @@ import type { PreviewConnectLineEvent } from "../../events/PreviewConnectLineEve
  */
 export type ConnectableProps = {
 	connectType?: ConnectType;
-	connectEnabled?: boolean;
 	onConnect?: (e: DiagramConnectEvent) => void;
 	onPreviewConnectLine?: (e: PreviewConnectLineEvent) => void;
 };
-
-// TODO: shapesに移動

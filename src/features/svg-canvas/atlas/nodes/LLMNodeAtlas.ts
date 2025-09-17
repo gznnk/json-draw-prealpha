@@ -35,20 +35,16 @@ import { LLMNode, LLMNodeMinimap } from "../../components/nodes/LLMNode";
 // ============================================================================
 // Utility Functions
 // ============================================================================
-import { createLLMNodeState } from "../../utils/nodes/llmNodeData/createLLMNodeState";
-import { mapLLMNodeDataToState } from "../../utils/nodes/llmNodeData/mapLLMNodeDataToState";
-import { llmNodeStateToData } from "../../utils/nodes/llmNodeData/mapLLMNodeStateToData";
-import { transformLLMNodeItems } from "../../utils/nodes/llmNodeData/transformLLMNodeItems";
+import { createLLMNodeState } from "../../utils/nodes/llmNode/createLLMNodeState";
+import { mapLLMNodeDataToState } from "../../utils/nodes/llmNode/mapLLMNodeDataToState";
+import { llmNodeStateToData } from "../../utils/nodes/llmNode/mapLLMNodeStateToData";
+import { transformLLMNodeItems } from "../../utils/nodes/llmNode/transformLLMNodeItems";
 import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * LLMNode Atlas Type Definition
  */
-type LLMNodeAtlas = DiagramAtlas<
-	LLMNodeData,
-	LLMNodeState,
-	LLMNodeProps
->;
+type LLMNodeAtlas = DiagramAtlas<LLMNodeData, LLMNodeState, LLMNodeProps>;
 
 /**
  * LLMNode Atlas Implementation

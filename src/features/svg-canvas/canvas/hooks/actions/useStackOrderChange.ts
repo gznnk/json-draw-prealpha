@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types.
 import type { StackOrderChangeEvent } from "../../../types/events/StackOrderChangeEvent";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 

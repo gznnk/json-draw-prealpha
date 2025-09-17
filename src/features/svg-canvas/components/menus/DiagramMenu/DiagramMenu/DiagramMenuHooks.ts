@@ -9,7 +9,7 @@ import type { StrokableData } from "../../../../types/data/core/StrokableData";
 import type { TextableData } from "../../../../types/data/core/TextableData";
 
 import type { DiagramStyleChangeEvent } from "../../../../types/events/DiagramStyleChangeEvent";
-import type { Diagram } from "../../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../../types/state/core/Diagram";
 
 // Import utils.
 import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
@@ -118,9 +118,9 @@ export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 
 		// Find the first border radius item in the selected items.
 		// This is used to determine the border radius menu state.
-		const firstCornerRoundableItem = findFirstCornerRoundableRecursive(selectedItems) as
-			| CornerRoundableData
-			| undefined;
+		const firstCornerRoundableItem = findFirstCornerRoundableRecursive(
+			selectedItems,
+		) as CornerRoundableData | undefined;
 		if (firstCornerRoundableItem) {
 			menuStateMap.BorderRadius = "Show";
 

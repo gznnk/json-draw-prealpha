@@ -1,7 +1,7 @@
 import type { Bounds } from "../../../types/core/Bounds";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
-import type { ItemableState } from "../../../types/state/core/ItemableState";
 import type { Frame } from "../../../types/core/Frame";
+import type { Diagram } from "../../../types/state/core/Diagram";
+import type { ItemableState } from "../../../types/state/core/ItemableState";
 import { calcItemableOrientedBox } from "../calcItemableOrientedBox";
 
 describe("calcItemableOrientedBox", () => {
@@ -13,7 +13,7 @@ describe("calcItemableOrientedBox", () => {
 		height: number,
 		rotation = 0,
 		items: Diagram[] = [],
-	): ItemableState<Diagram> =>
+	): Diagram & Frame & ItemableState =>
 		({
 			id: "test-shape",
 			type: "Group",
@@ -26,14 +26,14 @@ describe("calcItemableOrientedBox", () => {
 			scaleY: 1,
 			itemableType: "abstract",
 			items,
-		}) as Frame & ItemableState<Diagram>;
+		}) as Diagram & Frame & ItemableState;
 
 	// Mock point state for testing
 	const createMockPoint = (
 		x: number,
 		y: number,
 		items: Diagram[] = [],
-	): ItemableState<Diagram> =>
+	): Diagram & ItemableState =>
 		({
 			id: "test-point",
 			type: "Group",
@@ -42,7 +42,7 @@ describe("calcItemableOrientedBox", () => {
 			itemableType: "abstract",
 			items,
 			name: "Test Point",
-		}) as ItemableState<Diagram>;
+		}) as Diagram & ItemableState;
 
 	describe("Valid input cases", () => {
 		describe("Frame with no rotation and no items", () => {
@@ -243,7 +243,7 @@ describe("calcItemableOrientedBox", () => {
 				id: "invalid",
 				type: "Invalid",
 				// Missing x, y properties that would make it a point
-			} as unknown as ItemableState<Diagram>;
+			} as unknown as ItemableState;
 
 			expect(() => calcItemableOrientedBox(invalidItemable)).toThrow(
 				"Unsupported itemable state",
@@ -396,7 +396,7 @@ describe("calcItemableOrientedBox", () => {
 	});
 
 	describe("Type compatibility", () => {
-		it("should accept ItemableState<Diagram> and return Bounds", () => {
+		it("should accept ItemableState and return Bounds", () => {
 			const frame = createMockFrame(0, 0, 100, 50);
 			const result: Bounds = calcItemableOrientedBox(frame);
 

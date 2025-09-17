@@ -8,4 +8,6 @@ import type { TransformativeData } from "../../data/core/TransformativeData";
 export type TransformativeState = TransformativeData & {
 	showTransformControls: boolean;
 	isTransforming: boolean;
+	minWidth?: number;
+	minHeight?: number;
 };

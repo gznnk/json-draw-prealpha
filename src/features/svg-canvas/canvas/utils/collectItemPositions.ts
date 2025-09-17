@@ -1,5 +1,6 @@
 // Import types.
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { Point } from "../../types/core/Point";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { isItemableState } from "../../utils/validation/isItemableState";
@@ -13,17 +14,15 @@ import { isItemableState } from "../../utils/validation/isItemableState";
  * @param items - Array of diagram items to collect positions from
  * @returns Map where keys are item IDs and values are { x, y } coordinates
  */
-export const createItemPositionMap = (
-	items: Diagram[],
-): Map<string, { x: number; y: number }> => {
-	const positionMap = new Map<string, { x: number; y: number }>();
+export const createItemPositionMap = (items: Diagram[]): Map<string, Point> => {
+	const positionMap = new Map<string, Point>();
 	storeItemPositions(items, positionMap);
 	return positionMap;
 };
 
 const storeItemPositions = (
 	items: Diagram[],
-	positionMap: Map<string, { x: number; y: number }>,
+	positionMap: Map<string, Point>,
 ): void => {
 	for (const item of items) {
 		positionMap.set(item.id, { x: item.x, y: item.y });

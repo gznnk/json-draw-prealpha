@@ -6,16 +6,19 @@ import type { GroupState } from "../../../types/state/shapes/GroupState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
-import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
-// Import utils.
-import { newEventId } from "../../../utils/core/newEventId";
-import { newId } from "../../../utils/shapes/common/newId";
-import { removeGroupedRecursive } from "../../utils/removeGroupedRecursive";
-
-import { isSelectableState } from "../../../utils/validation/isSelectableState";
-import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 // Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
+
+// Import utils.
+import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
+import { newEventId } from "../../../utils/core/newEventId";
+import { newId } from "../../../utils/shapes/common/newId";
+import { isSelectableState } from "../../../utils/validation/isSelectableState";
+import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
+import { cleanupGroups } from "../../utils/cleanupGroups";
+import { removeSelectedDiagrams } from "../../utils/removeSelectedDiagrams";
+import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
+import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 
 /**
  * Custom hook to handle group events on the canvas.
@@ -40,8 +43,8 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 		} = refBus.current;
 
 		setCanvasState((prevState) => {
-			const selectedItems = getSelectedDiagrams(prevState.items);
-			if (selectedItems.length < 2) {
+			const selectedDiagrams = getSelectedDiagrams(prevState.items);
+			if (selectedDiagrams.length < 2) {
 				// Do not group if there are less than 2 selected shapes
 				// If this is reached, there is a flaw in the caller's control logic
 				console.error("Invalid selection count for group.");
@@ -62,9 +65,8 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 				type: "Group",
 				isSelected: true,
 				showOutline: true,
-				items: applyFunctionRecursively(selectedItems, (childItem) => {
+				items: applyFunctionRecursively(selectedDiagrams, (childItem) => {
 					if (!isSelectableState(childItem)) {
-						// Ignore non-selectable child items.
 						return childItem;
 					}
 					return {
@@ -75,23 +77,28 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 					};
 				}),
 			};
-			// Remove grouped shapes from the shape array
-			let items = removeGroupedRecursive(prevState.items);
-			// Add new group
-			items = [...items, group];
+			// Create next state items.
+			const selectedRemovedItems = removeSelectedDiagrams(prevState.items);
+			const groupsCleanedUpItems = cleanupGroups(selectedRemovedItems);
+			const mergedItems = [...groupsCleanedUpItems, group];
 
-			// Generate event ID and create new state
+			// Bring connect lines forward that are connected to grouped components.
+			const orderedItems = bringConnectLinesForward(mergedItems, selectedDiagrams);
+
+			const outlineUpdatedItems = updateOutlineOfAllItemables(orderedItems);
+
+			// Create next state
 			const eventId = newEventId();
-			let newState = {
+			let nextState = {
 				...prevState,
-				items,
+				items: outlineUpdatedItems,
 				multiSelectGroup: undefined,
 			} as SvgCanvasState;
 
 			// Add history
-			newState = addHistory(eventId, newState);
+			nextState = addHistory(eventId, nextState);
 
-			return newState;
+			return nextState;
 		});
 	}, []);
 };

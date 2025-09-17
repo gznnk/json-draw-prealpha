@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../state/catalog/Diagram";
+import type { Diagram } from "../state/core/Diagram";
 import type { EventPhase } from "./EventPhase";
 
 /**

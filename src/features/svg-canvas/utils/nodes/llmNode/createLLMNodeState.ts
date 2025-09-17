@@ -5,17 +5,17 @@ import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
 import { createInputState } from "../../elements/input/createInputState";
 import { createNodeHeaderState } from "../../elements/nodeHeader/createNodeHeaderState";
 import { degreesToRadians } from "../../math/common/degreesToRadians";
-import { affineTransformation } from "../../math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../math/transform/efficientAffineTransformation";
 import { newId } from "../../shapes/common/newId";
 import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectangleConnectPoint";
 import { createLLMNodeInputFrame } from "./createLLMNodeInputFrame";
 
+// Import constants.
+import { LLMNodeDefaultState } from "../../../constants/state/nodes/LLMNodeDefaultState";
 import {
 	HEADER_HEIGHT,
 	HEADER_MARGIN_TOP,
-} from "../../../components/nodes/LLMNode/LLMNodeConstants";
-// Import constants.
-import { LLMNodeDefaultState } from "../../../constants/state/nodes/LLMNodeDefaultState";
+} from "../../../constants/styling/core/LayoutStyling";
 
 /**
  * Creates state for an LLM node with specified properties.
@@ -27,6 +27,9 @@ import { LLMNodeDefaultState } from "../../../constants/state/nodes/LLMNodeDefau
  * @param rotation - Optional rotation of the node
  * @param scaleX - Optional x scale of the node
  * @param scaleY - Optional y scale of the node
+ * @param text - Optional initial text content
+ * @param minWidth - Optional minimum width of the node
+ * @param minHeight - Optional minimum height of the node
  * @returns LLM node state object
  */
 export const createLLMNodeState = ({
@@ -38,6 +41,8 @@ export const createLLMNodeState = ({
 	scaleX = 1,
 	scaleY = 1,
 	text = "",
+	minWidth = LLMNodeDefaultState.minWidth,
+	minHeight = LLMNodeDefaultState.minHeight,
 }: {
 	x: number;
 	y: number;
@@ -47,6 +52,8 @@ export const createLLMNodeState = ({
 	scaleX?: number;
 	scaleY?: number;
 	text?: string;
+	minWidth?: number;
+	minHeight?: number;
 }) => {
 	const connectPoints = createRectangleConnectPoint({
 		x,
@@ -59,7 +66,7 @@ export const createLLMNodeState = ({
 	});
 
 	// Calculate dimensions and positions for child elements
-	const headerCenter = affineTransformation(
+	const headerCenter = efficientAffineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,
@@ -89,6 +96,8 @@ export const createLLMNodeState = ({
 		rotation,
 		scaleX,
 		scaleY,
+		minWidth,
+		minHeight,
 		items: [
 			createNodeHeaderState({
 				x: headerCenter.x,

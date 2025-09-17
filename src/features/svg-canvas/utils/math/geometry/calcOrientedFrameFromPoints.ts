@@ -5,8 +5,8 @@ import type { Frame } from "../../../types/core/Frame";
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";
-import { affineTransformation } from "../transform/affineTransformation";
-import { inverseAffineTransformation } from "../transform/inverseAffineTransformation";
+import { efficientAffineTransformation } from "../transform/efficientAffineTransformation";
+import { efficientInverseAffineTransformation } from "../transform/efficientInverseAffineTransformation";
 
 /**
  * Calculates an oriented bounding box for a series of points.
@@ -38,7 +38,7 @@ export const calcOrientedFrameFromPoints = (
 	const radians = degreesToRadians(rotation);
 
 	const inversePoints = points.map((p) =>
-		inverseAffineTransformation(p.x, p.y, scaleX, scaleY, radians, x, y),
+		efficientInverseAffineTransformation(p.x, p.y, scaleX, scaleY, radians, x, y),
 	);
 
 	const inverseLeft = Math.min(...inversePoints.map((p) => p.x));
@@ -46,7 +46,7 @@ export const calcOrientedFrameFromPoints = (
 	const inverseRight = Math.max(...inversePoints.map((p) => p.x));
 	const inverseBottom = Math.max(...inversePoints.map((p) => p.y));
 
-	const originalCenter = affineTransformation(
+	const originalCenter = efficientAffineTransformation(
 		nanToZero((inverseLeft + inverseRight) / 2),
 		nanToZero((inverseTop + inverseBottom) / 2),
 		scaleX,

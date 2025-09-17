@@ -17,6 +17,8 @@ import {
 } from "../add_svg_to_canvas_node";
 import { connectNodesToolDefinition } from "../connect_nodes/definition";
 import { useConnectNodesTool } from "../connect_nodes/hook";
+import { groupShapesToolDefinition } from "../group_shapes/definition";
+import { useGroupShapesTool } from "../group_shapes/hook";
 import AI_AGENT_INSTRUCTIONS from "./prompts/agent-instructions.md?raw";
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 
@@ -33,6 +35,7 @@ export const useWorkflowAgentHandler = (
 	const addTextNodeHandler = useAddTextNodeTool(eventBus);
 	const addSvgToCanvasNodeHandler = useAddSvgToCanvasNodeTool(eventBus);
 	const connectNodesHandler = useConnectNodesTool(eventBus);
+	const groupShapesHandler = useGroupShapesTool(eventBus);
 
 	// handler本体はuseMemoで生成
 	return useMemo<FunctionCallHandler>(() => {
@@ -42,6 +45,7 @@ export const useWorkflowAgentHandler = (
 			textNodeToolDefinition,
 			svgToCanvasToolDefinition,
 			connectNodesToolDefinition,
+			groupShapesToolDefinition,
 		];
 		const functionHandlerMap = {
 			add_image_gen_node: addImageGenNodeHandler,
@@ -49,6 +53,7 @@ export const useWorkflowAgentHandler = (
 			add_text_node: addTextNodeHandler,
 			add_svg_to_canvas_node: addSvgToCanvasNodeHandler,
 			connect_nodes: connectNodesHandler,
+			group_shapes: groupShapesHandler,
 		};
 		const handler: FunctionCallHandler = async (
 			functionCall: FunctionCallInfo,
@@ -97,5 +102,6 @@ export const useWorkflowAgentHandler = (
 		addTextNodeHandler,
 		addSvgToCanvasNodeHandler,
 		connectNodesHandler,
+		groupShapesHandler,
 	]);
 };

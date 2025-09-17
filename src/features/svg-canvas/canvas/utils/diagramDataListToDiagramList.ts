@@ -1,6 +1,6 @@
 // Import types.
-import type { DiagramData } from "../../types/data/catalog/DiagramData";
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { DiagramData } from "../../types/data/core/DiagramData";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { isItemableData } from "../../utils/validation/isItemableData";

@@ -1,5 +1,6 @@
 // Import React.
-import React, { memo } from "react";
+import type React from "react";
+import { memo } from "react";
 
 // Import types.
 import { DiagramRegistry } from "../../../registry";
@@ -8,9 +9,7 @@ import type { GroupProps } from "../../../types/props/shapes/GroupProps";
 /**
  * Group minimap component - lightweight version without outlines, controls, and labels.
  */
-const GroupMinimapComponent: React.FC<GroupProps> = ({
-	items,
-}) => {
+const GroupMinimapComponent: React.FC<GroupProps> = ({ items }) => {
 	return (
 		<g>
 			{items.map((item) => {

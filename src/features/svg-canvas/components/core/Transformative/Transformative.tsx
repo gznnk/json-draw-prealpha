@@ -28,8 +28,8 @@ import { createLinearX2yFunction } from "../../../utils/math/geometry/createLine
 import { createLinearY2xFunction } from "../../../utils/math/geometry/createLinearY2xFunction";
 import { calcClosestCircleIntersection } from "../../../utils/math/points/calcClosestCircleIntersection";
 import { calcRadians } from "../../../utils/math/points/calcRadians";
-import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
-import { inverseAffineTransformation } from "../../../utils/math/transform/inverseAffineTransformation";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
+import { efficientInverseAffineTransformation } from "../../../utils/math/transform/efficientInverseAffineTransformation";
 import { getCursorFromAngle } from "../../../utils/shapes/common/getCursorFromAngle";
 
 // Import local module files.
@@ -105,7 +105,7 @@ const TransformativeComponent: React.FC<Props> = ({
 	const isSwapped = (rotation + 405) % 180 > 90;
 
 	const affineTransformationOnDrag = (x: number, y: number) =>
-		affineTransformation(
+		efficientAffineTransformation(
 			x,
 			y,
 			1,
@@ -116,7 +116,7 @@ const TransformativeComponent: React.FC<Props> = ({
 		);
 
 	const inverseAffineTransformationOnDrag = (x: number, y: number) =>
-		inverseAffineTransformation(
+		efficientInverseAffineTransformation(
 			x,
 			y,
 			1,
@@ -895,7 +895,7 @@ const TransformativeComponent: React.FC<Props> = ({
 	}, [showTransformControls]);
 
 	// Rotation
-	const rotationPoint = affineTransformation(
+	const rotationPoint = efficientAffineTransformation(
 		width / 2 + ROTATE_POINT_MARGIN,
 		-(height / 2 + ROTATE_POINT_MARGIN),
 		1,

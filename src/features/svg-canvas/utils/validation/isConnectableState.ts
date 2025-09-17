@@ -13,6 +13,8 @@ export const isConnectableState = (obj: unknown): obj is ConnectableState => {
 		typeof obj === "object" &&
 		"showConnectPoints" in obj &&
 		typeof (obj as ConnectableState).showConnectPoints === "boolean" &&
+		"connectEnabled" in obj &&
+		typeof (obj as ConnectableState).connectEnabled === "boolean" &&
 		"connectPoints" in obj &&
 		Array.isArray((obj as ConnectableState).connectPoints)
 	);

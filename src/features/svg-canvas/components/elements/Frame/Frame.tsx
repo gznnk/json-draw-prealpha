@@ -115,8 +115,8 @@ const FrameComponent: React.FC<FrameProps> = ({
 		() => ({
 			x,
 			y,
-			width,
-			height,
+			width: width,
+			height: height,
 			rotation,
 			scaleX,
 			scaleY,

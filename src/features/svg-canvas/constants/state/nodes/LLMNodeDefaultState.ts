@@ -4,6 +4,10 @@ import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
 
 // Import constants.
 import { LLMNodeDefaultData } from "../../data/nodes/LLMNodeDefaultData";
+import {
+	MIN_WIDTH,
+	MIN_HEIGHT,
+} from "../../styling/nodes/LLMNodeStyling";
 
 // Import helpers.
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
@@ -17,5 +21,7 @@ export const LLMNodeDefaultState = CreateDefaultState<LLMNodeState>({
 	baseData: LLMNodeDefaultData,
 	properties: {
 		itemableType: "concrete",
+		minWidth: MIN_WIDTH,
+		minHeight: MIN_HEIGHT,
 	},
 });

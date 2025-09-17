@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 // Import constants.
 import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../constants/core/EventNames";
-import type { Diagram } from "../types/state/catalog/Diagram";
+import type { Diagram } from "../types/state/core/Diagram";
 
 // Import types.
 import type { AddDiagramEvent } from "../types/events/AddDiagramEvent";

@@ -38,6 +38,7 @@ export const createRectangleState = ({
 	fontSize = 16,
 	fontFamily = "Segoe UI",
 	fontWeight = "normal",
+	connectEnabled = true,
 }: {
 	x: number;
 	y: number;
@@ -59,16 +60,19 @@ export const createRectangleState = ({
 	fontSize?: number;
 	fontFamily?: string;
 	fontWeight?: string;
+	connectEnabled?: boolean;
 }): RectangleState => {
-	const connectPoints = createRectangleConnectPoint({
-		x,
-		y,
-		width,
-		height,
-		rotation,
-		scaleX,
-		scaleY,
-	});
+	const connectPoints = connectEnabled
+		? createRectangleConnectPoint({
+				x,
+				y,
+				width,
+				height,
+				rotation,
+				scaleX,
+				scaleY,
+			})
+		: [];
 
 	return {
 		...RectangleDefaultState,
@@ -93,6 +97,7 @@ export const createRectangleState = ({
 		fontSize,
 		fontFamily,
 		fontWeight,
+		connectEnabled,
 		connectPoints,
 	} as RectangleState;
 };

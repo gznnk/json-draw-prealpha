@@ -1,3 +1,6 @@
+import type { PathPointData } from "../../types/data/shapes/PathPointData";
+import type { PathPointProps } from "../../types/props/shapes/PathPointProps";
+import type { PathPointState } from "../../types/state/shapes/PathPointState";
 /**
  * PathPoint Shape Atlas
  *
@@ -12,13 +15,10 @@
 // Types
 // ============================================================================
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { PathPointData } from "../../types/data/shapes/PathPointData";
-import type { PathPointState } from "../../types/state/shapes/PathPointState";
-import type { PathPointProps } from "../../types/props/shapes/PathPointProps";
 
 // ============================================================================
 // Defaults
@@ -32,11 +32,11 @@ import { PathPointDefaultState } from "../../constants/state/shapes/PathPointDef
 import { PathPoint } from "../../components/shapes/Path";
 import { PathPointMinimap } from "../../components/shapes/Path/PathPoint";
 
+import { mapPathPointDataToState } from "../../utils/shapes/path/mapPathPointDataToState";
 // ============================================================================
 // Utility Functions
 // ============================================================================
 import { pathPointStateToData } from "../../utils/shapes/path/mapPathPointStateToData";
-import { mapPathPointDataToState } from "../../utils/shapes/path/mapPathPointDataToState";
 
 /**
  * PathPoint Shape Atlas Type Definition

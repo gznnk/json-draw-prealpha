@@ -3,16 +3,16 @@ import { useEffect, useRef } from "react";
 
 // Import types.
 import type { Frame } from "../../../types/core/Frame";
-import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
-import type { PathPointState } from "../../../types/state/shapes/PathPointState";
 import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
+import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
+import type { PathPointState } from "../../../types/state/shapes/PathPointState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
+import { EVENT_NAME_CONNECT_NODES } from "../../../constants/core/EventNames";
 // Import constants.
 import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
-import { EVENT_NAME_CONNECT_NODES } from "../../../constants/core/EventNames";
 
 // Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";
@@ -20,6 +20,8 @@ import { calcOrientedFrameFromPoints } from "../../../utils/math/geometry/calcOr
 import { newId } from "../../../utils/shapes/common/newId";
 import { generateOptimalFrameToFrameConnection } from "../../../utils/shapes/connectPoint/generateOptimalFrameToFrameConnection";
 
+import { isConnectableState } from "../../../utils/validation/isConnectableState";
+import { isFrame } from "../../../utils/validation/isFrame";
 // Import hooks.
 import { useAddDiagram } from "../actions/useAddDiagram";
 
@@ -60,6 +62,16 @@ export const useOnConnectNodes = (props: SvgCanvasSubHooksProps) => {
 
 			if (!sourceNode || !targetNode) {
 				console.error("Source or target node not found.");
+				return;
+			}
+
+			if (!isFrame(sourceNode) || !isFrame(targetNode)) {
+				console.error("Source or target node is not a frame.");
+				return;
+			}
+
+			if (!isConnectableState(sourceNode) || !isConnectableState(targetNode)) {
+				console.error("Source node is not connectable.");
 				return;
 			}
 

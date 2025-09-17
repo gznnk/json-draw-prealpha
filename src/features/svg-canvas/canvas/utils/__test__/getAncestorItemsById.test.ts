@@ -1,5 +1,5 @@
 import type { DiagramType } from "../../../types/core/DiagramType";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";

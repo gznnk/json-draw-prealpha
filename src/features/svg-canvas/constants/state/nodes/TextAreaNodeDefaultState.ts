@@ -4,6 +4,10 @@ import type { TextAreaNodeState } from "../../../types/state/nodes/TextAreaNodeS
 
 // Import constants.
 import { TextAreaNodeDefaultData } from "../../data/nodes/TextAreaNodeDefaultData";
+import {
+	MIN_WIDTH,
+	MIN_HEIGHT,
+} from "../../styling/nodes/TextAreaNodeStyling";
 
 // Import helpers.
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
@@ -17,5 +21,7 @@ export const TextAreaNodeDefaultState = CreateDefaultState<TextAreaNodeState>({
 	baseData: TextAreaNodeDefaultData,
 	properties: {
 		itemableType: "concrete",
+		minWidth: MIN_WIDTH,
+		minHeight: MIN_HEIGHT,
 	},
 });

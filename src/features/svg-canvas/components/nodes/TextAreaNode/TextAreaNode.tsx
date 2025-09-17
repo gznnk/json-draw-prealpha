@@ -22,19 +22,28 @@ import { TextArea } from "../../icons/TextArea";
 // Import utils.
 import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { affineTransformation } from "../../../utils/math/transform/affineTransformation";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 
-// Import local modules.
+// Import constants.
 import {
 	BASE_MARGIN,
+	HEADER_HEIGHT,
+	HEADER_MARGIN_BOTTOM,
+	HEADER_MARGIN_TOP,
+} from "../../../constants/styling/core/LayoutStyling";
+import {
+	BACKGROUND_COLOR,
+	BORDER_COLOR,
+	BORDER_WIDTH,
 	BUTTON_HEIGHT,
 	BUTTON_MARGIN_BOTTOM,
 	BUTTON_MARGIN_TOP,
 	BUTTON_WIDTH,
-	HEADER_HEIGHT,
-	HEADER_MARGIN_BOTTOM,
-	HEADER_MARGIN_TOP,
-} from "./TextAreaConstants";
+	CORNER_RADIUS,
+	ICON_COLOR,
+	MIN_HEIGHT,
+	MIN_WIDTH,
+} from "../../../constants/styling/nodes/TextAreaNodeStyling";
 
 /**
  * TextAreaNode component.
@@ -52,12 +61,13 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		items,
 		isSelected,
 		isAncestorSelected,
+		minWidth = MIN_WIDTH,
+		minHeight = MIN_HEIGHT,
 		onDrag,
 		onSelect,
 		onClick,
 		onHoverChange,
 		onTextChange,
-		onDiagramChange,
 		onExecute,
 	} = props;
 
@@ -79,8 +89,8 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		onSelect,
 		onClick,
 		onHoverChange,
+		onTextChange,
 		onExecute,
-		onDiagramChange,
 		inputState,
 		setText,
 	};
@@ -148,23 +158,17 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 
 	// Handle propagation events from child components
 	const onPropagation = useCallback((e: ExecutionPropagationEvent) => {
-		const { id, text, inputState, onDiagramChange, onExecute, setText } =
-			refBus.current;
+		const { id, inputState, onTextChange, onExecute, setText } = refBus.current;
 
 		setText(e.data.text);
 
 		if (e.eventPhase === "Ended") {
 			// Update the text state with the new text from the event data.
-			onDiagramChange?.({
+			onTextChange?.({
 				id: inputState.id,
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
-				startDiagram: {
-					text,
-				},
-				endDiagram: {
-					text: e.data.text,
-				},
+				text: e.data.text,
 			});
 
 			// Propagate the event.
@@ -188,7 +192,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			BUTTON_MARGIN_TOP +
 			BUTTON_MARGIN_BOTTOM);
 
-	const headerCenter = affineTransformation(
+	const headerCenter = efficientAffineTransformation(
 		0,
 		-(height / 2 - (HEADER_HEIGHT / 2 + HEADER_MARGIN_TOP)),
 		scaleX,
@@ -198,7 +202,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		y,
 	);
 
-	const inputCenter = affineTransformation(
+	const inputCenter = efficientAffineTransformation(
 		0,
 		-(
 			height / 2 -
@@ -221,12 +225,14 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		<>
 			<Frame
 				{...props}
-				minWidth={200}
-				minHeight={200}
-				stroke="#E5E6EB"
-				strokeWidth="1px"
-				fill="white"
-				cornerRadius={6}
+				width={width}
+				height={height}
+				minWidth={minWidth}
+				minHeight={minHeight}
+				stroke={BORDER_COLOR}
+				strokeWidth={BORDER_WIDTH}
+				fill={BACKGROUND_COLOR}
+				cornerRadius={CORNER_RADIUS}
 				onPropagation={onPropagation}
 			>
 				<Button
@@ -265,7 +271,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
 				icon={<TextArea fill="#ffffff" />}
-				iconBackgroundColor="#1890ff"
+				iconBackgroundColor={ICON_COLOR}
 				onDrag={handleDrag}
 				onSelect={handleSelect}
 				onClick={handleClick}

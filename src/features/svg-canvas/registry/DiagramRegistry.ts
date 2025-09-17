@@ -1,7 +1,7 @@
 // Import types.
 import type { DiagramType } from "../types/core/DiagramType";
-import { Frame } from "../types/core/Frame";
-import type { Diagram } from "../types/state/catalog/Diagram";
+import type { Frame } from "../types/core/Frame";
+import type { Diagram } from "../types/state/core/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 import type {
 	DataToStateMapper,
@@ -101,7 +101,9 @@ class DiagramRegistryClass {
 	 */
 	getTransformItemsFunction(
 		type: DiagramType,
-	): (((ownerFrame: Frame, items: Diagram[]) => Diagram[]) | undefined) | undefined {
+	):
+		| (((ownerFrame: Frame, items: Diagram[]) => Diagram[]) | undefined)
+		| undefined {
 		return this.definitions.get(type)?.transformItems;
 	}
 

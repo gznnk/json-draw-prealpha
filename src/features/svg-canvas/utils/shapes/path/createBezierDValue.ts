@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 
 /**
  * Creates a quadratic Bézier path data value (d attribute) from an array of diagram items.
@@ -33,11 +33,11 @@ export const createBezierDValue = (items: Diagram[]): string => {
 			// and the curve passes through the midpoints between prev-current and current-next
 			const controlX = current.x;
 			const controlY = current.y;
-			
+
 			// Calculate the end point for this curve segment (midpoint to next)
 			const endX = (current.x + next.x) / 2;
 			const endY = (current.y + next.y) / 2;
-			
+
 			if (i === 1) {
 				// First curve segment: start from first point, control at current, end at midpoint to next
 				d += ` Q ${controlX} ${controlY} ${endX} ${endY}`;

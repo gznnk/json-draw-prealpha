@@ -37,6 +37,8 @@ const InputComponent: React.FC<InputProps> = ({
 	y,
 	width,
 	height,
+	minWidth,
+	minHeight,
 	scaleX,
 	scaleY,
 	rotation,
@@ -74,7 +76,6 @@ const InputComponent: React.FC<InputProps> = ({
 	onConnect,
 	onPreviewConnectLine,
 	onTextChange,
-	onDiagramChange,
 	onHoverChange,
 }) => {
 	// Internal text state
@@ -109,8 +110,8 @@ const InputComponent: React.FC<InputProps> = ({
 		attributes: {
 			x,
 			y,
-			width,
-			height,
+			width: width,
+			height: height,
 			scaleX,
 			scaleY,
 			rotation,
@@ -168,16 +169,11 @@ const InputComponent: React.FC<InputProps> = ({
 
 			if (e.eventPhase === "Ended") {
 				// Update the diagram state with the new text
-				onDiagramChange?.({
+				onTextChange?.({
 					id,
 					eventId: e.eventId,
 					eventPhase: e.eventPhase,
-					startDiagram: {
-						text,
-					},
-					endDiagram: {
-						text: e.data.text,
-					},
+					text: e.data.text,
 				});
 			}
 		},
@@ -198,8 +194,8 @@ const InputComponent: React.FC<InputProps> = ({
 		() => ({
 			x,
 			y,
-			width,
-			height,
+			width: width,
+			height: height,
 			rotation,
 			scaleX,
 			scaleY,
@@ -274,6 +270,8 @@ const InputComponent: React.FC<InputProps> = ({
 					y={y}
 					width={width}
 					height={height}
+					minWidth={minWidth}
+					minHeight={minHeight}
 					rotation={rotation}
 					scaleX={scaleX}
 					scaleY={scaleY}

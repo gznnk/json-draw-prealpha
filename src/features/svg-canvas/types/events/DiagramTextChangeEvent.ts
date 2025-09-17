@@ -16,5 +16,6 @@ export type DiagramTextChangeEvent = {
 	eventPhase: EventPhase;
 	id: string;
 	text: string;
+	activateEditor?: boolean;
 	initializeAttributes?: TextEditorAttributes; // Optional initial attributes for the text editor
 };

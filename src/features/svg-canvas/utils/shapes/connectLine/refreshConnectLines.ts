@@ -1,11 +1,12 @@
 // Import types.
 import type { SvgCanvasState } from "../../../canvas/types/SvgCanvasState";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
 
 // Import utils.
 import { getDiagramById } from "../../core/getDiagramById";
 import { isConnectableState } from "../../validation/isConnectableState";
+import { isFrame } from "../../validation/isFrame";
 import { newId } from "../common/newId";
 import { generateOptimalFrameToFrameConnection } from "../connectPoint/generateOptimalFrameToFrameConnection";
 import { updateManualConnectLinePath } from "../connectPoint/updateManualConnectLinePath";
@@ -26,7 +27,14 @@ export const refreshConnectLines = (
 ): SvgCanvasState => {
 	// Create a set of updated diagram IDs for efficient lookup
 	const updatedDiagramIds = new Set(
-		updatedDiagrams.filter((d) => isConnectableState(d)).map((d) => d.id),
+		updatedDiagrams
+			.filter(
+				(d) =>
+					isConnectableState(d) &&
+					d.connectEnabled &&
+					0 < d.connectPoints.length,
+			)
+			.map((d) => d.id),
 	);
 
 	// Find all connect lines that need to be updated
@@ -58,6 +66,11 @@ export const refreshConnectLines = (
 
 		// Skip if either owner shape is not found
 		if (!startOwnerFrame || !endOwnerFrame) {
+			return item;
+		}
+
+		// Skip if either owner shape is not a Frame
+		if (!isFrame(startOwnerFrame) || !isFrame(endOwnerFrame)) {
 			return item;
 		}
 

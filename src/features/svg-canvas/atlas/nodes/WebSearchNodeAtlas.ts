@@ -1,3 +1,7 @@
+import type { WebSearchNodeData } from "../../types/data/nodes/WebSearchNodeData";
+import { WebSearchNodeFeatures } from "../../types/data/nodes/WebSearchNodeData";
+import type { WebSearchNodeProps } from "../../types/props/nodes/WebSearchNodeProps";
+import type { WebSearchNodeState } from "../../types/state/nodes/WebSearchNodeState";
 /**
  * WebSearchNode Atlas
  *
@@ -12,14 +16,10 @@
 // Types
 // ============================================================================
 import type {
-	DiagramAtlas,
 	DataToStateMapper,
+	DiagramAtlas,
 	StateToDataMapper,
 } from "../DiagramAtlas";
-import type { WebSearchNodeData } from "../../types/data/nodes/WebSearchNodeData";
-import type { WebSearchNodeState } from "../../types/state/nodes/WebSearchNodeState";
-import type { WebSearchNodeProps } from "../../types/props/nodes/WebSearchNodeProps";
-import { WebSearchNodeFeatures } from "../../types/data/nodes/WebSearchNodeData";
 
 // ============================================================================
 // Defaults
@@ -30,15 +30,18 @@ import { WebSearchNodeDefaultState } from "../../constants/state/nodes/WebSearch
 // ============================================================================
 // Components
 // ============================================================================
-import { WebSearchNode, WebSearchNodeMinimap } from "../../components/nodes/WebSearchNode";
+import {
+	WebSearchNode,
+	WebSearchNodeMinimap,
+} from "../../components/nodes/WebSearchNode";
 
 // ============================================================================
 // Utility Functions
 // ============================================================================
 import { createWebSearchNodeState } from "../../utils/nodes/webSearchNode/createWebSearchNodeState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { webSearchNodeStateToData } from "../../utils/nodes/webSearchNode/mapWebSearchNodeStateToData";
 import { mapWebSearchNodeDataToState } from "../../utils/nodes/webSearchNode/mapWebSearchNodeDataToState";
+import { webSearchNodeStateToData } from "../../utils/nodes/webSearchNode/mapWebSearchNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * WebSearchNode Atlas Type Definition

@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 
 // Import types.
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
@@ -297,7 +297,7 @@ export const useOnSelect = (
 									isSelected: true,
 									showTransformControls: false,
 									showOutline: true, // Show outline for the group.
-								};
+								} as Diagram;
 							}
 
 							// If no selection change, return with updated items
@@ -305,13 +305,13 @@ export const useOnSelect = (
 								...item,
 								showTransformControls: false,
 								items: updatedItems,
-							};
+							} as Diagram;
 						}
 
 						return {
 							...item,
 							showTransformControls: false,
-						};
+						} as Diagram;
 					};
 
 					return items.map(processItem);

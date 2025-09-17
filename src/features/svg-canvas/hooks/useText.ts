@@ -65,6 +65,7 @@ export const useText = (props: UseTextProps): UseTextReturn => {
 			eventPhase: "Started",
 			id,
 			text: "",
+			activateEditor: true,
 			initializeAttributes: resolvedAttributes,
 		};
 		onTextChange(textChangeEvent);

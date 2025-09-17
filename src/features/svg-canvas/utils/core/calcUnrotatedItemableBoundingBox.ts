@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { isItemableState } from "../validation/isItemableState";
@@ -33,7 +33,7 @@ export const calcUnrotatedItemableBoundingBox = (
 	let right = Number.NEGATIVE_INFINITY;
 	for (const item of items) {
 		// Exclude ConnectPoint from shape calculations
-		const itemItems = isItemableState<Diagram>(item)
+		const itemItems = isItemableState(item)
 			? (item.items ?? []).filter((i) => i.type !== "ConnectPoint")
 			: [];
 		if (

@@ -1,8 +1,9 @@
 // Import types.
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { calcItemableOrientedBox } from "../../utils/core/calcItemableOrientedBox";
+import { isFrame } from "../../utils/validation/isFrame";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**
@@ -14,7 +15,11 @@ import { isItemableState } from "../../utils/validation/isItemableState";
  * @returns {Diagram} - The updated itemable diagram with outline updated.
  */
 export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
-	if (!isItemableState(itemable) || itemable.itemableType === "concrete") {
+	if (
+		!isFrame(itemable) ||
+		!isItemableState(itemable) ||
+		itemable.itemableType === "concrete"
+	) {
 		return itemable;
 	}
 
@@ -62,5 +67,5 @@ export const updateOutlineOfItemable = (itemable: Diagram): Diagram => {
 		width: box.width,
 		height: box.height,
 		items: updatedItems,
-	};
+	} as Diagram;
 };

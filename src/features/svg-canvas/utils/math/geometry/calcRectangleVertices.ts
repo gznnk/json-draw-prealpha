@@ -5,7 +5,7 @@ import type { Frame } from "../../../types/core/Frame";
 // Import utils.
 import { degreesToRadians } from "../common/degreesToRadians";
 import { nanToZero } from "../common/nanToZero";
-import { affineTransformation } from "../transform/affineTransformation";
+import { efficientAffineTransformation } from "../transform/efficientAffineTransformation";
 
 /**
  * Calculates the vertices of a rectangle.
@@ -22,9 +22,23 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 	const tx = x;
 	const ty = y;
 
+	// No rotation vertices calculation - optimized path when rotation is 0
+	if (rotation === 0) {
+		return {
+			topLeftPoint: { x: tx - halfWidth, y: ty - halfHeight },
+			bottomLeftPoint: { x: tx - halfWidth, y: ty + halfHeight },
+			topRightPoint: { x: tx + halfWidth, y: ty - halfHeight },
+			bottomRightPoint: { x: tx + halfWidth, y: ty + halfHeight },
+			topCenterPoint: { x: tx, y: ty - halfHeight },
+			leftCenterPoint: { x: tx - halfWidth, y: ty },
+			rightCenterPoint: { x: tx + halfWidth, y: ty },
+			bottomCenterPoint: { x: tx, y: ty + halfHeight },
+		};
+	}
+
 	const radians = degreesToRadians(rotation);
 
-	const topLeftPoint = affineTransformation(
+	const topLeftPoint = efficientAffineTransformation(
 		-halfWidth,
 		-halfHeight,
 		scaleX,
@@ -34,7 +48,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 		ty,
 	);
 
-	const bottomLeftPoint = affineTransformation(
+	const bottomLeftPoint = efficientAffineTransformation(
 		-halfWidth,
 		halfHeight,
 		scaleX,
@@ -44,7 +58,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 		ty,
 	);
 
-	const topRightPoint = affineTransformation(
+	const topRightPoint = efficientAffineTransformation(
 		halfWidth,
 		-halfHeight,
 		scaleX,
@@ -54,7 +68,7 @@ export const calcRectangleVertices = (frame: Frame): RectangleVertices => {
 		ty,
 	);
 
-	const bottomRightPoint = affineTransformation(
+	const bottomRightPoint = efficientAffineTransformation(
 		halfWidth,
 		halfHeight,
 		scaleX,

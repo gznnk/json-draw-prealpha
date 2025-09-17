@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../types/state/catalog/Diagram";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 // Import utils.
 import { isItemableState } from "../../utils/validation/isItemableState";
@@ -26,10 +26,10 @@ export const ungroupSelectedGroupsRecursively = (items: Diagram[]) => {
 					ungroupedItems.push(groupItem);
 				}
 			} else {
-				const updatedGroup: Diagram = {
+				const updatedGroup = {
 					...item,
 					items: ungroupSelectedGroupsRecursively(item.items),
-				};
+				} as Diagram;
 				ungroupedItems.push(updatedGroup);
 			}
 		} else {

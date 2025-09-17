@@ -22,27 +22,13 @@ export const affineTransformation = (
 	tx: number,
 	ty: number,
 ): Point => {
-	// Scale and rotation matrix
-	const transformationMatrix = [
-		[sx * Math.cos(theta), -sy * Math.sin(theta)],
-		[sx * Math.sin(theta), sy * Math.cos(theta)],
-	];
+	// Calculate trigonometric values once
+	const cosTheta = Math.cos(theta);
+	const sinTheta = Math.sin(theta);
 
-	// Translation vector
-	const translationVector = [tx, ty];
+	// Apply affine transformation with pre-computed values
+	const transformedX = sx * cosTheta * px - sy * sinTheta * py + tx;
+	const transformedY = sx * sinTheta * px + sy * cosTheta * py + ty;
 
-	// Original coordinate vector
-	const originalVector = [px, py];
-
-	// Apply affine transformation
-	const transformedVector = [
-		transformationMatrix[0][0] * originalVector[0] +
-			transformationMatrix[0][1] * originalVector[1] +
-			translationVector[0],
-		transformationMatrix[1][0] * originalVector[0] +
-			transformationMatrix[1][1] * originalVector[1] +
-			translationVector[1],
-	];
-
-	return { x: transformedVector[0], y: transformedVector[1] };
+	return { x: transformedX, y: transformedY };
 };

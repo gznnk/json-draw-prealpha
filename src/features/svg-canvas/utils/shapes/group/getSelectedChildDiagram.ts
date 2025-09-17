@@ -1,5 +1,5 @@
 // Import types.
-import type { Diagram } from "../../../types/state/catalog/Diagram";
+import type { Diagram } from "../../../types/state/core/Diagram";
 
 // Import utils.
 import { isItemableState } from "../../validation/isItemableState";
@@ -18,7 +18,7 @@ export const getSelectedChildDiagram = (
 		if (isSelectableState(diagram) && diagram.isSelected) {
 			return diagram;
 		}
-		if (isItemableState<Diagram>(diagram)) {
+		if (isItemableState(diagram)) {
 			const ret = getSelectedChildDiagram(diagram.items || []);
 			if (ret) {
 				return ret;

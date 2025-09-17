@@ -15,6 +15,13 @@ import { createRectangleConnectPoint } from "../../shapes/rectangle/createRectan
  *
  * @param x - The x coordinate of the node
  * @param y - The y coordinate of the node
+ * @param width - Optional width of the node
+ * @param height - Optional height of the node
+ * @param rotation - Optional rotation of the node
+ * @param scaleX - Optional x scale of the node
+ * @param scaleY - Optional y scale of the node
+ * @param minWidth - Optional minimum width of the node
+ * @param minHeight - Optional minimum height of the node
  * @returns TextArea node state object
  */
 export const createTextAreaNodeState = ({
@@ -25,6 +32,8 @@ export const createTextAreaNodeState = ({
 	rotation = 0,
 	scaleX = 1,
 	scaleY = 1,
+	minWidth = TextAreaNodeDefaultState.minWidth,
+	minHeight = TextAreaNodeDefaultState.minHeight,
 }: {
 	x: number;
 	y: number;
@@ -33,6 +42,8 @@ export const createTextAreaNodeState = ({
 	rotation?: number;
 	scaleX?: number;
 	scaleY?: number;
+	minWidth?: number;
+	minHeight?: number;
 }) => {
 	const connectPoints = createRectangleConnectPoint({
 		x,
@@ -54,6 +65,8 @@ export const createTextAreaNodeState = ({
 		rotation,
 		scaleX,
 		scaleY,
+		minWidth,
+		minHeight,
 		items: [
 			createNodeHeaderState({
 				x,

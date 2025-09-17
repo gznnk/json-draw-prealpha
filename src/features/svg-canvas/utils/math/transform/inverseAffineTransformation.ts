@@ -23,31 +23,17 @@ export const inverseAffineTransformation = (
 	tx: number,
 	ty: number,
 ): Point => {
-	// Calculate inverse matrix for scaling and rotation
-	const inverseTransformationMatrix = [
-		[Math.cos(theta) / sx, Math.sin(theta) / sx],
-		[-Math.sin(theta) / sy, Math.cos(theta) / sy],
-	];
+	// Calculate trigonometric values once
+	const cosTheta = Math.cos(theta);
+	const sinTheta = Math.sin(theta);
 
-	// Inverse vector for translation
-	const inverseTranslationVector = [-tx, -ty];
-
-	// Coordinate vector after transformation
-	const transformedVector = [px, py];
-
-	// Apply inverse transformation for translation
-	const translatedVector = [
-		transformedVector[0] + inverseTranslationVector[0],
-		transformedVector[1] + inverseTranslationVector[1],
-	];
+	// Apply inverse translation first
+	const translatedX = px - tx;
+	const translatedY = py - ty;
 
 	// Apply inverse affine transformation
-	const originalVector = [
-		inverseTransformationMatrix[0][0] * translatedVector[0] +
-			inverseTransformationMatrix[0][1] * translatedVector[1],
-		inverseTransformationMatrix[1][0] * translatedVector[0] +
-			inverseTransformationMatrix[1][1] * translatedVector[1],
-	];
+	const originalX = (cosTheta * translatedX + sinTheta * translatedY) / sx;
+	const originalY = (-sinTheta * translatedX + cosTheta * translatedY) / sy;
 
-	return { x: originalVector[0], y: originalVector[1] };
+	return { x: originalX, y: originalY };
 };
