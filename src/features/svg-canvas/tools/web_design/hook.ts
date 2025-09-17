@@ -21,7 +21,7 @@ import { LLMClientFactory } from "../../../../shared/llm-client";
 import { OpenAiKeyManager } from "../../../../utils/KeyManager";
 
 // Import instructions
-import { WEB_DESIGN_INSTRUCTIONS } from "./prompts/instructions";
+import WEB_DESIGN_INSTRUCTIONS from "./prompts/instructions.md?raw";
 
 export const useWebDesignTool = (eventBus: EventBus): FunctionCallHandler => {
 	// 各ツールのhandlerをhookで生成
