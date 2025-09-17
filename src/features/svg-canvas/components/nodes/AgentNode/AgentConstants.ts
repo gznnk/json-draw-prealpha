@@ -59,11 +59,6 @@ The size of the ImageGeneration node is 100 pixels wide and 100 pixels tall.
 Returns a JSON object containing the node ID, node type and the size (width and height).
 `;
 
-export const X_PARAM_DESCRIPTION =
-	"The X coordinate of the center of the node on the canvas.";
-export const Y_PARAM_DESCRIPTION =
-	"The Y coordinate of the center of the node on the canvas.";
-
 export const AI_AGENT_TOOLS = [
 	{
 		type: "function",
@@ -78,11 +73,11 @@ export const AI_AGENT_TOOLS = [
 				},
 				x: {
 					type: "number",
-					description: X_PARAM_DESCRIPTION,
+					description: "The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: Y_PARAM_DESCRIPTION,
+					description: "The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
@@ -99,11 +94,11 @@ export const AI_AGENT_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: X_PARAM_DESCRIPTION,
+					description: "The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: Y_PARAM_DESCRIPTION,
+					description: "The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
@@ -120,11 +115,11 @@ export const AI_AGENT_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: X_PARAM_DESCRIPTION,
+					description: "The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: Y_PARAM_DESCRIPTION,
+					description: "The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
@@ -141,11 +136,11 @@ export const AI_AGENT_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: X_PARAM_DESCRIPTION,
+					description: "The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: Y_PARAM_DESCRIPTION,
+					description: "The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
