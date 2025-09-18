@@ -23,6 +23,45 @@
 			"args": ["--runInBand", "--watchAll=false"],
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Electron Main Process",
+			"program": "${workspaceFolder}/dist-desktop/main.js",
+			"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+			"runtimeArgs": ["--enable-logging", "--inspect=5858", "--remote-debugging-port=9222"],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"console": "integratedTerminal",
+			"preLaunchTask": "npm: electron:build",
+			"sourceMaps": true,
+			"outFiles": ["${workspaceFolder}/dist-desktop/**/*.js"],
+			"skipFiles": ["<node_internals>/**"],
+			"windows": {
+				"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+			}
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Electron with Web Dev Server",
+			"program": "${workspaceFolder}/dist-desktop/main.js",
+			"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+			"runtimeArgs": ["--enable-logging", "--inspect=5858", "--remote-debugging-port=9222"],
+			"env": {
+				"NODE_ENV": "development",
+				"ELECTRON_START_URL": "http://localhost:5173"
+			},
+			"console": "integratedTerminal",
+			"preLaunchTask": "Start Dev Server",
+			"sourceMaps": true,
+			"outFiles": ["${workspaceFolder}/dist-desktop/**/*.js"],
+			"skipFiles": ["<node_internals>/**"],
+			"windows": {
+				"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+			}
 		}
 	]
 }

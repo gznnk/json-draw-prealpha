@@ -53,6 +53,30 @@
 				"clear": false
 			},
 			"problemMatcher": []
+		},
+		{
+			"label": "npm: electron:build",
+			"type": "shell",
+			"command": "npm run electron:build",
+			"group": "build",
+			"problemMatcher": ["$tsc"]
+		},
+		{
+			"label": "Start Dev Server",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": true,
+			"problemMatcher": {
+				"owner": "custom",
+				"pattern": {
+					"regexp": "^$"
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "vite",
+					"endsPattern": "ready in"
+				}
+			}
 		}
 	],
 	"inputs": [

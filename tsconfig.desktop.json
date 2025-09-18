@@ -12,7 +12,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false,
-    "outDir": "./dist-desktop"
+    "outDir": "./dist-desktop",
+    "sourceMap": true
   },
   "include": [
     "desktop/**/*"
