@@ -5,4 +5,6 @@ export type GroupShapesEvent = {
 	eventId: string;
 	shapeIds: string[];
 	groupId: string;
+	name?: string;
+	description?: string;
 };

@@ -76,5 +76,15 @@ export const textElementToolDefinition: ToolDefinition = {
 				"Vertical text alignment within the rectangle. Default is 'center'.",
 			enum: ["top", "center", "bottom"],
 		},
+		{
+			name: "name",
+			type: "string",
+			description: "Optional name for the text element.",
+		},
+		{
+			name: "description",
+			type: "string",
+			description: "Optional description for the text element.",
+		},
 	],
 };

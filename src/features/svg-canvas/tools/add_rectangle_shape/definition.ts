@@ -100,5 +100,15 @@ export const rectangleShapeToolDefinition: ToolDefinition = {
 			description:
 				"Font weight for the text (e.g., 'normal', 'bold'). Default is 'normal'.",
 		},
+		{
+			name: "name",
+			type: "string",
+			description: "Optional name for the rectangle shape.",
+		},
+		{
+			name: "description",
+			type: "string",
+			description: "Optional description for the rectangle shape.",
+		},
 	],
 };

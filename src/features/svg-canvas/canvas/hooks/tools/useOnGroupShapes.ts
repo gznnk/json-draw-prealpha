@@ -63,6 +63,10 @@ export const useOnGroupShapes = (props: SvgCanvasSubHooksProps) => {
 
 				// Create a new group data.
 				const group: GroupState = {
+					id: event.groupId,
+					type: "Group",
+					name: event.name,
+					description: event.description,
 					x: boundingBox.left + (boundingBox.right - boundingBox.left) / 2,
 					y: boundingBox.top + (boundingBox.bottom - boundingBox.top) / 2,
 					width: boundingBox.right - boundingBox.left,
@@ -72,8 +76,6 @@ export const useOnGroupShapes = (props: SvgCanvasSubHooksProps) => {
 					scaleY: 1,
 					keepProportion: true,
 					itemableType: "abstract",
-					id: event.groupId,
-					type: "Group",
 					isSelected: false,
 					showOutline: false,
 					showTransformControls: false,
@@ -89,7 +91,10 @@ export const useOnGroupShapes = (props: SvgCanvasSubHooksProps) => {
 				const mergedItems = [...groupsCleanedUpItems, group];
 
 				// Bring connect lines forward that are connected to grouped components.
-				const orderedItems = bringConnectLinesForward(mergedItems, targetDiagrams);
+				const orderedItems = bringConnectLinesForward(
+					mergedItems,
+					targetDiagrams,
+				);
 
 				const outlineUpdatedItems = updateOutlineOfAllItemables(orderedItems);
 

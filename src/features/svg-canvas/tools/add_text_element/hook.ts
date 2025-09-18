@@ -22,6 +22,8 @@ export const useAddTextElementTool = (eventBus: EventBus): FunctionCallHandler =
 				fontFamily?: string;
 				textAlign?: "left" | "center" | "right";
 				verticalAlign?: "top" | "center" | "bottom";
+				name?: string;
+				description?: string;
 			};
 			
 			if (
@@ -54,6 +56,8 @@ export const useAddTextElementTool = (eventBus: EventBus): FunctionCallHandler =
 					textAlign: args.textAlign || "center",
 					verticalAlign: args.verticalAlign || "center",
 					connectEnabled: false,
+					name: args.name,
+					description: args.description,
 				});
 				
 				addDiagram(data);

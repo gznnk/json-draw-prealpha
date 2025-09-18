@@ -50,5 +50,15 @@ export const circleShapeToolDefinition: ToolDefinition = {
 			type: "number",
 			description: "The width of the stroke in pixels. Default is 1.",
 		},
+		{
+			name: "name",
+			type: "string",
+			description: "Optional name for the circle shape.",
+		},
+		{
+			name: "description",
+			type: "string",
+			description: "Optional description for the circle shape.",
+		},
 	],
 };
