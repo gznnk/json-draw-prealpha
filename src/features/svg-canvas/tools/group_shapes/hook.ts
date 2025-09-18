@@ -31,6 +31,8 @@ export const useGroupShapesTool = (
 		(functionCall: FunctionCallInfo) => {
 			const args = functionCall.arguments as {
 				shapeIds: string[];
+				name?: string;
+				description?: string;
 			};
 
 			if (
@@ -43,6 +45,8 @@ export const useGroupShapesTool = (
 					eventId: newEventId(),
 					shapeIds: args.shapeIds,
 					groupId: groupId,
+					name: args.name,
+					description: args.description,
 				} as GroupShapesEvent;
 
 				const customEvent = new CustomEvent(EVENT_NAME_GROUP_SHAPES, {

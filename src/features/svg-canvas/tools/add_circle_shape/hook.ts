@@ -18,6 +18,8 @@ export const useAddCircleShapeTool = (eventBus: EventBus): FunctionCallHandler =
 				fill: string;
 				stroke?: string;
 				strokeWidth?: number;
+				name?: string;
+				description?: string;
 			};
 			
 			if (
@@ -37,6 +39,8 @@ export const useAddCircleShapeTool = (eventBus: EventBus): FunctionCallHandler =
 					text: "",
 					textType: "textarea",
 					connectEnabled: false,
+					name: args.name,
+					description: args.description,
 				});
 				
 				addDiagram(data);

@@ -10,4 +10,6 @@ export type DiagramBaseData = {
 	type: DiagramType;
 	x: number;
 	y: number;
+	name?: string;
+	description?: string;
 };

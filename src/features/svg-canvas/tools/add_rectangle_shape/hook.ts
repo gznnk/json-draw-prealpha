@@ -27,6 +27,8 @@ export const useAddRectangleShapeTool = (eventBus: EventBus): FunctionCallHandle
 				fontSize?: number;
 				fontFamily?: string;
 				fontWeight?: string;
+				name?: string;
+				description?: string;
 			};
 			
 			if (
@@ -58,6 +60,8 @@ export const useAddRectangleShapeTool = (eventBus: EventBus): FunctionCallHandle
 					fontFamily: args.fontFamily || "Segoe UI",
 					fontWeight: args.fontWeight || "normal",
 					connectEnabled: false,
+					name: args.name,
+					description: args.description,
 				});
 				
 				addDiagram(data);
