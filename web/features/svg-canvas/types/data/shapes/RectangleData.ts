@@ -1,6 +1,5 @@
-// Import types.
-import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "./CreateDataType";
+import type { DiagramFeatures } from "../../core/DiagramFeatures";
 
 /**
  * Diagram features for Rectangle shapes.

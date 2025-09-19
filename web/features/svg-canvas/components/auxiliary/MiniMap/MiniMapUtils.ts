@@ -1,11 +1,6 @@
-// Import types.
+import { MINIMAP_VIEWPORT_MARGIN } from "../../../constants/core/Constants";
 import type { Bounds } from "../../../types/core/Bounds";
 import type { Diagram } from "../../../types/state/core/Diagram";
-
-// Import constants.
-import { MINIMAP_VIEWPORT_MARGIN } from "../../../constants/core/Constants";
-
-// Import utils.
 import { calcDiagramsBoundingBox } from "../../../utils/math/geometry/calcDiagramsBoundingBox";
 
 /**

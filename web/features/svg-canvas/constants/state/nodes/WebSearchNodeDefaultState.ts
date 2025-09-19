@@ -1,11 +1,6 @@
-// Import types.
 import { WebSearchNodeFeatures } from "../../../types/data/nodes/WebSearchNodeData";
 import type { WebSearchNodeState } from "../../../types/state/nodes/WebSearchNodeState";
-
-// Import constants.
 import { WebSearchNodeDefaultData } from "../../data/nodes/WebSearchNodeDefaultData";
-
-// Import helpers.
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**

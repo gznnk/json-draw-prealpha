@@ -1,8 +1,5 @@
-// Import libraries.
-import type { ToolDefinition } from "../../../../shared/llm-client/types";
-
-// Import prompt.
 import TOOL_DESCRIPTION from "./prompts/tool-description.md?raw";
+import type { ToolDefinition } from "../../../../shared/llm-client/types";
 
 /**
  * Tool definition for the web design agent that helps users create web page layouts.

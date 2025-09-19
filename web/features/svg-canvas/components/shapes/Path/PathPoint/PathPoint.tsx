@@ -1,18 +1,19 @@
-// Import React.
-import type React from "react";
-import { memo } from "react";
+import React, { memo } from "react";
 
-// Import components related to SvgCanvas.
-import { DragPoint } from "../../../core/DragPoint";
-
-// Import types related to SvgCanvas.
 import type { PathPointProps } from "../../../../types/props/shapes/PathPointProps";
+import { DragPoint } from "../../../core/DragPoint";
 
 /**
  * Polyline vertex component
  */
-export const PathPoint: React.FC<PathPointProps> = memo(
-	({ id, x, y, hidden, onDrag }) => {
-		return <DragPoint id={id} x={x} y={y} hidden={hidden} onDrag={onDrag} />;
-	},
-);
+const PathPointComponent: React.FC<PathPointProps> = ({
+	id,
+	x,
+	y,
+	hidden,
+	onDrag,
+}) => {
+	return <DragPoint id={id} x={x} y={y} hidden={hidden} onDrag={onDrag} />;
+};
+
+export const PathPoint = memo(PathPointComponent);

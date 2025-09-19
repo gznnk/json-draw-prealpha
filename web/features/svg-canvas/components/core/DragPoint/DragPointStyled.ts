@@ -1,4 +1,3 @@
-// Import Emotion.
 import styled from "@emotion/styled";
 
 /**
@@ -13,9 +12,9 @@ type CircleProps = {
  * Styled circle element for drag points.
  */
 export const Circle = styled.circle<CircleProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
-    :focus {
-        outline: ${(props) => props.outline};
-        outline-offset: 3px;
-    }
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	:focus {
+		outline: ${(props) => props.outline};
+		outline-offset: 3px;
+	}
 `;

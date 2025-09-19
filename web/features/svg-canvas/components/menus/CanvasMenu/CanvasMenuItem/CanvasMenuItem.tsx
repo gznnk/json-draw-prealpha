@@ -1,4 +1,3 @@
-// Import React.
 import type React from "react";
 
 // Imports related to this component.

@@ -1,26 +1,18 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useRef } from "react";
 
-// Import components.
-import { DragLine } from "../../../core/DragLine";
-
-// Import types.
+import type { SegmentData } from "./SegmentTypes";
 import type { Point } from "../../../../types/core/Point";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
-
-// Import utils.
 import { radiansToDegrees } from "../../../../utils/math/common/radiansToDegrees";
 import { createLinearX2yFunction } from "../../../../utils/math/geometry/createLinearX2yFunction";
 import { createLinearY2xFunction } from "../../../../utils/math/geometry/createLinearY2xFunction";
 import { calcRadians } from "../../../../utils/math/points/calcRadians";
 import { rotatePoint } from "../../../../utils/math/points/rotatePoint";
 import { getCursorFromAngle } from "../../../../utils/shapes/common/getCursorFromAngle";
-
-// Import local modules.
-import type { SegmentData } from "./SegmentTypes";
+import { DragLine } from "../../../core/DragLine";
 
 /**
  * Line segment properties

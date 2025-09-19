@@ -1,4 +1,3 @@
-// Import types.
 import type { ConnectType } from "../../../types/core/ConnectType";
 import type { Frame } from "../../../types/core/Frame";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";

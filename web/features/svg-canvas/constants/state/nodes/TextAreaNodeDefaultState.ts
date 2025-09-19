@@ -1,15 +1,7 @@
-// Import types.
 import { TextAreaNodeFeatures } from "../../../types/data/nodes/TextAreaNodeData";
 import type { TextAreaNodeState } from "../../../types/state/nodes/TextAreaNodeState";
-
-// Import constants.
 import { TextAreaNodeDefaultData } from "../../data/nodes/TextAreaNodeDefaultData";
-import {
-	MIN_WIDTH,
-	MIN_HEIGHT,
-} from "../../styling/nodes/TextAreaNodeStyling";
-
-// Import helpers.
+import { MIN_WIDTH, MIN_HEIGHT } from "../../styling/nodes/TextAreaNodeStyling";
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**

@@ -1,6 +1,5 @@
-// Import types.
-import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "./CreateDataType";
+import type { DiagramFeatures } from "../../core/DiagramFeatures";
 
 /**
  * Diagram features for Image shapes.
@@ -15,6 +14,9 @@ export const ImageFeatures = {
 /**
  * Data type for Image component.
  */
-export type ImageData = CreateDataType<typeof ImageFeatures, {
-	base64Data: string;
-}>;
+export type ImageData = CreateDataType<
+	typeof ImageFeatures,
+	{
+		base64Data: string;
+	}
+>;

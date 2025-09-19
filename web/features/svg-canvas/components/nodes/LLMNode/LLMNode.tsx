@@ -1,35 +1,8 @@
-// Import React.
+import { OpenAI } from "openai";
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import other libraries.
-import { OpenAI } from "openai";
-
-// Import types.
-import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
-import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
-import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
-import type { LLMNodeProps } from "../../../types/props/nodes/LLMNodeProps";
-import type { InputState } from "../../../types/state/elements/InputState";
-import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
-
-// Import components.
-import { Frame } from "../../elements/Frame";
-import { Input } from "../../elements/Input";
-import { NodeHeader } from "../../elements/NodeHeader";
-
-// Import icons.
-import { LLM } from "../../icons/LLM";
-
-// Import utils.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
-import { newEventId } from "../../../utils/core/newEventId";
-import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
-
-// Import constants.
 import {
 	BASE_MARGIN,
 	HEADER_HEIGHT,
@@ -45,6 +18,21 @@ import {
 	MIN_HEIGHT,
 	MIN_WIDTH,
 } from "../../../constants/styling/nodes/LLMNodeStyling";
+import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
+import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
+import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
+import type { LLMNodeProps } from "../../../types/props/nodes/LLMNodeProps";
+import type { InputState } from "../../../types/state/elements/InputState";
+import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
+import { newEventId } from "../../../utils/core/newEventId";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
+import { Frame } from "../../elements/Frame";
+import { Input } from "../../elements/Input";
+import { NodeHeader } from "../../elements/NodeHeader";
+import { LLM } from "../../icons/LLM";
 
 /**
  * LLMNode component.
@@ -154,7 +142,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 			setProcessIdList((prev) => [...prev, processId]);
 
 			const openai = new OpenAI({
-				apiKey: apiKey,
+				apiKey,
 				dangerouslyAllowBrowser: true,
 			});
 

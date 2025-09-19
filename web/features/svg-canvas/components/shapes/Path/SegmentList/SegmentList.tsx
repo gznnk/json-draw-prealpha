@@ -1,8 +1,6 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
-// Import types.
 import type { PathPointData } from "../../../../types/data/shapes/PathPointData";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
@@ -10,11 +8,7 @@ import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent
 import type { DiagramPointerEvent } from "../../../../types/events/DiagramPointerEvent";
 import type { Diagram } from "../../../../types/state/core/Diagram";
 import type { PathState } from "../../../../types/state/shapes/PathState";
-
-// Import utils.
 import { newId } from "../../../../utils/shapes/common/newId";
-
-// Imports related to this component.
 import { Segment, type SegmentData } from "../Segment";
 
 /**

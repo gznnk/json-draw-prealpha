@@ -1,29 +1,15 @@
-// Import React.
+import { OpenAI } from "openai";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
-// Import other libraries.
-import { OpenAI } from "openai";
-
-// Import components related to SvgCanvas.
-import { IconContainer } from "../../core/IconContainer";
-import { Rectangle } from "../../shapes/Rectangle";
-
-// Import constants.
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
-
-// Import hooks related to SvgCanvas.
-import { useExecutionChain } from "../../../hooks/useExecutionChain";
-
-// Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils/core/newEventId";
-
-// Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
-
-// Import related to this component.
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { WebSearchNodeProps } from "../../../types/props/nodes/WebSearchNodeProps";
+import { newEventId } from "../../../utils/core/newEventId";
+import { IconContainer } from "../../core/IconContainer";
 import { WebSearch } from "../../icons/WebSearch";
+import { Rectangle } from "../../shapes/Rectangle";
 
 /**
  * WebSearchNode component.
@@ -53,7 +39,7 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 			setProcessIdList((prev) => [...prev, processId]);
 
 			const openai = new OpenAI({
-				apiKey: apiKey,
+				apiKey,
 				dangerouslyAllowBrowser: true,
 			});
 

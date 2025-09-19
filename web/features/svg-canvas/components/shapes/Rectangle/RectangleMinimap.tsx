@@ -1,19 +1,11 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
+import { RectangleElement } from "./RectangleStyled";
 import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
-
-// Import components.
-import { Textable } from "../../core/Textable";
-
-// Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-
-// Import local module files.
-import { RectangleElement } from "./RectangleStyled";
+import { Textable } from "../../core/Textable";
 
 /**
  * Rectangle minimap component - lightweight version without outlines, controls, and labels.

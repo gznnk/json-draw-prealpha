@@ -1,7 +1,4 @@
-// Import types.
 import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
 import { calcItemableOrientedBox } from "../../utils/core/calcItemableOrientedBox";
 import { isFrame } from "../../utils/validation/isFrame";
 import { isItemableState } from "../../utils/validation/isItemableState";

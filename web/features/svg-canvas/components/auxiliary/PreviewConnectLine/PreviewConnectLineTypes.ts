@@ -1,4 +1,3 @@
-// Import types.
 import type { PathState } from "../../../types/state/shapes/PathState";
 
 /**

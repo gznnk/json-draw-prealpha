@@ -1,15 +1,10 @@
-// Import types.
+import { DiagramRegistry } from "../../registry";
 import type { DiagramData } from "../../types/data/core/DiagramData";
 import type { Diagram } from "../../types/state/core/Diagram";
-import type { SvgCanvasData } from "../types/SvgCanvasData";
-import type { SvgCanvasState } from "../types/SvgCanvasState";
-
-// Import resistry.
-import { DiagramRegistry } from "../../registry";
-
-// Import utils.
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { isItemableState } from "../../utils/validation/isItemableState";
+import type { SvgCanvasData } from "../types/SvgCanvasData";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 
 /**
  * Helper function to recursively convert state items to data format.

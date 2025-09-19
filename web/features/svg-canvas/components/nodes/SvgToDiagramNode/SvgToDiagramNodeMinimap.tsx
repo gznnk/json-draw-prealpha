@@ -1,18 +1,16 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { SvgToDiagramNodeProps } from "../../../types/props/nodes/SvgToDiagramNodeProps";
-
-// Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
 import { Gachapon } from "../../icons/Gachapon";
 
 /**
  * SvgToDiagramNode minimap component - lightweight version without outlines, controls, and labels.
  */
-const SvgToDiagramNodeMinimapComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
+const SvgToDiagramNodeMinimapComponent: React.FC<SvgToDiagramNodeProps> = (
+	props,
+) => {
 	return (
 		<IconContainer
 			x={props.x}

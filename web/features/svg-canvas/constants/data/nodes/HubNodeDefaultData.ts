@@ -1,8 +1,5 @@
-// Import types.
 import type { HubNodeData } from "../../../types/data/nodes/HubNodeData";
 import { HubNodeFeatures } from "../../../types/data/nodes/HubNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

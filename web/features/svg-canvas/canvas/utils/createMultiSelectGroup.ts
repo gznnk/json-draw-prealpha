@@ -1,12 +1,7 @@
-// Import types.
 import type { Diagram } from "../../types/state/core/Diagram";
 import type { GroupState } from "../../types/state/shapes/GroupState";
-
-// Import constants.
-import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
-
-// Import utils.
 import { calcUnrotatedItemableBoundingBox } from "../../utils/core/calcUnrotatedItemableBoundingBox";
+import { MULTI_SELECT_GROUP } from "../SvgCanvasConstants";
 
 /**
  * Creates a multi-select group from a list of selected items.

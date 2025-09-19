@@ -1,12 +1,7 @@
-// Import types.
-import type { RectangleState } from "../../../types/state/shapes/RectangleState";
-import { RectangleFeatures } from "../../../types/data/shapes/RectangleData";
-
-// Import constants.
-import { RectangleDefaultData } from "../../data/shapes/RectangleDefaultData";
-
-// Import helpers.
 import { CreateDefaultState } from "./CreateDefaultState";
+import { RectangleFeatures } from "../../../types/data/shapes/RectangleData";
+import type { RectangleState } from "../../../types/state/shapes/RectangleState";
+import { RectangleDefaultData } from "../../data/shapes/RectangleDefaultData";
 
 /**
  * Default rectangle state template.

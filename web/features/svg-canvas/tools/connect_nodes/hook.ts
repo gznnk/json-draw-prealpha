@@ -1,23 +1,13 @@
-// Import React.
 import { useCallback } from "react";
 
-// Import types.
-import type { ConnectNodesEvent } from "../../types/events/ConnectNodesEvent";
-
-// Import constants.
-import { EVENT_NAME_CONNECT_NODES } from "../../constants/core/EventNames";
-
-// Import utils.
-import { newEventId } from "../../utils/core/newEventId";
-
-// Import context.
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
-
-// Import shared.
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client";
+import { EVENT_NAME_CONNECT_NODES } from "../../constants/core/EventNames";
+import type { ConnectNodesEvent } from "../../types/events/ConnectNodesEvent";
+import { newEventId } from "../../utils/core/newEventId";
 
 /**
  * React hook to dispatch ConnectNodesEvent using the shared event bus.

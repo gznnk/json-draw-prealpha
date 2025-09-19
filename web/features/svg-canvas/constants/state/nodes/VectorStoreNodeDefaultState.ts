@@ -1,11 +1,6 @@
-// Import types.
 import { VectorStoreNodeFeatures } from "../../../types/data/nodes/VectorStoreNodeData";
 import type { VectorStoreNodeState } from "../../../types/state/nodes/VectorStoreNodeState";
-
-// Import constants.
 import { VectorStoreNodeDefaultData } from "../../data/nodes/VectorStoreNodeDefaultData";
-
-// Import helpers.
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**

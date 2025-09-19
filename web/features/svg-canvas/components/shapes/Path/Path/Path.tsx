@@ -1,17 +1,14 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import types.
+import type { PathMode } from "./PathTypes";
 import type { PathData } from "../../../../types/data/shapes/PathData";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { PathProps } from "../../../../types/props/shapes/PathProps";
 import type { PathState } from "../../../../types/state/shapes/PathState";
-import type { PathMode } from "./PathTypes";
-
-// Import components.
+import { mergeProps } from "../../../../utils/core/mergeProps";
 import { Outline } from "../../../core/Outline";
 import { PositionLabel } from "../../../core/PositionLabel";
 import { Transformative } from "../../../core/Transformative";
@@ -19,14 +16,9 @@ import { NewVertexList } from "../NewVertexList";
 import { PathPoint } from "../PathPoint";
 import { SegmentList } from "../SegmentList";
 import { PathElement } from "./PathStyled";
-
-// Import hooks.
 import { useClick } from "../../../../hooks/useClick";
 import { useDrag } from "../../../../hooks/useDrag";
 import { useSelect } from "../../../../hooks/useSelect";
-
-// Import utils.
-import { mergeProps } from "../../../../utils/core/mergeProps";
 import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
 import {

@@ -1,11 +1,8 @@
-// Import types.
+import { mapDiagramDataToState } from "./mapDiagramDataToState";
 import type { DiagramData } from "../../types/data/core/DiagramData";
 import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
 import { isItemableData } from "../../utils/validation/isItemableData";
 import { isItemableState } from "../../utils/validation/isItemableState";
-import { mapDiagramDataToState } from "./mapDiagramDataToState";
 
 /**
  * Converts a list of DiagramData items to Diagram state format.

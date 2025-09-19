@@ -73,11 +73,13 @@ export const AI_AGENT_TOOLS = [
 				},
 				x: {
 					type: "number",
-					description: "The X coordinate of the center of the node on the canvas.",
+					description:
+						"The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the center of the node on the canvas.",
+					description:
+						"The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
@@ -94,11 +96,13 @@ export const AI_AGENT_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the center of the node on the canvas.",
+					description:
+						"The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the center of the node on the canvas.",
+					description:
+						"The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
@@ -115,11 +119,13 @@ export const AI_AGENT_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the center of the node on the canvas.",
+					description:
+						"The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the center of the node on the canvas.",
+					description:
+						"The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,
@@ -136,11 +142,13 @@ export const AI_AGENT_TOOLS = [
 			properties: {
 				x: {
 					type: "number",
-					description: "The X coordinate of the center of the node on the canvas.",
+					description:
+						"The X coordinate of the center of the node on the canvas.",
 				},
 				y: {
 					type: "number",
-					description: "The Y coordinate of the center of the node on the canvas.",
+					description:
+						"The Y coordinate of the center of the node on the canvas.",
 				},
 			},
 			additionalProperties: false,

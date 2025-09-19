@@ -1,11 +1,7 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import components.
 import { ConnectPoint } from "../ConnectPoint";
-
-// Import types.
 import type { ConnectPointsProps } from "./ConnectPointsTypes";
 
 /**

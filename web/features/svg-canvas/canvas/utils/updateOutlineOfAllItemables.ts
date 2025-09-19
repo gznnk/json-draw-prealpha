@@ -1,8 +1,5 @@
-// Import types.
-import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
 import { updateOutlineOfItemable } from "./updateOutlineOfItemable";
+import type { Diagram } from "../../types/state/core/Diagram";
 
 /**
  * Update the outline of all itemable diagrams in the list.

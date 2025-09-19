@@ -1,18 +1,10 @@
-// Import React.
 import type React from "react";
 import { memo, useEffect, useRef } from "react";
 
-// import features.
-import { renderMarkdown } from "../../../../../../shared/markdown";
-
-// Import types.
-import type { TextableState } from "../../../../types/state/core/TextableState";
-
-// Import utils.
-import { negativeToZero } from "../../../../utils/math/common/negativeToZero";
-
-// Import local module files.
 import { ForeignObjectElement, Text, TextWrapper } from "./TextableStyled";
+import { renderMarkdown } from "../../../../../../shared/markdown";
+import type { TextableState } from "../../../../types/state/core/TextableState";
+import { negativeToZero } from "../../../../utils/math/common/negativeToZero";
 
 /**
  * Props for rendering editable text inside the SVG shape.

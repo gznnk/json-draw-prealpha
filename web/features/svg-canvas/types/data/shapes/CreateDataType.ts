@@ -1,4 +1,5 @@
-// Import types.
+import type { ConnectableData } from "./ConnectableData";
+import type { Prettify } from "../../../../../shared/utility-types";
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CornerRoundableData } from "../core/CornerRoundableData";
 import type { DiagramBaseData } from "../core/DiagramBaseData";
@@ -8,10 +9,6 @@ import type { ItemableData } from "../core/ItemableData";
 import type { StrokableData } from "../core/StrokableData";
 import type { TextableData } from "../core/TextableData";
 import type { TransformativeData } from "../core/TransformativeData";
-import type { ConnectableData } from "./ConnectableData";
-
-// Import shared modules.
-import type { Prettify } from "../../../../../shared/utility-types";
 
 /**
  * Generic type creator for diagram data types.

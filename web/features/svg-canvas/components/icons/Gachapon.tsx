@@ -1,5 +1,4 @@
-// Import React.
-import { memo } from "react";
+import React, { memo } from "react";
 
 /**
  * Props for Gachapon icon
@@ -11,8 +10,13 @@ type GachaponProps = {
 
 /**
  * Gachapon machine icon component
+ *
+ * @param props - Props for the icon
+ * @param props.width - Icon width
+ * @param props.height - Icon height
+ * @returns SVG element for gachapon machine icon
  */
-export const Gachapon = memo<GachaponProps>(({ width = 80, height = 80 }) => {
+const GachaponComponent: React.FC<GachaponProps> = ({ width = 80, height = 80 }) => {
 	return (
 		<svg width={width} height={height} viewBox="0 0 80 80">
 			<title>Gachapon</title>
@@ -25,4 +29,6 @@ export const Gachapon = memo<GachaponProps>(({ width = 80, height = 80 }) => {
 			<polygon points="28,45 38,28 48,45" fill="#66FF66" />
 		</svg>
 	);
-});
+};
+
+export const Gachapon = memo(GachaponComponent);

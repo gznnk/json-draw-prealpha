@@ -1,26 +1,14 @@
-// Import React.
 import type React from "react";
 import { memo, useState } from "react";
 
-// Import components related to SvgCanvas.
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useEventBus } from "../../../context/EventBusContext";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
+import { useWebDesignTool } from "../../../tools/web_design";
+import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
 import { IconContainer } from "../../core/IconContainer";
 import { PageDesign } from "../../icons/PageDesign";
 import { Rectangle } from "../../shapes/Rectangle";
-
-// Import constants.
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
-
-// Import hooks related to SvgCanvas.
-import { useExecutionChain } from "../../../hooks/useExecutionChain";
-
-// Import tools.
-import { useWebDesignTool } from "../../../tools/web_design";
-
-// Import context.
-import { useEventBus } from "../../../context/EventBusContext";
-
-// Import related to this component.
-import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
 
 /**
  * PageDesignNode component.

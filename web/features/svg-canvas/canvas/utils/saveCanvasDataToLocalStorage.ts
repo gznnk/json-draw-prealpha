@@ -1,5 +1,5 @@
-import type { SvgCanvasState } from "../types/SvgCanvasState";
 import { clearSelectionRecursively } from "./clearSelectionRecursively";
+import type { SvgCanvasState } from "../types/SvgCanvasState";
 
 /**
  * Save the current canvas state to local storage.

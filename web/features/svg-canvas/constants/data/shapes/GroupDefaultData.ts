@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { GroupData } from "../../../types/data/shapes/GroupData";
 import { GroupFeatures } from "../../../types/data/shapes/GroupData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default group data template.

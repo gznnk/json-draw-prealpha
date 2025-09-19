@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 

@@ -1,31 +1,21 @@
-// Import React.
 import type React from "react";
 import { memo, useMemo, useRef } from "react";
 
-// Import types.
-import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
-
-// Import components.
-import { Outline } from "../../core/Outline";
-import { PositionLabel } from "../../core/PositionLabel";
-import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
-import { ConnectPoints } from "../ConnectPoints";
-
-// Import hooks.
+import { EllipseElement } from "./EllipseStyled";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
-
-// Import utils.
+import type { EllipseProps } from "../../../types/props/shapes/EllipseProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-
-// Import local module files.
-import { EllipseElement } from "./EllipseStyled";
+import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
+import { Textable } from "../../core/Textable";
+import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../ConnectPoints";
 
 /**
  * Ellipse component

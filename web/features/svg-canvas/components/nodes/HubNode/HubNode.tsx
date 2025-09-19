@@ -1,20 +1,15 @@
-// Import React.
 import type React from "react";
 import { memo, useState } from "react";
-
 // Import components related to SvgCanvas.
-import { Ellipse } from "../../shapes/Ellipse";
-import { Hub } from "../../icons/Hub";
-import { IconContainer } from "../../core/IconContainer";
 
-// Import constants.
 import { EllipseDefaultState } from "../../../constants/state/shapes/EllipseDefaultState";
-
 // Import hooks related to SvgCanvas.
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
-
 // Imports related to this component.
 import type { HubNodeProps } from "../../../types/props/nodes/HubNodeProps";
+import { IconContainer } from "../../core/IconContainer";
+import { Hub } from "../../icons/Hub";
+import { Ellipse } from "../../shapes/Ellipse";
 
 const HubNodeComponent: React.FC<HubNodeProps> = (props) => {
 	const [isFlashing, setIsFlashing] = useState(false);

@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
@@ -17,6 +16,9 @@ export const VectorStoreNodeFeatures = {
 /**
  * Type of the VectorStoreNode data.
  */
-export type VectorStoreNodeData = CreateDataType<typeof VectorStoreNodeFeatures, {
-	type: "VectorStoreNode";
-}>;
+export type VectorStoreNodeData = CreateDataType<
+	typeof VectorStoreNodeFeatures,
+	{
+		type: "VectorStoreNode";
+	}
+>;

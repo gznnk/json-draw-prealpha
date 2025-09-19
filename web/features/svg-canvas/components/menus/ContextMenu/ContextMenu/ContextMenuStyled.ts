@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -13,18 +12,20 @@ type ContextMenuDivProps = {
  * Style for the context menu.
  */
 export const ContextMenuDiv = styled.div<ContextMenuDivProps>`
-    position: absolute;
-    top: ${(props) => props.y}px;
-    left: ${(props) => props.x}px;
-    min-width: 200px;
-    padding: 4px 0;
-    background-color: #ffffff;
-    border: 1px solid #d9d9d9;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    pointer-events: auto;
-    user-select: none;
-    z-index: 1050;
+	position: absolute;
+	top: ${(props) => props.y}px;
+	left: ${(props) => props.x}px;
+	min-width: 200px;
+	padding: 4px 0;
+	background-color: #ffffff;
+	border: 1px solid #d9d9d9;
+	border-radius: 6px;
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.06),
+		0 1px 2px rgba(0, 0, 0, 0.04);
+	pointer-events: auto;
+	user-select: none;
+	z-index: 1050;
 `;
 
 /**

@@ -1,8 +1,5 @@
-// Import types.
 import type { TextAreaNodeData } from "../../../types/data/nodes/TextAreaNodeData";
 import { TextAreaNodeFeatures } from "../../../types/data/nodes/TextAreaNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

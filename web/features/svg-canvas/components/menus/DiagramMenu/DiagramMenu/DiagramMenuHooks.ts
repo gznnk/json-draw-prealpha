@@ -1,36 +1,30 @@
-// Import React.
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// Import types.
-import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
-import type { CornerRoundableData } from "../../../../types/data/core/CornerRoundableData";
-import type { FillableData } from "../../../../types/data/core/FillableData";
-import type { StrokableData } from "../../../../types/data/core/StrokableData";
-import type { TextableData } from "../../../../types/data/core/TextableData";
-
-import type { DiagramStyleChangeEvent } from "../../../../types/events/DiagramStyleChangeEvent";
-import type { Diagram } from "../../../../types/state/core/Diagram";
-
-// Import utils.
-import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
-import { newEventId } from "../../../../utils/core/newEventId";
-import { isItemableState } from "../../../../utils/validation/isItemableState";
-import { isTextableState } from "../../../../utils/validation/isTextableState";
-import { isTransformativeState } from "../../../../utils/validation/isTransformativeState";
-
-// Imports related to this component.
-import { InteractionState } from "../../../../canvas/types/InteractionState";
+import type {
+	DiagramMenuProps,
+	DiagramMenuStateMap,
+	DiagramMenuType,
+} from "./DiagramMenuTypes";
 import {
 	findFirstCornerRoundableRecursive,
 	findFirstFillableRecursive,
 	findFirstStrokableRecursive,
 	findFirstTextableRecursive,
 } from "./DiagramMenuUtils";
-import type {
-	DiagramMenuProps,
-	DiagramMenuStateMap,
-	DiagramMenuType,
-} from "./DiagramMenuTypes";
+import { InteractionState } from "../../../../canvas/types/InteractionState";
+import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
+import type { CornerRoundableData } from "../../../../types/data/core/CornerRoundableData";
+import type { FillableData } from "../../../../types/data/core/FillableData";
+import type { StrokableData } from "../../../../types/data/core/StrokableData";
+import type { TextableData } from "../../../../types/data/core/TextableData";
+import type { DiagramStyleChangeEvent } from "../../../../types/events/DiagramStyleChangeEvent";
+import type { Diagram } from "../../../../types/state/core/Diagram";
+import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
+import { newEventId } from "../../../../utils/core/newEventId";
+import { isItemableState } from "../../../../utils/validation/isItemableState";
+import { isTextableState } from "../../../../utils/validation/isTextableState";
+import { isTransformativeState } from "../../../../utils/validation/isTransformativeState";
+// Imports related to this component.
 
 export const useDiagramMenu = (canvasProps: SvgCanvasProps) => {
 	// Extract properties from canvasProps.

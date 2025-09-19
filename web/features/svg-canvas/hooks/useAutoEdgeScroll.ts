@@ -1,16 +1,10 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import constants.
 import { AUTO_SCROLL_INTERVAL_MS } from "../constants/core/Constants";
-
-// Import types.
-import type { SvgViewport } from "../types/core/SvgViewport";
 import type { Point } from "../types/core/Point";
-
-// Import utils.
-import { detectEdgeProximity } from "../utils/math/geometry/detectEdgeProximity";
+import type { SvgViewport } from "../types/core/SvgViewport";
 import { calculateScrollDelta } from "../utils/math/geometry/calculateScrollDelta";
+import { detectEdgeProximity } from "../utils/math/geometry/detectEdgeProximity";
 
 /**
  * Type for edge scroll state.

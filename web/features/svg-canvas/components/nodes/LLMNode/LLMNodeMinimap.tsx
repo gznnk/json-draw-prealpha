@@ -1,11 +1,7 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { LLMNodeProps } from "../../../types/props/nodes/LLMNodeProps";
-
-// Import utils.
 import { negativeToZero } from "../../../utils/math/common/negativeToZero";
 
 /**

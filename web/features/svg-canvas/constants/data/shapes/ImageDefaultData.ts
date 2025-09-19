@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { ImageData } from "../../../types/data/shapes/ImageData";
 import { ImageFeatures } from "../../../types/data/shapes/ImageData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default image data template.

@@ -1,13 +1,12 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback } from "react";
 
 // Imports related to this component.
+import { ContextMenuItemDiv } from "./ContextMenuItemStyled";
 import type {
 	ContextMenuStateMap,
 	ContextMenuType,
 } from "../ContextMenu/ContextMenuTypes";
-import { ContextMenuItemDiv } from "./ContextMenuItemStyled";
 
 /**
  * Props for the ContextMenuItem component.

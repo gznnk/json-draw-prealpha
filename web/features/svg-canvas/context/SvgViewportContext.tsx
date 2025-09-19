@@ -1,7 +1,5 @@
-// Import React.
 import { createContext, useContext } from "react";
 
-// Import types.
 import type { SvgViewport } from "../types/core/SvgViewport";
 
 /**

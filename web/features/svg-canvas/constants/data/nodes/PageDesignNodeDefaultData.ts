@@ -1,8 +1,5 @@
-// Import types.
 import type { PageDesignNodeData } from "../../../types/data/nodes/PageDesignNodeData";
 import { PageDesignNodeFeatures } from "../../../types/data/nodes/PageDesignNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

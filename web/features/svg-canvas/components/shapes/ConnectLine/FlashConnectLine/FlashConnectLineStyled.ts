@@ -1,6 +1,5 @@
-// Import Emotion for styling.
-import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
+import styled from "@emotion/styled";
 
 /* Temporarily increase brightness to make it appear "flashing" */
 const flashBrightness = keyframes`
@@ -10,9 +9,9 @@ const flashBrightness = keyframes`
 `;
 
 export const FlashGroup = styled.g<{ $flash: boolean }>`
-    ${({ $flash }) =>
-			$flash &&
-			css`
-                animation: ${flashBrightness} 0.5s ease-out 1 forwards;
-            `}
+	${({ $flash }) =>
+		$flash &&
+		css`
+			animation: ${flashBrightness} 0.5s ease-out 1 forwards;
+		`}
 `;

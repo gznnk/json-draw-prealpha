@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -7,7 +6,7 @@ import styled from "@emotion/styled";
 export const MainContainerGroup = styled.g`
 	cursor: move;
 	pointer-events: none;
-	
+
 	* {
 		pointer-events: none;
 	}

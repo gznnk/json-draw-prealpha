@@ -1,13 +1,9 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useRef } from "react";
 
-// Import types.
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { ConnectLineProps } from "../../../../types/props/shapes/ConnectLineProps";
 import type { ConnectLineState } from "../../../../types/state/shapes/ConnectLineState";
-
-// Import components related to SvgCanvas.
 import { Path } from "../../Path";
 
 /**

@@ -1,6 +1,6 @@
+import { canvasStateToHistory } from "./canvasStateToHistory";
 import { newEventId } from "../../utils/core/newEventId";
 import type { SvgCanvasState } from "../types/SvgCanvasState";
-import { canvasStateToHistory } from "./canvasStateToHistory";
 
 /**
  * Load canvas data from local storage.

@@ -1,14 +1,8 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
-import type { ImageProps } from "../../../types/props/shapes/ImageProps";
-
-// Import components.
 import { ImageElement } from "./ImageStyled";
-
-// Import utils.
+import type { ImageProps } from "../../../types/props/shapes/ImageProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 

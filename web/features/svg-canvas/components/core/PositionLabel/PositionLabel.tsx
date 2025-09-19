@@ -1,15 +1,9 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { RectangleVertices } from "../../../types/core/RectangleVertices";
-
-// Import components.
 import { calcBottomLabelPosition } from "../BottomLabel";
 import { StyledText } from "./PositionLabelStyled";
-
-// Import utils.
 import { calcRectangleVertices } from "../../../utils/math/geometry/calcRectangleVertices";
 
 /**

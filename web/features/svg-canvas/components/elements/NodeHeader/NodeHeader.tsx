@@ -1,24 +1,14 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
-import type { NodeHeaderProps } from "../../../types/props/elements/NodeHeaderProps";
-
-// Import constants.
+import { ICON_TEXT_MARGIN } from "./NodeHeaderConstants";
+import { IconWrapper, MainContainerGroup } from "./NodeHeaderStyled";
 import { NodeHeaderDefaultData } from "../../../constants/data/elements/NodeHeaderDefaultData";
-
-// Import components.
-import { Input } from "../Input";
-
-// Import utils.
+import type { NodeHeaderProps } from "../../../types/props/elements/NodeHeaderProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-
-// Import local modules.
-import { ICON_TEXT_MARGIN } from "./NodeHeaderConstants";
-import { IconWrapper, MainContainerGroup } from "./NodeHeaderStyled";
+import { Input } from "../Input";
 
 /**
  * NodeHeader component - an icon with text in a row layout

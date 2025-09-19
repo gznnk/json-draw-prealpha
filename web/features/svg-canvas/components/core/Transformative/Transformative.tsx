@@ -1,24 +1,15 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import types.
+import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
 import type { DiagramType } from "../../../types/core/DiagramType";
 import type { Point } from "../../../types/core/Point";
 import type { TransformationType } from "../../../types/core/TransformationType";
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import type { TransformativeProps } from "../../../types/props/core/TransformativeProps";
 import type { TransformativeState } from "../../../types/state/core/TransformativeState";
-
-// Import components.
-import { BottomLabel } from "../BottomLabel";
-import { DragLine } from "../DragLine";
-import { DragPoint } from "../DragPoint";
-import { RotatePoint } from "../RotatePoint";
-
-// Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { nanToZero } from "../../../utils/math/common/nanToZero";
 import { radiansToDegrees } from "../../../utils/math/common/radiansToDegrees";
@@ -31,9 +22,10 @@ import { calcRadians } from "../../../utils/math/points/calcRadians";
 import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { efficientInverseAffineTransformation } from "../../../utils/math/transform/efficientInverseAffineTransformation";
 import { getCursorFromAngle } from "../../../utils/shapes/common/getCursorFromAngle";
-
-// Import local module files.
-import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
+import { BottomLabel } from "../BottomLabel";
+import { DragLine } from "../DragLine";
+import { DragPoint } from "../DragPoint";
+import { RotatePoint } from "../RotatePoint";
 
 /**
  * Props for the Transformative component.

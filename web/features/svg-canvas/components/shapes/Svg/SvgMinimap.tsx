@@ -1,19 +1,11 @@
-// Import React.
+import DOMPurify from "dompurify";
 import type React from "react";
 import { memo, useEffect, useRef } from "react";
 
-// Import other libraries.
-import DOMPurify from "dompurify";
-
-// Import types.
-import type { SvgProps } from "../../../types/props/shapes/SvgProps";
-
-// Import components.
 import { SvgGroupElement } from "./SvgStyled";
-
-// Import utils.
-import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import type { SvgProps } from "../../../types/props/shapes/SvgProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
  * Svg minimap component - lightweight version without outlines, controls, and labels.

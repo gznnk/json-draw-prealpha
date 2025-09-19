@@ -1,32 +1,20 @@
-// Import React.
 import { useCallback } from "react";
 
-// Import types.
-import type { GroupShapesEvent } from "../../types/events/GroupShapesEvent";
-
-// Import constants.
-import { EVENT_NAME_GROUP_SHAPES } from "../../constants/core/EventNames";
-
-// Import utils.
-import { newEventId } from "../../utils/core/newEventId";
-import { newId } from "../../utils/shapes/common/newId";
-
-// Import context.
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
-
-// Import shared.
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client";
+import { EVENT_NAME_GROUP_SHAPES } from "../../constants/core/EventNames";
+import type { GroupShapesEvent } from "../../types/events/GroupShapesEvent";
+import { newEventId } from "../../utils/core/newEventId";
+import { newId } from "../../utils/shapes/common/newId";
 
 /**
  * React hook to dispatch GroupShapesEvent using the shared event bus.
  * Returns a memoized function.
  */
-export const useGroupShapesTool = (
-	eventBus: EventBus,
-): FunctionCallHandler => {
+export const useGroupShapesTool = (eventBus: EventBus): FunctionCallHandler => {
 	return useCallback(
 		(functionCall: FunctionCallInfo) => {
 			const args = functionCall.arguments as {
@@ -44,7 +32,7 @@ export const useGroupShapesTool = (
 				const event = {
 					eventId: newEventId(),
 					shapeIds: args.shapeIds,
-					groupId: groupId,
+					groupId,
 					name: args.name,
 					description: args.description,
 				} as GroupShapesEvent;
@@ -57,13 +45,14 @@ export const useGroupShapesTool = (
 				// Return the grouping data
 				return {
 					shapeIds: args.shapeIds,
-					groupId: groupId,
+					groupId,
 					success: true,
 				};
 			}
 
 			return {
-				error: "Invalid arguments. shapeIds must be an array of at least 2 string IDs.",
+				error:
+					"Invalid arguments. shapeIds must be an array of at least 2 string IDs.",
 			};
 		},
 		[eventBus],

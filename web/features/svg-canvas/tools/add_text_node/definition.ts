@@ -1,7 +1,4 @@
-// Import libraries.
 import type { ToolDefinition } from "../../../../shared/llm-client/types";
-
-
 
 /**
  * Description text for the add_text_node tool.

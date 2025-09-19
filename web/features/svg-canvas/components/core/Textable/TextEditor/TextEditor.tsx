@@ -1,15 +1,11 @@
-// Import React.
 import type React from "react";
 import { memo, useEffect, useRef } from "react";
 
-// Import utils.
+import { Input, TextArea } from "./TextEditorStyled";
+import type { TextEditorProps } from "./TextEditorTypes";
 import { newEventId } from "../../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../../utils/shapes/common/createSvgTransform";
-
-// Import local module files.
-import { Input, TextArea } from "./TextEditorStyled";
-import type { TextEditorProps } from "./TextEditorTypes";
 
 /**
  * TextEditor component.

@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import { LLMClientFactory } from "../../../../shared/llm-client";
 import type {
 	FunctionCallHandler,
@@ -10,17 +12,16 @@ import {
 	useAddImageGenNodeTool,
 } from "../add_image_gen_node";
 import { llmToolDefinition, useAddLLMNodeTool } from "../add_llm_node";
-import { textNodeToolDefinition, useAddTextNodeTool } from "../add_text_node";
 import {
 	svgToCanvasToolDefinition,
 	useAddSvgToCanvasNodeTool,
 } from "../add_svg_to_canvas_node";
+import { textNodeToolDefinition, useAddTextNodeTool } from "../add_text_node";
 import { connectNodesToolDefinition } from "../connect_nodes/definition";
 import { useConnectNodesTool } from "../connect_nodes/hook";
 import { groupShapesToolDefinition } from "../group_shapes/definition";
 import { useGroupShapesTool } from "../group_shapes/hook";
 import AI_AGENT_INSTRUCTIONS from "./prompts/agent-instructions.md?raw";
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
 
 /**
  * Workflow agent handler function (hook版)
@@ -82,7 +83,6 @@ export const useWorkflowAgentHandler = (
 						content: outputContent || "Workflow generation completed.",
 					};
 				} catch (error) {
-					// eslint-disable-next-line no-console
 					console.error("Error in workflow agent:", error);
 					return {
 						success: false,

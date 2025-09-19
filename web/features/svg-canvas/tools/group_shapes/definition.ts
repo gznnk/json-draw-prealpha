@@ -1,4 +1,3 @@
-// Import libraries.
 import type { ToolDefinition } from "../../../../shared/llm-client/types";
 
 /**

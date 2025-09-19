@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
@@ -7,7 +8,9 @@ import type {
 import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
 import { createEllipseState } from "../../utils/shapes/ellipse/createEllipseState";
 
-export const useAddCircleShapeTool = (eventBus: EventBus): FunctionCallHandler => {
+export const useAddCircleShapeTool = (
+	eventBus: EventBus,
+): FunctionCallHandler => {
 	const addDiagram = useAddDiagramWithBus(eventBus);
 	return useCallback(
 		(functionCall: FunctionCallInfo) => {
@@ -21,7 +24,7 @@ export const useAddCircleShapeTool = (eventBus: EventBus): FunctionCallHandler =
 				name?: string;
 				description?: string;
 			};
-			
+
 			if (
 				typeof args.cx === "number" &&
 				typeof args.cy === "number" &&
@@ -42,7 +45,7 @@ export const useAddCircleShapeTool = (eventBus: EventBus): FunctionCallHandler =
 					name: args.name,
 					description: args.description,
 				});
-				
+
 				addDiagram(data);
 				return {
 					id: data.id,

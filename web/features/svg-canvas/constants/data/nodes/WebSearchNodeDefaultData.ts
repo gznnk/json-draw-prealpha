@@ -1,8 +1,5 @@
-// Import types.
 import type { WebSearchNodeData } from "../../../types/data/nodes/WebSearchNodeData";
 import { WebSearchNodeFeatures } from "../../../types/data/nodes/WebSearchNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

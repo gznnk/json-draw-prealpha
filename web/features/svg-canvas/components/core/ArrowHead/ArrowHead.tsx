@@ -1,15 +1,9 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
-import type { ArrowHeadType } from "../../../types/core/ArrowHeadType";
-
-// Import utils.
-import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-
-// Import local module files.
 import { ARROW_HEAD_SIZE } from "./ArrowHeadConstants";
+import type { ArrowHeadType } from "../../../types/core/ArrowHeadType";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
 /**
  * Props for ArrowHead component.

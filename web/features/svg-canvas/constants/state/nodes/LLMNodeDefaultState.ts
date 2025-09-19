@@ -1,15 +1,7 @@
-// Import types.
 import { LLMNodeFeatures } from "../../../types/data/nodes/LLMNodeData";
 import type { LLMNodeState } from "../../../types/state/nodes/LLMNodeState";
-
-// Import constants.
 import { LLMNodeDefaultData } from "../../data/nodes/LLMNodeDefaultData";
-import {
-	MIN_WIDTH,
-	MIN_HEIGHT,
-} from "../../styling/nodes/LLMNodeStyling";
-
-// Import helpers.
+import { MIN_WIDTH, MIN_HEIGHT } from "../../styling/nodes/LLMNodeStyling";
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**

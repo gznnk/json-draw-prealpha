@@ -1,26 +1,25 @@
 import { useMemo } from "react";
+
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
+import { LLMClientFactory } from "../../../../shared/llm-client";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-
-// Import tool definitions and handlers
-import { rectangleShapeToolDefinition } from "../add_rectangle_shape";
-import { circleShapeToolDefinition } from "../add_circle_shape";
-import { textElementToolDefinition } from "../add_text_element";
-import { groupShapesToolDefinition } from "../group_shapes";
-
-import { useAddRectangleShapeTool } from "../add_rectangle_shape";
-import { useAddCircleShapeTool } from "../add_circle_shape";
-import { useAddTextElementTool } from "../add_text_element";
-import { useGroupShapesTool } from "../group_shapes";
-
-// Import LLM client
-import { LLMClientFactory } from "../../../../shared/llm-client";
 import { OpenAiKeyManager } from "../../../../utils/KeyManager";
-
-// Import instructions
+import {
+	circleShapeToolDefinition,
+	useAddCircleShapeTool,
+} from "../add_circle_shape";
+import {
+	rectangleShapeToolDefinition,
+	useAddRectangleShapeTool,
+} from "../add_rectangle_shape";
+import {
+	textElementToolDefinition,
+	useAddTextElementTool,
+} from "../add_text_element";
+import { groupShapesToolDefinition, useGroupShapesTool } from "../group_shapes";
 import WEB_DESIGN_INSTRUCTIONS from "./prompts/instructions.md?raw";
 
 export const useWebDesignTool = (eventBus: EventBus): FunctionCallHandler => {
@@ -78,7 +77,6 @@ export const useWebDesignTool = (eventBus: EventBus): FunctionCallHandler => {
 						content: outputContent || "Web design creation completed.",
 					};
 				} catch (error) {
-					// eslint-disable-next-line no-console
 					console.error("Error in web design agent:", error);
 					return {
 						success: false,

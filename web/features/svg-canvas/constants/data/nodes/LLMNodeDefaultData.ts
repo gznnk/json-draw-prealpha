@@ -1,8 +1,5 @@
-// Import types.
 import type { LLMNodeData } from "../../../types/data/nodes/LLMNodeData";
 import { LLMNodeFeatures } from "../../../types/data/nodes/LLMNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

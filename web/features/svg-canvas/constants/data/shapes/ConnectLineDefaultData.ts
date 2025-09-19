@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { ConnectLineData } from "../../../types/data/shapes/ConnectLineData";
 import { ConnectLineFeatures } from "../../../types/data/shapes/ConnectLineData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default connect line data template.

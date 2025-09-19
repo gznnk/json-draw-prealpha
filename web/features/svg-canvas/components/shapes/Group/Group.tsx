@@ -1,13 +1,7 @@
-// Import React.
 import React, { memo } from "react";
 
-// Import resistry.
 import { DiagramRegistry } from "../../../registry";
-
-// Import types.
 import type { GroupProps } from "../../../types/props/shapes/GroupProps";
-
-// Import components.
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";

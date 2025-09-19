@@ -1,16 +1,10 @@
-// Import React.
 import type React from "react";
 import { useRef } from "react";
 
-// Import types.
-import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
-
-// Import utils.
-import { newEventId } from "../utils/core/newEventId";
-import { getSvgPoint } from "../utils/core/getSvgPoint";
-
-// Import constants.
 import { DRAG_DEAD_ZONE } from "../constants/core/Constants";
+import type { DiagramClickEvent } from "../types/events/DiagramClickEvent";
+import { getSvgPoint } from "../utils/core/getSvgPoint";
+import { newEventId } from "../utils/core/newEventId";
 
 /**
  * Type definition for click props

@@ -1,10 +1,6 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { FileDropEvent } from "../types/events/FileDropEvent";
-
-// Import utils.
 import { newEventId } from "../utils/core/newEventId";
 
 /**

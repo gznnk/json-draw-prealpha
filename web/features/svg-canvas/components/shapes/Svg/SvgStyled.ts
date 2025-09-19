@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -19,12 +18,12 @@ type SvgRectProps = {
  * Styled group element for SVG content.
  */
 export const SvgGroupElement = styled.g<SvgGroupProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
 `;
 
 /**
  * Styled rect element for pointer events.
  */
 export const SvgRectElement = styled.rect<SvgRectProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
 `;

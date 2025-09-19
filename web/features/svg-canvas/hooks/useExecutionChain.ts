@@ -1,12 +1,8 @@
-// Import React.
 import { useEffect, useRef } from "react";
 
-// Import types.
-import type { ExecutionPropagationEvent } from "../types/events/ExecutionPropagationEvent";
 import { EVENT_NAME_EXECUTION_PROPAGATION } from "../constants/core/EventNames";
-
-// Import EventBus.
 import { useEventBus } from "../context/EventBusContext";
+import type { ExecutionPropagationEvent } from "../types/events/ExecutionPropagationEvent";
 
 type ExecutionChainProps = {
 	id: string;

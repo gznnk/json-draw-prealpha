@@ -1,16 +1,10 @@
-// Import React.
 import { useCallback } from "react";
 
-// Import constants.
-import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../constants/core/EventNames";
-import type { Diagram } from "../types/state/core/Diagram";
-
-// Import types.
-import type { AddDiagramEvent } from "../types/events/AddDiagramEvent";
-import { newEventId } from "../utils/core/newEventId";
-
-// Import shared modules.
 import type { EventBus } from "../../../shared/event-bus/EventBus";
+import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../constants/core/EventNames";
+import type { AddDiagramEvent } from "../types/events/AddDiagramEvent";
+import type { Diagram } from "../types/state/core/Diagram";
+import { newEventId } from "../utils/core/newEventId";
 
 /**
  * Returns a callback for tool modules to dispatch an AddDiagramEvent using the provided eventBus.

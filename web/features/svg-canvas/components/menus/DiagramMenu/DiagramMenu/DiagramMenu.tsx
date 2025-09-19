@@ -1,8 +1,21 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import components related to SvgCanvas.
+import {
+	MAX_BORDER_RADIUS,
+	MAX_FONT_SIZE,
+	MIN_BORDER_RADIUS,
+	MIN_FONT_SIZE,
+} from "./DiagramMenuConstants";
+import {
+	DiagramMenuDiv,
+	DiagramMenuDivider,
+	DiagramMenuPositioner,
+	DiagramMenuWrapper,
+} from "./DiagramMenuStyled";
+import type { DiagramMenuProps, DiagramMenuType } from "./DiagramMenuTypes";
+import type { RectangleVertices } from "../../../../types/core/RectangleVertices";
+import { calcRectangleVertices } from "../../../../utils/math/geometry/calcRectangleVertices";
 import { AlignCenter } from "../../../icons/AlignCenter";
 import { AlignLeft } from "../../../icons/AlignLeft";
 import { AlignRight } from "../../../icons/AlignRight";
@@ -21,30 +34,9 @@ import { SendToBack } from "../../../icons/SendToBack";
 import { VerticalAlignBottom } from "../../../icons/VerticalAlignBottom";
 import { VerticalAlignMiddle } from "../../../icons/VerticalAlignMiddle";
 import { VerticalAlignTop } from "../../../icons/VerticalAlignTop";
-
-// Import types related to SvgCanvas.
-import type { RectangleVertices } from "../../../../types/core/RectangleVertices";
-
-// Import functions related to SvgCanvas.
-import { calcRectangleVertices } from "../../../../utils/math/geometry/calcRectangleVertices";
-
-// Imports related to this component.
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
 import { NumberStepper } from "../NumberStepper";
-import {
-	MAX_BORDER_RADIUS,
-	MAX_FONT_SIZE,
-	MIN_BORDER_RADIUS,
-	MIN_FONT_SIZE,
-} from "./DiagramMenuConstants";
-import {
-	DiagramMenuDiv,
-	DiagramMenuDivider,
-	DiagramMenuPositioner,
-	DiagramMenuWrapper,
-} from "./DiagramMenuStyled";
-import type { DiagramMenuProps, DiagramMenuType } from "./DiagramMenuTypes";
 
 const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	x,

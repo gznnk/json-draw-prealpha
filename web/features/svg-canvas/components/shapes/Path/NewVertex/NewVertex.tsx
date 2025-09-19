@@ -1,15 +1,9 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import components.
-import { DragPoint } from "../../../core/DragPoint";
-
-// Import types.
-import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
-
-// Import local modules.
 import type { NewVertexData } from "./NewVertexTypes";
+import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
+import { DragPoint } from "../../../core/DragPoint";
 
 /**
  * New vertex properties

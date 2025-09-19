@@ -1,16 +1,10 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
+import { ButtonElement } from "./ButtonStyled";
 import type { ButtonProps } from "../../../types/props/elements/ButtonProps";
-
-// Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-
-// Import local module files.
-import { ButtonElement } from "./ButtonStyled";
 
 /**
  * Button minimap component - lightweight version without outlines, controls, and labels.

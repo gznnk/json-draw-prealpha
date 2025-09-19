@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
@@ -20,6 +19,9 @@ export const AgentNodeFeatures = {
 /**
  * Type of the AgentNode data.
  */
-export type AgentNodeData = CreateDataType<typeof AgentNodeFeatures, {
-	type: "AgentNode";
-}>;
+export type AgentNodeData = CreateDataType<
+	typeof AgentNodeFeatures,
+	{
+		type: "AgentNode";
+	}
+>;

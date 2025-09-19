@@ -1,9 +1,6 @@
-// Import types.
-import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
-import { isSelectableState } from "../../utils/validation/isSelectableState";
 import { applyFunctionRecursively } from "./applyFunctionRecursively";
+import type { Diagram } from "../../types/state/core/Diagram";
+import { isSelectableState } from "../../utils/validation/isSelectableState";
 
 /**
  * Adds outline display to items based on their selection state and ancestor selection state.

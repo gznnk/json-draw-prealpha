@@ -1,4 +1,3 @@
-// Import types related to SvgCanvas.
 import type { Frame } from "../../../types/core/Frame";
 
 export type ConnectionEvent = {

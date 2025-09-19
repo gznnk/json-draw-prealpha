@@ -1,13 +1,12 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback } from "react";
 
 // Imports related to this component.
+import { DiagramMenuItemDiv } from "./DiagramMenuItemStyled";
 import type {
 	DiagramMenuStateMap,
 	DiagramMenuType,
 } from "../DiagramMenu/DiagramMenuTypes";
-import { DiagramMenuItemDiv } from "./DiagramMenuItemStyled";
 
 /**
  * Props for the DiagramMenuItem component.

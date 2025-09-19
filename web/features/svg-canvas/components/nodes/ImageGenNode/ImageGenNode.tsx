@@ -1,29 +1,17 @@
-// Import React.
+import { OpenAI } from "openai";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
-// Import other libraries.
-import { OpenAI } from "openai";
-
-// Import types.
+import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useAddDiagram } from "../../../hooks/useAddDiagram";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { ImageGenNodeProps } from "../../../types/props/nodes/ImageGenNodeProps";
-
-// Import components.
+import { newEventId } from "../../../utils/core/newEventId";
+import { createImageState } from "../../../utils/shapes/image/createImageState";
 import { IconContainer } from "../../core/IconContainer";
 import { Picture } from "../../icons/Picture";
 import { Rectangle } from "../../shapes/Rectangle";
-
-// Import constants.
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
-
-// Import hooks.
-import { useExecutionChain } from "../../../hooks/useExecutionChain";
-
-// Import utils.
-import { useAddDiagram } from "../../../hooks/useAddDiagram";
-import { newEventId } from "../../../utils/core/newEventId";
-import { createImageState } from "../../../utils/shapes/image/createImageState";
-import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 /**
  * ImageGenNode component.
@@ -54,7 +42,7 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 			setProcessIdList((prev) => [...prev, processId]);
 
 			const openai = new OpenAI({
-				apiKey: apiKey,
+				apiKey,
 				dangerouslyAllowBrowser: true,
 			});
 

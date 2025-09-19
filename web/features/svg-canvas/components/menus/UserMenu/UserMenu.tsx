@@ -1,33 +1,31 @@
-// Import React.
+import styled from "@emotion/styled";
 import type React from "react";
 import { useState, useEffect } from "react";
-
 // Import other libraries.
-import styled from "@emotion/styled";
 
 // Import utilities.
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 const UserMenuDiv = styled.div`
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
 `;
 
 const MenuDetailDiv = styled.div`
-    position: absolute;
-    top: 56px;
-    right: 20px;
-    width: 300px;
-    min-height: 100px;
-    padding: 3px 4px;
-    background-color: #f0f0f0;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    pointer-events: auto;
+	position: absolute;
+	top: 56px;
+	right: 20px;
+	width: 300px;
+	min-height: 100px;
+	padding: 3px 4px;
+	background-color: #f0f0f0;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	pointer-events: auto;
 `;
 
 const UserMenu: React.FC = () => {
@@ -118,18 +116,18 @@ const UserMenu: React.FC = () => {
 export default UserMenu;
 
 const IconButtonElm = styled.button`
-    width: 36px;
-    height: 36px;
-    background-color: #f0f0f0;
-    border: none;
-    border-radius: 6px;
-    padding: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    pointer-events: auto;
+	width: 36px;
+	height: 36px;
+	background-color: #f0f0f0;
+	border: none;
+	border-radius: 6px;
+	padding: 6px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	pointer-events: auto;
 `;
 
 type IconButtonProps = {

@@ -1,4 +1,3 @@
-// Import Emotion.
 import styled from "@emotion/styled";
 
 /**
@@ -22,49 +21,49 @@ type TextEditorStyledProps = {
  * Styled input element for the text editor.
  */
 export const Input = styled.input<TextEditorStyledProps>`
-    position: absolute;
-    left: ${(props) => props.left}px;
-    top: ${(props) => props.top}px;
-    transform: ${(props) => props.transform};
-    width: ${(props) => props.width}px;
-    height: ${(props) => props.height}px;
-    text-align: ${(props) => props.textAlign};
-    vertical-align: ${(props) => props.verticalAlign};
-    color: ${(props) => props.color};
-    font-size: ${(props) => props.fontSize}px;
-    font-family: ${(props) => props.fontFamily};
-    font-weight: ${(props) => props.fontWeight};
-    background: transparent;
-    border: none;
-    outline: none;
-    overflow: hidden;
-    resize: none;
-    box-sizing: border-box;
-    padding: 2px 6px;
-    pointer-events: auto;
+	position: absolute;
+	left: ${(props) => props.left}px;
+	top: ${(props) => props.top}px;
+	transform: ${(props) => props.transform};
+	width: ${(props) => props.width}px;
+	height: ${(props) => props.height}px;
+	text-align: ${(props) => props.textAlign};
+	vertical-align: ${(props) => props.verticalAlign};
+	color: ${(props) => props.color};
+	font-size: ${(props) => props.fontSize}px;
+	font-family: ${(props) => props.fontFamily};
+	font-weight: ${(props) => props.fontWeight};
+	background: transparent;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	resize: none;
+	box-sizing: border-box;
+	padding: 2px 6px;
+	pointer-events: auto;
 `;
 
 /**
  * Styled textarea element for the text editor.
  */
 export const TextArea = styled.textarea<TextEditorStyledProps>`
-    position: absolute;
-    left: ${(props) => props.left}px;
-    top: ${(props) => props.top}px;
-    transform: ${(props) => props.transform};
-    width: ${(props) => props.width}px;
-    height: ${(props) => props.height}px;
-    text-align: ${(props) => props.textAlign};
-    vertical-align: ${(props) => props.verticalAlign};
-    color: ${(props) => props.color};
-    font-size: ${(props) => props.fontSize}px;
-    font-family: ${(props) => props.fontFamily};
-    background: transparent;
-    border: none;
-    outline: none;
-    overflow-y: auto;
-    resize: none;
-    box-sizing: border-box;
-    padding: 2px 6px;
-    pointer-events: auto;
+	position: absolute;
+	left: ${(props) => props.left}px;
+	top: ${(props) => props.top}px;
+	transform: ${(props) => props.transform};
+	width: ${(props) => props.width}px;
+	height: ${(props) => props.height}px;
+	text-align: ${(props) => props.textAlign};
+	vertical-align: ${(props) => props.verticalAlign};
+	color: ${(props) => props.color};
+	font-size: ${(props) => props.fontSize}px;
+	font-family: ${(props) => props.fontFamily};
+	background: transparent;
+	border: none;
+	outline: none;
+	overflow-y: auto;
+	resize: none;
+	box-sizing: border-box;
+	padding: 2px 6px;
+	pointer-events: auto;
 `;

@@ -1,11 +1,12 @@
 import { useCallback } from "react";
-import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
-import { createImageGenNodeState } from "../../utils/nodes/imageGenNode/createImageGenNodeState";
+
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
+import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
+import { createImageGenNodeState } from "../../utils/nodes/imageGenNode/createImageGenNodeState";
 
 export const useAddImageGenNodeTool = (
 	eventBus: EventBus,

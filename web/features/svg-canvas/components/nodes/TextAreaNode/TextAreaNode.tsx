@@ -1,30 +1,6 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import types.
-import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
-import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
-import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
-import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
-import type { InputState } from "../../../types/state/elements/InputState";
-import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
-
-// Import components.
-import { Button } from "../../elements/Button";
-import { Frame } from "../../elements/Frame";
-import { Input } from "../../elements/Input";
-import { NodeHeader } from "../../elements/NodeHeader";
-import { TextArea } from "../../icons/TextArea";
-
-// Import utils.
-import { newEventId } from "../../../utils/core/newEventId";
-import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
-
-// Import constants.
 import {
 	BASE_MARGIN,
 	HEADER_HEIGHT,
@@ -44,6 +20,22 @@ import {
 	MIN_HEIGHT,
 	MIN_WIDTH,
 } from "../../../constants/styling/nodes/TextAreaNodeStyling";
+import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
+import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
+import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
+import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
+import type { InputState } from "../../../types/state/elements/InputState";
+import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
+import { newEventId } from "../../../utils/core/newEventId";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
+import { Button } from "../../elements/Button";
+import { Frame } from "../../elements/Frame";
+import { Input } from "../../elements/Input";
+import { NodeHeader } from "../../elements/NodeHeader";
+import { TextArea } from "../../icons/TextArea";
 
 /**
  * TextAreaNode component.

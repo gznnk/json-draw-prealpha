@@ -1,11 +1,12 @@
 import { useCallback } from "react";
-import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
-import { createSvgToDiagramNodeState } from "../../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeState";
+
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
+import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
+import { createSvgToDiagramNodeState } from "../../utils/nodes/svgToDiagramNode/createSvgToDiagramNodeState";
 
 export const useAddSvgToCanvasNodeTool = (
 	eventBus: EventBus,

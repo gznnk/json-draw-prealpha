@@ -1,25 +1,15 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useAddDiagram } from "../../../hooks/useAddDiagram";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { SvgToDiagramNodeProps } from "../../../types/props/nodes/SvgToDiagramNodeProps";
 import type { Diagram } from "../../../types/state/core/Diagram";
-
-// Import components.
+import { createSvgStateFromText } from "../../../utils/shapes/svg/createSvgStateFromText";
 import { IconContainer } from "../../core/IconContainer";
 import { Gachapon } from "../../icons/Gachapon";
 import { Rectangle } from "../../shapes/Rectangle";
-
-// Import constants.
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
-
-// Import hooks.
-import { useAddDiagram } from "../../../hooks/useAddDiagram";
-import { useExecutionChain } from "../../../hooks/useExecutionChain";
-
-// Import utils.
-import { createSvgStateFromText } from "../../../utils/shapes/svg/createSvgStateFromText";
 
 /**
  * SvgToDiagramNode component.

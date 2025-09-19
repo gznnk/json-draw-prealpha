@@ -1,15 +1,12 @@
-// Import React.
 import { useCallback, useState } from "react";
 
 // Import types related to SvgCanvas.
+import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
-
 // Import functions related to SvgCanvas.
 import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
 import { isExportable } from "../../../../utils/validation/isExportable";
-
 // Imports related to this component.
-import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 
 export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 	// Extract properties from canvasProps.

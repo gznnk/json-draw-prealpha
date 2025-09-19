@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
@@ -7,7 +8,9 @@ import type {
 import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
 import { createRectangleState } from "../../utils/shapes/rectangle/createRectangleState";
 
-export const useAddRectangleShapeTool = (eventBus: EventBus): FunctionCallHandler => {
+export const useAddRectangleShapeTool = (
+	eventBus: EventBus,
+): FunctionCallHandler => {
 	const addDiagram = useAddDiagramWithBus(eventBus);
 	return useCallback(
 		(functionCall: FunctionCallInfo) => {
@@ -30,7 +33,7 @@ export const useAddRectangleShapeTool = (eventBus: EventBus): FunctionCallHandle
 				name?: string;
 				description?: string;
 			};
-			
+
 			if (
 				typeof args.x === "number" &&
 				typeof args.y === "number" &&
@@ -63,7 +66,7 @@ export const useAddRectangleShapeTool = (eventBus: EventBus): FunctionCallHandle
 					name: args.name,
 					description: args.description,
 				});
-				
+
 				addDiagram(data);
 				return {
 					id: data.id,

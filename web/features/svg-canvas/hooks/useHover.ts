@@ -1,7 +1,4 @@
-// Import types.
 import type { DiagramHoverChangeEvent } from "../types/events/DiagramHoverChangeEvent";
-
-// Import utils.
 import { newEventId } from "../utils/core/newEventId";
 
 /**

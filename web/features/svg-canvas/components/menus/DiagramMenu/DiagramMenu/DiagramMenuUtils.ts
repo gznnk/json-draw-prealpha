@@ -1,7 +1,4 @@
-// Import types.
 import type { Diagram } from "../../../../types/state/core/Diagram";
-
-// Import utils.
 import { isFillableState } from "../../../../utils/validation/isFillableState";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
 import { isStrokableState } from "../../../../utils/validation/isStrokableState";

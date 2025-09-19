@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { EllipseData } from "../../../types/data/shapes/EllipseData";
 import { EllipseFeatures } from "../../../types/data/shapes/EllipseData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default ellipse data template.

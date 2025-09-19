@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -12,5 +11,5 @@ type EllipseProps = {
  * Styled ellipse element for drag points.
  */
 export const EllipseElement = styled.ellipse<EllipseProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
 `;

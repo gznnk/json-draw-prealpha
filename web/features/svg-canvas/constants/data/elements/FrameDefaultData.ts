@@ -1,9 +1,6 @@
-// Import types.
 import type { FrameData } from "../../../types/data/elements/FrameData";
-
-// Import constants.
-import { CreateDefaultData } from "../shapes/CreateDefaultData";
 import { FrameFeatures } from "../../../types/data/elements/FrameData";
+import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**
  * Default data values for Frame

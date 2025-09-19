@@ -1,20 +1,14 @@
-// Import React.
 import type React from "react";
 import { memo, useRef } from "react";
 
-// Import hooks.
+import { Circle } from "./DragPointStyled";
 import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
-
-// Import types.
 import type { DiagramType } from "../../../types/core/DiagramType";
 import type { Point } from "../../../types/core/Point";
 import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
-
-// Import local module files.
-import { Circle } from "./DragPointStyled";
 
 /**
  * Props for the DragPoint component.

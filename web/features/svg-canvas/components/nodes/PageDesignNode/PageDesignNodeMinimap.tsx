@@ -1,18 +1,16 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
-
-// Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
 import { PageDesign } from "../../icons/PageDesign";
 
 /**
  * PageDesignNode minimap component - lightweight version without outlines, controls, and labels.
  */
-const PageDesignNodeMinimapComponent: React.FC<PageDesignNodeProps> = (props) => {
+const PageDesignNodeMinimapComponent: React.FC<PageDesignNodeProps> = (
+	props,
+) => {
 	return (
 		<IconContainer
 			x={props.x}
@@ -23,11 +21,7 @@ const PageDesignNodeMinimapComponent: React.FC<PageDesignNodeProps> = (props) =>
 			scaleX={props.scaleX}
 			scaleY={props.scaleY}
 		>
-			<PageDesign
-				width={props.width}
-				height={props.height}
-				animation={false}
-			/>
+			<PageDesign width={props.width} height={props.height} animation={false} />
 		</IconContainer>
 	);
 };

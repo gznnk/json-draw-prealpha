@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
@@ -17,6 +16,9 @@ export const ImageGenNodeFeatures = {
 /**
  * Type of the ImageGenNode data.
  */
-export type ImageGenNodeData = CreateDataType<typeof ImageGenNodeFeatures, {
-	type: "ImageGenNode";
-}>;
+export type ImageGenNodeData = CreateDataType<
+	typeof ImageGenNodeFeatures,
+	{
+		type: "ImageGenNode";
+	}
+>;

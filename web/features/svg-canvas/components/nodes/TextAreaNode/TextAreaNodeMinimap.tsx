@@ -1,11 +1,7 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeProps";
-
-// Import utils.
 import { negativeToZero } from "../../../utils/math/common/negativeToZero";
 
 /**

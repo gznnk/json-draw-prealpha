@@ -1,16 +1,13 @@
-// Import types.
-import type { DiagramType } from "../../../types/core/DiagramType";
-import type { DiagramFeatures } from "../../../types/core/DiagramFeatures";
-
-// Import constants.
-import { DiagramBaseDefaultState } from "../core/DiagramBaseDefaultState";
-import { SelectableDefaultState } from "../core/SelectableDefaultState";
-import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
-import { ItemableDefaultState } from "../core/ItemableDefaultState";
 import { ConnectableDefaultState } from "./ConnectableDefaultState";
-import { StrokableDefaultState } from "../core/StrokableDefaultState";
+import type { DiagramFeatures } from "../../../types/core/DiagramFeatures";
+import type { DiagramType } from "../../../types/core/DiagramType";
+import { DiagramBaseDefaultState } from "../core/DiagramBaseDefaultState";
 import { FillableDefaultState } from "../core/FillableDefaultState";
+import { ItemableDefaultState } from "../core/ItemableDefaultState";
+import { SelectableDefaultState } from "../core/SelectableDefaultState";
+import { StrokableDefaultState } from "../core/StrokableDefaultState";
 import { TextableDefaultState } from "../core/TextableDefaultState";
+import { TransformativeDefaultState } from "../core/TransformativeDefaultState";
 
 /**
  * Creates default state for a shape by combining feature-specific defaults.

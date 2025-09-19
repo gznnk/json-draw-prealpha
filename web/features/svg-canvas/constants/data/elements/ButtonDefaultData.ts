@@ -1,7 +1,4 @@
-// Import types.
 import type { ButtonData } from "../../../types/data/elements/ButtonData";
-
-// Import constants.
 import { ButtonFeatures } from "../../../types/data/elements/ButtonData";
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 

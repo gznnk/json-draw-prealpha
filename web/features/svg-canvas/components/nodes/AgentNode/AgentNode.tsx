@@ -1,15 +1,14 @@
-// Import React.
-
 import type React from "react";
 import { memo, useState } from "react";
+
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useEventBus } from "../../../context/EventBusContext";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
+import { useWorkflowAgentHandler } from "../../../tools/workflow_agent/hook";
+import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
 import { IconContainer } from "../../core/IconContainer";
 import { Agent } from "../../icons/Agent";
 import { Rectangle } from "../../shapes/Rectangle";
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
-import { useExecutionChain } from "../../../hooks/useExecutionChain";
-import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
-import { useEventBus } from "../../../context/EventBusContext";
-import { useWorkflowAgentHandler } from "../../../tools/workflow_agent/hook";
 
 /**
  * AgentNode component.
@@ -51,7 +50,6 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 					},
 				});
 			} catch (error) {
-				// eslint-disable-next-line no-console
 				console.error("Error in AgentNode workflow agent:", error);
 				props.onExecute?.({
 					id: props.id,

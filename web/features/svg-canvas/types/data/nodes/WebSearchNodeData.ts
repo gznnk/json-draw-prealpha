@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
@@ -17,6 +16,9 @@ export const WebSearchNodeFeatures = {
 /**
  * Type of the WebSearchNode data.
  */
-export type WebSearchNodeData = CreateDataType<typeof WebSearchNodeFeatures, {
-	type: "WebSearchNode";
-}>;
+export type WebSearchNodeData = CreateDataType<
+	typeof WebSearchNodeFeatures,
+	{
+		type: "WebSearchNode";
+	}
+>;

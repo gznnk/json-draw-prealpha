@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -14,7 +13,9 @@ export const NumberStepperContainer = styled.div`
 	background-color: #ffffff;
 	border: 1px solid #d9d9d9;
 	border-radius: 6px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.06),
+		0 1px 2px rgba(0, 0, 0, 0.04);
 	padding: 4px;
 	pointer-events: auto;
 	user-select: none;
@@ -38,12 +39,12 @@ export const NumberStepperInput = styled.input`
 	color: rgba(0, 0, 0, 0.88);
 	font-size: 14px;
 	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-	
+
 	&:focus {
 		border-color: #1890ff;
 		box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 	}
-	
+
 	&:hover {
 		border-color: #40a9ff;
 	}
@@ -68,17 +69,17 @@ export const NumberStepperButton = styled.div`
 	&:hover {
 		background-color: #f5f5f5;
 	}
-	
+
 	&:active {
 		background-color: #e6f4ff;
 		transform: scale(0.95);
 	}
-	
+
 	svg {
 		color: rgba(0, 0, 0, 0.65);
 		transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 	}
-	
+
 	&:hover svg {
 		color: #1890ff;
 	}

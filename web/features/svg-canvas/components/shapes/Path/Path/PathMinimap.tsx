@@ -1,12 +1,8 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
-import type { PathProps } from "../../../../types/props/shapes/PathProps";
-
-// Import components.
 import { PathElement } from "./PathStyled";
+import type { PathProps } from "../../../../types/props/shapes/PathProps";
 
 /**
  * Path minimap component - lightweight version without outlines, controls, and labels.

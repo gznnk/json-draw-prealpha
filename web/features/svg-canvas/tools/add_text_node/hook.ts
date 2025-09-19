@@ -1,11 +1,12 @@
 import { useCallback } from "react";
-import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
-import { createTextAreaNodeState } from "../../utils/nodes/textAreaNode/createTextAreaNodeState";
+
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
+import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
+import { createTextAreaNodeState } from "../../utils/nodes/textAreaNode/createTextAreaNodeState";
 
 /**
  * React hook to provide a handler for adding a Text node to the canvas using the event bus.

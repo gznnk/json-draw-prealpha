@@ -1,8 +1,6 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import { DiagramRegistry } from "../../../registry";
 import type { GroupProps } from "../../../types/props/shapes/GroupProps";
 

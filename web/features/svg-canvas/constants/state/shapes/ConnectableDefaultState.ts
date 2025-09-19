@@ -1,5 +1,5 @@
-import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
+import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 
 export const ConnectableDefaultState = {
 	connectEnabled: true,

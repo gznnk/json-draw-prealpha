@@ -1,13 +1,12 @@
-// Import types.
-import type { DiagramType } from "../types/core/DiagramType";
-import type { Frame } from "../types/core/Frame";
-import type { Diagram } from "../types/state/core/Diagram";
-import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 import type {
 	DataToStateMapper,
 	DiagramDefinition,
 	StateToDataMapper,
 } from "./DiagramDefinition";
+import type { DiagramType } from "../types/core/DiagramType";
+import type { Frame } from "../types/core/Frame";
+import type { Diagram } from "../types/state/core/Diagram";
+import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 
 /**
  * Registry for managing diagram definitions.
@@ -41,7 +40,7 @@ class DiagramRegistryClass {
 	 * @param type - The diagram type
 	 * @returns The component or undefined if not found
 	 */
-	// biome-ignore lint/suspicious/noExplicitAny: Different shapes have different prop types
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getComponent(type: DiagramType): React.FC<any> | undefined {
 		return this.definitions.get(type)?.component;
 	}
@@ -52,7 +51,7 @@ class DiagramRegistryClass {
 	 * @param type - The diagram type
 	 * @returns The minimap component or undefined if not found
 	 */
-	// biome-ignore lint/suspicious/noExplicitAny: Different shapes have different prop types
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getMinimapComponent(type: DiagramType): React.FC<any> | undefined {
 		return this.definitions.get(type)?.minimapComponent;
 	}

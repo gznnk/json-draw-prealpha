@@ -1,6 +1,7 @@
 # svg-canvas Dependency Rules
 
 ## General Rules
+
 ```mermaid
 graph TD
     registry --> types
@@ -23,8 +24,8 @@ graph TD
     canvas --> registry
 ```
 
-
 ## `types` Module
+
 ```mermaid
 graph TD
     data --> core
@@ -40,6 +41,7 @@ graph TD
 ```
 
 ## `components` Module
+
 ```mermaid
 graph TD
     core --> icons

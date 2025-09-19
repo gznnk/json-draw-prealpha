@@ -53,6 +53,7 @@
 			"name": "Debug Electron: Renderer",
 			"port": 9222,
 			"webRoot": "${workspaceFolder}",
+			"preLaunchTask": "npm run dev",
 			"urlFilter": "http://localhost:5173/*"
 		}
 	],

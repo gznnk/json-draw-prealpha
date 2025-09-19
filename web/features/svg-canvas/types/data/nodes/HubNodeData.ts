@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
@@ -20,6 +19,9 @@ export const HubNodeFeatures = {
 /**
  * Type of the hub node data.
  */
-export type HubNodeData = CreateDataType<typeof HubNodeFeatures, {
-	type: "HubNode";
-}>;
+export type HubNodeData = CreateDataType<
+	typeof HubNodeFeatures,
+	{
+		type: "HubNode";
+	}
+>;

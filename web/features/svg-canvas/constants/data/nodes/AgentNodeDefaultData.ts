@@ -1,8 +1,5 @@
-// Import types.
 import type { AgentNodeData } from "../../../types/data/nodes/AgentNodeData";
 import { AgentNodeFeatures } from "../../../types/data/nodes/AgentNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

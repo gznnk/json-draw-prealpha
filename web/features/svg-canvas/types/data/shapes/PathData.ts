@@ -1,8 +1,7 @@
-// Import types.
+import type { CreateDataType } from "./CreateDataType";
 import type { ArrowHeadType } from "../../core/ArrowHeadType";
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { PathType } from "../../core/PathType";
-import type { CreateDataType } from "./CreateDataType";
 
 /**
  * Diagram features for Path shapes.
@@ -19,8 +18,11 @@ export const PathFeatures = {
 /**
  * Data type for polyline/path elements.
  */
-export type PathData = CreateDataType<typeof PathFeatures, {
-	pathType: PathType;
-	startArrowHead?: ArrowHeadType;
-	endArrowHead?: ArrowHeadType;
-}>;
+export type PathData = CreateDataType<
+	typeof PathFeatures,
+	{
+		pathType: PathType;
+		startArrowHead?: ArrowHeadType;
+		endArrowHead?: ArrowHeadType;
+	}
+>;

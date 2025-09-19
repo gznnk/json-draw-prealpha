@@ -1,28 +1,18 @@
-// Import React.
-import type React from "react";
-import { memo, useEffect, useRef } from "react";
-
-// Import other libraries.
 import DOMPurify from "dompurify";
+import { memo, useEffect, useRef } from "react";
+import type React from "react";
 
-// Import types.
-import type { SvgProps } from "../../../types/props/shapes/SvgProps";
-
-// Import components.
-import { Outline } from "../../core/Outline";
-import { PositionLabel } from "../../core/PositionLabel";
-import { Transformative } from "../../core/Transformative";
 import { SvgGroupElement, SvgRectElement } from "./SvgStyled";
-
-// Import hooks.
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useSelect } from "../../../hooks/useSelect";
-
-// Import utils.
+import type { SvgProps } from "../../../types/props/shapes/SvgProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
+import { Transformative } from "../../core/Transformative";
 
 /**
  * Svg component.

@@ -1,13 +1,9 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type {
 	DiagramTextChangeEvent,
 	TextEditorAttributes,
 } from "../types/events/DiagramTextChangeEvent";
-
-// Import utils.
 import { newEventId } from "../utils/core/newEventId";
 
 export type UseTextProps = {

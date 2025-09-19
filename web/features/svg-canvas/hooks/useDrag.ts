@@ -1,8 +1,15 @@
-// Import React.
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// Import types.
+import type { DoStartEdgeScrollArgs } from "./useAutoEdgeScroll";
+import { useAutoEdgeScroll } from "./useAutoEdgeScroll";
+import { DRAG_DEAD_ZONE } from "../constants/core/Constants";
+import {
+	EVENT_NAME_BROADCAST_DRAG,
+	EVENT_NAME_SVG_CANVAS_SCROLL,
+} from "../constants/core/EventNames";
+import { useEventBus } from "../context/EventBusContext";
+import { useSvgViewport } from "../context/SvgViewportContext";
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Point } from "../types/core/Point";
 import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
@@ -10,26 +17,9 @@ import type { DiagramDragEvent } from "../types/events/DiagramDragEvent";
 import type { DiagramPointerEvent } from "../types/events/DiagramPointerEvent";
 import type { EventPhase } from "../types/events/EventPhase";
 import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
-
-// Import utils.
 import { getSvgPoint } from "../utils/core/getSvgPoint";
 import { newEventId } from "../utils/core/newEventId";
 import { isPointerOver } from "../utils/shapes/common/isPointerOver";
-
-// Import constants.
-import { DRAG_DEAD_ZONE } from "../constants/core/Constants";
-import {
-	EVENT_NAME_BROADCAST_DRAG,
-	EVENT_NAME_SVG_CANVAS_SCROLL,
-} from "../constants/core/EventNames";
-
-// Import hooks.
-import type { DoStartEdgeScrollArgs } from "./useAutoEdgeScroll";
-import { useAutoEdgeScroll } from "./useAutoEdgeScroll";
-
-// Import context.
-import { useEventBus } from "../context/EventBusContext";
-import { useSvgViewport } from "../context/SvgViewportContext";
 
 /**
  * Type definition for broadcast drag event
@@ -273,7 +263,7 @@ export const useDrag = (props: DragProps) => {
 			eventId,
 			eventPhase: "InProgress",
 			id,
-			type: type,
+			type,
 			startX: startX.current,
 			startY: startY.current,
 			endX: dragPoint.x,
@@ -372,7 +362,7 @@ export const useDrag = (props: DragProps) => {
 						eventId,
 						eventPhase: "Ended",
 						id,
-						type: type,
+						type,
 						startX: startX.current,
 						startY: startY.current,
 						endX: dragPoint.x,

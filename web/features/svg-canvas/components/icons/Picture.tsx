@@ -1,9 +1,6 @@
-// Import React.
-import { memo } from "react";
-
-// Import Emotion for styling
-import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
+import styled from "@emotion/styled";
+import React, { memo } from "react";
 
 /**
  * Animation for sun rise and set
@@ -18,13 +15,13 @@ const riseAndSet = keyframes`
  * Styled component for sun animation group
  */
 const SunGroup = styled.g<{ $animate: boolean }>`
-    transform-origin: 32px 48px;  /* Center at ridge line */
-    transform-box: view-box;
-    ${({ $animate }) =>
-			$animate &&
-			css`
-        animation: ${riseAndSet} 3s linear infinite;
-    `}
+	transform-origin: 32px 48px; /* Center at ridge line */
+	transform-box: view-box;
+	${({ $animate }) =>
+		$animate &&
+		css`
+			animation: ${riseAndSet} 3s linear infinite;
+		`}
 `;
 
 /**
@@ -42,11 +39,11 @@ const skyColor = keyframes`
  * Styled component for sky animation
  */
 const Sky = styled.rect<{ $animate: boolean }>`
-  ${({ $animate }) =>
+	${({ $animate }) =>
 		$animate &&
 		css`
-        animation: ${skyColor} 3s linear infinite;
-    `}
+			animation: ${skyColor} 3s linear infinite;
+		`}
 `;
 
 /**
@@ -60,18 +57,28 @@ type PictureProps = {
 
 /**
  * Picture icon component
+ *
+ * @param props - Props for the icon
+ * @param props.width - Icon width
+ * @param props.height - Icon height
+ * @param props.animation - Whether to show animation
+ * @returns SVG element for picture icon
  */
-export const Picture = memo<PictureProps>(
-	({ width = 60, height = 60, animation = false }) => {
-		return (
-			<svg width={width} height={height} viewBox="0 0 60 60">
-				<title>Picture</title>
-				<Sky $animate={animation} width="60" height="60" fill="#ffffff" />
-				<polygon points="8,48 20,30 30,42 42,22 52,48" fill="#2196F3" />
-				<SunGroup $animate={animation}>
-					<circle cx="32" cy="18" r="4" fill="#FFC107" />
-				</SunGroup>
-			</svg>
-		);
-	},
-);
+const PictureComponent: React.FC<PictureProps> = ({
+	width = 60,
+	height = 60,
+	animation = false,
+}) => {
+	return (
+		<svg width={width} height={height} viewBox="0 0 60 60">
+			<title>Picture</title>
+			<Sky $animate={animation} width="60" height="60" fill="#ffffff" />
+			<polygon points="8,48 20,30 30,42 42,22 52,48" fill="#2196F3" />
+			<SunGroup $animate={animation}>
+				<circle cx="32" cy="18" r="4" fill="#FFC107" />
+			</SunGroup>
+		</svg>
+	);
+};
+
+export const Picture = memo(PictureComponent);

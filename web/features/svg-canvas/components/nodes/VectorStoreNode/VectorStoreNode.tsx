@@ -1,32 +1,28 @@
-// Import React.
+import { OpenAI, toFile } from "openai";
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-
 // Import other libraries.
-import { OpenAI, toFile } from "openai";
 
 // Import components related to SvgCanvas.
+import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
+import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useExecutionChain } from "../../../hooks/useExecutionChain";
+import type { FileDropEvent } from "../../../types/events/FileDropEvent";
+import type { VectorStoreNodeProps } from "../../../types/props/nodes/VectorStoreNodeProps";
+import { newEventId } from "../../../utils/core/newEventId";
 import { IconContainer } from "../../core/IconContainer";
 import { VectorStore } from "../../icons/VectorStore";
 import { Rectangle } from "../../shapes/Rectangle";
 
-// Import constants.
-import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
-
 // Import hooks related to SvgCanvas.
-import { useExecutionChain } from "../../../hooks/useExecutionChain";
 
 // Import types related to SvgCanvas.
-import type { FileDropEvent } from "../../../types/events/FileDropEvent";
 
 // Import functions related to SvgCanvas.
-import { newEventId } from "../../../utils/core/newEventId";
 
 // Import utilities.
-import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 // Import related to this component.
-import type { VectorStoreNodeProps } from "../../../types/props/nodes/VectorStoreNodeProps";
 
 /**
  * VectorStoreNode component.
@@ -110,7 +106,7 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 			setProcessIdList((prev) => [...prev, processId]);
 
 			const openai = new OpenAI({
-				apiKey: apiKey,
+				apiKey,
 				dangerouslyAllowBrowser: true, // Required for direct browser usage
 			});
 

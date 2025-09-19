@@ -1,32 +1,22 @@
-// Import React.
 import type React from "react";
 import { memo, useMemo, useRef } from "react";
 
-// Import types.
-import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
-
-// Import components.
-import { Outline } from "../../core/Outline";
-import { PositionLabel } from "../../core/PositionLabel";
-import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
-import { ConnectPoints } from "../ConnectPoints";
-
-// Import hooks.
+import { RectangleElement } from "./RectangleStyled";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
-
-// Import utils.
+import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-
-// Import local module files.
-import { RectangleElement } from "./RectangleStyled";
+import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
+import { Textable } from "../../core/Textable";
+import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../ConnectPoints";
 
 /**
  * Rectangle component

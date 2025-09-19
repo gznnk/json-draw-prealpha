@@ -1,8 +1,6 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { NodeHeaderProps } from "../../../types/props/elements/NodeHeaderProps";
 
 /**
@@ -38,7 +36,7 @@ const NodeHeaderMinimapComponent: React.FC<NodeHeaderProps> = ({
 				ry={iconSize * 0.15}
 				fill={iconBackgroundColor}
 			/>
-			
+
 			{/* Simplified icon representation (just a circle for minimap) */}
 			<circle
 				cx={iconX}

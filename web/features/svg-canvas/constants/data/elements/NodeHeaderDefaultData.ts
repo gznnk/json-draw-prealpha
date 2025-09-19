@@ -1,7 +1,4 @@
-// Import types.
 import type { NodeHeaderData } from "../../../types/data/elements/NodeHeaderData";
-
-// Import constants.
 import { NodeHeaderFeatures } from "../../../types/data/elements/NodeHeaderData";
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 

@@ -1,9 +1,6 @@
-// Import types.
+import { DiagramRegistry } from "../../registry";
 import type { DiagramData } from "../../types/data/core/DiagramData";
 import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import registry.
-import { DiagramRegistry } from "../../registry";
 
 /**
  * Converts a single DiagramData to Diagram (state format).

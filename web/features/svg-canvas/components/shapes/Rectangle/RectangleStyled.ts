@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -12,5 +11,5 @@ type RectangleProps = {
  * Styled rectangle element for drag points.
  */
 export const RectangleElement = styled.rect<RectangleProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
 `;

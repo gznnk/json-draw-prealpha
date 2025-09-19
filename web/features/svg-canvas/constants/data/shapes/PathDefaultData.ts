@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { PathData } from "../../../types/data/shapes/PathData";
 import { PathFeatures } from "../../../types/data/shapes/PathData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default path data template.

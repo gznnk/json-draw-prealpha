@@ -1,11 +1,7 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { HubNodeProps } from "../../../types/props/nodes/HubNodeProps";
-
-// Import components related to SvgCanvas.
 import { IconContainer } from "../../core/IconContainer";
 import { Hub } from "../../icons/Hub";
 

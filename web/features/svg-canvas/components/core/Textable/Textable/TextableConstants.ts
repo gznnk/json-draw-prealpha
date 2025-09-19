@@ -1,4 +1,3 @@
-// Import types.
 import type { TextAlign } from "../../../../types/core/TextAlign";
 import type { VerticalAlign } from "../../../../types/core/VerticalAlign";
 

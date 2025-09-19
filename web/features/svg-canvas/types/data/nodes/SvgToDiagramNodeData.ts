@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "../shapes/CreateDataType";
 
@@ -17,6 +16,9 @@ export const SvgToDiagramNodeFeatures = {
 /**
  * Type of the SvgToDiagramNode data.
  */
-export type SvgToDiagramNodeData = CreateDataType<typeof SvgToDiagramNodeFeatures, {
-	type: "SvgToDiagramNode";
-}>;
+export type SvgToDiagramNodeData = CreateDataType<
+	typeof SvgToDiagramNodeFeatures,
+	{
+		type: "SvgToDiagramNode";
+	}
+>;

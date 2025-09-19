@@ -1,9 +1,6 @@
-// Import types.
-import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
-import { isTransformativeState } from "../../utils/validation/isTransformativeState";
 import { applyFunctionRecursively } from "./applyFunctionRecursively";
+import type { Diagram } from "../../types/state/core/Diagram";
+import { isTransformativeState } from "../../utils/validation/isTransformativeState";
 
 /**
  * Removes the showTransformControls property from non-transformative items in a Diagram tree.

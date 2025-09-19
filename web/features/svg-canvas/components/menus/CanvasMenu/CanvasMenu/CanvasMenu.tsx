@@ -1,15 +1,12 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
 // Import types related to SvgCanvas.
+import { CanvasMenuDiv } from "./CanvasMenuStyled";
 import type { AddDiagramByTypeEvent } from "../../../../types/events/AddDiagramByTypeEvent";
-
 // Import functions related to SvgCanvas.
 import { newEventId } from "../../../../utils/core/newEventId";
-
 // Imports related to this component.
-import { CanvasMenuDiv } from "./CanvasMenuStyled";
 import { CanvasMenuItem } from "../CanvasMenuItem";
 
 type CanvasMenuProps = {
@@ -84,13 +81,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 						fill="none"
 						stroke="#D0D4E0"
 					/>
-					<text
-						x="12"
-						y="13"
-						fontSize="6"
-						textAnchor="middle"
-						fill="#D0D4E0"
-					>
+					<text x="12" y="13" fontSize="6" textAnchor="middle" fill="#D0D4E0">
 						BTN
 					</text>
 				</svg>

@@ -1,25 +1,17 @@
-// Import React.
 import type React from "react";
 import { memo, useRef } from "react";
 
-// Import types.
-import type { ImageProps } from "../../../types/props/shapes/ImageProps";
-
-// Import components.
-import { PositionLabel } from "../../core/PositionLabel";
-import { Outline } from "../../core/Outline";
-import { Transformative } from "../../core/Transformative";
 import { ImageElement } from "./ImageStyled";
-
-// Import hooks.
-import { useDrag } from "../../../hooks/useDrag";
 import { useClick } from "../../../hooks/useClick";
+import { useDrag } from "../../../hooks/useDrag";
 import { useSelect } from "../../../hooks/useSelect";
-
-// Import utils.
+import type { ImageProps } from "../../../types/props/shapes/ImageProps";
+import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-import { mergeProps } from "../../../utils/core/mergeProps";
+import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
+import { Transformative } from "../../core/Transformative";
 
 /**
  * Image component.

@@ -1,4 +1,3 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 

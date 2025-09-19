@@ -1,10 +1,7 @@
-// Import types.
-import type { FrameState } from "../../../types/state/elements/FrameState";
-
-// Import constants.
-import { CreateDefaultState } from "../shapes/CreateDefaultState";
 import { FrameFeatures } from "../../../types/data/elements/FrameData";
+import type { FrameState } from "../../../types/state/elements/FrameState";
 import { FrameDefaultData } from "../../data/elements/FrameDefaultData";
+import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**
  * Default state values for Frame

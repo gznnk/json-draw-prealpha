@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Frame } from "../types/core/Frame";
 import type { DiagramData } from "../types/data/core/DiagramData";
@@ -26,11 +25,11 @@ export type DiagramDefinition = {
 	type: DiagramType;
 
 	/** React component factory for rendering the diagram */
-	// biome-ignore lint/suspicious/noExplicitAny: Different shapes have different prop types
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	component: React.FC<any>;
 
 	/** Lightweight react component for MiniMap rendering without outlines, controls, and labels */
-	// biome-ignore lint/suspicious/noExplicitAny: Different shapes have different prop types
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	minimapComponent: React.FC<any>;
 
 	/** Function to calculate connect point positions for the diagram */

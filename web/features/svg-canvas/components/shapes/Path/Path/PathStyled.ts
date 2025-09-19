@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -12,5 +11,5 @@ type PathProps = {
  * Styled path element for diagrams.
  */
 export const PathElement = styled.path<PathProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
 `;

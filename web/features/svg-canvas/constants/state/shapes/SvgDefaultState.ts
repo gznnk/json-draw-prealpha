@@ -1,12 +1,7 @@
-// Import types.
-import type { SvgState } from "../../../types/state/shapes/SvgState";
-import { SvgFeatures } from "../../../types/data/shapes/SvgData";
-
-// Import constants.
-import { SvgDefaultData } from "../../data/shapes/SvgDefaultData";
-
-// Import helpers.
 import { CreateDefaultState } from "./CreateDefaultState";
+import { SvgFeatures } from "../../../types/data/shapes/SvgData";
+import type { SvgState } from "../../../types/state/shapes/SvgState";
+import { SvgDefaultData } from "../../data/shapes/SvgDefaultData";
 
 /**
  * Default SVG state template.

@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { SvgData } from "../../../types/data/shapes/SvgData";
 import { SvgFeatures } from "../../../types/data/shapes/SvgData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default SVG data template.

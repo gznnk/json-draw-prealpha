@@ -1,10 +1,6 @@
-// Import React.
 import { memo } from "react";
 
-// Import types.
 import type { PreviewConnectLineProps } from "./PreviewConnectLineTypes";
-
-// Import components.
 import { Path } from "../../shapes/Path";
 
 /**

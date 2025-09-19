@@ -1,11 +1,6 @@
-// Import types.
 import { SvgToDiagramNodeFeatures } from "../../../types/data/nodes/SvgToDiagramNodeData";
 import type { SvgToDiagramNodeState } from "../../../types/state/nodes/SvgToDiagramNodeState";
-
-// Import constants.
 import { SvgToDiagramNodeDefaultData } from "../../data/nodes/SvgToDiagramNodeDefaultData";
-
-// Import helpers.
 import { CreateDefaultState } from "../shapes/CreateDefaultState";
 
 /**

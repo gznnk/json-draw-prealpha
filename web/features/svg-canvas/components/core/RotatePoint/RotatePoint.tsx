@@ -1,15 +1,9 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useRef, useState } from "react";
 
-// Import types.
-import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
-
-// Import hooks.
 import type { DragProps } from "../../../hooks/useDrag";
 import { useDrag } from "../../../hooks/useDrag";
-
-// Import components.
+import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import { RotateRight } from "../../icons/RotateRight";
 
 /**

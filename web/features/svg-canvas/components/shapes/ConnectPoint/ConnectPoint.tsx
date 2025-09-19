@@ -1,8 +1,10 @@
-// Import React.
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-// Import types.
+import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
+import { EVENT_NAME_CONNECTION } from "../../../constants/core/EventNames";
+import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
+import { useEventBus } from "../../../context/EventBusContext";
 import type { Point } from "../../../types/core/Point";
 import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
@@ -10,26 +12,12 @@ import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import type { ConnectPointProps } from "../../../types/props/shapes/ConnectPointProps";
-
-// Import hooks
-import { useEventBus } from "../../../context/EventBusContext";
-
-// Import components.
-import { DragPoint } from "../../core/DragPoint";
-
-// Import utils.
 import { calcRectangleBoundingBoxGeometry } from "../../../utils/math/geometry/calcRectangleBoundingBoxGeometry";
 import { newId } from "../../../utils/shapes/common/newId";
 import { generateOptimalFrameToFrameConnection } from "../../../utils/shapes/connectPoint/generateOptimalFrameToFrameConnection";
 import { generatePathFromFrameToPoint } from "../../../utils/shapes/connectPoint/generatePathFromFrameToPoint";
 import { getLineDirection } from "../../../utils/shapes/connectPoint/getLineDirection";
-
-// Import constants.
-import { EVENT_NAME_CONNECTION } from "../../../constants/core/EventNames";
-import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
-
-// Import local module files.
-import type { ConnectingPoint, ConnectionEvent } from "./ConnectPointTypes";
+import { DragPoint } from "../../core/DragPoint";
 
 /**
  * Connect point component
@@ -104,7 +92,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 		// Notify the path data for the new connection line rendering.
 		onPreviewConnectLine?.({
-			eventPhase: eventPhase,
+			eventPhase,
 			pathData: {
 				...ConnectLineDefaultState,
 				id: `${id}-connecting-path`,
@@ -313,7 +301,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 					onConnect?.({
 						eventId: customEvent.detail.eventId,
 						startOwnerId: ownerId,
-						points: points,
+						points,
 						endOwnerId: customEvent.detail.endOwnerId,
 					});
 

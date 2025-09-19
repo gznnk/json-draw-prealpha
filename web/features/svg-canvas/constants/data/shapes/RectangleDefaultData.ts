@@ -1,9 +1,6 @@
-// Import types.
+import { CreateDefaultData } from "./CreateDefaultData";
 import type { RectangleData } from "../../../types/data/shapes/RectangleData";
 import { RectangleFeatures } from "../../../types/data/shapes/RectangleData";
-
-// Import helpers.
-import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default rectangle data template.

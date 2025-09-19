@@ -1,20 +1,14 @@
-// Import React.
 import { memo, useEffect, useState } from "react";
 
-// Import types.
-import type { PathData } from "../../../../types/data/shapes/PathData";
+import { FlashGroup } from "./FlashConnectLineStyled";
 import type { FlashConnectLineEvent } from "./FlashConnectLineTypes";
-
-// Import utils.
-import { createDValue } from "../../../../utils/shapes/path/createDValue";
+import { EVENT_NAME_FLASH_CONNECT_LINE } from "../../../../constants/core/EventNames";
+import type { PathData } from "../../../../types/data/shapes/PathData";
 import {
 	createStartPointArrowHead,
 	createEndPointArrowHead,
 } from "../../../../utils/shapes/path/createArrowHeads";
-
-// Import constants and styled components.
-import { EVENT_NAME_FLASH_CONNECT_LINE } from "../../../../constants/core/EventNames";
-import { FlashGroup } from "./FlashConnectLineStyled";
+import { createDValue } from "../../../../utils/shapes/path/createDValue";
 
 export const FlashConnectLineComponent = () => {
 	const [connectLineList, setConnectLineList] = useState<

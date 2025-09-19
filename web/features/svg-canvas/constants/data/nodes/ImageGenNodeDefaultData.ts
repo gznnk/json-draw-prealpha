@@ -1,8 +1,5 @@
-// Import types.
 import type { ImageGenNodeData } from "../../../types/data/nodes/ImageGenNodeData";
 import { ImageGenNodeFeatures } from "../../../types/data/nodes/ImageGenNodeData";
-
-// Import helpers.
 import { CreateDefaultData } from "../shapes/CreateDefaultData";
 
 /**

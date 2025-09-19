@@ -1,4 +1,3 @@
-// Import Emotion for styling.
 import styled from "@emotion/styled";
 
 /**
@@ -12,5 +11,5 @@ type ImageProps = {
  * Styled image element for diagrams.
  */
 export const ImageElement = styled.image<ImageProps>`
-    opacity: ${(props) => (props.isTransparent ? 0 : 1)};
+	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
 `;

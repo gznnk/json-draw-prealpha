@@ -1,8 +1,6 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import types.
 import type { InputProps } from "../../../types/props/elements/InputProps";
 import { nanToZero } from "../../../utils/math/common/nanToZero";
 import { negativeToZero } from "../../../utils/math/common/negativeToZero";

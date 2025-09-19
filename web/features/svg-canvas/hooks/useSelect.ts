@@ -1,10 +1,6 @@
-// Import React.
 import type React from "react";
 
-// Import types.
 import type { DiagramSelectEvent } from "../types/events/DiagramSelectEvent";
-
-// Import utils.
 import { newEventId } from "../utils/core/newEventId";
 
 /**
