@@ -1,10 +1,6 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { diagramDataListToDiagramList } from "../../utils/diagramDataListToDiagramList";
 
 /**

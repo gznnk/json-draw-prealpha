@@ -1,3 +1,20 @@
+import { HubNode, HubNodeMinimap } from "../../components/nodes/HubNode";
+import { HubNodeDefaultData } from "../../constants/data/nodes/HubNodeDefaultData";
+import { HubNodeDefaultState } from "../../constants/state/nodes/HubNodeDefaultState";
+import type { HubNodeData } from "../../types/data/nodes/HubNodeData";
+import { HubNodeFeatures } from "../../types/data/nodes/HubNodeData";
+import type { HubNodeProps } from "../../types/props/nodes/HubNodeProps";
+import type { HubNodeState } from "../../types/state/nodes/HubNodeState";
+import { createHubNodeState } from "../../utils/nodes/hubNode/createHubNodeState";
+import { mapHubNodeDataToState } from "../../utils/nodes/hubNode/mapHubNodeDataToState";
+import { hubNodeStateToData } from "../../utils/nodes/hubNode/mapHubNodeStateToData";
+import { calcEllipseConnectPointPosition } from "../../utils/shapes/ellipse/calcEllipseConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * HubNode Atlas
  *
@@ -8,37 +25,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { HubNodeData } from "../../types/data/nodes/HubNodeData";
-import { HubNodeFeatures } from "../../types/data/nodes/HubNodeData";
-import type { HubNodeProps } from "../../types/props/nodes/HubNodeProps";
-import type { HubNodeState } from "../../types/state/nodes/HubNodeState";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { HubNodeDefaultData } from "../../constants/data/nodes/HubNodeDefaultData";
-import { HubNodeDefaultState } from "../../constants/state/nodes/HubNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { HubNode, HubNodeMinimap } from "../../components/nodes/HubNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createHubNodeState } from "../../utils/nodes/hubNode/createHubNodeState";
-import { mapHubNodeDataToState } from "../../utils/nodes/hubNode/mapHubNodeDataToState";
-import { hubNodeStateToData } from "../../utils/nodes/hubNode/mapHubNodeStateToData";
-import { calcEllipseConnectPointPosition } from "../../utils/shapes/ellipse/calcEllipseConnectPointPosition";
 
 /**
  * HubNode Atlas Type Definition

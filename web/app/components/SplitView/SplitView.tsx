@@ -2,8 +2,8 @@
 import type React from "react";
 import { memo } from "react";
 
-import { TwoColumnSplitView } from "./TwoColumnSplitView";
 import { ThreeColumnSplitView } from "./ThreeColumnSplitView";
+import { TwoColumnSplitView } from "./TwoColumnSplitView";
 
 type SplitViewProps = {
 	initialRatio?: number[]; // 分割比率の配列（合計1になるように調整）

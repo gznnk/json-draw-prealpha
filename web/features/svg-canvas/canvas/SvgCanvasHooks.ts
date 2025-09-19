@@ -1,29 +1,9 @@
-// Import React.
 import { useRef, useState, type RefObject } from "react";
 
-// Import types related to SvgCanvas.
-import type { TextEditorState } from "../components/core/Textable";
-import type { DiagramData } from "../types/data/core/DiagramData";
-import type { Diagram } from "../types/state/core/Diagram";
-import { InteractionState } from "./types/InteractionState";
-import type { SvgCanvasData } from "./types/SvgCanvasData";
-import type { SvgCanvasRef } from "./types/SvgCanvasRef";
-import type { SvgCanvasState } from "./types/SvgCanvasState";
-import type { SvgCanvasSubHooksProps } from "./types/SvgCanvasSubHooksProps";
-
-// Import utils.
-import { deepCopy } from "../utils/core/deepCopy";
-import { diagramDataListToDiagramList } from "./utils/diagramDataListToDiagramList";
-
-// Import shared modules.
-import { EventBus } from "../../../shared/event-bus/EventBus";
-
-// Import canvas custom hooks.
 import { useAddDiagramByType } from "./hooks/actions/useAddDiagramByType";
 import { useConstraintChange } from "./hooks/actions/useConstraintChange";
 import { useCopy } from "./hooks/actions/useCopy";
 import { useDelete } from "./hooks/actions/useDelete";
-import { useOnDiagramChange } from "./hooks/diagram/useOnDiagramChange";
 import { useExport } from "./hooks/actions/useExport";
 import { useGroup } from "./hooks/actions/useGroup";
 import { usePaste } from "./hooks/actions/usePaste";
@@ -34,6 +14,7 @@ import { useUngroup } from "./hooks/actions/useUngroup";
 import { useOnAddDiagram } from "./hooks/diagram/useOnAddDiagram";
 import { useOnClick } from "./hooks/diagram/useOnClick";
 import { useOnConnect } from "./hooks/diagram/useOnConnect";
+import { useOnDiagramChange } from "./hooks/diagram/useOnDiagramChange";
 import { useOnDrag } from "./hooks/diagram/useOnDrag";
 import { useOnDragLeave } from "./hooks/diagram/useOnDragLeave";
 import { useOnDragOver } from "./hooks/diagram/useOnDragOver";
@@ -54,6 +35,17 @@ import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
 import { useSelectAll } from "./hooks/selection/useSelectAll";
 import { useOnConnectNodes } from "./hooks/tools/useOnConnectNodes";
 import { useOnGroupShapes } from "./hooks/tools/useOnGroupShapes";
+import { InteractionState } from "./types/InteractionState";
+import type { SvgCanvasData } from "./types/SvgCanvasData";
+import type { SvgCanvasRef } from "./types/SvgCanvasRef";
+import type { SvgCanvasState } from "./types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "./types/SvgCanvasSubHooksProps";
+import { diagramDataListToDiagramList } from "./utils/diagramDataListToDiagramList";
+import { EventBus } from "../../../shared/event-bus/EventBus";
+import type { TextEditorState } from "../components/core/Textable";
+import type { DiagramData } from "../types/data/core/DiagramData";
+import type { Diagram } from "../types/state/core/Diagram";
+import { deepCopy } from "../utils/core/deepCopy";
 
 /**
  * Props for the useSvgCanvas hook.

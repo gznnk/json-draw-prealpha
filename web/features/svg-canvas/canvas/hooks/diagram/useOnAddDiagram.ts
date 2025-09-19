@@ -1,18 +1,10 @@
-// Import React.
 import { useEffect, useRef } from "react";
 
-// Import constants.
 import { ADD_NEW_DIAGRAM_EVENT_NAME } from "../../../constants/core/EventNames";
-
-// Import types.
 import type { AddDiagramEvent } from "../../../types/events/AddDiagramEvent";
+import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
-import { isSelectableState } from "../../../utils/validation/isSelectableState";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

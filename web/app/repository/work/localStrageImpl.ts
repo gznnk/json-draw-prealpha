@@ -1,5 +1,5 @@
-import type { Work } from "../../models/Work";
 import type { WorkRepository } from "./interface";
+import type { Work } from "../../models/Work";
 
 /**
  * LocalStorageWorkRepository provides a WorkRepository implementation

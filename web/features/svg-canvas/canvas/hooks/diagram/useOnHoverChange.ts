@@ -1,13 +1,9 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { DiagramHoverChangeEvent } from "../../../types/events/DiagramHoverChangeEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 
 /**

@@ -1,4 +1,3 @@
-// Import React.
 import React, {
 	forwardRef,
 	memo,
@@ -9,16 +8,15 @@ import React, {
 	useState,
 } from "react";
 
-// Import types.
-import type { SvgViewport } from "../types/core/SvgViewport";
+import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
 import { InteractionState } from "./types/InteractionState";
 import type { SvgCanvasProps } from "./types/SvgCanvasProps";
 import type { SvgCanvasRef } from "./types/SvgCanvasRef";
-
-// Import constants.
-import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
-
-// Import components.
+import {
+	getNextZoomLevel,
+	getPreviousZoomLevel,
+	getResetZoomLevel,
+} from "./utils/zoomLevels";
 import { GridBackground } from "../components/auxiliary/GridBackground";
 import { GridPattern } from "../components/auxiliary/GridPattern";
 import { MiniMap } from "../components/auxiliary/MiniMap";
@@ -32,23 +30,11 @@ import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { Group } from "../components/shapes/Group";
-
 // Import registry.
 import { DiagramRegistry } from "../registry";
 import { initializeSvgCanvasDiagrams } from "./SvgCanvasRegistry";
-
-// Import utils.
 import { newEventId } from "../utils/core/newEventId";
-import {
-	getNextZoomLevel,
-	getPreviousZoomLevel,
-	getResetZoomLevel,
-} from "./utils/zoomLevels";
-
-// Import hooks.
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
-
-// Import local module files.
 import {
 	Container,
 	HTMLElementsContainer,
@@ -57,10 +43,9 @@ import {
 	Viewport,
 	ViewportOverlay,
 } from "./SvgCanvasStyled";
-
-// Import context.
 import { EventBusProvider } from "../context/EventBusContext";
 import { SvgViewportProvider } from "../context/SvgViewportContext";
+import type { SvgViewport } from "../types/core/SvgViewport";
 
 // Initialize all diagram types when this module is loaded
 initializeSvgCanvasDiagrams();
@@ -598,5 +583,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		);
 	},
 );
+SvgCanvasComponent.displayName = "SvgCanvas";
 
 export const SvgCanvas = memo(SvgCanvasComponent);

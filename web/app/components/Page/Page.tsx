@@ -1,8 +1,9 @@
 import type React from "react";
 import { memo } from "react";
+
 import { PageContainer } from "./PageStyled";
-import { Header } from "../Header";
 import { Body } from "../Body";
+import { Header } from "../Header";
 
 /**
  * Constants related to the Page layout.

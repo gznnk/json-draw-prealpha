@@ -1,25 +1,19 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import { InteractionState } from "../../types/InteractionState";
-import type { SvgCanvasState } from "../../types/SvgCanvasState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
+import { InteractionState } from "../../types/InteractionState";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createItemMap } from "../../utils/createItemMap";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

@@ -1,26 +1,25 @@
-// Import types.
+import type { AreaSelectionState } from "./AreaSelectionState";
+import type { SvgCanvasData } from "./SvgCanvasData";
+import type { SvgCanvasState } from "./SvgCanvasState";
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
+import type { AddDiagramByTypeEvent } from "../../types/events/AddDiagramByTypeEvent";
 import type { AreaSelectionEvent } from "../../types/events/AreaSelectionEvent";
 import type { DiagramChangeEvent } from "../../types/events/DiagramChangeEvent";
 import type { DiagramClickEvent } from "../../types/events/DiagramClickEvent";
 import type { DiagramConnectEvent } from "../../types/events/DiagramConnectEvent";
 import type { DiagramConstraintChangeEvent } from "../../types/events/DiagramConstraintChangeEvent";
-import type { DiagramDragEvent } from "../../types/events/DiagramDragEvent";
 import type { DiagramDragDropEvent } from "../../types/events/DiagramDragDropEvent";
+import type { DiagramDragEvent } from "../../types/events/DiagramDragEvent";
 import type { DiagramHoverChangeEvent } from "../../types/events/DiagramHoverChangeEvent";
 import type { DiagramSelectEvent } from "../../types/events/DiagramSelectEvent";
 import type { DiagramStyleChangeEvent } from "../../types/events/DiagramStyleChangeEvent";
 import type { DiagramTextChangeEvent } from "../../types/events/DiagramTextChangeEvent";
 import type { DiagramTransformEvent } from "../../types/events/DiagramTransformEvent";
 import type { ExecuteEvent } from "../../types/events/ExecuteEvent";
-import type { AddDiagramByTypeEvent } from "../../types/events/AddDiagramByTypeEvent";
 import type { PreviewConnectLineEvent } from "../../types/events/PreviewConnectLineEvent";
 import type { StackOrderChangeEvent } from "../../types/events/StackOrderChangeEvent";
 import type { SvgCanvasResizeEvent } from "../../types/events/SvgCanvasResizeEvent";
 import type { SvgCanvasScrollEvent } from "../../types/events/SvgCanvasScrollEvent";
-import type { AreaSelectionState } from "./AreaSelectionState";
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
-import type { SvgCanvasData } from "./SvgCanvasData";
-import type { SvgCanvasState } from "./SvgCanvasState";
 
 /**
  * Props for the SvgCanvas component.

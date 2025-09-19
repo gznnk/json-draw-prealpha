@@ -1,3 +1,20 @@
+import { Svg, SvgMinimap } from "../../components/shapes/Svg";
+import { SvgDefaultData } from "../../constants/data/shapes/SvgDefaultData";
+import { SvgDefaultState } from "../../constants/state/shapes/SvgDefaultState";
+import type { SvgData } from "../../types/data/shapes/SvgData";
+import { SvgFeatures } from "../../types/data/shapes/SvgData";
+import type { SvgProps } from "../../types/props/shapes/SvgProps";
+import type { SvgState } from "../../types/state/shapes/SvgState";
+import { createSvgState } from "../../utils/shapes/svg/createSvgState";
+import { mapSvgDataToState } from "../../utils/shapes/svg/mapSvgDataToState";
+import { svgStateToData } from "../../utils/shapes/svg/mapSvgStateToData";
+import { svgToBlob } from "../../utils/shapes/svg/svgToBlob";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * Svg Shape Atlas
  *
@@ -8,37 +25,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { SvgData } from "../../types/data/shapes/SvgData";
-import { SvgFeatures } from "../../types/data/shapes/SvgData";
-import type { SvgProps } from "../../types/props/shapes/SvgProps";
-import type { SvgState } from "../../types/state/shapes/SvgState";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { SvgDefaultData } from "../../constants/data/shapes/SvgDefaultData";
-import { SvgDefaultState } from "../../constants/state/shapes/SvgDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { Svg, SvgMinimap } from "../../components/shapes/Svg";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createSvgState } from "../../utils/shapes/svg/createSvgState";
-import { mapSvgDataToState } from "../../utils/shapes/svg/mapSvgDataToState";
-import { svgStateToData } from "../../utils/shapes/svg/mapSvgStateToData";
-import { svgToBlob } from "../../utils/shapes/svg/svgToBlob";
 
 /**
  * Svg Shape Atlas Type Definition

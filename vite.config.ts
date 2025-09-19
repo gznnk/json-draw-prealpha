@@ -1,7 +1,8 @@
-import { defineConfig } from "vite";
+import path from "node:path";
+
 import react from "@vitejs/plugin-react-swc";
 import license from "rollup-plugin-license";
-import path from "node:path";
+import { defineConfig } from "vite";
 
 const COPYRIGHT = `
 Copyright (c) ${new Date().getFullYear()} msnakagawa. All Rights Reserved.

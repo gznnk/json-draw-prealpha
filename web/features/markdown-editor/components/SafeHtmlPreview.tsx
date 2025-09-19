@@ -1,4 +1,5 @@
 import { forwardRef, memo, useEffect, useRef } from "react";
+
 import { PreviewArea } from "./MarkdownEditorStyled";
 
 /**

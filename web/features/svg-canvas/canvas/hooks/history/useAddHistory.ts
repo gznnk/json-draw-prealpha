@@ -1,17 +1,11 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
+import { MAX_HISTORY_SIZE } from "../../SvgCanvasConstants";
+import type { SvgCanvasHistory } from "../../types/SvgCanvasHistory";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import type { SvgCanvasHistory } from "../../types/SvgCanvasHistory";
-
-// Import constants.
-import { MAX_HISTORY_SIZE } from "../../SvgCanvasConstants";
-
-// Import utils.
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 import { canvasStateToHistory } from "../../utils/canvasStateToHistory";
+import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
  * Custom hook to add history entries to the canvas.

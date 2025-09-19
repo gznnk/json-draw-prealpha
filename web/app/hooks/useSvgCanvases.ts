@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+
 import type { SvgCanvas } from "../models/SvgCanvas";
 import { createSvgCanvasRepository } from "../repository/svg-canvas/factory";
 import type { SvgCanvasRepository } from "../repository/svg-canvas/interface";

@@ -1,3 +1,14 @@
+import { NodeHeaderMinimap } from "../../components/elements/NodeHeader";
+import { NodeHeaderDefaultData } from "../../constants/data/elements/NodeHeaderDefaultData";
+import { NodeHeaderDefaultState } from "../../constants/state/elements/NodeHeaderDefaultState";
+import type { NodeHeaderData } from "../../types/data/elements/NodeHeaderData";
+import { NodeHeaderFeatures } from "../../types/data/elements/NodeHeaderData";
+import type { NodeHeaderProps } from "../../types/props/elements/NodeHeaderProps";
+import type { NodeHeaderState } from "../../types/state/elements/NodeHeaderState";
+import { createNodeHeaderState } from "../../utils/elements/nodeHeader/createNodeHeaderState";
+import type { DiagramAtlas } from "../DiagramAtlas";
+import { DummyComponent, dummyImplementation } from "../DiagramAtlas";
+
 /**
  * NodeHeader Element Atlas
  *
@@ -8,32 +19,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { NodeHeaderData } from "../../types/data/elements/NodeHeaderData";
-import { NodeHeaderFeatures } from "../../types/data/elements/NodeHeaderData";
-import type { NodeHeaderProps } from "../../types/props/elements/NodeHeaderProps";
-import type { NodeHeaderState } from "../../types/state/elements/NodeHeaderState";
-import type { DiagramAtlas } from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { NodeHeaderDefaultData } from "../../constants/data/elements/NodeHeaderDefaultData";
-import { NodeHeaderDefaultState } from "../../constants/state/elements/NodeHeaderDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { NodeHeaderMinimap } from "../../components/elements/NodeHeader";
-import { DummyComponent } from "../DiagramAtlas";
-
-import { createNodeHeaderState } from "../../utils/elements/nodeHeader/createNodeHeaderState";
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { dummyImplementation } from "../DiagramAtlas";
 
 /**
  * NodeHeader Element Atlas Type Definition

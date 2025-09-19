@@ -1,3 +1,20 @@
+import { AgentNode, AgentNodeMinimap } from "../../components/nodes/AgentNode";
+import { AgentNodeDefaultData } from "../../constants/data/nodes/AgentNodeDefaultData";
+import { AgentNodeDefaultState } from "../../constants/state/nodes/AgentNodeDefaultState";
+import type { AgentNodeData } from "../../types/data/nodes/AgentNodeData";
+import { AgentNodeFeatures } from "../../types/data/nodes/AgentNodeData";
+import type { AgentNodeProps } from "../../types/props/nodes/AgentNodeProps";
+import type { AgentNodeState } from "../../types/state/nodes/AgentNodeState";
+import { createAgentNodeState } from "../../utils/nodes/agentNode/createAgentNodeState";
+import { mapAgentNodeDataToState } from "../../utils/nodes/agentNode/mapAgentNodeDataToState";
+import { agentNodeStateToData } from "../../utils/nodes/agentNode/mapAgentNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * AgentNode Atlas
  *
@@ -8,37 +25,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { AgentNodeData } from "../../types/data/nodes/AgentNodeData";
-import { AgentNodeFeatures } from "../../types/data/nodes/AgentNodeData";
-import type { AgentNodeProps } from "../../types/props/nodes/AgentNodeProps";
-import type { AgentNodeState } from "../../types/state/nodes/AgentNodeState";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { AgentNodeDefaultData } from "../../constants/data/nodes/AgentNodeDefaultData";
-import { AgentNodeDefaultState } from "../../constants/state/nodes/AgentNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { AgentNode, AgentNodeMinimap } from "../../components/nodes/AgentNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createAgentNodeState } from "../../utils/nodes/agentNode/createAgentNodeState";
-import { mapAgentNodeDataToState } from "../../utils/nodes/agentNode/mapAgentNodeDataToState";
-import { agentNodeStateToData } from "../../utils/nodes/agentNode/mapAgentNodeStateToData";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * AgentNode Atlas Type Definition

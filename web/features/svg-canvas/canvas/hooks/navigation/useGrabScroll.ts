@@ -1,10 +1,8 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
 import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/core/EventNames";
+import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
  * Return type for the useGrabScroll hook

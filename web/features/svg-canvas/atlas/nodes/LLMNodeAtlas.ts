@@ -1,3 +1,21 @@
+import { LLMNode, LLMNodeMinimap } from "../../components/nodes/LLMNode";
+import { LLMNodeDefaultData } from "../../constants/data/nodes/LLMNodeDefaultData";
+import { LLMNodeDefaultState } from "../../constants/state/nodes/LLMNodeDefaultState";
+import { LLMNodeFeatures } from "../../types/data/nodes/LLMNodeData";
+import type { LLMNodeData } from "../../types/data/nodes/LLMNodeData";
+import type { LLMNodeProps } from "../../types/props/nodes/LLMNodeProps";
+import type { LLMNodeState } from "../../types/state/nodes/LLMNodeState";
+import { createLLMNodeState } from "../../utils/nodes/llmNode/createLLMNodeState";
+import { mapLLMNodeDataToState } from "../../utils/nodes/llmNode/mapLLMNodeDataToState";
+import { llmNodeStateToData } from "../../utils/nodes/llmNode/mapLLMNodeStateToData";
+import { transformLLMNodeItems } from "../../utils/nodes/llmNode/transformLLMNodeItems";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * LLMNode Atlas
  *
@@ -8,38 +26,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { LLMNodeData } from "../../types/data/nodes/LLMNodeData";
-import { LLMNodeFeatures } from "../../types/data/nodes/LLMNodeData";
-import type { LLMNodeProps } from "../../types/props/nodes/LLMNodeProps";
-import type { LLMNodeState } from "../../types/state/nodes/LLMNodeState";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { LLMNodeDefaultData } from "../../constants/data/nodes/LLMNodeDefaultData";
-import { LLMNodeDefaultState } from "../../constants/state/nodes/LLMNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { LLMNode, LLMNodeMinimap } from "../../components/nodes/LLMNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createLLMNodeState } from "../../utils/nodes/llmNode/createLLMNodeState";
-import { mapLLMNodeDataToState } from "../../utils/nodes/llmNode/mapLLMNodeDataToState";
-import { llmNodeStateToData } from "../../utils/nodes/llmNode/mapLLMNodeStateToData";
-import { transformLLMNodeItems } from "../../utils/nodes/llmNode/transformLLMNodeItems";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * LLMNode Atlas Type Definition

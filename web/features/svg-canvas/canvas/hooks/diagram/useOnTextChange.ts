@@ -1,16 +1,10 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { TextEditorState } from "../../../components/core/Textable/TextEditor/TextEditorTypes";
 import type { DiagramTextChangeEvent } from "../../../types/events/DiagramTextChangeEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

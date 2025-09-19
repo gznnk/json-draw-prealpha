@@ -1,19 +1,13 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
+import { useAddDiagram } from "./useAddDiagram";
+import { DiagramRegistry } from "../../../registry";
 import type { DiagramType } from "../../../types/core/DiagramType";
 import type { AddDiagramByTypeEvent } from "../../../types/events/AddDiagramByTypeEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
-import { DiagramRegistry } from "../../../registry";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
-
-// Import hooks.
-import { useAddDiagram } from "./useAddDiagram";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
  * Custom hook to handle new diagram events on the canvas.

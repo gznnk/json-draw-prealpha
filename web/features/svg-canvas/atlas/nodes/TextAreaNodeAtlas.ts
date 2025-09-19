@@ -1,7 +1,23 @@
+import {
+	TextAreaNode,
+	TextAreaNodeMinimap,
+} from "../../components/nodes/TextAreaNode";
+import { TextAreaNodeDefaultData } from "../../constants/data/nodes/TextAreaNodeDefaultData";
+import { TextAreaNodeDefaultState } from "../../constants/state/nodes/TextAreaNodeDefaultState";
 import type { TextAreaNodeData } from "../../types/data/nodes/TextAreaNodeData";
 import { TextAreaNodeFeatures } from "../../types/data/nodes/TextAreaNodeData";
 import type { TextAreaNodeProps } from "../../types/props/nodes/TextAreaNodeProps";
 import type { TextAreaNodeState } from "../../types/state/nodes/TextAreaNodeState";
+import { createTextAreaNodeState } from "../../utils/nodes/textAreaNode/createTextAreaNodeState";
+import { mapTextAreaNodeDataToState } from "../../utils/nodes/textAreaNode/mapTextAreaNodeDataToState";
+import { textAreaNodeStateToData } from "../../utils/nodes/textAreaNode/mapTextAreaNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * TextAreaNode Atlas
  *
@@ -12,36 +28,6 @@ import type { TextAreaNodeState } from "../../types/state/nodes/TextAreaNodeStat
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { TextAreaNodeDefaultData } from "../../constants/data/nodes/TextAreaNodeDefaultData";
-import { TextAreaNodeDefaultState } from "../../constants/state/nodes/TextAreaNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import {
-	TextAreaNode,
-	TextAreaNodeMinimap,
-} from "../../components/nodes/TextAreaNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createTextAreaNodeState } from "../../utils/nodes/textAreaNode/createTextAreaNodeState";
-import { mapTextAreaNodeDataToState } from "../../utils/nodes/textAreaNode/mapTextAreaNodeDataToState";
-import { textAreaNodeStateToData } from "../../utils/nodes/textAreaNode/mapTextAreaNodeStateToData";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * TextAreaNode Atlas Type Definition

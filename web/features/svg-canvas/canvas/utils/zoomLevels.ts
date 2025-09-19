@@ -1,7 +1,7 @@
 /**
  * Predefined zoom levels following the step pattern:
  * 5-50%: 5% increments
- * 50-100%: 10% increments  
+ * 50-100%: 10% increments
  * 100%+: 25% increments
  */
 const ZOOM_LEVELS = [
@@ -10,7 +10,7 @@ const ZOOM_LEVELS = [
 	// 50% to 100% (10% increments)
 	0.6, 0.7, 0.8, 0.9, 1.0,
 	// 100%+ (25% increments)
-	1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0
+	1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0,
 ];
 
 /**
@@ -48,7 +48,7 @@ export const findNearestZoomLevel = (currentZoom: number): number => {
 export const getNextZoomLevel = (currentZoom: number): number => {
 	// First snap to nearest level
 	const nearestLevel = findNearestZoomLevel(currentZoom);
-	
+
 	// If current is already at or above nearest, find next level
 	if (currentZoom >= nearestLevel) {
 		const currentIndex = ZOOM_LEVELS.indexOf(nearestLevel);
@@ -57,7 +57,7 @@ export const getNextZoomLevel = (currentZoom: number): number => {
 		}
 		return ZOOM_LEVELS[ZOOM_LEVELS.length - 1]; // Max level
 	}
-	
+
 	// If current is below nearest, return nearest
 	return nearestLevel;
 };
@@ -70,7 +70,7 @@ export const getNextZoomLevel = (currentZoom: number): number => {
 export const getPreviousZoomLevel = (currentZoom: number): number => {
 	// First snap to nearest level
 	const nearestLevel = findNearestZoomLevel(currentZoom);
-	
+
 	// If current is already at or below nearest, find previous level
 	if (currentZoom <= nearestLevel) {
 		const currentIndex = ZOOM_LEVELS.indexOf(nearestLevel);
@@ -79,7 +79,7 @@ export const getPreviousZoomLevel = (currentZoom: number): number => {
 		}
 		return ZOOM_LEVELS[0]; // Min level
 	}
-	
+
 	// If current is above nearest, return nearest
 	return nearestLevel;
 };

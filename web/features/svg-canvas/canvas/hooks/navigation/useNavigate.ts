@@ -1,11 +1,7 @@
-// Import React.
 import { useCallback } from "react";
 
-// Import types related to SvgCanvas.
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import hooks.
 import { useScroll } from "./useScroll";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
  * Custom hook to handle navigation events using scroll functionality.

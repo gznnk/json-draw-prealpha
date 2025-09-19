@@ -1,5 +1,5 @@
-import type { SvgCanvas } from "../../models/SvgCanvas";
 import type { SvgCanvasRepository } from "./interface";
+import type { SvgCanvas } from "../../models/SvgCanvas";
 
 /**
  * LocalStorageSvgCanvasRepository provides a SvgCanvasRepository implementation

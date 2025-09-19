@@ -1,12 +1,8 @@
-// Import React.
 import { useCallback } from "react";
 
-// Import types.
+import { useOnSelect } from "./useOnSelect";
 import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import hooks.
-import { useOnSelect } from "./useOnSelect";
 
 /**
  * Custom hook to handle click events on the canvas.

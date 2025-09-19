@@ -1,4 +1,3 @@
-// Import types.
 import type { GroupState } from "../../types/state/shapes/GroupState";
 
 /**

@@ -1,24 +1,16 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
-import type { PathPointState } from "../../../types/state/shapes/PathPointState";
+import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
 import type { DiagramConnectEvent } from "../../../types/events/DiagramConnectEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import constants.
-import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
-
-// Import utils.
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
+import type { PathPointState } from "../../../types/state/shapes/PathPointState";
 import { newEventId } from "../../../utils/core/newEventId";
 import { calcOrientedFrameFromPoints } from "../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

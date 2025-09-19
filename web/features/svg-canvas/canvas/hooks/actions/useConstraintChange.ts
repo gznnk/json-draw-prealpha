@@ -1,14 +1,8 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
 import type { DiagramConstraintChangeEvent } from "../../../types/events/DiagramConstraintChangeEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import functions related to SvgCanvas.
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

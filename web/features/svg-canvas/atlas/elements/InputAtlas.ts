@@ -1,7 +1,20 @@
+import { Input, InputMinimap } from "../../components/elements/Input";
+import { InputDefaultData } from "../../constants/data/elements/InputDefaultData";
+import { InputDefaultState } from "../../constants/state/elements/InputDefaultState";
 import type { InputData } from "../../types/data/elements/InputData";
 import { InputFeatures } from "../../types/data/elements/InputData";
 import type { InputProps } from "../../types/props/elements/InputProps";
 import type { InputState } from "../../types/state/elements/InputState";
+import { createInputState } from "../../utils/elements/input/createInputState";
+import { mapInputDataToState } from "../../utils/elements/input/mapInputDataToState";
+import { inputStateToData } from "../../utils/elements/input/mapInputStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * Input Shape Atlas
  *
@@ -12,33 +25,6 @@ import type { InputState } from "../../types/state/elements/InputState";
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { InputDefaultData } from "../../constants/data/elements/InputDefaultData";
-import { InputDefaultState } from "../../constants/state/elements/InputDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { Input, InputMinimap } from "../../components/elements/Input";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createInputState } from "../../utils/elements/input/createInputState";
-import { mapInputDataToState } from "../../utils/elements/input/mapInputDataToState";
-import { inputStateToData } from "../../utils/elements/input/mapInputStateToData";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * Input Shape Atlas Type Definition

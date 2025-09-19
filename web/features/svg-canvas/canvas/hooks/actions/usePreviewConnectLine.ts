@@ -1,11 +1,7 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
 import type { PreviewConnectLineEvent } from "../../../types/events/PreviewConnectLineEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import functions related to SvgCanvas.
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 
 /**

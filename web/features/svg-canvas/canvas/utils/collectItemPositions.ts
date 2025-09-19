@@ -1,8 +1,5 @@
-// Import types.
 import type { Point } from "../../types/core/Point";
 import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**

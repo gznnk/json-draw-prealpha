@@ -1,16 +1,10 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { StackOrderChangeEvent } from "../../../types/events/StackOrderChangeEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
+import { isItemableState } from "../../../utils/validation/isItemableState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
-import { isItemableState } from "../../../utils/validation/isItemableState";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

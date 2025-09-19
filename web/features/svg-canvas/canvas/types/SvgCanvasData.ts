@@ -1,4 +1,3 @@
-// Import types.
 import type { DiagramData } from "../../types/data/core/DiagramData";
 
 /**

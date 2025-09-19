@@ -1,27 +1,19 @@
-// Import React.
 import type React from "react";
 import { memo, useMemo, useRef } from "react";
 
-// Import types.
-import type { FrameProps } from "../../../types/props/elements/FrameProps";
-
-// Import components.
-import { Outline } from "../../core/Outline";
-import { PositionLabel } from "../../core/PositionLabel/PositionLabel";
-import { Transformative } from "../../core/Transformative";
-import { ConnectPoints } from "../../shapes/ConnectPoints";
-
-// Import hooks.
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
-
-// Import utils.
+import type { FrameProps } from "../../../types/props/elements/FrameProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel/PositionLabel";
+import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 /**
  * Frame component - a simple rectangular frame element
@@ -115,8 +107,8 @@ const FrameComponent: React.FC<FrameProps> = ({
 		() => ({
 			x,
 			y,
-			width: width,
-			height: height,
+			width,
+			height,
 			rotation,
 			scaleX,
 			scaleY,

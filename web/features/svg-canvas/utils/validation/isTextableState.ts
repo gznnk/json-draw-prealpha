@@ -1,4 +1,3 @@
-// Import types.
 import type { TextableState } from "../../types/state/core/TextableState";
 
 /**

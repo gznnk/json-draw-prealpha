@@ -1,17 +1,13 @@
-// Import React.
 import type { ReactElement } from "react";
 import { useEffect, useState, useCallback } from "react";
 
-// Import components.
-import { Page } from "./components/Page";
 import { CanvasView } from "./components/CanvasView";
-
-// Import repository and factory.
+import { Page } from "./components/Page";
+import type { SvgCanvas } from "./models/SvgCanvas";
 import {
 	createSvgCanvasRepository,
 	type SvgCanvasRepository,
 } from "./repository/svg-canvas";
-import type { SvgCanvas } from "./models/SvgCanvas";
 import type { SvgCanvasData } from "../features/svg-canvas/canvas/types/SvgCanvasData";
 
 const svgCanvasRepository: SvgCanvasRepository = createSvgCanvasRepository();

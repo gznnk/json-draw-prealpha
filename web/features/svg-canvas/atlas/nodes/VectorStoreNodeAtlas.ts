@@ -1,7 +1,23 @@
+import {
+	VectorStoreNode,
+	VectorStoreNodeMinimap,
+} from "../../components/nodes/VectorStoreNode";
+import { VectorStoreNodeDefaultData } from "../../constants/data/nodes/VectorStoreNodeDefaultData";
+import { VectorStoreNodeDefaultState } from "../../constants/state/nodes/VectorStoreNodeDefaultState";
 import type { VectorStoreNodeData } from "../../types/data/nodes/VectorStoreNodeData";
 import { VectorStoreNodeFeatures } from "../../types/data/nodes/VectorStoreNodeData";
 import type { VectorStoreNodeProps } from "../../types/props/nodes/VectorStoreNodeProps";
 import type { VectorStoreNodeState } from "../../types/state/nodes/VectorStoreNodeState";
+import { createVectorStoreNodeState } from "../../utils/nodes/vectorStoreNode/createVectorStoreNodeState";
+import { mapVectorStoreNodeDataToState } from "../../utils/nodes/vectorStoreNode/mapVectorStoreNodeDataToState";
+import { vectorStoreNodeStateToData } from "../../utils/nodes/vectorStoreNode/mapVectorStoreNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * VectorStoreNode Atlas
  *
@@ -12,36 +28,6 @@ import type { VectorStoreNodeState } from "../../types/state/nodes/VectorStoreNo
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { VectorStoreNodeDefaultData } from "../../constants/data/nodes/VectorStoreNodeDefaultData";
-import { VectorStoreNodeDefaultState } from "../../constants/state/nodes/VectorStoreNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import {
-	VectorStoreNode,
-	VectorStoreNodeMinimap,
-} from "../../components/nodes/VectorStoreNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createVectorStoreNodeState } from "../../utils/nodes/vectorStoreNode/createVectorStoreNodeState";
-import { mapVectorStoreNodeDataToState } from "../../utils/nodes/vectorStoreNode/mapVectorStoreNodeDataToState";
-import { vectorStoreNodeStateToData } from "../../utils/nodes/vectorStoreNode/mapVectorStoreNodeStateToData";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * VectorStoreNode Atlas Type Definition

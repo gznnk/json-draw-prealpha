@@ -1,4 +1,3 @@
-// Import React.
 import type { RefObject } from "react";
 
 /**

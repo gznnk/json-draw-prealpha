@@ -1,3 +1,12 @@
+import { ConnectPoint } from "../../components/shapes/ConnectPoint";
+import { ConnectPointDefaultData } from "../../constants/data/shapes/ConnectPointDefaultData";
+import { ConnectPointDefaultState } from "../../constants/state/shapes/ConnectPointDefaultState";
+import type { ConnectPointData } from "../../types/data/shapes/ConnectPointData";
+import type { ConnectPointProps } from "../../types/props/shapes/ConnectPointProps";
+import type { ConnectPointState } from "../../types/state/shapes/ConnectPointState";
+import type { DiagramAtlas } from "../DiagramAtlas";
+import { DummyComponent, dummyImplementation } from "../DiagramAtlas";
+
 /**
  * ConnectPoint Shape Atlas
  *
@@ -8,30 +17,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { ConnectPointData } from "../../types/data/shapes/ConnectPointData";
-import type { ConnectPointProps } from "../../types/props/shapes/ConnectPointProps";
-import type { ConnectPointState } from "../../types/state/shapes/ConnectPointState";
-import type { DiagramAtlas } from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { ConnectPointDefaultData } from "../../constants/data/shapes/ConnectPointDefaultData";
-import { ConnectPointDefaultState } from "../../constants/state/shapes/ConnectPointDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { ConnectPoint } from "../../components/shapes/ConnectPoint";
-import { DummyComponent } from "../DiagramAtlas";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { dummyImplementation } from "../DiagramAtlas";
 
 /**
  * ConnectPoint Shape Atlas Type Definition

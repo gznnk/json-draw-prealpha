@@ -1,28 +1,22 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
+import { useClearAllSelection } from "./useClearAllSelection";
+import type { DoStartEdgeScrollArgs } from "../../../hooks/useAutoEdgeScroll";
+import { useAutoEdgeScroll } from "../../../hooks/useAutoEdgeScroll";
 import type { Box } from "../../../types/core/Box";
 import type { AreaSelectionEvent } from "../../../types/events/AreaSelectionEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
-import { InteractionState } from "../../types/InteractionState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { calcDiagramBoundingBox } from "../../../utils/math/geometry/calcDiagramBoundingBox";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
+import { InteractionState } from "../../types/InteractionState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
-
-// Import hooks.
-import type { DoStartEdgeScrollArgs } from "../../../hooks/useAutoEdgeScroll";
-import { useAutoEdgeScroll } from "../../../hooks/useAutoEdgeScroll";
-import { useClearAllSelection } from "./useClearAllSelection";
 
 /**
  * Update items array with outline display based on selection bounds

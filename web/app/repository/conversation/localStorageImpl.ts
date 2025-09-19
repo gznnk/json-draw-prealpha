@@ -1,5 +1,5 @@
-import type { Conversation } from "../../models/Conversation";
 import type { ConversationRepository } from "./interface";
+import type { Conversation } from "../../models/Conversation";
 
 /**
  * LocalStorageConversationRepository provides a ConversationRepository implementation

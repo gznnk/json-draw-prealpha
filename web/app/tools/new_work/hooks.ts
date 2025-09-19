@@ -2,9 +2,10 @@
  * Custom hook to listen for events from the new_work tool
  */
 import { useEffect, useMemo } from "react";
-import type { Work } from "../../models/Work";
-import { EventBus } from "../../../shared/event-bus/EventBus";
+
 import { NEW_WORK_EVENT } from "./constants";
+import { EventBus } from "../../../shared/event-bus/EventBus";
+import type { Work } from "../../models/Work";
 
 /**
  * useTool hook - listens for new_work events and executes the callback

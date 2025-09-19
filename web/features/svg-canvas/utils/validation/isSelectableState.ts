@@ -1,4 +1,3 @@
-// Import types.
 import type { SelectableState } from "../../types/state/core/SelectableState";
 
 /**

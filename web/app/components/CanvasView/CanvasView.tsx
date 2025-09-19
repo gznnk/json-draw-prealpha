@@ -1,12 +1,9 @@
-import { memo, useRef } from "react";
 import type { ReactElement } from "react";
+import { memo, useRef } from "react";
 
-// Import SvgCanvas component and hooks
+import type { CanvasViewProps } from "./CanvasViewTypes";
 import { SvgCanvas, useSvgCanvas } from "../../../features/svg-canvas";
 import type { SvgCanvasRef } from "../../../features/svg-canvas/canvas/types/SvgCanvasRef";
-
-// Import types
-import type { CanvasViewProps } from "./CanvasViewTypes";
 
 /**
  * Component that renders an SVG canvas using SvgCanvasData supplied by the parent.

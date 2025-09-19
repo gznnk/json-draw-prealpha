@@ -8,6 +8,7 @@ import type { Frame } from "../types/core/Frame";
 import type { DiagramData } from "../types/data/core/DiagramData";
 import type { Diagram } from "../types/state/core/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
+
 export type {
 	DataToStateMapper,
 	StateToDataMapper,
@@ -23,7 +24,7 @@ export type {
 export type DiagramAtlas<
 	TData extends DiagramData,
 	TState extends Diagram,
-	// biome-ignore lint/suspicious/noExplicitAny: Generic type parameter requires flexibility
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	TProps = any,
 > = {
 	// ============================================================================

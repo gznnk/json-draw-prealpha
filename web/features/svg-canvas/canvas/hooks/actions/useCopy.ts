@@ -1,14 +1,10 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { isItemableState } from "../../../utils/validation/isItemableState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
  * Collects all shape IDs contained in the specified list

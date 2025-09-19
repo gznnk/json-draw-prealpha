@@ -1,6 +1,18 @@
+import { PathPoint } from "../../components/shapes/Path";
+import { PathPointMinimap } from "../../components/shapes/Path/PathPoint";
+import { PathPointDefaultData } from "../../constants/data/shapes/PathPointDefaultData";
+import { PathPointDefaultState } from "../../constants/state/shapes/PathPointDefaultState";
 import type { PathPointData } from "../../types/data/shapes/PathPointData";
 import type { PathPointProps } from "../../types/props/shapes/PathPointProps";
 import type { PathPointState } from "../../types/state/shapes/PathPointState";
+import { mapPathPointDataToState } from "../../utils/shapes/path/mapPathPointDataToState";
+import { pathPointStateToData } from "../../utils/shapes/path/mapPathPointStateToData";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * PathPoint Shape Atlas
  *
@@ -11,32 +23,6 @@ import type { PathPointState } from "../../types/state/shapes/PathPointState";
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { PathPointDefaultData } from "../../constants/data/shapes/PathPointDefaultData";
-import { PathPointDefaultState } from "../../constants/state/shapes/PathPointDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { PathPoint } from "../../components/shapes/Path";
-import { PathPointMinimap } from "../../components/shapes/Path/PathPoint";
-
-import { mapPathPointDataToState } from "../../utils/shapes/path/mapPathPointDataToState";
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { pathPointStateToData } from "../../utils/shapes/path/mapPathPointStateToData";
 
 /**
  * PathPoint Shape Atlas Type Definition

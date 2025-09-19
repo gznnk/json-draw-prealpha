@@ -1,28 +1,20 @@
-// Import React.
 import { useEffect, useRef } from "react";
 
-// Import types.
+import { EVENT_NAME_CONNECT_NODES } from "../../../constants/core/EventNames";
+import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
 import type { Frame } from "../../../types/core/Frame";
 import type { ConnectNodesEvent } from "../../../types/events/ConnectNodesEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { ConnectableState } from "../../../types/state/shapes/ConnectableState";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { PathPointState } from "../../../types/state/shapes/PathPointState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-import { EVENT_NAME_CONNECT_NODES } from "../../../constants/core/EventNames";
-// Import constants.
-import { ConnectLineDefaultState } from "../../../constants/state/shapes/ConnectLineDefaultState";
-
-// Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { calcOrientedFrameFromPoints } from "../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { newId } from "../../../utils/shapes/common/newId";
 import { generateOptimalFrameToFrameConnection } from "../../../utils/shapes/connectPoint/generateOptimalFrameToFrameConnection";
-
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { isFrame } from "../../../utils/validation/isFrame";
-// Import hooks.
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { useAddDiagram } from "../actions/useAddDiagram";
 
 /**

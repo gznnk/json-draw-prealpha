@@ -1,32 +1,22 @@
-// Import React.
 import type React from "react";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 
-// Import types.
-import type { InputProps } from "../../../types/props/elements/InputProps";
-
-// Import constants.
 import { InputDefaultData } from "../../../constants/data/elements/InputDefaultData";
-
-// Import components.
-import { Outline } from "../../core/Outline";
-import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
-import { ConnectPoints } from "../../shapes/ConnectPoints";
-
-// Import hooks.
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
-
-// Import utils.
+import type { InputProps } from "../../../types/props/elements/InputProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { negativeToZero } from "../../../utils/math/common/negativeToZero";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { Outline } from "../../core/Outline";
+import { Textable } from "../../core/Textable";
+import { Transformative } from "../../core/Transformative";
+import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 /**
  * Input component - a simple text shape with textable feature only
@@ -110,8 +100,8 @@ const InputComponent: React.FC<InputProps> = ({
 		attributes: {
 			x,
 			y,
-			width: width,
-			height: height,
+			width,
+			height,
 			scaleX,
 			scaleY,
 			rotation,
@@ -194,8 +184,8 @@ const InputComponent: React.FC<InputProps> = ({
 		() => ({
 			x,
 			y,
-			width: width,
-			height: height,
+			width,
+			height,
 			rotation,
 			scaleX,
 			scaleY,

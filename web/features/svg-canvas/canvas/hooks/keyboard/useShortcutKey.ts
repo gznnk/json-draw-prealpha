@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
+
 import type { TextEditorState } from "../../../components/core/Textable/TextEditor/TextEditorTypes";
 
 /**

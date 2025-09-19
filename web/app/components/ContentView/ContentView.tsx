@@ -1,21 +1,16 @@
 import { memo } from "react";
 import type { ReactElement } from "react";
 
-// Import components
-import { MarkdownEditor } from "../../../features/markdown-editor";
-import { CanvasView } from "../CanvasView";
-
-// Import types and constants
-import { ContentType } from "../../types/ContentType";
-import type { ContentViewProps } from "./ContentViewTypes";
-import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/types/SvgCanvasData";
 import {
 	EMPTY_CONTENT_MESSAGE,
 	NO_SELECTION_MESSAGE,
 } from "./ContentViewConstants";
-
-// Import styled components
 import { Container, EmptyContent } from "./ContentViewStyled";
+import type { ContentViewProps } from "./ContentViewTypes";
+import { MarkdownEditor } from "../../../features/markdown-editor";
+import type { SvgCanvasData } from "../../../features/svg-canvas/canvas/types/SvgCanvasData";
+import { ContentType } from "../../types/ContentType";
+import { CanvasView } from "../CanvasView";
 
 /**
  * View component that displays various types of content.

@@ -1,19 +1,5 @@
-// Import React.
 import React, { memo, useCallback, useMemo, useState } from "react";
 
-// Import DiagramRegistry to render actual canvas content
-import { DiagramRegistry } from "../../../registry";
-
-// Import EventBus for diagram components
-import { EventBus } from "../../../../../shared/event-bus/EventBus";
-import { EventBusProvider } from "../../../context/EventBusContext";
-
-// Imports related to this component.
-import {
-	calculateCombinedCanvasBounds,
-	calculateCanvasViewportBounds,
-	constrainViewportPosition,
-} from "./MiniMapUtils";
 import {
 	MiniMapBackground,
 	MiniMapContainer,
@@ -21,6 +7,14 @@ import {
 	ViewportIndicator,
 } from "./MiniMapStyled";
 import type { MiniMapProps } from "./MiniMapTypes";
+import {
+	calculateCombinedCanvasBounds,
+	calculateCanvasViewportBounds,
+	constrainViewportPosition,
+} from "./MiniMapUtils";
+import { EventBus } from "../../../../../shared/event-bus/EventBus";
+import { EventBusProvider } from "../../../context/EventBusContext";
+import { DiagramRegistry } from "../../../registry";
 
 /**
  * MiniMap component that shows an overview of the entire canvas

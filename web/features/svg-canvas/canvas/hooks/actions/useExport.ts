@@ -1,13 +1,9 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
 import { DiagramRegistry } from "../../../registry";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import functions related to SvgCanvas.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { mimeToExtension } from "../../../utils/core/mimeToExtension";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
  * Custom hook to handle export events on the canvas.

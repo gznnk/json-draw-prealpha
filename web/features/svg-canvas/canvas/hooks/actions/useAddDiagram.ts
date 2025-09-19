@@ -1,17 +1,10 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { AddDiagramEvent } from "../../../types/events/AddDiagramEvent";
+import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
-import { isSelectableState } from "../../../utils/validation/isSelectableState";
-
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

@@ -1,3 +1,13 @@
+import { Frame } from "../../components/elements/Frame";
+import { FrameDefaultData } from "../../constants/data/elements/FrameDefaultData";
+import { FrameDefaultState } from "../../constants/state/elements/FrameDefaultState";
+import type { FrameData } from "../../types/data/elements/FrameData";
+import { FrameFeatures } from "../../types/data/elements/FrameData";
+import type { FrameProps } from "../../types/props/elements/FrameProps";
+import type { FrameState } from "../../types/state/elements/FrameState";
+import type { DiagramAtlas } from "../DiagramAtlas";
+import { DummyComponent, dummyImplementation } from "../DiagramAtlas";
+
 /**
  * Frame Element Atlas
  *
@@ -8,31 +18,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { FrameData } from "../../types/data/elements/FrameData";
-import { FrameFeatures } from "../../types/data/elements/FrameData";
-import type { FrameProps } from "../../types/props/elements/FrameProps";
-import type { FrameState } from "../../types/state/elements/FrameState";
-import type { DiagramAtlas } from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { FrameDefaultData } from "../../constants/data/elements/FrameDefaultData";
-import { FrameDefaultState } from "../../constants/state/elements/FrameDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { Frame } from "../../components/elements/Frame";
-import { DummyComponent } from "../DiagramAtlas";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { dummyImplementation } from "../DiagramAtlas";
 
 /**
  * Frame Element Atlas Type Definition

@@ -1,3 +1,20 @@
+import { Ellipse, EllipseMinimap } from "../../components/shapes/Ellipse";
+import { EllipseDefaultData } from "../../constants/data/shapes/EllipseDefaultData";
+import { EllipseDefaultState } from "../../constants/state/shapes/EllipseDefaultState";
+import type { EllipseData } from "../../types/data/shapes/EllipseData";
+import { EllipseFeatures } from "../../types/data/shapes/EllipseData";
+import type { EllipseProps } from "../../types/props/shapes/EllipseProps";
+import type { EllipseState } from "../../types/state/shapes/EllipseState";
+import { calcEllipseConnectPointPosition } from "../../utils/shapes/ellipse/calcEllipseConnectPointPosition";
+import { createEllipseState } from "../../utils/shapes/ellipse/createEllipseState";
+import { mapEllipseDataToState } from "../../utils/shapes/ellipse/mapEllipseDataToState";
+import { ellipseStateToData } from "../../utils/shapes/ellipse/mapEllipseStateToData";
+import type {
+	DiagramAtlas,
+	DataToStateMapper,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * Ellipse Shape Atlas
  *
@@ -8,46 +25,11 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-import type { EllipseData } from "../../types/data/shapes/EllipseData";
-import type { EllipseState } from "../../types/state/shapes/EllipseState";
-import type { EllipseProps } from "../../types/props/shapes/EllipseProps";
-import { EllipseFeatures } from "../../types/data/shapes/EllipseData";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { EllipseDefaultData } from "../../constants/data/shapes/EllipseDefaultData";
-import { EllipseDefaultState } from "../../constants/state/shapes/EllipseDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { Ellipse, EllipseMinimap } from "../../components/shapes/Ellipse";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createEllipseState } from "../../utils/shapes/ellipse/createEllipseState";
-import { calcEllipseConnectPointPosition } from "../../utils/shapes/ellipse/calcEllipseConnectPointPosition";
-import { ellipseStateToData } from "../../utils/shapes/ellipse/mapEllipseStateToData";
-import { mapEllipseDataToState } from "../../utils/shapes/ellipse/mapEllipseDataToState";
 
 /**
  * Ellipse Shape Atlas Type Definition
  */
-type EllipseAtlas = DiagramAtlas<
-	EllipseData,
-	EllipseState,
-	EllipseProps
->;
+type EllipseAtlas = DiagramAtlas<EllipseData, EllipseState, EllipseProps>;
 
 /**
  * Ellipse Shape Atlas Implementation

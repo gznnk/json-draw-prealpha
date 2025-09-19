@@ -1,8 +1,6 @@
-// Import types.
+import { ConnectableDefaultData } from "./ConnectableDefaultData";
 import type { DiagramFeatures } from "../../../types/core/DiagramFeatures";
 import type { DiagramType } from "../../../types/core/DiagramType";
-
-// Import constants.
 import { DiagramBaseDefaultData } from "../core/DiagramBaseDefaultData";
 import { FillableDefaultData } from "../core/FillableDefaultData";
 import { FrameableDefaultData } from "../core/FrameableDefaultData";
@@ -10,7 +8,6 @@ import { ItemableDefaultData } from "../core/ItemableDefaultData";
 import { StrokableDefaultData } from "../core/StrokableDefaultData";
 import { TextableDefaultData } from "../core/TextableDefaultData";
 import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
-import { ConnectableDefaultData } from "./ConnectableDefaultData";
 
 /**
  * Creates default data for a shape by combining feature-specific defaults.

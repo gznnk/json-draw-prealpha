@@ -1,3 +1,21 @@
+import {
+	ConnectLine,
+	ConnectLineMinimap,
+} from "../../components/shapes/ConnectLine";
+import { ConnectLineDefaultData } from "../../constants/data/shapes/ConnectLineDefaultData";
+import { ConnectLineDefaultState } from "../../constants/state/shapes/ConnectLineDefaultState";
+import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
+import { ConnectLineFeatures } from "../../types/data/shapes/ConnectLineData";
+import type { ConnectLineProps } from "../../types/props/shapes/ConnectLineProps";
+import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
+import { mapConnectLineDataToState } from "../../utils/shapes/connectLine/mapConnectLineDataToState";
+import { connectLineStateToData } from "../../utils/shapes/connectLine/mapConnectLineStateToData";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * ConnectLine Shape Atlas
  *
@@ -8,38 +26,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
-import { ConnectLineFeatures } from "../../types/data/shapes/ConnectLineData";
-import type { ConnectLineProps } from "../../types/props/shapes/ConnectLineProps";
-import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { ConnectLineDefaultData } from "../../constants/data/shapes/ConnectLineDefaultData";
-import { ConnectLineDefaultState } from "../../constants/state/shapes/ConnectLineDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import {
-	ConnectLine,
-	ConnectLineMinimap,
-} from "../../components/shapes/ConnectLine";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { mapConnectLineDataToState } from "../../utils/shapes/connectLine/mapConnectLineDataToState";
-import { connectLineStateToData } from "../../utils/shapes/connectLine/mapConnectLineStateToData";
 
 /**
  * ConnectLine Shape Atlas Type Definition

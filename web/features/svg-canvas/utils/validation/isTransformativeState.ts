@@ -1,4 +1,3 @@
-// Import types.
 import type { TransformativeState } from "../../types/state/core/TransformativeState";
 
 /**

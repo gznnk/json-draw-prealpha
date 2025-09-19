@@ -1,17 +1,11 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { InteractionState } from "../../types/InteractionState";
-
-// Import utils.
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

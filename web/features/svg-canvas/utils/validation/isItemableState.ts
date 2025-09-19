@@ -1,4 +1,3 @@
-// Import types.
 import type { ItemableState } from "../../types/state/core/ItemableState";
 
 /**

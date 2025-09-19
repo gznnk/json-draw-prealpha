@@ -1,4 +1,3 @@
-// Import types.
 import type { ConnectableState } from "../../types/state/shapes/ConnectableState";
 
 /**

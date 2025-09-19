@@ -1,5 +1,6 @@
 import type React from "react";
 import { memo } from "react";
+
 import { BodyContainer } from "./BodyStyled";
 
 /**

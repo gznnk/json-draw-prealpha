@@ -1,16 +1,12 @@
-// Import React.
-import React from "react";
+import React, { memo } from "react";
 
-// Import other features.
-import { renderMarkdown } from "../../../../shared/markdown";
-import type { Message } from "../../types";
-
-// Import related to this component.
 import {
 	UserMessageContainer,
 	AssistantMessageContainer,
 	MessageContent,
 } from "./MessageItemStyled";
+import { renderMarkdown } from "../../../../shared/markdown";
+import type { Message } from "../../types";
 import { CaretIndicator } from "../ChatUI/ChatUIStyled";
 
 type MessageItemProps = {
@@ -47,24 +43,25 @@ const SafeMarkdown: React.FC<{ content: string }> = ({ content }) => {
  * @param props - Component properties containing the message to display
  * @returns Rendered message component
  */
-export const MessageItem = React.memo(
-	({ message, showCaret }: MessageItemProps) => {
-		const Container =
-			message.role === "user"
-				? UserMessageContainer
-				: AssistantMessageContainer;
+const MessageItemComponent: React.FC<MessageItemProps> = ({
+	message,
+	showCaret,
+}) => {
+	const Container =
+		message.role === "user" ? UserMessageContainer : AssistantMessageContainer;
 
-		return (
-			<Container>
-				{message.role === "user" ? (
-					<MessageContent>{message.content}</MessageContent>
-				) : (
-					<MessageContent>
-						<SafeMarkdown content={message.content} />
-						{showCaret ? <CaretIndicator>|</CaretIndicator> : null}
-					</MessageContent>
-				)}
-			</Container>
-		);
-	},
-);
+	return (
+		<Container>
+			{message.role === "user" ? (
+				<MessageContent>{message.content}</MessageContent>
+			) : (
+				<MessageContent>
+					<SafeMarkdown content={message.content} />
+					{showCaret ? <CaretIndicator>|</CaretIndicator> : null}
+				</MessageContent>
+			)}
+		</Container>
+	);
+};
+
+export const MessageItem = memo(MessageItemComponent);

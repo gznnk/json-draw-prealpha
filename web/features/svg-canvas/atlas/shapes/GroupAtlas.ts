@@ -1,3 +1,18 @@
+import { Group, GroupMinimap } from "../../components/shapes/Group";
+import { GroupDefaultData } from "../../constants/data/shapes/GroupDefaultData";
+import { GroupDefaultState } from "../../constants/state/shapes/GroupDefaultState";
+import type { GroupData } from "../../types/data/shapes/GroupData";
+import { GroupFeatures } from "../../types/data/shapes/GroupData";
+import type { GroupProps } from "../../types/props/shapes/GroupProps";
+import type { GroupState } from "../../types/state/shapes/GroupState";
+import { mapGroupDataToState } from "../../utils/shapes/group/mapGroupDataToState";
+import { groupStateToData } from "../../utils/shapes/group/mapGroupStateToData";
+import type {
+	DiagramAtlas,
+	DataToStateMapper,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * Group Shape Atlas
  *
@@ -8,44 +23,11 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-import type { GroupData } from "../../types/data/shapes/GroupData";
-import type { GroupState } from "../../types/state/shapes/GroupState";
-import type { GroupProps } from "../../types/props/shapes/GroupProps";
-import { GroupFeatures } from "../../types/data/shapes/GroupData";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { GroupDefaultData } from "../../constants/data/shapes/GroupDefaultData";
-import { GroupDefaultState } from "../../constants/state/shapes/GroupDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { Group, GroupMinimap } from "../../components/shapes/Group";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { groupStateToData } from "../../utils/shapes/group/mapGroupStateToData";
-import { mapGroupDataToState } from "../../utils/shapes/group/mapGroupDataToState";
 
 /**
  * Group Shape Atlas Type Definition
  */
-type GroupAtlas = DiagramAtlas<
-	GroupData,
-	GroupState,
-	GroupProps
->;
+type GroupAtlas = DiagramAtlas<GroupData, GroupState, GroupProps>;
 
 /**
  * Group Shape Atlas Implementation

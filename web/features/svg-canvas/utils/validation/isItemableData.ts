@@ -1,4 +1,3 @@
-// Import types.
 import type { ItemableData } from "../../types/data/core/ItemableData";
 
 /**

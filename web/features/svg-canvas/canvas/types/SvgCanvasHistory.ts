@@ -1,4 +1,3 @@
-// Import types.
 import type { SvgCanvasData } from "./SvgCanvasData";
 
 /**

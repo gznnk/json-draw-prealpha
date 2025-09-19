@@ -1,7 +1,23 @@
+import {
+	WebSearchNode,
+	WebSearchNodeMinimap,
+} from "../../components/nodes/WebSearchNode";
+import { WebSearchNodeDefaultData } from "../../constants/data/nodes/WebSearchNodeDefaultData";
+import { WebSearchNodeDefaultState } from "../../constants/state/nodes/WebSearchNodeDefaultState";
 import type { WebSearchNodeData } from "../../types/data/nodes/WebSearchNodeData";
 import { WebSearchNodeFeatures } from "../../types/data/nodes/WebSearchNodeData";
 import type { WebSearchNodeProps } from "../../types/props/nodes/WebSearchNodeProps";
 import type { WebSearchNodeState } from "../../types/state/nodes/WebSearchNodeState";
+import { createWebSearchNodeState } from "../../utils/nodes/webSearchNode/createWebSearchNodeState";
+import { mapWebSearchNodeDataToState } from "../../utils/nodes/webSearchNode/mapWebSearchNodeDataToState";
+import { webSearchNodeStateToData } from "../../utils/nodes/webSearchNode/mapWebSearchNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DataToStateMapper,
+	DiagramAtlas,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * WebSearchNode Atlas
  *
@@ -12,36 +28,6 @@ import type { WebSearchNodeState } from "../../types/state/nodes/WebSearchNodeSt
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { WebSearchNodeDefaultData } from "../../constants/data/nodes/WebSearchNodeDefaultData";
-import { WebSearchNodeDefaultState } from "../../constants/state/nodes/WebSearchNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import {
-	WebSearchNode,
-	WebSearchNodeMinimap,
-} from "../../components/nodes/WebSearchNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createWebSearchNodeState } from "../../utils/nodes/webSearchNode/createWebSearchNodeState";
-import { mapWebSearchNodeDataToState } from "../../utils/nodes/webSearchNode/mapWebSearchNodeDataToState";
-import { webSearchNodeStateToData } from "../../utils/nodes/webSearchNode/mapWebSearchNodeStateToData";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
 
 /**
  * WebSearchNode Atlas Type Definition

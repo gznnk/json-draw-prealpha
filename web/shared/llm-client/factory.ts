@@ -1,7 +1,7 @@
 // Import interfaces and types
 import type { LLMClient } from "./interface";
-import type { LLMClientOptions } from "./types";
 import { OpenAIClient } from "./openai/client";
+import type { LLMClientOptions } from "./types";
 
 /**
  * Factory functions for creating LLM clients.

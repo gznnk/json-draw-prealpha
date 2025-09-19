@@ -5,12 +5,12 @@
  * @param eventBus - EventBus instance for dispatching work creation events
  * @returns A function handler that processes function calls and dispatches events
  */
+import { NEW_WORK_EVENT } from "./constants";
+import type { EventBus } from "../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../shared/llm-client/types";
-import type { EventBus } from "../../../shared/event-bus/EventBus";
-import { NEW_WORK_EVENT } from "./constants";
 
 /**
  * Factory to create a handler

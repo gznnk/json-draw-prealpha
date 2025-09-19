@@ -1,15 +1,11 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types related to SvgCanvas.
-import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
+import { triggerFlashConnectLine } from "../../../components/shapes/ConnectLine";
 import { EVENT_NAME_EXECUTION_PROPAGATION } from "../../../constants/core/EventNames";
 import type { ExecuteEvent } from "../../../types/events/ExecuteEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
+import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import functions related to SvgCanvas.
-import { triggerFlashConnectLine } from "../../../components/shapes/ConnectLine";
 
 /**
  * Custom hook to handle execute events on the canvas.

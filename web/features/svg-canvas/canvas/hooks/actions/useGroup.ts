@@ -1,24 +1,18 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { GroupState } from "../../../types/state/shapes/GroupState";
-import type { SvgCanvasState } from "../../types/SvgCanvasState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import hooks.
-import { useAddHistory } from "../history/useAddHistory";
-
-// Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../utils/core/newEventId";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
+import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 import { cleanupGroups } from "../../utils/cleanupGroups";
 import { removeSelectedDiagrams } from "../../utils/removeSelectedDiagrams";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
-import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle group events on the canvas.
@@ -83,7 +77,10 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 			const mergedItems = [...groupsCleanedUpItems, group];
 
 			// Bring connect lines forward that are connected to grouped components.
-			const orderedItems = bringConnectLinesForward(mergedItems, selectedDiagrams);
+			const orderedItems = bringConnectLinesForward(
+				mergedItems,
+				selectedDiagrams,
+			);
 
 			const outlineUpdatedItems = updateOutlineOfAllItemables(orderedItems);
 

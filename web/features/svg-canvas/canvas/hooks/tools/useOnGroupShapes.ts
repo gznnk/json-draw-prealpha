@@ -1,24 +1,16 @@
-// Import React.
 import { useEffect, useRef } from "react";
 
-// Import types.
+import { EVENT_NAME_GROUP_SHAPES } from "../../../constants/core/EventNames";
 import type { GroupShapesEvent } from "../../../types/events/GroupShapesEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
+import { calcUnrotatedItemableBoundingBox } from "../../../utils/core/calcUnrotatedItemableBoundingBox";
+import { getDiagramById } from "../../../utils/core/getDiagramById";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import constants.
-import { EVENT_NAME_GROUP_SHAPES } from "../../../constants/core/EventNames";
-
-// Import utils.
-import { getDiagramById } from "../../../utils/core/getDiagramById";
-import { calcUnrotatedItemableBoundingBox } from "../../../utils/core/calcUnrotatedItemableBoundingBox";
+import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 import { cleanupGroups } from "../../utils/cleanupGroups";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
-import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
-
-// Import hooks.
 import { useAddHistory } from "../history/useAddHistory";
 
 /**

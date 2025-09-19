@@ -1,4 +1,3 @@
-// Import types.
 import type { Frame } from "../../types/core/Frame";
 
 /**

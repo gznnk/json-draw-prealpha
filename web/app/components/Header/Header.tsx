@@ -1,8 +1,6 @@
-// Import React.
 import type React from "react";
 import { memo } from "react";
 
-// Import local module files.
 import { HeaderContainer, HeaderTitle, HeaderControls } from "./HeaderStyled";
 
 /**

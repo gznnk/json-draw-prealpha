@@ -1,10 +1,7 @@
-// Import types.
+import { applyFunctionRecursively } from "./applyFunctionRecursively";
 import type { Diagram } from "../../types/state/core/Diagram";
-
-// Import utils.
 import { isSelectableState } from "../../utils/validation/isSelectableState";
 import { isTransformativeState } from "../../utils/validation/isTransformativeState";
-import { applyFunctionRecursively } from "./applyFunctionRecursively";
 
 /**
  * Recursively clear the selection state of all items.

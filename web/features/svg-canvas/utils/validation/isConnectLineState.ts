@@ -1,4 +1,3 @@
-// Import types.
 import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
 
 /**

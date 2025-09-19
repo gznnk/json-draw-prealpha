@@ -6,6 +6,7 @@ import {
 	useState,
 	type ReactElement,
 } from "react";
+
 import { renderMarkdown } from "../../../shared/markdown";
 import type { MarkdownEditorProps } from "../types";
 import {
@@ -24,11 +25,8 @@ import {
 	ToolbarRight,
 	TitleInput,
 } from "./MarkdownEditorStyled";
+import { adjustScrollBasedOnCaret, syncScroll } from "./MarkdownEditorUtils";
 import { SafeHtmlPreview } from "./SafeHtmlPreview";
-import {
-	adjustScrollBasedOnCaret,
-	syncScroll,
-} from "./MarkdownEditorUtils";
 
 const MarkdownEditorComponent = ({
 	markdown = "",

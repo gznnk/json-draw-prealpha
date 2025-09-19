@@ -1,11 +1,7 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import constants.
 import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL } from "../../SvgCanvasConstants";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
  * Custom hook to handle zoom events on the canvas.

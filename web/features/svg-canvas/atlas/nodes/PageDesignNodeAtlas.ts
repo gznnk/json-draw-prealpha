@@ -1,3 +1,23 @@
+import {
+	PageDesignNode,
+	PageDesignNodeMinimap,
+} from "../../components/nodes/PageDesignNode";
+import { PageDesignNodeDefaultData } from "../../constants/data/nodes/PageDesignNodeDefaultData";
+import { PageDesignNodeDefaultState } from "../../constants/state/nodes/PageDesignNodeDefaultState";
+import type { PageDesignNodeData } from "../../types/data/nodes/PageDesignNodeData";
+import { PageDesignNodeFeatures } from "../../types/data/nodes/PageDesignNodeData";
+import type { PageDesignNodeProps } from "../../types/props/nodes/PageDesignNodeProps";
+import type { PageDesignNodeState } from "../../types/state/nodes/PageDesignNodeState";
+import { createPageDesignNodeState } from "../../utils/nodes/pageDesignNode/createPageDesignNodeState";
+import { mapPageDesignNodeDataToState } from "../../utils/nodes/pageDesignNode/mapPageDesignNodeDataToState";
+import { pageDesignNodeStateToData } from "../../utils/nodes/pageDesignNode/mapPageDesignNodeStateToData";
+import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
+import type {
+	DiagramAtlas,
+	DataToStateMapper,
+	StateToDataMapper,
+} from "../DiagramAtlas";
+
 /**
  * PageDesignNode Atlas
  *
@@ -8,37 +28,6 @@
  * This file serves both as a developer reference and as a programmatic
  * registry for the DiagramRegistry system.
  */
-// ============================================================================
-// Types
-// ============================================================================
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
-} from "../DiagramAtlas";
-import type { PageDesignNodeData } from "../../types/data/nodes/PageDesignNodeData";
-import type { PageDesignNodeState } from "../../types/state/nodes/PageDesignNodeState";
-import type { PageDesignNodeProps } from "../../types/props/nodes/PageDesignNodeProps";
-import { PageDesignNodeFeatures } from "../../types/data/nodes/PageDesignNodeData";
-
-// ============================================================================
-// Defaults
-// ============================================================================
-import { PageDesignNodeDefaultData } from "../../constants/data/nodes/PageDesignNodeDefaultData";
-import { PageDesignNodeDefaultState } from "../../constants/state/nodes/PageDesignNodeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
-import { PageDesignNode, PageDesignNodeMinimap } from "../../components/nodes/PageDesignNode";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-import { createPageDesignNodeState } from "../../utils/nodes/pageDesignNode/createPageDesignNodeState";
-import { calcRectangleConnectPointPosition } from "../../utils/shapes/rectangle/calcRectangleConnectPointPosition";
-import { pageDesignNodeStateToData } from "../../utils/nodes/pageDesignNode/mapPageDesignNodeStateToData";
-import { mapPageDesignNodeDataToState } from "../../utils/nodes/pageDesignNode/mapPageDesignNodeDataToState";
 
 /**
  * PageDesignNode Atlas Type Definition

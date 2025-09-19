@@ -1,14 +1,10 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
-import type { SvgCanvasState } from "../../types/SvgCanvasState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../utils/core/newEventId";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { cleanupGroups } from "../../utils/cleanupGroups";
 import { collectDiagramIds } from "../../utils/collectDiagramIds";
 import { removeSelectedDiagrams } from "../../utils/removeSelectedDiagrams";

@@ -1,4 +1,3 @@
-// External library imports
 import DOMPurify from "dompurify";
 import hljs from "highlight.js";
 import katex from "katex";

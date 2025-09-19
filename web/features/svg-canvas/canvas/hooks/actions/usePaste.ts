@@ -1,20 +1,16 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 

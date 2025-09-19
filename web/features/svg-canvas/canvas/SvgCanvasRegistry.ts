@@ -1,23 +1,5 @@
-// Import registry
-import { DiagramRegistry } from "../registry";
-
-// Import Atlas objects
-import { ConnectLineAtlas } from "../atlas/shapes/ConnectLineAtlas";
-import { EllipseAtlas } from "../atlas/shapes/EllipseAtlas";
-import { GroupAtlas } from "../atlas/shapes/GroupAtlas";
-import { ImageAtlas } from "../atlas/shapes/ImageAtlas";
-import { PathAtlas } from "../atlas/shapes/PathAtlas";
-import { PathPointAtlas } from "../atlas/shapes/PathPointAtlas";
-import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
-import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
-
-// Import Element Atlas objects
 import { ButtonAtlas } from "../atlas/elements/ButtonAtlas";
 import { InputAtlas } from "../atlas/elements/InputAtlas";
-
-// Import Diagram Atlas objects
-
-// Import Node Atlas objects
 import { AgentNodeAtlas } from "../atlas/nodes/AgentNodeAtlas";
 import { HubNodeAtlas } from "../atlas/nodes/HubNodeAtlas";
 import { ImageGenNodeAtlas } from "../atlas/nodes/ImageGenNodeAtlas";
@@ -27,6 +9,15 @@ import { SvgToDiagramNodeAtlas } from "../atlas/nodes/SvgToDiagramNodeAtlas";
 import { TextAreaNodeAtlas } from "../atlas/nodes/TextAreaNodeAtlas";
 import { VectorStoreNodeAtlas } from "../atlas/nodes/VectorStoreNodeAtlas";
 import { WebSearchNodeAtlas } from "../atlas/nodes/WebSearchNodeAtlas";
+import { ConnectLineAtlas } from "../atlas/shapes/ConnectLineAtlas";
+import { EllipseAtlas } from "../atlas/shapes/EllipseAtlas";
+import { GroupAtlas } from "../atlas/shapes/GroupAtlas";
+import { ImageAtlas } from "../atlas/shapes/ImageAtlas";
+import { PathAtlas } from "../atlas/shapes/PathAtlas";
+import { PathPointAtlas } from "../atlas/shapes/PathPointAtlas";
+import { RectangleAtlas } from "../atlas/shapes/RectangleAtlas";
+import { SvgAtlas } from "../atlas/shapes/SvgAtlas";
+import { DiagramRegistry } from "../registry";
 
 /**
  * Initialize all diagram registrations for the SvgCanvas.

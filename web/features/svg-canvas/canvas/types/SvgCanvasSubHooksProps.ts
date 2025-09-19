@@ -1,8 +1,7 @@
-// Import types.
-import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type { SvgCanvasData } from "./SvgCanvasData";
 import type { SvgCanvasRef } from "./SvgCanvasRef";
 import type { SvgCanvasState } from "./SvgCanvasState";
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 
 /**
  * Type for canvas custom hooks.

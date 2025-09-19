@@ -1,17 +1,11 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
+import { newEventId } from "../../../utils/core/newEventId";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import hooks.
-import { useAddHistory } from "../history/useAddHistory";
-
-// Import utils.
-import { newEventId } from "../../../utils/core/newEventId";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { ungroupSelectedGroupsRecursively } from "../../utils/ungroupSelectedGroupsRecursively";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle ungroup events on the canvas.

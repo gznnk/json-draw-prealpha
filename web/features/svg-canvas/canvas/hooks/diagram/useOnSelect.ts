@@ -1,17 +1,13 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
-import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
 import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { getAncestorItemsById } from "../../utils/getAncestorItemsById";

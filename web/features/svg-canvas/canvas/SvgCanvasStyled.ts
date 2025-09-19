@@ -2,23 +2,23 @@
 import styled from "@emotion/styled";
 
 export const Viewport = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
 `;
 
 /**
  * Styled wrapper element for the SVG canvas.
  */
 export const Container = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    background-color: #ffffff;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	background-color: #ffffff;
 `;
 
 /**
@@ -32,17 +32,17 @@ type SvgProps = {
  * Styled SVG element for rendering the diagram.
  */
 export const Svg = styled.svg<SvgProps>`
-    display: block;
-    box-sizing: border-box;
-    background-color: #FFFFFF;
-    outline: none;
-    cursor: ${(props) => {
-			if (props.isGrabScrolling) return "grabbing";
-			return "default";
-		}};
-    * {
-        outline: none;
-    }
+	display: block;
+	box-sizing: border-box;
+	background-color: #ffffff;
+	outline: none;
+	cursor: ${(props) => {
+		if (props.isGrabScrolling) return "grabbing";
+		return "default";
+	}};
+	* {
+		outline: none;
+	}
 `;
 
 /**
@@ -60,28 +60,28 @@ type HTMLElementsContainerProps = {
  * Styled wrapper element for containing HTML elements.
  */
 export const HTMLElementsContainer = styled.div<HTMLElementsContainerProps>`
-    position: absolute;
-    left: ${(props) => props.left}px;
-    top: ${(props) => props.top}px;
-    width: ${(props) => props.width}px;
-    height: ${(props) => props.height}px;
-    transform: ${(props) => (props.zoom ? `scale(${props.zoom})` : "none")};
-    transform-origin: top left;
-    pointer-events: none;
+	position: absolute;
+	left: ${(props) => props.left}px;
+	top: ${(props) => props.top}px;
+	width: ${(props) => props.width}px;
+	height: ${(props) => props.height}px;
+	transform: ${(props) => (props.zoom ? `scale(${props.zoom})` : "none")};
+	transform-origin: top left;
+	pointer-events: none;
 `;
 
 /**
  * Styled element for the viewport overlay.
  */
 export const ViewportOverlay = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
-    pointer-events: none;
-    user-select: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	pointer-events: none;
+	user-select: none;
 `;
 
 /**
@@ -99,12 +99,12 @@ type SelectionRectProps = {
  * Styled selection rectangle for area selection.
  */
 export const SelectionRect = styled.rect<SelectionRectProps>`
-    fill: rgba(22, 119, 255, 0.06);
-    stroke: #1677ff;
-    stroke-width: 1.5;
-    stroke-dasharray: 5,3;
-    pointer-events: none;
-    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
-    rx: 2;
-    ry: 2;
+	fill: rgba(22, 119, 255, 0.06);
+	stroke: #1677ff;
+	stroke-width: 1.5;
+	stroke-dasharray: 5, 3;
+	pointer-events: none;
+	visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+	rx: 2;
+	ry: 2;
 `;

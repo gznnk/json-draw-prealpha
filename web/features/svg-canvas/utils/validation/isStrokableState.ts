@@ -1,4 +1,3 @@
-// Import types.
 import type { StrokableState } from "../../types/state/core/StrokableState";
 
 /**
