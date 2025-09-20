@@ -8,6 +8,7 @@ import {
 	MenuDropdown,
 	MenuDropdownItem,
 } from "./MenuStyled";
+import { useMenuPlugin } from "../../hooks/useMenuPlugin";
 
 /**
  * Props for the MenuComponent.
@@ -39,11 +40,13 @@ type MenuProps = {
  * @returns ReactElement representing the menu
  */
 const MenuComponent: React.FC<MenuProps> = ({
-	onNew,
-	onOpen,
-	onSave,
-	onHelp,
+	onNew: legacyOnNew,
+	onOpen: legacyOnOpen,
+	onSave: legacyOnSave,
+	onHelp: legacyOnHelp,
 }) => {
+	// Use the plugin system for menu actions
+	const { onNew, onOpen, onSave, onHelp } = useMenuPlugin();
 	const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 	const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
 	const menuItemRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -63,9 +66,21 @@ const MenuComponent: React.FC<MenuProps> = ({
 		setActiveDropdown(menuName);
 	};
 
-	const handleItemClick = (action: (() => void) | undefined) => {
+	const handleItemClick = async (
+		pluginAction: (() => Promise<void>) | (() => void),
+		legacyAction?: () => void
+	) => {
 		setActiveDropdown(null);
-		action?.();
+		
+		try {
+			// Use plugin action first, fall back to legacy if provided
+			await pluginAction();
+			
+			// Also call legacy callback if provided (for backward compatibility)
+			legacyAction?.();
+		} catch (error) {
+			console.error("Menu action failed:", error);
+		}
 	};
 
 	const handleMouseLeave = () => {
@@ -104,19 +119,19 @@ const MenuComponent: React.FC<MenuProps> = ({
 					>
 						{activeDropdown === "file" && (
 							<>
-								<MenuDropdownItem onClick={() => handleItemClick(onNew)}>
+								<MenuDropdownItem onClick={() => handleItemClick(onNew, legacyOnNew)}>
 									新規作成
 								</MenuDropdownItem>
-								<MenuDropdownItem onClick={() => handleItemClick(onOpen)}>
+								<MenuDropdownItem onClick={() => handleItemClick(onOpen, legacyOnOpen)}>
 									開く
 								</MenuDropdownItem>
-								<MenuDropdownItem onClick={() => handleItemClick(onSave)}>
+								<MenuDropdownItem onClick={() => handleItemClick(onSave, legacyOnSave)}>
 									保存
 								</MenuDropdownItem>
 							</>
 						)}
 						{activeDropdown === "help" && (
-							<MenuDropdownItem onClick={() => handleItemClick(onHelp)}>
+							<MenuDropdownItem onClick={() => handleItemClick(onHelp, legacyOnHelp)}>
 								ヘルプ
 							</MenuDropdownItem>
 						)}
