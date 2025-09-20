@@ -18,10 +18,12 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 		console.log("Web: Creating new file...");
 		this.showNotification("新しいファイルを作成します", "info");
 		
-		// Web-specific implementation
-		// For example: clear current canvas, reset state, etc.
-		if (confirm("現在の作業内容が失われます。新しいファイルを作成しますか？")) {
-			// Implement new file logic here
+		// Check for unsaved changes
+		const shouldProceed = !this.canvasDataContext?.hasUnsavedChanges || 
+			confirm("現在の作業内容が失われます。新しいファイルを作成しますか？");
+		
+		if (shouldProceed) {
+			// Canvas data context will handle the new canvas creation
 			console.log("Web: New file created");
 			this.showNotification("新しいファイルが作成されました", "success");
 		}
@@ -38,8 +40,13 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 				const file = await fileHandle.getFile();
 				const content = await file.text();
 				console.log("Web: File opened:", file.name, "Content length:", content.length);
+
+				// Import canvas data if context is available
+				if (this.canvasDataContext) {
+					await this.canvasDataContext.importCanvasData(content);
+				}
+
 				this.showNotification(`ファイル "${file.name}" を開きました`, "success");
-				// Process file content here
 			}
 		} catch (error) {
 			console.error("Web: Error opening file:", error);
@@ -116,12 +123,17 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 	 * Save file using File System Access API or download
 	 */
 	private async saveFileDialog(): Promise<void> {
-		const content = JSON.stringify({ message: "Sample content" }, null, 2);
+		if (!this.canvasDataContext) {
+			throw new Error("Canvas data context not available");
+		}
+
+		const content = this.canvasDataContext.exportCanvasData();
+		const fileName = this.canvasDataContext.getCurrentFileName();
 
 		// Modern browsers with File System Access API
 		if ('showSaveFilePicker' in window) {
 			const fileHandle = await (window as unknown as { showSaveFilePicker: (options: unknown) => Promise<{ createWritable: () => Promise<{ write: (content: string) => Promise<void>; close: () => Promise<void> }> }> }).showSaveFilePicker({
-				suggestedName: 'diagram.json',
+				suggestedName: fileName,
 				types: [
 					{
 						description: 'JSON files',
@@ -142,7 +154,7 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = 'diagram.json';
+		a.download = fileName;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);

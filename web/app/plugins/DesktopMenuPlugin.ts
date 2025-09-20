@@ -36,14 +36,15 @@ export class DesktopMenuPlugin extends BaseMenuPlugin {
 		this.showNotification("新しいファイルを作成します", "info");
 
 		try {
-			// Desktop-specific implementation using Electron APIs
-			const result = await this.showConfirmDialog(
-				"新しいファイル",
-				"現在の作業内容が失われます。新しいファイルを作成しますか？"
-			);
+			// Check for unsaved changes
+			const shouldProceed = !this.canvasDataContext?.hasUnsavedChanges || 
+				await this.showConfirmDialog(
+					"新しいファイル",
+					"現在の作業内容が失われます。新しいファイルを作成しますか？"
+				);
 
-			if (result) {
-				// Implement new file logic here
+			if (shouldProceed) {
+				// Canvas data context will handle the new canvas creation
 				console.log("Desktop: New file created");
 				this.showNotification("新しいファイルが作成されました", "success");
 			}
@@ -64,8 +65,13 @@ export class DesktopMenuPlugin extends BaseMenuPlugin {
 			if (filePath) {
 				const content = await this.readFile(filePath);
 				console.log("Desktop: File opened:", filePath, "Content length:", content.length);
+				
+				// Import canvas data if context is available
+				if (this.canvasDataContext) {
+					await this.canvasDataContext.importCanvasData(content);
+				}
+				
 				this.showNotification(`ファイル "${filePath}" を開きました`, "success");
-				// Process file content here
 			}
 		} catch (error) {
 			console.error("Desktop: Error opening file:", error);
@@ -78,11 +84,15 @@ export class DesktopMenuPlugin extends BaseMenuPlugin {
 		this.showNotification("ファイルを保存します", "info");
 
 		try {
+			if (!this.canvasDataContext) {
+				throw new Error("Canvas data context not available");
+			}
+
 			// Desktop-specific implementation using Electron dialog
 			const filePath = await this.showSaveDialog();
 			
 			if (filePath) {
-				const content = JSON.stringify({ message: "Sample content" }, null, 2);
+				const content = this.canvasDataContext.exportCanvasData();
 				await this.writeFile(filePath, content);
 				console.log("Desktop: File saved:", filePath);
 				this.showNotification(`ファイル "${filePath}" を保存しました`, "success");

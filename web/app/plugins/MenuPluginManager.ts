@@ -1,6 +1,20 @@
 import { DesktopMenuPlugin } from "./DesktopMenuPlugin";
 import type { MenuPlugin } from "./MenuPlugin";
 import { WebMenuPlugin } from "./WebMenuPlugin";
+import type { SvgCanvasData } from "../../features/svg-canvas/canvas/types/SvgCanvasData";
+
+// Forward declare the context type to avoid circular dependency
+type CanvasDataContextType = {
+	canvas: { id: string; name: string; content: SvgCanvasData } | null;
+	hasUnsavedChanges: boolean;
+	updateCanvas: (data: SvgCanvasData) => void;
+	saveCanvas: () => Promise<void>;
+	loadCanvas: (id: string) => Promise<void>;
+	createNewCanvas: (name?: string) => void;
+	exportCanvasData: () => string;
+	importCanvasData: (jsonData: string) => Promise<void>;
+	getCurrentFileName: () => string;
+};
 
 /**
  * Plugin manager that automatically selects the appropriate menu plugin
@@ -10,6 +24,7 @@ export class MenuPluginManager {
 	private static instance: MenuPluginManager;
 	private currentPlugin: MenuPlugin | null = null;
 	private availablePlugins: MenuPlugin[] = [];
+	private canvasDataContext: CanvasDataContextType | null = null;
 
 	private constructor() {
 		this.initializePlugins();
@@ -80,10 +95,28 @@ export class MenuPluginManager {
 	}
 
 	/**
+	 * Set the canvas data context for plugins to use
+	 */
+	public setCanvasDataContext(context: CanvasDataContextType): void {
+		this.canvasDataContext = context;
+		
+		// Update plugins with the canvas context
+		this.availablePlugins.forEach(plugin => {
+			if ('setCanvasDataContext' in plugin && typeof (plugin as MenuPlugin & { setCanvasDataContext?: (ctx: CanvasDataContextType) => void }).setCanvasDataContext === 'function') {
+				(plugin as MenuPlugin & { setCanvasDataContext: (ctx: CanvasDataContextType) => void }).setCanvasDataContext(context);
+			}
+		});
+	}
+
+	/**
 	 * Execute new file action using current plugin
 	 */
 	public async onNew(): Promise<void> {
 		if (this.currentPlugin) {
+			if (this.canvasDataContext) {
+				// Use canvas data context to create new canvas
+				this.canvasDataContext.createNewCanvas();
+			}
 			return this.currentPlugin.onNew();
 		}
 		console.error("MenuPluginManager: No plugin available for onNew");
@@ -104,6 +137,10 @@ export class MenuPluginManager {
 	 */
 	public async onSave(): Promise<void> {
 		if (this.currentPlugin) {
+			if (this.canvasDataContext) {
+				// Use canvas data context to save
+				await this.canvasDataContext.saveCanvas();
+			}
 			return this.currentPlugin.onSave();
 		}
 		console.error("MenuPluginManager: No plugin available for onSave");

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useCanvasData } from "../context/CanvasDataContext";
 import type { MenuPlugin } from "../plugins/MenuPlugin";
 import { MenuPluginManager } from "../plugins/MenuPluginManager";
 
@@ -11,11 +12,14 @@ export const useMenuPlugin = () => {
 	const [pluginManager] = useState(() => MenuPluginManager.getInstance());
 	const [currentPlugin, setCurrentPlugin] = useState<MenuPlugin | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const canvasData = useCanvasData();
 
 	// Update current plugin when manager changes
 	useEffect(() => {
 		setCurrentPlugin(pluginManager.getCurrentPlugin());
-	}, [pluginManager]);
+		// Pass canvas data context to plugin manager
+		pluginManager.setCanvasDataContext(canvasData);
+	}, [pluginManager, canvasData]);
 
 	// Menu action handlers
 	const handleNew = useCallback(async () => {
