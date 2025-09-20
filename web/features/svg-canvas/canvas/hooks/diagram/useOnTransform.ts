@@ -1,35 +1,25 @@
-// Import React.
 import { useCallback, useRef } from "react";
 
-// Import types.
+import { DiagramRegistry } from "../../../registry";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
+import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
+import { rotatePoint } from "../../../utils/math/points/rotatePoint";
+import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
+import { isConnectableState } from "../../../utils/validation/isConnectableState";
+import { isItemableState } from "../../../utils/validation/isItemableState";
+import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-
-// Import utils.
-import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
-import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { createItemMap } from "../../utils/createItemMap";
-import { updateOutlineOfItemable } from "../../utils/updateOutlineOfItemable";
-
-// Import hooks.
-import { useAddHistory } from "../history/useAddHistory";
-
-// Import resistry.
-import { DiagramRegistry } from "../../../registry";
-
-// Import utils.
-import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
-import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
-import { rotatePoint } from "../../../utils/math/points/rotatePoint";
-import { isItemableState } from "../../../utils/validation/isItemableState";
-import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
-import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
+import { updateOutlineOfItemable } from "../../utils/updateOutlineOfItemable";
+import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Determines if an item should be in transforming state based on event type.
@@ -64,7 +54,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 	const transformChild = useCallback(
 		(
 			item: Diagram,
-			e: DiagramTransformEvent,
+			event: DiagramTransformEvent,
 			transformedConnectables: Diagram[],
 			ancestors: string[] = [],
 			topLevelGroupIds: Set<string> = new Set(),
@@ -74,42 +64,43 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				// If the item is not found in the initial items map, return the child item as is.
 				return item;
 			}
-			const groupScaleX = e.endFrame.width / e.startFrame.width;
-			const groupScaleY = e.endFrame.height / e.startFrame.height;
+			const groupScaleX = event.endFrame.width / event.startFrame.width;
+			const groupScaleY = event.endFrame.height / event.startFrame.height;
 			const inversedItemCenter = rotatePoint(
 				initialItem.x,
 				initialItem.y,
-				e.startFrame.x,
-				e.startFrame.y,
-				degreesToRadians(-e.startFrame.rotation),
+				event.startFrame.x,
+				event.startFrame.y,
+				degreesToRadians(-event.startFrame.rotation),
 			);
 			const dx =
-				(inversedItemCenter.x - e.startFrame.x) *
-				e.startFrame.scaleX *
-				e.endFrame.scaleX;
+				(inversedItemCenter.x - event.startFrame.x) *
+				event.startFrame.scaleX *
+				event.endFrame.scaleX;
 			const dy =
-				(inversedItemCenter.y - e.startFrame.y) *
-				e.startFrame.scaleY *
-				e.endFrame.scaleY;
+				(inversedItemCenter.y - event.startFrame.y) *
+				event.startFrame.scaleY *
+				event.endFrame.scaleY;
 
 			const newDx = dx * groupScaleX;
 			const newDy = dy * groupScaleY;
 
 			let newCenter = {
-				x: e.endFrame.x + newDx,
-				y: e.endFrame.y + newDy,
+				x: event.endFrame.x + newDx,
+				y: event.endFrame.y + newDy,
 			};
 			newCenter = rotatePoint(
 				newCenter.x,
 				newCenter.y,
-				e.endFrame.x,
-				e.endFrame.y,
-				degreesToRadians(e.endFrame.rotation),
+				event.endFrame.x,
+				event.endFrame.y,
+				degreesToRadians(event.endFrame.rotation),
 			);
 
 			let newItem: Diagram;
 			if (isTransformativeState(initialItem)) {
-				const rotationDiff = e.endFrame.rotation - e.startFrame.rotation;
+				const rotationDiff =
+					event.endFrame.rotation - event.startFrame.rotation;
 				const newRotation = initialItem.rotation + rotationDiff;
 				const newItemFrame = {
 					x: newCenter.x,
@@ -117,8 +108,8 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					width: initialItem.width * groupScaleX,
 					height: initialItem.height * groupScaleY,
 					rotation: newRotation,
-					scaleX: e.endFrame.scaleX,
-					scaleY: e.endFrame.scaleY,
+					scaleX: event.endFrame.scaleX,
+					scaleY: event.endFrame.scaleY,
 				};
 
 				// Apply minWidth and minHeight constraints
@@ -150,7 +141,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					} else {
 						newItems = transformRecursively(
 							initialItem.items ?? [],
-							e,
+							event,
 							transformedConnectables,
 							true,
 							[...ancestors, item.id],
@@ -162,7 +153,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				newItem = {
 					...item,
 					...newItemFrame,
-					isTransforming: getIsTransformingState(e.eventPhase),
+					isTransforming: getIsTransformingState(event.eventPhase),
 					items: newItems,
 				} as Diagram;
 
@@ -195,23 +186,23 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 	const transformRecursively = useCallback(
 		(
 			items: Diagram[],
-			e: DiagramTransformEvent,
+			event: DiagramTransformEvent,
 			transformedConnectables: Diagram[],
 			isTransformedChild: boolean,
 			ancestors: string[] = [],
 			topLevelGroupIds: Set<string> = new Set(),
 		): Diagram[] => {
 			return items.map((item) => {
-				if (item.id === e.id) {
+				if (item.id === event.id) {
 					// Apply the new shape to the item.
 					let newItem = {
 						...item,
-						...e.endFrame,
+						...event.endFrame,
 					} as Diagram;
 
 					// Update isTransforming flag if it's transformative data
 					if (isTransformativeState(newItem)) {
-						newItem.isTransforming = getIsTransformingState(e.eventPhase);
+						newItem.isTransforming = getIsTransformingState(event.eventPhase);
 					}
 
 					// Transform its children recursively.
@@ -220,7 +211,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 							item.type,
 						);
 						if (transformFunction) {
-							newItem.items = transformFunction(e.endFrame, newItem.items);
+							newItem.items = transformFunction(event.endFrame, newItem.items);
 							newItem.items = newItem.items.map((child) => {
 								if (isConnectableState(child)) {
 									const updatedChild = updateDiagramConnectPoints(child);
@@ -232,7 +223,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						} else {
 							newItem.items = transformRecursively(
 								newItem.items ?? [],
-								e,
+								event,
 								transformedConnectables,
 								true,
 								[...ancestors, item.id],
@@ -258,7 +249,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				if (isTransformedChild || multiSelectedItemIds.current.has(item.id)) {
 					const transformedChild = transformChild(
 						item,
-						e,
+						event,
 						transformedConnectables,
 						ancestors,
 						topLevelGroupIds,
@@ -277,7 +268,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						...item,
 						items: transformRecursively(
 							item.items ?? [],
-							e,
+							event,
 							transformedConnectables,
 							false,
 							[...ancestors, item.id],
