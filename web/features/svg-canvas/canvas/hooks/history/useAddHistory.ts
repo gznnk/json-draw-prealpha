@@ -4,8 +4,8 @@ import { MAX_HISTORY_SIZE } from "../../SvgCanvasConstants";
 import type { SvgCanvasHistory } from "../../types/SvgCanvasHistory";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import { canvasStateToData } from "../../utils/canvasStateToData";
 import { canvasStateToHistory } from "../../utils/canvasStateToHistory";
-import { svgCanvasStateToData } from "../../utils/svgCanvasStateToData";
 
 /**
  * Custom hook to add history entries to the canvas.
@@ -51,7 +51,7 @@ export const useAddHistory = (props: SvgCanvasSubHooksProps) => {
 				historyIndex: newHistory.length - 1,
 			};
 
-			onDataChange?.(svgCanvasStateToData(newCanvasState));
+			onDataChange?.(canvasStateToData(newCanvasState));
 
 			return newCanvasState;
 		},

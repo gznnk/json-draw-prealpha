@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import type { CanvasViewProps } from "./CanvasViewTypes";
 import { SvgCanvas, useSvgCanvas } from "../../../features/svg-canvas";
@@ -21,7 +21,7 @@ const CanvasViewComponent = ({
 	const canvasId = id || content.id;
 	const { items, minX, minY, zoom } = content;
 	// Initialize required state with the useSvgCanvas hook
-	const { canvasProps } = useSvgCanvas({
+	const { canvasProps, loadCanvasData } = useSvgCanvas({
 		id: canvasId,
 		minX: minX || 0,
 		minY: minY || 0,
@@ -30,6 +30,18 @@ const CanvasViewComponent = ({
 		canvasRef,
 		onDataChange,
 	});
+
+	useEffect(() => {
+		// Reload canvas data when content prop changes
+		loadCanvasData({
+			id: canvasId,
+			minX: minX || 0,
+			minY: minY || 0,
+			zoom: zoom || 1,
+			items,
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [canvasId]);
 
 	// Spread all required props to the SvgCanvas component
 	return <SvgCanvas {...canvasProps} ref={canvasRef} />;

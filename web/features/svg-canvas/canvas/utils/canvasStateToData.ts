@@ -42,7 +42,7 @@ const convertItemsStateToData = (items: Diagram[]): DiagramData[] => {
  * @param state - Source SvgCanvasState
  * @returns SvgCanvasData object
  */
-export const svgCanvasStateToData = (state: SvgCanvasState): SvgCanvasData => {
+export const canvasStateToData = (state: SvgCanvasState): SvgCanvasData => {
 	return {
 		id: state.id,
 		minX: state.minX,

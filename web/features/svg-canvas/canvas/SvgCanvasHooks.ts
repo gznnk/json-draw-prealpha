@@ -35,17 +35,13 @@ import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
 import { useSelectAll } from "./hooks/selection/useSelectAll";
 import { useOnConnectNodes } from "./hooks/tools/useOnConnectNodes";
 import { useOnGroupShapes } from "./hooks/tools/useOnGroupShapes";
-import { InteractionState } from "./types/InteractionState";
 import type { SvgCanvasData } from "./types/SvgCanvasData";
 import type { SvgCanvasRef } from "./types/SvgCanvasRef";
 import type { SvgCanvasState } from "./types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "./types/SvgCanvasSubHooksProps";
-import { diagramDataListToDiagramList } from "./utils/diagramDataListToDiagramList";
+import { canvasDataToState } from "./utils/canvasDataToState";
 import { EventBus } from "../../../shared/event-bus/EventBus";
-import type { TextEditorState } from "../components/core/Textable";
 import type { DiagramData } from "../types/data/core/DiagramData";
-import type { Diagram } from "../types/state/core/Diagram";
-import { deepCopy } from "../utils/core/deepCopy";
 
 /**
  * Props for the useSvgCanvas hook.
@@ -70,35 +66,16 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Create EventBus instance for canvas-wide event communication
 	const eventBusRef = useRef(new EventBus());
 
-	// Convert props.items from DiagramData[] to Diagram[] format
-	const stateItems: Diagram[] = diagramDataListToDiagramList(props.items);
-
 	// The state of the canvas.
-	const [canvasState, setCanvasState] = useState<SvgCanvasState>({
-		id: props.id,
-		minX: props.minX,
-		minY: props.minY,
-		zoom: props.zoom,
-		items: stateItems,
-		history: [
-			{
-				id: props.id,
-				minX: props.minX,
-				minY: props.minY,
-				zoom: props.zoom,
-				items: deepCopy(stateItems),
-			},
-		],
-		historyIndex: 0,
-		lastHistoryEventId: "",
-		textEditorState: { isActive: false } as TextEditorState,
-		interactionState: InteractionState.Idle,
-		areaSelectionState: {
-			startX: 0,
-			startY: 0,
-			endX: 0,
-			endY: 0,
-		},
+	const [canvasState, setCanvasState] = useState<SvgCanvasState>(() => {
+		const initialData: SvgCanvasData = {
+			id: props.id,
+			minX: props.minX,
+			minY: props.minY,
+			zoom: props.zoom,
+			items: props.items,
+		};
+		return canvasDataToState(initialData);
 	});
 
 	// Create props for the canvas hooks.
@@ -271,5 +248,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	return {
 		state: [canvasState, setCanvasState] as const,
 		canvasProps,
+		loadCanvasData: (data: SvgCanvasData) => {
+			setCanvasState(canvasDataToState(data));
+		},
 	};
 };
