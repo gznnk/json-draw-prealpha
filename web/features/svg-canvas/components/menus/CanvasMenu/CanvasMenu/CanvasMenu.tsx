@@ -154,8 +154,8 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 						height="16"
 						rx="2"
 						ry="2"
-						fill="#fff275"
-						stroke="#d4af37"
+						fill="#fef08a"
+						stroke="#fef08a"
 						strokeWidth="1"
 					/>
 					<line
@@ -163,7 +163,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 						y1="8"
 						x2="18"
 						y2="8"
-						stroke="#d4af37"
+						stroke="#000000"
 						strokeWidth="0.5"
 					/>
 					<line
@@ -171,7 +171,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 						y1="11"
 						x2="15"
 						y2="11"
-						stroke="#d4af37"
+						stroke="#000000"
 						strokeWidth="0.5"
 					/>
 					<line
@@ -179,7 +179,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 						y1="14"
 						x2="13"
 						y2="14"
-						stroke="#d4af37"
+						stroke="#000000"
 						strokeWidth="0.5"
 					/>
 				</svg>
