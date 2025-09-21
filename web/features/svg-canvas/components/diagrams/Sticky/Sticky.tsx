@@ -1,6 +1,7 @@
 import type React from "react";
 import { memo, useRef } from "react";
 
+import { STICKY_FOLD_SIZE } from "../../../constants/styling/diagrams/StickyStyleConstants";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
@@ -58,7 +59,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 	onHoverChange,
 }) => {
 	// Reference to the SVG element to be transformed
-	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
+	const svgRef = useRef<SVGPolygonElement>({} as SVGPolygonElement);
 
 	// Handle text editing
 	const { onDoubleClick } = useText({
@@ -111,7 +112,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 		hoverProps,
 	);
 
-	// Generate rect transform attribute
+	// Generate transform attribute
 	const transform = createSvgTransform(
 		scaleX,
 		scaleY,
@@ -120,15 +121,38 @@ const StickyComponent: React.FC<StickyProps> = ({
 		y,
 	);
 
+	// Create polygon points for sticky note with folded corner
+	const foldSize = STICKY_FOLD_SIZE;
+	const left = -width / 2;
+	const right = width / 2;
+	const top = -height / 2;
+	const bottom = height / 2;
+
+	const points = [
+		[left, top], // Top-left
+		[right, top], // Top-right
+		[right, bottom - foldSize], // Right side until fold
+		[right - foldSize, bottom], // Fold corner
+		[left, bottom], // Bottom-left
+	]
+		.map(([px, py]) => `${px},${py}`)
+		.join(" ");
+
+	// Create fold triangle points for shadow effect
+	const foldTrianglePoints = [
+		[right - foldSize, bottom - foldSize], // Fold inner corner
+		[right, bottom - foldSize], // Right side
+		[right - foldSize, bottom], // Bottom side
+	]
+		.map(([px, py]) => `${px},${py}`)
+		.join(" ");
+
 	return (
 		<>
-			{/* Main sticky note rectangle */}
-			<rect
+			{/* Main sticky note with folded corner */}
+			<polygon
 				id={id}
-				x={-width / 2}
-				y={-height / 2}
-				width={width}
-				height={height}
+				points={points}
 				fill={fill}
 				stroke={stroke}
 				strokeWidth={strokeWidth}
@@ -138,6 +162,15 @@ const StickyComponent: React.FC<StickyProps> = ({
 				ref={svgRef}
 				onDoubleClick={onDoubleClick}
 				{...composedProps}
+			/>
+
+			{/* Folded corner shadow */}
+			<polygon
+				points={foldTrianglePoints}
+				fill="rgba(0,0,0,0.15)"
+				stroke="none"
+				transform={transform}
+				pointerEvents="none"
 			/>
 
 			{/* Text content */}
