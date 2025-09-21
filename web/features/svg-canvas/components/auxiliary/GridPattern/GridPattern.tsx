@@ -10,7 +10,7 @@ type GridPatternProps = {
  */
 const GridPatternComponent = ({
 	gridSize = 20,
-	color = "rgba(24, 144, 255, 0.1)",
+	color = "#f3f4f6",
 }: GridPatternProps): React.JSX.Element => {
 	return (
 		<defs>
