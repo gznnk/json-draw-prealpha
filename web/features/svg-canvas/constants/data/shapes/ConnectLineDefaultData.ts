@@ -11,7 +11,7 @@ export const ConnectLineDefaultData = CreateDefaultData<ConnectLineData>({
 	options: ConnectLineFeatures,
 	properties: {
 		pathType: "Linear",
-		stroke: "#002766",
+		stroke: "#374151",
 		strokeWidth: "2px",
 		startOwnerId: "",
 		endOwnerId: "",

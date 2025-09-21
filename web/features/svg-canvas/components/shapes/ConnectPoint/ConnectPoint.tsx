@@ -333,7 +333,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 			type="ConnectPoint"
 			radius={6}
 			stroke="rgba(107, 114, 128, 0.8)"
-			fill="rgba(255, 255, 255, 0.8)"
+			fill="rgba(255, 255, 255, 1)"
 			cursor={connectType === "end-only" ? "default" : "pointer"}
 			outline="none"
 			isTransparent={!alwaysVisible && !isHovered}
