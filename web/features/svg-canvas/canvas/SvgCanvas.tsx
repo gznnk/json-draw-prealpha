@@ -47,6 +47,7 @@ import { EventBusProvider } from "../context/EventBusContext";
 import { SvgViewportProvider } from "../context/SvgViewportContext";
 import type { SvgViewport } from "../types/core/SvgViewport";
 
+// TODO: 実行する場所を考える
 // Initialize all diagram types when this module is loaded
 initializeSvgCanvasDiagrams();
 

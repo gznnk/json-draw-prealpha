@@ -140,8 +140,6 @@ const TransformativeComponent: React.FC<Props> = ({
 			endFrame: startFrame.current,
 			cursorX: e.cursorX,
 			cursorY: e.cursorY,
-			clientX: e.clientX,
-			clientY: e.clientY,
 			minX: e.minX,
 			minY: e.minY,
 		});
@@ -172,8 +170,6 @@ const TransformativeComponent: React.FC<Props> = ({
 			},
 			cursorX: e.cursorX,
 			cursorY: e.cursorY,
-			clientX: e.clientX,
-			clientY: e.clientY,
 			minX: e.minX,
 			minY: e.minY,
 		};
@@ -937,8 +933,6 @@ const TransformativeComponent: React.FC<Props> = ({
 				endFrame: startFrame.current,
 				cursorX: e.cursorX,
 				cursorY: e.cursorY,
-				clientX: e.clientX,
-				clientY: e.clientY,
 				minX: e.minX,
 				minY: e.minY,
 			});
@@ -969,8 +963,6 @@ const TransformativeComponent: React.FC<Props> = ({
 			},
 			cursorX: e.cursorX,
 			cursorY: e.cursorY,
-			clientX: e.clientX,
-			clientY: e.clientY,
 		};
 
 		onTransform?.(event);

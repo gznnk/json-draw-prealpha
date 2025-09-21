@@ -19,10 +19,6 @@ export type DiagramDragEvent = {
 	cursorX: number;
 	/** The cursor's y position at the start of the drag (in SVG coordinates) */
 	cursorY: number;
-	/** The cursor's x position in client coordinates */
-	clientX: number;
-	/** The cursor's y position in client coordinates */
-	clientY: number;
 	/** The canvas's min x position */
 	minX?: number;
 	/** The canvas's min y position */

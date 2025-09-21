@@ -1,5 +1,11 @@
 import type React from "react";
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import {
+	createContext,
+	useContext,
+	useState,
+	useEffect,
+	useCallback,
+} from "react";
 
 import type { SvgCanvasData } from "../../features/svg-canvas/canvas/types/SvgCanvasData";
 import type { SvgCanvas } from "../models/SvgCanvas";
@@ -16,42 +22,42 @@ type CanvasDataContextType = {
 	 * Current canvas data
 	 */
 	canvas: SvgCanvas | null;
-	
+
 	/**
 	 * Whether the canvas has unsaved changes
 	 */
 	hasUnsavedChanges: boolean;
-	
+
 	/**
 	 * Update canvas data
 	 */
 	updateCanvas: (data: SvgCanvasData) => void;
-	
+
 	/**
 	 * Save canvas data to storage
 	 */
 	saveCanvas: () => Promise<void>;
-	
+
 	/**
 	 * Load canvas data from storage
 	 */
 	loadCanvas: (id: string) => Promise<void>;
-	
+
 	/**
 	 * Create a new canvas
 	 */
 	createNewCanvas: (name?: string) => void;
-	
+
 	/**
 	 * Export canvas data as JSON string
 	 */
 	exportCanvasData: () => string;
-	
+
 	/**
 	 * Import canvas data from JSON string
 	 */
 	importCanvasData: (jsonData: string) => Promise<void>;
-	
+
 	/**
 	 * Get current file name for saving
 	 */
@@ -77,13 +83,15 @@ type CanvasDataProviderProps = {
 /**
  * Canvas data provider component
  */
-export const CanvasDataProvider = ({ 
-	children, 
-	initialCanvasId = "default-canvas" 
+export const CanvasDataProvider = ({
+	children,
+	initialCanvasId = "default-canvas",
 }: CanvasDataProviderProps) => {
 	const [canvas, setCanvas] = useState<SvgCanvas | null>(null);
 	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-	const [repository] = useState<SvgCanvasRepository>(() => createSvgCanvasRepository());
+	const [repository] = useState<SvgCanvasRepository>(() =>
+		createSvgCanvasRepository(),
+	);
 
 	// Load initial canvas data
 	useEffect(() => {
@@ -116,17 +124,21 @@ export const CanvasDataProvider = ({
 	}, [initialCanvasId, repository]);
 
 	// Update canvas data
-	const updateCanvas = useCallback((data: SvgCanvasData) => {
-		if (!canvas) return;
+	const updateCanvas = useCallback(
+		(data: SvgCanvasData) => {
+			if (!canvas) return;
 
-		const updatedCanvas: SvgCanvas = {
-			...canvas,
-			content: data,
-		};
-		
-		setCanvas(updatedCanvas);
-		setHasUnsavedChanges(true);
-	}, [canvas]);
+			const updatedCanvas: SvgCanvas = {
+				...canvas,
+				content: data,
+			};
+
+			setCanvas(updatedCanvas);
+			setHasUnsavedChanges(true);
+			repository.updateCanvas(updatedCanvas);
+		},
+		[canvas, repository],
+	);
 
 	// Save canvas to storage
 	const saveCanvas = useCallback(async () => {
@@ -145,20 +157,23 @@ export const CanvasDataProvider = ({
 	}, [canvas, repository]);
 
 	// Load canvas from storage
-	const loadCanvas = useCallback(async (id: string) => {
-		try {
-			const canvasData = await repository.getCanvasById(id);
-			if (canvasData) {
-				setCanvas(canvasData);
-				setHasUnsavedChanges(false);
-			} else {
-				throw new Error(`Canvas with ID "${id}" not found`);
+	const loadCanvas = useCallback(
+		async (id: string) => {
+			try {
+				const canvasData = await repository.getCanvasById(id);
+				if (canvasData) {
+					setCanvas(canvasData);
+					setHasUnsavedChanges(false);
+				} else {
+					throw new Error(`Canvas with ID "${id}" not found`);
+				}
+			} catch (error) {
+				console.error("Failed to load canvas:", error);
+				throw error;
 			}
-		} catch (error) {
-			console.error("Failed to load canvas:", error);
-			throw error;
-		}
-	}, [repository]);
+		},
+		[repository],
+	);
 
 	// Create new canvas
 	const createNewCanvas = useCallback((name: string = "新しい図") => {
@@ -174,7 +189,7 @@ export const CanvasDataProvider = ({
 				zoom: 1,
 			},
 		};
-		
+
 		setCanvas(newCanvas);
 		setHasUnsavedChanges(true);
 	}, []);
@@ -192,9 +207,13 @@ export const CanvasDataProvider = ({
 	const importCanvasData = useCallback(async (jsonData: string) => {
 		try {
 			const importedCanvas = JSON.parse(jsonData) as SvgCanvas;
-			
+
 			// Validate imported data structure
-			if (!importedCanvas.id || !importedCanvas.name || !importedCanvas.content) {
+			if (
+				!importedCanvas.id ||
+				!importedCanvas.name ||
+				!importedCanvas.content
+			) {
 				throw new Error("Invalid canvas data format");
 			}
 
@@ -219,12 +238,12 @@ export const CanvasDataProvider = ({
 	// Get current file name for saving
 	const getCurrentFileName = useCallback(() => {
 		if (!canvas) return "diagram.json";
-		
+
 		// Sanitize file name
 		const sanitizedName = canvas.name
 			.replace(/[^a-zA-Z0-9\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\-_]/g, "_")
 			.substring(0, 50);
-		
+
 		return `${sanitizedName}.json`;
 	}, [canvas]);
 
