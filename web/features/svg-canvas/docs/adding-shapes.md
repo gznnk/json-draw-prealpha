@@ -278,15 +278,31 @@ Create `src/features/svg-canvas/constants/data/shapes/MyShapeDefaultData.ts`:
 
 ```typescript
 import type { MyShapeData } from "../../../types/data/shapes/MyShapeData";
+import { MyShapeFeatures } from "../../../types/data/shapes/MyShapeData";
 import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
  * Default data values for MyShape
  */
-export const MyShapeDefaultData: MyShapeData = {
-	...CreateDefaultData.MyShape,
-	customProperty: 0,
-};
+export const MyShapeDefaultData: MyShapeData = CreateDefaultData<MyShapeData>({
+	type: "MyShape",
+	options: MyShapeFeatures,
+	properties: {
+		// Add shape-specific default properties here
+		width: 100,
+		height: 100,
+		fill: "#ffffff",
+		stroke: "#000000",
+		strokeWidth: "1px",
+		text: "MyShape",
+		fontSize: 14,
+		fontColor: "#000000",
+		fontWeight: "normal",
+		textAlign: "center",
+		verticalAlign: "center",
+		customProperty: 0, // your custom properties
+	},
+});
 ```
 
 ### Step 5: Create Default State Values
@@ -294,13 +310,19 @@ export const MyShapeDefaultData: MyShapeData = {
 Create `src/features/svg-canvas/constants/state/shapes/MyShapeDefaultState.ts`:
 
 ```typescript
+import { MyShapeFeatures } from "../../../types/data/shapes/MyShapeData";
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
+import { MyShapeDefaultData } from "../../data/shapes/MyShapeDefaultData";
 import { CreateDefaultState } from "./CreateDefaultState";
 
 /**
  * Default state values for MyShape
  */
-export const MyShapeDefaultState: MyShapeState = CreateDefaultState.MyShape;
+export const MyShapeDefaultState: MyShapeState = CreateDefaultState<MyShapeState>({
+	type: "MyShape",
+	options: MyShapeFeatures,
+	baseData: MyShapeDefaultData,
+});
 ```
 
 ### Step 6: Implement Utility Functions
