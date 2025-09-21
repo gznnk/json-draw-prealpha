@@ -354,35 +354,41 @@ export const createMyShapeState = ({
 Create data-to-state mapper in `src/features/svg-canvas/utils/shapes/myShape/mapMyShapeDataToState.ts`:
 
 ```typescript
-import type { MyShapeData } from "../../../types/data/shapes/MyShapeData";
-import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
 import { MyShapeDefaultState } from "../../../constants/state/shapes/MyShapeDefaultState";
-import { mapCreateDataToState } from "../common/mapCreateDataToState";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
+import type { Diagram } from "../../../types/state/core/Diagram";
+import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
+import { createDataToStateMapper } from "../../core/createDataToStateMapper";
 
 /**
  * Maps MyShape data to state
  */
-export const mapMyShapeDataToState = (data: MyShapeData): MyShapeState => ({
-	...MyShapeDefaultState,
-	...mapCreateDataToState(data),
-	customProperty: data.customProperty,
-});
+export const mapMyShapeDataToState = createDataToStateMapper<MyShapeState>(
+	MyShapeDefaultState,
+);
+
+export const myShapeDataToState = (data: DiagramData): Diagram =>
+	mapMyShapeDataToState(data);
 ```
 
 Create state-to-data mapper in `src/features/svg-canvas/utils/shapes/myShape/mapMyShapeStateToData.ts`:
 
 ```typescript
+import { MyShapeDefaultData } from "../../../constants/data/shapes/MyShapeDefaultData";
+import type { DiagramData } from "../../../types/data/core/DiagramData";
 import type { MyShapeData } from "../../../types/data/shapes/MyShapeData";
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-import { mapCreateStateToData } from "../common/mapCreateStateToData";
+import { createStateToDataMapper } from "../../core/createStateToDataMapper";
 
 /**
  * Maps MyShape state to data
  */
-export const mapMyShapeStateToData = (state: MyShapeState): MyShapeData => ({
-	...mapCreateStateToData(state),
-	customProperty: state.customProperty,
-});
+export const mapMyShapeStateToData =
+	createStateToDataMapper<MyShapeData>(MyShapeDefaultData);
+
+export const myShapeStateToData = (state: Diagram): DiagramData =>
+	mapMyShapeStateToData(state as MyShapeState);
 ```
 
 ### Step 7: Implement Connect Point Functions (if connectable)
