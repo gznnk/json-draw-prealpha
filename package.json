@@ -11,6 +11,8 @@
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write .",
+		"format:changed": "node scripts/format-changed.mjs",
+		"format:staged": "node scripts/format-changed.mjs --staged",
 		"format:check": "prettier --check .",
 		"preview": "vite preview",
 		"deploy": "vite build && gh-pages -d dist-web",
