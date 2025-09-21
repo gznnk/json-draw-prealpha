@@ -10,6 +10,7 @@ import {
 } from "../constants/core/EventNames";
 import { useEventBus } from "../context/EventBusContext";
 import { useSvgViewport } from "../context/SvgViewportContext";
+import type { ArrowKeyCode } from "../types/core/ArrowKeyCode";
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Point } from "../types/core/Point";
 import type { DiagramDragDropEvent } from "../types/events/DiagramDragDropEvent";
@@ -19,6 +20,9 @@ import type { EventPhase } from "../types/events/EventPhase";
 import type { SvgCanvasScrollEvent } from "../types/events/SvgCanvasScrollEvent";
 import { getSvgPoint } from "../utils/core/getSvgPoint";
 import { newEventId } from "../utils/core/newEventId";
+import { getArrowDirection } from "../utils/keyboard/getArrowDirection";
+import { hasAnyArrowKeyCode } from "../utils/keyboard/hasAnyArrowKeyCode";
+import { isArrowKeyCode } from "../utils/keyboard/isArrowKeyCode";
 import { isPointerOver } from "../utils/shapes/common/isPointerOver";
 
 /**
@@ -106,6 +110,15 @@ export const useDrag = (props: DragProps) => {
 	// The offset between the center and the pointer.
 	const offsetXBetweenCenterAndPointer = useRef(0);
 	const offsetYBetweenCenterAndPointer = useRef(0);
+	// The distance moved while keyboard dragging
+	const keyboardDragDeltaX = useRef(0);
+	const keyboardDragDeltaY = useRef(0);
+	// The eventId of the last keyboard drag event
+	const lastKeyboardEventId = useRef("");
+	// The last position of the keyboard drag event
+	const lastKeyboardDragEnd = useRef<Point>({ x: 0, y: 0 });
+	// Set of currently pressed arrow keys
+	const pressedArrowKeys = useRef<Set<ArrowKeyCode>>(new Set());
 
 	/**
 	 * Get the drag area coordinates from the SVG point during dragging.
@@ -370,15 +383,10 @@ export const useDrag = (props: DragProps) => {
 	 * Key press event handler
 	 */
 	const handleKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
-		console.log("key down");
-
 		// Do nothing while pointer is down
 		if (isPointerDown.current) {
 			return;
 		}
-
-		// Generate event ID
-		const eventId = newEventId();
 
 		/**
 		 * Move point by arrow keys
@@ -387,19 +395,47 @@ export const useDrag = (props: DragProps) => {
 		 * @param dy y coordinate offset
 		 */
 		const movePoint = (dx: number, dy: number) => {
+			const eventPhase = isArrowDragging.current ? "InProgress" : "Started";
+
+			// Start arrow key dragging if not already started
+			if (!isArrowDragging.current) {
+				// Remember the start position when starting arrow key dragging
+				startX.current = x;
+				startY.current = y;
+
+				// Initialize keyboard drag delta
+				keyboardDragDeltaX.current = 0;
+				keyboardDragDeltaY.current = 0;
+
+				// Initialize pressed arrow keys set
+				pressedArrowKeys.current = new Set();
+
+				// Generate event ID
+				lastKeyboardEventId.current = newEventId();
+
+				// Mark as arrow key dragging
+				isArrowDragging.current = true;
+			}
+
+			// Accumulate the distance moved by arrow keys
+			keyboardDragDeltaX.current += dx;
+			keyboardDragDeltaY.current += dy;
+
 			let newPoint = {
-				x: x + dx,
-				y: y + dy,
+				x: startX.current + keyboardDragDeltaX.current,
+				y: startY.current + keyboardDragDeltaY.current,
 			};
 
 			if (dragPositioningFunction) {
 				newPoint = dragPositioningFunction(newPoint.x, newPoint.y);
 			}
 
+			lastKeyboardDragEnd.current = newPoint;
+
 			// For keyboard operations, treat the shape's center as the cursor position
 			const dragEvent = {
-				eventId,
-				eventPhase: "InProgress",
+				eventId: lastKeyboardEventId.current,
+				eventPhase,
 				id,
 				startX: startX.current,
 				startY: startY.current,
@@ -409,58 +445,17 @@ export const useDrag = (props: DragProps) => {
 				cursorY: newPoint.y, // Use shape center as cursor position
 			} as DiagramDragEvent;
 
-			if (!isArrowDragging.current) {
-				startX.current = x;
-				startY.current = y;
-
-				onDrag?.({
-					...dragEvent,
-					eventPhase: "Started",
-				});
-
-				isArrowDragging.current = true;
-
-				return;
-			}
-
 			onDrag?.(dragEvent);
 		};
 
-		switch (e.key) {
-			case "ArrowRight":
-				movePoint(1, 0);
-				break;
-			case "ArrowLeft":
-				movePoint(-1, 0);
-				break;
-			case "ArrowUp":
-				movePoint(0, -1);
-				break;
-			case "ArrowDown":
-				movePoint(0, 1);
-				break;
-			case "Shift":
-				if (isArrowDragging.current) {
-					// When shift key is pressed during arrow key dragging, end the drag
-					// Fire drag end event to notify SvgCanvas side of coordinate update and update coordinates
-					onDrag?.({
-						eventId,
-						eventPhase: "Ended",
-						id,
-						startX: x,
-						startY: y,
-						endX: x,
-						endY: y,
-						cursorX: x, // Use shape center as cursor position
-						cursorY: y, // Use shape center as cursor position
-					});
+		if (isArrowKeyCode(e.code)) {
+			// Add the pressed arrow key to the set
+			pressedArrowKeys.current.add(e.code);
+		}
 
-					// Mark arrow key drag as ended
-					isArrowDragging.current = false;
-				}
-				break;
-			default:
-				break;
+		if (hasAnyArrowKeyCode(pressedArrowKeys.current)) {
+			const direction = getArrowDirection(pressedArrowKeys.current);
+			movePoint(direction.x, direction.y);
 		}
 	};
 
@@ -473,38 +468,42 @@ export const useDrag = (props: DragProps) => {
 			return;
 		}
 
-		// Create event information for arrow key movement completion
-		const dragEvent = {
-			eventId: newEventId(),
-			eventPhase: "Ended",
-			id,
-			startX: startX.current,
-			startY: startY.current,
-			endX: x,
-			endY: y,
-			cursorX: x, // Use shape center as cursor position
-			cursorY: y, // Use shape center as cursor position
-		} as DiagramDragEvent;
-
 		if (isArrowDragging.current) {
-			if (e.key === "Shift") {
-				// When shift key is released during arrow key dragging, fire drag end event
-				// and notify SvgCanvas side to update coordinates once
-				onDrag?.(dragEvent);
-				onDrag?.({
-					...dragEvent,
-					eventPhase: "Started",
-				});
+			// Create event information for arrow key movement completion
+			const dragEvent = {
+				eventId: lastKeyboardEventId.current,
+				eventPhase: "Ended",
+				id,
+				startX: startX.current,
+				startY: startY.current,
+				endX: lastKeyboardDragEnd.current.x,
+				endY: lastKeyboardDragEnd.current.y,
+				cursorX: lastKeyboardDragEnd.current.x, // Use shape center as cursor position
+				cursorY: lastKeyboardDragEnd.current.y, // Use shape center as cursor position
+			} as DiagramDragEvent;
+
+			if (isArrowKeyCode(e.code)) {
+				// Remove the released arrow key from the set
+				pressedArrowKeys.current.delete(e.code);
 			}
-			if (
-				e.key === "ArrowRight" ||
-				e.key === "ArrowLeft" ||
-				e.key === "ArrowUp" ||
-				e.key === "ArrowDown"
-			) {
+
+			if (!hasAnyArrowKeyCode(pressedArrowKeys.current)) {
 				// When arrow key is released, fire drag end event to notify SvgCanvas side of coordinate update and update coordinates
-				onDrag?.(dragEvent); // Mark arrow key drag as ended
+				onDrag?.(dragEvent);
+
+				// Mark arrow key drag as ended
 				isArrowDragging.current = false;
+
+				// Reset the last keyboard event ID
+				lastKeyboardEventId.current = "";
+				// Reset keyboard drag deltas
+				keyboardDragDeltaX.current = 0;
+				keyboardDragDeltaY.current = 0;
+				// Reset start position
+				startX.current = 0;
+				startY.current = 0;
+				// Reset last keyboard drag end position
+				lastKeyboardDragEnd.current = { x: 0, y: 0 };
 			}
 		}
 	};
