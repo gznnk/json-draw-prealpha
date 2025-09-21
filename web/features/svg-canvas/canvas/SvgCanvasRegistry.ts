@@ -1,3 +1,4 @@
+import { StickyAtlas } from "../atlas/diagrams/StickyAtlas";
 import { ButtonAtlas } from "../atlas/elements/ButtonAtlas";
 import { InputAtlas } from "../atlas/elements/InputAtlas";
 import { AgentNodeAtlas } from "../atlas/nodes/AgentNodeAtlas";
@@ -48,6 +49,7 @@ export const initializeSvgCanvasDiagrams = (): void => {
 	// ============================================================================
 	// Diagram Atlas Registration
 	// ============================================================================
+	DiagramRegistry.register(StickyAtlas);
 
 	// ============================================================================
 	// Node Atlas Registration

@@ -18,6 +18,8 @@ export type DiagramType =
 	| "Button"
 	| "Input"
 	| "NodeHeader"
+	// Diagrams
+	| "Sticky"
 	// Nodes
 	| "AgentNode"
 	| "HubNode"

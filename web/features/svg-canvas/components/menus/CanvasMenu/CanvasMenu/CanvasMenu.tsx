@@ -140,6 +140,54 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 				onClick={() =>
 					onAddDiagramByType?.({
 						eventId: newEventId(),
+						diagramType: "Sticky",
+						isSelected: true,
+					})
+				}
+			>
+				<svg width="20" height="20" viewBox="0 0 24 24">
+					<title>Add Sticky Note</title>
+					<rect
+						x="3"
+						y="3"
+						width="16"
+						height="16"
+						rx="2"
+						ry="2"
+						fill="#fff275"
+						stroke="#d4af37"
+						strokeWidth="1"
+					/>
+					<line
+						x1="6"
+						y1="8"
+						x2="18"
+						y2="8"
+						stroke="#d4af37"
+						strokeWidth="0.5"
+					/>
+					<line
+						x1="6"
+						y1="11"
+						x2="15"
+						y2="11"
+						stroke="#d4af37"
+						strokeWidth="0.5"
+					/>
+					<line
+						x1="6"
+						y1="14"
+						x2="13"
+						y2="14"
+						stroke="#d4af37"
+						strokeWidth="0.5"
+					/>
+				</svg>
+			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onAddDiagramByType?.({
+						eventId: newEventId(),
 						diagramType: "TextAreaNode",
 						isSelected: true,
 					})

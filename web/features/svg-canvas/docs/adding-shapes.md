@@ -5,6 +5,7 @@ This document outlines the complete procedure for adding new shapes to the SVG c
 ## Architecture Overview
 
 The SVG canvas shape system consists of several key components:
+
 - **Components**: React components that render the shapes
 - **Types**: TypeScript definitions for data and state
 - **Constants**: Default values for data and state
@@ -16,7 +17,7 @@ The SVG canvas shape system consists of several key components:
 Before adding new elements, it's important to understand the distinctions:
 
 - **Shapes**: Basic geometric elements (Rectangle, Ellipse, Path, etc.) - placed in `shapes/` folders
-- **Elements**: UI elements and components (Button, Input, Frame, NodeHeader, etc.) - placed in `elements/` folders  
+- **Elements**: UI elements and components (Button, Input, Frame, NodeHeader, etc.) - placed in `elements/` folders
 - **Nodes**: Workflow/diagram nodes with specific business logic (LLM, Agent, Hub, etc.) - placed in `nodes/` folders
 - **Diagrams**: Complete diagram templates and compositions - placed in `diagrams/` folders
 
@@ -29,6 +30,7 @@ When adding a new diagram element (e.g., "MyShape", "MyElement", "MyNode", "MyDi
 ### 1. Component Files
 
 **For Shapes:**
+
 ```
 src/features/svg-canvas/components/shapes/MyShape/
 ├── index.tsx                    # Export barrel
@@ -38,6 +40,7 @@ src/features/svg-canvas/components/shapes/MyShape/
 ```
 
 **For Elements:**
+
 ```
 src/features/svg-canvas/components/elements/MyElement/
 ├── index.tsx                    # Export barrel
@@ -47,6 +50,7 @@ src/features/svg-canvas/components/elements/MyElement/
 ```
 
 **For Workflow Nodes:**
+
 ```
 src/features/svg-canvas/components/nodes/MyNode/
 ├── index.tsx                    # Export barrel
@@ -56,6 +60,7 @@ src/features/svg-canvas/components/nodes/MyNode/
 ```
 
 **For Diagrams:**
+
 ```
 src/features/svg-canvas/components/diagrams/MyDiagram/
 ├── index.tsx                    # Export barrel
@@ -63,107 +68,131 @@ src/features/svg-canvas/components/diagrams/MyDiagram/
 ├── MyDiagramMinimap.tsx        # Minimap representation
 └── MyDiagramStyled.tsx         # Styled components (if needed)
 ```
+
 ```
 
 ### 2. Type Definitions
 
 **For Shapes:**
 ```
-src/features/svg-canvas/types/data/shapes/MyShapeData.ts     # Data type definition
-src/features/svg-canvas/types/state/shapes/MyShapeState.ts   # State type definition  
-src/features/svg-canvas/types/props/shapes/MyShapeProps.ts   # Props type definition
+
+src/features/svg-canvas/types/data/shapes/MyShapeData.ts # Data type definition
+src/features/svg-canvas/types/state/shapes/MyShapeState.ts # State type definition  
+src/features/svg-canvas/types/props/shapes/MyShapeProps.ts # Props type definition
+
 ```
 
 **For Elements:**
 ```
-src/features/svg-canvas/types/data/elements/MyElementData.ts     # Data type definition
-src/features/svg-canvas/types/state/elements/MyElementState.ts   # State type definition  
-src/features/svg-canvas/types/props/elements/MyElementProps.ts   # Props type definition
+
+src/features/svg-canvas/types/data/elements/MyElementData.ts # Data type definition
+src/features/svg-canvas/types/state/elements/MyElementState.ts # State type definition  
+src/features/svg-canvas/types/props/elements/MyElementProps.ts # Props type definition
+
 ```
 
 **For Workflow Nodes:**
 ```
-src/features/svg-canvas/types/data/nodes/MyNodeData.ts       # Data type definition
-src/features/svg-canvas/types/state/nodes/MyNodeState.ts     # State type definition  
-src/features/svg-canvas/types/props/nodes/MyNodeProps.ts     # Props type definition
+
+src/features/svg-canvas/types/data/nodes/MyNodeData.ts # Data type definition
+src/features/svg-canvas/types/state/nodes/MyNodeState.ts # State type definition  
+src/features/svg-canvas/types/props/nodes/MyNodeProps.ts # Props type definition
+
 ```
 
 **For Diagrams:**
 ```
-src/features/svg-canvas/types/data/diagrams/MyDiagramData.ts     # Data type definition
-src/features/svg-canvas/types/state/diagrams/MyDiagramState.ts   # State type definition  
-src/features/svg-canvas/types/props/diagrams/MyDiagramProps.ts   # Props type definition
+
+src/features/svg-canvas/types/data/diagrams/MyDiagramData.ts # Data type definition
+src/features/svg-canvas/types/state/diagrams/MyDiagramState.ts # State type definition  
+src/features/svg-canvas/types/props/diagrams/MyDiagramProps.ts # Props type definition
+
 ```
+
 ```
 
 ### 3. Default Values
 
 **For Shapes:**
+
 ```
 src/features/svg-canvas/constants/data/shapes/MyShapeDefaultData.ts    # Default data values
 src/features/svg-canvas/constants/state/shapes/MyShapeDefaultState.ts  # Default state values
 ```
 
 **For Elements:**
+
 ```
 src/features/svg-canvas/constants/data/elements/MyElementDefaultData.ts    # Default data values
 src/features/svg-canvas/constants/state/elements/MyElementDefaultState.ts  # Default state values
 ```
 
 **For Workflow Nodes:**
+
 ```
 src/features/svg-canvas/constants/data/nodes/MyNodeDefaultData.ts      # Default data values
 src/features/svg-canvas/constants/state/nodes/MyNodeDefaultState.ts    # Default state values
 ```
 
 **For Diagrams:**
+
 ```
 src/features/svg-canvas/constants/data/diagrams/MyDiagramDefaultData.ts    # Default data values
 src/features/svg-canvas/constants/state/diagrams/MyDiagramDefaultState.ts  # Default state values
 ```
+
 ```
 
 ### 4. Utility Functions
 
 **For Shapes:**
 ```
+
 src/features/svg-canvas/utils/shapes/myShape/
-├── createMyShapeState.ts           # State creation function
-├── mapMyShapeDataToState.ts        # Data to state mapper
-├── mapMyShapeStateToData.ts        # State to data mapper
-├── calcMyShapeConnectPointPosition.ts  # Connect point calculator (if connectable)
-└── createMyShapeConnectPoint.ts    # Connect point creator (if connectable)
+├── createMyShapeState.ts # State creation function
+├── mapMyShapeDataToState.ts # Data to state mapper
+├── mapMyShapeStateToData.ts # State to data mapper
+├── calcMyShapeConnectPointPosition.ts # Connect point calculator (if connectable)
+└── createMyShapeConnectPoint.ts # Connect point creator (if connectable)
+
 ```
 
 **For Elements:**
 ```
+
 src/features/svg-canvas/utils/elements/myElement/
-├── createMyElementState.ts         # State creation function
-├── mapMyElementDataToState.ts      # Data to state mapper
-├── mapMyElementStateToData.ts      # State to data mapper
-├── calcMyElementConnectPointPosition.ts  # Connect point calculator (if connectable)
-└── createMyElementConnectPoint.ts  # Connect point creator (if connectable)
+├── createMyElementState.ts # State creation function
+├── mapMyElementDataToState.ts # Data to state mapper
+├── mapMyElementStateToData.ts # State to data mapper
+├── calcMyElementConnectPointPosition.ts # Connect point calculator (if connectable)
+└── createMyElementConnectPoint.ts # Connect point creator (if connectable)
+
 ```
 
 **For Workflow Nodes:**
 ```
+
 src/features/svg-canvas/utils/nodes/myNode/
-├── createMyNodeState.ts            # State creation function
-├── mapMyNodeDataToState.ts         # Data to state mapper
-├── mapMyNodeStateToData.ts         # State to data mapper
-├── calcMyNodeConnectPointPosition.ts   # Connect point calculator (if connectable)
-└── createMyNodeConnectPoint.ts     # Connect point creator (if connectable)
+├── createMyNodeState.ts # State creation function
+├── mapMyNodeDataToState.ts # Data to state mapper
+├── mapMyNodeStateToData.ts # State to data mapper
+├── calcMyNodeConnectPointPosition.ts # Connect point calculator (if connectable)
+└── createMyNodeConnectPoint.ts # Connect point creator (if connectable)
+
 ```
 
 **For Diagrams:**
 ```
+
 src/features/svg-canvas/utils/diagrams/myDiagram/
-├── createMyDiagramState.ts         # State creation function
-├── mapMyDiagramDataToState.ts      # Data to state mapper
-├── mapMyDiagramStateToData.ts      # State to data mapper
-├── calcMyDiagramConnectPointPosition.ts  # Connect point calculator (if connectable)
-└── createMyDiagramConnectPoint.ts  # Connect point creator (if connectable)
+├── createMyDiagramState.ts # State creation function
+├── mapMyDiagramDataToState.ts # Data to state mapper
+├── mapMyDiagramStateToData.ts # State to data mapper
+├── calcMyDiagramConnectPointPosition.ts # Connect point calculator (if connectable)
+└── createMyDiagramConnectPoint.ts # Connect point creator (if connectable)
+
 ```
+
 ```
 
 ## Step-by-Step Implementation Guide
@@ -177,7 +206,6 @@ src/features/svg-canvas/utils/diagrams/myDiagram/
 Create `src/features/svg-canvas/types/data/shapes/MyShapeData.ts`:
 
 ```typescript
-// Import types.
 import type { DiagramFeatures } from "../../core/DiagramFeatures";
 import type { CreateDataType } from "./CreateDataType";
 
@@ -185,17 +213,17 @@ import type { CreateDataType } from "./CreateDataType";
  * Diagram features for MyShape shapes.
  */
 export const MyShapeFeatures = {
-	frameable: true,          // Frame properties (position, size, rotation, scale)
-	selectable: true,         // Basic selection capability
-	transformative: true,     // Position, size, and rotation transformation
-	itemable: false,          // Container for other diagram items
-	connectable: true,        // Connection points and lines
-	strokable: true,          // Stroke/border styling
-	fillable: true,           // Fill/background styling
-	cornerRoundable: true,    // Corner radius styling
-	textable: true,           // Text content and styling
-	executable: false,        // Executable/clickable functionality
-	fileDroppable: false,     // File drop handling
+	frameable: true, // Frame properties (position, size, rotation, scale)
+	selectable: true, // Basic selection capability
+	transformative: true, // Position, size, and rotation transformation
+	itemable: false, // Container for other diagram items
+	connectable: true, // Connection points and lines
+	strokable: true, // Stroke/border styling
+	fillable: true, // Fill/background styling
+	cornerRoundable: true, // Corner radius styling
+	textable: true, // Text content and styling
+	executable: false, // Executable/clickable functionality
+	fileDroppable: false, // File drop handling
 } as const satisfies DiagramFeatures;
 
 /**
@@ -213,7 +241,6 @@ export type MyShapeData = CreateDataType<typeof MyShapeFeatures> & {
 Create `src/features/svg-canvas/types/state/shapes/MyShapeState.ts`:
 
 ```typescript
-// Import types.
 import type {
 	MyShapeData,
 	MyShapeFeatures,
@@ -224,10 +251,7 @@ import type { CreateStateType } from "./CreateStateType";
  * State type for MyShape shapes.
  * Contains properties specific to MyShape diagram elements.
  */
-export type MyShapeState = CreateStateType<
-	MyShapeData,
-	typeof MyShapeFeatures
->;
+export type MyShapeState = CreateStateType<MyShapeData, typeof MyShapeFeatures>;
 ```
 
 ### Step 3: Define Props Type
@@ -235,7 +259,6 @@ export type MyShapeState = CreateStateType<
 Create `src/features/svg-canvas/types/props/shapes/MyShapeProps.ts`:
 
 ```typescript
-// Import types.
 import type { MyShapeFeatures } from "../../data/shapes/MyShapeData";
 import type { MyShapeState } from "../../state/shapes/MyShapeState";
 import type { CreateDiagramProps } from "./CreateDiagramProps";
@@ -254,10 +277,7 @@ export type MyShapeProps = CreateDiagramProps<
 Create `src/features/svg-canvas/constants/data/shapes/MyShapeDefaultData.ts`:
 
 ```typescript
-// Import types.
 import type { MyShapeData } from "../../../types/data/shapes/MyShapeData";
-
-// Import constants.
 import { CreateDefaultData } from "./CreateDefaultData";
 
 /**
@@ -274,10 +294,7 @@ export const MyShapeDefaultData: MyShapeData = {
 Create `src/features/svg-canvas/constants/state/shapes/MyShapeDefaultState.ts`:
 
 ```typescript
-// Import types.
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-
-// Import constants.
 import { CreateDefaultState } from "./CreateDefaultState";
 
 /**
@@ -291,19 +308,20 @@ export const MyShapeDefaultState: MyShapeState = CreateDefaultState.MyShape;
 Create the state creation function in `src/features/svg-canvas/utils/shapes/myShape/createMyShapeState.ts`:
 
 ```typescript
-// Import types.
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-
-// Import constants.
 import { MyShapeDefaultState } from "../../../constants/state/shapes/MyShapeDefaultState";
-
-// Import utils.
 import { newId } from "../common/newId";
 
 /**
  * Create MyShape state
  */
-export const createMyShapeState = ({ x, y }: { x: number; y: number }): MyShapeState => ({
+export const createMyShapeState = ({
+	x,
+	y,
+}: {
+	x: number;
+	y: number;
+}): MyShapeState => ({
 	...MyShapeDefaultState,
 	id: newId(),
 	x,
@@ -314,14 +332,9 @@ export const createMyShapeState = ({ x, y }: { x: number; y: number }): MyShapeS
 Create data-to-state mapper in `src/features/svg-canvas/utils/shapes/myShape/mapMyShapeDataToState.ts`:
 
 ```typescript
-// Import types.
 import type { MyShapeData } from "../../../types/data/shapes/MyShapeData";
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-
-// Import constants.
 import { MyShapeDefaultState } from "../../../constants/state/shapes/MyShapeDefaultState";
-
-// Import utils.
 import { mapCreateDataToState } from "../common/mapCreateDataToState";
 
 /**
@@ -337,11 +350,8 @@ export const mapMyShapeDataToState = (data: MyShapeData): MyShapeState => ({
 Create state-to-data mapper in `src/features/svg-canvas/utils/shapes/myShape/mapMyShapeStateToData.ts`:
 
 ```typescript
-// Import types.
 import type { MyShapeData } from "../../../types/data/shapes/MyShapeData";
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-
-// Import utils.
 import { mapCreateStateToData } from "../common/mapCreateStateToData";
 
 /**
@@ -358,18 +368,17 @@ export const mapMyShapeStateToData = (state: MyShapeState): MyShapeData => ({
 If your shape supports connections, create connect point calculator in `src/features/svg-canvas/utils/shapes/myShape/calcMyShapeConnectPointPosition.ts`:
 
 ```typescript
-// Import types.
 import type { Diagram } from "../../../types/state/catalog/Diagram";
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-
-// Import utils.
 import { createMyShapeConnectPoint } from "./createMyShapeConnectPoint";
 
 /**
  * Calculate connect point positions for MyShape
  */
-export const calcMyShapeConnectPointPosition = (diagram: Diagram): ConnectPointState[] => {
+export const calcMyShapeConnectPointPosition = (
+	diagram: Diagram,
+): ConnectPointState[] => {
 	const shape = diagram as MyShapeState;
 	return [
 		createMyShapeConnectPoint(shape, "top"),
@@ -383,14 +392,9 @@ export const calcMyShapeConnectPointPosition = (diagram: Diagram): ConnectPointS
 Create connect point creator in `src/features/svg-canvas/utils/shapes/myShape/createMyShapeConnectPoint.ts`:
 
 ```typescript
-// Import types.
 import type { ConnectPointState } from "../../../types/state/shapes/ConnectPointState";
 import type { MyShapeState } from "../../../types/state/shapes/MyShapeState";
-
-// Import constants.
 import { ConnectPointDefaultState } from "../../../constants/state/shapes/ConnectPointDefaultState";
-
-// Import utils.
 import { newId } from "../common/newId";
 
 /**
@@ -403,7 +407,7 @@ export const createMyShapeConnectPoint = (
 	// Calculate position based on shape dimensions and position
 	let x = shape.x;
 	let y = shape.y;
-	
+
 	switch (position) {
 		case "top":
 			y = shape.y - shape.height / 2;
@@ -437,26 +441,18 @@ Create the main component in `src/features/svg-canvas/components/shapes/MyShape/
 // Import React.
 import type React from "react";
 import { memo, useMemo, useRef } from "react";
-
-// Import types.
 import type { MyShapeProps } from "../../../types/props/shapes/MyShapeProps";
-
-// Import components.
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../ConnectPoints";
-
-// Import hooks.
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useFileDrop } from "../../../hooks/useFileDrop";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
-
-// Import utils.
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
@@ -533,7 +529,7 @@ const MyShapeComponent: React.FC<MyShapeProps> = ({
 		<>
 			{/* Main SVG element - implement your shape here */}
 			{/* Example: <rect>, <circle>, <path>, etc. */}
-			
+
 			{/* Text support */}
 			{isTextEditEnabled && (
 				<Textable
@@ -553,7 +549,7 @@ const MyShapeComponent: React.FC<MyShapeProps> = ({
 					isTextEditing={isTextEditing}
 				/>
 			)}
-			
+
 			{/* Selection outline */}
 			<Outline
 				x={x}
@@ -565,7 +561,7 @@ const MyShapeComponent: React.FC<MyShapeProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			
+
 			{/* Transform controls */}
 			{showTransformControls && (
 				<Transformative
@@ -584,7 +580,7 @@ const MyShapeComponent: React.FC<MyShapeProps> = ({
 					onTransform={onTransform}
 				/>
 			)}
-			
+
 			{/* Connect points */}
 			<ConnectPoints
 				ownerId={id}
@@ -595,7 +591,7 @@ const MyShapeComponent: React.FC<MyShapeProps> = ({
 				onConnect={onConnect}
 				onPreviewConnectLine={onPreviewConnectLine}
 			/>
-			
+
 			{/* Position label during drag */}
 			{isSelected && isDragging && (
 				<PositionLabel
@@ -618,14 +614,9 @@ export const MyShape = memo(MyShapeComponent);
 Create the minimap component in `src/features/svg-canvas/components/shapes/MyShape/MyShapeMinimap.tsx`:
 
 ```typescript
-// Import React.
 import type React from "react";
 import { memo } from "react";
-
-// Import types.
 import type { MyShapeProps } from "../../../types/props/shapes/MyShapeProps";
-
-// Import utils.
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 
@@ -673,22 +664,12 @@ export { MyShapeMinimap } from "./MyShapeMinimap";
 
 ### Step 9: Create Atlas Object
 
-Create an Atlas object for your shape/node. 
+Create an Atlas object for your shape/node.
 
 **For Shapes**, create in `src/features/svg-canvas/atlas/shapes/MyShapeAtlas.ts`:  
 **For Workflow Nodes**, create in `src/features/svg-canvas/atlas/nodes/MyNodeAtlas.ts`:
 
 ```typescript
-/**
- * MyShape Atlas (or MyNode Atlas for workflow nodes)
- *
- * Complete index and registry for MyShape-related components.
- * This atlas provides centralized access to all MyShape-related types,
- * default values, components, and utility functions.
- */
-// ============================================================================
-// Types
-// ============================================================================
 import type {
 	DiagramAtlas,
 	DataToStateMapper,
@@ -698,34 +679,26 @@ import type { MyShapeData } from "../../types/data/shapes/MyShapeData";
 import type { MyShapeState } from "../../types/state/shapes/MyShapeState";
 import type { MyShapeProps } from "../../types/props/shapes/MyShapeProps";
 import { MyShapeFeatures } from "../../types/data/shapes/MyShapeData";
-
-// ============================================================================
-// Defaults
-// ============================================================================
 import { MyShapeDefaultData } from "../../constants/data/shapes/MyShapeDefaultData";
 import { MyShapeDefaultState } from "../../constants/state/shapes/MyShapeDefaultState";
-
-// ============================================================================
-// Components
-// ============================================================================
 import { MyShape, MyShapeMinimap } from "../../components/shapes/MyShape";
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
 import { createMyShapeState } from "../../utils/shapes/myShape/createMyShapeState";
 import { calcMyShapeConnectPointPosition } from "../../utils/shapes/myShape/calcMyShapeConnectPointPosition";
 import { mapMyShapeDataToState } from "../../utils/shapes/myShape/mapMyShapeDataToState";
 import { mapMyShapeStateToData } from "../../utils/shapes/myShape/mapMyShapeStateToData";
 
 /**
+ * MyShape Atlas (or MyNode Atlas for workflow nodes)
+ *
+ * Complete index and registry for MyShape-related components.
+ * This atlas provides centralized access to all MyShape-related types,
+ * default values, components, and utility functions.
+ */
+
+/**
  * MyShape Atlas Type Definition
  */
-type MyShapeAtlas = DiagramAtlas<
-	MyShapeData,
-	MyShapeState,
-	MyShapeProps
->;
+type MyShapeAtlas = DiagramAtlas<MyShapeData, MyShapeState, MyShapeProps>;
 
 /**
  * MyShape Atlas Implementation
@@ -829,11 +802,8 @@ export const initializeSvgCanvasDiagrams = (): void => {
 Add your shape type to the DiagramType union in `src/features/svg-canvas/types/core/DiagramType.ts`:
 
 ```typescript
-export type DiagramType =
-	| "Rectangle"
-	| "Ellipse"
-	| "MyShape"  // Add your shape here
-	// ... other types
+export type DiagramType = "Rectangle" | "Ellipse" | "MyShape"; // Add your shape here
+// ... other types
 ```
 
 ### Step 12: Update Default Data Constants
@@ -848,17 +818,18 @@ Add your element's default data to the appropriate CreateDefaultData file:
 ```typescript
 export const CreateDefaultData = {
 	// ... existing items
-	MyShape: { // or MyElement, MyNode, MyDiagram
+	MyShape: {
+		// or MyElement, MyNode, MyDiagram
 		// Define default values based on your features
 		...DiagramBaseDefaultData,
-		...FrameableDefaultData,      // if frameable: true
+		...FrameableDefaultData, // if frameable: true
 		...TransformativeDefaultData, // if transformative: true
-		...StrokableDefaultData,      // if strokable: true
-		...FillableDefaultData,       // if fillable: true
+		...StrokableDefaultData, // if strokable: true
+		...FillableDefaultData, // if fillable: true
 		...CornerRoundableDefaultData, // if cornerRoundable: true
-		...TextableDefaultData,       // if textable: true
-		...ExecutableDefaultData,     // if executable: true
-		customProperty: 0,            // your custom properties
+		...TextableDefaultData, // if textable: true
+		...ExecutableDefaultData, // if executable: true
+		customProperty: 0, // your custom properties
 	},
 } as const;
 ```
@@ -873,61 +844,51 @@ Add your element's default state to the appropriate CreateDefaultState file:
 ```typescript
 export const CreateDefaultState = {
 	// ... existing items
-	MyShape: { // or MyElement, MyNode, MyDiagram
+	MyShape: {
+		// or MyElement, MyNode, MyDiagram
 		...DiagramBaseDefaultState,
-		...FrameableDefaultState,      // if frameable: true
-		...SelectableDefaultState,     // if selectable: true
+		...FrameableDefaultState, // if frameable: true
+		...SelectableDefaultState, // if selectable: true
 		...TransformativeDefaultState, // if transformative: true
-		...ItemableDefaultState,       // if itemable: true
-		...StrokableDefaultState,      // if strokable: true
-		...FillableDefaultState,       // if fillable: true
+		...ItemableDefaultState, // if itemable: true
+		...StrokableDefaultState, // if strokable: true
+		...FillableDefaultState, // if fillable: true
 		...CornerRoundableDefaultState, // if cornerRoundable: true
-		...TextableDefaultState,       // if textable: true
-		...ExecutableDefaultState,     // if executable: true
-		customProperty: 0,             // your custom properties
+		...TextableDefaultState, // if textable: true
+		...ExecutableDefaultState, // if executable: true
+		customProperty: 0, // your custom properties
 	},
 } as const;
 ```
 
-### Step 14: Verify All Exports
-
-Ensure all your new files are properly exported through their respective index files:
-
-**For shapes**, update exports in:
-- `src/features/svg-canvas/components/shapes/index.ts` (if exists)
-- `src/features/svg-canvas/types/data/shapes/index.ts` (if exists)
-- `src/features/svg-canvas/types/state/shapes/index.ts` (if exists)
-- `src/features/svg-canvas/utils/shapes/index.ts` (if exists)
-
-**For nodes**, update exports in:
-- `src/features/svg-canvas/components/nodes/index.ts` (if exists)
-- `src/features/svg-canvas/types/data/nodes/index.ts` (if exists)
-- `src/features/svg-canvas/types/state/nodes/index.ts` (if exists)
-- `src/features/svg-canvas/utils/nodes/index.ts` (if exists)
-
 ## Important Design Patterns
 
 ### 1. Feature Composition
+
 - Use the feature system to compose capabilities (transformative, connectable, etc.)
 - Only include features your shape actually needs
 - Features determine which props and state properties are available
 
 ### 2. Memoization
+
 - Always wrap components with `memo()` for performance
 - Use `useMemo()` for expensive calculations and object creation
 - Memoize the `ownerShape` object for connect points
 
 ### 3. Hook Integration
+
 - Use the provided interaction hooks (useDrag, useClick, useSelect, etc.)
 - Merge hook properties using `mergeProps()`
 - Follow the established pattern for hook composition
 
 ### 4. Transform System
+
 - Use `createSvgTransform()` for consistent transformation
 - Apply transforms to the main SVG element
 - Remember that shapes are positioned from their center point
 
 ### 5. Connect Point System
+
 - Implement connect points if your shape should support connections
 - Calculate positions relative to the shape's center and dimensions
 - Use the established connect point creation pattern
@@ -974,6 +935,7 @@ The new Atlas system provides several advantages:
 6. **Discovery**: Easy to find all components, utilities, and types for a diagram type
 
 Each Atlas object consolidates:
+
 - Type definitions (Data, State, Props, Features)
 - Default values (DefaultData, DefaultState)
 - React components (Component, MinimapComponent)
