@@ -7,19 +7,19 @@ export const DiagramMenuItemDiv = styled.div`
 	justify-content: center;
 	width: 32px;
 	height: 32px;
-	border-radius: 4px;
+	border-radius: 6px;
 	border: 1px solid transparent;
 	cursor: pointer;
 	user-select: none;
 	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	&:hover {
-		background-color: #f5f5f5;
+		background-color: #f3f4f6;
 	}
 
 	&.active {
-		background-color: #e6f4ff;
-		border-color: #1890ff;
+		background-color: #f9fafb;
+		border-color: #6b7280;
 	}
 
 	&.disabled {
@@ -32,19 +32,19 @@ export const DiagramMenuItemDiv = styled.div`
 	}
 
 	svg {
-		color: rgba(0, 0, 0, 0.65);
+		color: #6b7280;
 		transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 	}
 
 	&:hover svg {
-		color: #1890ff;
+		color: #374151;
 	}
 
 	&.active svg {
-		color: #1890ff;
+		color: #374151;
 	}
 
 	&.disabled svg {
-		color: rgba(0, 0, 0, 0.25);
+		color: #d1d5db;
 	}
 `;

@@ -11,5 +11,5 @@ export const BodyContainer = styled.div<{ top?: number }>`
 	right: 0;
 	bottom: 0;
 	box-sizing: border-box;
-	background-color: #0c0f1c;
+	background-color: #111827;
 `;

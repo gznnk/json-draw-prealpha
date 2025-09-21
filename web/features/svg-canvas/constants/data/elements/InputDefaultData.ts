@@ -17,7 +17,7 @@ export const InputDefaultData: InputData = CreateDefaultData<InputData>({
 		cornerRadius: 6,
 		fontColor: "#000000",
 		fontSize: 14,
-		fontFamily: "Segoe UI",
+		fontFamily: "Noto Sans JP",
 		fontWeight: "normal",
 		textAlign: "left",
 		verticalAlign: "center",

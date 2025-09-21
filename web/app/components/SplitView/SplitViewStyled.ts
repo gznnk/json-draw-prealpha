@@ -17,11 +17,10 @@ export const Pane = styled.div`
 export const Divider = styled.div`
 	width: 1px;
 	height: 100%;
-	background-color: #3a415c;
-	position: relative;
+	background-color: #374151;
 
 	&:hover {
-		background-color: #2a3366;
+		background-color: #4b5563;
 	}
 `;
 

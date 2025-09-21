@@ -18,15 +18,16 @@ export const MenuContainer = styled.div`
 export const MenuItem = styled.div<{ isActive: boolean }>`
 	padding: 6px 12px;
 	cursor: pointer;
-	background-color: ${(props) => (props.isActive ? "#096dd9" : "transparent")};
-	color: #ffffff;
+	background-color: ${(props) => (props.isActive ? "#374151" : "transparent")};
+	color: #374151;
 	border-radius: 2px;
 	font-size: 12px;
 	position: relative;
 	transition: background-color 0.2s ease;
 
 	&:hover {
-		background-color: #096dd9;
+		background-color: #374151;
+		color: #ffffff;
 	}
 
 	user-select: none;
@@ -41,9 +42,9 @@ export const MenuDropdown = styled.div`
 	top: 100%;
 	left: 0;
 	background-color: #ffffff;
-	border: 1px solid #d9d9d9;
-	border-radius: 4px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	border: 1px solid #e5e7eb;
+	border-radius: 6px;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 	min-width: 120px;
 	z-index: 9999;
 	padding: 4px 0;
@@ -57,13 +58,13 @@ export const MenuDropdown = styled.div`
 export const MenuDropdownItem = styled.div`
 	padding: 8px 16px;
 	cursor: pointer;
-	color: #262626;
+	color: #374151;
 	font-size: 12px;
 	background-color: transparent;
 	transition: background-color 0.2s ease;
 
 	&:hover {
-		background-color: #f5f5f5;
+		background-color: #f3f4f6;
 	}
 
 	user-select: none;

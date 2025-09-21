@@ -54,7 +54,7 @@ export const useAddTextElementTool = (
 					text: args.text,
 					textType: "textarea",
 					fontSize: args.fontSize,
-					fontFamily: args.fontFamily || "Segoe UI",
+					fontFamily: args.fontFamily || "Noto Sans JP",
 					fontColor: args.fill,
 					textAlign: args.textAlign || "center",
 					verticalAlign: args.verticalAlign || "center",

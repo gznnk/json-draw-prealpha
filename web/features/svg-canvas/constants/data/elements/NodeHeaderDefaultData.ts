@@ -13,7 +13,7 @@ export const NodeHeaderDefaultData: NodeHeaderData =
 			height: 30,
 			fontColor: "#000000",
 			fontSize: 18,
-			fontFamily: "Segoe UI",
+			fontFamily: "Noto Sans JP",
 			fontWeight: "400",
 			textAlign: "left",
 			verticalAlign: "center",

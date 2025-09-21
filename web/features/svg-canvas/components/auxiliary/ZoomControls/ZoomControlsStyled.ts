@@ -7,9 +7,9 @@ export const ZoomControlsContainer = styled.div`
 	display: flex;
 	align-items: center;
 	background: #ffffff;
-	border: 1px solid #d9d9d9;
-	border-radius: 6px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 	z-index: 1000;
 	user-select: none;
 	pointer-events: auto;
@@ -23,18 +23,18 @@ export const ZoomButton = styled.button`
 	height: 32px;
 	border: none;
 	background: transparent;
-	color: rgba(0, 0, 0, 0.85);
+	color: #374151;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	pointer-events: auto;
 
 	&:hover {
-		background: #f5f5f5;
-		color: #1677ff;
+		background: #f3f4f6;
+		color: #1f2937;
 	}
 
 	&:active {
-		background: #e6f4ff;
+		background: #e5e7eb;
 	}
 
 	&:first-of-type {
@@ -57,19 +57,19 @@ export const ZoomDisplay = styled.div`
 	padding: 0 8px;
 	font-size: 12px;
 	font-weight: 500;
-	color: rgba(0, 0, 0, 0.85);
-	border-left: 1px solid #d9d9d9;
-	border-right: 1px solid #d9d9d9;
+	color: #374151;
+	border-left: 1px solid #e5e7eb;
+	border-right: 1px solid #e5e7eb;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	pointer-events: auto;
 
 	&:hover {
-		background: #f5f5f5;
-		color: #1677ff;
+		background: #f3f4f6;
+		color: #1f2937;
 	}
 
 	&:active {
-		background: #e6f4ff;
+		background: #e5e7eb;
 	}
 `;

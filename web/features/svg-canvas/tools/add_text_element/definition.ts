@@ -59,7 +59,7 @@ export const textElementToolDefinition: ToolDefinition = {
 		{
 			name: "fontFamily",
 			type: "string",
-			description: "Font family for the text. Default is 'Segoe UI'.",
+			description: "Font family for the text. Default is 'Noto Sans JP'.",
 		},
 		{
 			name: "textAlign",

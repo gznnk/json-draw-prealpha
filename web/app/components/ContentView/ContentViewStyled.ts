@@ -9,8 +9,8 @@ export const Container = styled.div`
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: #1a1f33; // Dark navy (Section Background)
-	color: #c0c4d2; // Light gray with blue tint (Primary Text)
+	background-color: #1f2937; // Dark gray background
+	color: #f9fafb; // Light text
 	overflow: auto;
 	padding: 0;
 	position: relative;
@@ -24,6 +24,6 @@ export const EmptyContent = styled.div`
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-	color: #666b82; // Dark gray with blue tint (Placeholder Text)
+	color: #9ca3af; // Gray placeholder text
 	font-style: italic;
 `;

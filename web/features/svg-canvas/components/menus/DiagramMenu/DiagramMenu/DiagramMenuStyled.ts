@@ -33,11 +33,11 @@ export const DiagramMenuDiv = styled.div`
 	font-size: 14px;
 	padding: 4px 8px;
 	background-color: #ffffff;
-	border: 1px solid #d9d9d9;
-	border-radius: 6px;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
 	box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.06),
-		0 1px 2px rgba(0, 0, 0, 0.04);
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	pointer-events: auto;
 	user-select: none;
 	z-index: 1000;
@@ -50,7 +50,7 @@ export const DiagramMenuDivider = styled.div`
 	width: 1px;
 	height: 16px;
 	margin: 0 8px;
-	background-color: #f0f0f0;
+	background-color: #f3f4f6;
 	align-self: center;
 `;
 

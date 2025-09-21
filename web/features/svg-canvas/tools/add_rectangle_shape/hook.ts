@@ -60,7 +60,7 @@ export const useAddRectangleShapeTool = (
 					verticalAlign: args.verticalAlign || "center",
 					fontColor: args.fontColor || "black",
 					fontSize: args.fontSize || 16,
-					fontFamily: args.fontFamily || "Segoe UI",
+					fontFamily: args.fontFamily || "Noto Sans JP",
 					fontWeight: args.fontWeight || "normal",
 					connectEnabled: false,
 					name: args.name,

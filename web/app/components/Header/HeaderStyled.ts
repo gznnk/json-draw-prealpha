@@ -7,14 +7,14 @@ import styled from "@emotion/styled";
 export const HeaderContainer = styled.header<{ height?: number }>`
 	height: ${(props) => `${props.height || 30}px`};
 	width: 100%;
-	background-color: #1890ff;
-	border-bottom: 1px solid #096dd9;
+	background-color: #ffffff;
+	border-bottom: 1px solid #e5e7eb;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
 	padding: 0 16px;
 	box-sizing: border-box;
-	color: #ffffff;
+	color: #374151;
 	font-size: 12px;
 	position: relative;
 	overflow: visible;

@@ -9,6 +9,6 @@ export const PageContainer = styled.div`
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: #0c0f1c;
-	color: #ffffff;
+	background-color: #111827;
+	color: #f9fafb;
 `;

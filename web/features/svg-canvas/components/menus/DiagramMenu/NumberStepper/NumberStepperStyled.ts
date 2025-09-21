@@ -11,11 +11,11 @@ export const NumberStepperContainer = styled.div`
 	box-sizing: border-box;
 	flex-direction: row;
 	background-color: #ffffff;
-	border: 1px solid #d9d9d9;
-	border-radius: 6px;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
 	box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.06),
-		0 1px 2px rgba(0, 0, 0, 0.04);
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	padding: 4px;
 	pointer-events: auto;
 	user-select: none;
@@ -33,20 +33,20 @@ export const NumberStepperInput = styled.input`
 	padding: 4px 8px;
 	text-align: center;
 	outline: none;
-	border: 1px solid #d9d9d9;
+	border: 1px solid #e5e7eb;
 	border-radius: 4px;
 	background-color: #ffffff;
-	color: rgba(0, 0, 0, 0.88);
+	color: #374151;
 	font-size: 14px;
 	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	&:focus {
-		border-color: #1890ff;
-		box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+		border-color: #6b7280;
+		box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
 	}
 
 	&:hover {
-		border-color: #40a9ff;
+		border-color: #9ca3af;
 	}
 `;
 
@@ -67,20 +67,20 @@ export const NumberStepperButton = styled.div`
 	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	&:hover {
-		background-color: #f5f5f5;
+		background-color: #f3f4f6;
 	}
 
 	&:active {
-		background-color: #e6f4ff;
+		background-color: #e5e7eb;
 		transform: scale(0.95);
 	}
 
 	svg {
-		color: rgba(0, 0, 0, 0.65);
+		color: #6b7280;
 		transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 	}
 
 	&:hover svg {
-		color: #1890ff;
+		color: #374151;
 	}
 `;

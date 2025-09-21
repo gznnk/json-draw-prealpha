@@ -6,12 +6,12 @@ export const ColorPickerContainer = styled.div`
 	align-items: center;
 	box-sizing: border-box;
 	padding: 12px;
-	border: 1px solid #d9d9d9;
-	border-radius: 6px;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
 	background-color: #ffffff;
 	box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.06),
-		0 1px 2px rgba(0, 0, 0, 0.04);
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	user-select: none;
 	pointer-events: auto;
 	z-index: 1100;
@@ -37,7 +37,7 @@ export const ColorSwatch = styled.div<ColorSwatchProps>`
 	position: relative;
 	border-radius: 6px;
 	border: ${({ selected }) =>
-		selected ? "2px solid #1890ff" : "1px solid #d9d9d9"};
+		selected ? "2px solid #6b7280" : "1px solid #e5e7eb"};
 	background: ${({ color }) =>
 		color === "transparent"
 			? "repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 50% / 8px 8px"
@@ -46,9 +46,9 @@ export const ColorSwatch = styled.div<ColorSwatchProps>`
 	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	&:hover {
-		border-color: #1890ff;
+		border-color: #6b7280;
 		transform: scale(1.1);
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
 
 	&:active {
@@ -65,26 +65,26 @@ export const ColorInput = styled.input<ColorInputProps>`
 	height: 32px;
 	padding: 4px 11px;
 	box-sizing: border-box;
-	border: 1px solid ${({ isValid }) => (isValid ? "#d9d9d9" : "#ff4d4f")};
+	border: 1px solid ${({ isValid }) => (isValid ? "#e5e7eb" : "#ef4444")};
 	border-radius: 6px;
 	background-color: #ffffff;
-	color: rgba(0, 0, 0, 0.88);
+	color: #374151;
 	font-size: 14px;
 	text-align: center;
 	outline: none;
 	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	&:focus {
-		border-color: #1890ff;
-		box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+		border-color: #6b7280;
+		box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.2);
 	}
 
 	&:hover {
-		border-color: ${({ isValid }) => (isValid ? "#40a9ff" : "#ff7875")};
+		border-color: ${({ isValid }) => (isValid ? "#9ca3af" : "#f87171")};
 	}
 
 	::placeholder {
-		color: rgba(0, 0, 0, 0.25);
+		color: #9ca3af;
 		opacity: 1;
 	}
 `;

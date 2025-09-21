@@ -9,7 +9,7 @@ export const TextableDefaultData = {
 	textType: "textarea",
 	fontColor: "#000000",
 	fontSize: 16,
-	fontFamily: "Segoe UI",
+	fontFamily: "Noto Sans JP",
 	fontWeight: "normal",
 	textAlign: "center",
 	verticalAlign: "center",

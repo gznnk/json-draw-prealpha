@@ -31,7 +31,7 @@ export const createRectangleState = ({
 	verticalAlign = "center",
 	fontColor = "black",
 	fontSize = 16,
-	fontFamily = "Segoe UI",
+	fontFamily = "Noto Sans JP",
 	fontWeight = "normal",
 	connectEnabled = true,
 	name,

@@ -10,18 +10,18 @@ export const MiniMapContainer = styled.div<{ width: number; height: number }>`
 	width: ${(props) => props.width}px;
 	height: ${(props) => props.height}px;
 	background-color: #fafafa;
-	border: 1px solid rgba(24, 144, 255, 0.15);
+	border: 1px solid rgba(107, 114, 128, 0.15);
 	border-radius: 8px;
 	box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.06),
-		0 1px 2px rgba(0, 0, 0, 0.04);
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	cursor: pointer;
 	overflow: hidden;
 	z-index: 1000;
 	pointer-events: auto;
 
 	&:hover {
-		border-color: rgba(24, 144, 255, 0.3);
+		border-color: rgba(107, 114, 128, 0.3);
 	}
 `;
 
@@ -47,7 +47,7 @@ export const MiniMapSvg = styled.svg`
  */
 export const MiniMapBackground = styled.rect`
 	fill: #ffffff;
-	stroke: rgba(24, 144, 255, 0.08);
+	stroke: rgba(107, 114, 128, 0.08);
 	stroke-width: 0.5;
 `;
 
@@ -55,16 +55,16 @@ export const MiniMapBackground = styled.rect`
  * Viewport indicator rectangle
  */
 export const ViewportIndicator = styled.rect`
-	fill: rgba(24, 144, 255, 0.08);
-	stroke: rgba(24, 144, 255, 0.8);
+	fill: rgba(107, 114, 128, 0.08);
+	stroke: rgba(107, 114, 128, 0.8);
 	stroke-width: 1.5;
 	opacity: 0.9;
 	cursor: grab !important;
 	pointer-events: all !important;
 
 	&:hover {
-		fill: rgba(24, 144, 255, 0.12);
-		stroke: rgba(24, 144, 255, 1);
+		fill: rgba(107, 114, 128, 0.12);
+		stroke: rgba(107, 114, 128, 1);
 		stroke-width: 2;
 		opacity: 1;
 		cursor: grab !important;
@@ -72,8 +72,8 @@ export const ViewportIndicator = styled.rect`
 
 	&:active {
 		cursor: grabbing !important;
-		fill: rgba(24, 144, 255, 0.15);
-		stroke: rgba(24, 144, 255, 1);
+		fill: rgba(107, 114, 128, 0.15);
+		stroke: rgba(107, 114, 128, 1);
 		stroke-width: 2;
 		opacity: 1;
 	}
@@ -83,6 +83,6 @@ export const ViewportIndicator = styled.rect`
  * Item representation in the minimap
  */
 export const MiniMapItem = styled.rect`
-	fill: rgba(24, 144, 255, 0.6);
+	fill: rgba(107, 114, 128, 0.6);
 	opacity: 0.8;
 `;
