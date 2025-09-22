@@ -72,6 +72,10 @@ function parseArgs() {
 				config.title = "Claude Code - Deployment Complete 🚀";
 				config.message = "Application deployed successfully!";
 				break;
+			case "--lint":
+				config.title = "Claude Code - Lint Complete 🔍";
+				config.message = "Code linting finished successfully!";
+				break;
 			case "--help":
 			case "-h":
 				showHelp();
@@ -108,10 +112,11 @@ Options:
 
 Presets:
   --success             Success notification preset
-  --error               Error notification preset  
+  --error               Error notification preset
   --build               Build completion preset
   --test                Test completion preset
   --deploy              Deployment completion preset
+  --lint                Lint completion preset
 
 Examples:
   node scripts/notify.mjs --success
