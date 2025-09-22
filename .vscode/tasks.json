@@ -53,6 +53,13 @@
 				"clear": false
 			},
 			"problemMatcher": []
+		},
+		{
+			"label": "npm run electron:build",
+			"type": "shell",
+			"command": "npm run electron:build",
+			"group": "build",
+			"problemMatcher": ["$tsc"]
 		}
 	],
 	"inputs": [

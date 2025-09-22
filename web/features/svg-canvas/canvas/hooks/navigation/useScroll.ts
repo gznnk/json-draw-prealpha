@@ -1,0 +1,47 @@
+import { useCallback, useRef } from "react";
+
+import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/core/EventNames";
+import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
+import { InteractionState } from "../../types/InteractionState";
+import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+
+/**
+ * Custom hook to handle scroll events on the canvas.
+ */
+export const useScroll = (props: SvgCanvasSubHooksProps) => {
+	const { eventBus } = props;
+
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		props,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
+	return useCallback(
+		(e: SvgCanvasScrollEvent) => {
+			// Bypass references to avoid function creation in every render.
+			const { setCanvasState } = refBus.current.props;
+
+			// Dispatch the scroll event to the event bus.
+			eventBus.dispatchEvent(
+				new CustomEvent(EVENT_NAME_SVG_CANVAS_SCROLL, {
+					detail: e,
+				}),
+			);
+
+			setCanvasState((prevState) => {
+				// Only update state directly if interaction state is Idle
+				if (prevState.interactionState === InteractionState.Idle) {
+					return {
+						...prevState,
+						minX: e.newMinX,
+						minY: e.newMinY,
+					};
+				}
+				return prevState;
+			});
+		},
+		[eventBus],
+	);
+};

@@ -10,7 +10,7 @@
 import { memo } from "react";
 
 const ButtonComponent = (): JSX.Element => {
-  return <button>Click</button>;
+	return <button>Click</button>;
 };
 
 export const Button = memo(ButtonComponent);

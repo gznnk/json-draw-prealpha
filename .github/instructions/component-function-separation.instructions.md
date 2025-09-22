@@ -16,20 +16,29 @@ Place logic in utility functions when it meets these criteria:
 - **Testable Units**: Logic that can be easily unit tested in isolation
 
 **Examples of utility functions:**
+
 ```typescript
 // Coordinate transformation
-export const transformToMiniMapCoords = (x: number, y: number, bounds: Bounds): Point => {
-  // Pure calculation logic
+export const transformToMiniMapCoords = (
+	x: number,
+	y: number,
+	bounds: Bounds,
+): Point => {
+	// Pure calculation logic
 };
 
 // Data extraction
 export const extractTransformativeItems = (items: Diagram[]): Diagram[] => {
-  // Pure data processing
+	// Pure data processing
 };
 
 // Mathematical calculations
-export const calculateScale = (bounds: Bounds, width: number, height: number): number => {
-  // Pure mathematical computation
+export const calculateScale = (
+	bounds: Bounds,
+	width: number,
+	height: number,
+): number => {
+	// Pure mathematical computation
 };
 ```
 
@@ -45,6 +54,7 @@ Keep logic in components when it involves:
 - **Component Lifecycle**: Logic tied to mounting, unmounting, or updates
 
 **Examples of component logic:**
+
 ```typescript
 // Memoized calculations based on props
 const canvasBounds = useMemo(() => {

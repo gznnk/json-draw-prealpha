@@ -7,24 +7,61 @@
 		{
 			"type": "chrome",
 			"request": "launch",
-			"name": "Launch Chrome against localhost",
+			"name": "Debug Web App",
 			"url": "http://localhost:5173",
 			"webRoot": "${workspaceFolder}",
 			"preLaunchTask": "npm run dev",
 			"postDebugTask": "terminate",
-			"runtimeArgs": [
-				"--load-extension=${workspaceFolder}/chrome_extensions/react-developer-tools/6.1.1_0"
-			]
+			"runtimeArgs": []
 		},
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Debug Jest Tests",
+			"name": "Debug Tests",
 			"runtimeExecutable": "npm",
 			"runtimeArgs": ["run", "test", "--"],
 			"args": ["--runInBand", "--watchAll=false"],
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Electron: Main",
+			"program": "${workspaceFolder}/dist-desktop/main.js",
+			"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+			"runtimeArgs": [
+				"--enable-logging",
+				"--inspect=5858",
+				"--remote-debugging-port=9222"
+			],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"console": "integratedTerminal",
+			"preLaunchTask": "npm run electron:build",
+			"sourceMaps": true,
+			"outFiles": ["${workspaceFolder}/dist-desktop/**/*.js"],
+			"skipFiles": ["<node_internals>/**"],
+			"windows": {
+				"runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+			}
+		},
+		{
+			"type": "chrome",
+			"request": "attach",
+			"name": "Debug Electron: Renderer",
+			"port": 9222,
+			"webRoot": "${workspaceFolder}",
+			"preLaunchTask": "npm run dev",
+			"urlFilter": "http://localhost:5173/*"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Debug Electron",
+			"configurations": ["Debug Electron: Main", "Debug Electron: Renderer"],
+			"stopAll": true
 		}
 	]
 }

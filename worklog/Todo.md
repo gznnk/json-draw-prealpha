@@ -1,2 +1,2 @@
-* DiagramMenuコンポーネントのHookが本当に必要か確認
-* stateToMap、mapToStateがネストしたアイテムに対応していない
+- DiagramMenuコンポーネントのHookが本当に必要か確認
+- stateToMap、mapToStateがネストしたアイテムに対応していない

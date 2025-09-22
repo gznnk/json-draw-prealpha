@@ -13,6 +13,7 @@
 - Show commit results but don't show intermediate status checks unless there are errors
 
 Example commit message formats:
+
 - "[Copilot] Implement complete SVG canvas system with drag and drop functionality"
 - "[Copilot] Fix multiple markdown editor issues including formatting and parsing"
 - "[Copilot] Update git workflow and commit message generation system"

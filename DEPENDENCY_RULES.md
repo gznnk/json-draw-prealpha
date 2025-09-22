@@ -1,6 +1,7 @@
 # App Dependency Rules
 
 ## Architecture
+
 ```mermaid
 graph TD
     app --> features
@@ -10,6 +11,7 @@ graph TD
 ```
 
 ## Feature
+
 ```mermaid
 graph TD
     app/App.tsx --> features/llm-chat-ui

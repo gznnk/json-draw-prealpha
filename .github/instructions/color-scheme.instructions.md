@@ -5,16 +5,19 @@ This document outlines the color scheme used in the application's blue theme, ba
 ## Primary Colors
 
 ### Background Colors
+
 - **Main Background**: `#0C0F1C` (Very dark blue)
 - **Section Background**: `#1A1F33` (Dark navy)
 - **Card/Element Background**: `#2A2F4C` (Dark blue)
 
 ### Text Colors
+
 - **Primary Text**: `#C0C4D2` (Light gray with blue tint)
 - **Secondary Text**: `#B0B0B0` (Medium gray)
 - **Placeholder Text**: `#666B82` (Dark gray with blue tint)
 
 ### Accent Colors - Ant Design Blue
+
 - **Primary Blue**: `#1890ff` (Ant Design primary color)
 - **Primary Blue RGBA**: `rgba(24, 144, 255, 1)` (Solid primary blue)
 - **Primary Blue Semi-Transparent**: `rgba(24, 144, 255, 0.8)` (80% opacity)
@@ -25,17 +28,20 @@ This document outlines the color scheme used in the application's blue theme, ba
 ## UI Element Colors
 
 ### SVG Canvas Elements
+
 - **Grid Pattern**: `rgba(24, 144, 255, 0.1)` (Light blue grid)
 - **Drag Points**: `rgba(24, 144, 255, 0.8)` (Semi-transparent blue)
 - **Selection Outline**: `rgba(24, 144, 255, 0.8)` (Semi-transparent blue)
 - **Dash Pattern**: `strokeDasharray="4,2"` (4px dash, 2px gap)
 
 ### Code and Syntax
+
 - **Code Block Background**: `#1A1F33` (Dark navy)
 - **Inline Code Background**: `#2A2F4C` (Dark blue)
 - **Code Border**: `rgba(24, 144, 255, 0.15)` (Light blue border)
 
 ### Interactive Elements
+
 - **Caret Indicator**: `#B0B0B0` (Medium gray)
 - **Input Border**: `#2A2F4C` (Dark blue)
 - **Input Border Focus**: `rgba(24, 144, 255, 0.6)` (Blue focus state)
@@ -45,6 +51,7 @@ This document outlines the color scheme used in the application's blue theme, ba
 ## Ant Design Color Values
 
 ### Core Blue Palette
+
 - **Blue-1**: `#e6f7ff` (Lightest blue)
 - **Blue-3**: `#91d5ff` (Light blue)
 - **Blue-6**: `#1890ff` (Primary blue - main theme color)

@@ -1,13 +1,25 @@
 {
 	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "biomejs.biome",
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
 	"editor.codeActionsOnSave": {
-		"quickfix.biome": "explicit"
-		// "source.organizeImports": "explicit"
+		"source.fixAll.eslint": "explicit",
 	},
 	"files.exclude": {
 		// "**/__tests__": true
 		"**/*.drawio.png.bkp": true
 	},
-	"todo-tree.filtering.excludeGlobs": ["node_modules", "chrome_extensions"]
+	"todo-tree.filtering.excludeGlobs": [
+		"node_modules",
+		"chrome_extensions"
+	],
+
 }

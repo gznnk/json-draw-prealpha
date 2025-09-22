@@ -1,7 +1,8 @@
-import { defineConfig } from "vite";
+import path from "node:path";
+
 import react from "@vitejs/plugin-react-swc";
 import license from "rollup-plugin-license";
-import path from "node:path";
+import { defineConfig } from "vite";
 
 const COPYRIGHT = `
 Copyright (c) ${new Date().getFullYear()} msnakagawa. All Rights Reserved.
@@ -14,6 +15,7 @@ export default defineConfig({
 	// base: "/react-vite-project/",
 	plugins: [react()],
 	build: {
+		outDir: "dist-web",
 		rollupOptions: {
 			plugins: [
 				license({
@@ -22,7 +24,7 @@ export default defineConfig({
 						content: COPYRIGHT,
 					},
 					thirdParty: {
-						output: path.join(__dirname, "dist", "DEPENDENCIES"),
+						output: path.join(__dirname, "dist-web", "DEPENDENCIES"),
 						includePrivate: true,
 					},
 				}),

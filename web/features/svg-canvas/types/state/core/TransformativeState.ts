@@ -1,0 +1,12 @@
+import type { TransformativeData } from "../../data/core/TransformativeData";
+
+/**
+ * Interface for diagram elements that can be resized, rotated, and repositioned.
+ * Extends base data with runtime state that should not be persisted.
+ */
+export type TransformativeState = TransformativeData & {
+	showTransformControls: boolean;
+	isTransforming: boolean;
+	minWidth?: number;
+	minHeight?: number;
+};

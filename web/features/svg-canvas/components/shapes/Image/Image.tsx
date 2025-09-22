@@ -1,0 +1,150 @@
+import type React from "react";
+import { memo, useRef } from "react";
+
+import { ImageElement } from "./ImageStyled";
+import { useClick } from "../../../hooks/useClick";
+import { useDrag } from "../../../hooks/useDrag";
+import { useSelect } from "../../../hooks/useSelect";
+import type { ImageProps } from "../../../types/props/shapes/ImageProps";
+import { mergeProps } from "../../../utils/core/mergeProps";
+import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
+import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { Outline } from "../../core/Outline";
+import { PositionLabel } from "../../core/PositionLabel";
+import { Transformative } from "../../core/Transformative";
+
+/**
+ * Image component.
+ */
+const ImageComponent: React.FC<ImageProps> = ({
+	id,
+	x,
+	y,
+	width,
+	height,
+	rotation,
+	scaleX,
+	scaleY,
+	keepProportion,
+	isSelected,
+	isAncestorSelected = false,
+	base64Data,
+	isDragging = false,
+	showOutline = false,
+	showTransformControls = false,
+	isTransforming = false,
+	onDrag,
+	onClick,
+	onSelect,
+	onTransform,
+}) => {
+	// Reference to the element.
+	const svgRef = useRef<SVGImageElement>({} as SVGImageElement);
+
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		id,
+		isSelected,
+		onDrag,
+		onSelect,
+		onTransform,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
+	// Prepare props for the drag element.
+	const dragProps = useDrag({
+		id,
+		type: "Image",
+		x,
+		y,
+		ref: svgRef,
+		onDrag,
+	});
+	// Generate properties for clicking
+	const clickProps = useClick({
+		id,
+		x,
+		y,
+		isSelected,
+		isAncestorSelected,
+		ref: svgRef,
+		onClick,
+	});
+	// Generate properties for selection
+	const selectProps = useSelect({
+		id,
+		onSelect,
+	});
+	// Compose props for ImageElement
+	const composedProps = mergeProps(dragProps, clickProps, selectProps);
+
+	// Create the transform attribute for the element.
+	const transform = createSvgTransform(
+		scaleX,
+		scaleY,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
+
+	return (
+		<>
+			<g transform={transform}>
+				<ImageElement
+					id={id}
+					x={-width / 2}
+					y={-height / 2}
+					width={width}
+					height={height}
+					tabIndex={0}
+					cursor="move"
+					href={`data:image/png;base64,${base64Data}`}
+					isTransparent={false}
+					ref={svgRef}
+					{...composedProps}
+				/>
+			</g>
+			<Outline
+				x={x}
+				y={y}
+				width={width}
+				height={height}
+				rotation={rotation}
+				scaleX={scaleX}
+				scaleY={scaleY}
+				showOutline={showOutline}
+			/>
+			{showTransformControls && (
+				<Transformative
+					id={id}
+					type="Rectangle"
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+					keepProportion={keepProportion}
+					showTransformControls={showTransformControls}
+					isTransforming={isTransforming}
+					onTransform={onTransform}
+				/>
+			)}
+			{isSelected && isDragging && (
+				<PositionLabel
+					x={x}
+					y={y}
+					width={width}
+					height={height}
+					rotation={rotation}
+					scaleX={scaleX}
+					scaleY={scaleY}
+				/>
+			)}
+		</>
+	);
+};
+
+export const Image = memo(ImageComponent);

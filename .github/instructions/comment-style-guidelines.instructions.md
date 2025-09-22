@@ -13,17 +13,20 @@
 /**
  * Processes diagram events and updates the canvas state accordingly.
  * This handler manages both user interactions and system-generated events.
- * 
+ *
  * @param event - The diagram event to process
  * @param canvasState - Current state of the canvas
  * @returns Updated canvas state after processing the event
  */
-function processDiagramEvent(event: DiagramEvent, canvasState: CanvasState): CanvasState {
-  // Implementation
+function processDiagramEvent(
+	event: DiagramEvent,
+	canvasState: CanvasState,
+): CanvasState {
+	// Implementation
 }
 
 // Short utility to generate unique IDs
 function generateUniqueId(): string {
-  // Implementation
+	// Implementation
 }
 ```

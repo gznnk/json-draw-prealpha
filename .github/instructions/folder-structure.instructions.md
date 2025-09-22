@@ -21,11 +21,13 @@ Application-level glue code that composes features and shared modules into actua
 Each folder represents a self-contained **application feature or use case**, encapsulating UI, state, and logic together.
 
 ### Responsibilities:
+
 - Own all logic, types, and UI necessary for a single function
 - Avoid direct dependencies on other features (no coupling)
 - May depend on `shared`, `lib`, `models`
 
 ### Examples:
+
 - `llm-chat-ui/`: LLM chat window feature
 - `markdown-editor/`: Markdown editing feature
 - `svg-canvas/`: Diagram and drawing canvas feature
@@ -37,12 +39,14 @@ Each folder represents a self-contained **application feature or use case**, enc
 Contains **reusable utilities, components, and logic** that are used by multiple features or by the app root.
 
 ### Responsibilities:
+
 - Cross-feature UI components (e.g., `Button`, `Modal`)
 - Reusable hooks, utility functions, types
 - Not tied to any one use case or business domain
 - Should not depend on any feature
 
 ### Examples:
+
 - `shared/llm-client`: API client for OpenAI (used by multiple features)
 - `shared/markdown`: Markdown parsers, renderers, utilities
 
@@ -53,6 +57,7 @@ Contains **reusable utilities, components, and logic** that are used by multiple
 Holds **low-level integrations with external services or infrastructure**, often wrapping SDKs or setting up core behaviors.
 
 ### Responsibilities:
+
 - Initialization and configuration of axios, Firebase, OpenAI, etc.
 - Auth and error handling middlewares
 - Typically imported by shared or features modules
@@ -76,3 +81,4 @@ graph TD
     app --> shared
     app --> lib
     app --> models
+```
