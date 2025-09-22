@@ -10,17 +10,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
    ```bash
    npm run create-worktree <feature-branch-name>
+   cd ../<feature-branch-name>
    ```
 
 2. **Complete Development**: After finishing your task, commit and merge back
 
    ```bash
-   npm run merge-and-cleanup-worktree "<commit-message>"<feature-branch-name>
-   ```
-
-3. **Complete Development**: After finishing your task, commit and merge back
-   ```bash
    npm run merge-and-cleanup-worktree "<commit-message>"
+   cd ../react-vite-project
    ```
 
 This workflow ensures clean branch management and isolated development environments.

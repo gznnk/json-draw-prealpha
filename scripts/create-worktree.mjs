@@ -61,13 +61,9 @@ function main() {
 			{ stdio: "inherit" },
 		);
 
-		// 作成したworktreeに移動
-		console.log(`📁 Moving to worktree ${branchName}...`);
-		process.chdir(`../${branchName}`);
-
 		console.log("✅ Successfully created branch and worktree!");
-		console.log(`📂 Current location: ${process.cwd()}`);
-		console.log(`🎯 Ready to work on branch '${branchName}'`);
+		console.log(`📂 Worktree location: ${worktreePath}`);
+		console.log(`🚀 To switch to the worktree: cd ../${branchName}`);
 	} catch (error) {
 		console.error("❌ Error occurred:", error.message);
 		process.exit(1);

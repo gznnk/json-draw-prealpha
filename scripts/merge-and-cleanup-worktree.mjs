@@ -182,13 +182,10 @@ function main() {
 		// worktreeを削除（存在する場合）
 		if (isWorktree) {
 			console.log(
-				`📁 Moving to main project and removing worktree ${worktreePath}...`,
+				`📁 Moving to parent directory and removing worktree ${worktreePath}...`,
 			);
-			// package.jsonからプロジェクト名を取得
-			const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-			const projectName = packageJson.name;
-			// 同じ階層のメインプロジェクトディレクトリに移動
-			process.chdir(`../${projectName}`);
+			// 親ディレクトリに移動してからworktreeを削除
+			process.chdir("..");
 			execSync(`git worktree remove ${currentBranch}`, { stdio: "inherit" });
 		}
 
