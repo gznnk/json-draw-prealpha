@@ -2,26 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Worktree Development Workflow
-
-**IMPORTANT**: For all development tasks, follow this worktree-based workflow:
-
-1. **Start Development**: Create a new worktree for your task
-
-   ```bash
-   npm run create-worktree <feature-branch-name>
-   cd ../<feature-branch-name>
-   ```
-
-2. **Complete Development**: After finishing your task, commit and merge back
-
-   ```bash
-   npm run merge-and-cleanup-worktree "<commit-message>"
-   cd ../react-vite-project
-   ```
-
-This workflow ensures clean branch management and isolated development environments.
-
 ## Development Commands
 
 ### Worktree Management
@@ -186,7 +166,7 @@ Key canvas capabilities:
 3. Run `npm run lint` to check for ESLint errors and fix any issues
 4. Run `npm run format:all` to format all modified files (changed + staged + untracked), or use specific commands like `format:changed` if needed
 5. Ask the user if they want to commit the changes
-6. If approved, use `npm run merge-and-cleanup-worktree "<commit-message>"` to commit, merge, and cleanup the worktree
+6. If approved, create a commit with an appropriate commit message
 
 ## Dependencies Note
 
