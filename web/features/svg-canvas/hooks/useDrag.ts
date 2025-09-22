@@ -305,7 +305,14 @@ export const useDrag = (props: DragProps) => {
 
 		if (!disableAutoEdgeScroll) {
 			// Use the shared auto edge scroll functionality
-			if (autoEdgeScroll(svgCursorPoint)) return;
+			if (
+				autoEdgeScroll(svgCursorPoint, {
+					dragPoint,
+					dragPositioningFunction,
+				})
+			) {
+				return;
+			}
 		}
 
 		// Fire dragging event

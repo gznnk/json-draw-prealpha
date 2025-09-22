@@ -26,12 +26,10 @@ export type DoStartEdgeScrollArgs = EdgeScrollState & {
  * Custom hook to handle auto edge scrolling in the SVG canvas.
  * @param viewport - The current SVG viewport.
  * @param doStartEdgeScroll - Function to start edge scrolling with new state.
- * @param dragPositioningFunction - Optional function to modify the calculated scroll delta.
  */
 export const useAutoEdgeScroll = (
 	viewport: SvgViewport,
 	doStartEdgeScroll: (state: DoStartEdgeScrollArgs) => void,
-	dragPositioningFunction?: (delta: Point) => Point,
 ) => {
 	// Internal state for edge scrolling
 	const scrollIntervalRef = useRef<number | null>(null);
@@ -47,7 +45,6 @@ export const useAutoEdgeScroll = (
 	const refBusVal = {
 		viewport,
 		doStartEdgeScroll,
-		dragPositioningFunction,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -124,12 +121,17 @@ export const useAutoEdgeScroll = (
 	/**
 	 * Auto edge scroll handler
 	 * @param cursorPos - The current cursor position
+	 * @param options - Optional drag options containing dragPoint and dragPositioningFunction
 	 * @return {boolean} - Returns true if auto edge scrolling was triggered, false otherwise.
 	 */
 	const autoEdgeScroll = useCallback(
-		(cursorPos: Point): boolean => {
-			// Bypass references to avoid function creation in every render.
-			const { viewport, dragPositioningFunction } = refBus.current;
+		(
+			cursorPos: Point,
+			options?: {
+				dragPoint?: Point;
+				dragPositioningFunction?: (x: number, y: number) => Point;
+			},
+		): boolean => {
 			// Auto edge scroll if the cursor is near the edges.
 			const { x: cursorX, y: cursorY } = cursorPos;
 
@@ -149,11 +151,21 @@ export const useAutoEdgeScroll = (
 			);
 
 			// Apply dragPositioningFunction if provided
-			if (dragPositioningFunction) {
-				const modifiedDelta = dragPositioningFunction({ x: deltaX, y: deltaY });
-				deltaX = modifiedDelta.x;
-				deltaY = modifiedDelta.y;
+			const { dragPoint, dragPositioningFunction } = options || {};
+			if (dragPoint && dragPositioningFunction) {
+				// Calculate target position with original delta applied to dragPoint
+				const targetX = dragPoint.x + deltaX;
+				const targetY = dragPoint.y + deltaY;
+
+				// Apply positioning function to get modified target position
+				const modifiedTarget = dragPositioningFunction(targetX, targetY);
+
+				// Calculate new delta as difference between current dragPoint and modified target
+				deltaX = modifiedTarget.x - dragPoint.x;
+				deltaY = modifiedTarget.y - dragPoint.y;
 			}
+
+			// Update edgeScrollStateRef
 			edgeScrollStateRef.current = {
 				cursorPos,
 				delta: { x: deltaX, y: deltaY },
@@ -164,7 +176,7 @@ export const useAutoEdgeScroll = (
 			}
 			return true;
 		},
-		[startEdgeScroll, clearEdgeScroll],
+		[viewport, startEdgeScroll, clearEdgeScroll],
 	);
 
 	return {

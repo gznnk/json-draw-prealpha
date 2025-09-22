@@ -15,7 +15,7 @@ export const MINIMAP_VIEWPORT_MARGIN = 20000;
 export const AUTO_SCROLL_THRESHOLD = 20;
 
 /** The amount of space to scroll each time when auto-scrolling at canvas edge */
-export const AUTO_SCROLL_STEP_SIZE = 15;
+export const AUTO_SCROLL_STEP_SIZE = 10;
 
 /** Interval duration for continuous auto-scrolling when cursor is at edge (in milliseconds) */
 export const AUTO_SCROLL_INTERVAL_MS = 20;
