@@ -7,8 +7,6 @@
 	"homepage": "./",
 	"scripts": {
 		"dev": "vite",
-		"create-worktree": "node scripts/create-worktree.mjs",
-		"merge-and-cleanup-worktree": "node scripts/merge-and-cleanup-worktree.mjs",
 		"notify": "node scripts/notify.mjs",
 		"notify:success": "node scripts/notify.mjs --success",
 		"notify:error": "node scripts/notify.mjs --error",

@@ -40,7 +40,8 @@
 			"mcp__serena__write_memory",
 			"Bash(npm run format:all:*)",
 			"Bash(npm run notify:success:*)",
-			"Bash(npm run notify:*)"
+			"Bash(npm run notify:*)",
+			"Bash(npm run notify:build:*)"
 		],
 		"deny": []
 	},

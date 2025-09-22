@@ -9,6 +9,7 @@ import notifier from "node-notifier";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { execSync } from "node:child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -121,21 +122,36 @@ Examples:
 }
 
 /**
- * Get project info from package.json
+ * Get current git branch name
  */
+function getCurrentBranch() {
+	try {
+		const branch = execSync("git branch --show-current", { 
+			encoding: "utf-8",
+			stdio: ["ignore", "pipe", "ignore"]
+		}).trim();
+		return branch || "unknown";
+	} catch (error) {
+		return "unknown";
+	}
+}
+
 async function getProjectInfo() {
 	try {
 		const packagePath = join(__dirname, "..", "package.json");
 		const packageContent = await readFile(packagePath, "utf-8");
 		const packageJson = JSON.parse(packageContent);
+		const branch = getCurrentBranch();
 		return {
 			name: packageJson.name || "Unknown Project",
 			version: packageJson.version || "0.0.0",
+			branch: branch,
 		};
 	} catch (error) {
 		return {
 			name: "Unknown Project",
 			version: "0.0.0",
+			branch: "unknown",
 		};
 	}
 }
@@ -149,6 +165,14 @@ async function sendNotification(config) {
 	// Enhance message with project context if it's a generic message
 	if (config.message === DEFAULT_CONFIG.message) {
 		config.message = `${projectInfo.name} - Task completed successfully!`;
+	}
+	
+	// Add branch info to title
+	if (projectInfo.branch !== "unknown") {
+		// Check if title already has branch info in parentheses
+		if (!config.title.match(/\([^)]*\)$/)) {
+			config.title = `${config.title} (${projectInfo.branch})`;
+		}
 	}
 
 	return new Promise((resolve, reject) => {
@@ -181,9 +205,9 @@ async function main() {
 	try {
 		const config = parseArgs();
 		
-		console.log(`Sending notification: ${config.title} - ${config.message}`);
-		
 		await sendNotification(config);
+		
+		console.log(`Sending notification: ${config.title} - ${config.message}`);
 		
 		if (config.wait) {
 			console.log("Notification sent. Waiting for user interaction...");
