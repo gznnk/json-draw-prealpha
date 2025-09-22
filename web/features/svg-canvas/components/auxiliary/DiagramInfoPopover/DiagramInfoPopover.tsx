@@ -1,20 +1,49 @@
-import React, { memo } from "react";
+import React, { memo, useState, useCallback } from "react";
 
-import { PopoverContainer, PopoverContent, PopoverTitle, PopoverDescription } from "./DiagramInfoPopoverStyled";
-import type { SvgCanvasProps } from "../../../canvas/types/SvgCanvasProps";
-import type { Diagram } from "../../../types/state/core/Diagram";
+import {
+	PopoverContainer,
+	PopoverContent,
+	PopoverInput,
+	PopoverTextarea,
+	PopoverLabel,
+	PopoverFieldContainer,
+} from "./DiagramInfoPopoverStyled";
+import type { DiagramInfoPopoverProps } from "./iagramInfoPopoverTypes";
 
-export type DiagramInfoPopoverProps = {
-	diagram: Diagram;
-	position: { x: number; y: number };
-	canvasProps: SvgCanvasProps;
-};
+const DiagramInfoPopoverComponent = ({
+	display,
+	diagram,
+	position,
+	onNameChange,
+	onDescriptionChange,
+}: DiagramInfoPopoverProps): React.JSX.Element => {
+	const [localName, setLocalName] = useState(diagram?.name || "");
+	const [localDescription, setLocalDescription] = useState(
+		diagram?.description || "",
+	);
 
-const DiagramInfoPopoverComponent = ({ diagram, position }: DiagramInfoPopoverProps): React.JSX.Element => {
-	const hasName = diagram.name && diagram.name.trim() !== "";
-	const hasDescription = diagram.description && diagram.description.trim() !== "";
+	const handleNameBlur = useCallback(() => {
+		if (localName !== (diagram?.name || "")) {
+			onNameChange(localName);
+		}
+	}, [localName, diagram?.name, onNameChange]);
 
-	if (!hasName && !hasDescription) {
+	const handleDescriptionBlur = useCallback(() => {
+		if (localDescription !== (diagram?.description || "")) {
+			onDescriptionChange(localDescription);
+		}
+	}, [localDescription, diagram?.description, onDescriptionChange]);
+
+	const handleNameKeyDown = useCallback(
+		(e: React.KeyboardEvent<HTMLInputElement>) => {
+			if (e.key === "Enter") {
+				e.currentTarget.blur();
+			}
+		},
+		[],
+	);
+
+	if (!display || !diagram) {
 		return <></>;
 	}
 
@@ -26,12 +55,27 @@ const DiagramInfoPopoverComponent = ({ diagram, position }: DiagramInfoPopoverPr
 			}}
 		>
 			<PopoverContent>
-				{hasName && (
-					<PopoverTitle>{diagram.name}</PopoverTitle>
-				)}
-				{hasDescription && (
-					<PopoverDescription>{diagram.description}</PopoverDescription>
-				)}
+				<PopoverFieldContainer>
+					<PopoverLabel>Name</PopoverLabel>
+					<PopoverInput
+						value={localName}
+						onChange={(e) => setLocalName(e.target.value)}
+						onBlur={handleNameBlur}
+						onKeyDown={handleNameKeyDown}
+						placeholder="Enter diagram name..."
+					/>
+				</PopoverFieldContainer>
+
+				<PopoverFieldContainer>
+					<PopoverLabel>Description</PopoverLabel>
+					<PopoverTextarea
+						value={localDescription}
+						onChange={(e) => setLocalDescription(e.target.value)}
+						onBlur={handleDescriptionBlur}
+						placeholder="Enter description..."
+						rows={3}
+					/>
+				</PopoverFieldContainer>
 			</PopoverContent>
 		</PopoverContainer>
 	);

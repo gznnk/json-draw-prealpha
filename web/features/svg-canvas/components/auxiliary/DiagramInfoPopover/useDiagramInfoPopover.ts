@@ -1,144 +1,144 @@
-import { useMemo } from "react";
+import { useCallback } from "react";
 
+import type { DiagramInfoPopoverProps } from "./iagramInfoPopoverTypes";
 import type { SvgCanvasProps } from "../../../canvas/types/SvgCanvasProps";
+import {
+	DISTANCE_FROM_DIAGRAM,
+	POPOVER_HEIGHT,
+	POPOVER_WIDTH,
+} from "../../../constants/styling/auxiliary/DiagramInfoPopoverStyling";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
-
-type PopoverDisplayInfo = {
-	diagram: Diagram;
-	position: { x: number; y: number };
-} | null;
+import { newEventId } from "../../../utils/core/newEventId";
+import { calcDiagramBoundingBox } from "../../../utils/math/geometry/calcDiagramBoundingBox";
+import { isFrame } from "../../../utils/validation/isFrame";
 
 /**
  * Hook for managing diagram info popover display of diagram name and description
  * @param canvasProps - SVG Canvas props containing state and configuration
  * @returns Information about which diagram to display popover info for and its position
  */
-export const useDiagramInfoPopover = (canvasProps: SvgCanvasProps): PopoverDisplayInfo => {
-	return useMemo(() => {
-		// Get selected diagrams
-		const selectedDiagrams = getSelectedDiagrams(canvasProps.items);
+export const useDiagramInfoPopover = (
+	canvasProps: SvgCanvasProps,
+	containerWidth: number,
+	containerHeight: number,
+): DiagramInfoPopoverProps => {
+	const handleNameChange = useCallback(
+		(diagramId: string, name: string) => {
+			if (!canvasProps.onDiagramChange) return;
 
-		// Only show popover info for single selection
-		if (selectedDiagrams.length !== 1) {
-			return null;
-		}
+			const selectedDiagrams = getSelectedDiagrams(canvasProps.items);
+			const selectedDiagram = selectedDiagrams.find((d) => d.id === diagramId);
+			if (!selectedDiagram) return;
 
-		const selectedDiagram = selectedDiagrams[0];
+			canvasProps.onDiagramChange({
+				eventId: newEventId(),
+				eventPhase: "Ended",
+				id: diagramId,
+				startDiagram: { name: selectedDiagram.name },
+				endDiagram: { name },
+			});
+		},
+		[canvasProps],
+	);
 
-		// Check if the diagram has name or description
-		const hasName = selectedDiagram.name && selectedDiagram.name.trim() !== "";
-		const hasDescription = selectedDiagram.description && selectedDiagram.description.trim() !== "";
+	const handleDescriptionChange = useCallback(
+		(diagramId: string, description: string) => {
+			if (!canvasProps.onDiagramChange) return;
 
-		if (!hasName && !hasDescription) {
-			return null;
-		}
+			const selectedDiagrams = getSelectedDiagrams(canvasProps.items);
+			const selectedDiagram = selectedDiagrams.find((d) => d.id === diagramId);
+			if (!selectedDiagram) return;
 
-		// Calculate position for popover display
-		const position = calculatePopoverPosition(selectedDiagram, canvasProps);
+			canvasProps.onDiagramChange({
+				eventId: newEventId(),
+				eventPhase: "Ended",
+				id: diagramId,
+				startDiagram: { description: selectedDiagram.description },
+				endDiagram: { description },
+			});
+		},
+		[canvasProps],
+	);
 
+	// Get selected diagrams
+	const selectedDiagrams = getSelectedDiagrams(canvasProps.items);
+
+	if (selectedDiagrams.length === 0) {
 		return {
-			diagram: selectedDiagram,
-			position,
+			display: false,
+			position: { x: 0, y: 0 },
+			onNameChange: () => {},
+			onDescriptionChange: () => {},
 		};
-	}, [canvasProps]);
+	}
+
+	const selectedDiagram = selectedDiagrams[0];
+
+	// Calculate position for popover display
+	const position = calculatePopoverPosition(
+		canvasProps,
+		containerWidth,
+		containerHeight,
+		selectedDiagram,
+	);
+
+	return {
+		display: canvasProps.interactionState === "idle",
+		diagram: selectedDiagram,
+		position,
+		onNameChange: (value: string) =>
+			handleNameChange(selectedDiagram.id, value),
+		onDescriptionChange: (value: string) =>
+			handleDescriptionChange(selectedDiagram.id, value),
+	};
 };
 
 /**
  * Calculate the position for popover display
  * Priority: right side of the shape, fallback to left side if no space
+ * Note: This now works in the HTMLElementsContainer coordinate system without zoom
  */
-const calculatePopoverPosition = (diagram: Diagram, canvasProps: SvgCanvasProps): { x: number; y: number } => {
-	const MARGIN = 12; // Distance from the shape
-	const POPOVER_WIDTH = 256; // 16rem in pixels (estimated)
-
-	// Get diagram bounds (basic implementation for common shape properties)
-	const diagramX = diagram.x || 0;
-	const diagramY = diagram.y || 0;
-
-	// Estimate diagram dimensions (this could be enhanced based on diagram type)
-	const diagramWidth = getDiagramWidth(diagram);
-	const diagramHeight = getDiagramHeight(diagram);
-
-	// Calculate canvas viewport bounds
-	const viewportWidth = window.innerWidth; // Could be passed as prop if needed
-	const canvasTransformX = -canvasProps.minX * canvasProps.zoom;
-	const canvasTransformY = -canvasProps.minY * canvasProps.zoom;
-
-	// Convert diagram position to screen coordinates
-	const screenX = (diagramX * canvasProps.zoom) + canvasTransformX;
-	const screenY = (diagramY * canvasProps.zoom) + canvasTransformY;
-	const scaledWidth = diagramWidth * canvasProps.zoom;
-	const scaledHeight = diagramHeight * canvasProps.zoom;
-
-	// Try right side first
-	const rightPosition = screenX + scaledWidth + MARGIN;
-	const centerY = screenY + (scaledHeight / 2);
-
-	// Check if there's enough space on the right
-	if (rightPosition + POPOVER_WIDTH <= viewportWidth - 20) {
-		return {
-			x: rightPosition,
-			y: centerY,
-		};
+const calculatePopoverPosition = (
+	canvasProps: SvgCanvasProps,
+	containerWidth: number,
+	containerHeight: number,
+	diagram?: Diagram,
+): { x: number; y: number } => {
+	if (!diagram) {
+		return { x: 0, y: 0 }; // Default position if no diagram
+	}
+	if (!isFrame(diagram)) {
+		return { x: diagram.x, y: diagram.y };
 	}
 
-	// Fallback to left side
-	const leftPosition = screenX - POPOVER_WIDTH - MARGIN;
+	const boundingBox = calcDiagramBoundingBox(diagram);
+
+	let popoverX = boundingBox.right * canvasProps.zoom + DISTANCE_FROM_DIAGRAM;
+	if (canvasProps.minX + containerWidth < popoverX + POPOVER_WIDTH) {
+		// Not enough space on the right, fallback to left
+		popoverX =
+			boundingBox.left * canvasProps.zoom -
+			DISTANCE_FROM_DIAGRAM -
+			POPOVER_WIDTH;
+	}
+
+	let popoverY = (diagram.y - POPOVER_HEIGHT / 2) * canvasProps.zoom;
+	const diagramBottomY = boundingBox.bottom * canvasProps.zoom;
+	if (diagramBottomY < popoverY + POPOVER_HEIGHT * canvasProps.zoom) {
+		popoverY = diagramBottomY - POPOVER_HEIGHT * canvasProps.zoom;
+	}
+	if (popoverY < canvasProps.minY) {
+		popoverY = canvasProps.minY;
+	}
+	const popoverBottomY = popoverY + POPOVER_HEIGHT * canvasProps.zoom;
+	const viewportBottomY = canvasProps.minY + containerHeight;
+	if (viewportBottomY < popoverBottomY) {
+		popoverY = viewportBottomY - POPOVER_HEIGHT * canvasProps.zoom;
+	}
+
 	return {
-		x: Math.max(20, leftPosition), // Ensure minimum distance from left edge
-		y: centerY,
+		x: popoverX,
+		y: popoverY,
 	};
-};
-
-/**
- * Get estimated width of diagram based on its type and properties
- */
-const getDiagramWidth = (diagram: Diagram): number => {
-	// This is a basic implementation - could be enhanced based on actual diagram types
-	if ('width' in diagram && typeof diagram.width === 'number') {
-		return diagram.width;
-	}
-
-	// Default estimates based on diagram type
-	switch (diagram.type) {
-		case 'Text':
-			return 100;
-		case 'Rectangle':
-			return 120;
-		case 'Ellipse':
-			return 80;
-		case 'LLMNode':
-			return 160;
-		case 'AgentNode':
-			return 140;
-		default:
-			return 100;
-	}
-};
-
-/**
- * Get estimated height of diagram based on its type and properties
- */
-const getDiagramHeight = (diagram: Diagram): number => {
-	// This is a basic implementation - could be enhanced based on actual diagram types
-	if ('height' in diagram && typeof diagram.height === 'number') {
-		return diagram.height;
-	}
-
-	// Default estimates based on diagram type
-	switch (diagram.type) {
-		case 'Text':
-			return 30;
-		case 'Rectangle':
-			return 80;
-		case 'Ellipse':
-			return 80;
-		case 'LLMNode':
-			return 100;
-		case 'AgentNode':
-			return 90;
-		default:
-			return 60;
-	}
 };

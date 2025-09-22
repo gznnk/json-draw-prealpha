@@ -48,8 +48,10 @@ import { DiagramRegistry } from "../registry";
 import type { SvgViewport } from "../types/core/SvgViewport";
 import { newEventId } from "../utils/core/newEventId";
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
-import { DiagramInfoPopover , useDiagramInfoPopover } from "../components/auxiliary/DiagramInfoPopover";
-
+import {
+	DiagramInfoPopover,
+	useDiagramInfoPopover,
+} from "../components/auxiliary/DiagramInfoPopover";
 
 // TODO: 実行する場所を考える
 // Initialize all diagram types when this module is loaded
@@ -195,6 +197,13 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// Use the diagram menu hook to handle diagram menu events.
 		const { diagramMenuProps } = useDiagramMenu(props);
+
+		// Get diagram info popover information
+		const popoverInfoProps = useDiagramInfoPopover(
+			props,
+			containerWidth,
+			containerHeight,
+		);
 
 		// Use the shortcut key hook to handle keyboard shortcuts
 		useShortcutKey({
@@ -489,9 +498,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onZoom?.(resetLevel);
 		}, [onZoom]);
 
-		// Get diagram info popover information
-		const popoverInfo = useDiagramInfoPopover(props);
-
 		// Render diagrams
 		const renderedItems = items.map((item) => {
 			const component = DiagramRegistry.getComponent(item.type);
@@ -603,6 +609,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									height={containerHeight + minY}
 								>
 									<DiagramMenu {...diagramMenuProps} />
+									{/* Diagram info popover for selected diagram name/description */}
+									<DiagramInfoPopover {...popoverInfoProps} />
 								</HTMLElementsContainer>
 							</SvgViewportProvider>
 						</SvgCanvasStateProvider>
@@ -635,14 +643,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						onPointerMove={handleCaptureElementPointerMove}
 						onPointerUp={handleCaptureElementPointerUp}
 					/>
-					{/* Diagram info popover for selected diagram name/description */}
-					{popoverInfo && (
-						<DiagramInfoPopover
-							diagram={popoverInfo.diagram}
-							position={popoverInfo.position}
-							canvasProps={props}
-						/>
-					)}
 				</ViewportOverlay>
 			</Viewport>
 		);
