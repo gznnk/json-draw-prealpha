@@ -8,7 +8,7 @@ import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams"
 import { isExportable } from "../../../../utils/validation/isExportable";
 // Imports related to this component.
 
-export const useContextMenu = (canvasProps: SvgCanvasProps) => {
+export const useContextMenu = (canvasProps: SvgCanvasProps, containerRef?: React.RefObject<HTMLDivElement | null>) => {
 	// Extract properties from canvasProps.
 	const {
 		items,
@@ -111,11 +111,19 @@ export const useContextMenu = (canvasProps: SvgCanvasProps) => {
 			// If grab scrolling is active, do not show the context menu.
 			if (grabScrollState?.grabScrollOccurred === true) return;
 
-			const x = e.clientX;
-			const y = e.clientY;
+			let x = e.clientX;
+			let y = e.clientY;
+
+			// Adjust coordinates relative to the container if containerRef is provided
+			if (containerRef?.current) {
+				const containerRect = containerRef.current.getBoundingClientRect();
+				x = e.clientX - containerRect.left;
+				y = e.clientY - containerRect.top;
+			}
+
 			setContextMenuState({ x, y, isVisible: true });
 		},
-		[grabScrollState],
+		[grabScrollState, containerRef],
 	);
 
 	/**

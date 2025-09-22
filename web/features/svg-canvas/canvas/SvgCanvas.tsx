@@ -189,7 +189,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			contextMenuProps,
 			contextMenuHandlers: { onContextMenu },
 			contextMenuFunctions,
-		} = useContextMenu(props);
+		} = useContextMenu(props, containerRef);
 
 		// Use the diagram menu hook to handle diagram menu events.
 		const { diagramMenuProps } = useDiagramMenu(props);
