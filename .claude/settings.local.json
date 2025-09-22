@@ -39,7 +39,8 @@
 			"mcp__serena__search_for_pattern",
 			"mcp__serena__write_memory",
 			"Bash(npm run format:all:*)",
-			"Bash(npm run create-worktree:*)"
+			"Bash(npm run notify:success:*)",
+			"Bash(npm run notify:*)"
 		],
 		"deny": []
 	},

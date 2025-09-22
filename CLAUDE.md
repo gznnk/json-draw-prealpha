@@ -27,6 +27,22 @@ npm run format:check     # Check code formatting with Prettier
 npm test             # Run Jest tests
 ```
 
+### Notifications
+
+```bash
+npm run notify                 # Send default notification
+npm run notify:success         # Success notification preset
+npm run notify:error           # Error notification preset  
+npm run notify:build           # Build completion preset
+npm run notify:test            # Test completion preset
+npm run notify:deploy          # Deployment completion preset
+
+# Custom notifications
+npm run notify -- --title "Custom Title" --message "Custom message"
+npm run notify -- --build --wait  # Wait for user interaction
+npm run notify -- "Quick message" # Simple message
+```
+
 ### Deployment
 
 ```bash
@@ -165,8 +181,23 @@ Key canvas capabilities:
 2. Fix any TypeScript errors or build issues if they occur
 3. Run `npm run lint` to check for ESLint errors and fix any issues
 4. Run `npm run format:all` to format all modified files (changed + staged + untracked), or use specific commands like `format:changed` if needed
-5. Ask the user if they want to commit the changes
-6. If approved, create a commit with an appropriate commit message
+5. **Send completion notification** using `npm run notify:success` or appropriate preset
+6. Ask the user if they want to commit the changes
+7. If approved, create a commit with an appropriate commit message
+
+### When to Send Notifications
+
+**MANDATORY** - Send notifications in these scenarios:
+- ✅ Task completion: `npm run notify:success`
+- ❌ Task failed/errors: `npm run notify:error`
+- 🏗️ Build completion: `npm run notify:build` (automatic with `npm run build`)
+- 🧪 Test completion: `npm run notify:test` (automatic with `npm run test`)
+- 🚀 Deployment: `npm run notify:deploy`
+
+**OPTIONAL** - Consider notifications for:
+- Long-running operations (>30 seconds)
+- Multi-step task milestones
+- Before requesting user review/feedback
 
 ## Dependencies Note
 
