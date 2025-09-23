@@ -23,7 +23,7 @@ export const ButtonElement = styled.rect<ButtonProps>`
 			props.effectsEnabled
 				? props.isTransparent
 					? 0
-					: 0.85
+					: 0.8
 				: props.isTransparent
 					? 0
 					: 1};
