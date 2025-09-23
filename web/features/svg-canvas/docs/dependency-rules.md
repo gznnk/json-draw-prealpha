@@ -4,24 +4,26 @@
 
 ```mermaid
 graph TD
+    constants --> types
     registry --> types
+    utils --> constants
     utils --> types
     utils --> registry
-    hooks --> types
     hooks --> constants
-    hooks --> utils
+    hooks --> types
     hooks --> registry
-    components --> types
+    hooks --> utils
     components --> constants
-    components --> utils
+    components --> types
     components --> hooks
     components --> registry
-    canvas --> types
-    canvas --> constants
-    canvas --> utils
-    canvas --> hooks
+    components --> utils
     canvas --> components
+    canvas --> constants
+    canvas --> types
+    canvas --> hooks
     canvas --> registry
+    canvas --> utils
 ```
 
 ## `types` Module
