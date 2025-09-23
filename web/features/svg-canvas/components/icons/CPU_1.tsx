@@ -2,6 +2,8 @@ import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { memo } from "react";
 
+import type { IconProps } from "../../types/props/icon/IconProps";
+
 /**
  * Animation for the blinking effect.
  */
@@ -23,15 +25,6 @@ const SmallRect = styled.rect<{ $blink: boolean }>`
 `;
 
 /**
- * Props for the CPU_1 icon.
- */
-type CPU1Props = {
-	width?: number;
-	height?: number;
-	animation?: boolean;
-};
-
-/**
  * CPU_1 component that renders a CPU icon with optional blinking effect.
  *
  * @param props - Props for the icon
@@ -40,10 +33,11 @@ type CPU1Props = {
  * @param props.animation - Whether to show blinking animation
  * @returns SVG element for CPU icon
  */
-const CPU_1Component: React.FC<CPU1Props> = ({
+const CPU_1Component: React.FC<IconProps> = ({
 	width = 80,
 	height = 80,
 	animation = false,
+	title,
 }) => {
 	return (
 		<svg
@@ -52,7 +46,7 @@ const CPU_1Component: React.FC<CPU1Props> = ({
 			width={width}
 			height={height}
 		>
-			<title>CPU</title>
+			<title>{title || "CPU"}</title>
 			<rect x="0" y="0" width="80" height="80" rx="10" ry="10" fill="#0A0A37" />
 			<g fill="none" stroke="#00D1B2" strokeWidth="2">
 				<rect x="20" y="20" width="40" height="40" rx="5" ry="5" />

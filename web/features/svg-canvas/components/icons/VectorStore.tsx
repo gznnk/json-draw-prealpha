@@ -3,6 +3,8 @@ import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import React, { memo } from "react";
 
+import type { IconProps } from "../../types/props/icon/IconProps";
+
 /**
  * Animation for flash brightness effect
  */
@@ -24,18 +26,14 @@ export const FlashGroup = styled.g<{ $flash: boolean }>`
 `;
 
 /**
- * Props for VectorStore icon
- */
-type VectorStoreProps = {
-	width?: number;
-	height?: number;
-	animation?: boolean;
-};
-
-/**
  * Vector Store icon component
  */
-const VectorStoreComponent: React.FC<VectorStoreProps> = ({ width = 80, height = 80, animation = false }) => {
+const VectorStoreComponent: React.FC<IconProps> = ({
+	width = 80,
+	height = 80,
+	animation = false,
+	title,
+}) => {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +41,7 @@ const VectorStoreComponent: React.FC<VectorStoreProps> = ({ width = 80, height =
 			height={height}
 			viewBox="0 0 100 100"
 		>
-			<title>Vector Store</title>
+			<title>{title || "Vector Store"}</title>
 			<rect
 				x="0"
 				y="0"

@@ -1,14 +1,6 @@
 import React, { memo } from "react";
 
-/**
- * Props for Plus icon
- */
-type PlusProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Plus icon component
@@ -20,7 +12,7 @@ type PlusProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for plus icon
  */
-const PlusComponent: React.FC<PlusProps> = ({
+const PlusComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

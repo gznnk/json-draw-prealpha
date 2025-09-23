@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for BringToFront icon
- */
-type BringToFrontProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Bring to front icon component
@@ -20,7 +12,7 @@ type BringToFrontProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for bring to front icon
  */
-const BringToFrontComponent: React.FC<BringToFrontProps> = ({
+const BringToFrontComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

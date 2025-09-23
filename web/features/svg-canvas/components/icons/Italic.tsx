@@ -1,14 +1,6 @@
 import React, { memo } from "react";
 
-/**
- * Props for Italic icon
- */
-type ItalicProps = {
-	width?: number;
-	height?: number;
-	title?: string;
-	fill?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Italic icon component
@@ -20,7 +12,7 @@ type ItalicProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for italic text formatting icon
  */
-const ItalicComponent: React.FC<ItalicProps> = ({
+const ItalicComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for FontColor icon
- */
-type FontColorProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Font color icon component
@@ -20,7 +12,7 @@ type FontColorProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for font color icon
  */
-const FontColorComponent: React.FC<FontColorProps> = ({
+const FontColorComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

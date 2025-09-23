@@ -2,6 +2,8 @@ import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import React, { memo } from "react";
 
+import type { IconProps } from "../../types/props/icon/IconProps";
+
 /**
  * Animation for page design creation
  */
@@ -26,15 +28,6 @@ const AnimatedGroup = styled.g<{ $animation: boolean }>`
 `;
 
 /**
- * Props for PageDesign icon
- */
-type PageDesignProps = {
-	width?: number;
-	height?: number;
-	animation?: boolean;
-};
-
-/**
  * PageDesign icon component
  *
  * @param props - Props for the icon
@@ -43,10 +36,11 @@ type PageDesignProps = {
  * @param props.animation - Whether to show animation
  * @returns SVG element for page design icon
  */
-const PageDesignComponent: React.FC<PageDesignProps> = ({
+const PageDesignComponent: React.FC<IconProps> = ({
 	width = 80,
 	height = 80,
 	animation = false,
+	title,
 }) => {
 	return (
 		<svg
@@ -55,7 +49,7 @@ const PageDesignComponent: React.FC<PageDesignProps> = ({
 			width={width}
 			height={height}
 		>
-			<title>Page Design</title>
+			<title>{title || "Page Design"}</title>
 			<AnimatedGroup $animation={animation}>
 				{/* Page background */}
 				<rect

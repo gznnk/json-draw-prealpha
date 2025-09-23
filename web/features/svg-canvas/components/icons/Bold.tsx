@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for Bold icon
- */
-type BoldProps = {
-	width?: number;
-	height?: number;
-	title?: string;
-	fill?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Bold text formatting icon component
@@ -20,7 +12,7 @@ type BoldProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for bold text formatting icon
  */
-const BoldComponent: React.FC<BoldProps> = ({
+const BoldComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

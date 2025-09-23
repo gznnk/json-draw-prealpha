@@ -2,6 +2,8 @@ import { keyframes, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import React, { memo } from "react";
 
+import type { IconProps } from "../../types/props/icon/IconProps";
+
 /**
  * Animation for sun rise and set
  */
@@ -31,7 +33,7 @@ const skyColor = keyframes`
     0%   { fill: #ffffff; }
     25%  { fill: #ffffff; }
     50%  { fill: #0d47a1; }
-    75%  { fill: #0d47a1; }  
+    75%  { fill: #0d47a1; }
     100% { fill: #ffffff; }
 `;
 
@@ -47,15 +49,6 @@ const Sky = styled.rect<{ $animate: boolean }>`
 `;
 
 /**
- * Props for Picture icon
- */
-type PictureProps = {
-	width?: number;
-	height?: number;
-	animation?: boolean;
-};
-
-/**
  * Picture icon component
  *
  * @param props - Props for the icon
@@ -64,14 +57,15 @@ type PictureProps = {
  * @param props.animation - Whether to show animation
  * @returns SVG element for picture icon
  */
-const PictureComponent: React.FC<PictureProps> = ({
+const PictureComponent: React.FC<IconProps> = ({
 	width = 60,
 	height = 60,
 	animation = false,
+	title,
 }) => {
 	return (
 		<svg width={width} height={height} viewBox="0 0 60 60">
-			<title>Picture</title>
+			<title>{title || "Picture"}</title>
 			<Sky $animate={animation} width="60" height="60" fill="#ffffff" />
 			<polygon points="8,48 20,30 30,42 42,22 52,48" fill="#2196F3" />
 			<SunGroup $animate={animation}>

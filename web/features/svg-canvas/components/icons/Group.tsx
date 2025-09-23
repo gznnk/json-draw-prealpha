@@ -1,14 +1,6 @@
 import React, { memo } from "react";
 
-/**
- * Props for Group icon
- */
-type GroupProps = {
-	fill?: string;
-	width?: number;
-	height?: number;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Group icon component
@@ -20,7 +12,7 @@ type GroupProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for group icon
  */
-const GroupComponent: React.FC<GroupProps> = ({
+const GroupComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",
