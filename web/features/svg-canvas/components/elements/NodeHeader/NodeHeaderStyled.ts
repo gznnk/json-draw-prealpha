@@ -11,15 +11,3 @@ export const MainContainerGroup = styled.g`
 		pointer-events: none;
 	}
 `;
-
-/**
- * Icon wrapper div with flexbox centering.
- */
-export const IconWrapper = styled.div`
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	pointer-events: none;
-`;

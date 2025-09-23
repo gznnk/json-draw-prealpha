@@ -1,8 +1,7 @@
-import type React from "react";
-import { memo } from "react";
+import React, { memo } from "react";
 
 import { ICON_TEXT_MARGIN } from "./NodeHeaderConstants";
-import { IconWrapper, MainContainerGroup } from "./NodeHeaderStyled";
+import { MainContainerGroup } from "./NodeHeaderStyled";
 import { NodeHeaderDefaultData } from "../../../constants/data/elements/NodeHeaderDefaultData";
 import type { NodeHeaderProps } from "../../../types/props/elements/NodeHeaderProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -80,14 +79,15 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 
 				{/* Icon component */}
 				{icon && (
-					<foreignObject
-						x={iconX - iconSize / 2}
-						y={-iconSize / 2}
-						width={iconSize}
-						height={iconSize}
+					<g
+						transform={`translate(${iconX}, 0)`}
 					>
-						<IconWrapper>{icon}</IconWrapper>
-					</foreignObject>
+						{React.createElement(icon, {
+							width: iconSize * 0.6,
+							height: iconSize * 0.6,
+							fill: "#ffffff",
+						})}
+					</g>
 				)}
 			</MainContainerGroup>
 

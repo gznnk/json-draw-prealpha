@@ -248,7 +248,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				rotation={rotation}
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
-				icon={<LLM fill="#ffffff" />}
+				icon={LLM}
 				iconBackgroundColor={
 					processIdList.length > 0 ? ICON_COLOR_PROCESSING : ICON_COLOR_IDLE
 				}
