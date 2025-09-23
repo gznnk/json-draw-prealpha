@@ -14,6 +14,7 @@ import {
 	DiagramMenuWrapper,
 } from "./DiagramMenuStyled";
 import type { DiagramMenuProps, DiagramMenuType } from "./DiagramMenuTypes";
+import { DISTANCE_FROM_DIAGRAM } from "../../../../constants/styling/menus/DiagramMenuStyling";
 import type { RectangleVertices } from "../../../../types/core/RectangleVertices";
 import { calcRectangleVertices } from "../../../../utils/math/geometry/calcRectangleVertices";
 import { AlignCenter } from "../../../icons/AlignCenter";
@@ -46,7 +47,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	zoom,
 	isVisible,
 	menuStateMap,
 	bgColor,
@@ -66,7 +66,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	onFontColorChange,
 }) => {
 	const menuRef = useRef<HTMLDivElement>(null);
-	const [menuDimensions, setMenuDimensions] = useState({ width: 0, height: 40 });
+	const [menuDimensions, setMenuDimensions] = useState({
+		width: 0,
+		height: 40,
+	});
 
 	// Update menu dimensions when DOM changes
 	useEffect(() => {
@@ -99,13 +102,12 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 
 	// Calculate menu position with viewport constraints
 	const calculateMenuPosition = (): { x: number; y: number } => {
-		const distanceFromDiagram = 20 * zoom;
 		const menuWidth = menuDimensions.width;
 		const menuHeight = menuDimensions.height;
 
 		// Default position: below the diagram, centered
 		let menuX = diagramCenterX - menuWidth / 2;
-		let menuY = diagramBottomY + distanceFromDiagram;
+		let menuY = diagramBottomY + DISTANCE_FROM_DIAGRAM;
 
 		// Check if menu overflows viewport horizontally
 		const viewportRight = minX + containerWidth;
@@ -126,7 +128,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				const vertex = vertices[key as keyof RectangleVertices];
 				return Math.min(min, vertex.y);
 			}, Number.POSITIVE_INFINITY);
-			menuY = diagramTopY - distanceFromDiagram - menuHeight;
+			menuY = diagramTopY - DISTANCE_FROM_DIAGRAM - menuHeight;
 		}
 
 		// Ensure menu doesn't go above viewport
