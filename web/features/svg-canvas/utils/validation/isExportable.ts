@@ -1,4 +1,3 @@
-// TODO: Refactor dependency structure
 import { DiagramRegistry } from "../../registry";
 import type { DiagramType } from "../../types/core/DiagramType";
 
