@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for AspectRatio icon
- */
-type AspectRatioProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Aspect ratio icon component
@@ -20,7 +12,7 @@ type AspectRatioProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for aspect ratio icon
  */
-const AspectRatioComponent: React.FC<AspectRatioProps> = ({
+const AspectRatioComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

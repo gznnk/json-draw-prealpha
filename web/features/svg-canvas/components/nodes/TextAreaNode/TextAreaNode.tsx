@@ -262,7 +262,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				rotation={rotation}
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
-				icon={<TextArea fill="#ffffff" />}
+				icon={TextArea}
 				iconBackgroundColor={ICON_COLOR}
 				onDrag={handleDrag}
 				onSelect={handleSelect}

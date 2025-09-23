@@ -1,14 +1,6 @@
 import React, { memo } from "react";
 
-/**
- * Props for Minus icon
- */
-type MinusProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Minus icon component
@@ -20,7 +12,7 @@ type MinusProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for minus icon
  */
-const MinusComponent: React.FC<MinusProps> = ({
+const MinusComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

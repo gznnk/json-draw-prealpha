@@ -2,6 +2,8 @@ import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { memo } from "react";
 
+import type { IconProps } from "../../types/props/icon/IconProps";
+
 /**
  * Animation for up and down movement
  */
@@ -24,21 +26,13 @@ const AnimatedGroup = styled.g<{ $animation: boolean }>`
 `;
 
 /**
- * Props for Agent icon
- */
-type AgentProps = {
-	width?: number;
-	height?: number;
-	animation?: boolean;
-};
-
-/**
  * Agent icon component
  */
-const AgentComponent: React.FC<AgentProps> = ({
+const AgentComponent: React.FC<IconProps> = ({
 	width = 80,
 	height = 80,
 	animation = false,
+	title,
 }) => {
 	return (
 		<svg
@@ -47,7 +41,7 @@ const AgentComponent: React.FC<AgentProps> = ({
 			width={width}
 			height={height}
 		>
-			<title>Agent</title>
+			<title>{title || "Agent"}</title>
 			<rect x="0" y="0" width="80" height="80" fill="#000" rx="8" ry="8" />
 			<circle cx="40" cy="40" r="30" fill="#fff" />
 			<AnimatedGroup $animation={animation}>

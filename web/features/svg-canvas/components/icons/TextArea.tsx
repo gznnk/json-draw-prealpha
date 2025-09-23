@@ -1,19 +1,16 @@
 import React, { memo } from "react";
 
-/**
- * Props for TextArea icon
- */
-type TextAreaProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * TextArea icon component
  */
-const TextAreaComponent: React.FC<TextAreaProps> = ({ width = 24, height = 24, fill = "#000000", title = "TextArea" }) => {
+const TextAreaComponent: React.FC<IconProps> = ({
+	width = 24,
+	height = 24,
+	fill = "#000000",
+	title = "TextArea",
+}) => {
 	return (
 		<svg
 			width={width}
@@ -42,30 +39,9 @@ const TextAreaComponent: React.FC<TextAreaProps> = ({ width = 24, height = 24, f
 				<line x1="5" y1="16" x2="14" y2="16" stroke={fill} strokeWidth="1" />
 				{/* Resize handle in bottom right corner */}
 				<g>
-					<line
-						x1="18"
-						y1="19"
-						x2="20"
-						y2="17"
-						stroke={fill}
-						strokeWidth="1"
-					/>
-					<line
-						x1="19"
-						y1="19"
-						x2="21"
-						y2="17"
-						stroke={fill}
-						strokeWidth="1"
-					/>
-					<line
-						x1="20"
-						y1="19"
-						x2="22"
-						y2="17"
-						stroke={fill}
-						strokeWidth="1"
-					/>
+					<line x1="18" y1="19" x2="20" y2="17" stroke={fill} strokeWidth="1" />
+					<line x1="19" y1="19" x2="21" y2="17" stroke={fill} strokeWidth="1" />
+					<line x1="20" y1="19" x2="22" y2="17" stroke={fill} strokeWidth="1" />
 				</g>
 			</g>
 		</svg>

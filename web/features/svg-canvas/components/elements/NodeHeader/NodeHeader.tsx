@@ -1,8 +1,7 @@
-import type React from "react";
-import { memo } from "react";
+import React, { memo } from "react";
 
 import { ICON_TEXT_MARGIN } from "./NodeHeaderConstants";
-import { IconWrapper, MainContainerGroup } from "./NodeHeaderStyled";
+import { MainContainerGroup } from "./NodeHeaderStyled";
 import { NodeHeaderDefaultData } from "../../../constants/data/elements/NodeHeaderDefaultData";
 import type { NodeHeaderProps } from "../../../types/props/elements/NodeHeaderProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -41,8 +40,9 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 	onTextChange,
 }) => {
 	// Constants for layout
+	const ICON_SCALE = 0.8;
 	const iconSize = height;
-	const iconX = -width / 2 + iconSize / 2; // No left padding
+	const iconCenterX = -width / 2 + iconSize / 2;
 	const textWidth = width - iconSize - ICON_TEXT_MARGIN; // Remaining width minus margin ; // Margin from icon
 	const textCenter = efficientAffineTransformation(
 		textWidth / 2 - (width / 2 - iconSize - ICON_TEXT_MARGIN),
@@ -69,7 +69,7 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 			<MainContainerGroup transform={transform}>
 				{/* Icon background (rounded rectangle) */}
 				<rect
-					x={iconX - iconSize / 2}
+					x={iconCenterX - iconSize / 2}
 					y={-iconSize / 2}
 					width={iconSize}
 					height={iconSize}
@@ -80,14 +80,15 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 
 				{/* Icon component */}
 				{icon && (
-					<foreignObject
-						x={iconX - iconSize / 2}
-						y={-iconSize / 2}
-						width={iconSize}
-						height={iconSize}
+					<g
+						transform={`translate(${iconCenterX - (iconSize * ICON_SCALE) / 2}, ${-(iconSize * ICON_SCALE) / 2})`}
 					>
-						<IconWrapper>{icon}</IconWrapper>
-					</foreignObject>
+						{React.createElement(icon, {
+							width: iconSize * ICON_SCALE,
+							height: iconSize * ICON_SCALE,
+							fill: "#ffffff",
+						})}
+					</g>
 				)}
 			</MainContainerGroup>
 

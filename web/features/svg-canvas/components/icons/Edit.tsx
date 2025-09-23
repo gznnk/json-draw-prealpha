@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for Edit icon
- */
-type EditProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Edit icon component
@@ -20,7 +12,7 @@ type EditProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for edit icon
  */
-const EditComponent: React.FC<EditProps> = ({
+const EditComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

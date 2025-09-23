@@ -1,5 +1,6 @@
 import type { Optional } from "../../../../../shared/utility-types";
 import type { NodeHeaderFeatures } from "../../data/elements/NodeHeaderData";
+import type { IconProps } from "../../props/icon/IconProps";
 import type { NodeHeaderState } from "../../state/elements/NodeHeaderState";
 import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
 
@@ -11,7 +12,7 @@ export type NodeHeaderProps = Optional<
 		NodeHeaderState,
 		typeof NodeHeaderFeatures,
 		{
-			icon: React.ReactNode;
+			icon: React.ComponentType<IconProps>;
 		}
 	>,
 	| "height"

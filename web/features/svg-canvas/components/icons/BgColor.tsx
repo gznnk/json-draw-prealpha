@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for BgColor icon
- */
-type BgColorProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Background color icon component
@@ -20,7 +12,7 @@ type BgColorProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for background color icon
  */
-const BgColorComponent: React.FC<BgColorProps> = ({
+const BgColorComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

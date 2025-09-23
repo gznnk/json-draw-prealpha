@@ -1,19 +1,16 @@
 import React, { memo } from "react";
 
-/**
- * Props for VerticalAlignTop icon
- */
-type VerticalAlignTopProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Vertical align top icon component
  */
-const VerticalAlignTopComponent: React.FC<VerticalAlignTopProps> = ({ width = 24, height = 24, fill = "#333333", title }) => {
+const VerticalAlignTopComponent: React.FC<IconProps> = ({
+	width = 24,
+	height = 24,
+	fill = "#333333",
+	title,
+}) => {
 	return (
 		<svg
 			width={width}

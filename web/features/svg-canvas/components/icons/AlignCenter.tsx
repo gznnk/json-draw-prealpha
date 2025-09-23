@@ -1,19 +1,11 @@
 import { memo } from "react";
 
-/**
- * Props for AlignCenter icon
- */
-type AlignCenterProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Center alignment icon component
  */
-const AlignCenterComponent: React.FC<AlignCenterProps> = ({
+const AlignCenterComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

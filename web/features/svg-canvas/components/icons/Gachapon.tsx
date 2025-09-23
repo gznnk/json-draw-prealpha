@@ -1,12 +1,6 @@
 import React, { memo } from "react";
 
-/**
- * Props for Gachapon icon
- */
-type GachaponProps = {
-	width?: number;
-	height?: number;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Gachapon machine icon component
@@ -16,10 +10,14 @@ type GachaponProps = {
  * @param props.height - Icon height
  * @returns SVG element for gachapon machine icon
  */
-const GachaponComponent: React.FC<GachaponProps> = ({ width = 80, height = 80 }) => {
+const GachaponComponent: React.FC<IconProps> = ({
+	width = 80,
+	height = 80,
+	title,
+}) => {
 	return (
 		<svg width={width} height={height} viewBox="0 0 80 80">
-			<title>Gachapon</title>
+			<title>{title || "Gachapon"}</title>
 			<rect x="0" y="0" width="80" height="80" rx="10" ry="10" fill="#eee" />
 			<rect x="20" y="10" width="40" height="40" rx="5" ry="5" fill="#fff" />
 			<rect x="20" y="50" width="40" height="10" rx="2" ry="2" fill="#ccc" />

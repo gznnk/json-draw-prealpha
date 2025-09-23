@@ -16,8 +16,10 @@ npm run merge-and-cleanup-worktree "<message>"  # Commit, merge, and cleanup wor
 ```bash
 npm run dev          # Start development server
 npm run build        # Build for production (runs tsc -b && vite build)
+npm run build:notify # Build for production with notification
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
+npm run lint:notify  # Run ESLint with notification
 npm run format           # Format all code with Prettier
 npm run format:changed   # Format files changed since last commit
 npm run format:staged    # Format staged files only
@@ -25,6 +27,7 @@ npm run format:untracked # Format untracked files only
 npm run format:all       # Format changed + staged + untracked files
 npm run format:check     # Check code formatting with Prettier
 npm test             # Run Jest tests
+npm test:notify      # Run Jest tests with notification
 ```
 
 ### Notifications
@@ -177,13 +180,15 @@ Key canvas capabilities:
 
 **IMPORTANT**: After completing any task, follow these steps:
 
-1. Run `npm run build` to verify that your changes don't introduce build errors
+1. Run `npm run build:notify` to verify that your changes don't introduce build errors (with notification)
 2. Fix any TypeScript errors or build issues if they occur
-3. Run `npm run lint` to check for ESLint errors and fix any issues
+3. Run `npm run lint:notify` to check for ESLint errors and fix any issues (with notification)
 4. Run `npm run format:all` to format all modified files (changed + staged + untracked), or use specific commands like `format:changed` if needed
 5. **Send completion notification** using `npm run notify:success` or appropriate preset
 6. Ask the user if they want to commit the changes
 7. If approved, create a commit with an appropriate commit message
+
+**Note**: Use `npm run build`, `npm run lint`, and `npm run test` (without `:notify`) for CI/CD compatibility. Use the `:notify` versions for local development to get completion notifications.
 
 ### When to Send Notifications
 
