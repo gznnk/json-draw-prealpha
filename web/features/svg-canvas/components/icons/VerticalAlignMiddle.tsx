@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for VerticalAlignMiddle icon
- */
-type VerticalAlignMiddleProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Vertical align middle icon component
@@ -20,7 +12,7 @@ type VerticalAlignMiddleProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for vertical align middle icon
  */
-const VerticalAlignMiddleComponent: React.FC<VerticalAlignMiddleProps> = ({
+const VerticalAlignMiddleComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

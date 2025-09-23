@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for BorderRadius icon
- */
-type BorderRadiusProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Border radius icon component
@@ -20,7 +12,7 @@ type BorderRadiusProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for border radius icon
  */
-const BorderRadiusComponent: React.FC<BorderRadiusProps> = ({
+const BorderRadiusComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

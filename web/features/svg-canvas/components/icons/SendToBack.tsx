@@ -1,19 +1,16 @@
 import React, { memo } from "react";
 
-/**
- * Props for SendToBack icon
- */
-type SendToBackProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Send to back icon component
  */
-const SendToBackComponent: React.FC<SendToBackProps> = ({ width = 24, height = 24, fill = "#333333", title }) => {
+const SendToBackComponent: React.FC<IconProps> = ({
+	width = 24,
+	height = 24,
+	fill = "#333333",
+	title,
+}) => {
 	return (
 		<svg
 			width={width}

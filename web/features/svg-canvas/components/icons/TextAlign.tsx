@@ -1,19 +1,16 @@
 import React, { memo } from "react";
 
-/**
- * Props for TextAlign icon
- */
-type TextAlignProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Text alignment icon component
  */
-const TextAlignComponent: React.FC<TextAlignProps> = ({ width = 24, height = 24, fill = "#333333", title }) => {
+const TextAlignComponent: React.FC<IconProps> = ({
+	width = 24,
+	height = 24,
+	fill = "#333333",
+	title,
+}) => {
 	return (
 		<svg
 			width={width}

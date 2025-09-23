@@ -1,14 +1,6 @@
 import { memo } from "react";
 
-/**
- * Props for AlignRight icon
- */
-type AlignRightProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Right alignment icon component
@@ -20,7 +12,7 @@ type AlignRightProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for right alignment icon
  */
-const AlignRightComponent: React.FC<AlignRightProps> = ({
+const AlignRightComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",

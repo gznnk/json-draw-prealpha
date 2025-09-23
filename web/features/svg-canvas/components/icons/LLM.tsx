@@ -1,14 +1,6 @@
 import React, { memo } from "react";
 
-/**
- * Props for LLM icon
- */
-type LLMProps = {
-	width?: number;
-	height?: number;
-	fill?: string;
-	title?: string;
-};
+import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * LLM icon component - represents a brain with neural connections
@@ -20,7 +12,7 @@ type LLMProps = {
  * @param props.title - Accessible title for the icon
  * @returns SVG element for LLM brain icon
  */
-const LLMComponent: React.FC<LLMProps> = ({
+const LLMComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#000000",
@@ -53,59 +45,17 @@ const LLMComponent: React.FC<LLMProps> = ({
 				<circle cx="16" cy="8" r="1" fill={fill} />
 				<circle cx="18" cy="12" r="1" fill={fill} />
 				<circle cx="15" cy="15" r="1" fill={fill} />
-				<line
-					x1="16"
-					y1="8"
-					x2="18"
-					y2="12"
-					stroke={fill}
-					strokeWidth="0.8"
-				/>
-				<line
-					x1="18"
-					y1="12"
-					x2="15"
-					y2="15"
-					stroke={fill}
-					strokeWidth="0.8"
-				/>
+				<line x1="16" y1="8" x2="18" y2="12" stroke={fill} strokeWidth="0.8" />
+				<line x1="18" y1="12" x2="15" y2="15" stroke={fill} strokeWidth="0.8" />
 
 				{/* Central processing connections */}
 				<circle cx="12" cy="10" r="1" fill={fill} />
 				<circle cx="12" cy="14" r="1" fill={fill} />
 				<line x1="8" y1="8" x2="12" y2="10" stroke={fill} strokeWidth="0.8" />
-				<line
-					x1="16"
-					y1="8"
-					x2="12"
-					y2="10"
-					stroke={fill}
-					strokeWidth="0.8"
-				/>
-				<line
-					x1="12"
-					y1="10"
-					x2="12"
-					y2="14"
-					stroke={fill}
-					strokeWidth="0.8"
-				/>
-				<line
-					x1="12"
-					y1="14"
-					x2="9"
-					y2="15"
-					stroke={fill}
-					strokeWidth="0.8"
-				/>
-				<line
-					x1="12"
-					y1="14"
-					x2="15"
-					y2="15"
-					stroke={fill}
-					strokeWidth="0.8"
-				/>
+				<line x1="16" y1="8" x2="12" y2="10" stroke={fill} strokeWidth="0.8" />
+				<line x1="12" y1="10" x2="12" y2="14" stroke={fill} strokeWidth="0.8" />
+				<line x1="12" y1="14" x2="9" y2="15" stroke={fill} strokeWidth="0.8" />
+				<line x1="12" y1="14" x2="15" y2="15" stroke={fill} strokeWidth="0.8" />
 			</g>
 		</svg>
 	);

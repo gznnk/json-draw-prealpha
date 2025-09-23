@@ -2,6 +2,8 @@ import { keyframes, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import React, { memo } from "react";
 
+import type { IconProps } from "../../types/props/icon/IconProps";
+
 /**
  * Animation for flash brightness effect
  */
@@ -23,15 +25,6 @@ export const FlashGroup = styled.g<{ $flash: boolean }>`
 `;
 
 /**
- * Props for Hub icon
- */
-type HubProps = {
-	width?: number;
-	height?: number;
-	animation?: boolean;
-};
-
-/**
  * Hub icon component with optional flash animation
  *
  * @param props - Props for the icon
@@ -40,14 +33,15 @@ type HubProps = {
  * @param props.animation - Whether to show flash animation
  * @returns SVG element for hub icon
  */
-const HubComponent: React.FC<HubProps> = ({
+const HubComponent: React.FC<IconProps> = ({
 	width = 100,
 	height = 100,
 	animation = false,
+	title,
 }) => {
 	return (
 		<svg width={width} height={height} viewBox="0 0 100 100">
-			<title>Hub</title>
+			<title>{title || "Hub"}</title>
 			<FlashGroup $flash={animation}>
 				<line
 					x1="50"
