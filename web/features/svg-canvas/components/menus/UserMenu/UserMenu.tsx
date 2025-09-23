@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 // Import other libraries.
 
 // Import utilities.
+import { BOX_SHADOW } from "../../../constants/styling/core/CommonStyling";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 
 const UserMenuDiv = styled.div`
@@ -24,7 +25,7 @@ const MenuDetailDiv = styled.div`
 	padding: 3px 4px;
 	background-color: #f0f0f0;
 	border-radius: 4px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: ${BOX_SHADOW};
 	pointer-events: auto;
 `;
 
@@ -126,7 +127,7 @@ const IconButtonElm = styled.button`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: ${BOX_SHADOW};
 	pointer-events: auto;
 `;
 

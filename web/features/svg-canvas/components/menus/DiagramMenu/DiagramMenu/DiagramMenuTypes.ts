@@ -1,28 +1,12 @@
+import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
+
 /**
  * Props for the DiagramMenu component.
  */
 export type DiagramMenuProps = {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	rotation: number;
-	scaleX: number;
-	scaleY: number;
-	zoom: number;
-	isVisible: boolean;
-	menuStateMap: DiagramMenuStateMap;
-	bgColor: string;
-	borderColor: string;
-	borderRadius: number;
-	fontSize: number;
-	fontColor: string;
-	onMenuClick: (menuType: DiagramMenuType) => void;
-	onBgColorChange: (bgColor: string) => void;
-	onBorderColorChange: (borderColor: string) => void;
-	onBorderRadiusChange: (borderRadius: number) => void;
-	onFontSizeChange: (fontSize: number) => void;
-	onFontColorChange: (fontColor: string) => void;
+	canvasProps: SvgCanvasProps;
+	containerWidth: number;
+	containerHeight: number;
 };
 
 /**

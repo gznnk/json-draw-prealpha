@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
+
 export const ColorPickerContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -9,9 +11,7 @@ export const ColorPickerContainer = styled.div`
 	border: 1px solid #e5e7eb;
 	border-radius: 8px;
 	background-color: #ffffff;
-	box-shadow:
-		0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-shadow: ${BOX_SHADOW};
 	user-select: none;
 	pointer-events: auto;
 	z-index: 1100;
@@ -48,7 +48,7 @@ export const ColorSwatch = styled.div<ColorSwatchProps>`
 	&:hover {
 		border-color: #6b7280;
 		transform: scale(1.1);
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		box-shadow: ${BOX_SHADOW};
 	}
 
 	&:active {

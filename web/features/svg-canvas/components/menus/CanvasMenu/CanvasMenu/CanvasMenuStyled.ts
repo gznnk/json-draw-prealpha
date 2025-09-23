@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
+
 export const CanvasMenuDiv = styled.div`
 	position: absolute;
 	top: 10px;
@@ -10,9 +12,7 @@ export const CanvasMenuDiv = styled.div`
 	background-color: #ffffff;
 	border: 1px solid #d9d9d9;
 	padding: 8px;
-	box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.06),
-		0 1px 2px rgba(0, 0, 0, 0.04);
+	box-shadow: ${BOX_SHADOW};
 	border-radius: 6px;
 	pointer-events: none;
 	user-select: none;

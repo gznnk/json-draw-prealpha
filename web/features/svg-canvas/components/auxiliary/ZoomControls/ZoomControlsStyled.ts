@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import { BOX_SHADOW } from "../../../constants/styling/core/CommonStyling";
+
 export const ZoomControlsContainer = styled.div`
 	position: absolute;
 	bottom: 24px;
@@ -9,7 +11,7 @@ export const ZoomControlsContainer = styled.div`
 	background: #ffffff;
 	border: 1px solid #e5e7eb;
 	border-radius: 8px;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	box-shadow: ${BOX_SHADOW};
 	z-index: 1000;
 	user-select: none;
 	pointer-events: auto;

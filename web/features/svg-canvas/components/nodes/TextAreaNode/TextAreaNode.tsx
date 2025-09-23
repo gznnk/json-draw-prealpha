@@ -6,7 +6,7 @@ import {
 	HEADER_HEIGHT,
 	HEADER_MARGIN_BOTTOM,
 	HEADER_MARGIN_TOP,
-} from "../../../constants/styling/core/CommonStyling";
+} from "../../../constants/styling/nodes/NodeStyling";
 import {
 	BACKGROUND_COLOR,
 	BORDER_COLOR,

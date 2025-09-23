@@ -9,4 +9,6 @@ export const DiagramBaseDefaultData = {
 	type: "Rectangle",
 	x: 0,
 	y: 0,
+	name: "",
+	description: "",
 } as const satisfies DiagramBaseData;

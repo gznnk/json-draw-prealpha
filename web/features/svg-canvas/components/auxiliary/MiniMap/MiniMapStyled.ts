@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import { BOX_SHADOW } from "../../../constants/styling/core/CommonStyling";
+
 /**
  * Container for the MiniMap component
  */
@@ -12,9 +14,7 @@ export const MiniMapContainer = styled.div<{ width: number; height: number }>`
 	background-color: #fafafa;
 	border: 1px solid rgba(107, 114, 128, 0.15);
 	border-radius: 8px;
-	box-shadow:
-		0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-shadow: ${BOX_SHADOW};
 	cursor: pointer;
 	overflow: hidden;
 	z-index: 1000;

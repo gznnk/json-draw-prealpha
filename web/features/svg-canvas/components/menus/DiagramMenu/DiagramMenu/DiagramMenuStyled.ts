@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 
+import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
+
 /**
  * Properties for the DiagramMenuWrapper.
  */
 type DiagramMenuWrapperProps = {
 	x: number;
 	y: number;
-	zoom: number;
 };
 
 /**
@@ -15,10 +16,9 @@ type DiagramMenuWrapperProps = {
 export const DiagramMenuWrapper = styled.div<DiagramMenuWrapperProps>`
 	position: absolute;
 	top: ${(props) => props.y}px;
-	left: ${(props) => props.x - 300 * props.zoom}px;
-	width: ${(props) => 600 * props.zoom}px;
+	left: ${(props) => props.x}px;
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 `;
 
 /**
@@ -35,12 +35,10 @@ export const DiagramMenuDiv = styled.div`
 	background-color: #ffffff;
 	border: 1px solid #e5e7eb;
 	border-radius: 8px;
-	box-shadow:
-		0 4px 6px -1px rgba(0, 0, 0, 0.1),
-		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-shadow: ${BOX_SHADOW};
 	pointer-events: auto;
 	user-select: none;
-	z-index: 1000;
+	z-index: 1060;
 `;
 
 /**

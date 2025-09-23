@@ -9,6 +9,15 @@ import React, {
 } from "react";
 
 import { MULTI_SELECT_GROUP } from "./SvgCanvasConstants";
+import { initializeSvgCanvasDiagrams } from "./SvgCanvasRegistry";
+import {
+	Container,
+	HTMLElementsContainer,
+	SelectionRect,
+	Svg,
+	Viewport,
+	ViewportOverlay,
+} from "./SvgCanvasStyled";
 import { InteractionState } from "./types/InteractionState";
 import type { SvgCanvasProps } from "./types/SvgCanvasProps";
 import type { SvgCanvasRef } from "./types/SvgCanvasRef";
@@ -27,27 +36,19 @@ import { ZoomControls } from "../components/auxiliary/ZoomControls";
 import { TextEditor } from "../components/core/Textable";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
-import { DiagramMenu, useDiagramMenu } from "../components/menus/DiagramMenu";
+import { DiagramMenu } from "../components/menus/DiagramMenu";
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { Group } from "../components/shapes/Group";
 // Import registry.
-import { DiagramRegistry } from "../registry";
-import { initializeSvgCanvasDiagrams } from "./SvgCanvasRegistry";
-import { newEventId } from "../utils/core/newEventId";
-import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
-import {
-	Container,
-	HTMLElementsContainer,
-	SelectionRect,
-	Svg,
-	Viewport,
-	ViewportOverlay,
-} from "./SvgCanvasStyled";
 import { EventBusProvider } from "../context/EventBusContext";
 import { SvgCanvasStateProvider } from "../context/SvgCanvasStateContext";
 import { SvgViewportProvider } from "../context/SvgViewportContext";
+import { DiagramRegistry } from "../registry";
 import type { SvgViewport } from "../types/core/SvgViewport";
+import { newEventId } from "../utils/core/newEventId";
+import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
+import { DiagramInfoPopover } from "../components/auxiliary/DiagramInfoPopover";
 
 // TODO: 実行する場所を考える
 // Initialize all diagram types when this module is loaded
@@ -191,8 +192,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			contextMenuFunctions,
 		} = useContextMenu(props, containerRef);
 
-		// Use the diagram menu hook to handle diagram menu events.
-		const { diagramMenuProps } = useDiagramMenu(props);
+		// DiagramMenu is now self-contained and doesn't need a hook
+
 
 		// Use the shortcut key hook to handle keyboard shortcuts
 		useShortcutKey({
@@ -597,7 +598,17 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									width={containerWidth + minX}
 									height={containerHeight + minY}
 								>
-									<DiagramMenu {...diagramMenuProps} />
+									<DiagramMenu
+										canvasProps={props}
+										containerWidth={containerWidth}
+										containerHeight={containerHeight}
+									/>
+									{/* Diagram info popover for selected diagram name/description */}
+									<DiagramInfoPopover
+										canvasProps={props}
+										containerWidth={containerWidth}
+										containerHeight={containerHeight}
+									/>
 								</HTMLElementsContainer>
 							</SvgViewportProvider>
 						</SvgCanvasStateProvider>
