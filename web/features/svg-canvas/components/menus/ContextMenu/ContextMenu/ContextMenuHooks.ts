@@ -8,7 +8,10 @@ import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams"
 import { isExportable } from "../../../../utils/validation/isExportable";
 // Imports related to this component.
 
-export const useContextMenu = (canvasProps: SvgCanvasProps, containerRef?: React.RefObject<HTMLDivElement | null>) => {
+export const useContextMenu = (
+	canvasProps: SvgCanvasProps,
+	containerRef?: React.RefObject<HTMLDivElement | null>,
+) => {
 	// Extract properties from canvasProps.
 	const {
 		items,
@@ -136,9 +139,15 @@ export const useContextMenu = (canvasProps: SvgCanvasProps, containerRef?: React
 		}));
 	}, []);
 
+	// Get container dimensions for positioning logic
+	const containerWidth = containerRef?.current?.clientWidth ?? 0;
+	const containerHeight = containerRef?.current?.clientHeight ?? 0;
+
 	return {
 		contextMenuProps: {
 			...contextMenuState,
+			containerWidth,
+			containerHeight,
 			menuStateMap,
 			onMenuClick,
 		},
