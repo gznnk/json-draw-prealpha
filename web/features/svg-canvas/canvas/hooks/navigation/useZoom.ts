@@ -17,7 +17,8 @@ export const useZoom = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback((newZoom: number) => {
 		// Bypass references to avoid function creation in every render.
-		const { canvasState, setCanvasState, canvasRef } = refBus.current.props;
+		const { canvasState, setCanvasState, canvasRef, onPanZoomChange } =
+			refBus.current.props;
 
 		// Clamp zoom value within min/max limits
 		const clampedZoom = Math.max(
@@ -27,10 +28,20 @@ export const useZoom = (props: SvgCanvasSubHooksProps) => {
 
 		if (!canvasRef?.containerRef.current) {
 			// Fallback: If container ref is not available, use simple zoom
-			setCanvasState((prevState) => ({
-				...prevState,
-				zoom: clampedZoom,
-			}));
+			setCanvasState((prevState) => {
+				const newState = {
+					...prevState,
+					zoom: clampedZoom,
+				};
+
+				onPanZoomChange?.({
+					minX: newState.minX,
+					minY: newState.minY,
+					zoom: clampedZoom,
+				});
+
+				return newState;
+			});
 			return;
 		}
 
@@ -66,11 +77,21 @@ export const useZoom = (props: SvgCanvasSubHooksProps) => {
 		const newMinX = newViewBoxX * clampedZoom;
 		const newMinY = newViewBoxY * clampedZoom;
 
-		setCanvasState((prevState) => ({
-			...prevState,
-			zoom: clampedZoom,
-			minX: newMinX,
-			minY: newMinY,
-		}));
+		setCanvasState((prevState) => {
+			const newState = {
+				...prevState,
+				zoom: clampedZoom,
+				minX: newMinX,
+				minY: newMinY,
+			};
+
+			onPanZoomChange?.({
+				minX: newMinX,
+				minY: newMinY,
+				zoom: clampedZoom,
+			});
+
+			return newState;
+		});
 	}, []);
 };

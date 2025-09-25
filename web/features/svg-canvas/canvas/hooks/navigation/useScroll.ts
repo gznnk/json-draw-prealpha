@@ -21,7 +21,7 @@ export const useScroll = (props: SvgCanvasSubHooksProps) => {
 	return useCallback(
 		(e: SvgCanvasScrollEvent) => {
 			// Bypass references to avoid function creation in every render.
-			const { setCanvasState } = refBus.current.props;
+			const { setCanvasState, onPanZoomChange } = refBus.current.props;
 
 			// Dispatch the scroll event to the event bus.
 			eventBus.dispatchEvent(
@@ -33,6 +33,12 @@ export const useScroll = (props: SvgCanvasSubHooksProps) => {
 			setCanvasState((prevState) => {
 				// Only update state directly if interaction state is Idle
 				if (prevState.interactionState === InteractionState.Idle) {
+					onPanZoomChange?.({
+						minX: e.newMinX,
+						minY: e.newMinY,
+						zoom: prevState.zoom,
+					});
+
 					return {
 						...prevState,
 						minX: e.newMinX,

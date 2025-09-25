@@ -1,4 +1,5 @@
 import type { SvgCanvasData } from "./SvgCanvasData";
+import type { SvgCanvasPanZoom } from "./SvgCanvasPanZoom";
 import type { SvgCanvasRef } from "./SvgCanvasRef";
 import type { SvgCanvasState } from "./SvgCanvasState";
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
@@ -8,8 +9,9 @@ import type { EventBus } from "../../../../shared/event-bus/EventBus";
  */
 export type SvgCanvasSubHooksProps = {
 	canvasState: SvgCanvasState;
+	eventBus: EventBus;
 	canvasRef?: SvgCanvasRef | null;
 	setCanvasState: React.Dispatch<React.SetStateAction<SvgCanvasState>>;
 	onDataChange?: (data: SvgCanvasData) => void;
-	eventBus: EventBus;
+	onPanZoomChange?: (pz: SvgCanvasPanZoom) => void;
 };

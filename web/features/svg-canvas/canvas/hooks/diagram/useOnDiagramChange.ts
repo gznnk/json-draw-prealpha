@@ -34,7 +34,7 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 	return useCallback((e: DiagramChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
-			props: { setCanvasState },
+			props: { setCanvasState, onPanZoomChange },
 			addHistory,
 		} = refBus.current;
 
@@ -63,6 +63,12 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			if (e.minX !== undefined && e.minY !== undefined) {
 				newState.minX = e.minX;
 				newState.minY = e.minY;
+
+				onPanZoomChange?.({
+					minX: e.minX,
+					minY: e.minY,
+					zoom: newState.zoom,
+				});
 			}
 
 			if (e.eventPhase === "Ended") {

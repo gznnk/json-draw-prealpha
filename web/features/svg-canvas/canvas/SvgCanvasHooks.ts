@@ -36,6 +36,7 @@ import { useSelectAll } from "./hooks/selection/useSelectAll";
 import { useOnConnectNodes } from "./hooks/tools/useOnConnectNodes";
 import { useOnGroupShapes } from "./hooks/tools/useOnGroupShapes";
 import type { SvgCanvasData } from "./types/SvgCanvasData";
+import type { SvgCanvasPanZoom } from "./types/SvgCanvasPanZoom";
 import type { SvgCanvasRef } from "./types/SvgCanvasRef";
 import type { SvgCanvasState } from "./types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "./types/SvgCanvasSubHooksProps";
@@ -54,6 +55,7 @@ type SvgCanvasHooksProps = {
 	zoom: number;
 	canvasRef: RefObject<SvgCanvasRef | null>;
 	onDataChange?: (data: SvgCanvasData) => void;
+	onPanZoomChange?: (pz: SvgCanvasPanZoom) => void;
 };
 
 /**
@@ -81,10 +83,11 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Create props for the canvas hooks.
 	const canvasHooksProps: SvgCanvasSubHooksProps = {
 		canvasState,
-		setCanvasState,
-		canvasRef: props.canvasRef.current,
-		onDataChange: props.onDataChange,
 		eventBus: eventBusRef.current,
+		canvasRef: props.canvasRef.current,
+		setCanvasState,
+		onDataChange: props.onDataChange,
+		onPanZoomChange: props.onPanZoomChange,
 	};
 
 	// keyboard

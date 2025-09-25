@@ -23,9 +23,10 @@ export const useGrabScroll = (
 	props: SvgCanvasSubHooksProps,
 ): UseGrabScrollReturn => {
 	const {
-		canvasState: { minX, minY, grabScrollState },
+		canvasState: { minX, minY, grabScrollState, zoom },
 		setCanvasState,
 		eventBus,
+		onPanZoomChange,
 	} = props;
 
 	// Reference to store the initial drag start state
@@ -40,9 +41,11 @@ export const useGrabScroll = (
 	const refBusVal = {
 		minX,
 		minY,
+		zoom,
 		isGrabScrolling: grabScrollState?.isGrabScrolling,
 		setCanvasState,
 		eventBus,
+		onPanZoomChange,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -98,7 +101,7 @@ export const useGrabScroll = (
 			if (!dragStartState.current) return;
 
 			// Bypass references to avoid function creation in every render.
-			const { setCanvasState, eventBus } = refBus.current;
+			const { setCanvasState, eventBus, zoom, onPanZoomChange } = refBus.current;
 
 			// Calculate total movement from the start position
 			const totalDeltaX = e.clientX - dragStartState.current.clientX;
@@ -109,15 +112,25 @@ export const useGrabScroll = (
 			const newMinY = dragStartState.current.minY - totalDeltaY;
 
 			// Mark that grab scrolling occurred
-			setCanvasState((prevState) => ({
-				...prevState,
-				minX: newMinX,
-				minY: newMinY,
-				grabScrollState: {
-					isGrabScrolling: true,
-					grabScrollOccurred: true,
-				},
-			}));
+			setCanvasState((prevState) => {
+				const newState = {
+					...prevState,
+					minX: newMinX,
+					minY: newMinY,
+					grabScrollState: {
+						isGrabScrolling: true,
+						grabScrollOccurred: true,
+					},
+				};
+
+				onPanZoomChange?.({
+					minX: newMinX,
+					minY: newMinY,
+					zoom,
+				});
+
+				return newState;
+			});
 
 			// Emit scroll event for other components to handle
 			const scrollEvent: SvgCanvasScrollEvent = {

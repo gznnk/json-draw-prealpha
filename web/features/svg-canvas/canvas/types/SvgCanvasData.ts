@@ -1,12 +1,13 @@
+import type { SvgCanvasPanZoom } from "./SvgCanvasPanZoom";
+import type { Prettify } from "../../../../shared/utility-types";
 import type { DiagramData } from "../../types/data/core/DiagramData";
 
 /**
  * Type for the data of the SvgCanvas.
  */
-export type SvgCanvasData = {
-	id: string;
-	minX: number;
-	minY: number;
-	zoom: number;
-	items: DiagramData[];
-};
+export type SvgCanvasData = Prettify<
+	SvgCanvasPanZoom & {
+		id: string;
+		items: DiagramData[];
+	}
+>;

@@ -288,7 +288,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 		(e: DiagramTransformEvent) => {
 			// Bypass references to avoid function creation in every render.
 			const {
-				props: { setCanvasState },
+				props: { setCanvasState, onPanZoomChange },
 			} = refBus.current;
 			const { addHistory } = refBus.current;
 
@@ -341,6 +341,12 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				if (e.minX !== undefined && e.minY !== undefined) {
 					newState.minX = e.minX;
 					newState.minY = e.minY;
+
+					onPanZoomChange?.({
+						minX: e.minX,
+						minY: e.minY,
+						zoom: newState.zoom,
+					});
 				}
 
 				// Refresh the connect lines for the transformed diagrams.
