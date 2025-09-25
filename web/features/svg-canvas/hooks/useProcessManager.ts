@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ProcessItem, ProcessStatus } from "../types/core/ProcessItem";
 
-const CLEANUP_DELAY = 10000; // 10 seconds
+const CLEANUP_DELAY = 4000; // 4 seconds
 
 export const useProcessManager = () => {
 	const [processes, setProcesses] = useState<ProcessItem[]>([]);

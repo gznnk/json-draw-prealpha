@@ -17,7 +17,7 @@ const disappearAnimation = keyframes`
 	0% {
 		opacity: 1;
 	}
-	90% {
+	80% {
 		opacity: 1;
 	}
 	100% {
@@ -33,7 +33,9 @@ export const StyledCircle = styled.circle<{
 }>`
 	fill: ${(props) => props.statusColor};
 	transform: translateX(${(props) => props.translateX}px);
-	transition: fill 0.5s linear, transform 0.3s ease-out;
+	transition:
+		fill 0.5s linear,
+		transform 0.3s ease-out;
 	${({ isProcessing }) =>
 		isProcessing &&
 		css`
@@ -42,6 +44,6 @@ export const StyledCircle = styled.circle<{
 	${({ isDisappearing }) =>
 		isDisappearing &&
 		css`
-			animation: ${disappearAnimation} 10s ease-out forwards;
+			animation: ${disappearAnimation} 4s ease-out forwards;
 		`}
 `;
