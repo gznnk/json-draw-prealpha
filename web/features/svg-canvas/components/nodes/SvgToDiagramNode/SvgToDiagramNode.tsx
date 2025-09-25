@@ -6,7 +6,7 @@ import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { SvgToDiagramNodeProps } from "../../../types/props/nodes/SvgToDiagramNodeProps";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import { createSvgStateFromText } from "../../../utils/shapes/svg/createSvgStateFromText";
+import { createSvgStateFromText } from "../../../utils/nodes/svgToDiagramNode/createSvgStateFromText";
 import { IconContainer } from "../../core/IconContainer";
 import { Gachapon } from "../../icons/Gachapon";
 import { Rectangle } from "../../shapes/Rectangle";
@@ -24,12 +24,7 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 		onPropagation: (e) => {
 			if (e.eventPhase !== "Ended") return;
 
-			const data = e.data.text
-				.replace("```svg", "")
-				.replace("```xml", "")
-				.replace("```", "");
-
-			const svgData = createSvgStateFromText(data);
+			const svgData = createSvgStateFromText(e.data.text);
 			if (!svgData) return;
 
 			svgData.x = props.x + (Math.random() - 0.5) * 300;

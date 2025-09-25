@@ -2,6 +2,7 @@ import DOMPurify from "dompurify";
 import { memo, useEffect, useRef } from "react";
 import type React from "react";
 
+import { ERROR_SVG_ICON_STRING } from "./SvgConstants";
 import { SvgGroupElement, SvgRectElement } from "./SvgStyled";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
@@ -10,6 +11,7 @@ import type { SvgProps } from "../../../types/props/shapes/SvgProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
+import { isValidSvgString } from "../../../utils/validation/isValidSvgString";
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Transformative } from "../../core/Transformative";
@@ -99,9 +101,13 @@ const SvgComponent: React.FC<SvgProps> = ({
 	// This is done to avoid parsing the SVG text on every render.
 	useEffect(() => {
 		const parser = new DOMParser();
-		const sanitizedSvgText = DOMPurify.sanitize(svgText, {
+		let sanitizedSvgText = DOMPurify.sanitize(svgText, {
 			NAMESPACE: "http://www.w3.org/2000/svg",
 		});
+		const isValid = isValidSvgString(sanitizedSvgText);
+		if (!isValid) {
+			sanitizedSvgText = ERROR_SVG_ICON_STRING;
+		}
 		const svgDoc = parser.parseFromString(sanitizedSvgText, "image/svg+xml");
 		const svgElement = svgDoc.documentElement;
 		svgElement.setAttribute("width", `${initialWidth}`);
@@ -147,7 +153,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 			{showTransformControls && (
 				<Transformative
 					id={id}
-					type="Rectangle"
+					type="Svg"
 					x={x}
 					y={y}
 					width={width}
