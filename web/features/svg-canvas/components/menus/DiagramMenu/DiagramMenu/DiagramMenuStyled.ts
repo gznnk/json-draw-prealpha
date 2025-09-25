@@ -8,6 +8,7 @@ import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
 type DiagramMenuWrapperProps = {
 	x: number;
 	y: number;
+	zIndex?: number;
 };
 
 /**
@@ -19,6 +20,7 @@ export const DiagramMenuWrapper = styled.div<DiagramMenuWrapperProps>`
 	left: ${(props) => props.x}px;
 	display: flex;
 	justify-content: flex-start;
+	z-index: ${(props) => props.zIndex ?? 1060};
 `;
 
 /**
@@ -38,7 +40,6 @@ export const DiagramMenuDiv = styled.div`
 	box-shadow: ${BOX_SHADOW};
 	pointer-events: auto;
 	user-select: none;
-	z-index: 1060;
 `;
 
 /**

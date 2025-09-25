@@ -16,9 +16,4 @@ export const ImageGenNodeFeatures = {
 /**
  * Type of the ImageGenNode data.
  */
-export type ImageGenNodeData = CreateDataType<
-	typeof ImageGenNodeFeatures,
-	{
-		type: "ImageGenNode";
-	}
->;
+export type ImageGenNodeData = CreateDataType<typeof ImageGenNodeFeatures>;

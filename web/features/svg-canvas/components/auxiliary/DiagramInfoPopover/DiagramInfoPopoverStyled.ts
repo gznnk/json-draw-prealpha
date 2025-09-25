@@ -6,9 +6,13 @@ import {
 } from "../../../constants/styling/auxiliary/DiagramInfoPopoverStyling";
 import { BOX_SHADOW } from "../../../constants/styling/core/CommonStyling";
 
-export const PopoverContainer = styled.div`
+type PopoverContainerProps = {
+	zIndex?: number;
+};
+
+export const PopoverContainer = styled.div<PopoverContainerProps>`
 	position: absolute;
-	z-index: 1050;
+	z-index: ${(props) => props.zIndex ?? 1050};
 	pointer-events: auto;
 	background: rgba(255, 255, 255, 1);
 	backdrop-filter: blur(8px);

@@ -19,9 +19,4 @@ export const AgentNodeFeatures = {
 /**
  * Type of the AgentNode data.
  */
-export type AgentNodeData = CreateDataType<
-	typeof AgentNodeFeatures,
-	{
-		type: "AgentNode";
-	}
->;
+export type AgentNodeData = CreateDataType<typeof AgentNodeFeatures>;

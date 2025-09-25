@@ -8,6 +8,7 @@ import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
 type ContextMenuDivProps = {
 	x: number;
 	y: number;
+	zIndex: number;
 };
 
 /**
@@ -25,7 +26,7 @@ export const ContextMenuDiv = styled.div<ContextMenuDivProps>`
 	box-shadow: ${BOX_SHADOW};
 	pointer-events: auto;
 	user-select: none;
-	z-index: 1050;
+	z-index: ${(props) => props.zIndex};
 `;
 
 /**

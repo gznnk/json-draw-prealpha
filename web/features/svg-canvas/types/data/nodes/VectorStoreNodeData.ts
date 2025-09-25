@@ -17,8 +17,5 @@ export const VectorStoreNodeFeatures = {
  * Type of the VectorStoreNode data.
  */
 export type VectorStoreNodeData = CreateDataType<
-	typeof VectorStoreNodeFeatures,
-	{
-		type: "VectorStoreNode";
-	}
+	typeof VectorStoreNodeFeatures
 >;

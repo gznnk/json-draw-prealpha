@@ -17,8 +17,5 @@ export const SvgToDiagramNodeFeatures = {
  * Type of the SvgToDiagramNode data.
  */
 export type SvgToDiagramNodeData = CreateDataType<
-	typeof SvgToDiagramNodeFeatures,
-	{
-		type: "SvgToDiagramNode";
-	}
+	typeof SvgToDiagramNodeFeatures
 >;

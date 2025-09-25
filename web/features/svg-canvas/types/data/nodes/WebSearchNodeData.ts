@@ -16,9 +16,4 @@ export const WebSearchNodeFeatures = {
 /**
  * Type of the WebSearchNode data.
  */
-export type WebSearchNodeData = CreateDataType<
-	typeof WebSearchNodeFeatures,
-	{
-		type: "WebSearchNode";
-	}
->;
+export type WebSearchNodeData = CreateDataType<typeof WebSearchNodeFeatures>;

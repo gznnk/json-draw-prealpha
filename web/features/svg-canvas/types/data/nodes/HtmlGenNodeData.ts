@@ -21,9 +21,4 @@ export const HtmlGenNodeFeatures = {
 /**
  * Type of the HTML Generation node data.
  */
-export type HtmlGenNodeData = CreateDataType<
-	typeof HtmlGenNodeFeatures,
-	{
-		type: "HtmlGenNode"; // TODO: typeの定義場所がばらばらなので統一する
-	}
->;
+export type HtmlGenNodeData = CreateDataType<typeof HtmlGenNodeFeatures>;

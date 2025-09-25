@@ -25,6 +25,8 @@ const DiagramInfoPopoverComponent = ({
 	containerHeight,
 }: DiagramInfoPopoverProps): React.JSX.Element => {
 	const popoverRef = useRef<HTMLDivElement>(null);
+	const [previousSelectedDiagramId, setPreviousSelectedDiagramId] =
+		useState<string>("");
 	const [popoverDimensions, setPopoverDimensions] = useState({
 		width: MIN_POPOVER_WIDTH,
 		height: MIN_POPOVER_HEIGHT,
@@ -33,6 +35,8 @@ const DiagramInfoPopoverComponent = ({
 	// Get selected diagrams
 	const selectedDiagrams = getSelectedDiagrams(canvasProps.items);
 	const selectedDiagram = selectedDiagrams[0];
+	// Get selected diagram ID for dependency tracking
+	const selectedDiagramId = selectedDiagram?.id || "";
 
 	const isVisible =
 		selectedDiagrams.length > 0 &&
@@ -40,13 +44,15 @@ const DiagramInfoPopoverComponent = ({
 		selectedDiagram &&
 		(selectedDiagram.name || selectedDiagram.description);
 
-	// Update popover dimensions when DOM changes
+	// Update popover dimensions when DOM changes or selected diagram changes
 	useEffect(() => {
 		if (popoverRef.current && isVisible) {
 			const rect = popoverRef.current.getBoundingClientRect();
 			setPopoverDimensions({ width: rect.width, height: rect.height });
 		}
-	}, [isVisible]);
+		// Update the state for tracking
+		setPreviousSelectedDiagramId(selectedDiagramId);
+	}, [isVisible, selectedDiagramId]);
 
 	if (!isVisible) {
 		return <></>;
@@ -61,6 +67,9 @@ const DiagramInfoPopoverComponent = ({
 		popoverDimensions,
 	);
 
+	// Check if selected diagram has changed to control z-index
+	const isDiagramChanged = previousSelectedDiagramId !== selectedDiagramId;
+
 	return (
 		<PopoverContainer
 			ref={popoverRef}
@@ -68,6 +77,7 @@ const DiagramInfoPopoverComponent = ({
 				left: position.x,
 				top: position.y,
 			}}
+			zIndex={isDiagramChanged ? -1 : 1050}
 		>
 			<PopoverContent>
 				<PopoverFieldContainer>

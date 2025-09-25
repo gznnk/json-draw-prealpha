@@ -16,9 +16,4 @@ export const PageDesignNodeFeatures = {
 /**
  * Type of the PageDesignNode data.
  */
-export type PageDesignNodeData = CreateDataType<
-	typeof PageDesignNodeFeatures,
-	{
-		type: "PageDesignNode";
-	}
->;
+export type PageDesignNodeData = CreateDataType<typeof PageDesignNodeFeatures>;
