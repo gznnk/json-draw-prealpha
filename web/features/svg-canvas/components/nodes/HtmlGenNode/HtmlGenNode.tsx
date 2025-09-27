@@ -13,10 +13,12 @@ import {
 	CORNER_RADIUS,
 } from "../../../constants/styling/nodes/HtmlGenNodeStyling";
 import { BASE_MARGIN } from "../../../constants/styling/nodes/NodeStyling";
+import { useSvgCanvasState } from "../../../context/SvgCanvasStateContext";
 import { useConnectedDiagrams } from "../../../hooks/useConnectedDiagrams";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
 import type { HtmlGenNodeProps } from "../../../types/props/nodes/HtmlGenNodeProps";
+import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { newEventId } from "../../../utils/core/newEventId";
 import { previewHtmlWithConfirm } from "../../../utils/core/previewHtmlWithConfirm";
 import { Button } from "../../elements/Button";
@@ -26,19 +28,15 @@ import { Frame } from "../../elements/Frame";
  * HtmlGenNode component.
  */
 const HtmlGenNodeComponent: React.FC<HtmlGenNodeProps> = (props) => {
-	const {
-		id,
-		width,
-		height,
-		onDrag,
-		onExecute,
-	} = props;
+	const { id, width, height, onDrag, onExecute } = props;
 
+	const target = "7247c834-bf96-40bf-afae-ca74907cc13d";
 
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
 	// Get connected diagram data
 	const connectedDiagrams = useConnectedDiagrams(id);
+	const canvasRef = useSvgCanvasState();
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
@@ -67,92 +65,94 @@ const HtmlGenNodeComponent: React.FC<HtmlGenNodeProps> = (props) => {
 		});
 	}, []);
 
-
 	// Handler for executing HTML generation
-	const handleExecution = useCallback(
-		async () => {
+	const handleExecution = useCallback(async () => {
+		const {
+			id,
+			// connectedDiagrams,
+			onExecute,
+		} = refBus.current;
 
-			const { id, connectedDiagrams, onExecute } = refBus.current;
+		// Get connected diagram data (use first connected diagram if multiple)
+		// const connectedDiagram =
+		// 	connectedDiagrams.length > 0 ? connectedDiagrams[0] : null;
+		// const diagramData = connectedDiagram
+		// 	? JSON.stringify(connectedDiagram, null, 2)
+		// 	: "No diagram connected";
+		const targetd = getDiagramById(canvasRef.current.items, target);
+		const diagramData = JSON.stringify(targetd);
 
-			// Get connected diagram data (use first connected diagram if multiple)
-			const connectedDiagram = connectedDiagrams.length > 0 ? connectedDiagrams[0] : null;
-			const diagramData = connectedDiagram
-				? JSON.stringify(connectedDiagram, null, 2)
-				: "No diagram connected";
+		const processId = newEventId();
+		setProcessIdList((prev) => [...prev, processId]);
 
-			const processId = newEventId();
-			setProcessIdList((prev) => [...prev, processId]);
+		try {
+			// Create LLM client using the factory
+			const client = LLMClientFactory.createClient(apiKey);
 
-			try {
-				// Create LLM client using the factory
-				const client = LLMClientFactory.createClient(apiKey);
-
-				const systemPrompt = `You are an HTML generation assistant. Based on the provided diagram data, generate clean, modern HTML code. The HTML should be complete, well-structured, and include appropriate CSS styling.
+			const systemPrompt = `You are an HTML generation assistant. Based on the provided diagram data, generate clean, modern HTML code. The HTML should be complete, well-structured, and include appropriate CSS styling.
 
 Connected Diagram Data:
 ${diagramData}
 
 Please generate a complete HTML document that represents or visualizes the diagram data.`;
 
-				const eventId = newEventId();
+			const eventId = newEventId();
 
-				onExecute?.({
-					id,
-					eventId,
-					eventPhase: "Started",
-					data: {
-						text: "Generating HTML...",
-					},
-				});
+			onExecute?.({
+				id,
+				eventId,
+				eventPhase: "Started",
+				data: {
+					text: "Generating HTML...",
+				},
+			});
 
-				let generatedHtml = "";
+			let generatedHtml = "";
 
-				// Generate HTML using the LLM client
-				await client.chat({
-					message: systemPrompt,
-					onTextChunk: (chunk: string) => {
-						generatedHtml += chunk;
-						onExecute?.({
-							id,
-							eventId,
-							eventPhase: "InProgress",
-							data: {
-								text: generatedHtml,
-							},
-						});
-					},
-				});
+			// Generate HTML using the LLM client
+			await client.chat({
+				message: systemPrompt,
+				onTextChunk: (chunk: string) => {
+					generatedHtml += chunk;
+					onExecute?.({
+						id,
+						eventId,
+						eventPhase: "InProgress",
+						data: {
+							text: generatedHtml,
+						},
+					});
+				},
+			});
 
-				// Preview the generated HTML
-				previewHtmlWithConfirm(generatedHtml);
+			// Preview the generated HTML
+			previewHtmlWithConfirm(generatedHtml);
 
-				onExecute?.({
-					id,
-					eventId,
-					eventPhase: "Ended",
-					data: {
-						text: generatedHtml,
-					},
-				});
-			} catch (error) {
-				console.error("Error generating HTML:", error);
-				alert("An error occurred during HTML generation.");
+			onExecute?.({
+				id,
+				eventId,
+				eventPhase: "Ended",
+				data: {
+					text: generatedHtml,
+				},
+			});
+		} catch (error) {
+			console.error("Error generating HTML:", error);
+			alert("An error occurred during HTML generation.");
 
-				const eventId = newEventId();
-				onExecute?.({
-					id,
-					eventId,
-					eventPhase: "Ended",
-					data: {
-						text: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-					},
-				});
-			}
+			const eventId = newEventId();
+			onExecute?.({
+				id,
+				eventId,
+				eventPhase: "Ended",
+				data: {
+					text: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+				},
+			});
+		}
 
-			setProcessIdList((prev) => prev.filter((pid) => pid !== processId));
-		},
-		[apiKey],
-	);
+		setProcessIdList((prev) => prev.filter((pid) => pid !== processId));
+	}, [apiKey, canvasRef]);
 
 	// Handle button click for execution
 	const handleButtonClick = useCallback(() => {

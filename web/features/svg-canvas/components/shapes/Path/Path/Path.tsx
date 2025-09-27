@@ -25,8 +25,8 @@ import {
 	createEndPointArrowHead,
 	createStartPointArrowHead,
 } from "../../../../utils/shapes/path/createArrowHeads";
-import { createBezierDValue } from "../../../../utils/shapes/path/createBezierDValue";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
+import { createPathDValue } from "../../../../utils/shapes/path/createPathDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
 
 /**
@@ -282,8 +282,7 @@ const PathComponent: React.FC<PathProps> = ({
 	);
 
 	// Generate polyline d attribute value
-	const d =
-		pathType === "Bezier" ? createBezierDValue(items) : createDValue(items);
+	const d = createPathDValue(items, pathType);
 
 	// Generate vertex information
 	const isBothEnds = (idx: number) => idx === 0 || idx === items.length - 1;

@@ -8,7 +8,7 @@ import {
 	createStartPointArrowHead,
 	createEndPointArrowHead,
 } from "../../../../utils/shapes/path/createArrowHeads";
-import { createDValue } from "../../../../utils/shapes/path/createDValue";
+import { createPathDValue } from "../../../../utils/shapes/path/createPathDValue";
 
 export const FlashConnectLineComponent = () => {
 	const [connectLineList, setConnectLineList] = useState<
@@ -51,7 +51,7 @@ export const FlashConnectLineComponent = () => {
 			key={`${connectLine.data.id}-${connectLine.eventId}`}
 		>
 			<path
-				d={createDValue(connectLine.data.items)}
+				d={createPathDValue(connectLine.data.items, connectLine.data.pathType)}
 				strokeWidth={connectLine.data.strokeWidth}
 				stroke={connectLine.data.stroke}
 				fill="none"
