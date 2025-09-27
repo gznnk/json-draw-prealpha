@@ -19,6 +19,8 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 	y,
 	width,
 	height,
+	minWidth,
+	minHeight,
 	rotation,
 	scaleX,
 	scaleY,
@@ -102,6 +104,8 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 					y={y}
 					width={width}
 					height={height}
+					minWidth={minWidth}
+					minHeight={minHeight}
 					rotation={rotation}
 					scaleX={scaleX}
 					scaleY={scaleY}

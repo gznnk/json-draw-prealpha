@@ -2,19 +2,11 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 import { STICKY_FOLD_SIZE } from "../../../constants/styling/diagrams/StickyStyleConstants";
-import { useClick } from "../../../hooks/useClick";
-import { useDrag } from "../../../hooks/useDrag";
-import { useHover } from "../../../hooks/useHover";
-import { useSelect } from "../../../hooks/useSelect";
-import { useText } from "../../../hooks/useText";
+import { useBaseShape } from "../../../hooks/useBaseShape";
 import type { StickyProps } from "../../../types/props/diagrams/StickyProps";
-import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-import { Outline } from "../../core/Outline";
-import { PositionLabel } from "../../core/PositionLabel/PositionLabel";
-import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
+import { BaseShape } from "../../shapes/BaseShape";
 
 /**
  * Sticky component - a sticky note diagram element
@@ -61,56 +53,24 @@ const StickyComponent: React.FC<StickyProps> = ({
 	// Reference to the SVG element to be transformed
 	const svgRef = useRef<SVGPolygonElement>({} as SVGPolygonElement);
 
-	// Handle text editing
-	const { onDoubleClick } = useText({
-		id,
-		isSelected,
-		isTextEditEnabled,
-		onTextChange,
-	});
-
-	// Generate properties for dragging
-	const dragProps = useDrag({
+	// Use the unified base shape hook for all common interactions
+	const baseShapeProps = useBaseShape({
 		id,
 		type: "Sticky",
 		x,
 		y,
+		isSelected,
+		isAncestorSelected,
+		isTextEditEnabled,
 		ref: svgRef,
 		onDrag,
 		onDragOver,
 		onDragLeave,
-	});
-
-	// Generate properties for clicking
-	const clickProps = useClick({
-		id,
-		x,
-		y,
-		isSelected,
-		isAncestorSelected,
-		ref: svgRef,
 		onClick,
-	});
-
-	// Generate properties for selection
-	const selectProps = useSelect({
-		id,
 		onSelect,
-	});
-
-	// Generate properties for hovering
-	const hoverProps = useHover({
-		id,
+		onTextChange,
 		onHoverChange,
 	});
-
-	// Compose props for the SVG element
-	const composedProps = mergeProps(
-		dragProps,
-		clickProps,
-		selectProps,
-		hoverProps,
-	);
 
 	// Generate transform attribute
 	const transform = createSvgTransform(
@@ -148,7 +108,40 @@ const StickyComponent: React.FC<StickyProps> = ({
 		.join(" ");
 
 	return (
-		<>
+		<BaseShape
+			id={id}
+			type="Sticky"
+			x={x}
+			y={y}
+			width={width}
+			height={height}
+			minWidth={minWidth}
+			minHeight={minHeight}
+			rotation={rotation}
+			scaleX={scaleX}
+			scaleY={scaleY}
+			keepProportion={keepProportion}
+			isSelected={isSelected}
+			connectPoints={[]}
+			showConnectPoints={false}
+			connectEnabled={false}
+			text={text}
+			textType="textarea"
+			fontColor={fontColor}
+			fontSize={fontSize}
+			fontFamily={fontFamily}
+			fontWeight={fontWeight}
+			textAlign={textAlign}
+			verticalAlign={verticalAlign}
+			isTextEditing={isTextEditing}
+			isTextEditEnabled={isTextEditEnabled}
+			isDragging={isDragging}
+			showOutline={showOutline}
+			showTransformControls={showTransformControls}
+			isTransforming={isTransforming}
+			transform={transform}
+			onTransform={onTransform}
+		>
 			{/* Main sticky note with folded corner */}
 			<polygon
 				id={id}
@@ -160,8 +153,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 				cursor="move"
 				transform={transform}
 				ref={svgRef}
-				onDoubleClick={onDoubleClick}
-				{...composedProps}
+				{...baseShapeProps}
 			/>
 
 			{/* Folded corner shadow */}
@@ -172,73 +164,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 				transform={transform}
 				pointerEvents="none"
 			/>
-
-			{/* Text content */}
-			{isTextEditEnabled && (
-				<Textable
-					x={-width / 2}
-					y={-height / 2}
-					width={width}
-					height={height}
-					transform={transform}
-					text={text}
-					textType="textarea"
-					fontColor={fontColor}
-					fontSize={fontSize}
-					fontFamily={fontFamily}
-					fontWeight={fontWeight}
-					textAlign={textAlign}
-					verticalAlign={verticalAlign}
-					isTextEditing={isTextEditing}
-				/>
-			)}
-
-			{/* Selection outline */}
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
-
-			{/* Transform controls */}
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="Sticky"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					minWidth={minWidth}
-					minHeight={minHeight}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
-
-			{/* Position label during drag */}
-			{isDragging && isSelected && (
-				<PositionLabel
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-				/>
-			)}
-		</>
+		</BaseShape>
 	);
 };
 
