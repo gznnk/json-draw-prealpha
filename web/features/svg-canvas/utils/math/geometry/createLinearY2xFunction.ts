@@ -19,7 +19,7 @@ export const createLinearY2xFunction = (p1: Point, p2: Point) => {
 		const verticalIntersection = { x, y: lineY };
 
 		// Calculate intersection with horizontal line at y
-		const lineX = Number.isFinite(a) ? (y - b) / a : p1.x;
+		const lineX = Number.isFinite(a) && a !== 0 ? (y - b) / a : p1.x;
 		const horizontalIntersection = { x: lineX, y };
 
 		// Calculate distances from original point (x, y)
