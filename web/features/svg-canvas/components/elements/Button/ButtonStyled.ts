@@ -13,7 +13,7 @@ type ButtonProps = {
  */
 export const ButtonElement = styled.rect<ButtonProps>`
 	opacity: ${(props) => (props.isTransparent ? 0 : 1)};
-	cursor: pointer;
+	cursor: ${(props) => (props.effectsEnabled ? "pointer" : "move")};
 	transition:
 		opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1),
 		filter 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
