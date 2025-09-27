@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 
 import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
 import { useEventBus } from "../../../context/EventBusContext";
+import { useConnectedDiagrams } from "../../../hooks/useConnectedDiagrams";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useWebDesignTool } from "../../../tools/web_design";
 import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
@@ -17,7 +18,12 @@ import { Rectangle } from "../../shapes/Rectangle";
 const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 	const [isProcessing, setIsProcessing] = useState(false);
 	const eventBus = useEventBus();
+	const connectedDiagrams = useConnectedDiagrams(props.id);
 	const webDesignHandler = useWebDesignTool(eventBus);
+
+	// Find the first CanvasFrame type diagram
+	const canvasFrame = connectedDiagrams.find(diagram => diagram.type === "CanvasFrame");
+	const targetId = canvasFrame?.id;
 
 	useExecutionChain({
 		id: props.id,
@@ -42,7 +48,11 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 			});
 
 			try {
-				const result = await webDesignHandler({
+				if (!targetId) {
+					throw new Error("No CanvasFrame connected to PageDesignNode");
+				}
+
+				const result = await webDesignHandler(targetId)({
 					name: "web_design",
 					arguments: { design_request: textData },
 					callId: e.eventId,

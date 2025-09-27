@@ -8,42 +8,43 @@ import type {
 } from "../../../../shared/llm-client/types";
 import { OpenAiKeyManager } from "../../../../utils/KeyManager";
 import {
-	circleShapeToolDefinition,
-	useAddCircleShapeTool,
-} from "../add_circle_shape";
+	appendCircleShapeToolDefinition,
+	useAppendCircleShapeTool,
+} from "../append_circle_shape";
 import {
-	rectangleShapeToolDefinition,
-	useAddRectangleShapeTool,
-} from "../add_rectangle_shape";
+	appendRectangleShapeToolDefinition,
+	useAppendRectangleShapeTool,
+} from "../append_rectangle_shape";
 import {
-	textElementToolDefinition,
-	useAddTextElementTool,
-} from "../add_text_element";
+	appendTextElementToolDefinition,
+	useAppendTextElementTool,
+} from "../append_text_element";
 import { groupShapesToolDefinition, useGroupShapesTool } from "../group_shapes";
 import WEB_DESIGN_INSTRUCTIONS from "./prompts/instructions.md?raw";
 
-export const useWebDesignTool = (eventBus: EventBus): FunctionCallHandler => {
+export const useWebDesignTool = (eventBus: EventBus): ((targetId: string) => FunctionCallHandler) => {
 	// 各ツールのhandlerをhookで生成
-	const addRectangleShapeHandler = useAddRectangleShapeTool(eventBus);
-	const addCircleShapeHandler = useAddCircleShapeTool(eventBus);
-	const addTextElementHandler = useAddTextElementTool(eventBus);
+	const appendRectangleShapeHandler = useAppendRectangleShapeTool(eventBus);
+	const appendCircleShapeHandler = useAppendCircleShapeTool(eventBus);
+	const appendTextElementHandler = useAppendTextElementTool(eventBus);
 	const groupShapesHandler = useGroupShapesTool(eventBus);
 
 	// handler本体をuseMemoで生成
-	return useMemo<FunctionCallHandler>(() => {
-		const WEB_DESIGN_TOOLS = [
-			rectangleShapeToolDefinition,
-			circleShapeToolDefinition,
-			textElementToolDefinition,
-			groupShapesToolDefinition,
-		];
+	return useMemo<(targetId: string) => FunctionCallHandler>(() => {
+		return (targetId: string) => {
+			const WEB_DESIGN_TOOLS = [
+				appendRectangleShapeToolDefinition,
+				appendCircleShapeToolDefinition,
+				appendTextElementToolDefinition,
+				groupShapesToolDefinition,
+			];
 
-		const functionHandlerMap = {
-			add_rectangle_shape: addRectangleShapeHandler,
-			add_circle_shape: addCircleShapeHandler,
-			add_text_element: addTextElementHandler,
-			group_shapes: groupShapesHandler,
-		};
+			const functionHandlerMap = {
+				append_rectangle_shape: appendRectangleShapeHandler(targetId),
+				append_circle_shape: appendCircleShapeHandler(targetId),
+				append_text_element: appendTextElementHandler(targetId),
+				group_shapes: groupShapesHandler,
+			};
 
 		const handler: FunctionCallHandler = async (
 			functionCall: FunctionCallInfo,
@@ -89,11 +90,12 @@ export const useWebDesignTool = (eventBus: EventBus): FunctionCallHandler => {
 				content: "Invalid arguments: design_request is required.",
 			};
 		};
-		return handler;
+			return handler;
+		};
 	}, [
-		addRectangleShapeHandler,
-		addCircleShapeHandler,
-		addTextElementHandler,
+		appendRectangleShapeHandler,
+		appendCircleShapeHandler,
+		appendTextElementHandler,
 		groupShapesHandler,
 	]);
 };
