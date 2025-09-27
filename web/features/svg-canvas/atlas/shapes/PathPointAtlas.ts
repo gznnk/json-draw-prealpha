@@ -7,10 +7,11 @@ import type { PathPointProps } from "../../types/props/shapes/PathPointProps";
 import type { PathPointState } from "../../types/state/shapes/PathPointState";
 import { mapPathPointDataToState } from "../../utils/shapes/path/mapPathPointDataToState";
 import { pathPointStateToData } from "../../utils/shapes/path/mapPathPointStateToData";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
+import {
+	dummyImplementation,
+	type DataToStateMapper,
+	type DiagramAtlas,
+	type StateToDataMapper,
 } from "../DiagramAtlas";
 
 /**
@@ -68,7 +69,7 @@ export const PathPointAtlas: PathPointAtlas = {
 		y: props.y,
 	}),
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	transformItems: undefined,
 	dataToState: mapPathPointDataToState as DataToStateMapper,
 	stateToData: pathPointStateToData as StateToDataMapper,

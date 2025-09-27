@@ -8,10 +8,11 @@ import type { PathState } from "../../types/state/shapes/PathState";
 import { createPathState } from "../../utils/shapes/path/createPathState";
 import { mapPathDataToState } from "../../utils/shapes/path/mapPathDataToState";
 import { pathStateToData } from "../../utils/shapes/path/mapPathStateToData";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
+import {
+	dummyImplementation,
+	type DataToStateMapper,
+	type DiagramAtlas,
+	type StateToDataMapper,
 } from "../DiagramAtlas";
 
 /**
@@ -61,7 +62,7 @@ export const PathAtlas: PathAtlas = {
 
 	createState: createPathState,
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	transformItems: undefined,
 	dataToState: mapPathDataToState as DataToStateMapper,
 	stateToData: pathStateToData as StateToDataMapper,

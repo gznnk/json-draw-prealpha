@@ -7,10 +7,11 @@ import type { GroupProps } from "../../types/props/shapes/GroupProps";
 import type { GroupState } from "../../types/state/shapes/GroupState";
 import { mapGroupDataToState } from "../../utils/shapes/group/mapGroupDataToState";
 import { groupStateToData } from "../../utils/shapes/group/mapGroupStateToData";
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
+import {
+	type DiagramAtlas,
+	type DataToStateMapper,
+	type StateToDataMapper,
+	dummyImplementation,
 } from "../DiagramAtlas";
 
 /**
@@ -64,7 +65,7 @@ export const GroupAtlas: GroupAtlas = {
 		y: props.y,
 	}),
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	transformItems: undefined,
 	dataToState: mapGroupDataToState as DataToStateMapper,
 	stateToData: groupStateToData as StateToDataMapper,

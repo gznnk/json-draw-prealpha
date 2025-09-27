@@ -10,10 +10,11 @@ import type { ConnectLineProps } from "../../types/props/shapes/ConnectLineProps
 import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
 import { mapConnectLineDataToState } from "../../utils/shapes/connectLine/mapConnectLineDataToState";
 import { connectLineStateToData } from "../../utils/shapes/connectLine/mapConnectLineStateToData";
-import type {
-	DataToStateMapper,
-	DiagramAtlas,
-	StateToDataMapper,
+import {
+	dummyImplementation,
+	type DataToStateMapper,
+	type DiagramAtlas,
+	type StateToDataMapper,
 } from "../DiagramAtlas";
 
 /**
@@ -65,13 +66,9 @@ export const ConnectLineAtlas: ConnectLineAtlas = {
 	// Utility Functions
 	// ============================================================================
 
-	createState: (props: { x: number; y: number }) => ({
-		...ConnectLineDefaultState,
-		x: props.x,
-		y: props.y,
-	}),
+	createState: dummyImplementation,
 	export: undefined,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	transformItems: undefined,
 	dataToState: mapConnectLineDataToState as DataToStateMapper,
 	stateToData: connectLineStateToData as StateToDataMapper,

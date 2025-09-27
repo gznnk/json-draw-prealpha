@@ -9,10 +9,11 @@ import { createImageState } from "../../utils/shapes/image/createImageState";
 import { imageToBlob } from "../../utils/shapes/image/imageToBlob";
 import { mapImageDataToState } from "../../utils/shapes/image/mapImageDataToState";
 import { imageStateToData } from "../../utils/shapes/image/mapImageStateToData";
-import type {
-	DiagramAtlas,
-	DataToStateMapper,
-	StateToDataMapper,
+import {
+	type DiagramAtlas,
+	type DataToStateMapper,
+	type StateToDataMapper,
+	dummyImplementation,
 } from "../DiagramAtlas";
 
 /**
@@ -62,7 +63,7 @@ export const ImageAtlas: ImageAtlas = {
 
 	createState: createImageState,
 	export: imageToBlob,
-	calcConnectPointPosition: () => [],
+	calcConnectPointPosition: dummyImplementation,
 	transformItems: undefined,
 	dataToState: mapImageDataToState as DataToStateMapper,
 	stateToData: imageStateToData as StateToDataMapper,
