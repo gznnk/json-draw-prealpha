@@ -2,12 +2,8 @@ import type React from "react";
 import { memo, useRef } from "react";
 
 import { RectangleElement } from "./RectangleStyled";
-import { useClick } from "../../../hooks/useClick";
-import { useDrag } from "../../../hooks/useDrag";
+import { useBaseShape } from "../../../hooks/useBaseShape";
 import { useFileDrop } from "../../../hooks/useFileDrop";
-import { useHover } from "../../../hooks/useHover";
-import { useSelect } from "../../../hooks/useSelect";
-import { useText } from "../../../hooks/useText";
 import type { RectangleProps } from "../../../types/props/shapes/RectangleProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -66,72 +62,30 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	// Reference to the SVG element to be transformed
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
 
-	// To avoid frequent handler generation, hold referenced values in useRef
-	const refBusVal = {
-		// Properties
-		id,
-		isSelected,
-		isTextEditEnabled,
-		onDrag,
-		onTextChange,
-	};
-	const refBus = useRef(refBusVal);
-	refBus.current = refBusVal;
-
-	// Generate properties for text editing
-	const { onDoubleClick } = useText({
-		id,
-		isSelected,
-		isTextEditEnabled,
-		onTextChange,
-	});
-
-	// Generate properties for dragging
-	const dragProps = useDrag({
+	// Use the unified base shape hook for all common interactions
+	const baseShapeProps = useBaseShape({
 		id,
 		type: "Rectangle",
 		x,
 		y,
+		isSelected,
+		isAncestorSelected,
+		isTextEditEnabled,
 		ref: svgRef,
 		onDrag,
 		onDragOver,
 		onDragLeave,
-	});
-
-	// Generate properties for clicking
-	const clickProps = useClick({
-		id,
-		x,
-		y,
-		isSelected,
-		isAncestorSelected,
-		ref: svgRef,
 		onClick,
-	});
-
-	// Generate properties for selection
-	const selectProps = useSelect({
-		id,
 		onSelect,
-	});
-
-	// Generate properties for hovering
-	const hoverProps = useHover({
-		id,
+		onTextChange,
 		onHoverChange,
 	});
 
-	// Generate properties for file drop
+	// Handle file drop separately
 	const fileDropProps = useFileDrop({ id, onFileDrop });
 
-	// Compose props for RectangleElement
-	const composedProps = mergeProps(
-		dragProps,
-		clickProps,
-		selectProps,
-		hoverProps,
-		fileDropProps,
-	);
+	// Compose props
+	const composedProps = mergeProps(baseShapeProps, fileDropProps);
 
 	// Generate rect transform attribute
 	const transform = createSvgTransform(
@@ -193,7 +147,6 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				isTransparent={isTransparent}
 				transform={transform}
 				ref={svgRef}
-				onDoubleClick={onDoubleClick}
 				{...composedProps}
 			/>
 		</BaseShape>
