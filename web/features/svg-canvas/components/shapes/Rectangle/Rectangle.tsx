@@ -1,5 +1,5 @@
 import type React from "react";
-import { memo, useMemo, useRef } from "react";
+import { memo, useRef } from "react";
 
 import { RectangleElement } from "./RectangleStyled";
 import { useClick } from "../../../hooks/useClick";
@@ -12,11 +12,7 @@ import type { RectangleProps } from "../../../types/props/shapes/RectangleProps"
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-import { Outline } from "../../core/Outline";
-import { PositionLabel } from "../../core/PositionLabel";
-import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
-import { ConnectPoints } from "../ConnectPoints";
+import { BaseShape } from "../BaseShape";
 
 /**
  * Rectangle component
@@ -39,6 +35,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	isAncestorSelected = false,
 	connectPoints,
 	showConnectPoints = false,
+	connectEnabled = true,
 	text,
 	textType,
 	fontColor,
@@ -136,22 +133,6 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 		fileDropProps,
 	);
 
-	// Suppress ConnectPoint re-rendering by memoization
-	// If separated by key and passed as individual props, each ConnectPoint side
-	// performs comparison processing for each key which is inefficient, so detect Shape differences collectively here
-	const ownerFrame = useMemo(
-		() => ({
-			x,
-			y,
-			width,
-			height,
-			rotation,
-			scaleX,
-			scaleY,
-		}),
-		[x, y, width, height, rotation, scaleX, scaleY],
-	);
-
 	// Generate rect transform attribute
 	const transform = createSvgTransform(
 		scaleX,
@@ -162,7 +143,40 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	);
 
 	return (
-		<>
+		<BaseShape
+			id={id}
+			type="Rectangle"
+			x={x}
+			y={y}
+			width={width}
+			height={height}
+			rotation={rotation}
+			scaleX={scaleX}
+			scaleY={scaleY}
+			keepProportion={keepProportion}
+			isSelected={isSelected}
+			connectPoints={connectPoints}
+			showConnectPoints={showConnectPoints}
+			connectEnabled={connectEnabled}
+			text={text}
+			textType={textType}
+			fontColor={fontColor}
+			fontSize={fontSize}
+			fontFamily={fontFamily}
+			fontWeight={fontWeight}
+			textAlign={textAlign}
+			verticalAlign={verticalAlign}
+			isTextEditing={isTextEditing}
+			isTextEditEnabled={isTextEditEnabled}
+			isDragging={isDragging}
+			showOutline={showOutline}
+			showTransformControls={showTransformControls}
+			isTransforming={isTransforming}
+			transform={transform}
+			onTransform={onTransform}
+			onConnect={onConnect}
+			onPreviewConnectLine={onPreviewConnectLine}
+		>
 			<RectangleElement
 				id={id}
 				x={-width / 2}
@@ -182,72 +196,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 				onDoubleClick={onDoubleClick}
 				{...composedProps}
 			/>
-			{isTextEditEnabled && (
-				<Textable
-					x={-width / 2}
-					y={-height / 2}
-					width={width}
-					height={height}
-					transform={transform}
-					text={text}
-					textType={textType}
-					fontColor={fontColor}
-					fontSize={fontSize}
-					fontFamily={fontFamily}
-					fontWeight={fontWeight}
-					textAlign={textAlign}
-					verticalAlign={verticalAlign}
-					isTextEditing={isTextEditing}
-				/>
-			)}
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="Rectangle"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
-			<ConnectPoints
-				ownerId={id}
-				ownerFrame={ownerFrame}
-				connectPoints={connectPoints}
-				showConnectPoints={showConnectPoints}
-				shouldRender={!isDragging && !isTransforming && !isSelected}
-				onConnect={onConnect}
-				onPreviewConnectLine={onPreviewConnectLine}
-			/>
-			{isSelected && isDragging && (
-				<PositionLabel
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-				/>
-			)}
-		</>
+		</BaseShape>
 	);
 };
 
