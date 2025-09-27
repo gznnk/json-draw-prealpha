@@ -8,6 +8,7 @@ import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { ImageGenNodeProps } from "../../../types/props/nodes/ImageGenNodeProps";
 import { newEventId } from "../../../utils/core/newEventId";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { createImageState } from "../../../utils/shapes/image/createImageState";
 import { IconContainer } from "../../core/IconContainer";
 import { Picture } from "../../icons/Picture";
@@ -35,7 +36,9 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
 		onPropagation: async (e) => {
-			if (e.data.text === "") return;
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
+			if (textData === "") return;
 			if (e.eventPhase !== "Ended") return;
 
 			const processId = newEventId();
@@ -49,7 +52,7 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 			try {
 				const response = await openai.images.generate({
 					model: "gpt-image-1",
-					prompt: e.data.text,
+					prompt: textData,
 					size: "1024x1024",
 				});
 
@@ -60,7 +63,13 @@ const ImageGenNodeComponent: React.FC<ImageGenNodeProps> = (props) => {
 						id: props.id,
 						eventId,
 						eventPhase: e.eventPhase,
-						data: { text: base64Image },
+						payload: {
+							format: "text",
+							data: base64Image,
+							metadata: {
+								contentType: "plain",
+							},
+						},
 					});
 					addDiagram(
 						createImageState({

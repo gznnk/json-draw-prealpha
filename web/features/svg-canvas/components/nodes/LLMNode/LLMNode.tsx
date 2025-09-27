@@ -26,6 +26,7 @@ import type { LLMNodeProps } from "../../../types/props/nodes/LLMNodeProps";
 import type { InputState } from "../../../types/state/elements/InputState";
 import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
 import { newEventId } from "../../../utils/core/newEventId";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { ProcessIndicator } from "../../auxiliary/ProcessIndicator";
@@ -167,8 +168,12 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 					id,
 					eventId,
 					eventPhase: "Started",
-					data: {
-						text: "",
+					payload: {
+						format: "text",
+						data: "",
+						metadata: {
+							contentType: "plain",
+						},
 					},
 				});
 
@@ -181,8 +186,12 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 							id,
 							eventId,
 							eventPhase: "InProgress",
-							data: {
-								text: fullOutput,
+							payload: {
+								format: "text",
+								data: fullOutput,
+								metadata: {
+									contentType: "plain",
+								},
 							},
 						});
 					}
@@ -192,8 +201,12 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 							id,
 							eventId,
 							eventPhase: "Ended",
-							data: {
-								text: fullOutput,
+							payload: {
+								format: "text",
+								data: fullOutput,
+								metadata: {
+									contentType: "plain",
+								},
 							},
 						});
 						setProcessSuccess(processId);
@@ -212,8 +225,10 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 	const onPropagation = useCallback(
 		(e: ExecutionPropagationEvent) => {
 			if (e.eventPhase === "Ended") {
+				if (!isPlainTextPayload(e.payload)) return;
 				// Handle execution
-				handleExecution(e.data.text);
+				const textData = e.payload.data;
+				handleExecution(textData);
 			}
 		},
 		[handleExecution],

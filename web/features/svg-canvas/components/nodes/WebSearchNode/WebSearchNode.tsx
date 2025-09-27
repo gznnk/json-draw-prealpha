@@ -7,6 +7,7 @@ import { RectangleDefaultState } from "../../../constants/state/shapes/Rectangle
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { WebSearchNodeProps } from "../../../types/props/nodes/WebSearchNodeProps";
 import { newEventId } from "../../../utils/core/newEventId";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { IconContainer } from "../../core/IconContainer";
 import { WebSearch } from "../../icons/WebSearch";
 import { Rectangle } from "../../shapes/Rectangle";
@@ -32,7 +33,9 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
 		onPropagation: async (e) => {
-			if (e.data.text === "") return;
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
+			if (textData === "") return;
 			if (e.eventPhase !== "Ended") return;
 
 			const processId = newEventId();
@@ -47,7 +50,7 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 				const stream = await openai.responses.create({
 					model: "gpt-4.1",
 					tools: [{ type: "web_search_preview" }],
-					input: e.data.text,
+					input: textData,
 					tool_choice: "required",
 					stream: true,
 				});
@@ -60,8 +63,12 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 					id: props.id,
 					eventId,
 					eventPhase: "Started",
-					data: {
-						text: "",
+					payload: {
+						format: "text",
+						data: "",
+						metadata: {
+							contentType: "plain",
+						},
 					},
 				});
 
@@ -74,8 +81,12 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 							id: props.id,
 							eventId,
 							eventPhase: "InProgress",
-							data: {
-								text: fullOutput,
+							payload: {
+								format: "text",
+								data: fullOutput,
+								metadata: {
+									contentType: "plain",
+								},
 							},
 						});
 					}
@@ -85,8 +96,12 @@ const WebSearchNodeComponent: React.FC<WebSearchNodeProps> = (props) => {
 							id: props.id,
 							eventId,
 							eventPhase: "Ended",
-							data: {
-								text: fullOutput,
+							payload: {
+								format: "text",
+								data: fullOutput,
+								metadata: {
+									contentType: "plain",
+								},
 							},
 						});
 					}

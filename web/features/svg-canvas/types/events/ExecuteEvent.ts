@@ -1,12 +1,12 @@
 import type { EventPhase } from "./EventPhase";
-import type { ExecuteResult } from "./ExecuteResult";
+import type { ExecutionPayload } from "./ExecutionPayload";
 
 /**
  * Event fired when a diagram executes an operation
  */
-export type ExecuteEvent = {
+export type ExecuteEvent<T = unknown> = {
 	eventId: string;
 	eventPhase: EventPhase;
 	id: string;
-	data: ExecuteResult;
+	payload: ExecutionPayload<T>;
 };

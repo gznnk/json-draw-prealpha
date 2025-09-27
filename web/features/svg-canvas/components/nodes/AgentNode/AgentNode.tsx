@@ -6,6 +6,7 @@ import { useEventBus } from "../../../context/EventBusContext";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useWorkflowAgentHandler } from "../../../tools/workflow_agent/hook";
 import type { AgentNodeProps } from "../../../types/props/nodes/AgentNodeProps";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { IconContainer } from "../../core/IconContainer";
 import { Agent } from "../../icons/Agent";
 import { Rectangle } from "../../shapes/Rectangle";
@@ -23,7 +24,8 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
 		onPropagation: async (e) => {
-			if (e.data.text === "") return;
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
 			if (e.eventPhase !== "Ended") return;
 
 			setIsProcessing(true);
@@ -31,22 +33,32 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 				id: props.id,
 				eventId: e.eventId,
 				eventPhase: "Started",
-				data: { text: "" },
+				payload: {
+					format: "text",
+					data: "",
+					metadata: {
+						contentType: "plain",
+					},
+				},
 			});
 
 			try {
 				// FunctionCallInfo型のcallIdは必須。ここではeventIdを流用。
 				const result = await workflowAgentHandler({
 					name: "workflow_agent",
-					arguments: { user_goal: e.data.text },
+					arguments: { user_goal: textData },
 					callId: e.eventId,
 				});
 				props.onExecute?.({
 					id: props.id,
 					eventId: e.eventId,
 					eventPhase: "Ended",
-					data: {
-						text: typeof result?.content === "string" ? result.content : "",
+					payload: {
+						format: "text",
+						data: typeof result?.content === "string" ? result.content : "",
+						metadata: {
+							contentType: "plain",
+						},
 					},
 				});
 			} catch (error) {
@@ -55,7 +67,13 @@ const AgentNodeComponent: React.FC<AgentNodeProps> = (props) => {
 					id: props.id,
 					eventId: e.eventId,
 					eventPhase: "Ended",
-					data: { text: "Error generating workflow." },
+					payload: {
+						format: "text",
+						data: "Error generating workflow.",
+						metadata: {
+							contentType: "plain",
+						},
+					},
 				});
 			} finally {
 				setIsProcessing(false);

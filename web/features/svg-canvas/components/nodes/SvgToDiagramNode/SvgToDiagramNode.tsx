@@ -6,6 +6,7 @@ import { useAddDiagram } from "../../../hooks/useAddDiagram";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { SvgToDiagramNodeProps } from "../../../types/props/nodes/SvgToDiagramNodeProps";
 import type { Diagram } from "../../../types/state/core/Diagram";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { createSvgStateFromText } from "../../../utils/nodes/svgToDiagramNode/createSvgStateFromText";
 import { IconContainer } from "../../core/IconContainer";
 import { Gachapon } from "../../icons/Gachapon";
@@ -24,7 +25,9 @@ const SvgToDiagramNodeComponent: React.FC<SvgToDiagramNodeProps> = (props) => {
 		onPropagation: (e) => {
 			if (e.eventPhase !== "Ended") return;
 
-			const svgData = createSvgStateFromText(e.data.text);
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
+			const svgData = createSvgStateFromText(textData);
 			if (!svgData) return;
 
 			svgData.x = props.x + (Math.random() - 0.5) * 300;

@@ -39,10 +39,13 @@ export const useOnExecute = (props: SvgCanvasSubHooksProps) => {
 				triggerFlashConnectLine(line);
 			}
 
-			const detail = {
-				...e,
+			const detail: ExecutionPropagationEvent = {
+				eventId: e.eventId,
+				eventPhase: e.eventPhase,
+				id: e.id,
 				targetId: lines.map((i) => i.endOwnerId),
-			} as ExecutionPropagationEvent;
+				payload: e.payload,
+			};
 
 			if (0 < detail.targetId.length) {
 				eventBus.dispatchEvent(

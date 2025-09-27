@@ -10,6 +10,7 @@ import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import type { FileDropEvent } from "../../../types/events/FileDropEvent";
 import type { VectorStoreNodeProps } from "../../../types/props/nodes/VectorStoreNodeProps";
 import { newEventId } from "../../../utils/core/newEventId";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { IconContainer } from "../../core/IconContainer";
 import { VectorStore } from "../../icons/VectorStore";
 import { Rectangle } from "../../shapes/Rectangle";
@@ -99,7 +100,9 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
 		onPropagation: async (e) => {
-			if (e.data.text === "") return;
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
+			if (textData === "") return;
 			if (e.eventPhase !== "Ended") return;
 
 			const processId = newEventId();
@@ -110,7 +113,7 @@ const VectorStoreNodeComponent: React.FC<VectorStoreNodeProps> = (props) => {
 				dangerouslyAllowBrowser: true, // Required for direct browser usage
 			});
 
-			const fileContent = new Blob([e.data.text], { type: "text/plain" });
+			const fileContent = new Blob([textData], { type: "text/plain" });
 			const file = await toFile(fileContent, `${new Date().getTime()}.txt`);
 
 			const result = openai.vectorStores.files.uploadAndPoll(

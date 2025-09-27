@@ -102,8 +102,12 @@ Please generate a complete HTML document that represents or visualizes the diagr
 				id,
 				eventId,
 				eventPhase: "Started",
-				data: {
-					text: "Generating HTML...",
+				payload: {
+					format: "text",
+					data: "Generating HTML...",
+					metadata: {
+						contentType: "plain",
+					},
 				},
 			});
 
@@ -118,8 +122,12 @@ Please generate a complete HTML document that represents or visualizes the diagr
 						id,
 						eventId,
 						eventPhase: "InProgress",
-						data: {
-							text: generatedHtml,
+						payload: {
+							format: "text",
+							data: generatedHtml,
+							metadata: {
+								contentType: "html",
+							},
 						},
 					});
 				},
@@ -132,8 +140,12 @@ Please generate a complete HTML document that represents or visualizes the diagr
 				id,
 				eventId,
 				eventPhase: "Ended",
-				data: {
-					text: generatedHtml,
+				payload: {
+					format: "text",
+					data: generatedHtml,
+					metadata: {
+						contentType: "html",
+					},
 				},
 			});
 		} catch (error) {
@@ -145,8 +157,9 @@ Please generate a complete HTML document that represents or visualizes the diagr
 				id,
 				eventId,
 				eventPhase: "Ended",
-				data: {
-					text: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+				payload: {
+					format: "error",
+					data: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
 				},
 			});
 		}

@@ -7,6 +7,7 @@ import { EllipseDefaultState } from "../../../constants/state/shapes/EllipseDefa
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 // Imports related to this component.
 import type { HubNodeProps } from "../../../types/props/nodes/HubNodeProps";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { IconContainer } from "../../core/IconContainer";
 import { Hub } from "../../icons/Hub";
 import { Ellipse } from "../../shapes/Ellipse";
@@ -17,15 +18,20 @@ const HubNodeComponent: React.FC<HubNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
 		onPropagation: (e) => {
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
 			setIsFlashing(true);
 			setTimeout(() => setIsFlashing(false), 500); // Reset when animation ends
-
 			props.onExecute?.({
 				id: props.id,
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
-				data: {
-					text: e.data.text,
+				payload: {
+					format: "text",
+					data: textData,
+					metadata: {
+						contentType: "plain",
+					},
 				},
 			});
 		},

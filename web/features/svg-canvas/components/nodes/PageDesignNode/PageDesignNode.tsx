@@ -6,6 +6,7 @@ import { useEventBus } from "../../../context/EventBusContext";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useWebDesignTool } from "../../../tools/web_design";
 import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { IconContainer } from "../../core/IconContainer";
 import { PageDesign } from "../../icons/PageDesign";
 import { Rectangle } from "../../shapes/Rectangle";
@@ -21,7 +22,9 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 	useExecutionChain({
 		id: props.id,
 		onPropagation: async (e) => {
-			if (e.data.text === "") return;
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
+			if (textData === "") return;
 			if (e.eventPhase !== "Ended") return;
 
 			setIsProcessing(true);
@@ -29,21 +32,31 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 				id: props.id,
 				eventId: e.eventId,
 				eventPhase: "Started",
-				data: { text: "" },
+				payload: {
+					format: "text",
+					data: "",
+					metadata: {
+						contentType: "plain",
+					},
+				},
 			});
 
 			try {
 				const result = await webDesignHandler({
 					name: "web_design",
-					arguments: { design_request: e.data.text },
+					arguments: { design_request: textData },
 					callId: e.eventId,
 				});
 				props.onExecute?.({
 					id: props.id,
 					eventId: e.eventId,
 					eventPhase: "Ended",
-					data: {
-						text: typeof result?.content === "string" ? result.content : "",
+					payload: {
+						format: "text",
+						data: typeof result?.content === "string" ? result.content : "",
+						metadata: {
+							contentType: "plain",
+						},
 					},
 				});
 			} catch (error) {
@@ -52,7 +65,13 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 					id: props.id,
 					eventId: e.eventId,
 					eventPhase: "Ended",
-					data: { text: "Error generating web design." },
+					payload: {
+						format: "text",
+						data: "Error generating web design.",
+						metadata: {
+							contentType: "plain",
+						},
+					},
 				});
 			} finally {
 				setIsProcessing(false);

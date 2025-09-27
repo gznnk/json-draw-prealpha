@@ -28,6 +28,7 @@ import type { TextAreaNodeProps } from "../../../types/props/nodes/TextAreaNodeP
 import type { InputState } from "../../../types/state/elements/InputState";
 import type { NodeHeaderState } from "../../../types/state/elements/NodeHeaderState";
 import { newEventId } from "../../../utils/core/newEventId";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { Button } from "../../elements/Button";
@@ -133,16 +134,24 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 			id,
 			eventId,
 			eventPhase: "Started",
-			data: {
-				text: "",
+			payload: {
+				format: "text",
+				data: "",
+				metadata: {
+					contentType: "plain",
+				},
 			},
 		});
 		onExecute?.({
 			id,
 			eventId,
 			eventPhase: "Ended",
-			data: {
-				text,
+			payload: {
+				format: "text",
+				data: text,
+				metadata: {
+					contentType: "plain",
+				},
 			},
 		});
 	}, []);
@@ -151,7 +160,9 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 	const onPropagation = useCallback((e: ExecutionPropagationEvent) => {
 		const { id, inputState, onTextChange, onExecute, setText } = refBus.current;
 
-		setText(e.data.text);
+		if (!isPlainTextPayload(e.payload)) return;
+		const textData = e.payload.data;
+		setText(textData);
 
 		if (e.eventPhase === "Ended") {
 			// Update the text state with the new text from the event data.
@@ -159,7 +170,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				id: inputState.id,
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
-				text: e.data.text,
+				text: textData,
 			});
 
 			// Propagate the event.
@@ -167,8 +178,12 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				id,
 				eventId: e.eventId,
 				eventPhase: e.eventPhase,
-				data: {
-					text: e.data.text,
+				payload: {
+					format: "text",
+					data: textData,
+					metadata: {
+						contentType: "plain",
+					},
 				},
 			});
 		}

@@ -10,6 +10,7 @@ import { useSelect } from "../../../hooks/useSelect";
 import { useText } from "../../../hooks/useText";
 import type { InputProps } from "../../../types/props/elements/InputProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
+import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { negativeToZero } from "../../../utils/math/common/negativeToZero";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
@@ -155,7 +156,10 @@ const InputComponent: React.FC<InputProps> = ({
 	useExecutionChain({
 		id,
 		onPropagation: (e) => {
-			setInternalText(e.data.text);
+			if (!isPlainTextPayload(e.payload)) return;
+			const textData = e.payload.data;
+			if (textData === "") return;
+			setInternalText(textData);
 
 			if (e.eventPhase === "Ended") {
 				// Update the diagram state with the new text
@@ -163,7 +167,7 @@ const InputComponent: React.FC<InputProps> = ({
 					id,
 					eventId: e.eventId,
 					eventPhase: e.eventPhase,
-					text: e.data.text,
+					text: textData,
 				});
 			}
 		},
