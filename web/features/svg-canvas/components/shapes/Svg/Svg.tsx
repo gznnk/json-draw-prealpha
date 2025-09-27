@@ -47,17 +47,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
 	const groupRef = useRef<SVGGElement>({} as SVGGElement);
 
-	// Create references bypass to avoid function creation in every render.
-	const refBusVal = {
-		id,
-		isSelected,
-		onDrag,
-		onSelect,
-		onTransform,
-	};
-	const refBus = useRef(refBusVal);
-	refBus.current = refBusVal;
-
 	// Prepare props for the drag element.
 	const dragProps = useDrag({
 		id,

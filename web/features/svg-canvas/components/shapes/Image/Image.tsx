@@ -41,17 +41,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 	// Reference to the element.
 	const svgRef = useRef<SVGImageElement>({} as SVGImageElement);
 
-	// Create references bypass to avoid function creation in every render.
-	const refBusVal = {
-		id,
-		isSelected,
-		onDrag,
-		onSelect,
-		onTransform,
-	};
-	const refBus = useRef(refBusVal);
-	refBus.current = refBusVal;
-
 	// Prepare props for the drag element.
 	const dragProps = useDrag({
 		id,
