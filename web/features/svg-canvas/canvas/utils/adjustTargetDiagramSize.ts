@@ -9,7 +9,7 @@ import { isItemableState } from "../../utils/validation/isItemableState";
  * Options for adjusting target diagram size
  */
 export type AdjustTargetDiagramSizeOptions = {
-	/** Padding to add around children when resizing (default: 20) */
+	/** Padding to add around children when resizing (default: 0) */
 	padding?: number;
 };
 
@@ -29,7 +29,7 @@ export const adjustTargetDiagramSize = (
 	originalTargetDiagram: Diagram,
 	options: AdjustTargetDiagramSizeOptions = {},
 ): Diagram[] => {
-	const { padding = 20 } = options;
+	const { padding = 0 } = options;
 
 	// Only process Frame type diagrams
 	if (!isFrame(originalTargetDiagram)) {
