@@ -1,12 +1,12 @@
 import { useCallback, useRef } from "react";
 
 import type { ConnectLineState } from "../../../types/state/shapes/ConnectLineState";
+import { collectDiagramIds } from "../../../utils/core/collectDiagramIds";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../utils/core/newEventId";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { cleanupGroups } from "../../utils/cleanupGroups";
-import { collectDiagramIds } from "../../utils/collectDiagramIds";
 import { removeSelectedDiagrams } from "../../utils/removeSelectedDiagrams";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";

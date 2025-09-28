@@ -1,5 +1,5 @@
 import type { Diagram } from "../../types/state/core/Diagram";
-import { isItemableState } from "../../utils/validation/isItemableState";
+import { isItemableState } from "../validation/isItemableState";
 
 /**
  * Recursively collects all diagram IDs from an array of diagrams, including nested items.

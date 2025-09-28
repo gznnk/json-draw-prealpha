@@ -19,6 +19,7 @@ import type { DiagramData } from "../../../types/data/core/DiagramData";
 import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
 import type { CanvasFrameProps } from "../../../types/props/diagrams/CanvasFrameProps";
 import type { Diagram } from "../../../types/state/core/Diagram";
+import { collectDiagramDataIds } from "../../../utils/core/collectDiagramDataIds";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { isObjectPayload } from "../../../utils/execution/isObjectPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
@@ -100,11 +101,24 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		(e: DiagramDragDropEvent) => {
 			// Only handle diagram drops (not ConnectPoint drops)
 			if (e.dropItem.type !== "ConnectPoint") {
+				// Ignore drops if the dragged item is this frame itself
+				if (e.dropItem.id === id) {
+					return;
+				}
+
+				// Recursively collect all child IDs (including nested children)
+				const allChildIds = collectDiagramDataIds(items);
+
+				// Ignore drops if the dragged item is one of this frame's descendant diagrams
+				if (allChildIds.includes(e.dropItem.id)) {
+					return;
+				}
+
 				// Trigger append selected diagrams event
 				appendSelectedDiagrams(id);
 			}
 		},
-		[appendSelectedDiagrams, id],
+		[appendSelectedDiagrams, id, items],
 	);
 
 	// Use individual interaction hooks

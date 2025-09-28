@@ -1,6 +1,6 @@
-import { collectDiagramIds } from "./collectDiagramIds";
 import type { Diagram } from "../../types/state/core/Diagram";
 import type { ConnectLineState } from "../../types/state/shapes/ConnectLineState";
+import { collectDiagramIds } from "../../utils/core/collectDiagramIds";
 import { isConnectLineState } from "../../utils/validation/isConnectLineState";
 
 /**
