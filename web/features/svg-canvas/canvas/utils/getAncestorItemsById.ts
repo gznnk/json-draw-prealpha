@@ -34,7 +34,7 @@ const getAncestorItemsByIdInternal = (
 	}
 	const ancestors: Diagram[] = [];
 	for (const canvasItem of items) {
-		if (canvasItem.type === "Group" && isItemableState(canvasItem)) {
+		if (isItemableState(canvasItem)) {
 			// Check if the item is directly contained in this group
 			if (canvasItem.items.some((groupItem) => groupItem.id === id)) {
 				ancestors.push(canvasItem);
