@@ -87,8 +87,17 @@ describe("isConnectableState", () => {
 	});
 
 	describe("Missing required properties", () => {
+		it("should return false for object without connectEnabled property", () => {
+			const data = {
+				showConnectPoints: true,
+				connectPoints: [],
+			};
+			expect(isConnectableState(data)).toBe(false);
+		});
+
 		it("should return false for object without connectPoints property", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: true,
 			};
 			expect(isConnectableState(data)).toBe(false);
@@ -96,6 +105,34 @@ describe("isConnectableState", () => {
 
 		it("should return false for object without showConnectPoints property", () => {
 			const data = {
+				connectEnabled: true,
+				connectPoints: [],
+			};
+			expect(isConnectableState(data)).toBe(false);
+		});
+
+		it("should return false for object with connectEnabled that is not a boolean", () => {
+			const data = {
+				connectEnabled: "true",
+				showConnectPoints: true,
+				connectPoints: [],
+			};
+			expect(isConnectableState(data)).toBe(false);
+		});
+
+		it("should return false for object with connectEnabled as null", () => {
+			const data = {
+				connectEnabled: null,
+				showConnectPoints: true,
+				connectPoints: [],
+			};
+			expect(isConnectableState(data)).toBe(false);
+		});
+
+		it("should return false for object with connectEnabled as undefined", () => {
+			const data = {
+				connectEnabled: undefined,
+				showConnectPoints: true,
 				connectPoints: [],
 			};
 			expect(isConnectableState(data)).toBe(false);
@@ -103,6 +140,7 @@ describe("isConnectableState", () => {
 
 		it("should return false for object with connectPoints that is not an array", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: "not an array",
 			};
@@ -111,6 +149,7 @@ describe("isConnectableState", () => {
 
 		it("should return false for object with connectPoints as null", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: null,
 			};
@@ -119,6 +158,7 @@ describe("isConnectableState", () => {
 
 		it("should return false for object with connectPoints as undefined", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: undefined,
 			};
@@ -127,6 +167,7 @@ describe("isConnectableState", () => {
 
 		it("should return false for object with showConnectPoints that is not a boolean", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: "true",
 				connectPoints: [],
 			};
@@ -135,6 +176,7 @@ describe("isConnectableState", () => {
 
 		it("should return false for object with showConnectPoints as null", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: null,
 				connectPoints: [],
 			};
@@ -143,6 +185,7 @@ describe("isConnectableState", () => {
 
 		it("should return false for object with showConnectPoints as undefined", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: undefined,
 				connectPoints: [],
 			};
@@ -153,6 +196,7 @@ describe("isConnectableState", () => {
 	describe("Edge cases", () => {
 		it("should return true for object with additional properties", () => {
 			const data = {
+				connectEnabled: true,
 				showConnectPoints: true,
 				connectPoints: [],
 				extraProperty: "should be ignored",
@@ -160,10 +204,26 @@ describe("isConnectableState", () => {
 			expect(isConnectableState(data)).toBe(true);
 		});
 
-		it("should return false for object missing showConnectPoints", () => {
-			// Current implementation now checks showConnectPoints property
+		it("should return false for object missing connectEnabled", () => {
 			const data = {
+				showConnectPoints: true,
 				connectPoints: [],
+			};
+			expect(isConnectableState(data)).toBe(false);
+		});
+
+		it("should return false for object missing showConnectPoints", () => {
+			const data = {
+				connectEnabled: true,
+				connectPoints: [],
+			};
+			expect(isConnectableState(data)).toBe(false);
+		});
+
+		it("should return false for object missing connectPoints", () => {
+			const data = {
+				connectEnabled: true,
+				showConnectPoints: true,
 			};
 			expect(isConnectableState(data)).toBe(false);
 		});
@@ -194,14 +254,23 @@ describe("isConnectableState", () => {
 			// Test missing each required property one by one
 			// If ConnectableState gains new required properties, add tests here
 
-			// Missing showConnectPoints - now properly validated, should fail
+			// Missing connectEnabled - should fail
+			const missingConnectEnabled = {
+				showConnectPoints: true,
+				connectPoints: [validConnectPointState],
+			};
+			expect(isConnectableState(missingConnectEnabled)).toBe(false);
+
+			// Missing showConnectPoints - should fail
 			const missingShowConnectPoints = {
+				connectEnabled: true,
 				connectPoints: [validConnectPointState],
 			};
 			expect(isConnectableState(missingShowConnectPoints)).toBe(false);
 
 			// Missing connectPoints - should fail
 			const missingConnectPoints = {
+				connectEnabled: true,
 				showConnectPoints: true,
 			};
 			expect(isConnectableState(missingConnectPoints)).toBe(false);
@@ -216,18 +285,21 @@ describe("isConnectableState", () => {
 			// Current implementation validates:
 			// 1. Object is not null
 			// 2. Object is an object type
-			// 3. Has 'showConnectPoints' property
-			// 4. showConnectPoints is a boolean
-			// 5. Has 'connectPoints' property
-			// 6. connectPoints is an array
+			// 3. Has 'connectEnabled' property
+			// 4. connectEnabled is a boolean
+			// 5. Has 'showConnectPoints' property
+			// 6. showConnectPoints is a boolean
+			// 7. Has 'connectPoints' property
+			// 8. connectPoints is an array
 
 			// Properties NOT currently validated:
 			// - connectPoints array contents/structure
 			// - connectPoints array element types
 
 			const minimalValidObject = {
+				connectEnabled: true,
 				showConnectPoints: true,
-				connectPoints: [], // Both properties are now validated
+				connectPoints: [], // All three properties are now validated
 			};
 
 			expect(isConnectableState(minimalValidObject)).toBe(true);
