@@ -116,8 +116,8 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		connectType,
 		onConnect,
 		onPreviewConnectLine,
-		eventBus,
 		// Internal variables and functions
+		eventBus,
 		pathPoints,
 		updatePathPoints,
 	};
@@ -133,6 +133,11 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 		if (connectType === "end-only") {
 			return;
+		}
+
+		// Clear connecting point when starting a new drag to allow fresh connections
+		if (e.eventPhase === "Started") {
+			connectingPoint.current = undefined;
 		}
 
 		if (connectingPoint.current) {
@@ -312,6 +317,9 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 						pathData: undefined,
 						eventPhase: "Ended",
 					});
+
+					// Reset the connecting point after successful connection
+					connectingPoint.current = undefined;
 				}
 			}
 		};
