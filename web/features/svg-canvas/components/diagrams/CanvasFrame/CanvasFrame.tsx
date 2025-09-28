@@ -77,49 +77,41 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	// Hook for appending diagrams to this frame
 	const appendDiagrams = useAppendDiagrams();
 
-	// Hook for receiving execution results from connected nodes (like PageDesignNode)
-	useExecutionChain({
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
 		id,
-		onPropagation: async (e) => {
-			// Handle shape data from PageDesignNode
-			if (isObjectPayload(e.payload) && e.eventPhase === "InProgress") {
-				const shapeData = e.payload.data as Diagram;
-
-				// Validate that it's a valid diagram object
-				if (shapeData && shapeData.id && shapeData.type) {
-					// Append the received shape to this CanvasFrame
-					appendDiagrams(id, [shapeData]);
-				}
-			}
-		},
-	});
+		items,
+		appendSelectedDiagrams,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
 
 	/**
 	 * Event handler when diagrams are dropped on this CanvasFrame
 	 */
-	const onDrop = useCallback(
-		(e: DiagramDragDropEvent) => {
-			// Only handle diagram drops (not ConnectPoint drops)
-			if (e.dropItem.type !== "ConnectPoint") {
-				// Ignore drops if the dragged item is this frame itself
-				if (e.dropItem.id === id) {
-					return;
-				}
+	const onDrop = useCallback((e: DiagramDragDropEvent) => {
+		// Only handle diagram drops (not ConnectPoint drops)
+		if (e.dropItem.type !== "ConnectPoint") {
+			// Bypass references to avoid function creation in every render.
+			const { id, items, appendSelectedDiagrams } = refBus.current;
 
-				// Recursively collect all child IDs (including nested children)
-				const allChildIds = collectDiagramDataIds(items);
-
-				// Ignore drops if the dragged item is one of this frame's descendant diagrams
-				if (allChildIds.includes(e.dropItem.id)) {
-					return;
-				}
-
-				// Trigger append selected diagrams event
-				appendSelectedDiagrams(id);
+			// Ignore drops if the dragged item is this frame itself
+			if (e.dropItem.id === id) {
+				return;
 			}
-		},
-		[appendSelectedDiagrams, id, items],
-	);
+
+			// Recursively collect all child IDs (including nested children)
+			const allChildIds = collectDiagramDataIds(items);
+
+			// Ignore drops if the dragged item is one of this frame's descendant diagrams
+			if (allChildIds.includes(e.dropItem.id)) {
+				return;
+			}
+
+			// Trigger append selected diagrams event
+			appendSelectedDiagrams(id);
+		}
+	}, []);
 
 	// Use individual interaction hooks
 	const dragProps = useDrag({
@@ -217,6 +209,23 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		};
 
 		return React.createElement(component, props);
+	});
+
+	// Hook for receiving execution results from connected nodes (like PageDesignNode)
+	useExecutionChain({
+		id,
+		onPropagation: async (e) => {
+			// Handle shape data from PageDesignNode
+			if (isObjectPayload(e.payload) && e.eventPhase === "InProgress") {
+				const shapeData = e.payload.data as Diagram;
+
+				// Validate that it's a valid diagram object
+				if (shapeData && shapeData.id && shapeData.type) {
+					// Append the received shape to this CanvasFrame
+					appendDiagrams(id, [shapeData]);
+				}
+			}
+		},
 	});
 
 	return (
