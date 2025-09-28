@@ -48,7 +48,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 					props.onExecute?.({
 						id: props.id,
 						eventId: e.eventId,
-						eventPhase: "Ended",
+						eventPhase: "InProgress",
 						payload: {
 							format: "object",
 							data: diagram,
@@ -56,10 +56,23 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 					});
 				};
 
-				await webDesignHandler(shapeHandler)({
+				const result = await webDesignHandler(shapeHandler)({
 					name: "web_design",
 					arguments: { design_request: textData },
 					callId: e.eventId,
+				});
+
+				props.onExecute?.({
+					id: props.id,
+					eventId: e.eventId,
+					eventPhase: "Ended",
+					payload: {
+						format: "text",
+						data: typeof result?.content === "string" ? result.content : "",
+						metadata: {
+							contentType: "plain",
+						},
+					},
 				});
 			} catch (error) {
 				console.error("Error in PageDesignNode web design:", error);
