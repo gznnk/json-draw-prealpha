@@ -17,11 +17,7 @@ export const removeSelectedDiagrams = (diagrams: Diagram[]): Diagram[] => {
 			continue;
 		}
 
-		if (
-			isItemableState(diagram) &&
-			0 < diagram.items.length &&
-			diagram.itemableType === "abstract"
-		) {
+		if (isItemableState(diagram) && 0 < diagram.items.length) {
 			// If diagram is not selected but has children, process children recursively
 			const processedChildItems = removeSelectedDiagrams(diagram.items);
 			result.push({
