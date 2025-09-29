@@ -4,7 +4,7 @@ import { DiagramRegistry } from "../../../registry";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import type { Diagram } from "../../../types/state/core/Diagram";
-import type { GroupState } from "../../../types/state/shapes/GroupState";
+import { calcUnrotatedItemableBoundingBox } from "../../../utils/core/calcUnrotatedItemableBoundingBox";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
@@ -127,7 +127,10 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				// Handle rotation based on rotateEnabled flag and child items
 				if (!initialItem.rotateEnabled) {
 					newItemFrame.rotation = initialItem.rotation;
-				} else if (isItemableState(initialItem) && hasRotateDisabledItem(initialItem.items || [])) {
+				} else if (
+					isItemableState(initialItem) &&
+					hasRotateDisabledItem(initialItem.items || [])
+				) {
 					// If group contains rotate-disabled items, preserve original rotation
 					newItemFrame.rotation = initialItem.rotation;
 				}
@@ -337,14 +340,27 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					interactionState: getIsTransformingState(e.eventPhase)
 						? InteractionState.Transforming
 						: InteractionState.Idle,
-					multiSelectGroup: prevState.multiSelectGroup
-						? ({
-								...prevState.multiSelectGroup,
-								// Update the multi-select group with the new shape.
-								...e.endFrame,
-							} as GroupState)
-						: undefined,
 				} as SvgCanvasState;
+
+				if (prevState.multiSelectGroup) {
+					const selectedItems = getSelectedDiagrams(newState.items);
+					const boundingBox = calcUnrotatedItemableBoundingBox(
+						selectedItems,
+						e.endFrame.x,
+						e.endFrame.y,
+						e.endFrame.rotation,
+					);
+					newState.multiSelectGroup = {
+						...prevState.multiSelectGroup,
+						x: boundingBox.left + (boundingBox.right - boundingBox.left) / 2,
+						y: boundingBox.top + (boundingBox.bottom - boundingBox.top) / 2,
+						width: boundingBox.right - boundingBox.left,
+						height: boundingBox.bottom - boundingBox.top,
+						scaleX: e.endFrame.scaleX,
+						scaleY: e.endFrame.scaleY,
+						rotation: e.endFrame.rotation,
+					};
+				}
 
 				// If the event has minX and minY, update the canvas state
 				if (e.minX !== undefined && e.minY !== undefined) {
