@@ -2,6 +2,7 @@ import { useCallback, useRef } from "react";
 
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
+import type { GroupState } from "../../../types/state/shapes/GroupState";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import { isItemableState } from "../../../utils/validation/isItemableState";
@@ -11,7 +12,6 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createItemMap } from "../../utils/createItemMap";
-import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";
@@ -36,6 +36,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 	const selectedItemIds = useRef<Set<string>>(new Set());
 	// Reference to store initial items at the start of drag.
 	const initialItemsMap = useRef<Map<string, Diagram>>(new Map());
+	// Reference to store initial multi select group
+	const initialMultiSelectGroup = useRef<GroupState | undefined>(undefined);
 
 	// Return a callback function to handle the drag event.
 	return useCallback((e: DiagramDragEvent) => {
@@ -60,6 +62,10 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				selectedItemIds.current = new Set(selectedItems.map((item) => item.id));
 				// Store initial items map
 				initialItemsMap.current = createItemMap(prevState.items);
+				// Store initial multi select group
+				if (prevState.multiSelectGroup) {
+					initialMultiSelectGroup.current = prevState.multiSelectGroup;
+				}
 			}
 
 			// Calculate the movement delta
@@ -169,11 +175,12 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			}
 
 			// If multiple items are selected, create a multi-select group
-			if (prevState.multiSelectGroup) {
-				newState.multiSelectGroup = createMultiSelectGroup(
-					movedDiagrams,
-					prevState.multiSelectGroup?.keepProportion,
-				);
+			if (prevState.multiSelectGroup && initialMultiSelectGroup.current) {
+				newState.multiSelectGroup = {
+					...prevState.multiSelectGroup,
+					x: initialMultiSelectGroup.current.x + dx,
+					y: initialMultiSelectGroup.current.y + dy,
+				};
 			}
 
 			// Refresh the connect lines for the moved diagrams
@@ -209,6 +216,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				// Clean up the selected item IDs and initial items map.
 				selectedItemIds.current.clear();
 				initialItemsMap.current.clear();
+				// Clean up initial multi select group
+				initialMultiSelectGroup.current = undefined;
 			}
 
 			return newState;
