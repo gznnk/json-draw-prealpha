@@ -23,6 +23,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 	scaleX,
 	scaleY,
 	keepProportion,
+	rotateEnabled,
 	fill,
 	stroke,
 	strokeWidth,
@@ -121,6 +122,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 			scaleX={scaleX}
 			scaleY={scaleY}
 			keepProportion={keepProportion}
+			rotateEnabled={rotateEnabled}
 			isSelected={isSelected}
 			connectPoints={[]}
 			showConnectPoints={false}

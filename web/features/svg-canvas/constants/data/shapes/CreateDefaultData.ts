@@ -19,7 +19,7 @@ import { TransformativeDefaultData } from "../core/TransformativeDefaultData";
 export function CreateDefaultData<T>(config: {
 	type: DiagramType;
 	options: DiagramFeatures;
-	properties?: Record<string, unknown>;
+	properties?: Partial<T>;
 }): T {
 	const { type, options, properties } = config;
 

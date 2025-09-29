@@ -50,6 +50,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		scaleX,
 		scaleY,
 		rotation,
+		rotateEnabled,
 		items,
 		isSelected,
 		isAncestorSelected,
@@ -239,6 +240,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				strokeWidth={BORDER_WIDTH}
 				fill={BACKGROUND_COLOR}
 				cornerRadius={CORNER_RADIUS}
+				rotateEnabled={rotateEnabled}
 				onPropagation={onPropagation}
 			>
 				<Button
@@ -251,6 +253,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					scaleY={1}
 					rotation={0}
 					keepProportion={false}
+					rotateEnabled={rotateEnabled}
 					isSelected={false}
 					isAncestorSelected={false}
 					showConnectPoints={false}
@@ -295,6 +298,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				text={text}
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
+				rotateEnabled={rotateEnabled}
 				showOutline={false}
 				isTransforming={false}
 				showTransformControls={false}

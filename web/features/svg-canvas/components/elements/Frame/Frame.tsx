@@ -31,6 +31,7 @@ const FrameComponent: React.FC<FrameProps> = ({
 	scaleY,
 	cornerRadius,
 	keepProportion,
+	rotateEnabled,
 	fill = "transparent",
 	stroke = "black",
 	strokeWidth = 1,
@@ -179,6 +180,7 @@ const FrameComponent: React.FC<FrameProps> = ({
 					scaleX={scaleX}
 					scaleY={scaleY}
 					keepProportion={keepProportion}
+					rotateEnabled={rotateEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

@@ -21,6 +21,8 @@ export type NodeHeaderProps = Optional<
 			blinkIcon?: boolean;
 			/** Color to use for the icon background during blink animation */
 			blinkIconColor?: string;
+			/** Whether rotation controls are enabled */
+			rotateEnabled?: boolean;
 		}
 	>,
 	| "height"

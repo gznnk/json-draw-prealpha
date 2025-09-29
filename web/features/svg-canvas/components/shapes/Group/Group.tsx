@@ -19,6 +19,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 	scaleX,
 	scaleY,
 	keepProportion,
+	rotateEnabled,
 	isSelected,
 	items,
 	isDragging = false,
@@ -95,6 +96,7 @@ const GroupComponent: React.FC<GroupProps> = ({
 					scaleX={scaleX}
 					scaleY={scaleY}
 					keepProportion={keepProportion}
+					rotateEnabled={rotateEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

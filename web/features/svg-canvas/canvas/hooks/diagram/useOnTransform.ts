@@ -123,6 +123,10 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				newItemFrame.width = effectiveWidth;
 				newItemFrame.height = effectiveHeight;
 
+				if (!initialItem.rotateEnabled) {
+					newItemFrame.rotation = 0;
+				}
+
 				let newItems: Diagram[] | undefined;
 				if (isItemableState(initialItem)) {
 					const transformFunction = DiagramRegistry.getTransformItemsFunction(

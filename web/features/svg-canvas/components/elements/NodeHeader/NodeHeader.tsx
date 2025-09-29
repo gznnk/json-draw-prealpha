@@ -21,6 +21,7 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 	scaleX,
 	scaleY,
 	rotation,
+	rotateEnabled = true,
 	text,
 	fontColor = NodeHeaderDefaultData.fontColor,
 	fontSize = NodeHeaderDefaultData.fontSize,
@@ -106,6 +107,7 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 				scaleY={scaleY}
 				rotation={rotation}
 				keepProportion={false}
+				rotateEnabled={rotateEnabled}
 				strokeWidth="0px"
 				text={text}
 				textType="text"

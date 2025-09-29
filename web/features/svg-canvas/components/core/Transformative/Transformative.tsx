@@ -46,15 +46,16 @@ const TransformativeComponent: React.FC<Props> = ({
 	y,
 	width,
 	height,
+	minWidth = 0,
+	minHeight = 0,
 	rotation,
 	scaleX,
 	scaleY,
 	keepProportion,
+	rotateEnabled,
 	showTransformControls,
 	onTransform,
 	onClick,
-	minWidth = 0,
-	minHeight = 0,
 }) => {
 	const [isResizing, setIsResizing] = useState(false);
 	const [isRotating, setIsRotating] = useState(false);
@@ -1141,7 +1142,7 @@ const TransformativeComponent: React.FC<Props> = ({
 				</>
 			)}
 			{/* Rotate point. */}
-			{!isResizing && (
+			{!isResizing && rotateEnabled && (
 				<RotatePoint
 					id={`rotation-${id}`}
 					x={rotationPoint.x}

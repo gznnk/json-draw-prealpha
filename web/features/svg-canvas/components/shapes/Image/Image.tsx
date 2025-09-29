@@ -26,6 +26,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 	scaleX,
 	scaleY,
 	keepProportion,
+	rotateEnabled,
 	isSelected,
 	isAncestorSelected = false,
 	base64Data,
@@ -116,6 +117,7 @@ const ImageComponent: React.FC<ImageProps> = ({
 					scaleX={scaleX}
 					scaleY={scaleY}
 					keepProportion={keepProportion}
+					rotateEnabled={rotateEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

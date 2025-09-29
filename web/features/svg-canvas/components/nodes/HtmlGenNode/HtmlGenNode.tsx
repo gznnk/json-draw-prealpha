@@ -28,7 +28,7 @@ import { Frame } from "../../elements/Frame";
  * HtmlGenNode component.
  */
 const HtmlGenNodeComponent: React.FC<HtmlGenNodeProps> = (props) => {
-	const { id, width, height, onDrag, onExecute } = props;
+	const { id, width, height, rotateEnabled = true, onDrag, onExecute } = props;
 
 	const target = "7247c834-bf96-40bf-afae-ca74907cc13d";
 
@@ -198,6 +198,7 @@ Please generate a complete HTML document that represents or visualizes the diagr
 				fill={BACKGROUND_COLOR}
 				cornerRadius={CORNER_RADIUS}
 				keepProportion={false}
+				rotateEnabled={rotateEnabled}
 				showTransformControls={false}
 				isTransforming={false}
 				onPropagation={onPropagation}
@@ -212,6 +213,7 @@ Please generate a complete HTML document that represents or visualizes the diagr
 					scaleY={1}
 					rotation={0}
 					keepProportion={false}
+					rotateEnabled={rotateEnabled}
 					isSelected={false}
 					isAncestorSelected={false}
 					showConnectPoints={false}

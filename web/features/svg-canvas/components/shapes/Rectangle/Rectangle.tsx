@@ -24,6 +24,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	scaleX,
 	scaleY,
 	keepProportion,
+	rotateEnabled,
 	fill,
 	stroke,
 	strokeWidth,
@@ -108,6 +109,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 			scaleX={scaleX}
 			scaleY={scaleY}
 			keepProportion={keepProportion}
+			rotateEnabled={rotateEnabled}
 			isSelected={isSelected}
 			connectPoints={connectPoints}
 			showConnectPoints={showConnectPoints}
