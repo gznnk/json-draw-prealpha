@@ -5,6 +5,7 @@ import type { AppendSelectedDiagramsEvent } from "../../../types/events/AppendSe
 import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import { adjustTargetDiagramSize } from "../../utils/adjustTargetDiagramSize";
 import { appendDiagrams } from "../../utils/appendDiagrams";
 import { cleanupGroups } from "../../utils/cleanupGroups";
 import { removeDiagramsById } from "../../utils/removeDiagramsById";
@@ -66,8 +67,15 @@ export const useOnAppendSelectedDiagrams = (props: SvgCanvasSubHooksProps) => {
 				// 4. Append diagrams to target frame
 				const diagramsAppendedItems = appendDiagrams(diagramsRemovedItems, event.targetId, selectedDiagrams);
 
-				// 5. Clean up empty groups
-				const groupsCleanedUpItems = cleanupGroups(diagramsAppendedItems);
+				// 5. Adjust target diagram size if appended diagrams extend beyond bounds
+				const targetDiagramSizeAdjustedItems = adjustTargetDiagramSize(
+					diagramsAppendedItems,
+					event.targetId,
+					targetFrame,
+				);
+
+				// 6. Clean up empty groups
+				const groupsCleanedUpItems = cleanupGroups(targetDiagramSizeAdjustedItems);
 
 				// Update outlines
 				const updatedItems = updateOutlineOfAllItemables(groupsCleanedUpItems);

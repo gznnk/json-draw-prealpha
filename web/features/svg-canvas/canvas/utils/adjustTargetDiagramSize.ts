@@ -1,7 +1,6 @@
 import type { Diagram } from "../../types/state/core/Diagram";
+import { calcUnrotatedItemableBoundingBox } from "../../utils/core/calcUnrotatedItemableBoundingBox";
 import { getDiagramById } from "../../utils/core/getDiagramById";
-import { calcDiagramBoundingBox } from "../../utils/math/geometry/calcDiagramBoundingBox";
-import { calcDiagramsBoundingBox } from "../../utils/math/geometry/calcDiagramsBoundingBox";
 import { isFrame } from "../../utils/validation/isFrame";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
@@ -47,15 +46,24 @@ export const adjustTargetDiagramSize = (
 		return diagrams;
 	}
 
-	// Calculate current target diagram bounds
-	const targetBounds = calcDiagramBoundingBox(originalTargetDiagram);
+	// Calculate bounds of all items inside target diagram in the target's coordinate system
+	// This accounts for the target's rotation and scale transformations
+	const childrenBounds = calcUnrotatedItemableBoundingBox(
+		updatedTargetDiagram.items,
+		updatedTargetDiagram.x,
+		updatedTargetDiagram.y,
+		updatedTargetDiagram.rotation,
+	);
 
-	// Calculate bounds of all items inside target diagram
-	const childrenBounds = calcDiagramsBoundingBox(updatedTargetDiagram.items);
-
-	if (!childrenBounds) {
-		return diagrams;
-	}
+	// Calculate current target diagram bounds in unrotated space
+	const halfWidth = originalTargetDiagram.width / 2;
+	const halfHeight = originalTargetDiagram.height / 2;
+	const targetBounds = {
+		left: originalTargetDiagram.x - halfWidth,
+		top: originalTargetDiagram.y - halfHeight,
+		right: originalTargetDiagram.x + halfWidth,
+		bottom: originalTargetDiagram.y + halfHeight,
+	};
 
 	// Check if children extend beyond target bounds
 	const needsResize =
@@ -80,8 +88,8 @@ export const adjustTargetDiagramSize = (
 	// Calculate new center, width, and height
 	const newCenterX = (newLeft + newRight) / 2;
 	const newCenterY = (newTop + newBottom) / 2;
-	const newWidth = newRight - newLeft;
-	const newHeight = newBottom - newTop;
+	const newWidth = Math.abs(newRight - newLeft);
+	const newHeight = Math.abs(newBottom - newTop);
 
 	// Update target diagram with new dimensions
 	return diagrams.map((item) => {
