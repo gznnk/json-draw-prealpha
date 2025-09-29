@@ -76,7 +76,6 @@ export const useOnAppendDiagrams = (props: SvgCanvasSubHooksProps) => {
 				// 5. Adjust target diagram size if appended diagrams extend beyond bounds
 				const targetDiagramSizeAdjustedItems = adjustTargetDiagramSize(
 					diagramsAppendedItems,
-					event.targetId,
 					targetDiagram,
 				);
 

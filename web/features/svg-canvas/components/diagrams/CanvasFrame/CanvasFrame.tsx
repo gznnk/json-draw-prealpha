@@ -228,7 +228,6 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		},
 	});
 
-	console.log(x, y, width, height, rotation, scaleX, scaleY);
 
 	return (
 		<>
