@@ -8,7 +8,7 @@ import { calcUnrotatedItemableBoundingBox } from "../../../utils/core/calcUnrota
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
-import { hasRotateDisabledItem } from "../../../utils/shapes/group/hasRotateDisabledItem";
+import { isRotateDisabled } from "../../../utils/shapes/group/isRotateDisabled";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
@@ -105,13 +105,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 				};
 
 				// Handle rotation based on rotateEnabled flag and child items
-				if (!initialItem.rotateEnabled) {
-					newItemFrame.rotation = initialItem.rotation;
-				} else if (
-					isItemableState(initialItem) &&
-					hasRotateDisabledItem(initialItem.items || [])
-				) {
-					// If group contains rotate-disabled items, preserve original rotation
+				if (isRotateDisabled(initialItem)) {
 					newItemFrame.rotation = initialItem.rotation;
 				}
 
