@@ -3,7 +3,9 @@ import { useCallback, useRef } from "react";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import { InteractionState } from "../../types/InteractionState";
+import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import { adjustCanvasFrameSizesAndRefreshConnections } from "../../utils/adjustCanvasFrameSizesAndRefreshConnections";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";
@@ -31,6 +33,9 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
+	// Reference to store the canvas state at the start of change for connect line updates.
+	const startCanvasState = useRef<SvgCanvasState | undefined>(undefined);
+
 	return useCallback((e: DiagramChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const {
@@ -39,6 +44,10 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 		} = refBus.current;
 
 		setCanvasState((prevState) => {
+			// Store the current canvas state for connect line updates on change start
+			if (e.eventPhase === "Started") {
+				startCanvasState.current = prevState;
+			}
 			// Create a new state with the updated items and multi-select group.
 			let newState = {
 				...prevState,
@@ -72,8 +81,17 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			}
 
 			if (e.eventPhase === "Ended") {
+				// Adjust canvas frame sizes and refresh connections
+				newState = adjustCanvasFrameSizesAndRefreshConnections(
+					newState,
+					startCanvasState.current,
+				);
+
 				// Add history
 				newState = addHistory(e.eventId, newState);
+
+				// Clean up the canvas state reference
+				startCanvasState.current = undefined;
 			}
 
 			return newState;
