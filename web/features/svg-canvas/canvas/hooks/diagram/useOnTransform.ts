@@ -8,7 +8,6 @@ import { calcUnrotatedItemableBoundingBox } from "../../../utils/core/calcUnrota
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { calculateEffectiveDimensions } from "../../../utils/math/geometry/calculateEffectiveDimensions";
 import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
-import { isRotateDisabled } from "../../../utils/shapes/group/isRotateDisabled";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
@@ -16,6 +15,7 @@ import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { calculateTransformedCenter } from "../../utils/calculateTransformedCenter";
+import { calculateTransformedRotation } from "../../utils/calculateTransformedRotation";
 import { createItemMap } from "../../utils/createItemMap";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateOutlineOfItemable } from "../../utils/updateOutlineOfItemable";
@@ -90,9 +90,11 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						initialItem.minHeight,
 					);
 
-				const newRotation =
-					initialItem.rotation +
-					(event.endFrame.rotation - event.startFrame.rotation);
+				const newRotation = calculateTransformedRotation(
+					initialItem,
+					event.startFrame.rotation,
+					event.endFrame.rotation,
+				);
 
 				const newItemFrame = {
 					x: newCenter.x,
@@ -103,11 +105,6 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					scaleX: event.endFrame.scaleX,
 					scaleY: event.endFrame.scaleY,
 				};
-
-				// Handle rotation based on rotateEnabled flag and child items
-				if (isRotateDisabled(initialItem)) {
-					newItemFrame.rotation = initialItem.rotation;
-				}
 
 				let newItems: Diagram[] | undefined;
 				if (isItemableState(initialItem)) {
