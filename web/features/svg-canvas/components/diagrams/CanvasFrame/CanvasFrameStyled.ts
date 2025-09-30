@@ -20,7 +20,7 @@ export const CanvasFrameDropIndicator = styled.rect<CanvasFrameDropIndicatorProp
 	pointer-events: none;
 	fill: ${DROP_OVERLAY_COLOR};
 	opacity: ${(props) => (props.isActive ? 1 : 0)};
-	transition: opacity 80ms ease-in-out;
+	transition: opacity 120ms ease-in-out;
 `;
 
 /**

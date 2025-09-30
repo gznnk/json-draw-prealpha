@@ -206,14 +206,15 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 					}
 					return item;
 				});
-				// Update outline of all groups.
-				newState.items = updateOutlineOfAllItemables(newState.items);
 
 				// Adjust canvas frame sizes and refresh connections
 				newState = adjustCanvasFrameSizesAndRefreshConnections(
 					newState,
 					startCanvasState.current,
 				);
+
+				// Update outline of all groups.
+				newState.items = updateOutlineOfAllItemables(newState.items);
 
 				// Add history and get updated state
 				newState = addHistory(e.eventId, newState);

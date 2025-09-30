@@ -314,6 +314,42 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 						: InteractionState.Idle,
 				} as SvgCanvasState;
 
+				// If the event has minX and minY, update the canvas state
+				if (e.minX !== undefined && e.minY !== undefined) {
+					newState.minX = e.minX;
+					newState.minY = e.minY;
+
+					onPanZoomChange?.({
+						minX: e.minX,
+						minY: e.minY,
+						zoom: newState.zoom,
+					});
+				}
+
+				// Refresh the connect lines for the transformed diagrams.
+				newState = refreshConnectLines(
+					transformedConnectables,
+					newState,
+					startCanvasState.current,
+				);
+
+				if (e.eventPhase === "Ended") {
+					// Adjust canvas frame sizes and refresh connections
+					newState = adjustCanvasFrameSizesAndRefreshConnections(
+						newState,
+						startCanvasState.current,
+					);
+				}
+
+				// Update outline of top-level groups that contain transformed diagrams
+				newState.items = newState.items.map((item) => {
+					if (topLevelGroupIds.has(item.id)) {
+						return updateOutlineOfItemable(item);
+					}
+					return item;
+				});
+
+				// Update multi select group outline
 				if (prevState.multiSelectGroup) {
 					const selectedItems = getSelectedDiagrams(newState.items);
 					const boundingBox = calcUnrotatedItemableBoundingBox(
@@ -334,40 +370,7 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					};
 				}
 
-				// If the event has minX and minY, update the canvas state
-				if (e.minX !== undefined && e.minY !== undefined) {
-					newState.minX = e.minX;
-					newState.minY = e.minY;
-
-					onPanZoomChange?.({
-						minX: e.minX,
-						minY: e.minY,
-						zoom: newState.zoom,
-					});
-				}
-
-				// Refresh the connect lines for the transformed diagrams.
-				newState = refreshConnectLines(
-					transformedConnectables,
-					newState,
-					startCanvasState.current,
-				);
-
-				// Update outline of top-level groups that contain transformed diagrams
-				newState.items = newState.items.map((item) => {
-					if (topLevelGroupIds.has(item.id)) {
-						return updateOutlineOfItemable(item);
-					}
-					return item;
-				});
-
 				if (e.eventPhase === "Ended") {
-					// Adjust canvas frame sizes and refresh connections
-					newState = adjustCanvasFrameSizesAndRefreshConnections(
-						newState,
-						startCanvasState.current,
-					);
-
 					// Add history and get updated state
 					newState = addHistory(e.eventId, newState);
 
