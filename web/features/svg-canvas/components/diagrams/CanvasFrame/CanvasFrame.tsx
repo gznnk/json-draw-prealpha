@@ -1,6 +1,9 @@
-import React, { memo, useMemo, useRef, useCallback } from "react";
+import React, { memo, useMemo, useRef, useCallback, useState } from "react";
 
-import { CanvasFrameElement } from "./CanvasFrameStyled";
+import {
+	CanvasFrameElement,
+	CanvasFrameDropIndicator,
+} from "./CanvasFrameStyled";
 import {
 	BACKGROUND_COLOR,
 	BORDER_COLOR,
@@ -62,6 +65,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	onTransform,
 	onDragOver,
 	onDragLeave,
+	onDrop,
 	onHoverChange,
 	onDiagramChange,
 	onConnect,
@@ -78,40 +82,69 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	// Hook for appending diagrams to this frame
 	const appendDiagrams = useAppendDiagrams();
 
+	const [isDropTarget, setIsDropTarget] = useState(false);
+
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		id,
 		items,
 		appendSelectedDiagrams,
+		onDragOver,
+		onDragLeave,
+		onDrop,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
+	const canAcceptDrop = useCallback((event: DiagramDragDropEvent) => {
+		if (event.dropItem.type === "ConnectPoint") {
+			return false;
+		}
+
+		const { id: currentId, items: currentItems } = refBus.current;
+
+		if (event.dropItem.id === currentId) {
+			return false;
+		}
+
+		const allChildIds = collectDiagramDataIds(currentItems);
+		return !allChildIds.includes(event.dropItem.id);
+	}, []);
+
 	/**
 	 * Event handler when diagrams are dropped on this CanvasFrame
 	 */
-	const onDrop = useCallback((e: DiagramDragDropEvent) => {
-		// Only handle diagram drops (not ConnectPoint drops)
-		if (e.dropItem.type !== "ConnectPoint") {
-			// Bypass references to avoid function creation in every render.
-			const { id, items, appendSelectedDiagrams } = refBus.current;
+	const handleDrop = useCallback(
+		(event: DiagramDragDropEvent) => {
+			setIsDropTarget(false);
 
-			// Ignore drops if the dragged item is this frame itself
-			if (e.dropItem.id === id) {
+			if (!canAcceptDrop(event)) {
+				refBus.current.onDrop?.(event);
 				return;
 			}
 
-			// Recursively collect all child IDs (including nested children)
-			const allChildIds = collectDiagramDataIds(items);
+			const { id: currentId, appendSelectedDiagrams } = refBus.current;
+			appendSelectedDiagrams(currentId);
 
-			// Ignore drops if the dragged item is one of this frame's descendant diagrams
-			if (allChildIds.includes(e.dropItem.id)) {
-				return;
-			}
+			refBus.current.onDrop?.(event);
+		},
+		[canAcceptDrop],
+	);
 
-			// Trigger append selected diagrams event
-			appendSelectedDiagrams(id);
-		}
+	const handleDragOver = useCallback(
+		(event: DiagramDragDropEvent) => {
+			const droppable = canAcceptDrop(event);
+			setIsDropTarget(droppable);
+
+			refBus.current.onDragOver?.(event);
+		},
+		[canAcceptDrop],
+	);
+
+	const handleDragLeave = useCallback((event: DiagramDragDropEvent) => {
+		setIsDropTarget(false);
+
+		refBus.current.onDragLeave?.(event);
 	}, []);
 
 	// Use individual interaction hooks
@@ -122,9 +155,9 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		y,
 		ref: svgRef,
 		onDrag,
-		onDragOver,
-		onDragLeave,
-		onDrop,
+		onDragOver: handleDragOver,
+		onDragLeave: handleDragLeave,
+		onDrop: handleDrop,
 	});
 
 	const clickProps = useClick({
@@ -248,6 +281,17 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 				transform={transform}
 				ref={svgRef}
 				{...composedProps}
+			/>
+			<CanvasFrameDropIndicator
+				id={`${id}-drop-indicator`}
+				x={-width / 2}
+				y={-height / 2}
+				width={width}
+				height={height}
+				rx={CORNER_RADIUS}
+				ry={CORNER_RADIUS}
+				transform={transform}
+				isActive={isDropTarget}
 			/>
 			{children}
 			<Outline
