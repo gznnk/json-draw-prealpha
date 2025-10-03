@@ -249,6 +249,18 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	useExecutionChain({
 		id,
 		onPropagation: async (e) => {
+			if (e.eventPhase === "Started") {
+				onExecute?.({
+					id,
+					eventId: e.eventId,
+					eventPhase: "Started",
+					payload: {
+						format: "object",
+						data: undefined,
+					},
+				});
+			}
+
 			// Handle shape data from PageDesignNode
 			if (isObjectPayload(e.payload) && e.eventPhase === "InProgress") {
 				const shapeData = e.payload.data as Diagram;
@@ -258,6 +270,18 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 					// Append the received shape to this CanvasFrame
 					appendDiagrams(id, [shapeData]);
 				}
+			}
+
+			if (e.eventPhase === "Ended") {
+				onExecute?.({
+					id,
+					eventId: e.eventId,
+					eventPhase: "Ended",
+					payload: {
+						format: "object",
+						data: items,
+					},
+				});
 			}
 		},
 	});
