@@ -67,6 +67,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 						id: props.id,
 						eventId: e.eventId,
 						eventPhase: "InProgress",
+						// TODO: Define a proper payload format for tool results
 						payload: {
 							format: "tool",
 							data: result,
