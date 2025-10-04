@@ -14,7 +14,6 @@ import {
 } from "../../../constants/styling/nodes/HtmlGenNodeStyling";
 import { BASE_MARGIN } from "../../../constants/styling/nodes/NodeStyling";
 import { useSvgCanvasState } from "../../../context/SvgCanvasStateContext";
-import { useConnectedDiagrams } from "../../../hooks/useConnectedDiagrams";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { ExecutionPropagationEvent } from "../../../types/events/ExecutionPropagationEvent";
 import type { HtmlGenNodeProps } from "../../../types/props/nodes/HtmlGenNodeProps";
@@ -34,14 +33,11 @@ const HtmlGenNodeComponent: React.FC<HtmlGenNodeProps> = (props) => {
 
 	const [apiKey, setApiKey] = useState<string>("");
 	const [processIdList, setProcessIdList] = useState<string[]>([]);
-	// Get connected diagram data
-	const connectedDiagrams = useConnectedDiagrams(id);
 	const canvasRef = useSvgCanvasState();
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		id,
-		connectedDiagrams,
 		onDrag,
 		onExecute,
 	};
