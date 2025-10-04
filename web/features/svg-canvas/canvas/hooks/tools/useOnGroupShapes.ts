@@ -13,6 +13,7 @@ import { addDiagramToParentOrRoot } from "../../utils/addDiagramToParentOrRoot";
 import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 import { cleanupGroups } from "../../utils/cleanupGroups";
 import { findParentCanvasContainingAllDiagrams } from "../../utils/findParentCanvasContainingAllDiagrams";
+import { removeDiagramsById } from "../../utils/removeDiagramsById";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";
 
@@ -82,9 +83,10 @@ export const useOnGroupShapes = (props: SvgCanvasSubHooksProps) => {
 					items: targetDiagrams,
 				};
 
-				// Remove target diagrams from items
-				const remainingItems = prevState.items.filter(
-					(item) => !event.shapeIds.includes(item.id),
+				// Remove target diagrams from items recursively
+				const remainingItems = removeDiagramsById(
+					prevState.items,
+					event.shapeIds,
 				);
 				const groupsCleanedUpItems = cleanupGroups(remainingItems);
 
