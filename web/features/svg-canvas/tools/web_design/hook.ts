@@ -20,30 +20,54 @@ import {
 	textElementWithHandlerToolDefinition,
 	useAddTextElementWithHandlerTool,
 } from "../add_text_element_with_handler";
+import {
+	groupShapesWithHandlerToolDefinition,
+	useGroupShapesWithHandlerTool,
+} from "../group_shapes_with_handler";
 
+// TODO: 整理
 type ShapeHandler = (diagram: Diagram) => void;
+type GroupShapesResult = {
+	shapeIds: string[];
+	groupId: string;
+	name?: string;
+	description?: string;
+};
+type GroupShapesHandler = (result: GroupShapesResult) => void;
 
 export const useWebDesignTool = (): ((
 	shapeHandler: ShapeHandler,
+	groupShapesHandler: GroupShapesHandler,
 ) => FunctionCallHandler) => {
 	// 各_with_handlerツールを取得
 	const rectangleShapeWithHandlerTool = useAddRectangleShapeWithHandlerTool();
 	const circleShapeWithHandlerTool = useAddCircleShapeWithHandlerTool();
 	const textElementWithHandlerTool = useAddTextElementWithHandlerTool();
+	const groupShapesWithHandlerTool = useGroupShapesWithHandlerTool();
 
 	// handler本体をuseMemoで生成
-	return useMemo<(shapeHandler: ShapeHandler) => FunctionCallHandler>(() => {
-		return (shapeHandler: ShapeHandler) => {
+	return useMemo<
+		(
+			shapeHandler: ShapeHandler,
+			groupShapesHandler: GroupShapesHandler,
+		) => FunctionCallHandler
+	>(() => {
+		return (
+			shapeHandler: ShapeHandler,
+			groupShapesHandler: GroupShapesHandler,
+		) => {
 			const WEB_DESIGN_TOOLS = [
 				rectangleShapeWithHandlerToolDefinition,
 				circleShapeWithHandlerToolDefinition,
 				textElementWithHandlerToolDefinition,
+				groupShapesWithHandlerToolDefinition,
 			];
 
 			const functionHandlerMap = {
 				add_rectangle_shape: rectangleShapeWithHandlerTool(shapeHandler),
 				add_circle_shape: circleShapeWithHandlerTool(shapeHandler),
 				add_text_element: textElementWithHandlerTool(shapeHandler),
+				group_shapes: groupShapesWithHandlerTool(groupShapesHandler),
 			};
 
 			const handler: FunctionCallHandler = async (
@@ -96,5 +120,6 @@ export const useWebDesignTool = (): ((
 		rectangleShapeWithHandlerTool,
 		circleShapeWithHandlerTool,
 		textElementWithHandlerTool,
+		groupShapesWithHandlerTool,
 	]);
 };
