@@ -50,7 +50,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 						eventId: e.eventId,
 						eventPhase: "InProgress",
 						payload: {
-							format: "object",
+							format: "diagram",
 							data: diagram,
 						},
 					});

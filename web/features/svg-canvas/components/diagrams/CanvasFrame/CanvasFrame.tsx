@@ -24,7 +24,7 @@ import type { CanvasFrameProps } from "../../../types/props/diagrams/CanvasFrame
 import type { Diagram } from "../../../types/state/core/Diagram";
 import { collectDiagramDataIds } from "../../../utils/core/collectDiagramDataIds";
 import { mergeProps } from "../../../utils/core/mergeProps";
-import { isObjectPayload } from "../../../utils/execution/isObjectPayload";
+import { isDiagramPayload } from "../../../utils/execution/isDiagramPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { Outline } from "../../core/Outline";
@@ -270,14 +270,14 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 					eventId: e.eventId,
 					eventPhase: "Started",
 					payload: {
-						format: "object",
-						data: undefined,
+						format: "text",
+						data: "",
 					},
 				});
 			}
 
 			// Handle shape data from PageDesignNode
-			if (isObjectPayload(e.payload) && e.eventPhase === "InProgress") {
+			if (isDiagramPayload(e.payload) && e.eventPhase === "InProgress") {
 				const shapeData = e.payload.data as Diagram;
 
 				// Validate that it's a valid diagram object
