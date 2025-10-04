@@ -1,20 +1,19 @@
 import { isAllDiagramsInItemable } from "./isAllDiagramsInItemable";
 import type { Diagram } from "../../types/state/core/Diagram";
-import type { ItemableState } from "../../types/state/core/ItemableState";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**
- * Finds the parent Itemable (with itemableType === "canvas") that contains all specified diagrams.
- * Searches breadth-first to find the highest-level itemable that contains all diagrams.
+ * Finds the parent Canvas (with itemableType === "canvas") that contains all specified diagrams.
+ * Searches breadth-first to find the highest-level canvas that contains all diagrams.
  *
  * @param allDiagrams - Array of all diagrams on the canvas
  * @param targetDiagrams - Array of diagrams to find a common parent for
- * @returns The itemable containing all target diagrams, or undefined if not found
+ * @returns The canvas containing all target diagrams, or undefined if not found
  */
-export const findParentItemableContainingAllDiagrams = (
+export const findParentCanvasContainingAllDiagrams = (
 	allDiagrams: Diagram[],
 	targetDiagrams: Diagram[],
-): ItemableState | undefined => {
+): Diagram | undefined => {
 	// First, check all diagrams at the current level for canvas itemables
 	for (const diagram of allDiagrams) {
 		if (
@@ -30,7 +29,7 @@ export const findParentItemableContainingAllDiagrams = (
 	// If not found at current level, recursively search child itemables
 	for (const diagram of allDiagrams) {
 		if (isItemableState(diagram)) {
-			const result = findParentItemableContainingAllDiagrams(
+			const result = findParentCanvasContainingAllDiagrams(
 				diagram.items,
 				targetDiagrams,
 			);

@@ -1,16 +1,20 @@
 import { useCallback, useRef } from "react";
 
+import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../utils/core/newEventId";
 import { newId } from "../../../utils/shapes/common/newId";
+import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 import { cleanupGroups } from "../../utils/cleanupGroups";
+import { findParentCanvasContainingAllDiagrams } from "../../utils/findParentCanvasContainingAllDiagrams";
 import { removeSelectedDiagrams } from "../../utils/removeSelectedDiagrams";
+import { replaceDiagram } from "../../utils/replaceDiagram";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";
 
@@ -74,7 +78,25 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 			// Create next state items.
 			const selectedRemovedItems = removeSelectedDiagrams(prevState.items);
 			const groupsCleanedUpItems = cleanupGroups(selectedRemovedItems);
-			const mergedItems = [...groupsCleanedUpItems, group];
+
+			// Find parent canvas that contains all selected diagrams
+			const parentCanvas = findParentCanvasContainingAllDiagrams(
+				prevState.items,
+				selectedDiagrams,
+			);
+
+			let mergedItems: Diagram[];
+			if (parentCanvas && isItemableState(parentCanvas)) {
+				// Add group to the parent canvas's items
+				const updatedParent: typeof parentCanvas = {
+					...parentCanvas,
+					items: [...parentCanvas.items, group],
+				};
+				mergedItems = replaceDiagram(groupsCleanedUpItems, updatedParent);
+			} else {
+				// No parent canvas found, add to root level
+				mergedItems = [...groupsCleanedUpItems, group];
+			}
 
 			// Bring connect lines forward that are connected to grouped components.
 			const orderedItems = bringConnectLinesForward(
