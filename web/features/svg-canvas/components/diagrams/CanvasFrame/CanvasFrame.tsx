@@ -4,12 +4,14 @@ import {
 	CanvasFrameElement,
 	CanvasFrameDropIndicator,
 } from "./CanvasFrameStyled";
+import { EVENT_NAME_GROUP_SHAPES } from "../../../constants/core/EventNames";
 import {
 	BACKGROUND_COLOR,
 	BORDER_COLOR,
 	BORDER_WIDTH,
 	CORNER_RADIUS,
 } from "../../../constants/styling/diagrams/CanvasFrameStyling";
+import { useEventBus } from "../../../context/EventBusContext";
 import { useAppendDiagrams } from "../../../hooks/useAppendDiagrams";
 import { useAppendSelectedDiagrams } from "../../../hooks/useAppendSelectedDiagrams";
 import { useClick } from "../../../hooks/useClick";
@@ -19,12 +21,16 @@ import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { DiagramRegistry } from "../../../registry";
 import type { DiagramData } from "../../../types/data/core/DiagramData";
+import type { ItemableData } from "../../../types/data/core/ItemableData";
+import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { DiagramDragDropEvent } from "../../../types/events/DiagramDragDropEvent";
+import type { GroupShapesEvent } from "../../../types/events/GroupShapesEvent";
 import type { CanvasFrameProps } from "../../../types/props/diagrams/CanvasFrameProps";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import { collectDiagramDataIds } from "../../../utils/core/collectDiagramDataIds";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { isDiagramPayload } from "../../../utils/execution/isDiagramPayload";
+import { isToolPayload } from "../../../utils/execution/isToolPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { Outline } from "../../core/Outline";
@@ -75,6 +81,9 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 }) => {
 	// Reference to the SVG element for interaction
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
+
+	// Get EventBus instance from context
+	const eventBus = useEventBus();
 
 	// Hook for appending selected diagrams to this frame
 	const appendSelectedDiagrams = useAppendSelectedDiagrams();
@@ -274,16 +283,63 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 						data: "",
 					},
 				});
+				const changeDiagramEvent: DiagramChangeEvent<ItemableData> = {
+					id,
+					eventId: e.eventId,
+					eventPhase: "Started",
+					startDiagram: {
+						items,
+					},
+					endDiagram: {
+						items: [],
+					},
+				};
+				onDiagramChange?.(changeDiagramEvent);
+				onDiagramChange?.({
+					...changeDiagramEvent,
+					eventPhase: "Ended",
+				});
 			}
 
-			// Handle shape data from PageDesignNode
-			if (isDiagramPayload(e.payload) && e.eventPhase === "InProgress") {
-				const shapeData = e.payload.data as Diagram;
+			if (e.eventPhase === "InProgress") {
+				// Handle shape data from PageDesignNode
+				if (isDiagramPayload(e.payload)) {
+					const shapeData = e.payload.data as Diagram;
 
-				// Validate that it's a valid diagram object
-				if (shapeData && shapeData.id && shapeData.type) {
-					// Append the received shape to this CanvasFrame
-					appendDiagrams(id, [shapeData]);
+					// Validate that it's a valid diagram object
+					if (shapeData && shapeData.id && shapeData.type) {
+						// Append the received shape to this CanvasFrame
+						appendDiagrams(id, [shapeData]);
+					}
+				} else if (isToolPayload(e.payload)) {
+					// TODO: カスタムフック化
+					// Handle tool execution results (e.g., group_shapes)
+					const toolData = e.payload.data as {
+						shapeIds: string[];
+						groupId: string;
+						name?: string;
+						description?: string;
+					};
+
+					// Dispatch GROUP_SHAPES event to group the shapes
+					if (
+						toolData &&
+						Array.isArray(toolData.shapeIds) &&
+						toolData.shapeIds.length >= 2 &&
+						toolData.groupId
+					) {
+						const groupEvent: GroupShapesEvent = {
+							eventId: e.eventId,
+							shapeIds: toolData.shapeIds,
+							groupId: toolData.groupId,
+							name: toolData.name,
+							description: toolData.description,
+						};
+
+						eventBus.dispatchEvent(
+							new CustomEvent(EVENT_NAME_GROUP_SHAPES, { detail: groupEvent }),
+						);
+					}
 				}
 			}
 
