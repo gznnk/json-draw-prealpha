@@ -7,45 +7,16 @@ import type { ItemableState } from "../../types/state/core/ItemableState";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**
- * Gets a diagram at a specific path.
+ * Updates a diagram at a specific path (immutably) in a single traversal.
  * @param items - Root level diagrams
  * @param path - Path to the diagram
- * @returns The diagram at the path, or undefined if not found
+ * @param updateFn - Function to update the diagram
+ * @returns Updated diagrams array, or original if path not found
  */
-const getDiagramAtPath = (
+const updateDiagramAtPath = (
 	items: Diagram[],
 	path: DiagramPath,
-): Diagram | undefined => {
-	let current: Diagram[] = items;
-	let diagram: Diagram | undefined;
-
-	for (let i = 0; i < path.length; i++) {
-		const idx = path[i];
-		if (idx >= current.length) return undefined;
-
-		diagram = current[idx];
-		if (i < path.length - 1) {
-			// Not at the end yet, need to go deeper
-			if (!isItemableState(diagram)) return undefined;
-			current = diagram.items;
-		}
-	}
-
-	return diagram;
-};
-
-/**
- * Sets a diagram at a specific path (immutably).
- * This implementation avoids recursion by building the new structure from the path.
- * @param items - Root level diagrams
- * @param path - Path to the diagram
- * @param newDiagram - New diagram to set
- * @returns Updated diagrams array
- */
-const setDiagramAtPath = (
-	items: Diagram[],
-	path: DiagramPath,
-	newDiagram: Diagram,
+	updateFn: (diagram: Diagram, path: DiagramPath) => Diagram,
 ): Diagram[] => {
 	if (path.length === 0) return items;
 
@@ -65,12 +36,17 @@ const setDiagramAtPath = (
 		current = item.items;
 	}
 
-	// Start from the deepest level and work our way up
-	let result: Diagram[] = current;
+	// Get and update the target diagram
 	const lastIdx = path[path.length - 1];
+	if (lastIdx >= current.length) return items;
 
-	// Update the target diagram
-	result = result.map((item, i) => (i === lastIdx ? newDiagram : item));
+	const targetDiagram = current[lastIdx];
+	const updatedDiagram = updateFn(targetDiagram, path);
+
+	// Start from the deepest level and work our way up
+	let result: Diagram[] = current.map((item, i) =>
+		i === lastIdx ? updatedDiagram : item,
+	);
 
 	// Work backwards up the path, updating each parent
 	for (let i = itemsToUpdate.length - 1; i >= 0; i--) {
@@ -118,11 +94,7 @@ export const updateDiagramsByPath = (
 
 	// Process each path and update the diagram at that path
 	pathIndex.forEach((path) => {
-		const diagram = getDiagramAtPath(result, path);
-		if (diagram) {
-			const updatedDiagram = updateFn(diagram, path);
-			result = setDiagramAtPath(result, path, updatedDiagram);
-		}
+		result = updateDiagramAtPath(result, path, updateFn);
 	});
 
 	return result;
