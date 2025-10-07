@@ -3,7 +3,6 @@ import type {
 	DiagramPathIndex,
 } from "../../types/core/DiagramPath";
 import type { Diagram } from "../../types/state/core/Diagram";
-import type { ItemableState } from "../../types/state/core/ItemableState";
 import { isItemableState } from "../../utils/validation/isItemableState";
 
 /**
@@ -64,12 +63,17 @@ const updateDiagramAtPath = (
 		} as Diagram;
 
 		// Get the level containing this parent (its siblings) and update it
-		const parentSiblingLevel: Diagram[] =
-			i === 0
-				? items
-				: isItemableState(parentDiagrams[i - 1])
-					? (parentDiagrams[i - 1] as unknown as ItemableState).items
-					: [];
+		let parentSiblingLevel: Diagram[];
+		if (i === 0) {
+			// This is a top-level diagram, its siblings are in the root items array
+			parentSiblingLevel = items;
+		} else {
+			// This diagram is nested, get its siblings from its grandparent
+			const grandparent = parentDiagrams[i - 1];
+			if (!isItemableState(grandparent)) return items;
+			parentSiblingLevel = grandparent.items;
+		}
+
 		result = parentSiblingLevel.map((item, idx) =>
 			idx === pathIdx ? updatedParent : item,
 		);
