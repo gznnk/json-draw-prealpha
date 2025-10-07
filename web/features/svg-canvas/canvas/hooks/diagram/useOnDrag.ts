@@ -90,10 +90,9 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 			// Recursively update diagram and all its descendants
 			const updateDiagramRecursively = (diagram: Diagram): Diagram => {
 				const initialItem = initialItems.get(diagram.id);
-				if (!initialItem) {
-					return diagram;
-				}
+				if (!initialItem) return diagram;
 
+				// Update position and dragging state
 				let newItem = {
 					...diagram,
 					x: initialItem.x + dx,
@@ -114,35 +113,10 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 
 				// Recursively update children if this diagram has them
 				if (isItemableState(newItem)) {
-					newItem.items = newItem.items.map((child) => {
-						const childInitialItem = initialItems.get(child.id);
-						if (!childInitialItem) return child;
-
-						let updatedChild = {
-							...child,
-							x: childInitialItem.x + dx,
-							y: childInitialItem.y + dy,
-							isDragging,
-						} as Diagram;
-
-						// Hide transform controls during drag
-						if (isTransformativeState(updatedChild) && isDragging) {
-							updatedChild.showTransformControls = false;
-						}
-
-						// Update connect points
-						updatedChild = updateDiagramConnectPoints(updatedChild);
-
-						// Add to moved diagrams list
-						movedDiagrams.push(updatedChild);
-
-						// Recursively update grandchildren
-						if (isItemableState(updatedChild)) {
-							updatedChild = updateDiagramRecursively(updatedChild);
-						}
-
-						return updatedChild;
-					});
+					newItem = {
+						...newItem,
+						items: newItem.items.map(updateDiagramRecursively),
+					} as Diagram;
 				}
 
 				return newItem;
