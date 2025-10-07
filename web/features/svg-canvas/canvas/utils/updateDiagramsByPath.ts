@@ -1,4 +1,7 @@
-import type { DiagramPath, DiagramPathIndex } from "./createDiagramPathIndex";
+import type {
+	DiagramPath,
+	DiagramPathIndex,
+} from "../../types/core/DiagramPath";
 import type { Diagram } from "../../types/state/core/Diagram";
 import type { ItemableState } from "../../types/state/core/ItemableState";
 import { isItemableState } from "../../utils/validation/isItemableState";

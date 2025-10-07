@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 
+import type { DiagramPathIndex } from "../../../types/core/DiagramPath";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
@@ -11,10 +12,7 @@ import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { adjustCanvasFrameSizesAndRefreshConnections } from "../../utils/adjustCanvasFrameSizesAndRefreshConnections";
-import {
-	createDiagramPathIndex,
-	type DiagramPathIndex,
-} from "../../utils/createDiagramPathIndex";
+import { createDiagramPathIndex } from "../../utils/createDiagramPathIndex";
 import { createItemMap } from "../../utils/createItemMap";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateDiagramsByPath } from "../../utils/updateDiagramsByPath";
