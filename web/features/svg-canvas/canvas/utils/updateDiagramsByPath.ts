@@ -20,54 +20,57 @@ const updateDiagramAtPath = (
 ): Diagram[] => {
 	if (path.length === 0) return items;
 
-	// Build array of items that need to be updated along the path
-	const itemsToUpdate: Diagram[] = [];
-	let current: Diagram[] = items;
+	// Build array of parent diagrams that need to be updated along the path
+	const parentDiagrams: Diagram[] = [];
+	// Current level of diagrams being traversed (starts at root, goes deeper)
+	let currentLevel: Diagram[] = items;
 
-	// Navigate to the target, collecting items along the way
+	// Navigate to the target diagram's level, collecting parent diagrams along the way
 	for (let i = 0; i < path.length - 1; i++) {
 		const idx = path[i];
-		if (idx >= current.length) return items;
+		if (idx >= currentLevel.length) return items;
 
-		const item = current[idx];
-		itemsToUpdate.push(item);
+		const diagram = currentLevel[idx];
+		parentDiagrams.push(diagram);
 
-		if (!isItemableState(item)) return items;
-		current = item.items;
+		if (!isItemableState(diagram)) return items;
+		// Move to the next level (children of current diagram)
+		currentLevel = diagram.items;
 	}
 
-	// Get and update the target diagram
+	// Get and update the target diagram at the final level
 	const lastIdx = path[path.length - 1];
-	if (lastIdx >= current.length) return items;
+	if (lastIdx >= currentLevel.length) return items;
 
-	const targetDiagram = current[lastIdx];
+	const targetDiagram = currentLevel[lastIdx];
 	const updatedDiagram = updateFn(targetDiagram, path);
 
-	// Start from the deepest level and work our way up
-	let result: Diagram[] = current.map((item, i) =>
+	// Start from the deepest level (where target diagram is) and work our way up
+	let result: Diagram[] = currentLevel.map((item, i) =>
 		i === lastIdx ? updatedDiagram : item,
 	);
 
-	// Work backwards up the path, updating each parent
-	for (let i = itemsToUpdate.length - 1; i >= 0; i--) {
-		const parentItem = itemsToUpdate[i];
+	// Work backwards up the path, updating each parent diagram
+	for (let i = parentDiagrams.length - 1; i >= 0; i--) {
+		const parentDiagram = parentDiagrams[i];
 		const pathIdx = path[i];
 
-		if (!isItemableState(parentItem)) return items;
+		if (!isItemableState(parentDiagram)) return items;
 
+		// Create updated parent with new children
 		const updatedParent = {
-			...parentItem,
+			...parentDiagram,
 			items: result,
-		} as unknown as Diagram;
+		} as Diagram;
 
-		// Get the parent's siblings and update the array
-		const parentLevel: Diagram[] =
+		// Get the level containing this parent (its siblings) and update it
+		const parentSiblingLevel: Diagram[] =
 			i === 0
 				? items
-				: isItemableState(itemsToUpdate[i - 1])
-					? (itemsToUpdate[i - 1] as unknown as ItemableState).items
+				: isItemableState(parentDiagrams[i - 1])
+					? (parentDiagrams[i - 1] as unknown as ItemableState).items
 					: [];
-		result = parentLevel.map((item, idx) =>
+		result = parentSiblingLevel.map((item, idx) =>
 			idx === pathIdx ? updatedParent : item,
 		);
 	}
