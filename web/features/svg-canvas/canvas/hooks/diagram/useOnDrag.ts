@@ -4,8 +4,10 @@ import type { DiagramPathIndex } from "../../../types/core/DiagramPath";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
+import { collectDiagramIds } from "../../../utils/core/collectDiagramIds";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
-import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
+import { collectConnectedConnectLines } from "../../../utils/shapes/connectLine/collectConnectedConnectLines";
+import { updateConnectLinesByIds } from "../../../utils/shapes/connectLine/updateConnectLinesByIds";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { InteractionState } from "../../types/InteractionState";
@@ -42,6 +44,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 	const initialMultiSelectGroup = useRef<GroupState | undefined>(undefined);
 	// Reference to store path index for efficient updates
 	const pathIndex = useRef<DiagramPathIndex>(new Map());
+	// Reference to store ConnectLine IDs that need to be updated
+	const connectedConnectLineIds = useRef<Set<string>>(new Set());
 
 	// Return a callback function to handle the drag event.
 	return useCallback((e: DiagramDragEvent) => {
@@ -75,6 +79,16 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 
 				// Create path index for efficient updates
 				pathIndex.current = createDiagramPathIndex(prevState.items, selectedIds);
+
+				// Collect all diagram IDs that will be moved (selected + their descendants)
+				const allMovedDiagramIds = new Set(collectDiagramIds(selectedItems));
+
+				// Collect ConnectLine IDs that are connected to any of the moved diagrams
+				const connectLineIds = collectConnectedConnectLines(
+					prevState.items,
+					allMovedDiagramIds,
+				);
+				connectedConnectLineIds.current = new Set(connectLineIds);
 			}
 
 			// Calculate the movement delta
@@ -83,9 +97,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 
 			// Get initial items from ref (stored at drag start)
 			const initialItems = initialItemsMap.current;
-
-			// Collect all diagrams that will be moved (for connect point updates)
-			const movedDiagrams: Diagram[] = [];
 
 			// Recursively update diagram and all its descendants
 			const updateDiagramRecursively = (diagram: Diagram): Diagram => {
@@ -107,9 +118,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 
 				// Update connect points
 				newItem = updateDiagramConnectPoints(newItem);
-
-				// Add the moved item to the list
-				movedDiagrams.push(newItem);
 
 				// Recursively update children if this diagram has them
 				if (isItemableState(newItem)) {
@@ -157,9 +165,9 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				};
 			}
 
-			// Refresh the connect lines for the moved diagrams
-			newState = refreshConnectLines(
-				movedDiagrams,
+			// Refresh the connect lines using cached ConnectLine IDs
+			newState = updateConnectLinesByIds(
+				connectedConnectLineIds.current,
 				newState,
 				startCanvasState.current,
 			);
@@ -214,6 +222,7 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				initialItemsMap.current.clear();
 				initialMultiSelectGroup.current = undefined;
 				pathIndex.current.clear();
+				connectedConnectLineIds.current.clear();
 			}
 
 			return newState;
