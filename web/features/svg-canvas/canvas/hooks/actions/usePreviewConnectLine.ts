@@ -46,16 +46,13 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 				baseItems,
 				pathIndex.current,
 				(item) => {
-					if (isConnectableState(item) && item.id === e.ownerId) {
-						const point = item.connectPoints.find((cp) => cp.id === e.id);
-						if (point) {
-							return {
-								...item,
-								connectPoints: item.connectPoints.map((cp) =>
-									cp.id === e.id ? { ...cp, x: e.x, y: e.y } : cp,
-								),
-							};
-						}
+					if (isConnectableState(item)) {
+						return {
+							...item,
+							connectPoints: item.connectPoints.map((cp) =>
+								cp.id === e.id ? { ...cp, x: e.x, y: e.y } : cp,
+							),
+						};
 					}
 					return item;
 				},
@@ -65,12 +62,14 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 				...prevState,
 				items: updatedItems,
 				previewConnectLineState: e.pathData,
-				multiSelectGroup:
-					e.eventPhase === "Started" ? undefined : prevState.multiSelectGroup,
-				...(e.minX !== undefined && e.minY !== undefined
-					? { minX: e.minX, minY: e.minY }
-					: {}),
+				multiSelectGroup: undefined,
 			};
+
+			// Update minX and minY if provided (for auto canvas expansion)
+			if (e.minX !== undefined && e.minY !== undefined) {
+				newState.minX = e.minX;
+				newState.minY = e.minY;
+			}
 
 			// Clean up path index when connection preview ends
 			if (e.eventPhase === "Ended") {
