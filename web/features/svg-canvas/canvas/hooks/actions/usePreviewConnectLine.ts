@@ -1,10 +1,12 @@
 import { useCallback, useRef } from "react";
 
+import type { DiagramPathIndex } from "../../../types/core/DiagramPath";
 import type { PreviewConnectLineEvent } from "../../../types/events/PreviewConnectLineEvent";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
+import { createDiagramPathIndex } from "../../utils/createDiagramPathIndex";
+import { updateDiagramsByPath } from "../../utils/updateDiagramsByPath";
 
 /**
  * Custom hook to handle preview connect line events on the canvas.
@@ -18,27 +20,31 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
+	// Reference to store path index for efficient updates
+	const pathIndex = useRef<DiagramPathIndex>(new Map());
+
 	return useCallback((e: PreviewConnectLineEvent) => {
 		// Bypass references to avoid function creation in every render.
 		const { setCanvasState } = refBus.current.props;
 
 		setCanvasState((prevState) => {
-			let newState = {
-				...prevState,
-				previewConnectLineState: e.pathData,
-			};
-
-			// Clear all selections when connection preview starts
+			// Clear all selections and create path index when connection preview starts
 			if (e.eventPhase === "Started") {
-				newState.items = clearSelectionRecursively(prevState.items);
-				newState.multiSelectGroup = undefined;
+				// Create path index for the owner diagram
+				pathIndex.current = createDiagramPathIndex(
+					prevState.items,
+					new Set([e.ownerId]),
+				);
 			}
 
-			// Update connect point position
-			newState = {
-				...newState,
-				items: applyFunctionRecursively(newState.items, (item) => {
-					if (isConnectableState(item)) {
+			// Update connect point position using path-based update
+			const updatedItems = updateDiagramsByPath(
+				e.eventPhase === "Started"
+					? clearSelectionRecursively(prevState.items)
+					: prevState.items,
+				pathIndex.current,
+				(item) => {
+					if (isConnectableState(item) && item.id === e.ownerId) {
 						const point = item.connectPoints.find((cp) => cp.id === e.id);
 						if (point) {
 							return {
@@ -50,12 +56,23 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 						}
 					}
 					return item;
-				}),
+				},
+			);
+
+			const newState = {
+				...prevState,
+				items: updatedItems,
+				previewConnectLineState: e.pathData,
+				multiSelectGroup:
+					e.eventPhase === "Started" ? undefined : prevState.multiSelectGroup,
+				...(e.minX !== undefined && e.minY !== undefined
+					? { minX: e.minX, minY: e.minY }
+					: {}),
 			};
 
-			if (e.minX !== undefined && e.minY !== undefined) {
-				newState.minX = e.minX;
-				newState.minY = e.minY;
+			// Clean up path index when connection preview ends
+			if (e.eventPhase === "Ended") {
+				pathIndex.current.clear();
 			}
 
 			return newState;
