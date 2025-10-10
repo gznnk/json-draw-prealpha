@@ -54,6 +54,8 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		dragX: number,
 		dragY: number,
 		eventPhase: EventPhase,
+		minX?: number,
+		minY?: number,
 	) => {
 		let newPoints: Point[] = [];
 
@@ -92,6 +94,10 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 		// Notify the path data for the new connection line rendering.
 		onPreviewConnectLine?.({
+			id,
+			x,
+			y,
+			ownerId,
 			eventPhase,
 			pathData: {
 				...ConnectLineDefaultState,
@@ -102,6 +108,8 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 				height: 0,
 				items: newPathPoints,
 			},
+			minX,
+			minY,
 		});
 	};
 
@@ -128,8 +136,15 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	 * Drag event handler for the connect point
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { connectType, onPreviewConnectLine, updatePathPoints } =
-			refBus.current;
+		const {
+			id,
+			x,
+			y,
+			ownerId,
+			connectType,
+			onPreviewConnectLine,
+			updatePathPoints,
+		} = refBus.current;
 
 		if (connectType === "end-only") {
 			return;
@@ -146,12 +161,16 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 		}
 
 		if (e.eventPhase !== "Ended") {
-			updatePathPoints(e.endX, e.endY, e.eventPhase);
+			updatePathPoints(e.endX, e.endY, e.eventPhase, e.minX, e.minY);
 		} else {
 			setPathPoints([]);
 
 			// Clear the path data for the new connection line rendering.
 			onPreviewConnectLine?.({
+				id,
+				x,
+				y,
+				ownerId,
 				eventPhase: e.eventPhase,
 				pathData: undefined,
 			});
@@ -262,7 +281,7 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 	useEffect(() => {
 		const handleConnection = (e: Event) => {
 			// Get referenced values via refBus
-			const { id, pathPoints, ownerId, onConnect, updatePathPoints } =
+			const { id, x, y, pathPoints, ownerId, onConnect, updatePathPoints } =
 				refBus.current;
 
 			const customEvent = e as CustomEvent<ConnectionEvent>;
@@ -314,6 +333,10 @@ const ConnectPointComponent: React.FC<ConnectPointProps> = ({
 
 					// Clear the path data for the new connection line rendering.
 					refBus.current.onPreviewConnectLine?.({
+						id,
+						x,
+						y,
+						ownerId,
 						pathData: undefined,
 						eventPhase: "Ended",
 					});

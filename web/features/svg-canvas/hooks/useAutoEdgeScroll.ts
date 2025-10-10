@@ -1,4 +1,5 @@
 import { useCallback, useRef } from "react";
+import type { RefObject } from "react";
 
 import { AUTO_SCROLL_INTERVAL_MS } from "../constants/core/Constants";
 import type { Point } from "../types/core/Point";
@@ -23,12 +24,48 @@ export type DoStartEdgeScrollArgs = EdgeScrollState & {
 };
 
 /**
+ * Source type that can provide a viewport snapshot or a ref with one.
+ */
+type ViewportSource = SvgViewport | RefObject<SvgViewport | null>;
+
+/**
+ * Type guard to check if the source is a ref object.
+ * @param source - The source to check.
+ * @returns True if the source is a ref object, false otherwise.
+ */
+const isViewportRef = (
+	source: ViewportSource,
+): source is RefObject<SvgViewport | null> => {
+	return source !== null && typeof source === "object" && "current" in source;
+};
+
+/**
+ * Resolve the initial viewport from the source.
+ * @param source - The viewport source, either a direct viewport or a ref.
+ * @returns The resolved SvgViewport.
+ */
+const resolveInitialViewport = (source: ViewportSource): SvgViewport => {
+	if (isViewportRef(source)) {
+		return (
+			source.current ?? {
+				minX: 0,
+				minY: 0,
+				containerWidth: 0,
+				containerHeight: 0,
+				zoom: 1,
+			}
+		);
+	}
+	return source;
+};
+
+/**
  * Custom hook to handle auto edge scrolling in the SVG canvas.
- * @param viewport - The current SVG viewport.
+ * @param viewportSource - The current SVG viewport or a ref that can provide it.
  * @param doStartEdgeScroll - Function to start edge scrolling with new state.
  */
 export const useAutoEdgeScroll = (
-	viewport: SvgViewport,
+	viewportSource: ViewportSource,
 	doStartEdgeScroll: (state: DoStartEdgeScrollArgs) => void,
 ) => {
 	// Internal state for edge scrolling
@@ -41,9 +78,24 @@ export const useAutoEdgeScroll = (
 		delta: { x: 0, y: 0 },
 	});
 
+	const latestViewportRef = useRef<SvgViewport>(
+		resolveInitialViewport(viewportSource),
+	);
+	latestViewportRef.current = resolveInitialViewport(viewportSource);
+
+	const resolveViewport = () => {
+		if (isViewportRef(viewportSource)) {
+			const resolved = viewportSource.current ?? latestViewportRef.current;
+			latestViewportRef.current = resolved;
+			return resolved;
+		}
+		latestViewportRef.current = viewportSource;
+		return viewportSource;
+	};
+
 	// Use ref to hold referenced values to avoid frequent handler generation
 	const refBusVal = {
-		viewport,
+		resolveViewport,
 		doStartEdgeScroll,
 	};
 	const refBus = useRef(refBusVal);
@@ -74,7 +126,8 @@ export const useAutoEdgeScroll = (
 		// Execute scroll processing immediately
 		const executeScroll = () => {
 			// Bypass references to avoid function creation in every render.
-			const { viewport, doStartEdgeScroll } = refBus.current;
+			const { resolveViewport, doStartEdgeScroll } = refBus.current;
+			const viewport = resolveViewport();
 
 			// Auto edge scroll if the cursor is near the edges.
 			const zoom = viewport.zoom;
@@ -133,7 +186,8 @@ export const useAutoEdgeScroll = (
 			},
 		): boolean => {
 			// Bypass references to avoid function creation in every render.
-			const { viewport } = refBus.current;
+			const { resolveViewport } = refBus.current;
+			const viewport = resolveViewport();
 
 			// Auto edge scroll if the cursor is near the edges.
 			const { x: cursorX, y: cursorY } = cursorPos;

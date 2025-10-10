@@ -227,7 +227,7 @@ export const useDrag = (props: DragProps) => {
 
 	// Use the shared auto edge scroll hook
 	const { autoEdgeScroll, clearEdgeScroll } = useAutoEdgeScroll(
-		svgViewport.current,
+		svgViewport,
 		doStartEdgeScroll,
 	);
 

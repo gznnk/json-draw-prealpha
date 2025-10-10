@@ -1,7 +1,9 @@
 import { useCallback, useRef } from "react";
 
 import type { PreviewConnectLineEvent } from "../../../types/events/PreviewConnectLineEvent";
+import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
+import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 
 /**
@@ -21,7 +23,7 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 		const { setCanvasState } = refBus.current.props;
 
 		setCanvasState((prevState) => {
-			const newState = {
+			let newState = {
 				...prevState,
 				previewConnectLineState: e.pathData,
 			};
@@ -30,6 +32,30 @@ export const usePreviewConnectLine = (props: SvgCanvasSubHooksProps) => {
 			if (e.eventPhase === "Started") {
 				newState.items = clearSelectionRecursively(prevState.items);
 				newState.multiSelectGroup = undefined;
+			}
+
+			// Update connect point position
+			newState = {
+				...newState,
+				items: applyFunctionRecursively(newState.items, (item) => {
+					if (isConnectableState(item)) {
+						const point = item.connectPoints.find((cp) => cp.id === e.id);
+						if (point) {
+							return {
+								...item,
+								connectPoints: item.connectPoints.map((cp) =>
+									cp.id === e.id ? { ...cp, x: e.x, y: e.y } : cp,
+								),
+							};
+						}
+					}
+					return item;
+				}),
+			};
+
+			if (e.minX !== undefined && e.minY !== undefined) {
+				newState.minX = e.minX;
+				newState.minY = e.minY;
 			}
 
 			return newState;

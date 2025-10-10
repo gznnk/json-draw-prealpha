@@ -6,6 +6,10 @@ import type { PathState } from "../state/shapes/PathState";
  * This event is triggered when the preview connection line should be shown, updated, or hidden.
  */
 export type PreviewConnectLineEvent = {
+	id: string; // ConnectPoint id
+	x: number; // The x coordinate of the ConnectPoint in canvas space.
+	y: number; // The y coordinate of the ConnectPoint in canvas space.
+	ownerId: string; // The ID of the ConnectPoint that owns this event.
 	/**
 	 * The type of event that triggered this preview connection line event.
 	 */
@@ -15,4 +19,7 @@ export type PreviewConnectLineEvent = {
 	 * When undefined, the preview line should be hidden.
 	 */
 	pathData?: PathState;
+
+	minX?: number;
+	minY?: number;
 };
