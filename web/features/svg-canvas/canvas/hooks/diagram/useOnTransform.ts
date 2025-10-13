@@ -14,7 +14,6 @@ import { isTransformativeState } from "../../../utils/validation/isTransformativ
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import { adjustCanvasFrameSizesAndRefreshConnections } from "../../utils/adjustCanvasFrameSizesAndRefreshConnections";
 import { calculateTransformedCenter } from "../../utils/calculateTransformedCenter";
 import { calculateTransformedRotation } from "../../utils/calculateTransformedRotation";
 import { createItemMap } from "../../utils/createItemMap";
@@ -332,14 +331,6 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					newState,
 					startCanvasState.current,
 				);
-
-				if (e.eventPhase === "Ended") {
-					// Adjust canvas frame sizes and refresh connections
-					newState = adjustCanvasFrameSizesAndRefreshConnections(
-						newState,
-						startCanvasState.current,
-					);
-				}
 
 				// Update outline of top-level groups that contain transformed diagrams
 				newState.items = newState.items.map((item) => {

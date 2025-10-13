@@ -4,14 +4,10 @@ import { APPEND_SELECTED_DIAGRAMS_EVENT_NAME } from "../../../constants/core/Eve
 import type { AppendSelectedDiagramsEvent } from "../../../types/events/AppendSelectedDiagramsEvent";
 import { getDiagramById } from "../../../utils/core/getDiagramById";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
-import { refreshConnectLines } from "../../../utils/shapes/connectLine/refreshConnectLines";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import { adjustTargetDiagramSize } from "../../utils/adjustTargetDiagramSize";
 import { appendDiagrams } from "../../utils/appendDiagrams";
 import { cleanupGroups } from "../../utils/cleanupGroups";
 import { removeDiagramsById } from "../../utils/removeDiagramsById";
-import { replaceDiagram } from "../../utils/replaceDiagram";
-import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";
 
@@ -77,31 +73,8 @@ export const useOnAppendSelectedDiagrams = (props: SvgCanvasSubHooksProps) => {
 					selectedDiagrams,
 				);
 
-				// 5. Adjust target diagram size if appended diagrams extend beyond bounds
-				const targetAfterAppend = getDiagramById(
-					diagramsAppendedItems,
-					event.targetId,
-				);
-				if (!targetAfterAppend) {
-					console.error(
-						`Target diagram with id ${event.targetId} not found after append`,
-					);
-					return prevState;
-				}
-
-				// 5-1. Adjust target diagram size
-				const targetAfterResize = adjustTargetDiagramSize(targetAfterAppend);
-
-				// 6. Update connect points for the resized target diagram
-				const adjustedAndUpdatedTarget =
-					updateDiagramConnectPoints(targetAfterResize);
-				const connectPointsUpdatedItems = replaceDiagram(
-					diagramsAppendedItems,
-					adjustedAndUpdatedTarget,
-				);
-
-				// 7. Clean up empty groups
-				const groupsCleanedUpItems = cleanupGroups(connectPointsUpdatedItems);
+				// 5. Clean up empty groups
+				const groupsCleanedUpItems = cleanupGroups(diagramsAppendedItems);
 
 				// Update outlines
 				const updatedItems = updateOutlineOfAllItemables(groupsCleanedUpItems);
@@ -111,13 +84,6 @@ export const useOnAppendSelectedDiagrams = (props: SvgCanvasSubHooksProps) => {
 					...prevState,
 					items: updatedItems,
 				};
-
-				// 8. Refresh connect lines if target diagram was resized
-				newState = refreshConnectLines(
-					[adjustedAndUpdatedTarget],
-					newState,
-					prevState,
-				);
 
 				// Add history
 				newState = addHistory(event.eventId, newState);

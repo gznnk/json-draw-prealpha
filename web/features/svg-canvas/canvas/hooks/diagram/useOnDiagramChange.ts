@@ -5,7 +5,6 @@ import type { EventPhase } from "../../../types/events/EventPhase";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import { adjustCanvasFrameSizesAndRefreshConnections } from "../../utils/adjustCanvasFrameSizesAndRefreshConnections";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
 import { useAddHistory } from "../history/useAddHistory";
@@ -81,12 +80,6 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			}
 
 			if (e.eventPhase === "Ended") {
-				// Adjust canvas frame sizes and refresh connections
-				newState = adjustCanvasFrameSizesAndRefreshConnections(
-					newState,
-					startCanvasState.current,
-				);
-
 				// Add history
 				newState = addHistory(e.eventId, newState);
 

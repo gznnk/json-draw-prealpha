@@ -13,7 +13,6 @@ import { isTransformativeState } from "../../../utils/validation/isTransformativ
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
-import { adjustCanvasFrameSizesAndRefreshConnections } from "../../utils/adjustCanvasFrameSizesAndRefreshConnections";
 import { createDiagramPathIndex } from "../../utils/createDiagramPathIndex";
 import { createItemMap } from "../../utils/createItemMap";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
@@ -74,7 +73,10 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				const selectedIds = new Set(selectedItems.map((item) => item.id));
 
 				// Create path index for efficient updates
-				pathIndex.current = createDiagramPathIndex(prevState.items, selectedIds);
+				pathIndex.current = createDiagramPathIndex(
+					prevState.items,
+					selectedIds,
+				);
 
 				// Collect all diagram IDs that will be moved (selected + their descendants)
 				const allMovedDiagramIds = collectDiagramIds(selectedItems);
@@ -202,12 +204,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 					newState.items,
 					pathIndex.current,
 					restoreTransformControls,
-				);
-
-				// Adjust canvas frame sizes and refresh connections
-				newState = adjustCanvasFrameSizesAndRefreshConnections(
-					newState,
-					startCanvasState.current,
 				);
 
 				// Update outline of all groups.
