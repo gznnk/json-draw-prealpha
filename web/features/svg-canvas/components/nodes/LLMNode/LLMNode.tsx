@@ -1,7 +1,7 @@
-import { OpenAI } from "openai";
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
+import { LLMClientFactory, type LLMClient } from "../../../../../shared/llm-client";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
 import {
 	BACKGROUND_COLOR,
@@ -68,6 +68,7 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 
 	const [apiKey, setApiKey] = useState<string>("");
 	const [instructions, setInstructions] = useState<string>(inputState.text);
+	const [llmClient, setLlmClient] = useState<LLMClient | null>(null);
 	const {
 		processes,
 		hasActiveProcess,
@@ -94,13 +95,27 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	// Load the API key from local storage when the component mounts.
+	// Load the API key from local storage and initialize LLM client when the component mounts.
 	useEffect(() => {
 		const storedApiKey = OpenAiKeyManager.loadKey();
 		if (storedApiKey) {
 			setApiKey(storedApiKey);
+			const client = LLMClientFactory.createClient(storedApiKey, {
+				systemPrompt: instructions,
+			});
+			setLlmClient(client);
 		}
-	}, []);
+	}, [instructions]);
+
+	// Update LLM client when instructions change
+	useEffect(() => {
+		if (apiKey) {
+			const client = LLMClientFactory.createClient(apiKey, {
+				systemPrompt: instructions,
+			});
+			setLlmClient(client);
+		}
+	}, [apiKey, instructions]);
 
 	// Handler for drag events.
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
@@ -141,26 +156,14 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 	// Handler for executing the LLM with streaming response
 	const handleExecution = useCallback(
 		async (inputText: string) => {
-			if (inputText === "") return;
+			if (inputText === "" || !llmClient) return;
 
-			const { id, instructions, onExecute } = refBus.current;
+			const { id, onExecute } = refBus.current;
 
 			const processId = newEventId();
 			addProcess(processId);
 
-			const openai = new OpenAI({
-				apiKey,
-				dangerouslyAllowBrowser: true,
-			});
-
 			try {
-				const stream = await openai.responses.create({
-					model: "gpt-5",
-					instructions,
-					input: inputText,
-					stream: true,
-				});
-
 				let fullOutput = "";
 				const eventId = newEventId();
 
@@ -177,11 +180,11 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 					},
 				});
 
-				for await (const event of stream) {
-					if (event.type === "response.output_text.delta") {
-						const delta = event.delta;
-						fullOutput += delta;
-
+				// Use LLMClient's chat method with streaming callback
+				await llmClient.chat({
+					message: inputText,
+					onTextChunk: (textChunk: string) => {
+						fullOutput += textChunk;
 						onExecute?.({
 							id,
 							eventId,
@@ -194,31 +197,30 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 								},
 							},
 						});
-					}
+					},
+				});
 
-					if (event.type === "response.output_text.done") {
-						onExecute?.({
-							id,
-							eventId,
-							eventPhase: "Ended",
-							payload: {
-								format: "text",
-								data: fullOutput,
-								metadata: {
-									contentType: "plain",
-								},
-							},
-						});
-						setProcessSuccess(processId);
-					}
-				}
+				// Send completion event
+				onExecute?.({
+					id,
+					eventId,
+					eventPhase: "Ended",
+					payload: {
+						format: "text",
+						data: fullOutput,
+						metadata: {
+							contentType: "plain",
+						},
+					},
+				});
+				setProcessSuccess(processId);
 			} catch (error) {
-				console.error("Error fetching data from OpenAI API:", error);
+				console.error("Error fetching data from LLM API:", error);
 				alert("An error occurred during the API request.");
 				setProcessError(processId);
 			}
 		},
-		[apiKey, addProcess, setProcessError, setProcessSuccess],
+		[llmClient, addProcess, setProcessError, setProcessSuccess],
 	);
 
 	// Handle propagation events from child components
