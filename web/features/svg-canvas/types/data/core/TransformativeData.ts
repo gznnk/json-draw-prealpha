@@ -7,4 +7,5 @@ import type { Frame } from "../../core/Frame";
 export type TransformativeData = Frame & {
 	keepProportion: boolean;
 	rotateEnabled: boolean;
+	inversionEnabled: boolean;
 };

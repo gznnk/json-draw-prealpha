@@ -24,6 +24,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 	scaleY,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	fill,
 	stroke,
 	strokeWidth,
@@ -123,6 +124,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 			scaleY={scaleY}
 			keepProportion={keepProportion}
 			rotateEnabled={rotateEnabled}
+			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
 			connectPoints={[]}
 			showConnectPoints={false}

@@ -43,6 +43,7 @@ const PathComponent: React.FC<PathProps> = ({
 	scaleY,
 	keepProportion = false,
 	rotateEnabled,
+	inversionEnabled,
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
@@ -425,6 +426,7 @@ const PathComponent: React.FC<PathProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					rotateEnabled={rotateEnabled}
+					inversionEnabled={inversionEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

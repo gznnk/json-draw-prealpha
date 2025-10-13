@@ -24,6 +24,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	scaleY,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	fill = ButtonDefaultState.fill,
 	stroke = ButtonDefaultState.stroke,
 	strokeWidth = ButtonDefaultState.strokeWidth,
@@ -103,6 +104,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 			scaleY={scaleY}
 			keepProportion={keepProportion}
 			rotateEnabled={rotateEnabled}
+			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
 			connectPoints={connectPoints}
 			showConnectPoints={showConnectPoints}

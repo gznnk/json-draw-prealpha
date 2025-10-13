@@ -18,7 +18,6 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	rotateEnabled,
 	stroke = "black",
 	strokeWidth = "1px",
 	isSelected = false,
@@ -61,7 +60,8 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 			scaleX={scaleX}
 			scaleY={scaleY}
 			keepProportion={false}
-			rotateEnabled={rotateEnabled}
+			rotateEnabled={false}
+			inversionEnabled={false}
 			stroke={stroke}
 			strokeWidth={strokeWidth}
 			isSelected={isSelected}

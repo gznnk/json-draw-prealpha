@@ -51,6 +51,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 		scaleY,
 		rotation,
 		rotateEnabled,
+		inversionEnabled,
 		items,
 		isSelected,
 		isAncestorSelected,
@@ -254,6 +255,7 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					rotation={0}
 					keepProportion={false}
 					rotateEnabled={rotateEnabled}
+					inversionEnabled={inversionEnabled}
 					isSelected={false}
 					isAncestorSelected={false}
 					showConnectPoints={false}

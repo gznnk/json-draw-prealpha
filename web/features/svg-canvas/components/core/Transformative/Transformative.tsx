@@ -53,6 +53,7 @@ const TransformativeComponent: React.FC<Props> = ({
 	scaleY,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	showTransformControls,
 	onTransform,
 	onClick,
@@ -209,6 +210,7 @@ const TransformativeComponent: React.FC<Props> = ({
 
 	/**
 	 * Checks if dimensions are below minimum values and adjusts them.
+	 * Also handles inversion prevention when inversionEnabled is false.
 	 * Returns adjusted dimensions that meet minimum requirements.
 	 */
 	const enforceMinimumDimensions = (
@@ -217,6 +219,16 @@ const TransformativeComponent: React.FC<Props> = ({
 		aspectRatio?: number,
 		shouldKeepProportion?: boolean,
 	): { width: number; height: number } => {
+		// If inversion is disabled, prevent negative dimensions
+		if (!inversionEnabled) {
+			if (newWidth < 0) {
+				newWidth = Math.max(minWidth, 0);
+			}
+			if (newHeight < 0) {
+				newHeight = Math.max(minHeight, 0);
+			}
+		}
+
 		const absWidth = Math.abs(newWidth);
 		const absHeight = Math.abs(newHeight);
 		const widthSign = signNonZero(newWidth);

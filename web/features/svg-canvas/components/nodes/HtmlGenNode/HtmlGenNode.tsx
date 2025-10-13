@@ -27,7 +27,7 @@ import { Frame } from "../../elements/Frame";
  * HtmlGenNode component.
  */
 const HtmlGenNodeComponent: React.FC<HtmlGenNodeProps> = (props) => {
-	const { id, width, height, rotateEnabled = true, onDrag, onExecute } = props;
+	const { id, width, height, onDrag, onExecute } = props;
 
 	const target = "7247c834-bf96-40bf-afae-ca74907cc13d";
 
@@ -62,106 +62,109 @@ const HtmlGenNodeComponent: React.FC<HtmlGenNodeProps> = (props) => {
 	}, []);
 
 	// Handler for executing HTML generation
-	const handleExecution = useCallback(async (data?: unknown) => {
-		const {
-			id,
-			// connectedDiagrams,
-			onExecute,
-		} = refBus.current;
+	const handleExecution = useCallback(
+		async (data?: unknown) => {
+			const {
+				id,
+				// connectedDiagrams,
+				onExecute,
+			} = refBus.current;
 
-		// Use propagated data if available, otherwise fallback to target diagram
-		let diagramData: string;
-		if (data !== undefined) {
-			diagramData = JSON.stringify(data, null, 2);
-		} else {
-			const targetd = getDiagramById(canvasRef.current.items, target);
-			diagramData = JSON.stringify(targetd);
-		}
+			// Use propagated data if available, otherwise fallback to target diagram
+			let diagramData: string;
+			if (data !== undefined) {
+				diagramData = JSON.stringify(data, null, 2);
+			} else {
+				const targetd = getDiagramById(canvasRef.current.items, target);
+				diagramData = JSON.stringify(targetd);
+			}
 
-		const processId = newEventId();
-		setProcessIdList((prev) => [...prev, processId]);
+			const processId = newEventId();
+			setProcessIdList((prev) => [...prev, processId]);
 
-		try {
-			// Create LLM client using the factory
-			const client = LLMClientFactory.createClient(apiKey);
+			try {
+				// Create LLM client using the factory
+				const client = LLMClientFactory.createClient(apiKey);
 
-			const systemPrompt = `You are an HTML generation assistant. Based on the provided diagram data, generate clean, modern HTML code. The HTML should be complete, well-structured, and include appropriate CSS styling.
+				const systemPrompt = `You are an HTML generation assistant. Based on the provided diagram data, generate clean, modern HTML code. The HTML should be complete, well-structured, and include appropriate CSS styling.
 
 Connected Diagram Data:
 ${diagramData}
 
 Please generate a complete HTML document that represents or visualizes the diagram data.`;
 
-			const eventId = newEventId();
+				const eventId = newEventId();
 
-			onExecute?.({
-				id,
-				eventId,
-				eventPhase: "Started",
-				payload: {
-					format: "text",
-					data: "Generating HTML...",
-					metadata: {
-						contentType: "plain",
-					},
-				},
-			});
-
-			let generatedHtml = "";
-
-			// Generate HTML using the LLM client
-			await client.chat({
-				message: systemPrompt,
-				onTextChunk: (chunk: string) => {
-					generatedHtml += chunk;
-					onExecute?.({
-						id,
-						eventId,
-						eventPhase: "InProgress",
-						payload: {
-							format: "text",
-							data: generatedHtml,
-							metadata: {
-								contentType: "html",
-							},
+				onExecute?.({
+					id,
+					eventId,
+					eventPhase: "Started",
+					payload: {
+						format: "text",
+						data: "Generating HTML...",
+						metadata: {
+							contentType: "plain",
 						},
-					});
-				},
-			});
-
-			// Preview the generated HTML
-			previewHtmlWithConfirm(generatedHtml);
-
-			onExecute?.({
-				id,
-				eventId,
-				eventPhase: "Ended",
-				payload: {
-					format: "text",
-					data: generatedHtml,
-					metadata: {
-						contentType: "html",
 					},
-				},
-			});
-		} catch (error) {
-			console.error("Error generating HTML:", error);
-			alert("An error occurred during HTML generation.");
+				});
 
-			const eventId = newEventId();
-			onExecute?.({
-				id,
-				eventId,
-				eventPhase: "Ended",
-				payload: {
-					format: "error",
-					data: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-				},
-			});
-		}
+				let generatedHtml = "";
 
-		setProcessIdList((prev) => prev.filter((pid) => pid !== processId));
-	}, [apiKey, canvasRef]);
+				// Generate HTML using the LLM client
+				await client.chat({
+					message: systemPrompt,
+					onTextChunk: (chunk: string) => {
+						generatedHtml += chunk;
+						onExecute?.({
+							id,
+							eventId,
+							eventPhase: "InProgress",
+							payload: {
+								format: "text",
+								data: generatedHtml,
+								metadata: {
+									contentType: "html",
+								},
+							},
+						});
+					},
+				});
+
+				// Preview the generated HTML
+				previewHtmlWithConfirm(generatedHtml);
+
+				onExecute?.({
+					id,
+					eventId,
+					eventPhase: "Ended",
+					payload: {
+						format: "text",
+						data: generatedHtml,
+						metadata: {
+							contentType: "html",
+						},
+					},
+				});
+			} catch (error) {
+				console.error("Error generating HTML:", error);
+				alert("An error occurred during HTML generation.");
+
+				const eventId = newEventId();
+				onExecute?.({
+					id,
+					eventId,
+					eventPhase: "Ended",
+					payload: {
+						format: "error",
+						data: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+					},
+				});
+			}
+
+			setProcessIdList((prev) => prev.filter((pid) => pid !== processId));
+		},
+		[apiKey, canvasRef],
+	);
 
 	// Handle button click for execution
 	const handleButtonClick = useCallback(() => {
@@ -197,7 +200,8 @@ Please generate a complete HTML document that represents or visualizes the diagr
 				fill={BACKGROUND_COLOR}
 				cornerRadius={CORNER_RADIUS}
 				keepProportion={false}
-				rotateEnabled={rotateEnabled}
+				rotateEnabled={true}
+				inversionEnabled={true}
 				showTransformControls={false}
 				isTransforming={false}
 				onPropagation={onPropagation}
@@ -212,7 +216,8 @@ Please generate a complete HTML document that represents or visualizes the diagr
 					scaleY={1}
 					rotation={0}
 					keepProportion={false}
-					rotateEnabled={rotateEnabled}
+					rotateEnabled={true}
+					inversionEnabled={true}
 					isSelected={false}
 					isAncestorSelected={false}
 					showConnectPoints={false}

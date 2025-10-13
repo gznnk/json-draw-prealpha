@@ -7,9 +7,5 @@ import type { CreateDiagramProps } from "../shapes/CreateDiagramProps";
  */
 export type HtmlGenNodeProps = CreateDiagramProps<
 	HtmlGenNodeState,
-	typeof HtmlGenNodeFeatures,
-	{
-		/** Whether rotation controls are enabled */
-		rotateEnabled?: boolean;
-	}
+	typeof HtmlGenNodeFeatures
 >;

@@ -26,6 +26,7 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 	scaleY,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	isSelected,
 	connectPoints,
 	showConnectPoints = false,
@@ -112,6 +113,7 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					rotateEnabled={rotateEnabled}
+					inversionEnabled={inversionEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

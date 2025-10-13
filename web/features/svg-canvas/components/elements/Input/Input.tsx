@@ -35,6 +35,7 @@ const InputComponent: React.FC<InputProps> = ({
 	rotation,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	fill = InputDefaultData.fill,
 	stroke = InputDefaultData.stroke,
 	strokeWidth = InputDefaultData.strokeWidth,
@@ -272,6 +273,7 @@ const InputComponent: React.FC<InputProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					rotateEnabled={rotateEnabled}
+					inversionEnabled={inversionEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

@@ -14,4 +14,5 @@ export const TransformativeDefaultData = {
 	scaleY: 1,
 	keepProportion: false,
 	rotateEnabled: true,
+	inversionEnabled: true,
 } as const satisfies TransformativeData;

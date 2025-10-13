@@ -96,14 +96,22 @@ export const useOnTransform = (props: SvgCanvasSubHooksProps) => {
 					event.endFrame.rotation,
 				);
 
+				// Handle inversion if enabled
+				const effectiveScaleX = initialItem.inversionEnabled
+					? event.endFrame.scaleX
+					: Math.abs(event.endFrame.scaleX);
+				const effectiveScaleY = initialItem.inversionEnabled
+					? event.endFrame.scaleY
+					: Math.abs(event.endFrame.scaleY);
+
 				const newItemFrame = {
 					x: newCenter.x,
 					y: newCenter.y,
 					width: effectiveWidth,
 					height: effectiveHeight,
 					rotation: newRotation,
-					scaleX: event.endFrame.scaleX,
-					scaleY: event.endFrame.scaleY,
+					scaleX: effectiveScaleX,
+					scaleY: effectiveScaleY,
 				};
 
 				let newItems: Diagram[] | undefined;

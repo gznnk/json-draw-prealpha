@@ -9,7 +9,6 @@ import { PathMinimap } from "../../Path";
  */
 const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 	id,
-	rotateEnabled = true,
 	stroke = "black",
 	strokeWidth = "1px",
 	items = [],
@@ -37,7 +36,8 @@ const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 			showOutline={false}
 			showTransformControls={false}
 			keepProportion={false}
-			rotateEnabled={rotateEnabled}
+			rotateEnabled={false}
+			inversionEnabled={false}
 			isTransforming={false}
 		/>
 	);

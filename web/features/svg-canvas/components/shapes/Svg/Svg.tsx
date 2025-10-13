@@ -30,6 +30,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 	scaleY,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	isSelected,
 	isAncestorSelected = false,
 	initialWidth,
@@ -153,6 +154,7 @@ const SvgComponent: React.FC<SvgProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					rotateEnabled={rotateEnabled}
+					inversionEnabled={inversionEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

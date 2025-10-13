@@ -32,6 +32,7 @@ export const createMultiSelectGroup = (
 		scaleY: 1,
 		keepProportion: previousKeepProportion,
 		rotateEnabled,
+		inversionEnabled: true,
 		isSelected: true,
 		showOutline: true,
 		showTransformControls: true,

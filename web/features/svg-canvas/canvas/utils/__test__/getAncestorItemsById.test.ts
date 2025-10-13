@@ -39,6 +39,7 @@ const createMockGroup = (id: string, items: Diagram[]): GroupState => ({
 	scaleY: 1,
 	keepProportion: false,
 	rotateEnabled: true,
+	inversionEnabled: true,
 	isSelected: false,
 	showTransformControls: false,
 	showOutline: false,

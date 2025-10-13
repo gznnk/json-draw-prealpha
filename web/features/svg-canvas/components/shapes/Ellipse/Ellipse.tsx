@@ -25,6 +25,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	strokeWidth,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	isSelected,
 	isAncestorSelected = false,
 	connectPoints,
@@ -100,6 +101,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			scaleY={scaleY}
 			keepProportion={keepProportion}
 			rotateEnabled={rotateEnabled}
+			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
 			connectPoints={connectPoints}
 			showConnectPoints={showConnectPoints}

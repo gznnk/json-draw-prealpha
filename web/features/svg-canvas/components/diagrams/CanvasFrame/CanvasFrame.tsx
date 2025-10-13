@@ -55,6 +55,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	scaleY,
 	keepProportion,
 	rotateEnabled,
+	inversionEnabled,
 	isSelected,
 	isAncestorSelected,
 	items,
@@ -452,6 +453,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 					scaleY={scaleY}
 					keepProportion={keepProportion}
 					rotateEnabled={rotateEnabled}
+					inversionEnabled={inversionEnabled}
 					showTransformControls={showTransformControls}
 					isTransforming={isTransforming}
 					onTransform={onTransform}

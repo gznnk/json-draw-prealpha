@@ -13,5 +13,6 @@ export const CanvasFrameDefaultData = CreateDefaultData<CanvasFrameData>({
 		width: 500,
 		height: 500,
 		rotateEnabled: false,
+		inversionEnabled: false,
 	},
 });
