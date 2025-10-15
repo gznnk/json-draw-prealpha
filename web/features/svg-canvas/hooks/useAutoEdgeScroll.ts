@@ -154,13 +154,17 @@ export const useAutoEdgeScroll = (
 
 			const { cursorPos, delta } = edgeScrollStateRef.current;
 
-			// Apply time-based movement: delta (pixels/ms) * elapsed time (ms)
-			const deltaX = (delta.x / zoom) * deltaTime;
-			const deltaY = (delta.y / zoom) * deltaTime;
+			// Calculate time-adjusted scroll delta (pixels/ms * ms)
+			const scrollDeltaX = delta.x * deltaTime;
+			const scrollDeltaY = delta.y * deltaTime;
+
+			// Apply zoom adjustment for cursor position delta
+			const cursorDeltaX = scrollDeltaX / zoom;
+			const cursorDeltaY = scrollDeltaY / zoom;
 
 			const newCursorPos = {
-				x: cursorPos.x + deltaX,
-				y: cursorPos.y + deltaY,
+				x: cursorPos.x + cursorDeltaX,
+				y: cursorPos.y + cursorDeltaY,
 			};
 
 			// Update edgeScrollStateRef
@@ -169,17 +173,11 @@ export const useAutoEdgeScroll = (
 				delta,
 			};
 
-			// Calculate new scroll positions (time-adjusted)
-			const scrollDeltaX = delta.x * deltaTime;
-			const scrollDeltaY = delta.y * deltaTime;
-			const newMinX = minX + scrollDeltaX;
-			const newMinY = minY + scrollDeltaY;
-
 			handleEdgeScroll({
 				cursorPos: newCursorPos,
-				delta: { x: deltaX, y: deltaY },
-				minX: newMinX,
-				minY: newMinY,
+				delta: { x: cursorDeltaX, y: cursorDeltaY },
+				minX: minX + scrollDeltaX,
+				minY: minY + scrollDeltaY,
 			});
 
 			// Request next frame
