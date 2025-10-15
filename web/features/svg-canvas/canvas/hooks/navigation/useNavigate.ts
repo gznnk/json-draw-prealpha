@@ -1,28 +1,43 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
-import { useScroll } from "./useScroll";
+import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
- * Custom hook to handle navigation events using scroll functionality.
+ * Custom hook to handle navigation events.
  * This provides a way to programmatically navigate to specific coordinates on the canvas.
  */
 export const useNavigate = (props: SvgCanvasSubHooksProps) => {
-	// Get scroll handler
-	const onScroll = useScroll(props);
+	const { setCanvasState, onPanZoomChange } = props;
 
-	return useCallback(
-		(minX: number, minY: number) => {
-			// Use scroll handler with the specified coordinates
-			onScroll({
-				newMinX: minX,
-				newMinY: minY,
-				clientX: 0,
-				clientY: 0,
-				deltaX: 0,
-				deltaY: 0,
-			});
-		},
-		[onScroll],
-	);
+	// Create references bypass to avoid function creation in every render.
+	const refBusVal = {
+		setCanvasState,
+		onPanZoomChange,
+	};
+	const refBus = useRef(refBusVal);
+	refBus.current = refBusVal;
+
+	return useCallback((minX: number, minY: number) => {
+		// Bypass references to avoid function creation in every render.
+		const { setCanvasState, onPanZoomChange } = refBus.current;
+
+		setCanvasState((prevState) => {
+			// Only update state directly if interaction state is Idle
+			if (prevState.interactionState === InteractionState.Idle) {
+				onPanZoomChange?.({
+					minX,
+					minY,
+					zoom: prevState.zoom,
+				});
+
+				return {
+					...prevState,
+					minX,
+					minY,
+				};
+			}
+			return prevState;
+		});
+	}, []);
 };

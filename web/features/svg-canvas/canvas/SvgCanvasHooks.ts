@@ -30,7 +30,6 @@ import { useUndo } from "./hooks/history/useUndo";
 import { useCtrl } from "./hooks/keyboard/useCtrl";
 import { useGrabScroll } from "./hooks/navigation/useGrabScroll";
 import { useNavigate } from "./hooks/navigation/useNavigate";
-import { useScroll } from "./hooks/navigation/useScroll";
 import { useZoom } from "./hooks/navigation/useZoom";
 import { useAreaSelection } from "./hooks/selection/useAreaSelection";
 import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
@@ -185,11 +184,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const { onGrabStart, onGrabMove, onGrabEnd } =
 		useGrabScroll(canvasHooksProps);
 
-	// Handler for the navigate event (using scroll)
+	// Handler for the navigate event
 	const onNavigate = useNavigate(canvasHooksProps);
-
-	// Handler for the scroll event.
-	const onScroll = useScroll(canvasHooksProps);
 
 	// Handler for the zoom event.
 	const onZoom = useZoom(canvasHooksProps);
@@ -246,7 +242,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onGrabMove,
 		onGrabEnd,
 		onNavigate,
-		onScroll,
 		onZoom,
 		// selection
 		onAreaSelection,

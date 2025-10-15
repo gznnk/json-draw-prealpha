@@ -6,8 +6,6 @@ import {
 	INERTIA_MIN_VELOCITY,
 	INERTIA_VELOCITY_THRESHOLD,
 } from "../../../constants/core/Constants";
-import { EVENT_NAME_SVG_CANVAS_SCROLL } from "../../../constants/core/EventNames";
-import type { SvgCanvasScrollEvent } from "../../../types/events/SvgCanvasScrollEvent";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
@@ -31,7 +29,6 @@ export const useGrabScroll = (
 	const {
 		canvasState: { minX, minY, grabScrollState, zoom },
 		setCanvasState,
-		eventBus,
 		onPanZoomChange,
 	} = props;
 
@@ -90,7 +87,7 @@ export const useGrabScroll = (
 				const deltaY = velocityY * deltaTime;
 
 				// Update canvas position
-				const { setCanvasState, eventBus, zoom, onPanZoomChange, minX, minY } =
+				const { setCanvasState, zoom, onPanZoomChange, minX, minY } =
 					refBus.current;
 
 				const newMinX = minX - deltaX;
@@ -112,21 +109,6 @@ export const useGrabScroll = (
 					return newState;
 				});
 
-				// Emit scroll event
-				const scrollEvent: SvgCanvasScrollEvent = {
-					newMinX,
-					newMinY,
-					clientX: 0, // Not applicable for inertia
-					clientY: 0, // Not applicable for inertia
-					deltaX: -deltaX,
-					deltaY: -deltaY,
-				};
-				eventBus.dispatchEvent(
-					new CustomEvent(EVENT_NAME_SVG_CANVAS_SCROLL, {
-						detail: scrollEvent,
-					}),
-				);
-
 				// Continue animation
 				inertiaAnimationFrame.current = requestAnimationFrame(animate);
 			};
@@ -144,7 +126,6 @@ export const useGrabScroll = (
 		zoom,
 		isGrabScrolling: grabScrollState?.isGrabScrolling,
 		setCanvasState,
-		eventBus,
 		onPanZoomChange,
 		startInertiaAnimation,
 	};
@@ -217,8 +198,7 @@ export const useGrabScroll = (
 			if (!dragStartState.current) return;
 
 			// Bypass references to avoid function creation in every render.
-			const { setCanvasState, eventBus, zoom, onPanZoomChange } =
-				refBus.current;
+			const { setCanvasState, zoom, onPanZoomChange } = refBus.current;
 
 			// Update velocity tracker
 			if (velocityTracker.current) {
@@ -275,21 +255,6 @@ export const useGrabScroll = (
 
 				return newState;
 			});
-
-			// Emit scroll event for other components to handle
-			const scrollEvent: SvgCanvasScrollEvent = {
-				newMinX,
-				newMinY,
-				clientX: e.clientX,
-				clientY: e.clientY,
-				deltaX: -totalDeltaX,
-				deltaY: -totalDeltaY,
-			};
-			eventBus.dispatchEvent(
-				new CustomEvent(EVENT_NAME_SVG_CANVAS_SCROLL, {
-					detail: scrollEvent,
-				}),
-			);
 		},
 		[],
 	);

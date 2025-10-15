@@ -19,7 +19,6 @@ import type { ExecuteEvent } from "../../types/events/ExecuteEvent";
 import type { PreviewConnectLineEvent } from "../../types/events/PreviewConnectLineEvent";
 import type { StackOrderChangeEvent } from "../../types/events/StackOrderChangeEvent";
 import type { SvgCanvasResizeEvent } from "../../types/events/SvgCanvasResizeEvent";
-import type { SvgCanvasScrollEvent } from "../../types/events/SvgCanvasScrollEvent";
 
 /**
  * Props for the SvgCanvas component.
@@ -58,7 +57,6 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onGrabMove?: (e: React.PointerEvent<SVGSVGElement>) => void;
 	onGrabEnd?: (e: React.PointerEvent<SVGSVGElement>) => void;
 	onNavigate?: (minX: number, minY: number) => void;
-	onScroll?: (e: SvgCanvasScrollEvent) => void;
 	onZoom?: (zoom: number) => void;
 	// selection
 	onAreaSelection?: (event: AreaSelectionEvent) => void;

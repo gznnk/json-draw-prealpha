@@ -98,7 +98,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onGrabMove,
 			onGrabEnd,
 			onNavigate,
-			onScroll,
 			onZoom,
 			// selection
 			onAreaSelection,
@@ -194,7 +193,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 		// DiagramMenu is now self-contained and doesn't need a hook
 
-
 		// Use the shortcut key hook to handle keyboard shortcuts
 		useShortcutKey({
 			zoom,
@@ -223,7 +221,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			onDiagramChange,
 			onClearAllSelection,
 			onHoverChange,
-			onScroll,
 			onZoom,
 			onGrabStart,
 			onGrabMove,
@@ -312,23 +309,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		);
 
 		/**
-		 * Handle the wheel event on the SVG canvas for scrolling.
-		 */
-		const handleWheel = useCallback((e: React.WheelEvent<SVGSVGElement>) => {
-			// Bypass references to avoid function creation in every render.
-			const { minX, minY, onScroll } = refBus.current;
-
-			onScroll?.({
-				newMinX: minX + e.deltaX,
-				newMinY: minY + e.deltaY,
-				clientX: e.clientX,
-				clientY: e.clientY,
-				deltaX: e.deltaX,
-				deltaY: e.deltaY,
-			});
-		}, []);
-
-		/**
 		 * SvgCanvas key down event handler
 		 */
 		const handleKeyDown = useCallback(
@@ -393,16 +373,13 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		}, []);
 
 		useEffect(() => {
-			// Prevent browser zoom with Ctrl+wheel at document level
+			// Handle all wheel events for canvas zoom at document level
 			const onDocumentWheel = (e: WheelEvent) => {
-				if (e.ctrlKey) {
-					e.preventDefault();
-					e.stopPropagation();
+				e.preventDefault();
 
-					const delta = e.deltaY > 0 ? 0.9 : 1.1;
-					const newZoom = refBus.current.zoom * delta;
-					refBus.current.onZoom?.(newZoom);
-				}
+				const delta = e.deltaY > 0 ? 0.9 : 1.1;
+				const newZoom = refBus.current.zoom * delta;
+				refBus.current.onZoom?.(newZoom);
 			};
 
 			document.addEventListener("wheel", onDocumentWheel, {
@@ -534,7 +511,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									onKeyDown={handleKeyDown}
 									onFocus={handleFocus}
 									onBlur={handleBlur}
-									onWheel={handleWheel}
 									onContextMenu={onContextMenu}
 								>
 									<title>{title}</title>
