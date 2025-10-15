@@ -270,13 +270,13 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 						});
 					}
 
-					// Handle grab start for right mouse button
-					if (e.button === 2) {
-						onGrabStart?.(e);
-					}
-
 					// Clear the selection when pointer is down on the canvas.
 					onClearAllSelection?.();
+				}
+
+				// Handle grab start for right mouse button
+				if (e.button === 2) {
+					onGrabStart?.(e);
 				}
 
 				// Close the context menu.

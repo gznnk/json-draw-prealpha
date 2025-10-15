@@ -158,8 +158,8 @@ export const useGrabScroll = (
 				inertiaAnimationFrame.current = null;
 			}
 
-			// Check for right click and if the target is the SVG element
-			if (e.button === 2 && e.target === e.currentTarget) {
+			// Check for right click
+			if (e.button === 2) {
 				// Store the initial drag start state
 				dragStartState.current = {
 					clientX: e.clientX,
