@@ -74,6 +74,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			grabScrollState,
 			selectionState,
 			interactionState,
+			suppressContextMenu,
 			// actions
 			onClick,
 			onConnect,
@@ -152,6 +153,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			previewConnectLineState,
 			grabScrollState,
 			interactionState,
+			suppressContextMenu,
 			areaSelectionState: selectionState || {
 				startX: 0,
 				startY: 0,
@@ -173,6 +175,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			previewConnectLineState,
 			grabScrollState,
 			interactionState,
+			suppressContextMenu,
 			areaSelectionState: selectionState || {
 				startX: 0,
 				startY: 0,
@@ -508,7 +511,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									viewBox={`${minX / zoom} ${minY / zoom} ${containerWidth / zoom} ${containerHeight / zoom}`}
 									tabIndex={0}
 									ref={svgRef}
-									isGrabScrolling={grabScrollState?.isGrabScrolling}
+									isGrabbing={grabScrollState?.isGrabbing}
 									onPointerDown={handlePointerDown}
 									onPointerMove={handlePointerMove}
 									onPointerUp={handlePointerUp}

@@ -130,7 +130,7 @@ export const useGrabScroll = (
 		minX,
 		minY,
 		zoom,
-		isGrabScrolling: grabScrollState?.isGrabScrolling,
+		isGrabbing: grabScrollState?.isGrabbing,
 		setCanvasState,
 		onPanZoomChange,
 		startInertiaAnimation,
@@ -153,8 +153,7 @@ export const useGrabScroll = (
 			setCanvasState((prevState) => ({
 				...prevState,
 				grabScrollState: {
-					isGrabScrolling: false,
-					grabScrollOccurred: false,
+					isGrabbing: false,
 				},
 			}));
 
@@ -254,9 +253,9 @@ export const useGrabScroll = (
 					minX: newMinX,
 					minY: newMinY,
 					grabScrollState: {
-						isGrabScrolling: true,
-						grabScrollOccurred: true,
+						isGrabbing: true,
 					},
+					suppressContextMenu: true,
 				};
 
 				onPanZoomChange?.({
@@ -279,15 +278,14 @@ export const useGrabScroll = (
 	const onGrabEnd = useCallback(
 		(e: React.PointerEvent<SVGSVGElement>): void => {
 			// If grab scrolling is active, reset the state
-			if (refBus.current.isGrabScrolling) {
+			if (refBus.current.isGrabbing) {
 				// Bypass references to avoid function creation in every render.
 				const { setCanvasState, startInertiaAnimation } = refBus.current;
 
 				setCanvasState((prevState) => ({
 					...prevState,
 					grabScrollState: {
-						isGrabScrolling: false,
-						grabScrollOccurred: true,
+						isGrabbing: false,
 					},
 				}));
 

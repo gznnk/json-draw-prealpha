@@ -81,6 +81,7 @@ const createMockCanvasState = (items: Diagram[] = []): SvgCanvasState => ({
 		isActive: false,
 	},
 	interactionState: InteractionState.Idle,
+	suppressContextMenu: false,
 	areaSelectionState: {
 		startX: 0,
 		startY: 0,

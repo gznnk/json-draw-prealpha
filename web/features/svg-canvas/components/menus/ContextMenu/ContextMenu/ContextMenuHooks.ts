@@ -18,7 +18,7 @@ export const useContextMenu = (
 		multiSelectGroup,
 		history,
 		historyIndex,
-		grabScrollState,
+		suppressContextMenu,
 		onUndo,
 		onRedo,
 		onSelectAll,
@@ -111,8 +111,8 @@ export const useContextMenu = (
 		(e: React.MouseEvent<SVGSVGElement>) => {
 			e.preventDefault();
 
-			// If grab scrolling is active, do not show the context menu.
-			if (grabScrollState?.grabScrollOccurred === true) return;
+			// If context menu should be suppressed (e.g., after grab scroll), do not show it.
+			if (suppressContextMenu === true) return;
 
 			let x = e.clientX;
 			let y = e.clientY;
@@ -126,7 +126,7 @@ export const useContextMenu = (
 
 			setContextMenuState({ x, y, isVisible: true });
 		},
-		[grabScrollState, containerRef],
+		[suppressContextMenu, containerRef],
 	);
 
 	/**

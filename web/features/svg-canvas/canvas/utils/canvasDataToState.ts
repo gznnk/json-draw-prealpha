@@ -9,9 +9,14 @@ import type { SvgCanvasState } from "../types/SvgCanvasState";
 /**
  * Converts SvgCanvasData to SvgCanvasState
  */
-export const canvasDataToState = (data: SvgCanvasData): Omit<SvgCanvasState, "multiSelectGroup" | "previewConnectLineState" | "grabScrollState"> => {
+export const canvasDataToState = (
+	data: SvgCanvasData,
+): Omit<
+	SvgCanvasState,
+	"multiSelectGroup" | "previewConnectLineState" | "grabScrollState"
+> => {
 	const stateItems: Diagram[] = diagramDataListToDiagramList(data.items);
-	
+
 	return {
 		id: data.id,
 		minX: data.minX,
@@ -31,6 +36,7 @@ export const canvasDataToState = (data: SvgCanvasData): Omit<SvgCanvasState, "mu
 		lastHistoryEventId: "",
 		textEditorState: { isActive: false } as TextEditorState,
 		interactionState: InteractionState.Idle,
+		suppressContextMenu: false,
 		areaSelectionState: {
 			startX: 0,
 			startY: 0,
