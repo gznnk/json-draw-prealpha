@@ -159,11 +159,13 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 			const droppable = canAcceptDrop(event);
 			setIsDropTarget(droppable);
 
-			// Only hide ghost if the dragged item is one of this frame's children
-			const shouldControlGhost = allChildIdsRef.current.has(event.dropItem.id);
+			const isChildItem = allChildIdsRef.current.has(event.dropItem.id);
+
+			// Only set showGhost to true for external items entering the frame
+			// For child items, use undefined to avoid overwriting other handlers
 			refBus.current.onDragOver?.({
 				...event,
-				showGhost: shouldControlGhost ? false : undefined,
+				showGhost: isChildItem ? undefined : true,
 			});
 		},
 		[canAcceptDrop],
@@ -172,11 +174,12 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	const handleDragLeave = useCallback((event: DiagramDragDropEvent) => {
 		setIsDropTarget(false);
 
-		// Only show ghost if the leaving item is one of this frame's children
-		const shouldControlGhost = allChildIdsRef.current.has(event.dropItem.id);
+		const isChildItem = allChildIdsRef.current.has(event.dropItem.id);
+		// Only set showGhost to true for child items leaving the frame
+		// For external items, use undefined to avoid overwriting other handlers
 		refBus.current.onDragLeave?.({
 			...event,
-			showGhost: shouldControlGhost ? true : undefined,
+			showGhost: isChildItem ? true : undefined,
 		});
 	}, []);
 

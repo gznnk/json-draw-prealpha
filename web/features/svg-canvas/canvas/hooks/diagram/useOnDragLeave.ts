@@ -44,7 +44,8 @@ export const useOnDragLeave = (props: SvgCanvasSubHooksProps) => {
 			return {
 				...prevState,
 				items,
-				showDragGhost: e.showGhost ? true : prevState.showDragGhost,
+				showDragGhost:
+					e.showGhost !== undefined ? e.showGhost : prevState.showDragGhost,
 			};
 		});
 	}, []);

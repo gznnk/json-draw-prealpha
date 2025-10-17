@@ -23,38 +23,30 @@ export const useOnDragOver = (props: SvgCanvasSubHooksProps) => {
 		// Bypass references to avoid function creation in every render.
 		const { setCanvasState } = refBus.current.props;
 
-		// Only show connect points if dragging a ConnectPoint
-		if (e.dropItem.type === "ConnectPoint") {
-			setCanvasState((prevState) => {
-				// Update items to show connect points for connectable elements
-				const items = applyFunctionRecursively(
-					prevState.items,
-					(item: Diagram) => {
-						// Check if this item can have connect points
-						if (item.id === e.dropTargetItem.id && isConnectableState(item)) {
-							// Show connect points when ConnectPoint is being dragged over
-							return {
-								...item,
-								showConnectPoints: true,
-							};
-						}
-						return item;
-					},
-				);
+		setCanvasState((prevState) => {
+			let items = prevState.items;
 
-				return {
-					...prevState,
-					items,
-				};
-			});
-		}
+			if (e.dropItem.type === "ConnectPoint") {
+				// Only show connect points if dragging a ConnectPoint
+				items = applyFunctionRecursively(prevState.items, (item: Diagram) => {
+					// Check if this item can have connect points
+					if (item.id === e.dropTargetItem.id && isConnectableState(item)) {
+						// Show connect points when ConnectPoint is being dragged over
+						return {
+							...item,
+							showConnectPoints: true,
+						};
+					}
+					return item;
+				});
+			}
 
-		// Hide ghost image when showGhost flag is false
-		if (e.showGhost === false) {
-			setCanvasState((prevState) => ({
+			return {
 				...prevState,
-				showDragGhost: false,
-			}));
-		}
+				items,
+				showDragGhost:
+					e.showGhost !== undefined ? e.showGhost : prevState.showDragGhost,
+			};
+		});
 	}, []);
 };
