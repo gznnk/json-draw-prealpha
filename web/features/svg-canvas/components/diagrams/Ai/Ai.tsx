@@ -18,6 +18,7 @@ import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload"
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { ProcessIndicator } from "../../auxiliary/ProcessIndicator";
+import { Button } from "../../elements/Button";
 import { Frame } from "../../elements/Frame";
 import { Input } from "../../elements/Input";
 import { AiAssistant } from "../../icons/AiAssistant";
@@ -217,6 +218,13 @@ const AiComponent: React.FC<AiProps> = (props) => {
 		[llmClient, addProcess, setProcessError, setProcessSuccess],
 	);
 
+	// Handler for send button click
+	const handleSendClick = useCallback(() => {
+		const { text } = refBus.current;
+		if (text.trim() === "") return;
+		handleExecution(text);
+	}, [handleExecution]);
+
 	// Handle propagation events from child components
 	const onPropagation = useCallback(
 		(e: ExecutionPropagationEvent) => {
@@ -232,6 +240,8 @@ const AiComponent: React.FC<AiProps> = (props) => {
 
 	// Layout constants
 	const avatarSize = 60;
+	const buttonWidth = 60;
+	const buttonHeight = 36;
 	const bubbleHeight = height - avatarSize - 110; // Space for avatar, input, and padding
 	const inputHeight = 40;
 	const padding = 10;
@@ -243,10 +253,22 @@ const AiComponent: React.FC<AiProps> = (props) => {
 	// Speech bubble position (below avatar)
 	const bubbleY = avatarY + avatarSize / 2 + padding + bubbleHeight / 2;
 
-	// Input position (bottom)
+	// Input position (bottom left)
+	const inputWidth = width - padding * 2 - buttonWidth - 5; // 5px gap between input and button
 	const inputCenter = efficientAffineTransformation(
-		0,
+		-(buttonWidth / 2 + 2.5), // Shift left to make room for button
 		height / 2 - (inputHeight / 2 + padding),
+		scaleX,
+		scaleY,
+		degreesToRadians(rotation),
+		x,
+		y,
+	);
+
+	// Send button position (bottom right)
+	const buttonCenter = efficientAffineTransformation(
+		width / 2 - (buttonWidth / 2 + padding),
+		height / 2 - (buttonHeight / 2 + padding + 2), // Align with input vertically
 		scaleX,
 		scaleY,
 		degreesToRadians(rotation),
@@ -375,7 +397,7 @@ const AiComponent: React.FC<AiProps> = (props) => {
 					{...inputState}
 					x={inputCenter.x}
 					y={inputCenter.y}
-					width={width - padding * 2}
+					width={inputWidth}
 					height={inputHeight}
 					scaleX={scaleX}
 					scaleY={scaleY}
@@ -393,6 +415,31 @@ const AiComponent: React.FC<AiProps> = (props) => {
 					onTextChange={onTextChange}
 				/>
 			)}
+			<Button
+				id={`${id}-send-button`}
+				x={buttonCenter.x}
+				y={buttonCenter.y}
+				width={buttonWidth}
+				height={buttonHeight}
+				scaleX={1}
+				scaleY={1}
+				rotation={0}
+				keepProportion={false}
+				rotateEnabled={false}
+				inversionEnabled={false}
+				isSelected={false}
+				isAncestorSelected={false}
+				showConnectPoints={false}
+				connectEnabled={false}
+				showOutline={false}
+				isTransforming={false}
+				showTransformControls={false}
+				text="Send"
+				isTextEditing={false}
+				effectsEnabled
+				onDrag={handleDrag}
+				onClick={handleSendClick}
+			/>
 		</>
 	);
 };
