@@ -10,8 +10,6 @@ export const EVENT_NAME_BROADCAST_DRAG = "BroadcastDrag" as const;
 // Tool events
 export const ADD_NEW_DIAGRAM_EVENT_NAME = "AddNewDiagram" as const;
 export const APPEND_DIAGRAMS_EVENT_NAME = "AppendDiagrams" as const;
-export const APPEND_SELECTED_DIAGRAMS_EVENT_NAME =
-	"AppendSelectedDiagrams" as const;
 export const EXTRACT_SELECTED_DIAGRAMS_TO_TOP_LEVEL_EVENT_NAME =
 	"ExtractSelectedDiagramsToTopLevel" as const;
 

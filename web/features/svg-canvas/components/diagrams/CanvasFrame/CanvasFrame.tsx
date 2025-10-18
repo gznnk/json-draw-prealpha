@@ -14,7 +14,6 @@ import {
 import { useEventBus } from "../../../context/EventBusContext";
 import { useSvgCanvasState } from "../../../context/SvgCanvasStateContext";
 import { useAppendDiagrams } from "../../../hooks/useAppendDiagrams";
-import { useAppendSelectedDiagrams } from "../../../hooks/useAppendSelectedDiagrams";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
@@ -97,9 +96,6 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	// Get EventBus instance from context
 	const eventBus = useEventBus();
 
-	// Hook for appending selected diagrams to this frame
-	const appendSelectedDiagrams = useAppendSelectedDiagrams();
-
 	// Hook for appending diagrams to this frame
 	const appendDiagrams = useAppendDiagrams();
 
@@ -119,7 +115,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		id,
 		items,
 		canvasStateRef,
-		appendSelectedDiagrams,
+		appendDiagrams,
 		onDragOver,
 		onDragLeave,
 		onDrop,
@@ -185,12 +181,22 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	 */
 	const handleDrop = useCallback(
 		(event: DiagramDragDropEvent) => {
-			const { id: currentId, appendSelectedDiagrams, onDrop } = refBus.current;
+			const {
+				id: currentId,
+				canvasStateRef,
+				appendDiagrams,
+				onDrop,
+			} = refBus.current;
 
 			setIsDropTarget(false);
 
 			if (canAcceptDrop(event)) {
-				appendSelectedDiagrams(currentId);
+				// Get selected diagrams from canvas state
+				const allDiagrams = canvasStateRef.current?.items || [];
+				const selectedDiagrams = getSelectedDiagrams(allDiagrams);
+
+				// Append selected diagrams to this frame
+				appendDiagrams(currentId, selectedDiagrams);
 			}
 
 			// Only hide ghost if the dropped item is one of this frame's children
@@ -425,17 +431,13 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 					// Validate that it's a valid diagram object
 					if (shapeData && shapeData.id && shapeData.type) {
 						// Append the received shape to this CanvasFrame
-						appendDiagrams(
-							id,
-							[
-								{
-									...shapeData,
-									x: shapeData.x + originX,
-									y: shapeData.y + originY,
-								},
-							],
-							true,
-						);
+						appendDiagrams(id, [
+							{
+								...shapeData,
+								x: shapeData.x + originX,
+								y: shapeData.y + originY,
+							},
+						]);
 					}
 				} else if (isToolPayload(e.payload)) {
 					// TODO: カスタムフック化

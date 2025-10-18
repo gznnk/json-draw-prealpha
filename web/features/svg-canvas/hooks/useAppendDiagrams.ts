@@ -9,6 +9,7 @@ import { newEventId } from "../utils/core/newEventId";
 /**
  * Hook for appending multiple diagrams to a target diagram via drag and drop.
  * Dispatches AppendDiagramsEvent to the event bus.
+ * Diagrams are assumed to have absolute coordinates.
  */
 export const useAppendDiagrams = () => {
 	// Get EventBus instance from context
@@ -16,12 +17,11 @@ export const useAppendDiagrams = () => {
 
 	// Function to dispatch a new AppendDiagramsEvent
 	return useCallback(
-		(targetId: string, diagrams: Diagram[], useAbsoluteCoordinates = false) => {
+		(targetId: string, diagrams: Diagram[]) => {
 			const event: AppendDiagramsEvent = {
 				eventId: newEventId(),
 				targetId,
 				diagrams,
-				useAbsoluteCoordinates,
 			};
 
 			// Dispatch the AppendDiagramsEvent to the EventBus

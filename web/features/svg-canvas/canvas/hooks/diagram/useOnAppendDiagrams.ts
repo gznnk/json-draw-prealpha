@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 import { APPEND_DIAGRAMS_EVENT_NAME } from "../../../constants/core/EventNames";
 import type { AppendDiagramsEvent } from "../../../types/events/AppendDiagramsEvent";
 import { getDiagramById } from "../../../utils/core/getDiagramById";
-import { transformRelativeToAbsoluteCoordinates } from "../../../utils/math/transform/transformRelativeToAbsoluteCoordinates";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { appendDiagrams } from "../../utils/appendDiagrams";
 import { cleanupGroups } from "../../utils/cleanupGroups";
@@ -53,30 +52,20 @@ export const useOnAppendDiagrams = (props: SvgCanvasSubHooksProps) => {
 				// Extract IDs of diagrams to move
 				const diagramIds = event.diagrams.map((diagram) => diagram.id);
 
-				// TODO: 不要なら削除
-				// 2. Transform diagram coordinates from relative to absolute if needed
-				const transformedDiagrams =
-					event.useAbsoluteCoordinates === true
-						? event.diagrams
-						: transformRelativeToAbsoluteCoordinates(
-								event.diagrams,
-								targetDiagram,
-							);
-
-				// 3. Remove source diagrams from their current locations
+				// 2. Remove source diagrams from their current locations
 				const diagramsRemovedItems = removeDiagramsById(
 					prevState.items,
 					diagramIds,
 				);
 
-				// 4. Append diagrams to target diagram with transformed coordinates
+				// 3. Append diagrams to target diagram (diagrams are in absolute coordinates)
 				const diagramsAppendedItems = appendDiagrams(
 					diagramsRemovedItems,
 					event.targetId,
-					transformedDiagrams,
+					event.diagrams,
 				);
 
-				// 5. Clean up empty groups
+				// 4. Clean up empty groups
 				const groupsCleanedUpItems = cleanupGroups(diagramsAppendedItems);
 
 				// Update outlines
