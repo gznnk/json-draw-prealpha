@@ -244,7 +244,7 @@ const AiComponent: React.FC<AiProps> = (props) => {
 	const buttonHeight = 36;
 	const bubbleHeight = height - avatarSize - 110; // Space for avatar, input, and padding
 	const inputHeight = 40;
-	const padding = 10;
+	const padding = 0;
 	const bubblePadding = 15;
 
 	// Avatar position (top center)
