@@ -17,7 +17,7 @@ import { useAppendDiagrams } from "../../../hooks/useAppendDiagrams";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
-import { useExtractSelectedDiagramsToTopLevel } from "../../../hooks/useExtractSelectedDiagramsToTopLevel";
+import { useExtractDiagramsToTopLevel } from "../../../hooks/useExtractDiagramsToTopLevel";
 import { useHover } from "../../../hooks/useHover";
 import { useSelect } from "../../../hooks/useSelect";
 import { DiagramRegistry } from "../../../registry";
@@ -99,9 +99,8 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	// Hook for appending diagrams to this frame
 	const appendDiagrams = useAppendDiagrams();
 
-	// Hook for extracting selected diagrams to top level
-	const extractSelectedDiagramsToTopLevel =
-		useExtractSelectedDiagramsToTopLevel();
+	// Hook for extracting diagrams to top level
+	const extractDiagramsToTopLevel = useExtractDiagramsToTopLevel();
 
 	// State for managing drop target visual feedback
 	const [isDropTarget, setIsDropTarget] = useState(false);
@@ -120,7 +119,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		onDragLeave,
 		onDrop,
 		onDrag,
-		extractSelectedDiagramsToTopLevel,
+		extractDiagramsToTopLevel,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -299,7 +298,14 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		if (e.eventPhase === "Ended") {
 			// Extract selected items to top level if any child left the frame during drag
 			if (dragLeavingItemIdsRef.current.size > 0) {
-				refBus.current.extractSelectedDiagramsToTopLevel();
+				// Get selected diagrams from the canvas state
+				const selectedDiagrams = getSelectedDiagrams(
+					refBus.current.canvasStateRef.current?.items ?? [],
+				);
+
+				if (selectedDiagrams.length > 0) {
+					refBus.current.extractDiagramsToTopLevel(selectedDiagrams);
+				}
 			}
 
 			// Clean up references
