@@ -41,7 +41,6 @@ import { DiagramMenu } from "../components/menus/DiagramMenu";
 import UserMenu from "../components/menus/UserMenu/UserMenu";
 import { FlashConnectLine } from "../components/shapes/ConnectLine";
 import { Group } from "../components/shapes/Group";
-// Import registry.
 import { EventBusProvider } from "../context/EventBusContext";
 import { SvgCanvasStateProvider } from "../context/SvgCanvasStateContext";
 import { SvgViewportProvider } from "../context/SvgViewportContext";
@@ -551,7 +550,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									<FlashConnectLine />
 									{/* Render drag ghost for items dragged outside viewBox */}
 									{showDragGhost && (
-										<DragGhost selectedDiagrams={getSelectedDiagrams(items)} />
+										<DragGhost diagrams={getSelectedDiagrams(items)} />
 									)}
 									{/* Render area selection rectangle */}
 									{selectionState && (

@@ -12,13 +12,13 @@ import type { Diagram } from "../../../types/state/core/Diagram";
  * It is positioned at the front of the render order in SvgCanvas
  * to ensure it appears on top of all other shapes.
  */
-const DragGhostComponent: React.FC<DragGhostProps> = ({ selectedDiagrams }) => {
-	if (selectedDiagrams.length === 0) {
+const DragGhostComponent: React.FC<DragGhostProps> = ({ diagrams }) => {
+	if (diagrams.length === 0) {
 		return null;
 	}
 
 	// Render each selected diagram as a ghost element
-	const ghostElements = selectedDiagrams.map((diagram: Diagram) => {
+	const ghostElements = diagrams.map((diagram: Diagram) => {
 		const component = DiagramRegistry.getComponent(diagram.type);
 		if (!component) {
 			return null;

@@ -8,7 +8,6 @@ import type { DiagramHoverChangeEvent } from "../../events/DiagramHoverChangeEve
  * Defines common event handlers and appearance settings shared by all diagram elements.
  */
 export type DiagramBaseProps = {
-	isTransparent?: boolean;
 	onDrag?: (e: DiagramDragEvent) => void;
 	onDrop?: (e: DiagramDragDropEvent) => void;
 	onDragOver?: (e: DiagramDragDropEvent) => void;

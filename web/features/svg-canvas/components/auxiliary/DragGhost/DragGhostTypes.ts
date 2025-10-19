@@ -5,5 +5,5 @@ import type { Diagram } from "../../../types/state/core/Diagram";
  */
 export type DragGhostProps = {
 	/** The selected diagrams to display as ghost */
-	selectedDiagrams: Diagram[];
+	diagrams: Diagram[];
 };

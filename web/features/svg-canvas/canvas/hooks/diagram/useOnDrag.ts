@@ -16,6 +16,7 @@ import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { createDiagramPathIndex } from "../../utils/createDiagramPathIndex";
 import { createItemMap } from "../../utils/createItemMap";
+import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
 import { updateDiagramConnectPoints } from "../../utils/updateDiagramConnectPoints";
 import { updateDiagramsByPath } from "../../utils/updateDiagramsByPath";
 import { updateOutlineOfAllItemables } from "../../utils/updateOutlineOfAllItemables";
@@ -44,6 +45,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 	const initialMultiSelectGroup = useRef<GroupState | undefined>(undefined);
 	// Reference to store path index for efficient updates
 	const pathIndex = useRef<DiagramPathIndex>(new Map());
+	// Reference to store diagram IDs of the drag-triggering diagram and its ancestors
+	const dragTriggeredTreeIds = useRef<Set<string>>(new Set());
 	// Reference to store ConnectLine IDs that need to be updated
 	const connectedConnectLineIds = useRef<Set<string>>(new Set());
 
@@ -79,6 +82,12 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 					selectedIds,
 				);
 
+				// Collect all diagram IDs that are part of the drag operation
+				dragTriggeredTreeIds.current = new Set([
+					...getAncestorItemsById(e.id, prevState.items).map((d) => d.id),
+					e.id,
+				]);
+
 				// Collect all diagram IDs that will be moved (selected + their descendants)
 				const allMovedDiagramIds = collectDiagramIds(selectedItems);
 
@@ -112,6 +121,8 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 					x: initialItem.x + dx,
 					y: initialItem.y + dy,
 					isDragging,
+					isInDragTriggeredTree:
+						isDragging && dragTriggeredTreeIds.current.has(diagram.id),
 				} as Diagram;
 
 				// Hide transform controls during drag for transformative items
@@ -231,6 +242,7 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 				initialItemsMap.current.clear();
 				initialMultiSelectGroup.current = undefined;
 				pathIndex.current.clear();
+				dragTriggeredTreeIds.current.clear();
 				connectedConnectLineIds.current.clear();
 			}
 

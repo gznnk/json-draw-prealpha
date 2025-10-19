@@ -31,6 +31,8 @@ import type { GroupShapesEvent } from "../../../types/events/GroupShapesEvent";
 import type { CanvasFrameProps } from "../../../types/props/diagrams/CanvasFrameProps";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import { collectDiagramDataIds } from "../../../utils/core/collectDiagramDataIds";
+import { collectDiagramIds } from "../../../utils/core/collectDiagramIds";
+import { filterDragTriggeredTree } from "../../../utils/core/filterDragTriggeredTree";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { isDiagramPayload } from "../../../utils/execution/isDiagramPayload";
@@ -288,7 +290,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		// Update allChildIdsRef when drag starts
 		if (e.eventPhase === "Started") {
 			const { items } = refBus.current;
-			allChildIdsRef.current = collectDiagramDataIds(items);
+			allChildIdsRef.current = collectDiagramIds(items);
 		}
 
 		// Propagate the drag event
@@ -363,7 +365,16 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	);
 
 	// Create shapes within the canvas frame
-	const children = items.map((item: DiagramData) => {
+	// When dragging, extract only the tree containing the drag-triggered diagram
+	const renderItems = useMemo(() => {
+		if (!isDragging) {
+			return items;
+		}
+
+		return filterDragTriggeredTree(items);
+	}, [items, isDragging]);
+
+	const children = renderItems.map((item: DiagramData) => {
 		// Ensure that item.type is of DiagramType
 		if (!item.type) {
 			console.error("Item has no type", item);

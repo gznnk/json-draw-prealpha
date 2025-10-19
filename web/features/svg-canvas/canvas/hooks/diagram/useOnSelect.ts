@@ -42,7 +42,10 @@ export const useOnSelect = (
 			const isEventTriggeredItemSelected =
 				isSelectableState(eventTriggeredItem) && eventTriggeredItem.isSelected;
 			// Get the ancestors of the selected item.
-			const ancestorsOfSelectingItem = getAncestorItemsById(e.id, prevState);
+			const ancestorsOfSelectingItem = getAncestorItemsById(
+				e.id,
+				prevState.items,
+			);
 
 			// If the ancestors of the selected item are empty, it means the item is not part of a group.
 			const isGroupedItemSelection = ancestorsOfSelectingItem.length > 0;
