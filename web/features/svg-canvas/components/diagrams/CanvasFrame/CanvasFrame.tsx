@@ -123,6 +123,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		x,
 		y,
 		items,
+		isDragging,
 		canvasStateRef,
 		appendDiagrams,
 		onDrag,
@@ -183,6 +184,26 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		}
 
 		return true;
+	}, []);
+
+	/**
+	 * Handle drag events and cache innerHTML on drag start
+	 */
+	const handleDrag = useCallback((e: DiagramDragEvent) => {
+		const { x, y, onDrag } = refBus.current;
+		// Cache innerHTML and start position on drag start
+		if (e.eventPhase === "Started" && innerSvgRef.current) {
+			cachedInnerHTMLRef.current = innerSvgRef.current.innerHTML;
+			dragStartPosRef.current = { x, y };
+		}
+
+		// Clear cache on drag end
+		if (e.eventPhase === "Ended") {
+			cachedInnerHTMLRef.current = "";
+		}
+
+		// Propagate the drag event
+		onDrag?.(e);
 	}, []);
 
 	/**
@@ -254,28 +275,8 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		// For external items, use undefined to avoid overwriting other handlers
 		refBus.current.onDragLeave?.({
 			...event,
-			showGhost: isChildItem ? true : undefined,
+			showGhost: isChildItem && !refBus.current.isDragging ? true : undefined,
 		});
-	}, []);
-
-	/**
-	 * Handle drag events and cache innerHTML on drag start
-	 */
-	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { x, y, onDrag } = refBus.current;
-		// Cache innerHTML and start position on drag start
-		if (e.eventPhase === "Started" && innerSvgRef.current) {
-			cachedInnerHTMLRef.current = innerSvgRef.current.innerHTML;
-			dragStartPosRef.current = { x, y };
-		}
-
-		// Clear cache on drag end
-		if (e.eventPhase === "Ended") {
-			cachedInnerHTMLRef.current = "";
-		}
-
-		// Propagate the drag event
-		onDrag?.(e);
 	}, []);
 
 	// Use individual interaction hooks
