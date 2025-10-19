@@ -6,6 +6,7 @@ import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
 /**
  * Custom hook to handle select all events on the canvas.
@@ -23,7 +24,7 @@ export const useSelectAll = (props: SvgCanvasSubHooksProps) => {
 		const { setCanvasState } = refBus.current.props;
 
 		setCanvasState((prevState) => {
-			const items = prevState.items.map((item) => {
+			let items = prevState.items.map((item) => {
 				if (!isSelectableState(item)) {
 					// Ignore non-selectable items.
 					return item;
@@ -60,6 +61,9 @@ export const useSelectAll = (props: SvgCanvasSubHooksProps) => {
 					showOutline: true,
 				};
 			});
+
+			// Update isRootSelected state for all selected items
+			items = updateRootSelectedState(items);
 
 			// Create a multi-select group's items.
 			const multiSelectGroupItems = items.filter(

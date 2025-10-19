@@ -63,6 +63,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	rotateEnabled,
 	inversionEnabled,
 	isSelected,
+	isRootSelected,
 	isAncestorSelected,
 	items,
 	originX,
@@ -122,6 +123,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		id,
 		x,
 		y,
+		isRootSelected,
 		items,
 		isDragging,
 		canvasStateRef,
@@ -190,9 +192,9 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	 * Handle drag events and cache innerHTML on drag start
 	 */
 	const handleDrag = useCallback((e: DiagramDragEvent) => {
-		const { x, y, onDrag } = refBus.current;
+		const { x, y, isRootSelected, onDrag } = refBus.current;
 		// Cache innerHTML and start position on drag start
-		if (e.eventPhase === "Started" && innerSvgRef.current) {
+		if (e.eventPhase === "Started" && isRootSelected && innerSvgRef.current) {
 			cachedInnerHTMLRef.current = innerSvgRef.current.innerHTML;
 			dragStartPosRef.current = { x, y };
 		}
@@ -316,14 +318,20 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	 * Wrapped onDrag handler for child elements to track child IDs when drag starts
 	 */
 	const handleChildDrag = useCallback((e: DiagramDragEvent) => {
-		const { x, y, items, canvasStateRef, extractDiagramsToTopLevel } =
-			refBus.current;
+		const {
+			x,
+			y,
+			isRootSelected,
+			items,
+			canvasStateRef,
+			extractDiagramsToTopLevel,
+		} = refBus.current;
 		// Update allChildIdsRef when drag starts
 		if (e.eventPhase === "Started") {
 			allChildIdsRef.current = collectDiagramIds(items);
 
 			// Cache innerHTML and start position for performance
-			if (innerSvgRef.current) {
+			if (isRootSelected && innerSvgRef.current) {
 				cachedInnerHTMLRef.current = innerSvgRef.current.innerHTML;
 				dragStartPosRef.current = { x, y };
 			}

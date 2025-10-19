@@ -13,6 +13,7 @@ import { isTransformativeState } from "../../../utils/validation/isTransformativ
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
 /**
  * Offset amount when pasting shapes
@@ -358,6 +359,9 @@ export const usePaste = (props: SvgCanvasSubHooksProps) => {
 								return item;
 							});
 						}
+
+						// Update isRootSelected state for all selected items
+						allItems = updateRootSelectedState(allItems);
 
 						// Add the pasted items to the canvas
 						return {

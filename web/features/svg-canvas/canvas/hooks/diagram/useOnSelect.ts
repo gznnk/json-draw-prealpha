@@ -13,6 +13,7 @@ import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
 import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
+import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
 /**
  * Custom hook to handle select events on the canvas.
@@ -326,6 +327,9 @@ export const useOnSelect = (
 			// If the item is not transformative, remove the showTransformControls property.
 			// Remove showTransformControls from non-transformative items using shared utility
 			items = removeNonTransformativeShowTransformControls(items);
+
+			// Update isRootSelected state for all selected items
+			items = updateRootSelectedState(items);
 
 			return {
 				...prevState,

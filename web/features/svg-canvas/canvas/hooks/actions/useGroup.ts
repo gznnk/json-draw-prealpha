@@ -62,6 +62,7 @@ export const useGroup = (props: SvgCanvasSubHooksProps) => {
 				id: newId(),
 				type: "Group",
 				isSelected: true,
+				isRootSelected: true,
 				showOutline: true,
 				items: applyFunctionRecursively(selectedDiagrams, (childItem) => {
 					if (!isSelectableState(childItem)) {

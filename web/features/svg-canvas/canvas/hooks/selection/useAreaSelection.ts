@@ -17,6 +17,7 @@ import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
 import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
+import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
 /**
  * Update items array with outline display based on selection bounds
@@ -233,6 +234,11 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			 * Step 5: Remove transform controls from non-transformative items (shared utility)
 			 */
 			items = removeNonTransformativeShowTransformControls(items);
+
+			/**
+			 * Step 6: Update isRootSelected state for all selected items
+			 */
+			items = updateRootSelectedState(items);
 
 			return {
 				...prevState,
