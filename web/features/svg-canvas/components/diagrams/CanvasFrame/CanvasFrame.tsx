@@ -110,17 +110,25 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	const allChildIdsRef = useRef<Set<string>>(new Set());
 	// Reference to track IDs of child items that have left this frame during drag
 	const dragLeavingItemIdsRef = useRef<Set<string>>(new Set());
+	// Reference to cache innerHTML during drag for performance
+	const cachedInnerHTMLRef = useRef<string>("");
+	// Reference to the inner svg element containing children
+	const innerSvgRef = useRef<SVGSVGElement>(null);
+	// Reference to store drag start position for calculating offset
+	const dragStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
 		id,
+		x,
+		y,
 		items,
 		canvasStateRef,
 		appendDiagrams,
+		onDrag,
 		onDragOver,
 		onDragLeave,
 		onDrop,
-		onDrag,
 		extractDiagramsToTopLevel,
 	};
 	const refBus = useRef(refBusVal);
@@ -250,6 +258,26 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		});
 	}, []);
 
+	/**
+	 * Handle drag events and cache innerHTML on drag start
+	 */
+	const handleDrag = useCallback((e: DiagramDragEvent) => {
+		const { x, y, onDrag } = refBus.current;
+		// Cache innerHTML and start position on drag start
+		if (e.eventPhase === "Started" && innerSvgRef.current) {
+			cachedInnerHTMLRef.current = innerSvgRef.current.innerHTML;
+			dragStartPosRef.current = { x, y };
+		}
+
+		// Clear cache on drag end
+		if (e.eventPhase === "Ended") {
+			cachedInnerHTMLRef.current = "";
+		}
+
+		// Propagate the drag event
+		onDrag?.(e);
+	}, []);
+
 	// Use individual interaction hooks
 	const dragProps = useDrag({
 		id,
@@ -257,7 +285,7 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 		x,
 		y,
 		ref: svgRef,
-		onDrag,
+		onDrag: handleDrag,
 		onDragOver: handleDragOver,
 		onDragLeave: handleDragLeave,
 		onDrop: handleDrop,
@@ -287,10 +315,17 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	 * Wrapped onDrag handler for child elements to track child IDs when drag starts
 	 */
 	const handleChildDrag = useCallback((e: DiagramDragEvent) => {
+		const { x, y, items, canvasStateRef, extractDiagramsToTopLevel } =
+			refBus.current;
 		// Update allChildIdsRef when drag starts
 		if (e.eventPhase === "Started") {
-			const { items } = refBus.current;
 			allChildIdsRef.current = collectDiagramIds(items);
+
+			// Cache innerHTML and start position for performance
+			if (innerSvgRef.current) {
+				cachedInnerHTMLRef.current = innerSvgRef.current.innerHTML;
+				dragStartPosRef.current = { x, y };
+			}
 		}
 
 		// Propagate the drag event
@@ -302,17 +337,18 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 			if (dragLeavingItemIdsRef.current.size > 0) {
 				// Get selected diagrams from the canvas state
 				const selectedDiagrams = getSelectedDiagrams(
-					refBus.current.canvasStateRef.current?.items ?? [],
+					canvasStateRef.current?.items ?? [],
 				);
 
 				if (selectedDiagrams.length > 0) {
-					refBus.current.extractDiagramsToTopLevel(selectedDiagrams);
+					extractDiagramsToTopLevel(selectedDiagrams);
 				}
 			}
 
 			// Clean up references
 			allChildIdsRef.current = new Set();
 			dragLeavingItemIdsRef.current = new Set();
+			cachedInnerHTMLRef.current = "";
 		}
 	}, []);
 
@@ -555,6 +591,10 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	// Using absolute coordinates: x - width/2, y - height/2, width, height
 	const viewBox = `${x - width / 2} ${y - height / 2} ${width} ${height}`;
 
+	// Calculate drag offset for cached HTML
+	const dragOffsetX = x - dragStartPosRef.current.x;
+	const dragOffsetY = y - dragStartPosRef.current.y;
+
 	return (
 		<>
 			<CanvasFrameElement
@@ -594,8 +634,15 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 				viewBox={viewBox}
 				transform={transform}
 				overflow="hidden"
+				ref={innerSvgRef}
 			>
 				{children}
+				{isDragging && cachedInnerHTMLRef.current && (
+					<g
+						transform={`translate(${dragOffsetX}, ${dragOffsetY})`}
+						dangerouslySetInnerHTML={{ __html: cachedInnerHTMLRef.current }}
+					/>
+				)}
 			</svg>
 			<Outline
 				x={x}
