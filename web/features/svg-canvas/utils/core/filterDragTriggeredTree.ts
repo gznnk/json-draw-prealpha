@@ -16,7 +16,7 @@ export const filterDragTriggeredTree = (items: Diagram[]): Diagram[] => {
 		// If this item is in the ancestor path, include it
 		if (item.isInDragTriggeredTree) {
 			// Check if this item has nested items (Group or CanvasFrame)
-			if (isItemableState(item)) {
+			if (isItemableState(item) && item.itemableType !== "composite") {
 				// Recursively filter child items
 				const filteredChildren = filterDragTriggeredTree(item.items);
 				if (filteredChildren.length > 0) {
