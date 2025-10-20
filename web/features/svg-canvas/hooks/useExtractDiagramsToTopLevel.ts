@@ -17,9 +17,9 @@ export const useExtractDiagramsToTopLevel = () => {
 
 	// Function to dispatch a new ExtractDiagramsToTopLevelEvent
 	return useCallback(
-		(diagrams: Diagram[]) => {
+		(diagrams: Diagram[], eventId?: string) => {
 			const event: ExtractDiagramsToTopLevelEvent = {
-				eventId: newEventId(),
+				eventId: eventId ?? newEventId(),
 				diagrams,
 			};
 

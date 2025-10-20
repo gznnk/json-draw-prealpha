@@ -346,7 +346,8 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 				);
 
 				if (selectedDiagrams.length > 0) {
-					extractDiagramsToTopLevel(selectedDiagrams);
+					// Pass the drag event's eventId to extractDiagramsToTopLevel
+					extractDiagramsToTopLevel(selectedDiagrams, e.eventId);
 				}
 			}
 
