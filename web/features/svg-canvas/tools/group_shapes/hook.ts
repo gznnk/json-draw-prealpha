@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type { FunctionCallHandler } from "../../../../shared/llm-client/types";
@@ -37,5 +37,8 @@ export const useGroupShapesTool = (eventBus: EventBus): FunctionCallHandler => {
 		[eventBus],
 	);
 
-	return groupShapesWithHandlerTool(handler);
+	return useMemo(
+		() => groupShapesWithHandlerTool(handler),
+		[groupShapesWithHandlerTool, handler],
+	);
 };

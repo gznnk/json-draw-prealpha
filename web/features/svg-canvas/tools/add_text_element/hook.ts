@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type { FunctionCallHandler } from "../../../../shared/llm-client/types";
 import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
@@ -9,5 +11,8 @@ export const useAddTextElementTool = (
 	const addDiagram = useAddDiagramWithBus(eventBus);
 	const textElementWithHandlerTool = useAddTextElementWithHandlerTool();
 
-	return textElementWithHandlerTool(addDiagram);
+	return useMemo(
+		() => textElementWithHandlerTool(addDiagram),
+		[addDiagram, textElementWithHandlerTool],
+	);
 };

@@ -1,16 +1,35 @@
 import type React from "react";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
 	LLMClientFactory,
 	type LLMClient,
 } from "../../../../../shared/llm-client";
 import { OpenAiKeyManager } from "../../../../../utils/KeyManager";
+import { useEventBus } from "../../../context/EventBusContext";
 import { useClick } from "../../../hooks/useClick";
 import { useDrag } from "../../../hooks/useDrag";
 import { useHover } from "../../../hooks/useHover";
 import { useProcessManager } from "../../../hooks/useProcessManager";
 import { useSelect } from "../../../hooks/useSelect";
+import {
+	circleShapeToolDefinition,
+	useAddCircleShapeTool,
+} from "../../../tools/add_circle_shape";
+import {
+	rectangleShapeToolDefinition,
+	useAddRectangleShapeTool,
+} from "../../../tools/add_rectangle_shape";
+import {
+	textElementToolDefinition,
+	useAddTextElementTool,
+} from "../../../tools/add_text_element";
+import { connectNodesToolDefinition } from "../../../tools/connect_nodes/definition";
+import { useConnectNodesTool } from "../../../tools/connect_nodes/hook";
+import {
+	groupShapesToolDefinition,
+	useGroupShapesTool,
+} from "../../../tools/group_shapes";
 import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramSelectEvent } from "../../../types/events/DiagramSelectEvent";
@@ -54,9 +73,44 @@ const AiComponent: React.FC<AiProps> = (props) => {
 	const [currentMessage, setCurrentMessage] = useState<string>(aiMessage);
 	const [apiKey, setApiKey] = useState<string>("");
 	const [llmClient, setLlmClient] = useState<LLMClient | null>(null);
+	const eventBus = useEventBus();
 
 	const { processes, addProcess, setProcessSuccess, setProcessError } =
 		useProcessManager();
+
+	// Initialize tool hooks (memoized by eventBus)
+	const addRectangleShape = useAddRectangleShapeTool(eventBus);
+	const addCircleShape = useAddCircleShapeTool(eventBus);
+	const addTextElement = useAddTextElementTool(eventBus);
+	const connectNodes = useConnectNodesTool(eventBus);
+	const groupShapes = useGroupShapesTool(eventBus);
+
+	// Memoize tool definitions and handlers
+	const toolsConfig = useMemo(
+		() => ({
+			tools: [
+				rectangleShapeToolDefinition,
+				circleShapeToolDefinition,
+				textElementToolDefinition,
+				connectNodesToolDefinition,
+				groupShapesToolDefinition,
+			],
+			handlers: {
+				add_rectangle_shape: addRectangleShape,
+				add_circle_shape: addCircleShape,
+				add_text_element: addTextElement,
+				connect_nodes: connectNodes,
+				group_shapes: groupShapes,
+			},
+		}),
+		[
+			addRectangleShape,
+			addCircleShape,
+			addTextElement,
+			connectNodes,
+			groupShapes,
+		],
+	);
 
 	// Create ref for the Avatar circle element
 	const groupRef = useRef<SVGCircleElement>(null);
@@ -74,22 +128,21 @@ const AiComponent: React.FC<AiProps> = (props) => {
 		const storedApiKey = OpenAiKeyManager.loadKey();
 		if (storedApiKey) {
 			setApiKey(storedApiKey);
-			const client = LLMClientFactory.createClient(storedApiKey, {
-				systemPrompt: "You are a helpful AI assistant.",
-			});
-			setLlmClient(client);
 		}
 	}, []);
 
-	// Update LLM client when API key changes
+	// Update LLM client when API key or tools change
 	useEffect(() => {
 		if (apiKey) {
 			const client = LLMClientFactory.createClient(apiKey, {
-				systemPrompt: "You are a helpful AI assistant.",
+				systemPrompt:
+					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles and circles), add text elements, connect nodes, and group shapes together.",
+				tools: toolsConfig.tools,
+				functionHandlers: toolsConfig.handlers,
 			});
 			setLlmClient(client);
 		}
-	}, [apiKey]);
+	}, [apiKey, toolsConfig]);
 
 	// Create references to avoid function creation in every render
 	const refBusVal = {
@@ -275,6 +328,9 @@ const AiComponent: React.FC<AiProps> = (props) => {
 	// Avatar position (center of component)
 	const avatarY = 0;
 
+	// Check if processing
+	const isProcessing = processes.length > 0;
+
 	// Speech bubble position (above avatar)
 	const bubbleY = -(avatarSize / 2 + bubbleHeight / 2 - avatarOverlap);
 
@@ -303,7 +359,7 @@ const AiComponent: React.FC<AiProps> = (props) => {
 
 	// Calculate positions for bubble
 	const bubbleLeft = -bubbleWidth / 2;
-	const bubbleTop = bubbleY - bubbleHeight / 2;
+	const bubbleTop = bubbleY - bubbleHeight / 2 - 36;
 
 	return (
 		<>
@@ -360,15 +416,33 @@ const AiComponent: React.FC<AiProps> = (props) => {
 
 			{/* Avatar image or icon */}
 			{avatarUrl ? (
-				<image
-					href={avatarUrl}
-					x={x - avatarSize / 2}
-					y={y + avatarY - avatarSize / 2}
-					width={avatarSize}
-					height={avatarSize}
-					clipPath={`circle(${avatarSize / 2}px at center)`}
-					pointerEvents="none"
-				/>
+				<g>
+					<image
+						href={avatarUrl}
+						x={x - avatarSize / 2}
+						y={y + avatarY - avatarSize / 2}
+						width={avatarSize}
+						height={avatarSize}
+						clipPath={`circle(${avatarSize / 2}px at center)`}
+						pointerEvents="none"
+					>
+						{isProcessing && (
+							<animateTransform
+								attributeName="transform"
+								attributeType="XML"
+								type="rotate"
+								from={`-5 ${x} ${y + avatarY}`}
+								to={`5 ${x} ${y + avatarY}`}
+								dur="0.3s"
+								repeatCount="indefinite"
+								calcMode="spline"
+								keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+								keyTimes="0; 0.5; 1"
+								values={`-5 ${x} ${y + avatarY}; 5 ${x} ${y + avatarY}; -5 ${x} ${y + avatarY}`}
+							/>
+						)}
+					</image>
+				</g>
 			) : (
 				<IconContainer
 					x={x}

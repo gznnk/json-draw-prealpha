@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useMemo } from "react";
 
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
@@ -16,8 +16,8 @@ import { newEventId } from "../../utils/core/newEventId";
 export const useConnectNodesTool = (
 	eventBus: EventBus,
 ): FunctionCallHandler => {
-	return useCallback(
-		(functionCall: FunctionCallInfo) => {
+	return useMemo<FunctionCallHandler>(
+		() => (functionCall: FunctionCallInfo) => {
 			const args = functionCall.arguments as {
 				sourceNodeId: string;
 				targetNodeId: string;
