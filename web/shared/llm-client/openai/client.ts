@@ -29,7 +29,7 @@ export class OpenAIClient implements LLMClient {
 	constructor(apiKey: string, options?: LLMClientOptions) {
 		this.openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 		this.tools = options?.tools;
-		this.maxAttempts = options?.maxAttempts ?? 10;
+		this.maxAttempts = options?.maxAttempts ?? 100;
 
 		// 関数ハンドラが指定されていれば登録
 		if (options?.functionHandlers) {
@@ -158,6 +158,7 @@ export class OpenAIClient implements LLMClient {
 								// 関数コールの前に reasoning アイテムを追加
 								if (lastReasoningItem) {
 									this.messages.push(lastReasoningItem);
+									lastReasoningItem = null; // リセット
 								}
 
 								// 関数呼び出しメッセージ
