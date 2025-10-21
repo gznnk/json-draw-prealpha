@@ -16,22 +16,34 @@ export const cleanupGroups = (items: Diagram[]): Diagram[] => {
 			// Recursively cleanup nested groups first
 			const cleanedItems = cleanupGroups(item.items);
 
-			if (item.itemableType === "group" && cleanedItems.length === 0) {
-				// Remove empty groups
-			} else if (item.itemableType === "group" && cleanedItems.length === 1) {
-				// Ungroup single-item groups - add the single item directly
-				result.push(cleanedItems[0]);
-			} else {
-				// Keep groups with multiple items, but with cleaned up items
-				// Update rotateEnabled based on child items only (not previous group state)
-				const groupRotateEnabled = !hasRotateDisabledItem(cleanedItems);
+			// Handle group-specific cleanup
+			if (item.itemableType === "group") {
+				if (cleanedItems.length === 0) {
+					// Remove empty groups
+					continue;
+				} else if (cleanedItems.length === 1) {
+					// Ungroup single-item groups - add the single item directly
+					result.push(cleanedItems[0]);
+					continue;
+				} else {
+					// Keep groups with multiple items, but with cleaned up items
+					// Update rotateEnabled based on child items only (not previous group state)
+					const groupRotateEnabled = !hasRotateDisabledItem(cleanedItems);
 
-				result.push({
-					...item,
-					items: cleanedItems,
-					rotateEnabled: groupRotateEnabled,
-				} as typeof item);
+					result.push({
+						...item,
+						items: cleanedItems,
+						rotateEnabled: groupRotateEnabled,
+					} as typeof item);
+					continue;
+				}
 			}
+
+			// For non-group itemables (like CanvasFrame), just update items without changing rotateEnabled
+			result.push({
+				...item,
+				items: cleanedItems,
+			} as typeof item);
 		} else {
 			result.push(item);
 		}
