@@ -5,7 +5,7 @@ import {
 	PathTypeButton,
 	PathTypeSelectorWrapper,
 } from "./PathTypeSelectorStyled";
-import type { PathType } from "../../../types/core/PathType";
+import type { PathType } from "../../../../types/core/PathType";
 
 type PathTypeSelectorProps = {
 	value: PathType;

@@ -5,7 +5,7 @@ import {
 	StrokeDashButton,
 	StrokeDashSelectorWrapper,
 } from "./StrokeDashSelectorStyled";
-import type { StrokeDashType } from "../../../types/core/StrokeDashType";
+import type { StrokeDashType } from "../../../../types/core/StrokeDashType";
 
 type StrokeDashSelectorProps = {
 	value: StrokeDashType;
