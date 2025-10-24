@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
+
 export const LineStyleMenuWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -7,7 +9,7 @@ export const LineStyleMenuWrapper = styled.div`
 	padding: 8px;
 	background-color: #fff;
 	border-radius: 4px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	box-shadow: ${BOX_SHADOW};
 	pointer-events: auto;
 `;
 
