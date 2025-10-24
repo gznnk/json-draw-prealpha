@@ -50,12 +50,12 @@ import { AspectRatio } from "../../../icons/AspectRatio";
 import { BgColor } from "../../../icons/BgColor";
 import { Bold } from "../../../icons/Bold";
 import { BorderRadius } from "../../../icons/BorderRadius";
-import { BringToFront } from "../../../icons/BringToFront";
 import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { Group } from "../../../icons/Group";
 import { LineStyle } from "../../../icons/LineStyle";
+import { StackOrder as StackOrderIcon } from "../../../icons/StackOrder";
 import { VerticalAlignBottom } from "../../../icons/VerticalAlignBottom";
 import { VerticalAlignMiddle } from "../../../icons/VerticalAlignMiddle";
 import { VerticalAlignTop } from "../../../icons/VerticalAlignTop";
@@ -778,7 +778,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 					menuStateMap={menuStateMap}
 					onMenuClick={onMenuClick}
 				>
-					<BringToFront title="Stack Order" />
+					<StackOrderIcon title="Stack Order" />
 				</DiagramMenuItem>
 				{menuStateMap.StackOrder === "Active" && (
 					<StackOrderMenu
