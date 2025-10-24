@@ -27,15 +27,31 @@ export const LineStyleButton = styled.button<LineStyleButtonProps>`
 	width: 32px;
 	height: 32px;
 	padding: 4px;
-	border: 1px solid ${(props) => (props.isActive ? "#1890ff" : "#d9d9d9")};
-	border-radius: 4px;
-	background-color: ${(props) => (props.isActive ? "#e6f7ff" : "#fff")};
-	color: ${(props) => (props.isActive ? "#1890ff" : "#000")};
+	border: 1px solid ${(props) => (props.isActive ? "#6b7280" : "transparent")};
+	border-radius: 6px;
+	background-color: ${(props) => (props.isActive ? "#f9fafb" : "transparent")};
 	cursor: pointer;
-	transition: all 0.2s;
+	user-select: none;
+	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
 	&:hover {
-		border-color: #1890ff;
-		background-color: #e6f7ff;
+		background-color: #f3f4f6;
 	}
+
+	svg {
+		color: #6b7280;
+		transition: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+
+	&:hover svg {
+		color: #374151;
+	}
+
+	${(props) =>
+		props.isActive &&
+		`
+		svg {
+			color: #374151;
+		}
+	`}
 `;
