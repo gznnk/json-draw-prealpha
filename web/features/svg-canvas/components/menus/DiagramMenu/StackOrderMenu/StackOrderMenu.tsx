@@ -6,51 +6,73 @@ import {
 	StackOrderMenuWrapper,
 	StackOrderButton,
 } from "./StackOrderMenuStyled";
+import type { StackOrderChangeEvent } from "../../../../types/events/StackOrderChangeEvent";
+import { newEventId } from "../../../../utils/core/newEventId";
 import { BringForward } from "../../../icons/BringForward";
 import { BringToFront } from "../../../icons/BringToFront";
 import { SendBackward } from "../../../icons/SendBackward";
 import { SendToBack } from "../../../icons/SendToBack";
 
 type StackOrderMenuProps = {
-	onBringToFront: () => void;
-	onBringForward: () => void;
-	onSendBackward: () => void;
-	onSendToBack: () => void;
+	selectedItemId: string;
+	onStackOrderChange: (event: StackOrderChangeEvent) => void;
 };
 
 const StackOrderMenuComponent: React.FC<StackOrderMenuProps> = ({
-	onBringToFront,
-	onBringForward,
-	onSendBackward,
-	onSendToBack,
+	selectedItemId,
+	onStackOrderChange,
 }) => {
 	return (
 		<DiagramMenuControl>
 			<StackOrderMenuWrapper>
 				<StackOrderButton
 					isActive={false}
-					onClick={onBringToFront}
+					onClick={() =>
+						onStackOrderChange({
+							eventId: newEventId(),
+							changeType: "bringToFront",
+							id: selectedItemId,
+						})
+					}
 					title="Bring to Front"
 				>
 					<BringToFront />
 				</StackOrderButton>
 				<StackOrderButton
 					isActive={false}
-					onClick={onBringForward}
+					onClick={() =>
+						onStackOrderChange({
+							eventId: newEventId(),
+							changeType: "bringForward",
+							id: selectedItemId,
+						})
+					}
 					title="Bring Forward"
 				>
 					<BringForward />
 				</StackOrderButton>
 				<StackOrderButton
 					isActive={false}
-					onClick={onSendBackward}
+					onClick={() =>
+						onStackOrderChange({
+							eventId: newEventId(),
+							changeType: "sendBackward",
+							id: selectedItemId,
+						})
+					}
 					title="Send Backward"
 				>
 					<SendBackward />
 				</StackOrderButton>
 				<StackOrderButton
 					isActive={false}
-					onClick={onSendToBack}
+					onClick={() =>
+						onStackOrderChange({
+							eventId: newEventId(),
+							changeType: "sendToBack",
+							id: selectedItemId,
+						})
+					}
 					title="Send to Back"
 				>
 					<SendToBack />

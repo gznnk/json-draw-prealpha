@@ -780,46 +780,14 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				>
 					<StackOrderIcon title="Stack Order" />
 				</DiagramMenuItem>
-				{menuStateMap.StackOrder === "Active" && (
-					<StackOrderMenu
-						onBringToFront={() => {
-							if (singleSelectedItem) {
-								canvasProps.onStackOrderChange?.({
-									eventId: newEventId(),
-									changeType: "bringToFront",
-									id: singleSelectedItem.id,
-								});
-							}
-						}}
-						onBringForward={() => {
-							if (singleSelectedItem) {
-								canvasProps.onStackOrderChange?.({
-									eventId: newEventId(),
-									changeType: "bringForward",
-									id: singleSelectedItem.id,
-								});
-							}
-						}}
-						onSendBackward={() => {
-							if (singleSelectedItem) {
-								canvasProps.onStackOrderChange?.({
-									eventId: newEventId(),
-									changeType: "sendBackward",
-									id: singleSelectedItem.id,
-								});
-							}
-						}}
-						onSendToBack={() => {
-							if (singleSelectedItem) {
-								canvasProps.onStackOrderChange?.({
-									eventId: newEventId(),
-									changeType: "sendToBack",
-									id: singleSelectedItem.id,
-								});
-							}
-						}}
-					/>
-				)}
+				{menuStateMap.StackOrder === "Active" &&
+					singleSelectedItem &&
+					canvasProps.onStackOrderChange && (
+						<StackOrderMenu
+							selectedItemId={singleSelectedItem.id}
+							onStackOrderChange={canvasProps.onStackOrderChange}
+						/>
+					)}
 			</DiagramMenuPositioner>,
 		);
 		menuItemComponents.push(
