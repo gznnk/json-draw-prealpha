@@ -1,5 +1,6 @@
 import { Image, ImageMinimap } from "../../components/shapes/Image";
 import { ImageDefaultData } from "../../constants/data/shapes/ImageDefaultData";
+import { ImageMenuConfig } from "../../constants/menu/shapes/ImageMenuConfig";
 import { ImageDefaultState } from "../../constants/state/shapes/ImageDefaultState";
 import type { ImageData } from "../../types/data/shapes/ImageData";
 import { ImageFeatures } from "../../types/data/shapes/ImageData";
@@ -42,6 +43,7 @@ export const ImageAtlas: ImageAtlas = {
 
 	type: "Image",
 	features: ImageFeatures,
+	menuConfig: ImageMenuConfig,
 
 	// ============================================================================
 	// Defaults

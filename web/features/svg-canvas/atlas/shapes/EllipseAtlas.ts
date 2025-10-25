@@ -1,5 +1,6 @@
 import { Ellipse, EllipseMinimap } from "../../components/shapes/Ellipse";
 import { EllipseDefaultData } from "../../constants/data/shapes/EllipseDefaultData";
+import { EllipseMenuConfig } from "../../constants/menu/shapes/EllipseMenuConfig";
 import { EllipseDefaultState } from "../../constants/state/shapes/EllipseDefaultState";
 import type { EllipseData } from "../../types/data/shapes/EllipseData";
 import { EllipseFeatures } from "../../types/data/shapes/EllipseData";
@@ -41,6 +42,7 @@ export const EllipseAtlas: EllipseAtlas = {
 
 	type: "Ellipse",
 	features: EllipseFeatures,
+	menuConfig: EllipseMenuConfig,
 
 	// ============================================================================
 	// Defaults

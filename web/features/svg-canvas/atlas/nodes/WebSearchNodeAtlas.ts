@@ -3,6 +3,7 @@ import {
 	WebSearchNodeMinimap,
 } from "../../components/nodes/WebSearchNode";
 import { WebSearchNodeDefaultData } from "../../constants/data/nodes/WebSearchNodeDefaultData";
+import { WebSearchNodeMenuConfig } from "../../constants/menu/nodes/WebSearchNodeMenuConfig";
 import { WebSearchNodeDefaultState } from "../../constants/state/nodes/WebSearchNodeDefaultState";
 import type { WebSearchNodeData } from "../../types/data/nodes/WebSearchNodeData";
 import { WebSearchNodeFeatures } from "../../types/data/nodes/WebSearchNodeData";
@@ -48,6 +49,7 @@ export const WebSearchNodeAtlas: WebSearchNodeAtlas = {
 
 	type: "WebSearchNode",
 	features: WebSearchNodeFeatures,
+	menuConfig: WebSearchNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

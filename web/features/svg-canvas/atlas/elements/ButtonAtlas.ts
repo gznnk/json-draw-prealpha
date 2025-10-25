@@ -1,5 +1,6 @@
 import { Button, ButtonMinimap } from "../../components/elements/Button";
 import { ButtonDefaultData } from "../../constants/data/elements/ButtonDefaultData";
+import { ButtonMenuConfig } from "../../constants/menu/elements/ButtonMenuConfig";
 import { ButtonDefaultState } from "../../constants/state/elements/ButtonDefaultState";
 import type { ButtonData } from "../../types/data/elements/ButtonData";
 import { ButtonFeatures } from "../../types/data/elements/ButtonData";
@@ -41,6 +42,7 @@ export const ButtonAtlas: ButtonAtlas = {
 
 	type: "Button",
 	features: ButtonFeatures,
+	menuConfig: ButtonMenuConfig,
 
 	// ============================================================================
 	// Defaults

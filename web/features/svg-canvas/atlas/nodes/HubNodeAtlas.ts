@@ -1,5 +1,6 @@
 import { HubNode, HubNodeMinimap } from "../../components/nodes/HubNode";
 import { HubNodeDefaultData } from "../../constants/data/nodes/HubNodeDefaultData";
+import { HubNodeMenuConfig } from "../../constants/menu/nodes/HubNodeMenuConfig";
 import { HubNodeDefaultState } from "../../constants/state/nodes/HubNodeDefaultState";
 import type { HubNodeData } from "../../types/data/nodes/HubNodeData";
 import { HubNodeFeatures } from "../../types/data/nodes/HubNodeData";
@@ -41,6 +42,7 @@ export const HubNodeAtlas: HubNodeAtlas = {
 
 	type: "HubNode",
 	features: HubNodeFeatures,
+	menuConfig: HubNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

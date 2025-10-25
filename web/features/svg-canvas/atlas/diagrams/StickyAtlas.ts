@@ -1,5 +1,6 @@
 import { Sticky, StickyMinimap } from "../../components/diagrams/Sticky";
 import { StickyDefaultData } from "../../constants/data/diagrams/StickyDefaultData";
+import { StickyMenuConfig } from "../../constants/menu/diagrams/StickyMenuConfig";
 import { StickyDefaultState } from "../../constants/state/diagrams/StickyDefaultState";
 import type { StickyData } from "../../types/data/diagrams/StickyData";
 import { StickyFeatures } from "../../types/data/diagrams/StickyData";
@@ -37,6 +38,7 @@ export const StickyAtlas: StickyAtlas = {
 
 	type: "Sticky",
 	features: StickyFeatures,
+	menuConfig: StickyMenuConfig,
 
 	// ============================================================================
 	// Defaults

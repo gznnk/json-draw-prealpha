@@ -1,5 +1,9 @@
-import { CanvasFrame, CanvasFrameMinimap } from "../../components/diagrams/CanvasFrame";
+import {
+	CanvasFrame,
+	CanvasFrameMinimap,
+} from "../../components/diagrams/CanvasFrame";
 import { CanvasFrameDefaultData } from "../../constants/data/diagrams/CanvasFrameDefaultData";
+import { CanvasFrameMenuConfig } from "../../constants/menu/diagrams/CanvasFrameMenuConfig";
 import { CanvasFrameDefaultState } from "../../constants/state/diagrams/CanvasFrameDefaultState";
 import type { CanvasFrameData } from "../../types/data/diagrams/CanvasFrameData";
 import { CanvasFrameFeatures } from "../../types/data/diagrams/CanvasFrameData";
@@ -30,7 +34,11 @@ import {
 /**
  * CanvasFrame Diagram Atlas Type Definition
  */
-type CanvasFrameAtlas = DiagramAtlas<CanvasFrameData, CanvasFrameState, CanvasFrameProps>;
+type CanvasFrameAtlas = DiagramAtlas<
+	CanvasFrameData,
+	CanvasFrameState,
+	CanvasFrameProps
+>;
 
 /**
  * CanvasFrame Diagram Atlas Implementation
@@ -42,6 +50,7 @@ export const CanvasFrameAtlas: CanvasFrameAtlas = {
 
 	type: "CanvasFrame",
 	features: CanvasFrameFeatures,
+	menuConfig: CanvasFrameMenuConfig,
 
 	// ============================================================================
 	// Defaults

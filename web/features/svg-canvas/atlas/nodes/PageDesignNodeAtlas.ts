@@ -3,6 +3,7 @@ import {
 	PageDesignNodeMinimap,
 } from "../../components/nodes/PageDesignNode";
 import { PageDesignNodeDefaultData } from "../../constants/data/nodes/PageDesignNodeDefaultData";
+import { PageDesignNodeMenuConfig } from "../../constants/menu/nodes/PageDesignNodeMenuConfig";
 import { PageDesignNodeDefaultState } from "../../constants/state/nodes/PageDesignNodeDefaultState";
 import type { PageDesignNodeData } from "../../types/data/nodes/PageDesignNodeData";
 import { PageDesignNodeFeatures } from "../../types/data/nodes/PageDesignNodeData";
@@ -48,6 +49,7 @@ export const PageDesignNodeAtlas: PageDesignNodeAtlas = {
 
 	type: "PageDesignNode",
 	features: PageDesignNodeFeatures,
+	menuConfig: PageDesignNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

@@ -1,5 +1,6 @@
 import { AgentNode, AgentNodeMinimap } from "../../components/nodes/AgentNode";
 import { AgentNodeDefaultData } from "../../constants/data/nodes/AgentNodeDefaultData";
+import { AgentNodeMenuConfig } from "../../constants/menu/nodes/AgentNodeMenuConfig";
 import { AgentNodeDefaultState } from "../../constants/state/nodes/AgentNodeDefaultState";
 import type { AgentNodeData } from "../../types/data/nodes/AgentNodeData";
 import { AgentNodeFeatures } from "../../types/data/nodes/AgentNodeData";
@@ -45,6 +46,7 @@ export const AgentNodeAtlas: AgentNodeAtlas = {
 
 	type: "AgentNode",
 	features: AgentNodeFeatures,
+	menuConfig: AgentNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

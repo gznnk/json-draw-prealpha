@@ -1,5 +1,6 @@
 import { Path, PathMinimap } from "../../components/shapes/Path";
 import { PathDefaultData } from "../../constants/data/shapes/PathDefaultData";
+import { PathMenuConfig } from "../../constants/menu/shapes/PathMenuConfig";
 import { PathDefaultState } from "../../constants/state/shapes/PathDefaultState";
 import type { PathData } from "../../types/data/shapes/PathData";
 import { PathFeatures } from "../../types/data/shapes/PathData";
@@ -41,6 +42,7 @@ export const PathAtlas: PathAtlas = {
 
 	type: "Path",
 	features: PathFeatures,
+	menuConfig: PathMenuConfig,
 
 	// ============================================================================
 	// Defaults

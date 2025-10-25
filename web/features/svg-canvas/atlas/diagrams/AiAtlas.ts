@@ -1,5 +1,6 @@
 import { Ai, AiMinimap } from "../../components/diagrams/Ai";
 import { AiDefaultData } from "../../constants/data/diagrams/AiDefaultData";
+import { AiMenuConfig } from "../../constants/menu/diagrams/AiMenuConfig";
 import { AiDefaultState } from "../../constants/state/diagrams/AiDefaultState";
 import type { AiData } from "../../types/data/diagrams/AiData";
 import { AiFeatures } from "../../types/data/diagrams/AiData";
@@ -37,6 +38,7 @@ export const AiAtlas: AiAtlas = {
 
 	type: "Ai",
 	features: AiFeatures,
+	menuConfig: AiMenuConfig,
 
 	// ============================================================================
 	// Defaults

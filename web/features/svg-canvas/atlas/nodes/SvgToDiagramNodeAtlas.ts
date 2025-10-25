@@ -3,6 +3,7 @@ import {
 	SvgToDiagramNodeMinimap,
 } from "../../components/nodes/SvgToDiagramNode";
 import { SvgToDiagramNodeDefaultData } from "../../constants/data/nodes/SvgToDiagramNodeDefaultData";
+import { SvgToDiagramNodeMenuConfig } from "../../constants/menu/nodes/SvgToDiagramNodeMenuConfig";
 import { SvgToDiagramNodeDefaultState } from "../../constants/state/nodes/SvgToDiagramNodeDefaultState";
 import type { SvgToDiagramNodeData } from "../../types/data/nodes/SvgToDiagramNodeData";
 import { SvgToDiagramNodeFeatures } from "../../types/data/nodes/SvgToDiagramNodeData";
@@ -48,6 +49,7 @@ export const SvgToDiagramNodeAtlas: SvgToDiagramNodeAtlas = {
 
 	type: "SvgToDiagramNode",
 	features: SvgToDiagramNodeFeatures,
+	menuConfig: SvgToDiagramNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

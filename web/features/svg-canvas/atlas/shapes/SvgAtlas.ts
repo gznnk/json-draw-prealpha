@@ -1,5 +1,6 @@
 import { Svg, SvgMinimap } from "../../components/shapes/Svg";
 import { SvgDefaultData } from "../../constants/data/shapes/SvgDefaultData";
+import { SvgMenuConfig } from "../../constants/menu/shapes/SvgMenuConfig";
 import { SvgDefaultState } from "../../constants/state/shapes/SvgDefaultState";
 import type { SvgData } from "../../types/data/shapes/SvgData";
 import { SvgFeatures } from "../../types/data/shapes/SvgData";
@@ -41,6 +42,7 @@ export const SvgAtlas: SvgAtlas = {
 
 	type: "Svg",
 	features: SvgFeatures,
+	menuConfig: SvgMenuConfig,
 
 	// ============================================================================
 	// Defaults

@@ -1,5 +1,6 @@
 import { Rectangle, RectangleMinimap } from "../../components/shapes/Rectangle";
 import { RectangleDefaultData } from "../../constants/data/shapes/RectangleDefaultData";
+import { RectangleMenuConfig } from "../../constants/menu/shapes/RectangleMenuConfig";
 import { RectangleDefaultState } from "../../constants/state/shapes/RectangleDefaultState";
 import type { RectangleData } from "../../types/data/shapes/RectangleData";
 import { RectangleFeatures } from "../../types/data/shapes/RectangleData";
@@ -45,6 +46,7 @@ export const RectangleAtlas: RectangleAtlas = {
 
 	type: "Rectangle",
 	features: RectangleFeatures,
+	menuConfig: RectangleMenuConfig,
 
 	// ============================================================================
 	// Defaults

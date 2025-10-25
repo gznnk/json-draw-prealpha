@@ -3,6 +3,7 @@ import {
 	ImageGenNodeMinimap,
 } from "../../components/nodes/ImageGenNode";
 import { ImageGenNodeDefaultData } from "../../constants/data/nodes/ImageGenNodeDefaultData";
+import { ImageGenNodeMenuConfig } from "../../constants/menu/nodes/ImageGenNodeMenuConfig";
 import { ImageGenNodeDefaultState } from "../../constants/state/nodes/ImageGenNodeDefaultState";
 import type { ImageGenNodeData } from "../../types/data/nodes/ImageGenNodeData";
 import { ImageGenNodeFeatures } from "../../types/data/nodes/ImageGenNodeData";
@@ -48,6 +49,7 @@ export const ImageGenNodeAtlas: ImageGenNodeAtlas = {
 
 	type: "ImageGenNode",
 	features: ImageGenNodeFeatures,
+	menuConfig: ImageGenNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

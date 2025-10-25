@@ -1,5 +1,6 @@
 import { Frame } from "../../components/elements/Frame";
 import { FrameDefaultData } from "../../constants/data/elements/FrameDefaultData";
+import { FrameMenuConfig } from "../../constants/menu/elements/FrameMenuConfig";
 import { FrameDefaultState } from "../../constants/state/elements/FrameDefaultState";
 import type { FrameData } from "../../types/data/elements/FrameData";
 import { FrameFeatures } from "../../types/data/elements/FrameData";
@@ -34,6 +35,7 @@ export const FrameAtlas: FrameAtlas = {
 
 	type: "Frame",
 	features: FrameFeatures,
+	menuConfig: FrameMenuConfig,
 
 	// ============================================================================
 	// Defaults

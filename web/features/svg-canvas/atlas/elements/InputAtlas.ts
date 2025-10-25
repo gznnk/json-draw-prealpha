@@ -1,5 +1,6 @@
 import { Input, InputMinimap } from "../../components/elements/Input";
 import { InputDefaultData } from "../../constants/data/elements/InputDefaultData";
+import { InputMenuConfig } from "../../constants/menu/elements/InputMenuConfig";
 import { InputDefaultState } from "../../constants/state/elements/InputDefaultState";
 import type { InputData } from "../../types/data/elements/InputData";
 import { InputFeatures } from "../../types/data/elements/InputData";
@@ -41,6 +42,7 @@ export const InputAtlas: InputAtlas = {
 
 	type: "Input",
 	features: InputFeatures,
+	menuConfig: InputMenuConfig,
 
 	// ============================================================================
 	// Defaults

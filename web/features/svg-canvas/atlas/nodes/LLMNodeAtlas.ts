@@ -1,5 +1,6 @@
 import { LLMNode, LLMNodeMinimap } from "../../components/nodes/LLMNode";
 import { LLMNodeDefaultData } from "../../constants/data/nodes/LLMNodeDefaultData";
+import { LLMNodeMenuConfig } from "../../constants/menu/nodes/LLMNodeMenuConfig";
 import { LLMNodeDefaultState } from "../../constants/state/nodes/LLMNodeDefaultState";
 import { LLMNodeFeatures } from "../../types/data/nodes/LLMNodeData";
 import type { LLMNodeData } from "../../types/data/nodes/LLMNodeData";
@@ -42,6 +43,7 @@ export const LLMNodeAtlas: LLMNodeAtlas = {
 
 	type: "LLMNode",
 	features: LLMNodeFeatures,
+	menuConfig: LLMNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

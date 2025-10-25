@@ -3,6 +3,7 @@ import {
 	ConnectLineMinimap,
 } from "../../components/shapes/ConnectLine";
 import { ConnectLineDefaultData } from "../../constants/data/shapes/ConnectLineDefaultData";
+import { ConnectLineMenuConfig } from "../../constants/menu/shapes/ConnectLineMenuConfig";
 import { ConnectLineDefaultState } from "../../constants/state/shapes/ConnectLineDefaultState";
 import type { ConnectLineData } from "../../types/data/shapes/ConnectLineData";
 import { ConnectLineFeatures } from "../../types/data/shapes/ConnectLineData";
@@ -47,6 +48,7 @@ export const ConnectLineAtlas: ConnectLineAtlas = {
 
 	type: "ConnectLine",
 	features: ConnectLineFeatures,
+	menuConfig: ConnectLineMenuConfig,
 
 	// ============================================================================
 	// Defaults

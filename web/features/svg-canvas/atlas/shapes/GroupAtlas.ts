@@ -1,5 +1,6 @@
 import { Group, GroupMinimap } from "../../components/shapes/Group";
 import { GroupDefaultData } from "../../constants/data/shapes/GroupDefaultData";
+import { GroupMenuConfig } from "../../constants/menu/shapes/GroupMenuConfig";
 import { GroupDefaultState } from "../../constants/state/shapes/GroupDefaultState";
 import type { GroupData } from "../../types/data/shapes/GroupData";
 import { GroupFeatures } from "../../types/data/shapes/GroupData";
@@ -40,6 +41,7 @@ export const GroupAtlas: GroupAtlas = {
 
 	type: "Group",
 	features: GroupFeatures,
+	menuConfig: GroupMenuConfig,
 
 	// ============================================================================
 	// Defaults

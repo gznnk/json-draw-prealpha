@@ -3,6 +3,7 @@ import {
 	TextAreaNodeMinimap,
 } from "../../components/nodes/TextAreaNode";
 import { TextAreaNodeDefaultData } from "../../constants/data/nodes/TextAreaNodeDefaultData";
+import { TextAreaNodeMenuConfig } from "../../constants/menu/nodes/TextAreaNodeMenuConfig";
 import { TextAreaNodeDefaultState } from "../../constants/state/nodes/TextAreaNodeDefaultState";
 import type { TextAreaNodeData } from "../../types/data/nodes/TextAreaNodeData";
 import { TextAreaNodeFeatures } from "../../types/data/nodes/TextAreaNodeData";
@@ -48,6 +49,7 @@ export const TextAreaNodeAtlas: TextAreaNodeAtlas = {
 
 	type: "TextAreaNode",
 	features: TextAreaNodeFeatures,
+	menuConfig: TextAreaNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

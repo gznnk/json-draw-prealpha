@@ -3,6 +3,7 @@ import {
 	HtmlGenNodeMinimap,
 } from "../../components/nodes/HtmlGenNode";
 import { HtmlGenNodeDefaultData } from "../../constants/data/nodes/HtmlGenNodeDefaultData";
+import { HtmlGenNodeMenuConfig } from "../../constants/menu/nodes/HtmlGenNodeMenuConfig";
 import { HtmlGenNodeDefaultState } from "../../constants/state/nodes/HtmlGenNodeDefaultState";
 import { HtmlGenNodeFeatures } from "../../types/data/nodes/HtmlGenNodeData";
 import type { HtmlGenNodeData } from "../../types/data/nodes/HtmlGenNodeData";
@@ -48,6 +49,7 @@ export const HtmlGenNodeAtlas: HtmlGenNodeAtlas = {
 
 	type: "HtmlGenNode",
 	features: HtmlGenNodeFeatures,
+	menuConfig: HtmlGenNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults

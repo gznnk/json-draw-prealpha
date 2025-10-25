@@ -3,6 +3,7 @@ import {
 	VectorStoreNodeMinimap,
 } from "../../components/nodes/VectorStoreNode";
 import { VectorStoreNodeDefaultData } from "../../constants/data/nodes/VectorStoreNodeDefaultData";
+import { VectorStoreNodeMenuConfig } from "../../constants/menu/nodes/VectorStoreNodeMenuConfig";
 import { VectorStoreNodeDefaultState } from "../../constants/state/nodes/VectorStoreNodeDefaultState";
 import type { VectorStoreNodeData } from "../../types/data/nodes/VectorStoreNodeData";
 import { VectorStoreNodeFeatures } from "../../types/data/nodes/VectorStoreNodeData";
@@ -48,6 +49,7 @@ export const VectorStoreNodeAtlas: VectorStoreNodeAtlas = {
 
 	type: "VectorStoreNode",
 	features: VectorStoreNodeFeatures,
+	menuConfig: VectorStoreNodeMenuConfig,
 
 	// ============================================================================
 	// Defaults
