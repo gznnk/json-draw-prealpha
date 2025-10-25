@@ -52,7 +52,6 @@ import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { Group } from "../../../icons/Group";
-import { LineStyle } from "../../../icons/LineStyle";
 import { AlignmentMenu } from "../AlignmentMenu/AlignmentMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
@@ -553,27 +552,19 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			</DiagramMenuPositioner>,
 		);
 		menuItemComponents.push(
-			<DiagramMenuPositioner key="LineStyle">
-				<DiagramMenuItem
-					menuType="LineStyle"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<LineStyle title="Line Style" />
-				</DiagramMenuItem>
-				{menuStateMap.LineStyle === "Active" && (
-					<LineStyleMenu
-						strokeWidth={firstStrokableItem?.strokeWidth || "2px"}
-						pathType={firstPathableItem?.pathType || "Linear"}
-						strokeDashType={firstStrokableItem?.strokeDashType || "solid"}
-						onStrokeWidthChange={(value) => {
-							changeItemsStyle(selectedItems, { strokeWidth: value });
-						}}
-						onPathTypeChange={onPathTypeChange}
-						onStrokeDashTypeChange={onStrokeDashChange}
-					/>
-				)}
-			</DiagramMenuPositioner>,
+			<LineStyleMenu
+				key="LineStyle"
+				isOpen={isLineStyleMenuOpen}
+				onToggle={() => setIsLineStyleMenuOpen(!isLineStyleMenuOpen)}
+				strokeWidth={firstStrokableItem?.strokeWidth || "2px"}
+				pathType={firstPathableItem?.pathType || "Linear"}
+				strokeDashType={firstStrokableItem?.strokeDashType || "solid"}
+				onStrokeWidthChange={(value) => {
+					changeItemsStyle(selectedItems, { strokeWidth: value });
+				}}
+				onPathTypeChange={onPathTypeChange}
+				onStrokeDashTypeChange={onStrokeDashChange}
+			/>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuDivider key="FillableAndStrokableSectionDivider" />,
