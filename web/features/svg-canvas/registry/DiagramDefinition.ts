@@ -26,7 +26,7 @@ export type DiagramDefinition = {
 	type: DiagramType;
 
 	/** Menu configuration for the diagram (undefined if no menu is needed) */
-	menuConfig: DiagramMenuConfig | undefined;
+	menuConfig?: DiagramMenuConfig;
 
 	/** React component factory for rendering the diagram */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
