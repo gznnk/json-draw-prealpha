@@ -39,7 +39,6 @@ import { newEventId } from "../../../../utils/core/newEventId";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
 import { isTextableState } from "../../../../utils/validation/isTextableState";
 import { isTransformativeState } from "../../../../utils/validation/isTransformativeState";
-import { AspectRatio } from "../../../icons/AspectRatio";
 import { BgColor } from "../../../icons/BgColor";
 import { Bold } from "../../../icons/Bold";
 import { BorderRadius } from "../../../icons/BorderRadius";
@@ -50,6 +49,7 @@ import { Group } from "../../../icons/Group";
 import { AlignmentMenu } from "../AlignmentMenu/AlignmentMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
+import { KeepAspectRatioMenu } from "../KeepAspectRatioMenu";
 import { LineStyleMenu } from "../LineStyleMenu";
 import { NumberStepper } from "../NumberStepper";
 import { StackOrderMenu } from "../StackOrderMenu/StackOrderMenu";
@@ -593,14 +593,11 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const showKeepAspectRatioSection = showSection("KeepAspectRatio");
 	if (showKeepAspectRatioSection) {
 		menuItemComponents.push(
-			<DiagramMenuItem
+			<KeepAspectRatioMenu
 				key="KeepAspectRatio"
-				menuType="KeepAspectRatio"
-				menuStateMap={menuStateMap}
-				onMenuClick={onMenuClick}
-			>
-				<AspectRatio width={22} height={22} title="Keep Aspect Ratio" />
-			</DiagramMenuItem>,
+				isActive={menuStateMap.KeepAspectRatio === "Active"}
+				onClick={() => onMenuClick("KeepAspectRatio")}
+			/>,
 		);
 		menuItemComponents.push(
 			<DiagramMenuDivider key="KeepAspectRatioSectionDivider" />,
