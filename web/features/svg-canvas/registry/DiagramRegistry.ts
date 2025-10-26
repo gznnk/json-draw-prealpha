@@ -5,6 +5,7 @@ import type {
 } from "./DiagramDefinition";
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Frame } from "../types/core/Frame";
+import type { DiagramMenuConfig } from "../types/menu/DiagramMenuConfig";
 import type { Diagram } from "../types/state/core/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 
@@ -54,6 +55,16 @@ class DiagramRegistryClass {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getMinimapComponent(type: DiagramType): React.FC<any> | undefined {
 		return this.definitions.get(type)?.minimapComponent;
+	}
+
+	/**
+	 * Get the menu configuration for a diagram type.
+	 *
+	 * @param type - The diagram type
+	 * @returns The menu configuration or undefined if not found or not needed
+	 */
+	getMenuConfig(type: DiagramType): DiagramMenuConfig | undefined {
+		return this.definitions.get(type)?.menuConfig;
 	}
 
 	/**

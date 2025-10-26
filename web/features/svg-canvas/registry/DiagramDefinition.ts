@@ -1,6 +1,7 @@
 import type { DiagramType } from "../types/core/DiagramType";
 import type { Frame } from "../types/core/Frame";
 import type { DiagramData } from "../types/data/core/DiagramData";
+import type { DiagramMenuConfig } from "../types/menu/DiagramMenuConfig";
 import type { Diagram } from "../types/state/core/Diagram";
 import type { ConnectPointState } from "../types/state/shapes/ConnectPointState";
 
@@ -23,6 +24,9 @@ export type DataToStateMapper = (data: DiagramData) => Diagram;
 export type DiagramDefinition = {
 	/** The diagram type identifier */
 	type: DiagramType;
+
+	/** Menu configuration for the diagram (undefined if no menu is needed) */
+	menuConfig: DiagramMenuConfig | undefined;
 
 	/** React component factory for rendering the diagram */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
