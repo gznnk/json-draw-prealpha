@@ -1,6 +1,9 @@
 import { useCallback } from "react";
 
-import type { DiagramStyleChangeEvent } from "../../../../../types/events/DiagramStyleChangeEvent";
+import type {
+	DiagramStyleChangeEvent,
+	DiagramStyle,
+} from "../../../../../types/events/DiagramStyleChangeEvent";
 import type { Diagram } from "../../../../../types/state/core/Diagram";
 import { newEventId } from "../../../../../utils/core/newEventId";
 import { isItemableState } from "../../../../../utils/validation/isItemableState";
@@ -11,7 +14,7 @@ export type UseStyleChangeProps = {
 
 export type ApplyStyleChangeParams = {
 	items: Diagram[];
-	styleData: Partial<DiagramStyleChangeEvent["data"]>;
+	styleData: Partial<DiagramStyle>;
 	recursively?: boolean;
 	eventId?: string;
 };
