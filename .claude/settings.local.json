@@ -48,7 +48,8 @@
 			"mcp__serena__search_for_pattern",
 			"mcp__serena__write_memory",
 			"Bash(cat:*)",
-			"WebSearch"
+			"WebSearch",
+			"Bash(npm run lint:*)"
 		],
 		"deny": []
 	},

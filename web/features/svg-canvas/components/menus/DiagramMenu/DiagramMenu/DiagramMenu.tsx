@@ -26,7 +26,7 @@ import {
 	findFirstTextableRecursive,
 } from "./DiagramMenuUtils";
 import { useDiagramMenuState } from "./hooks/useDiagramMenuState";
-import { useStyleChange } from "./hooks/useStyleChange";
+import { useStyleChange } from "../../../../hooks/useStyleChange";
 import type { PathType } from "../../../../types/core/PathType";
 import type { StrokeDashType } from "../../../../types/core/StrokeDashType";
 import type { CornerRoundableData } from "../../../../types/data/core/CornerRoundableData";
@@ -89,9 +89,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const [isStackOrderMenuOpen, setIsStackOrderMenuOpen] = useState(false);
 
 	// Use style change hook for applying style changes
-	const { applyStyleChange } = useStyleChange({
-		onStyleChange: canvasProps.onStyleChange,
-	});
+	const applyStyleChange = useStyleChange();
 
 	// Utility functions for changing items
 	const changeItems = useCallback(
@@ -548,20 +546,8 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				key="Alignment"
 				isOpen={isAlignmentMenuOpen}
 				onToggle={() => setIsAlignmentMenuOpen(!isAlignmentMenuOpen)}
-				textAlign={firstTextableItem.textAlign}
-				verticalAlign={firstTextableItem.verticalAlign}
-				onTextAlignChange={(align) => {
-					applyStyleChange({
-						items: selectedItems,
-						styleData: { textAlign: align },
-					});
-				}}
-				onVerticalAlignChange={(align) => {
-					applyStyleChange({
-						items: selectedItems,
-						styleData: { verticalAlign: align },
-					});
-				}}
+				diagram={firstTextableItem}
+				selectedDiagrams={selectedItems}
 			/>,
 		);
 		menuItemComponents.push(

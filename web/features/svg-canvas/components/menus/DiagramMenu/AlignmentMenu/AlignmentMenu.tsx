@@ -4,6 +4,9 @@ import { memo } from "react";
 import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuControl } from "../DiagramMenuControl";
 import { AlignmentMenuWrapper, AlignmentButton } from "./AlignmentMenuStyled";
+import { useStyleChange } from "../../../../hooks/useStyleChange";
+import type { TextableData } from "../../../../types/data/core/TextableData";
+import type { Diagram } from "../../../../types/state/core/Diagram";
 import { AlignCenter } from "../../../icons/AlignCenter";
 import { AlignLeft as AlignLeftIcon } from "../../../icons/AlignLeft";
 import { AlignRight } from "../../../icons/AlignRight";
@@ -15,20 +18,32 @@ import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 type AlignmentMenuProps = {
 	isOpen: boolean;
 	onToggle: () => void;
-	textAlign: "left" | "center" | "right";
-	verticalAlign: "top" | "center" | "bottom";
-	onTextAlignChange: (align: "left" | "center" | "right") => void;
-	onVerticalAlignChange: (align: "top" | "center" | "bottom") => void;
+	diagram: TextableData;
+	selectedDiagrams: Diagram[];
 };
 
 const AlignmentMenuComponent: React.FC<AlignmentMenuProps> = ({
 	isOpen,
 	onToggle,
-	textAlign,
-	verticalAlign,
-	onTextAlignChange,
-	onVerticalAlignChange,
+	diagram,
+	selectedDiagrams,
 }) => {
+	const applyStyleChange = useStyleChange();
+
+	const handleTextAlignChange = (align: "left" | "center" | "right") => {
+		applyStyleChange({
+			items: selectedDiagrams,
+			styleData: { textAlign: align },
+		});
+	};
+
+	const handleVerticalAlignChange = (align: "top" | "center" | "bottom") => {
+		applyStyleChange({
+			items: selectedDiagrams,
+			styleData: { verticalAlign: align },
+		});
+	};
+
 	return (
 		<DiagramMenuPositioner>
 			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
@@ -39,51 +54,51 @@ const AlignmentMenuComponent: React.FC<AlignmentMenuProps> = ({
 					<AlignmentMenuWrapper>
 						{/* First row: Horizontal alignment */}
 						<AlignmentButton
-							isActive={textAlign === "left"}
-							onClick={() => onTextAlignChange("left")}
+							isActive={diagram.textAlign === "left"}
+							onClick={() => handleTextAlignChange("left")}
 							title="Align Left"
 						>
 							<AlignLeftIcon />
 						</AlignmentButton>
-				<AlignmentButton
-					isActive={textAlign === "center"}
-					onClick={() => onTextAlignChange("center")}
-					title="Align Center"
-				>
-					<AlignCenter />
-				</AlignmentButton>
-				<AlignmentButton
-					isActive={textAlign === "right"}
-					onClick={() => onTextAlignChange("right")}
-					title="Align Right"
-				>
-					<AlignRight />
-				</AlignmentButton>
+						<AlignmentButton
+							isActive={diagram.textAlign === "center"}
+							onClick={() => handleTextAlignChange("center")}
+							title="Align Center"
+						>
+							<AlignCenter />
+						</AlignmentButton>
+						<AlignmentButton
+							isActive={diagram.textAlign === "right"}
+							onClick={() => handleTextAlignChange("right")}
+							title="Align Right"
+						>
+							<AlignRight />
+						</AlignmentButton>
 
-				{/* Second row: Vertical alignment */}
-				<AlignmentButton
-					isActive={verticalAlign === "top"}
-					onClick={() => onVerticalAlignChange("top")}
-					title="Align Top"
-				>
-					<VerticalAlignTop />
-				</AlignmentButton>
-				<AlignmentButton
-					isActive={verticalAlign === "center"}
-					onClick={() => onVerticalAlignChange("center")}
-					title="Align Middle"
-				>
-					<VerticalAlignMiddle />
-				</AlignmentButton>
-					<AlignmentButton
-						isActive={verticalAlign === "bottom"}
-						onClick={() => onVerticalAlignChange("bottom")}
-						title="Align Bottom"
-					>
-						<VerticalAlignBottom />
-					</AlignmentButton>
-				</AlignmentMenuWrapper>
-			</DiagramMenuControl>
+						{/* Second row: Vertical alignment */}
+						<AlignmentButton
+							isActive={diagram.verticalAlign === "top"}
+							onClick={() => handleVerticalAlignChange("top")}
+							title="Align Top"
+						>
+							<VerticalAlignTop />
+						</AlignmentButton>
+						<AlignmentButton
+							isActive={diagram.verticalAlign === "center"}
+							onClick={() => handleVerticalAlignChange("center")}
+							title="Align Middle"
+						>
+							<VerticalAlignMiddle />
+						</AlignmentButton>
+						<AlignmentButton
+							isActive={diagram.verticalAlign === "bottom"}
+							onClick={() => handleVerticalAlignChange("bottom")}
+							title="Align Bottom"
+						>
+							<VerticalAlignBottom />
+						</AlignmentButton>
+					</AlignmentMenuWrapper>
+				</DiagramMenuControl>
 			)}
 		</DiagramMenuPositioner>
 	);
