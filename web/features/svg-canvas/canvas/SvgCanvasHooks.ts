@@ -13,7 +13,6 @@ import { useOnAiMessageChange } from "./hooks/diagram/useOnAiMessageChange";
 import { useOnAppendDiagrams } from "./hooks/diagram/useOnAppendDiagrams";
 import { useOnClick } from "./hooks/diagram/useOnClick";
 import { useOnConnect } from "./hooks/diagram/useOnConnect";
-import { useOnConstraintChange } from "./hooks/diagram/useOnConstraintChange";
 import { useOnDiagramChange } from "./hooks/diagram/useOnDiagramChange";
 import { useOnDrag } from "./hooks/diagram/useOnDrag";
 import { useOnDragLeave } from "./hooks/diagram/useOnDragLeave";
@@ -21,6 +20,7 @@ import { useOnDragOver } from "./hooks/diagram/useOnDragOver";
 import { useOnExecute } from "./hooks/diagram/useOnExecute";
 import { useOnExtractDiagramsToTopLevel } from "./hooks/diagram/useOnExtractDiagramsToTopLevel";
 import { useOnHoverChange } from "./hooks/diagram/useOnHoverChange";
+import { useOnKeepProportionChange } from "./hooks/diagram/useOnKeepProportionChange";
 import { useOnSelect } from "./hooks/diagram/useOnSelect";
 import { useOnStackOrderChange } from "./hooks/diagram/useOnStackOrderChange";
 import { useOnStyleChange } from "./hooks/diagram/useOnStyleChange";
@@ -137,8 +137,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Hook for the stack order change event.
 	useOnStackOrderChange(canvasHooksProps);
 
-	// Hook for the constraint change event.
-	useOnConstraintChange(canvasHooksProps);
+	// Hook for the keep proportion change event.
+	useOnKeepProportionChange(canvasHooksProps);
 
 	// Hook for extracting selected diagrams to top level when dragged out of CanvasFrame.
 	useOnExtractDiagramsToTopLevel(canvasHooksProps);

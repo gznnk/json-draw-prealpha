@@ -26,7 +26,6 @@ import {
 	findFirstTextableRecursive,
 } from "./DiagramMenuUtils";
 import { useDiagramMenuState } from "./hooks/useDiagramMenuState";
-import { useConstraintChange } from "../../../../hooks/useConstraintChange";
 import { useStyleChange } from "../../../../hooks/useStyleChange";
 import type { PathType } from "../../../../types/core/PathType";
 import type { StrokeDashType } from "../../../../types/core/StrokeDashType";
@@ -91,9 +90,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 
 	// Use style change hook for applying style changes
 	const applyStyleChange = useStyleChange();
-
-	// Use constraint change hook for applying constraint changes
-	const onConstraintChange = useConstraintChange();
 
 	// Utility functions for changing items
 	const changeItems = useCallback(
@@ -193,24 +189,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 					break;
 				case "StackOrder":
 					openControl("StackOrder", currentMenuStateMap);
-					break;
-				case "KeepAspectRatio":
-					if (canvasProps.multiSelectGroup) {
-						onConstraintChange({
-							eventId: newEventId(),
-							id: canvasProps.multiSelectGroup.id,
-							keepProportion: currentMenuStateMap.KeepAspectRatio !== "Active",
-						});
-					} else {
-						for (const item of selectedItems) {
-							onConstraintChange({
-								eventId: newEventId(),
-								id: item.id,
-								keepProportion:
-									currentMenuStateMap.KeepAspectRatio !== "Active",
-							});
-						}
-					}
 					break;
 				case "Group":
 					if (currentMenuStateMap.Group === "Show") {
@@ -581,7 +559,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<KeepAspectRatioMenu
 				key="KeepAspectRatio"
 				isActive={menuStateMap.KeepAspectRatio === "Active"}
-				onClick={() => onMenuClick("KeepAspectRatio")}
+				selectedItems={selectedItems}
 			/>,
 		);
 		menuItemComponents.push(

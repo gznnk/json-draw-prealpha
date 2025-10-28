@@ -19,8 +19,9 @@ export const STYLE_CHANGE_EVENT_NAME = "StyleChange" as const;
 // Stack order events
 export const STACK_ORDER_CHANGE_EVENT_NAME = "StackOrderChange" as const;
 
-// Constraint events
-export const CONSTRAINT_CHANGE_EVENT_NAME = "ConstraintChange" as const;
+// Keep proportion events
+export const KEEP_PROPORTION_CHANGE_EVENT_NAME =
+	"KeepProportionChange" as const;
 
 // Connection events
 export const EVENT_NAME_FLASH_CONNECT_LINE = "FlashConnectLine" as const;
