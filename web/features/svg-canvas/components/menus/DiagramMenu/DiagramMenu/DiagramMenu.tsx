@@ -63,7 +63,8 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 
 	// Get selected items from canvas
 	const selectedItems = getSelectedDiagrams(canvasProps.items);
-	const singleSelectedItem = selectedItems[0];
+	const singleSelectedItem =
+		selectedItems.length === 1 ? selectedItems[0] : undefined;
 
 	// Use diagram menu state hook to manage visibility, position, and selection state
 	const { shouldRender, menuPosition, shouldDisplayMenu } = useDiagramMenuState(
@@ -499,11 +500,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 
 	// Create a section for alignment items.
-	if (
-		menuConfig.textAlignment &&
-		firstTextableItem &&
-		isTextableState(firstTextableItem)
-	) {
+	if (menuConfig.textAlignment) {
 		menuItemComponents.push(
 			<AlignmentMenu
 				key="Alignment"
