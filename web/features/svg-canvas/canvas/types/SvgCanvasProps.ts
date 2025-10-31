@@ -35,14 +35,12 @@ export type SvgCanvasProps = SvgCanvasState & {
 	onDragOver?: (e: DiagramDragDropEvent) => void;
 	onExecute?: (e: ExecuteEvent) => void;
 	onExport?: () => void;
-	onGroup?: () => void;
 	onHoverChange?: (e: DiagramHoverChangeEvent) => void;
 	onAddDiagramByType?: (e: AddDiagramByTypeEvent) => void;
 	onPaste?: () => void;
 	onPreviewConnectLine?: (e: PreviewConnectLineEvent) => void;
 	onTextChange?: (e: DiagramTextChangeEvent) => void;
 	onTransform?: (e: DiagramTransformEvent) => void;
-	onUngroup?: () => void;
 	// history
 	onRedo?: () => void;
 	onUndo?: () => void;

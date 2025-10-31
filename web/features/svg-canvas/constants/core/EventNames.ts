@@ -23,6 +23,10 @@ export const STACK_ORDER_CHANGE_EVENT_NAME = "StackOrderChange" as const;
 export const KEEP_PROPORTION_CHANGE_EVENT_NAME =
 	"KeepProportionChange" as const;
 
+// Group events
+export const GROUP_EVENT_NAME = "Group" as const;
+export const UNGROUP_EVENT_NAME = "Ungroup" as const;
+
 // Connection events
 export const EVENT_NAME_FLASH_CONNECT_LINE = "FlashConnectLine" as const;
 export const EVENT_NAME_CONNECTION = "Connection" as const;

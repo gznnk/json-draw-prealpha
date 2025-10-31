@@ -4,10 +4,8 @@ import { useAddDiagramByType } from "./hooks/actions/useAddDiagramByType";
 import { useCopy } from "./hooks/actions/useCopy";
 import { useDelete } from "./hooks/actions/useDelete";
 import { useExport } from "./hooks/actions/useExport";
-import { useGroup } from "./hooks/actions/useGroup";
 import { usePaste } from "./hooks/actions/usePaste";
 import { usePreviewConnectLine } from "./hooks/actions/usePreviewConnectLine";
-import { useUngroup } from "./hooks/actions/useUngroup";
 import { useOnAddDiagram } from "./hooks/diagram/useOnAddDiagram";
 import { useOnAiMessageChange } from "./hooks/diagram/useOnAiMessageChange";
 import { useOnAppendDiagrams } from "./hooks/diagram/useOnAppendDiagrams";
@@ -19,6 +17,7 @@ import { useOnDragLeave } from "./hooks/diagram/useOnDragLeave";
 import { useOnDragOver } from "./hooks/diagram/useOnDragOver";
 import { useOnExecute } from "./hooks/diagram/useOnExecute";
 import { useOnExtractDiagramsToTopLevel } from "./hooks/diagram/useOnExtractDiagramsToTopLevel";
+import { useOnGroup } from "./hooks/diagram/useOnGroup";
 import { useOnHoverChange } from "./hooks/diagram/useOnHoverChange";
 import { useOnKeepProportionChange } from "./hooks/diagram/useOnKeepProportionChange";
 import { useOnSelect } from "./hooks/diagram/useOnSelect";
@@ -26,6 +25,7 @@ import { useOnStackOrderChange } from "./hooks/diagram/useOnStackOrderChange";
 import { useOnStyleChange } from "./hooks/diagram/useOnStyleChange";
 import { useOnTextChange } from "./hooks/diagram/useOnTextChange";
 import { useOnTransform } from "./hooks/diagram/useOnTransform";
+import { useOnUngroup } from "./hooks/diagram/useOnUngroup";
 import { useRedo } from "./hooks/history/useRedo";
 import { useUndo } from "./hooks/history/useUndo";
 import { useCtrl } from "./hooks/keyboard/useCtrl";
@@ -109,17 +109,11 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	// Handler for the export event.
 	const onExport = useExport(canvasHooksProps);
 
-	// Handler for the group event.
-	const onGroup = useGroup(canvasHooksProps);
-
 	// Handler for the paste event.
 	const onPaste = usePaste(canvasHooksProps);
 
 	// Handler for the preview connect line event.
 	const onPreviewConnectLine = usePreviewConnectLine(canvasHooksProps);
-
-	// Handler for the ungroup event.
-	const onUngroup = useUngroup(canvasHooksProps);
 
 	// diagram
 	// Hooks for the add diagram tool.
@@ -139,6 +133,12 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	// Hook for the keep proportion change event.
 	useOnKeepProportionChange(canvasHooksProps);
+
+	// Hook for the group event.
+	useOnGroup(canvasHooksProps);
+
+	// Hook for the ungroup event.
+	useOnUngroup(canvasHooksProps);
 
 	// Hook for extracting selected diagrams to top level when dragged out of CanvasFrame.
 	useOnExtractDiagramsToTopLevel(canvasHooksProps);
@@ -227,7 +227,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onDragLeave,
 		onExecute,
 		onExport,
-		onGroup,
 		onHoverChange,
 		onAddDiagramByType,
 		onAiMessageChange,
@@ -235,7 +234,6 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 		onPreviewConnectLine,
 		onTextChange,
 		onTransform,
-		onUngroup,
 		// history
 		onRedo,
 		onUndo,

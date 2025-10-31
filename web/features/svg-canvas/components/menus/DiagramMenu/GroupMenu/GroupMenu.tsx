@@ -1,27 +1,32 @@
 import type React from "react";
 import { memo } from "react";
 
+import { useGroup } from "../../../../hooks/useGroup";
+import { useUngroup } from "../../../../hooks/useUngroup";
+import type { Diagram } from "../../../../types/state/core/Diagram";
 import { Group } from "../../../icons/Group";
 import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 
 type GroupMenuProps = {
 	isActive: boolean;
-	onGroup?: () => void;
-	onUngroup?: () => void;
+	selectedDiagrams: Diagram[];
 	isHidden?: boolean;
 };
 
 const GroupMenuComponent: React.FC<GroupMenuProps> = ({
 	isActive,
-	onGroup,
-	onUngroup,
+	selectedDiagrams,
 	isHidden = false,
 }) => {
+	const onGroup = useGroup();
+	const onUngroup = useUngroup();
+
 	const handleClick = () => {
 		if (isActive) {
-			onUngroup?.();
+			onUngroup();
 		} else {
-			onGroup?.();
+			const diagramIds = selectedDiagrams.map((d) => d.id);
+			onGroup({ diagramIds });
 		}
 	};
 

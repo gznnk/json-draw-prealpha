@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
 // Import functions related to SvgCanvas.
+import { useGroup } from "../../../../hooks/useGroup";
+import { useUngroup } from "../../../../hooks/useUngroup";
 import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
 import { isExportable } from "../../../../utils/validation/isExportable";
 // Imports related to this component.
@@ -12,6 +14,10 @@ export const useContextMenu = (
 	canvasProps: SvgCanvasProps,
 	containerRef?: React.RefObject<HTMLDivElement | null>,
 ) => {
+	// Get group hooks
+	const onGroup = useGroup();
+	const onUngroup = useUngroup();
+
 	// Extract properties from canvasProps.
 	const {
 		items,
@@ -22,8 +28,6 @@ export const useContextMenu = (
 		onUndo,
 		onRedo,
 		onSelectAll,
-		onGroup,
-		onUngroup,
 		onExport,
 		onDelete,
 		onCopy,
@@ -75,11 +79,13 @@ export const useContextMenu = (
 				case "SelectAll":
 					onSelectAll?.();
 					break;
-				case "Group":
-					onGroup?.();
+				case "Group": {
+					const diagramIds = selectedItems.map((d) => d.id);
+					onGroup({ diagramIds });
 					break;
+				}
 				case "Ungroup":
-					onUngroup?.();
+					onUngroup();
 					break;
 				case "Export":
 					onExport?.();
@@ -99,6 +105,7 @@ export const useContextMenu = (
 			onSelectAll,
 			onGroup,
 			onUngroup,
+			selectedItems,
 			onExport,
 			onDelete,
 		],

@@ -543,8 +543,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			<GroupMenu
 				key="Group"
 				isActive={menuStateMap.Group === "Active"}
-				onGroup={canvasProps.onGroup}
-				onUngroup={canvasProps.onUngroup}
+				selectedDiagrams={selectedItems}
 			/>,
 		);
 		menuItemComponents.push(<DiagramMenuDivider key="GroupSectionDivider" />);
