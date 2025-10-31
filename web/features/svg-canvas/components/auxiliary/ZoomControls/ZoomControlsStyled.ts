@@ -3,9 +3,6 @@ import styled from "@emotion/styled";
 import { BOX_SHADOW } from "../../../constants/styling/core/CommonStyling";
 
 export const ZoomControlsContainer = styled.div`
-	position: absolute;
-	bottom: 24px;
-	right: 24px;
 	display: flex;
 	align-items: center;
 	background: #ffffff;

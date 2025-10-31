@@ -57,7 +57,7 @@ export const PreviewArea = styled.div`
 	overflow-wrap: break-word;
 	background-color: #0c0f1c;
 	color: #b0b0b0;
-	&:not(:first-child) {
+	&:not(:first-of-type) {
 		border-left: 1px solid #2a2f4c;
 	}
 

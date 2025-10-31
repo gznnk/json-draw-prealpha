@@ -6,9 +6,6 @@ import { BOX_SHADOW } from "../../../constants/styling/core/CommonStyling";
  * Container for the MiniMap component
  */
 export const MiniMapContainer = styled.div<{ width: number; height: number }>`
-	position: absolute;
-	top: 16px;
-	right: 16px;
 	width: ${(props) => props.width}px;
 	height: ${(props) => props.height}px;
 	background-color: #fafafa;

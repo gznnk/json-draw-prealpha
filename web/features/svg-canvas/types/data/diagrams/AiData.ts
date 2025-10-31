@@ -14,6 +14,7 @@ export const AiFeatures = {
 	textable: false,
 	selectable: true,
 	itemable: true,
+	executable: true,
 	fileDroppable: false,
 } as const satisfies DiagramFeatures;
 

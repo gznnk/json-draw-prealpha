@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import {
 	INERTIA_DECELERATION,
@@ -6,6 +6,7 @@ import {
 	INERTIA_MIN_VELOCITY,
 	INERTIA_VELOCITY_THRESHOLD,
 } from "../../../constants/core/Constants";
+import { EVENT_NAME_CANVAS_ZOOM } from "../../../constants/core/EventNames";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
@@ -31,6 +32,7 @@ export const useGrabScroll = (
 		canvasState: { minX, minY, grabScrollState, zoom },
 		setCanvasState,
 		onPanZoomChange,
+		eventBus,
 	} = props;
 
 	// Reference to store the initial drag start state
@@ -52,6 +54,35 @@ export const useGrabScroll = (
 
 	// Animation frame reference for inertia
 	const inertiaAnimationFrame = useRef<number | null>(null);
+
+	/**
+	 * Cancel inertia scrolling animation
+	 */
+	const cancelInertiaAnimation = useCallback((): void => {
+		if (inertiaAnimationFrame.current !== null) {
+			cancelAnimationFrame(inertiaAnimationFrame.current);
+			inertiaAnimationFrame.current = null;
+			setCanvasState((prevState) => ({
+				...prevState,
+				interactionState: InteractionState.Idle,
+			}));
+		}
+	}, [setCanvasState]);
+
+	/**
+	 * Listen for zoom events to cancel inertia scrolling
+	 */
+	useEffect(() => {
+		const handleZoomEvent = (): void => {
+			cancelInertiaAnimation();
+		};
+
+		eventBus.addEventListener(EVENT_NAME_CANVAS_ZOOM, handleZoomEvent);
+
+		return () => {
+			eventBus.removeEventListener(EVENT_NAME_CANVAS_ZOOM, handleZoomEvent);
+		};
+	}, [eventBus, cancelInertiaAnimation]);
 
 	/**
 	 * Start inertia scrolling animation with given initial velocity
@@ -134,6 +165,7 @@ export const useGrabScroll = (
 		setCanvasState,
 		onPanZoomChange,
 		startInertiaAnimation,
+		cancelInertiaAnimation,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
@@ -147,7 +179,8 @@ export const useGrabScroll = (
 	const onGrabStart = useCallback(
 		(e: React.PointerEvent<SVGSVGElement>): boolean => {
 			// Bypass references to avoid function creation in every render.
-			const { setCanvasState, minX, minY } = refBus.current;
+			const { setCanvasState, minX, minY, cancelInertiaAnimation } =
+				refBus.current;
 
 			// Reset the drag start state if already set
 			setCanvasState((prevState) => ({
@@ -158,10 +191,7 @@ export const useGrabScroll = (
 			}));
 
 			// Cancel any ongoing inertia animation
-			if (inertiaAnimationFrame.current !== null) {
-				cancelAnimationFrame(inertiaAnimationFrame.current);
-				inertiaAnimationFrame.current = null;
-			}
+			cancelInertiaAnimation();
 
 			// Check for right click
 			if (e.button === 2) {

@@ -38,6 +38,9 @@ export const EVENT_NAME_GROUP_SHAPES = "GroupShapes" as const;
 // Execution chain events
 export const EVENT_NAME_EXECUTION_PROPAGATION = "ExecutionPropagation" as const;
 
+// Canvas navigation events
+export const EVENT_NAME_CANVAS_ZOOM = "CanvasZoom" as const;
+
 /**
  * Union type of all event names for type safety
  */
@@ -47,4 +50,5 @@ export type SvgCanvasEventNames =
 	| typeof EVENT_NAME_CONNECTION
 	| typeof EVENT_NAME_CONNECT_NODES
 	| typeof EVENT_NAME_GROUP_SHAPES
-	| typeof EVENT_NAME_EXECUTION_PROPAGATION;
+	| typeof EVENT_NAME_EXECUTION_PROPAGATION
+	| typeof EVENT_NAME_CANVAS_ZOOM;

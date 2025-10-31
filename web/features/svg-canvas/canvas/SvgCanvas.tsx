@@ -27,12 +27,17 @@ import {
 	getPreviousZoomLevel,
 	getResetZoomLevel,
 } from "./utils/zoomLevels";
+import { AiChatPanel } from "../components/auxiliary/AiChatPanel";
 import { DragGhost } from "../components/auxiliary/DragGhost";
 import { GridBackground } from "../components/auxiliary/GridBackground";
 import { GridPattern } from "../components/auxiliary/GridPattern";
 import { MiniMap } from "../components/auxiliary/MiniMap";
 import { PointerCaptureElement } from "../components/auxiliary/PointerCaptureElement";
 import { PreviewConnectLine } from "../components/auxiliary/PreviewConnectLine";
+import {
+	BottomPanelContainer,
+	RightPanelContainer,
+} from "../components/auxiliary/RightPanelContainer";
 import { ZoomControls } from "../components/auxiliary/ZoomControls";
 import { TextEditor } from "../components/core/Textable";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
@@ -504,11 +509,11 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		});
 
 		return (
-			<Viewport>
-				<Container ref={containerRef}>
-					<EventBusProvider eventBus={eventBus}>
-						<SvgCanvasStateProvider canvasStateRef={canvasStateRef}>
-							<SvgViewportProvider viewportRef={viewportRef}>
+			<EventBusProvider eventBus={eventBus}>
+				<SvgCanvasStateProvider canvasStateRef={canvasStateRef}>
+					<SvgViewportProvider viewportRef={viewportRef}>
+						<Viewport>
+							<Container ref={containerRef}>
 								<Svg
 									width={containerWidth}
 									height={containerHeight}
@@ -601,39 +606,44 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 										containerHeight={containerHeight}
 									/>
 								</HTMLElementsContainer>
-							</SvgViewportProvider>
-						</SvgCanvasStateProvider>
-					</EventBusProvider>
-				</Container>
-				{/* Container for HTML elements fixed to the viewport. */}
-				<ViewportOverlay>
-					<CanvasMenu onAddDiagramByType={onAddDiagramByType} />
-					<UserMenu />
-					<ContextMenu {...contextMenuProps} />
-					<ZoomControls
-						zoom={zoom}
-						onZoomIn={handleZoomIn}
-						onZoomOut={handleZoomOut}
-						onZoomReset={handleZoomReset}
-					/>
-					<MiniMap
-						items={items}
-						minX={minX}
-						minY={minY}
-						containerWidth={containerWidth}
-						containerHeight={containerHeight}
-						zoom={zoom}
-						onNavigate={onNavigate}
-					/>
-					{/* Pointer capture element for area selection */}
-					<PointerCaptureElement
-						elementRef={dummyElementRef}
-						capturedPointerId={capturedPointerIdRef.current}
-						onPointerMove={handleCaptureElementPointerMove}
-						onPointerUp={handleCaptureElementPointerUp}
-					/>
-				</ViewportOverlay>
-			</Viewport>
+							</Container>
+							{/* Container for HTML elements fixed to the viewport. */}
+							<ViewportOverlay>
+								<CanvasMenu onAddDiagramByType={onAddDiagramByType} />
+								<UserMenu />
+								<ContextMenu {...contextMenuProps} />
+								<RightPanelContainer>
+									<MiniMap
+										items={items}
+										minX={minX}
+										minY={minY}
+										containerWidth={containerWidth}
+										containerHeight={containerHeight}
+										zoom={zoom}
+										onNavigate={onNavigate}
+									/>
+								</RightPanelContainer>
+								<BottomPanelContainer>
+									<AiChatPanel />
+									<ZoomControls
+										zoom={zoom}
+										onZoomIn={handleZoomIn}
+										onZoomOut={handleZoomOut}
+										onZoomReset={handleZoomReset}
+									/>
+								</BottomPanelContainer>
+								{/* Pointer capture element for area selection */}
+								<PointerCaptureElement
+									elementRef={dummyElementRef}
+									capturedPointerId={capturedPointerIdRef.current}
+									onPointerMove={handleCaptureElementPointerMove}
+									onPointerUp={handleCaptureElementPointerUp}
+								/>
+							</ViewportOverlay>
+						</Viewport>
+					</SvgViewportProvider>
+				</SvgCanvasStateProvider>
+			</EventBusProvider>
 		);
 	},
 );

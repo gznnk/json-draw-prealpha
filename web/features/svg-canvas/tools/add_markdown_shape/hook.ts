@@ -3,16 +3,16 @@ import { useMemo } from "react";
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type { FunctionCallHandler } from "../../../../shared/llm-client/types";
 import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
-import { useAddTextElementWithHandlerTool } from "../add_text_element_with_handler";
+import { useAddMarkdownShapeWithHandlerTool } from "../add_markdown_shape_with_handler";
 
-export const useAddTextElementTool = (
+export const useAddMarkdownShapeTool = (
 	eventBus: EventBus,
 ): FunctionCallHandler => {
 	const addDiagram = useAddDiagramWithBus(eventBus);
-	const textElementWithHandlerTool = useAddTextElementWithHandlerTool();
+	const markdownShapeWithHandlerTool = useAddMarkdownShapeWithHandlerTool();
 
 	return useMemo(
-		() => textElementWithHandlerTool(addDiagram),
-		[addDiagram, textElementWithHandlerTool],
+		() => markdownShapeWithHandlerTool(addDiagram),
+		[addDiagram, markdownShapeWithHandlerTool],
 	);
 };

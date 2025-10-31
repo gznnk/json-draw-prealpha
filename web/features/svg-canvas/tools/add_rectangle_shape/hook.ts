@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type { FunctionCallHandler } from "../../../../shared/llm-client/types";
 import { useAddDiagramWithBus } from "../../hooks/useAddDiagramWithBus";
@@ -9,5 +11,8 @@ export const useAddRectangleShapeTool = (
 	const addDiagram = useAddDiagramWithBus(eventBus);
 	const rectangleShapeWithHandlerTool = useAddRectangleShapeWithHandlerTool();
 
-	return rectangleShapeWithHandlerTool(addDiagram);
+	return useMemo(
+		() => rectangleShapeWithHandlerTool(addDiagram),
+		[addDiagram, rectangleShapeWithHandlerTool],
+	);
 };

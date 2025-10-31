@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 
+import { EVENT_NAME_CANVAS_ZOOM } from "../../../constants/core/EventNames";
 import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL } from "../../SvgCanvasConstants";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
@@ -27,8 +28,13 @@ export const useZoom = (props: SvgCanvasSubHooksProps) => {
 
 	return useCallback((newZoom: number, options?: ZoomOptions) => {
 		// Bypass references to avoid function creation in every render.
-		const { canvasState, setCanvasState, canvasRef, onPanZoomChange } =
-			refBus.current.props;
+		const {
+			canvasState,
+			setCanvasState,
+			canvasRef,
+			onPanZoomChange,
+			eventBus,
+		} = refBus.current.props;
 
 		// Clamp zoom value within min/max limits
 		const clampedZoom = Math.max(
@@ -144,5 +150,12 @@ export const useZoom = (props: SvgCanvasSubHooksProps) => {
 
 			return newState;
 		});
+
+		// Dispatch zoom event to cancel inertia scrolling
+		eventBus.dispatchEvent(
+			new CustomEvent(EVENT_NAME_CANVAS_ZOOM, {
+				detail: { zoom: clampedZoom },
+			}),
+		);
 	}, []);
 };
