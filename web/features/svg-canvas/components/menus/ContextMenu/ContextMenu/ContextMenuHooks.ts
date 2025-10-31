@@ -4,8 +4,9 @@ import { useCallback, useState } from "react";
 import type { ContextMenuStateMap, ContextMenuType } from "./ContextMenuTypes";
 import type { SvgCanvasProps } from "../../../../canvas/types/SvgCanvasProps";
 // Import functions related to SvgCanvas.
-import { useGroup } from "../../../../hooks/useGroup";
-import { useUngroup } from "../../../../hooks/useUngroup";
+// TEMPORARY: Commented out due to EventBusContext not being available in this component
+// import { useGroup } from "../../../../hooks/useGroup";
+// import { useUngroup } from "../../../../hooks/useUngroup";
 import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
 import { isExportable } from "../../../../utils/validation/isExportable";
 // Imports related to this component.
@@ -14,9 +15,9 @@ export const useContextMenu = (
 	canvasProps: SvgCanvasProps,
 	containerRef?: React.RefObject<HTMLDivElement | null>,
 ) => {
-	// Get group hooks
-	const onGroup = useGroup();
-	const onUngroup = useUngroup();
+	// TEMPORARY: Commented out due to EventBusContext not being available in this component
+	// const onGroup = useGroup();
+	// const onUngroup = useUngroup();
 
 	// Extract properties from canvasProps.
 	const {
@@ -79,13 +80,16 @@ export const useContextMenu = (
 				case "SelectAll":
 					onSelectAll?.();
 					break;
-				case "Group": {
-					const diagramIds = selectedItems.map((d) => d.id);
-					onGroup({ diagramIds });
+				case "Group":
+					// TEMPORARY: Disabled due to EventBusContext not being available
+					// {
+					// 	const diagramIds = selectedItems.map((d) => d.id);
+					// 	onGroup({ diagramIds });
+					// }
 					break;
-				}
 				case "Ungroup":
-					onUngroup();
+					// TEMPORARY: Disabled due to EventBusContext not being available
+					// onUngroup();
 					break;
 				case "Export":
 					onExport?.();
@@ -103,9 +107,7 @@ export const useContextMenu = (
 			onCopy,
 			onPaste,
 			onSelectAll,
-			onGroup,
-			onUngroup,
-			selectedItems,
+			// TEMPORARY: Removed onGroup, onUngroup, selectedItems from dependencies
 			onExport,
 			onDelete,
 		],
