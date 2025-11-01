@@ -388,9 +388,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				key="LineStyle"
 				isOpen={isLineStyleMenuOpen}
 				onToggle={() => setIsLineStyleMenuOpen(!isLineStyleMenuOpen)}
-				strokeWidth={firstStrokableItem?.strokeWidth || "2px"}
-				pathType={firstPathableItem?.pathType || "Linear"}
-				strokeDashType={firstStrokableItem?.strokeDashType || "solid"}
 				selectedDiagrams={selectedItems}
 			/>,
 		);

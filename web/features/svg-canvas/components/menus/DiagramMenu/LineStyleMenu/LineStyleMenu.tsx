@@ -18,9 +18,6 @@ import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 type LineStyleMenuProps = {
 	isOpen: boolean;
 	onToggle: () => void;
-	strokeWidth: string;
-	pathType: PathType;
-	strokeDashType: StrokeDashType;
 	selectedDiagrams: Diagram[];
 };
 
@@ -30,12 +27,22 @@ const strokeDashTypes: StrokeDashType[] = ["solid", "dashed", "dotted"];
 const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 	isOpen,
 	onToggle,
-	strokeWidth,
-	pathType,
-	strokeDashType,
 	selectedDiagrams,
 }) => {
 	const applyStyleChange = useStyleChange();
+
+	// Get the first diagram
+	const firstDiagram = selectedDiagrams[0];
+
+	// Get stroke width, path type, and stroke dash type from the first diagram
+	// If the property doesn't exist, it will be undefined (making all buttons inactive)
+	const strokeWidth = (firstDiagram as { strokeWidth?: string } | undefined)
+		?.strokeWidth;
+	const pathType = (firstDiagram as { pathType?: PathType } | undefined)
+		?.pathType;
+	const strokeDashType = (
+		firstDiagram as { strokeDashType?: StrokeDashType } | undefined
+	)?.strokeDashType;
 
 	const handleStrokeWidthChange = (width: string) => {
 		applyStyleChange({
