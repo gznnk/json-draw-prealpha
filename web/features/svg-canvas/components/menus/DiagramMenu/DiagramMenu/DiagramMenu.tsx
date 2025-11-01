@@ -133,7 +133,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				FontSize: false,
 				FontColor: false,
 				Alignment: false,
-				StackOrder: false,
 			} as {
 				[key in DiagramMenuType]: boolean;
 			};
@@ -149,7 +148,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			setIsFontSizeSelectorOpen(newControlsStateMap.FontSize);
 			setIsFontColorPickerOpen(newControlsStateMap.FontColor);
 			setIsAlignmentMenuOpen(newControlsStateMap.Alignment);
-			setIsStackOrderMenuOpen(newControlsStateMap.StackOrder);
 		},
 		[],
 	);
@@ -187,9 +185,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 					break;
 				case "Alignment":
 					openControl("Alignment", currentMenuStateMap);
-					break;
-				case "StackOrder":
-					openControl("StackOrder", currentMenuStateMap);
 					break;
 			}
 		};
@@ -264,9 +259,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		Bold: "Hidden",
 		FontColor: "Hidden",
 		Alignment: "Hidden",
-		StackOrder: "Hidden",
 		KeepAspectRatio: "Hidden",
-		Group: "Hidden",
 	} as DiagramMenuStateMap;
 
 	// Find diagram items for styling
@@ -312,11 +305,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		}
 	}
 
-	// Set stack order menu state.
-	if (selectedItems.length === 1) {
-		menuStateMap.StackOrder = isStackOrderMenuOpen ? "Active" : "Show";
-	}
-
 	// Set the keep aspect ratio state.
 	if (canvasProps.multiSelectGroup) {
 		menuStateMap.KeepAspectRatio = canvasProps.multiSelectGroup.keepProportion
@@ -326,13 +314,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		menuStateMap.KeepAspectRatio = singleSelectedItem.keepProportion
 			? "Active"
 			: "Show";
-	}
-
-	// Set the group menu state.
-	if (canvasProps.multiSelectGroup) {
-		menuStateMap.Group = "Show";
-	} else if (singleSelectedItem && singleSelectedItem.type === "Group") {
-		menuStateMap.Group = "Active";
 	}
 
 	// Create the menu click handler with the current state
@@ -537,13 +518,14 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 
 	// Create a section for group and ungroup items.
-	const showGroupSection = showSection("Group");
-	if (showGroupSection) {
-		menuItemComponents.push(
-			<GroupMenu key="Group" isActive={menuStateMap.Group === "Active"} />,
-		);
-		menuItemComponents.push(<DiagramMenuDivider key="GroupSectionDivider" />);
-	}
+	menuItemComponents.push(
+		<GroupMenu
+			key="Group"
+			multiSelectGroup={canvasProps.multiSelectGroup}
+			singleSelectedItem={singleSelectedItem}
+		/>,
+	);
+	menuItemComponents.push(<DiagramMenuDivider key="GroupSectionDivider" />);
 
 	// Remove the last divider.
 	menuItemComponents.pop();

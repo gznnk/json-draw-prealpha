@@ -21,9 +21,7 @@ export type DiagramMenuType =
 	| "Bold"
 	| "FontColor"
 	| "Alignment"
-	| "StackOrder"
-	| "KeepAspectRatio"
-	| "Group";
+	| "KeepAspectRatio";
 
 /**
  * Diagram menu state.
