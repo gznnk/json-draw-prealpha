@@ -1,8 +1,8 @@
 import { useRef, useEffect } from "react";
 
 import { GROUP_EVENT_NAME } from "../../../constants/core/EventNames";
-import type { GroupEvent } from "../../../types/events/GroupEvent";
 import type { GroupState } from "../../../types/state/shapes/GroupState";
+import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../utils/core/newEventId";
 import { newId } from "../../../utils/shapes/common/newId";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
@@ -12,7 +12,6 @@ import { addDiagramToParentOrRoot } from "../../utils/addDiagramToParentOrRoot";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 import { cleanupGroups } from "../../utils/cleanupGroups";
-import { findDiagramsById } from "../../utils/findDiagramsById";
 import { findParentCanvasContainingAllDiagrams } from "../../utils/findParentCanvasContainingAllDiagrams";
 import { removeDiagramsById } from "../../utils/removeDiagramsById";
 import { removeItemsFromDiagram } from "../../utils/removeItemsFromDiagram";
@@ -42,16 +41,13 @@ export const useOnGroup = (props: SvgCanvasSubHooksProps) => {
 	useEffect(() => {
 		const { eventBus } = refBus.current;
 
-		const handleEvent = (event: Event) => {
-			const customEvent = event as CustomEvent<GroupEvent>;
-			const e = customEvent.detail;
-
+		const handleEvent = (_event: Event) => {
 			// Bypass references to avoid function creation in every render.
 			const { setCanvasState, addHistory } = refBus.current;
 
 			setCanvasState((prevState) => {
-				// Find target diagrams to group
-				const targetDiagrams = findDiagramsById(prevState.items, e.diagramIds);
+				// Get selected diagrams from state
+				const targetDiagrams = getSelectedDiagrams(prevState.items);
 
 				if (targetDiagrams.length < 2) {
 					// Do not group if there are less than 2 diagrams
@@ -68,7 +64,7 @@ export const useOnGroup = (props: SvgCanvasSubHooksProps) => {
 				}
 
 				// Create a new group data.
-				const groupId = e.groupId ?? newId();
+				const groupId = newId();
 				const group: GroupState = {
 					...multiSelectGroup,
 					id: groupId,
@@ -95,14 +91,15 @@ export const useOnGroup = (props: SvgCanvasSubHooksProps) => {
 					targetDiagrams,
 				);
 				// If found, remove target diagrams from it
+				const targetDiagramIds = targetDiagrams.map((d) => d.id);
 				if (parentCanvas) {
-					parentCanvas = removeItemsFromDiagram(parentCanvas, e.diagramIds);
+					parentCanvas = removeItemsFromDiagram(parentCanvas, targetDiagramIds);
 				}
 
 				// Remove target diagrams from the current items
 				const targetRemovedItems = removeDiagramsById(
 					prevState.items,
-					e.diagramIds,
+					targetDiagramIds,
 				);
 
 				// Add group to parent canvas or root level
@@ -124,7 +121,7 @@ export const useOnGroup = (props: SvgCanvasSubHooksProps) => {
 				const outlineUpdatedItems = updateOutlineOfAllItemables(orderedItems);
 
 				// Create next state
-				const eventId = e.eventId ?? newEventId();
+				const eventId = newEventId();
 				let nextState = {
 					...prevState,
 					items: outlineUpdatedItems,

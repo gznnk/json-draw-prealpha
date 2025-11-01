@@ -1,6 +1,4 @@
 /**
- * Event for ungrouping diagrams
+ * Event for ungrouping selected diagrams
  */
-export type UngroupEvent = {
-	eventId?: string;
-};
+export type UngroupEvent = Record<string, never>;

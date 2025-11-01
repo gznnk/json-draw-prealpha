@@ -1,8 +1,4 @@
 /**
- * Event for grouping diagrams
+ * Event for grouping selected diagrams
  */
-export type GroupEvent = {
-	eventId?: string;
-	groupId?: string;
-	diagramIds: string[];
-};
+export type GroupEvent = Record<string, never>;

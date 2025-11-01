@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
 
 import { UNGROUP_EVENT_NAME } from "../../../constants/core/EventNames";
-import type { UngroupEvent } from "../../../types/events/UngroupEvent";
 import { newEventId } from "../../../utils/core/newEventId";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
@@ -32,10 +31,7 @@ export const useOnUngroup = (props: SvgCanvasSubHooksProps) => {
 	useEffect(() => {
 		const { eventBus } = refBus.current;
 
-		const handleEvent = (event: Event) => {
-			const customEvent = event as CustomEvent<UngroupEvent>;
-			const e = customEvent.detail;
-
+		const handleEvent = (_event: Event) => {
 			// Bypass references to avoid function creation in every render.
 			const { setCanvasState, addHistory } = refBus.current;
 
@@ -44,7 +40,7 @@ export const useOnUngroup = (props: SvgCanvasSubHooksProps) => {
 				newItems = clearSelectionRecursively(newItems);
 
 				// Create new state
-				const eventId = e.eventId ?? newEventId();
+				const eventId = newEventId();
 				let newState = {
 					...prevState,
 					items: newItems,

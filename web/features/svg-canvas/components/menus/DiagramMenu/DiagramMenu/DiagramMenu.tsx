@@ -540,11 +540,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const showGroupSection = showSection("Group");
 	if (showGroupSection) {
 		menuItemComponents.push(
-			<GroupMenu
-				key="Group"
-				isActive={menuStateMap.Group === "Active"}
-				selectedDiagrams={selectedItems}
-			/>,
+			<GroupMenu key="Group" isActive={menuStateMap.Group === "Active"} />,
 		);
 		menuItemComponents.push(<DiagramMenuDivider key="GroupSectionDivider" />);
 	}
