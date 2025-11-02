@@ -43,6 +43,7 @@ import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { AlignmentMenu } from "../AlignmentMenu/AlignmentMenu";
+import { ArrowMenu } from "../ArrowMenu";
 import { BoldMenu } from "../BoldMenu/BoldMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
@@ -372,6 +373,9 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				onToggle={() => setIsLineStyleMenuOpen(!isLineStyleMenuOpen)}
 				selectedDiagrams={selectedItems}
 			/>,
+		);
+		menuItemComponents.push(
+			<ArrowMenu key="Arrow" selectedDiagrams={selectedItems} />,
 		);
 		menuItemComponents.push(
 			<DiagramMenuDivider key="FillableAndStrokableSectionDivider" />,
