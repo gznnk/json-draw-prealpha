@@ -37,6 +37,10 @@ import {
 	groupShapesToolDefinition,
 	useGroupShapesTool,
 } from "../../../../tools/group_shapes";
+import {
+	updateDiagramToolDefinition,
+	useUpdateDiagramTool,
+} from "../../../../tools/update_diagram";
 
 /**
  * Custom hook for managing AI chat functionality using llm-client.
@@ -60,6 +64,7 @@ export const useAiChat = () => {
 	const addMarkdownShape = useAddMarkdownShapeTool(eventBus);
 	const getShapesInfo = useGetShapesInfoTool(eventBus);
 	const getSelectedShapes = useGetSelectedShapesTool(eventBus);
+	const updateDiagram = useUpdateDiagramTool();
 
 	// Memoize tool definitions and handlers
 	const toolsConfig = useMemo(
@@ -73,6 +78,7 @@ export const useAiChat = () => {
 				markdownShapeToolDefinition,
 				shapesInfoToolDefinition,
 				selectedShapesToolDefinition,
+				updateDiagramToolDefinition,
 			],
 			handlers: {
 				add_rectangle_shape: addRectangleShape,
@@ -83,6 +89,7 @@ export const useAiChat = () => {
 				add_markdown_shape: addMarkdownShape,
 				get_shapes_info: getShapesInfo,
 				get_selected_shapes: getSelectedShapes,
+				update_diagram: updateDiagram,
 			},
 		}),
 		[
@@ -94,6 +101,7 @@ export const useAiChat = () => {
 			addMarkdownShape,
 			getShapesInfo,
 			getSelectedShapes,
+			updateDiagram,
 		],
 	);
 
@@ -110,7 +118,7 @@ export const useAiChat = () => {
 		if (apiKey) {
 			const client = LLMClientFactory.createClient(apiKey, {
 				systemPrompt:
-					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles and circles), add text elements, add markdown-enabled text boxes, connect nodes, group shapes together, retrieve information about existing shapes on the canvas, and get detailed information about selected shapes. When users ask you to create or modify canvas elements, use the appropriate tools to help them.",
+					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles and circles), add text elements, add markdown-enabled text boxes, connect nodes, group shapes together, retrieve information about existing shapes on the canvas, get detailed information about selected shapes, and update properties of existing diagrams. When users ask you to create or modify canvas elements, use the appropriate tools to help them. Use the update_diagram tool to modify existing shapes' properties such as position, size, colors, text, and other visual attributes.",
 				tools: toolsConfig.tools,
 				functionHandlers: toolsConfig.handlers,
 			});
