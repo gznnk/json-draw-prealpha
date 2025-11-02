@@ -20,15 +20,19 @@ import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 type StackOrderMenuProps = {
 	isOpen: boolean;
 	onToggle: () => void;
-	selectedDiagram?: Diagram;
+	selectedDiagrams: Diagram[];
 };
 
 const StackOrderMenuComponent: React.FC<StackOrderMenuProps> = ({
 	isOpen,
 	onToggle,
-	selectedDiagram,
+	selectedDiagrams,
 }) => {
 	const onStackOrderChange = useStackOrderChange();
+
+	// Get the single selected diagram (only show menu when exactly one item is selected)
+	const selectedDiagram =
+		selectedDiagrams.length === 1 ? selectedDiagrams[0] : undefined;
 	const selectedItemId = selectedDiagram?.id;
 
 	if (!selectedItemId) {

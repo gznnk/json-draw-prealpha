@@ -2,10 +2,14 @@ import styled from "@emotion/styled";
 
 import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
 
-export const LineStyleMenuWrapper = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
+type ArrowMenuButtonProps = {
+	isActive?: boolean;
+};
+
+export const ArrowSelectorGrid = styled.div`
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 4px;
 	padding: 8px;
 	background-color: #fff;
 	border-radius: 4px;
@@ -13,24 +17,14 @@ export const LineStyleMenuWrapper = styled.div`
 	pointer-events: auto;
 `;
 
-export const LineStyleSection = styled.div`
-	display: flex;
-	gap: 4px;
-	justify-content: center;
-`;
-
-type LineStyleButtonProps = {
-	isActive: boolean;
-};
-
-export const LineStyleButton = styled.button<LineStyleButtonProps>`
+export const ArrowSelectorButton = styled.button<ArrowMenuButtonProps>`
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 32px;
 	height: 32px;
 	padding: 4px;
-	border: 1px solid ${(props) => (props.isActive ? "#6b7280" : "transparent")};
+	border: 1px solid ${(props) => (props.isActive ? "#6b7280" : "#e5e7eb")};
 	border-radius: 6px;
 	background-color: ${(props) => (props.isActive ? "#f9fafb" : "transparent")};
 	cursor: pointer;
@@ -39,6 +33,7 @@ export const LineStyleButton = styled.button<LineStyleButtonProps>`
 
 	&:hover {
 		background-color: #f3f4f6;
+		border-color: #9ca3af;
 	}
 
 	svg {

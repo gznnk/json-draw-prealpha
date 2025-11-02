@@ -27,12 +27,6 @@ export type DiagramMenuConfig = {
 	/** Show text alignment controls (left, center, right, top, middle, bottom) */
 	textAlignment?: boolean;
 
-	/** Show stack order controls (bring to front, send to back, etc.) */
-	stackOrder?: boolean;
-
 	/** Show aspect ratio lock control */
 	aspectRatio?: boolean;
-
-	/** Show group/ungroup control */
-	group?: boolean;
 };

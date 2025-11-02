@@ -10,15 +10,19 @@ import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 
 type GroupMenuProps = {
 	multiSelectGroup: GroupState | undefined;
-	singleSelectedItem: Diagram | undefined;
+	selectedDiagrams: Diagram[];
 };
 
 const GroupMenuComponent: React.FC<GroupMenuProps> = ({
 	multiSelectGroup,
-	singleSelectedItem,
+	selectedDiagrams,
 }) => {
 	const onGroup = useGroup();
 	const onUngroup = useUngroup();
+
+	// Get single selected item from selectedDiagrams
+	const singleSelectedItem =
+		selectedDiagrams.length === 1 ? selectedDiagrams[0] : undefined;
 
 	// Determine if the menu should be shown and if it's active
 	const shouldShow = Boolean(

@@ -12,16 +12,18 @@ import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 
 type KeepAspectRatioMenuProps = {
 	multiSelectGroup: GroupState | undefined;
-	singleSelectedItem: Diagram | undefined;
-	selectedItems: Diagram[];
+	selectedDiagrams: Diagram[];
 };
 
 const KeepAspectRatioMenuComponent: React.FC<KeepAspectRatioMenuProps> = ({
 	multiSelectGroup,
-	singleSelectedItem,
-	selectedItems,
+	selectedDiagrams,
 }) => {
 	const onKeepProportionChange = useKeepProportionChange();
+
+	// Get single selected item from selectedDiagrams
+	const singleSelectedItem =
+		selectedDiagrams.length === 1 ? selectedDiagrams[0] : undefined;
 
 	// Determine if the menu should be shown and if it's active
 	const shouldShow = Boolean(
@@ -43,7 +45,7 @@ const KeepAspectRatioMenuComponent: React.FC<KeepAspectRatioMenuProps> = ({
 				keepProportion: !isActive,
 			});
 		} else {
-			for (const item of selectedItems) {
+			for (const item of selectedDiagrams) {
 				onKeepProportionChange({
 					eventId,
 					id: item.id,

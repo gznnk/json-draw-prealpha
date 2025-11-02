@@ -2,13 +2,13 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import type { PathMode } from "./PathTypes";
-import type { PathData } from "../../../../types/data/shapes/PathData";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
 import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { PathProps } from "../../../../types/props/shapes/PathProps";
 import type { PathState } from "../../../../types/state/shapes/PathState";
 import { mergeProps } from "../../../../utils/core/mergeProps";
+import { getMarkerUrl } from "../../../../utils/shapes/path/getMarkerUrl";
 import { Outline } from "../../../core/Outline";
 import { PositionLabel } from "../../../core/PositionLabel";
 import { Transformative } from "../../../core/Transformative";
@@ -22,10 +22,6 @@ import { useSelect } from "../../../../hooks/useSelect";
 import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { convertStrokeDashTypeToArray } from "../../../../utils/shapes/common/convertStrokeDashTypeToArray";
 import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
-import {
-	createEndPointArrowHead,
-	createStartPointArrowHead,
-} from "../../../../utils/shapes/path/createArrowHeads";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { createPathDValue } from "../../../../utils/shapes/path/createPathDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
@@ -321,20 +317,6 @@ const PathComponent: React.FC<PathProps> = ({
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;
 
-	// Start ArrowHead.
-	const startArrowHeadComp = createStartPointArrowHead({
-		items,
-		stroke,
-		startArrowHead,
-	} as PathData);
-
-	// End ArrowHead.
-	const endArrowHeadComp = createEndPointArrowHead({
-		items,
-		stroke,
-		endArrowHead,
-	} as PathData);
-
 	// Convert strokeDashType to strokeDasharray value
 	const strokeDasharray = convertStrokeDashTypeToArray(strokeDashType);
 
@@ -348,6 +330,8 @@ const PathComponent: React.FC<PathProps> = ({
 				strokeWidth={strokeWidth}
 				strokeDasharray={strokeDasharray}
 				isTransparent={false}
+				markerStart={getMarkerUrl(startArrowHead)}
+				markerEnd={getMarkerUrl(endArrowHead)}
 			/>
 			{/* Path for dragging */}
 			<path
@@ -372,10 +356,6 @@ const PathComponent: React.FC<PathProps> = ({
 					pointerEvents="none"
 				/>
 			)}
-			{/* Start point arrow head. */}
-			{startArrowHeadComp}
-			{/* End point arrow head. */}
-			{endArrowHeadComp}
 			{/* Line segment dragging */}
 			{showSegmentList && (
 				<SegmentList

@@ -1,3 +1,4 @@
+import type { ArrowHeadType } from "../core/ArrowHeadType";
 import type { PathType } from "../core/PathType";
 import type { StrokeDashType } from "../core/StrokeDashType";
 import type { TextAlign } from "../core/TextAlign";
@@ -9,6 +10,8 @@ export type DiagramStyle = {
 	strokeWidth?: string;
 	strokeDashType?: StrokeDashType;
 	pathType?: PathType;
+	startArrowHead?: ArrowHeadType;
+	endArrowHead?: ArrowHeadType;
 	fill?: string;
 	fontColor?: string;
 	fontSize?: number;

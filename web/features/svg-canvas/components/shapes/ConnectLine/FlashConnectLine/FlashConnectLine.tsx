@@ -3,12 +3,8 @@ import { memo, useEffect, useState } from "react";
 import { FlashGroup } from "./FlashConnectLineStyled";
 import type { FlashConnectLineEvent } from "./FlashConnectLineTypes";
 import { EVENT_NAME_FLASH_CONNECT_LINE } from "../../../../constants/core/EventNames";
-import type { PathData } from "../../../../types/data/shapes/PathData";
-import {
-	createStartPointArrowHead,
-	createEndPointArrowHead,
-} from "../../../../utils/shapes/path/createArrowHeads";
 import { createPathDValue } from "../../../../utils/shapes/path/createPathDValue";
+import { getMarkerUrl } from "../../../../utils/shapes/path/getMarkerUrl";
 
 export const FlashConnectLineComponent = () => {
 	const [connectLineList, setConnectLineList] = useState<
@@ -56,9 +52,9 @@ export const FlashConnectLineComponent = () => {
 				stroke={connectLine.data.stroke}
 				fill="none"
 				pointerEvents="none"
+				markerStart={getMarkerUrl(connectLine.data.startArrowHead)}
+				markerEnd={getMarkerUrl(connectLine.data.endArrowHead)}
 			/>
-			{createStartPointArrowHead(connectLine.data as PathData)}
-			{createEndPointArrowHead(connectLine.data as PathData)}
 		</FlashGroup>
 	));
 };

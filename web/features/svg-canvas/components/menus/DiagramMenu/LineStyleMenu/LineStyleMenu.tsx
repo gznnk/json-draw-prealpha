@@ -14,6 +14,7 @@ import { LineStyle as LineStyleIcon } from "../../../icons/LineStyle";
 import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuControl } from "../DiagramMenuControl";
 import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
+import { MenuSlider } from "../MenuSlider";
 
 type LineStyleMenuProps = {
 	isOpen: boolean;
@@ -21,7 +22,6 @@ type LineStyleMenuProps = {
 	selectedDiagrams: Diagram[];
 };
 
-const strokeWidths = ["1px", "2px", "3px", "4px"] as const;
 const strokeDashTypes: StrokeDashType[] = ["solid", "dashed", "dotted"];
 
 const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
@@ -35,8 +35,8 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 	const firstDiagram = selectedDiagrams[0];
 
 	// Get stroke width, path type, and stroke dash type from the first diagram
-	// If the property doesn't exist, it will be undefined (making all buttons inactive)
-	const strokeWidth = (firstDiagram as { strokeWidth?: string } | undefined)
+	// If the property doesn't exist, it will be undefined
+	const strokeWidthStr = (firstDiagram as { strokeWidth?: string } | undefined)
 		?.strokeWidth;
 	const pathType = (firstDiagram as { pathType?: PathType } | undefined)
 		?.pathType;
@@ -44,10 +44,15 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 		firstDiagram as { strokeDashType?: StrokeDashType } | undefined
 	)?.strokeDashType;
 
-	const handleStrokeWidthChange = (width: string) => {
+	// Convert strokeWidth from string (e.g., "2px") to number (e.g., 2)
+	const strokeWidth = strokeWidthStr
+		? Number.parseInt(strokeWidthStr.replace("px", ""), 10)
+		: 2;
+
+	const handleStrokeWidthChange = (width: number) => {
 		applyStyleChange({
 			items: selectedDiagrams,
-			styleData: { strokeWidth: width },
+			styleData: { strokeWidth: `${width}px` },
 		});
 	};
 
@@ -73,30 +78,12 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 			{isOpen && (
 				<DiagramMenuControl>
 					<LineStyleMenuWrapper>
-						{/* Stroke Width */}
-						<LineStyleSection>
-							{strokeWidths.map((width) => (
-								<LineStyleButton
-									key={width}
-									isActive={strokeWidth === width}
-									onClick={() => handleStrokeWidthChange(width)}
-									title={`${width} line width`}
-								>
-									<svg width="24" height="24" viewBox="0 0 24 24">
-										<line
-											x1="4"
-											y1="12"
-											x2="20"
-											y2="12"
-											stroke="currentColor"
-											strokeWidth={width}
-											strokeLinecap="round"
-										/>
-									</svg>
-								</LineStyleButton>
-							))}
-						</LineStyleSection>
-
+						<MenuSlider
+							value={strokeWidth}
+							min={1}
+							max={100}
+							onChange={handleStrokeWidthChange}
+						/>
 						{/* Path Type */}
 						<LineStyleSection>
 							<LineStyleButton

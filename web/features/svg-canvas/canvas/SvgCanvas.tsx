@@ -28,9 +28,11 @@ import {
 	getResetZoomLevel,
 } from "./utils/zoomLevels";
 import { AiChatPanel } from "../components/auxiliary/AiChatPanel";
+import { DiagramInfoPopover } from "../components/auxiliary/DiagramInfoPopover";
 import { DragGhost } from "../components/auxiliary/DragGhost";
 import { GridBackground } from "../components/auxiliary/GridBackground";
 import { GridPattern } from "../components/auxiliary/GridPattern";
+import { MarkerDefs } from "../components/auxiliary/MarkerDefs";
 import { MiniMap } from "../components/auxiliary/MiniMap";
 import { PointerCaptureElement } from "../components/auxiliary/PointerCaptureElement";
 import { PreviewConnectLine } from "../components/auxiliary/PreviewConnectLine";
@@ -54,7 +56,6 @@ import type { SvgViewport } from "../types/core/SvgViewport";
 import { getSelectedDiagrams } from "../utils/core/getSelectedDiagrams";
 import { newEventId } from "../utils/core/newEventId";
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
-import { DiagramInfoPopover } from "../components/auxiliary/DiagramInfoPopover";
 
 // TODO: 実行する場所を考える
 // Initialize all diagram types when this module is loaded
@@ -530,6 +531,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									onContextMenu={onContextMenu}
 								>
 									<title>{title}</title>
+									{/* Arrow marker definitions */}
+									<MarkerDefs />
 									{/* Grid pattern definition */}
 									<GridPattern gridSize={20} color="#f3f4f6" />
 									{/* Grid background */}

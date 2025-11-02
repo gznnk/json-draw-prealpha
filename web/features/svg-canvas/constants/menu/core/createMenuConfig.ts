@@ -23,10 +23,7 @@ export const createMenuConfig = (
 	features: DiagramFeatures,
 	overrides: DiagramMenuConfig = {},
 ): DiagramMenuConfig => {
-	const config: DiagramMenuConfig = {
-		// Always available
-		stackOrder: overrides.stackOrder ?? true,
-	};
+	const config: DiagramMenuConfig = {};
 
 	// Add fillable features
 	if (features.fillable) {
@@ -58,11 +55,6 @@ export const createMenuConfig = (
 	// Add transformative features
 	if (features.transformative) {
 		config.aspectRatio = overrides.aspectRatio ?? true;
-	}
-
-	// Add itemable features
-	if (features.itemable) {
-		config.group = overrides.group ?? true;
 	}
 
 	return config;
