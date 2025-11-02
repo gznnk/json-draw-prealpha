@@ -578,25 +578,14 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									)}
 								</Svg>
 								{/* Container for HTML elements that follow the scroll of the SVG canvas with zoom scaling. */}
-								<HTMLElementsContainer
-									left={-minX}
-									top={-minY}
-									width={containerWidth + minX}
-									height={containerHeight + minY}
-									zoom={zoom}
-								>
+								<HTMLElementsContainer left={-minX} top={-minY} zoom={zoom}>
 									<TextEditor
 										{...textEditorState}
 										onTextChange={onTextChange}
 									/>
 								</HTMLElementsContainer>
 								{/* Container for HTML elements that follow the scroll but not zoom. */}
-								<HTMLElementsContainer
-									left={-minX}
-									top={-minY}
-									width={containerWidth + minX}
-									height={containerHeight + minY}
-								>
+								<HTMLElementsContainer left={-minX} top={-minY}>
 									<DiagramMenu
 										canvasProps={props}
 										containerWidth={containerWidth}

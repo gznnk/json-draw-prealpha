@@ -50,8 +50,6 @@ export const Svg = styled.svg<SvgProps>`
 type HTMLElementsContainerProps = {
 	left: number;
 	top: number;
-	width: number;
-	height: number;
 	zoom?: number;
 };
 
@@ -62,8 +60,6 @@ export const HTMLElementsContainer = styled.div<HTMLElementsContainerProps>`
 	position: absolute;
 	left: ${(props) => props.left}px;
 	top: ${(props) => props.top}px;
-	width: ${(props) => props.width}px;
-	height: ${(props) => props.height}px;
 	transform: ${(props) => (props.zoom ? `scale(${props.zoom})` : "none")};
 	transform-origin: top left;
 	pointer-events: none;
