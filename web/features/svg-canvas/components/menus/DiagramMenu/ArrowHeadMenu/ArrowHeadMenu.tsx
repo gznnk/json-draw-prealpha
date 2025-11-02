@@ -1,8 +1,8 @@
 import type React from "react";
 import { memo, useState } from "react";
 
-import { ArrowIconPreview } from "./ArrowIconPreview";
-import { ArrowSelector } from "./ArrowSelector";
+import { ArrowHeadIconPreview } from "./ArrowHeadIconPreview";
+import { ArrowHeadSelector } from "./ArrowHeadSelector";
 import { useStyleChange } from "../../../../hooks/useStyleChange";
 import type { ArrowHeadType } from "../../../../types/core/ArrowHeadType";
 import type { Diagram } from "../../../../types/state/core/Diagram";
@@ -11,14 +11,19 @@ import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuControl } from "../DiagramMenuControl";
 import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 
-type ArrowMenuProps = {
+type ArrowHeadMenuProps = {
 	selectedDiagrams: Diagram[];
 };
 
-const ArrowMenuComponent: React.FC<ArrowMenuProps> = ({ selectedDiagrams }) => {
+const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
+	selectedDiagrams,
+}) => {
 	const applyStyleChange = useStyleChange();
-	const [startArrowSelectorOpen, setStartArrowSelectorOpen] = useState(false);
-	const [endArrowSelectorOpen, setEndArrowSelectorOpen] = useState(false);
+
+	const [startArrowHeadSelectorOpen, setStartArrowHeadSelectorOpen] =
+		useState(false);
+	const [endArrowHeadSelectorOpen, setEndArrowHeadSelectorOpen] =
+		useState(false);
 
 	// Get the first diagram's arrow settings
 	const firstDiagram = selectedDiagrams[0];
@@ -34,7 +39,7 @@ const ArrowMenuComponent: React.FC<ArrowMenuProps> = ({ selectedDiagrams }) => {
 			items: selectedDiagrams,
 			styleData: { startArrowHead: arrowType },
 		});
-		setStartArrowSelectorOpen(false);
+		setStartArrowHeadSelectorOpen(false);
 	};
 
 	const handleEndArrowChange = (arrowType: ArrowHeadType) => {
@@ -42,7 +47,7 @@ const ArrowMenuComponent: React.FC<ArrowMenuProps> = ({ selectedDiagrams }) => {
 			items: selectedDiagrams,
 			styleData: { endArrowHead: arrowType },
 		});
-		setEndArrowSelectorOpen(false);
+		setEndArrowHeadSelectorOpen(false);
 	};
 
 	const handleSwapArrows = () => {
@@ -60,18 +65,18 @@ const ArrowMenuComponent: React.FC<ArrowMenuProps> = ({ selectedDiagrams }) => {
 			{/* Start Arrow Button */}
 			<DiagramMenuPositioner>
 				<DiagramMenuItemNew
-					isActive={startArrowSelectorOpen}
+					isActive={startArrowHeadSelectorOpen}
 					onClick={() => {
-						setStartArrowSelectorOpen(!startArrowSelectorOpen);
-						setEndArrowSelectorOpen(false);
+						setStartArrowHeadSelectorOpen(!startArrowHeadSelectorOpen);
+						setEndArrowHeadSelectorOpen(false);
 					}}
 				>
-					<ArrowIconPreview arrowType={startArrowHead} direction="start" />
+					<ArrowHeadIconPreview arrowType={startArrowHead} direction="start" />
 				</DiagramMenuItemNew>
-				{startArrowSelectorOpen && (
+				{startArrowHeadSelectorOpen && (
 					<DiagramMenuControl>
-						<ArrowSelector
-							selectedArrow={startArrowHead}
+						<ArrowHeadSelector
+							selectedArrowHead={startArrowHead}
 							onSelect={handleStartArrowChange}
 							direction="start"
 						/>
@@ -87,18 +92,18 @@ const ArrowMenuComponent: React.FC<ArrowMenuProps> = ({ selectedDiagrams }) => {
 			{/* End Arrow Button */}
 			<DiagramMenuPositioner>
 				<DiagramMenuItemNew
-					isActive={endArrowSelectorOpen}
+					isActive={endArrowHeadSelectorOpen}
 					onClick={() => {
-						setEndArrowSelectorOpen(!endArrowSelectorOpen);
-						setStartArrowSelectorOpen(false);
+						setEndArrowHeadSelectorOpen(!endArrowHeadSelectorOpen);
+						setStartArrowHeadSelectorOpen(false);
 					}}
 				>
-					<ArrowIconPreview arrowType={endArrowHead} direction="end" />
+					<ArrowHeadIconPreview arrowType={endArrowHead} direction="end" />
 				</DiagramMenuItemNew>
-				{endArrowSelectorOpen && (
+				{endArrowHeadSelectorOpen && (
 					<DiagramMenuControl>
-						<ArrowSelector
-							selectedArrow={endArrowHead}
+						<ArrowHeadSelector
+							selectedArrowHead={endArrowHead}
 							onSelect={handleEndArrowChange}
 							direction="end"
 						/>
@@ -109,4 +114,4 @@ const ArrowMenuComponent: React.FC<ArrowMenuProps> = ({ selectedDiagrams }) => {
 	);
 };
 
-export const ArrowMenu = memo(ArrowMenuComponent);
+export const ArrowHeadMenu = memo(ArrowHeadMenuComponent);

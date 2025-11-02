@@ -4,18 +4,18 @@ import { memo } from "react";
 import type { ArrowHeadType } from "../../../../types/core/ArrowHeadType";
 import { getMarkerUrl } from "../../../../utils/shapes/path/getMarkerUrl";
 
-type ArrowIconPreviewProps = {
+type ArrowHeadIconPreviewProps = {
 	arrowType: ArrowHeadType | undefined;
 	direction: "start" | "end";
 };
 
 /**
- * ArrowIconPreview component.
+ * ArrowHeadIconPreview component.
  * Renders arrow head preview icons that exactly match the MarkerDefs definitions.
  * Uses the existing marker definitions from MarkerDefs (marker-triangle, marker-concave-triangle, marker-circle)
  * via getMarkerUrl utility function for perfect consistency with actual diagram arrows.
  */
-const ArrowIconPreviewComponent: React.FC<ArrowIconPreviewProps> = ({
+const ArrowHeadIconPreviewComponent: React.FC<ArrowHeadIconPreviewProps> = ({
 	arrowType,
 	direction,
 }) => {
@@ -51,4 +51,4 @@ const ArrowIconPreviewComponent: React.FC<ArrowIconPreviewProps> = ({
 	);
 };
 
-export const ArrowIconPreview = memo(ArrowIconPreviewComponent);
+export const ArrowHeadIconPreview = memo(ArrowHeadIconPreviewComponent);

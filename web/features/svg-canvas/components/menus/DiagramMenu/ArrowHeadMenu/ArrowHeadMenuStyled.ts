@@ -2,11 +2,11 @@ import styled from "@emotion/styled";
 
 import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
 
-type ArrowMenuButtonProps = {
+type ArrowHeadMenuButtonProps = {
 	isActive?: boolean;
 };
 
-export const ArrowSelectorGrid = styled.div`
+export const ArrowHeadSelectorGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 4px;
@@ -17,7 +17,7 @@ export const ArrowSelectorGrid = styled.div`
 	pointer-events: auto;
 `;
 
-export const ArrowSelectorButton = styled.button<ArrowMenuButtonProps>`
+export const ArrowHeadSelectorButton = styled.button<ArrowHeadMenuButtonProps>`
 	display: flex;
 	align-items: center;
 	justify-content: center;

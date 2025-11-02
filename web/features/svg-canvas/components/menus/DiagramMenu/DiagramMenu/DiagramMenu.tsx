@@ -42,16 +42,16 @@ import { BorderRadius } from "../../../icons/BorderRadius";
 import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
-import { AlignmentMenu } from "../AlignmentMenu/AlignmentMenu";
-import { ArrowMenu } from "../ArrowMenu";
-import { BoldMenu } from "../BoldMenu/BoldMenu";
+import { AlignmentMenu } from "../AlignmentMenu";
+import { ArrowHeadMenu } from "../ArrowHeadMenu";
+import { BoldMenu } from "../BoldMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
-import { GroupMenu } from "../GroupMenu/GroupMenu";
+import { GroupMenu } from "../GroupMenu";
 import { KeepAspectRatioMenu } from "../KeepAspectRatioMenu";
 import { LineStyleMenu } from "../LineStyleMenu";
 import { NumberStepper } from "../NumberStepper";
-import { StackOrderMenu } from "../StackOrderMenu/StackOrderMenu";
+import { StackOrderMenu } from "../StackOrderMenu";
 
 const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	canvasProps,
@@ -375,7 +375,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			/>,
 		);
 		menuItemComponents.push(
-			<ArrowMenu key="Arrow" selectedDiagrams={selectedItems} />,
+			<ArrowHeadMenu key="Arrow" selectedDiagrams={selectedItems} />,
 		);
 		menuItemComponents.push(
 			<DiagramMenuDivider key="FillableAndStrokableSectionDivider" />,
