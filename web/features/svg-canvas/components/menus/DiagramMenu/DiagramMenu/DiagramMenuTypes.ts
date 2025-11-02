@@ -18,7 +18,6 @@ export type DiagramMenuType =
 	| "BorderRadius"
 	| "LineStyle"
 	| "FontSize"
-	| "Bold"
 	| "FontColor"
 	| "Alignment";
 

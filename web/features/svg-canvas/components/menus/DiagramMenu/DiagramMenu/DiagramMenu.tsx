@@ -37,14 +37,13 @@ import type { Diagram } from "../../../../types/state/core/Diagram";
 import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../../utils/core/newEventId";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
-import { isTextableState } from "../../../../utils/validation/isTextableState";
 import { BgColor } from "../../../icons/BgColor";
-import { Bold } from "../../../icons/Bold";
 import { BorderRadius } from "../../../icons/BorderRadius";
 import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { AlignmentMenu } from "../AlignmentMenu/AlignmentMenu";
+import { BoldMenu } from "../BoldMenu/BoldMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
 import { GroupMenu } from "../GroupMenu/GroupMenu";
@@ -170,15 +169,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				case "FontSize":
 					openControl("FontSize", currentMenuStateMap);
 					break;
-				case "Bold":
-					applyStyleChange({
-						items: selectedItems,
-						styleData: {
-							fontWeight:
-								currentMenuStateMap.Bold === "Active" ? "normal" : "bold",
-						},
-					});
-					break;
 				case "FontColor":
 					openControl("FontColor", currentMenuStateMap);
 					break;
@@ -255,7 +245,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		BorderRadius: "Hidden",
 		LineStyle: "Hidden",
 		FontSize: "Hidden",
-		Bold: "Hidden",
 		FontColor: "Hidden",
 		Alignment: "Hidden",
 	} as DiagramMenuStateMap;
@@ -292,15 +281,8 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 	if (firstTextableItem) {
 		menuStateMap.FontSize = isFontSizeSelectorOpen ? "Active" : "Show";
-		menuStateMap.Bold = "Show";
 		menuStateMap.FontColor = isFontColorPickerOpen ? "Active" : "Show";
 		menuStateMap.Alignment = isAlignmentMenuOpen ? "Active" : "Show";
-
-		if (isTextableState(firstTextableItem)) {
-			if (firstTextableItem.fontWeight === "bold") {
-				menuStateMap.Bold = "Active";
-			}
-		}
 	}
 
 	// Create the menu click handler with the current state
@@ -397,11 +379,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 
 	// Create a section for text appearance items.
-	const showTextAppearanceSection = showSection(
-		"FontSize",
-		"FontColor",
-		"Bold",
-	);
+	const showTextAppearanceSection = showSection("FontSize", "FontColor");
 	if (showTextAppearanceSection) {
 		menuItemComponents.push(
 			<DiagramMenuPositioner key="FontSize">
@@ -442,14 +420,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			</DiagramMenuPositioner>,
 		);
 		menuItemComponents.push(
-			<DiagramMenuItem
-				key="Bold"
-				menuType="Bold"
-				menuStateMap={menuStateMap}
-				onMenuClick={onMenuClick}
-			>
-				<Bold title="Bold" />
-			</DiagramMenuItem>,
+			<BoldMenu key="Bold" selectedDiagrams={selectedItems} />,
 		);
 		menuItemComponents.push(
 			<DiagramMenuDivider key="TextAppearanceSectionDivider" />,
