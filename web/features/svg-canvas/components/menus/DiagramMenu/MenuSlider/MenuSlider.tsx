@@ -2,17 +2,17 @@ import type React from "react";
 import { memo, useEffect, useState } from "react";
 
 import {
-	StrokeWidthSliderWrapper,
-	StrokeWidthSliderInput,
-	StrokeWidthSliderFooter,
-	StrokeWidthSliderLabel,
-	StrokeWidthSliderNumberInput,
-} from "./StrokeWidthSliderStyled";
+	MenuSliderWrapper,
+	MenuSliderInput,
+	MenuSliderFooter,
+	MenuSliderLabel,
+	MenuSliderNumberInput,
+} from "./MenuSliderStyled";
 
 /**
- * Props for the StrokeWidthSlider component.
+ * Props for the MenuSlider component.
  */
-type StrokeWidthSliderProps = {
+type MenuSliderProps = {
 	value: number;
 	min?: number;
 	max?: number;
@@ -20,10 +20,10 @@ type StrokeWidthSliderProps = {
 };
 
 /**
- * StrokeWidthSlider component.
- * A UI control for adjusting stroke width using a slider.
+ * MenuSlider component.
+ * A UI control for adjusting values using a slider.
  */
-const StrokeWidthSliderComponent: React.FC<StrokeWidthSliderProps> = ({
+const MenuSliderComponent: React.FC<MenuSliderProps> = ({
 	value,
 	min = 1,
 	max = 100,
@@ -77,17 +77,17 @@ const StrokeWidthSliderComponent: React.FC<StrokeWidthSliderProps> = ({
 	}, [value, isEditing]);
 
 	return (
-		<StrokeWidthSliderWrapper>
-			<StrokeWidthSliderInput
+		<MenuSliderWrapper>
+			<MenuSliderInput
 				type="range"
 				min={min}
 				max={max}
 				value={sliderValue}
 				onChange={handleSliderChange}
 			/>
-			<StrokeWidthSliderFooter>
-				<StrokeWidthSliderLabel>Thickness</StrokeWidthSliderLabel>
-				<StrokeWidthSliderNumberInput
+			<MenuSliderFooter>
+				<MenuSliderLabel>Thickness</MenuSliderLabel>
+				<MenuSliderNumberInput
 					type="number"
 					min={min}
 					max={max}
@@ -96,9 +96,9 @@ const StrokeWidthSliderComponent: React.FC<StrokeWidthSliderProps> = ({
 					onFocus={handleNumberInputFocus}
 					onBlur={handleNumberInputBlur}
 				/>
-			</StrokeWidthSliderFooter>
-		</StrokeWidthSliderWrapper>
+			</MenuSliderFooter>
+		</MenuSliderWrapper>
 	);
 };
 
-export const StrokeWidthSlider = memo(StrokeWidthSliderComponent);
+export const MenuSlider = memo(MenuSliderComponent);

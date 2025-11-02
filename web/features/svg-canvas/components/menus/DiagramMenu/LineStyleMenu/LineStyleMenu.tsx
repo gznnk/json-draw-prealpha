@@ -14,7 +14,7 @@ import { LineStyle as LineStyleIcon } from "../../../icons/LineStyle";
 import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuControl } from "../DiagramMenuControl";
 import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
-import { StrokeWidthSlider } from "../StrokeWidthSlider";
+import { MenuSlider } from "../MenuSlider";
 
 type LineStyleMenuProps = {
 	isOpen: boolean;
@@ -78,7 +78,7 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 			{isOpen && (
 				<DiagramMenuControl>
 					<LineStyleMenuWrapper>
-						<StrokeWidthSlider
+						<MenuSlider
 							value={strokeWidth}
 							min={1}
 							max={100}

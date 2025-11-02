@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 
 /**
- * Wrapper for the entire stroke width slider component.
+ * Wrapper for the entire menu slider component.
  */
-export const StrokeWidthSliderWrapper = styled.div`
+export const MenuSliderWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
@@ -11,9 +11,9 @@ export const StrokeWidthSliderWrapper = styled.div`
 `;
 
 /**
- * Styled range input element for the stroke width slider.
+ * Styled range input element for the menu slider.
  */
-export const StrokeWidthSliderInput = styled.input`
+export const MenuSliderInput = styled.input`
 	flex: 1;
 	height: 4px;
 	-webkit-appearance: none;
@@ -86,7 +86,7 @@ export const StrokeWidthSliderInput = styled.input`
 /**
  * Footer section containing label and number input.
  */
-export const StrokeWidthSliderFooter = styled.div`
+export const MenuSliderFooter = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
@@ -94,19 +94,19 @@ export const StrokeWidthSliderFooter = styled.div`
 `;
 
 /**
- * Label for the stroke width slider.
+ * Label for the menu slider.
  */
-export const StrokeWidthSliderLabel = styled.label`
+export const MenuSliderLabel = styled.label`
 	font-size: 10px;
 	font-weight: 600;
-	color: #6b7280;
+	color: #000000;
 	user-select: none;
 `;
 
 /**
  * Number input for direct value entry.
  */
-export const StrokeWidthSliderNumberInput = styled.input`
+export const MenuSliderNumberInput = styled.input`
 	display: block;
 	width: 36px;
 	height: 22px;
