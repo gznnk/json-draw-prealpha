@@ -12,6 +12,7 @@ import { useOnAppendDiagrams } from "./hooks/diagram/useOnAppendDiagrams";
 import { useOnClick } from "./hooks/diagram/useOnClick";
 import { useOnConnect } from "./hooks/diagram/useOnConnect";
 import { useOnDiagramChange } from "./hooks/diagram/useOnDiagramChange";
+import { useOnDiagramUpdate } from "./hooks/diagram/useOnDiagramUpdate";
 import { useOnDrag } from "./hooks/diagram/useOnDrag";
 import { useOnDragLeave } from "./hooks/diagram/useOnDragLeave";
 import { useOnDragOver } from "./hooks/diagram/useOnDragOver";
@@ -127,6 +128,9 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 
 	// Hook for the diagram style change event.
 	useOnStyleChange(canvasHooksProps);
+
+	// Hook for the diagram update event.
+	useOnDiagramUpdate(canvasHooksProps);
 
 	// Hook for the stack order change event.
 	useOnStackOrderChange(canvasHooksProps);

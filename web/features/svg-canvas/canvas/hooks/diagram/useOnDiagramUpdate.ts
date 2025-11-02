@@ -1,5 +1,6 @@
-import { useCallback, useRef } from "react";
+import { useRef, useEffect } from "react";
 
+import { DIAGRAM_UPDATE_EVENT_NAME } from "../../../constants/core/EventNames";
 import type { DiagramUpdateEvent } from "../../../types/events/DiagramUpdateEvent";
 import { collectDiagramIds } from "../../../utils/core/collectDiagramIds";
 import { getDiagramById } from "../../../utils/core/getDiagramById";
@@ -13,70 +14,85 @@ import { useAddHistory } from "../history/useAddHistory";
 
 /**
  * Custom hook to handle diagram update events on the canvas.
+ * Listens to DIAGRAM_UPDATE_EVENT_NAME from the event bus and applies updates.
  * Unlike useOnDiagramChange, this handler is for direct, non-interactive updates
  * without event phases (Started/InProgress/Ended).
  */
 export const useOnDiagramUpdate = (props: SvgCanvasSubHooksProps) => {
+	const { eventBus, setCanvasState } = props;
+
 	// Get the data change handler.
 	const addHistory = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
-		props,
+		eventBus,
+		setCanvasState,
 		addHistory,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	return useCallback((e: DiagramUpdateEvent) => {
-		// Bypass references to avoid function creation in every render.
-		const {
-			props: { setCanvasState },
-			addHistory,
-		} = refBus.current;
+	// Listen to diagram update events from the event bus
+	useEffect(() => {
+		const { eventBus } = refBus.current;
 
-		setCanvasState((prevState) => {
-			// Find the diagram being updated
-			const updatedDiagram = getDiagramById(prevState.items, e.id);
+		const handleEvent = (event: Event) => {
+			const customEvent = event as CustomEvent<DiagramUpdateEvent>;
+			const e = customEvent.detail;
 
-			// Collect all diagram IDs (updated diagram + its descendants)
-			const allUpdatedDiagramIds = updatedDiagram
-				? collectDiagramIds([updatedDiagram])
-				: new Set<string>([e.id]);
+			// Bypass references to avoid function creation in every render.
+			const { setCanvasState, addHistory } = refBus.current;
 
-			// Collect ConnectLine IDs that are connected to the updated diagrams
-			const connectLineIds = collectConnectedConnectLines(
-				prevState.items,
-				allUpdatedDiagramIds,
-			);
+			setCanvasState((prevState) => {
+				// Find the diagram being updated
+				const updatedDiagram = getDiagramById(prevState.items, e.id);
 
-			// Create a new state with the updated items
-			let newState = {
-				...prevState,
-				items: applyFunctionRecursively(prevState.items, (item) => {
-					// If the id does not match, return the original item.
-					if (item.id !== e.id) return item;
+				// Collect all diagram IDs (updated diagram + its descendants)
+				const allUpdatedDiagramIds = updatedDiagram
+					? collectDiagramIds([updatedDiagram])
+					: new Set<string>([e.id]);
 
-					// If the id matches, update the item with the new properties.
-					let newItem = { ...item, ...e.data };
+				// Collect ConnectLine IDs that are connected to the updated diagrams
+				const connectLineIds = collectConnectedConnectLines(
+					prevState.items,
+					allUpdatedDiagramIds,
+				);
 
-					// Update connect points for the updated diagram
-					newItem = updateDiagramConnectPoints(newItem);
+				// Create a new state with the updated items
+				let newState = {
+					...prevState,
+					items: applyFunctionRecursively(prevState.items, (item) => {
+						// If the id does not match, return the original item.
+						if (item.id !== e.id) return item;
 
-					// Return the updated item.
-					return newItem;
-				}),
-			};
+						// If the id matches, update the item with the new properties.
+						let newItem = { ...item, ...e.data };
 
-			newState.items = updateOutlineOfAllItemables(newState.items);
+						// Update connect points for the updated diagram
+						newItem = updateDiagramConnectPoints(newItem);
 
-			// Update the connect lines
-			newState = updateConnectLinesByIds(connectLineIds, newState, prevState);
+						// Return the updated item.
+						return newItem;
+					}),
+				};
 
-			// Add history for programmatic updates
-			newState = addHistory(e.eventId, newState);
+				newState.items = updateOutlineOfAllItemables(newState.items);
 
-			return newState;
-		});
+				// Update the connect lines
+				newState = updateConnectLinesByIds(connectLineIds, newState, prevState);
+
+				// Add history for programmatic updates
+				newState = addHistory(e.eventId, newState);
+
+				return newState;
+			});
+		};
+
+		eventBus.addEventListener(DIAGRAM_UPDATE_EVENT_NAME, handleEvent);
+
+		return () => {
+			eventBus.removeEventListener(DIAGRAM_UPDATE_EVENT_NAME, handleEvent);
+		};
 	}, []);
 };

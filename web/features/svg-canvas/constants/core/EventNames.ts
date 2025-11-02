@@ -16,6 +16,9 @@ export const EXTRACT_DIAGRAMS_TO_TOP_LEVEL_EVENT_NAME =
 // Style events
 export const STYLE_CHANGE_EVENT_NAME = "StyleChange" as const;
 
+// Diagram update events
+export const DIAGRAM_UPDATE_EVENT_NAME = "DiagramUpdate" as const;
+
 // Stack order events
 export const STACK_ORDER_CHANGE_EVENT_NAME = "StackOrderChange" as const;
 
