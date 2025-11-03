@@ -9,11 +9,12 @@ export type LineStyleProps = {
 
 /**
  * LineStyle icon component
+ * Shows three different line styles: thick solid, dashed, and curved
  */
 const LineStyleComponent: React.FC<LineStyleProps> = ({
 	width = 24,
 	height = 24,
-	fill = "currentColor",
+	fill = "#333333",
 	title,
 }) => {
 	return (
@@ -25,17 +26,17 @@ const LineStyleComponent: React.FC<LineStyleProps> = ({
 			fill="none"
 		>
 			{title && <title>{title}</title>}
-			{/* Thick line */}
+			{/* Solid line */}
 			<line
 				x1="4"
-				y1="7"
+				y1="6"
 				x2="20"
-				y2="7"
+				y2="6"
 				stroke={fill}
-				strokeWidth="3"
+				strokeWidth="2"
 				strokeLinecap="round"
 			/>
-			{/* Medium dashed line */}
+			{/* Dashed line */}
 			<line
 				x1="4"
 				y1="12"
@@ -43,13 +44,15 @@ const LineStyleComponent: React.FC<LineStyleProps> = ({
 				y2="12"
 				stroke={fill}
 				strokeWidth="2"
-				strokeDasharray="4,2"
+				strokeDasharray="3,3"
+				strokeLinecap="round"
 			/>
 			{/* Curved line */}
 			<path
-				d="M 4,17 Q 12,14 20,17"
+				d="M4 19 Q12 15 20 19"
 				stroke={fill}
 				strokeWidth="2"
+				strokeLinecap="round"
 				fill="none"
 			/>
 		</svg>
