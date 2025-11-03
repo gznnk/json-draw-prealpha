@@ -4,11 +4,12 @@ import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Stack order icon component - represents layering and z-index control
+ * Shows three stacked layers to represent order management
  *
  * @param props - Props for the icon
  * @param props.width - Icon width
  * @param props.height - Icon height
- * @param props.fill - SVG fill color
+ * @param props.fill - SVG fill color (used for stroke)
  * @param props.title - Accessible title for the icon
  * @returns SVG element for stack order icon
  */
@@ -22,44 +23,17 @@ const StackOrderComponent: React.FC<IconProps> = ({
 		<svg
 			width={width}
 			height={height}
-			viewBox="0 0 24 24"
+			viewBox="0 0 16 16"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
+			stroke={fill}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="1.3"
 		>
 			<title>{title}</title>
-			{/* Back layer */}
-			<rect
-				x="3"
-				y="7"
-				width="10"
-				height="10"
-				rx="1.5"
-				stroke={fill}
-				strokeWidth="1.5"
-				fill="none"
-			/>
-			{/* Middle layer */}
-			<rect
-				x="7"
-				y="11"
-				width="10"
-				height="10"
-				rx="1.5"
-				stroke={fill}
-				strokeWidth="1.5"
-				fill="white"
-			/>
-			{/* Front layer */}
-			<rect
-				x="11"
-				y="3"
-				width="10"
-				height="10"
-				rx="1.5"
-				stroke={fill}
-				strokeWidth="1.5"
-				fill="white"
-			/>
+			{/* Three stacked layers */}
+			<path d="m1.75 11 6.25 3.25 6.25-3.25m-12.5-3 6.25 3.25 6.25-3.25m-6.25-6.25-6.25 3.25 6.25 3.25 6.25-3.25z" />
 		</svg>
 	);
 };
