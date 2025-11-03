@@ -4,11 +4,12 @@ import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Group icon component
+ * Shows an outer frame with two overlapping squares inside representing grouped items
  *
  * @param props - Props for the icon
  * @param props.width - Icon width
  * @param props.height - Icon height
- * @param props.fill - SVG fill color
+ * @param props.fill - SVG fill color (used for stroke)
  * @param props.title - Accessible title for the icon
  * @returns SVG element for group icon
  */
@@ -22,17 +23,49 @@ const GroupComponent: React.FC<IconProps> = ({
 		<svg
 			width={width}
 			height={height}
-			viewBox="0 0 1024 1024"
+			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
 		>
 			<title>{title}</title>
-			<path
-				d="M912 820.1V203.9c28-9.9 48-36.6 48-67.9 0-39.8-32.2-72-72-72-31.3 0-58 20-67.9 48H203.9C194 84 167.3 64 136 64c-39.8 0-72 32.2-72 72 0 31.3 20 58 48 67.9v616.2C84 830 64 856.7 64 888c0 39.8 32.2 72 72 72 31.3 0 58-20 67.9-48h616.2c9.9 28 36.6 48 67.9 48 39.8 0 72-32.2 72-72 0-31.3-20-58-48-67.9zM888 112c13.3 0 24 10.7 24 24s-10.7 24-24 24-24-10.7-24-24 10.7-24 24-24zM136 912c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24z m0-752c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24z m704 680H184V184h656v656z m48 72c-13.3 0-24-10.7-24-24s10.7-24 24-24 24 10.7 24 24-10.7 24-24 24z"
-				fill={fill}
+			{/* Outer frame */}
+			<rect
+				x="3"
+				y="3"
+				width="18"
+				height="18"
+				stroke={fill}
+				strokeWidth="2"
+				fill="none"
 			/>
-			<path
-				d="M288 474h448c8.8 0 16-7.2 16-16V282c0-8.8-7.2-16-16-16H288c-8.8 0-16 7.2-16 16v176c0 8.8 7.2 16 16 16z m56-136h336v64H344v-64zM288 758h448c8.8 0 16-7.2 16-16V566c0-8.8-7.2-16-16-16H288c-8.8 0-16 7.2-16 16v176c0 8.8 7.2 16 16 16z m56-136h336v64H344v-64z"
-				fill={fill}
+			{/* Corner squares */}
+			{/* Top-left corner */}
+			<rect x="1" y="1" width="3" height="3" fill={fill} />
+			{/* Top-right corner */}
+			<rect x="20" y="1" width="3" height="3" fill={fill} />
+			{/* Bottom-left corner */}
+			<rect x="1" y="20" width="3" height="3" fill={fill} />
+			{/* Bottom-right corner */}
+			<rect x="20" y="20" width="3" height="3" fill={fill} />
+			{/* Back square (filled white to show layering) */}
+			<rect
+				x="7"
+				y="10"
+				width="7"
+				height="7"
+				stroke={fill}
+				strokeWidth="2"
+				fill="white"
+			/>
+			{/* Front square */}
+			<rect
+				x="10"
+				y="7"
+				width="7"
+				height="7"
+				stroke={fill}
+				strokeWidth="2"
+				fill="white"
 			/>
 		</svg>
 	);
