@@ -4,6 +4,14 @@ import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
  * Vertical align bottom icon component
+ * Shows a horizontal line at bottom with a downward arrow above
+ *
+ * @param props - Props for the icon
+ * @param props.width - Icon width
+ * @param props.height - Icon height
+ * @param props.fill - SVG fill color (used for stroke and fill)
+ * @param props.title - Accessible title for the icon
+ * @returns SVG element for vertical align bottom icon
  */
 const VerticalAlignBottomComponent: React.FC<IconProps> = ({
 	width = 24,
@@ -15,14 +23,27 @@ const VerticalAlignBottomComponent: React.FC<IconProps> = ({
 		<svg
 			width={width}
 			height={height}
-			viewBox="0 0 1024 1024"
+			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
 		>
 			<title>{title}</title>
+			{/* Bottom horizontal line */}
 			<path
-				d="M859.9 780H164.1c-4.5 0-8.1 3.6-8.1 8v60c0 4.4 3.6 8 8.1 8h695.8c4.5 0 8.1-3.6 8.1-8v-60c0-4.4-3.6-8-8.1-8zM505.7 669a8 8 0 0 0 12.6 0l112-141.7c4.1-5.2.4-12.9-6.3-12.9h-74.1V176c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v338.3H400c-6.7 0-10.4 7.7-6.3 12.9l112 141.8z"
-				fill={fill}
+				d="M3 20 L21 20"
+				stroke={fill}
+				strokeWidth="2"
+				strokeLinecap="round"
 			/>
+			{/* Vertical line (arrow shaft) */}
+			<path
+				d="M12 4 L12 16"
+				stroke={fill}
+				strokeWidth="2"
+				strokeLinecap="round"
+			/>
+			{/* Downward arrow head (filled triangle) */}
+			<path d="M12 17 L16 12 L8 12 Z" fill={fill} />
 		</svg>
 	);
 };
