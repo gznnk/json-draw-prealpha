@@ -50,22 +50,6 @@ export const useOnConnectShapes = (props: SvgCanvasSubHooksProps) => {
 
 			const event = (e as CustomEvent<ConnectShapesEvent>).detail;
 
-			// Debug: Log received event
-			console.log("📥 [useOnConnectShapes] Received event:", {
-				sourceShapeId: event.sourceShapeId,
-				targetShapeId: event.targetShapeId,
-				startArrowHead: event.startArrowHead,
-				endArrowHead: event.endArrowHead,
-				lineStyle: event.lineStyle,
-				pathType: event.pathType,
-				sourceAnchor: event.sourceAnchor,
-				targetAnchor: event.targetAnchor,
-				types: {
-					sourceAnchor: typeof event.sourceAnchor,
-					targetAnchor: typeof event.targetAnchor,
-				},
-			});
-
 			const sourceShape = getDiagramById(
 				canvasState.items,
 				event.sourceShapeId,
@@ -92,24 +76,6 @@ export const useOnConnectShapes = (props: SvgCanvasSubHooksProps) => {
 				console.error("Source or target shape is not connectable.");
 				return;
 			}
-
-			// Find connection points based on anchor positions or use defaults
-			console.log("🔍 [useOnConnectShapes] Looking for connect points:", {
-				sourceShapeId: event.sourceShapeId,
-				targetShapeId: event.targetShapeId,
-				requestedSourceAnchor: event.sourceAnchor,
-				requestedTargetAnchor: event.targetAnchor,
-				sourceShapeConnectPoints: (
-					sourceShape as ConnectableState
-				).connectPoints
-					?.map((p) => p.name)
-					.join(", "),
-				targetShapeConnectPoints: (
-					targetShape as ConnectableState
-				).connectPoints
-					?.map((p) => p.name)
-					.join(", "),
-			});
 
 			// Determine anchor names
 			const sourceAnchorName =
@@ -138,16 +104,13 @@ export const useOnConnectShapes = (props: SvgCanvasSubHooksProps) => {
 
 			// Generate missing source connect point
 			if (!sourceConnectPoint) {
-				console.log(
-					`🔧 [useOnConnectShapes] Generating source connect point: ${sourceAnchorName}`,
-				);
 				sourceConnectPoint = generateConnectPoint(
 					sourceShape,
 					sourceAnchorName,
 				);
 				if (!sourceConnectPoint) {
 					console.error(
-						`❌ Failed to generate source connect point: ${sourceAnchorName}`,
+						`Failed to generate source connect point: ${sourceAnchorName}`,
 					);
 					return;
 				}
@@ -167,16 +130,13 @@ export const useOnConnectShapes = (props: SvgCanvasSubHooksProps) => {
 
 			// Generate missing target connect point
 			if (!targetConnectPoint) {
-				console.log(
-					`🔧 [useOnConnectShapes] Generating target connect point: ${targetAnchorName}`,
-				);
 				targetConnectPoint = generateConnectPoint(
 					targetShape,
 					targetAnchorName,
 				);
 				if (!targetConnectPoint) {
 					console.error(
-						`❌ Failed to generate target connect point: ${targetAnchorName}`,
+						`Failed to generate target connect point: ${targetAnchorName}`,
 					);
 					return;
 				}
@@ -257,9 +217,6 @@ export const useOnConnectShapes = (props: SvgCanvasSubHooksProps) => {
 					newItems = applyFunctionRecursively(prevState.items, (item) => {
 						const updatedShape = updatedShapes.find((s) => s.id === item.id);
 						if (updatedShape) {
-							console.log(
-								`✅ Updated shape ${item.id} with new connect points`,
-							);
 							return updatedShape;
 						}
 						return item;
@@ -268,9 +225,6 @@ export const useOnConnectShapes = (props: SvgCanvasSubHooksProps) => {
 
 				// Add the connection line
 				newItems = [...newItems, connectLine];
-				console.log(
-					`✅ Added connection line from ${sourceShape.id} to ${targetShape.id}`,
-				);
 
 				return {
 					...prevState,
@@ -301,10 +255,6 @@ const generateConnectPoint = (
 	shape: Diagram,
 	anchorName: string,
 ): ConnectPointState | undefined => {
-	console.log(
-		`🏭 [generateConnectPoint] Generating: ${anchorName} for ${shape.type}`,
-	);
-
 	let generatedPoints: ConnectPointState[] = [];
 
 	if (shape.type === "Rectangle") {
@@ -331,7 +281,7 @@ const generateConnectPoint = (
 		});
 	} else {
 		console.error(
-			`❌ Cannot generate connect point for unsupported shape type: ${shape.type}`,
+			`Cannot generate connect point for unsupported shape type: ${shape.type}`,
 		);
 		return undefined;
 	}
@@ -343,12 +293,11 @@ const generateConnectPoint = (
 
 	if (!connectPoint) {
 		console.error(
-			`❌ Failed to generate connect point "${anchorName}" for shape type: ${shape.type}`,
+			`Failed to generate connect point "${anchorName}" for shape type: ${shape.type}`,
 		);
 		return undefined;
 	}
 
-	console.log(`✨ [generateConnectPoint] Generated: ${anchorName}`);
 	return connectPoint;
 };
 
@@ -370,16 +319,8 @@ const findConnectPoint = (
 	// Empty string should be treated as undefined (use default)
 	const anchorName = anchor && anchor.trim() !== "" ? anchor : defaultAnchor;
 
-	console.log("🔎 [findConnectPoint] Searching for:", anchorName);
-
 	// Find existing connect point
 	const existingPoint = shape.connectPoints?.find((p) => p.name === anchorName);
-
-	if (existingPoint) {
-		console.log(`✅ Found existing connect point: ${anchorName}`);
-	} else {
-		console.log(`⚠️ Connect point not found: ${anchorName}`);
-	}
 
 	return existingPoint;
 };
