@@ -33,7 +33,7 @@ export const UNGROUP_EVENT_NAME = "Ungroup" as const;
 // Connection events
 export const EVENT_NAME_FLASH_CONNECT_LINE = "FlashConnectLine" as const;
 export const EVENT_NAME_CONNECTION = "Connection" as const;
-export const EVENT_NAME_CONNECT_NODES = "ConnectNodes" as const;
+export const EVENT_NAME_CONNECT_SHAPES = "ConnectShapes" as const;
 
 // Group events
 export const EVENT_NAME_GROUP_SHAPES = "GroupShapes" as const;
@@ -51,7 +51,7 @@ export type SvgCanvasEventNames =
 	| typeof EVENT_NAME_BROADCAST_DRAG
 	| typeof EVENT_NAME_FLASH_CONNECT_LINE
 	| typeof EVENT_NAME_CONNECTION
-	| typeof EVENT_NAME_CONNECT_NODES
+	| typeof EVENT_NAME_CONNECT_SHAPES
 	| typeof EVENT_NAME_GROUP_SHAPES
 	| typeof EVENT_NAME_EXECUTION_PROPAGATION
 	| typeof EVENT_NAME_CANVAS_ZOOM;

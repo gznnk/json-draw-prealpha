@@ -24,8 +24,10 @@ import {
 	textElementToolDefinition,
 	useAddTextElementTool,
 } from "../../../tools/add_text_element";
-import { connectNodesToolDefinition } from "../../../tools/connect_nodes/definition";
-import { useConnectNodesTool } from "../../../tools/connect_nodes/hook";
+import {
+	connectShapesToolDefinition,
+	useConnectShapesTool,
+} from "../../../tools/connect_shapes";
 import {
 	groupShapesToolDefinition,
 	useGroupShapesTool,
@@ -82,7 +84,7 @@ const AiComponent: React.FC<AiProps> = (props) => {
 	const addRectangleShape = useAddRectangleShapeTool(eventBus);
 	const addCircleShape = useAddCircleShapeTool(eventBus);
 	const addTextElement = useAddTextElementTool(eventBus);
-	const connectNodes = useConnectNodesTool(eventBus);
+	const connectShapes = useConnectShapesTool(eventBus);
 	const groupShapes = useGroupShapesTool(eventBus);
 
 	// Memoize tool definitions and handlers
@@ -92,14 +94,14 @@ const AiComponent: React.FC<AiProps> = (props) => {
 				rectangleShapeToolDefinition,
 				circleShapeToolDefinition,
 				textElementToolDefinition,
-				connectNodesToolDefinition,
+				connectShapesToolDefinition,
 				groupShapesToolDefinition,
 			],
 			handlers: {
 				add_rectangle_shape: addRectangleShape,
 				add_circle_shape: addCircleShape,
 				add_text_element: addTextElement,
-				connect_nodes: connectNodes,
+				connect_shapes: connectShapes,
 				group_shapes: groupShapes,
 			},
 		}),
@@ -107,7 +109,7 @@ const AiComponent: React.FC<AiProps> = (props) => {
 			addRectangleShape,
 			addCircleShape,
 			addTextElement,
-			connectNodes,
+			connectShapes,
 			groupShapes,
 		],
 	);

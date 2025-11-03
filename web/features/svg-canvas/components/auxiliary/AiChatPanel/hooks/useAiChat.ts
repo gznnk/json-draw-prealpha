@@ -23,8 +23,10 @@ import {
 	textElementToolDefinition,
 	useAddTextElementTool,
 } from "../../../../tools/add_text_element";
-import { connectNodesToolDefinition } from "../../../../tools/connect_nodes/definition";
-import { useConnectNodesTool } from "../../../../tools/connect_nodes/hook";
+import {
+	connectShapesToolDefinition,
+	useConnectShapesTool,
+} from "../../../../tools/connect_shapes";
 import {
 	selectedShapesToolDefinition,
 	useGetSelectedShapesTool,
@@ -59,7 +61,7 @@ export const useAiChat = () => {
 	const addRectangleShape = useAddRectangleShapeTool(eventBus);
 	const addCircleShape = useAddCircleShapeTool(eventBus);
 	const addTextElement = useAddTextElementTool(eventBus);
-	const connectNodes = useConnectNodesTool(eventBus);
+	const connectShapes = useConnectShapesTool(eventBus);
 	const groupShapes = useGroupShapesTool(eventBus);
 	const addMarkdownShape = useAddMarkdownShapeTool(eventBus);
 	const getShapesInfo = useGetShapesInfoTool(eventBus);
@@ -73,7 +75,7 @@ export const useAiChat = () => {
 				rectangleShapeToolDefinition,
 				circleShapeToolDefinition,
 				textElementToolDefinition,
-				connectNodesToolDefinition,
+				connectShapesToolDefinition,
 				groupShapesToolDefinition,
 				markdownShapeToolDefinition,
 				shapesInfoToolDefinition,
@@ -84,7 +86,7 @@ export const useAiChat = () => {
 				add_rectangle_shape: addRectangleShape,
 				add_circle_shape: addCircleShape,
 				add_text_element: addTextElement,
-				connect_nodes: connectNodes,
+				connect_shapes: connectShapes,
 				group_shapes: groupShapes,
 				add_markdown_shape: addMarkdownShape,
 				get_shapes_info: getShapesInfo,
@@ -96,7 +98,7 @@ export const useAiChat = () => {
 			addRectangleShape,
 			addCircleShape,
 			addTextElement,
-			connectNodes,
+			connectShapes,
 			groupShapes,
 			addMarkdownShape,
 			getShapesInfo,
@@ -118,7 +120,7 @@ export const useAiChat = () => {
 		if (apiKey) {
 			const client = LLMClientFactory.createClient(apiKey, {
 				systemPrompt:
-					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles and circles), add text elements, add markdown-enabled text boxes, connect nodes, group shapes together, retrieve information about existing shapes on the canvas, get detailed information about selected shapes, and update properties of existing diagrams. When users ask you to create or modify canvas elements, use the appropriate tools to help them. Use the update_diagram tool to modify existing shapes' properties such as position, size, colors, text, and other visual attributes.",
+					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles and circles), add text elements, add markdown-enabled text boxes, connect shapes with fully customizable styles, group shapes together, retrieve information about existing shapes on the canvas, get detailed information about selected shapes, and update properties of existing diagrams. When users ask you to create or modify canvas elements, use the appropriate tools to help them. Use the connect_shapes tool to connect any shapes with custom arrow heads (FilledTriangle, ConcaveTriangle, OpenArrow, HollowTriangle, FilledDiamond, HollowDiamond, Circle, None), line styles (solid, dashed, dotted), path types (Linear, Bezier, Rounded), and specific anchor positions (topLeftPoint, topCenterPoint, topRightPoint, leftCenterPoint, rightCenterPoint, bottomLeftPoint, bottomCenterPoint, bottomRightPoint). Use the update_diagram tool to modify existing shapes' properties such as position, size, colors, text, and other visual attributes.",
 				tools: toolsConfig.tools,
 				functionHandlers: toolsConfig.handlers,
 			});

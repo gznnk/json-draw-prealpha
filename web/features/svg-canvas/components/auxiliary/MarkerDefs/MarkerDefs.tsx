@@ -4,10 +4,10 @@ import { memo } from "react";
 import { CircleMarker } from "./Circle";
 import { ConcaveTriangleMarker } from "./ConcaveTriangle";
 import { FilledDiamondMarker } from "./FilledDiamond";
+import { FilledTriangleMarker } from "./FilledTriangle";
 import { HollowDiamondMarker } from "./HollowDiamond";
 import { HollowTriangleMarker } from "./HollowTriangle";
 import { OpenArrowMarker } from "./OpenArrow";
-import { FilledTriangleMarker } from "./FilledTriangle";
 
 /**
  * MarkerDefs component.

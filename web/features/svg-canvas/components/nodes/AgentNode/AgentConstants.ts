@@ -158,24 +158,99 @@ export const AI_AGENT_TOOLS = [
 	},
 	{
 		type: "function",
-		name: "connect_nodes",
+		name: "connect_shapes",
 		description:
-			"Connects two nodes on the canvas with a directional connection from the source node to the target node.",
+			"Connects two shapes on the canvas with a customizable connection line. Supports various arrow heads, line styles, path types, and anchor positions.",
 		parameters: {
 			type: "object",
 			properties: {
-				sourceNodeId: {
+				sourceShapeId: {
 					type: "string",
 					description:
-						"The ID of the node where the connection starts (source node).",
+						"The ID of the source shape where the connection starts.",
 				},
-				targetNodeId: {
+				targetShapeId: {
+					type: "string",
+					description: "The ID of the target shape where the connection ends.",
+				},
+				startArrowHead: {
 					type: "string",
 					description:
-						"The ID of the node where the connection ends (target node).",
+						"Arrow head style at the start (FilledTriangle, ConcaveTriangle, OpenArrow, HollowTriangle, FilledDiamond, HollowDiamond, Circle, None, or empty string for no arrow).",
+					enum: [
+						"",
+						"FilledTriangle",
+						"ConcaveTriangle",
+						"OpenArrow",
+						"HollowTriangle",
+						"FilledDiamond",
+						"HollowDiamond",
+						"Circle",
+						"None",
+					],
+				},
+				endArrowHead: {
+					type: "string",
+					description:
+						"Arrow head style at the end (FilledTriangle, ConcaveTriangle, OpenArrow, HollowTriangle, FilledDiamond, HollowDiamond, Circle, None, or empty string for default FilledTriangle).",
+					enum: [
+						"",
+						"FilledTriangle",
+						"ConcaveTriangle",
+						"OpenArrow",
+						"HollowTriangle",
+						"FilledDiamond",
+						"HollowDiamond",
+						"Circle",
+						"None",
+					],
+				},
+				lineStyle: {
+					type: "string",
+					description:
+						"Line style (solid, dashed, dotted, or empty string for default solid).",
+					enum: ["", "solid", "dashed", "dotted"],
+				},
+				pathType: {
+					type: "string",
+					description:
+						"Path rendering type (Linear, Bezier, Rounded, or empty string for default Linear).",
+					enum: ["", "Linear", "Bezier", "Rounded"],
+				},
+				sourceAnchor: {
+					type: "string",
+					description:
+						"Connection point on source shape (topLeftPoint, topCenterPoint, topRightPoint, leftCenterPoint, rightCenterPoint, bottomLeftPoint, bottomCenterPoint, bottomRightPoint, or empty string for auto).",
+					enum: [
+						"",
+						"topLeftPoint",
+						"topCenterPoint",
+						"topRightPoint",
+						"leftCenterPoint",
+						"rightCenterPoint",
+						"bottomLeftPoint",
+						"bottomCenterPoint",
+						"bottomRightPoint",
+					],
+				},
+				targetAnchor: {
+					type: "string",
+					description:
+						"Connection point on target shape (topLeftPoint, topCenterPoint, topRightPoint, leftCenterPoint, rightCenterPoint, bottomLeftPoint, bottomCenterPoint, bottomRightPoint, or empty string for auto).",
+					enum: [
+						"",
+						"topLeftPoint",
+						"topCenterPoint",
+						"topRightPoint",
+						"leftCenterPoint",
+						"rightCenterPoint",
+						"bottomLeftPoint",
+						"bottomCenterPoint",
+						"bottomRightPoint",
+					],
 				},
 			},
-			required: ["sourceNodeId", "targetNodeId"],
+			required: ["sourceShapeId", "targetShapeId"],
 			additionalProperties: false,
 		},
 		strict: true,

@@ -36,7 +36,7 @@ import { useZoom } from "./hooks/navigation/useZoom";
 import { useAreaSelection } from "./hooks/selection/useAreaSelection";
 import { useClearAllSelection } from "./hooks/selection/useClearAllSelection";
 import { useSelectAll } from "./hooks/selection/useSelectAll";
-import { useOnConnectNodes } from "./hooks/tools/useOnConnectNodes";
+import { useOnConnectShapes } from "./hooks/tools/useOnConnectShapes";
 import { useOnGroupShapes } from "./hooks/tools/useOnGroupShapes";
 import type { SvgCanvasData } from "./types/SvgCanvasData";
 import type { SvgCanvasPanZoom } from "./types/SvgCanvasPanZoom";
@@ -210,8 +210,8 @@ export const useSvgCanvas = (props: SvgCanvasHooksProps) => {
 	const onSelectAll = useSelectAll(canvasHooksProps);
 
 	// tools
-	// Hook for the connect nodes tool.
-	useOnConnectNodes(canvasHooksProps);
+	// Hook for the connect shapes tool.
+	useOnConnectShapes(canvasHooksProps);
 	// Hook for the group shapes tool.
 	useOnGroupShapes(canvasHooksProps);
 
