@@ -110,82 +110,59 @@ export const findFirstPathableRecursive = (
 };
 
 /**
- * Check if a value is a plain object (not an array or null).
+ * Merge a boolean property: only include if all configs have it set to true.
  */
-const isPlainObject = (value: unknown): value is Record<string, unknown> => {
-	return (
-		typeof value === "object" &&
-		value !== null &&
-		!Array.isArray(value) &&
-		Object.getPrototypeOf(value) === Object.prototype
-	);
+const mergeBooleanProperty = (
+	configs: DiagramMenuConfig[],
+	key: keyof DiagramMenuConfig,
+): boolean | undefined => {
+	// Check if all configs have this property set to true
+	const allTrue = configs.every((config) => config[key] === true);
+	return allTrue ? true : undefined;
 };
 
 /**
- * Merge nested configuration objects, keeping only properties that are true in all configs.
- *
- * @param configs - Array of configuration objects to merge
- * @returns Merged configuration with only commonly enabled properties
+ * Merge borderStyle property: only include if all configs have it,
+ * and merge nested properties individually.
  */
-const mergeNestedConfigs = (
-	configs: Record<string, unknown>[],
-): Record<string, unknown> => {
-	if (configs.length === 0) {
-		return {};
+const mergeBorderStyle = (
+	configs: DiagramMenuConfig[],
+): { radius?: boolean } | undefined => {
+	// Check if all configs have borderStyle
+	const allHaveBorderStyle = configs.every(
+		(config) =>
+			config.borderStyle !== undefined &&
+			typeof config.borderStyle === "object",
+	);
+
+	if (!allHaveBorderStyle) {
+		return undefined;
 	}
 
-	const result: Record<string, unknown> = {};
-	const firstConfig = configs[0];
+	const result: { radius?: boolean } = {};
 
-	for (const key in firstConfig) {
-		const firstValue = firstConfig[key];
+	// Merge radius property: only include if all configs have it set to true
+	const allHaveRadius = configs.every(
+		(config) => config.borderStyle?.radius === true,
+	);
 
-		// Check if this is a nested object
-		if (isPlainObject(firstValue)) {
-			// Collect nested objects from all configs
-			const nestedConfigs: Record<string, unknown>[] = [];
-			let allHaveNestedObject = true;
-
-			for (const config of configs) {
-				const value = config[key];
-				if (isPlainObject(value)) {
-					nestedConfigs.push(value);
-				} else {
-					allHaveNestedObject = false;
-					break;
-				}
-			}
-
-			// If all configs have this nested object, merge recursively
-			if (allHaveNestedObject && nestedConfigs.length === configs.length) {
-				const merged = mergeNestedConfigs(nestedConfigs);
-				if (Object.keys(merged).length > 0) {
-					result[key] = merged;
-				}
-			}
-		}
-		// Check if this is a boolean property
-		else if (firstValue === true) {
-			// Only include if all configs have this property set to true
-			if (configs.every((config) => config[key] === true)) {
-				result[key] = true;
-			}
-		}
+	if (allHaveRadius) {
+		result.radius = true;
 	}
 
-	return result;
+	// Return undefined if no properties were merged
+	return Object.keys(result).length > 0 ? result : undefined;
 };
 
 /**
  * Get the common menu configuration for diagrams.
  * Only returns menu items that are enabled (true) for all diagram types.
+ * Each menu property is merged individually with its own merge logic.
  *
  * @param diagrams - Array of diagrams
  * @returns DiagramMenuConfig with only commonly enabled menu items set to true
  */
-export const getCommonMenuConfig = (
-	diagrams: Diagram[],
-): DiagramMenuConfig => {
+export const getCommonMenuConfig = (diagrams: Diagram[]): DiagramMenuConfig => {
 	const types = collectDiagramTypes(diagrams);
 
 	if (types.size === 0) {
@@ -204,5 +181,62 @@ export const getCommonMenuConfig = (
 		return {};
 	}
 
-	return mergeNestedConfigs(menuConfigs) as DiagramMenuConfig;
+	// Merge each property individually in the same loop
+	const result: DiagramMenuConfig = {};
+
+	// Merge backgroundColor
+	const backgroundColor = mergeBooleanProperty(menuConfigs, "backgroundColor");
+	if (backgroundColor !== undefined) {
+		result.backgroundColor = backgroundColor;
+	}
+
+	// Merge borderColor
+	const borderColor = mergeBooleanProperty(menuConfigs, "borderColor");
+	if (borderColor !== undefined) {
+		result.borderColor = borderColor;
+	}
+
+	// Merge borderStyle (nested object with special handling)
+	const borderStyle = mergeBorderStyle(menuConfigs);
+	if (borderStyle !== undefined) {
+		result.borderStyle = borderStyle;
+	}
+
+	// Merge borderRadius
+	const borderRadius = mergeBooleanProperty(menuConfigs, "borderRadius");
+	if (borderRadius !== undefined) {
+		result.borderRadius = borderRadius;
+	}
+
+	// Merge arrowHead
+	const arrowHead = mergeBooleanProperty(menuConfigs, "arrowHead");
+	if (arrowHead !== undefined) {
+		result.arrowHead = arrowHead;
+	}
+
+	// Merge lineStyle
+	const lineStyle = mergeBooleanProperty(menuConfigs, "lineStyle");
+	if (lineStyle !== undefined) {
+		result.lineStyle = lineStyle;
+	}
+
+	// Merge fontStyle
+	const fontStyle = mergeBooleanProperty(menuConfigs, "fontStyle");
+	if (fontStyle !== undefined) {
+		result.fontStyle = fontStyle;
+	}
+
+	// Merge textAlignment
+	const textAlignment = mergeBooleanProperty(menuConfigs, "textAlignment");
+	if (textAlignment !== undefined) {
+		result.textAlignment = textAlignment;
+	}
+
+	// Merge aspectRatio
+	const aspectRatio = mergeBooleanProperty(menuConfigs, "aspectRatio");
+	if (aspectRatio !== undefined) {
+		result.aspectRatio = aspectRatio;
+	}
+
+	return result;
 };
