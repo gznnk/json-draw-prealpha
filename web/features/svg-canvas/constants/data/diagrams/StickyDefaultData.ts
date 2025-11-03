@@ -13,7 +13,7 @@ export const StickyDefaultData: StickyData = CreateDefaultData<StickyData>({
 		height: 120,
 		fill: "#fef9c3",
 		stroke: "#fef9c3",
-		strokeWidth: "1px",
+		strokeWidth: 1,
 		text: "Sticky Note",
 		fontSize: 14,
 		fontColor: "#000000",

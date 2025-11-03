@@ -48,7 +48,7 @@ export const useAddTextElementWithHandlerTool = (): ((
 					cornerRadius: 0,
 					fill: "transparent", // Transparent background for text-only elements
 					stroke: "transparent",
-					strokeWidth: "0px",
+					strokeWidth: 0,
 					text: args.text,
 					textType: "textarea",
 					fontSize: args.fontSize,

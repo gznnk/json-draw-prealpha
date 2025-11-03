@@ -19,7 +19,7 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 	scaleX,
 	scaleY,
 	stroke = "black",
-	strokeWidth = "1px",
+	strokeWidth = 1,
 	strokeDashType = "solid",
 	isSelected = false,
 	items = [],

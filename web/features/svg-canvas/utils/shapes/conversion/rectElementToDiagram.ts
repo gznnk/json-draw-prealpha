@@ -24,6 +24,11 @@ export const rectElementToDiagram = (
 		throw new Error("Unsupported SVGRectElement attribute was found.");
 	}
 
+	const strokeWidthAttr = element.getAttribute("stroke-width");
+	const strokeWidth = strokeWidthAttr
+		? parseFloat(strokeWidthAttr.replace("px", ""))
+		: 0;
+
 	return createRectangleState({
 		x: x + width / 2,
 		y: y + height / 2,
@@ -31,6 +36,6 @@ export const rectElementToDiagram = (
 		height,
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
-		strokeWidth: element.getAttribute("stroke-width") || "0",
+		strokeWidth: isNaN(strokeWidth) ? 0 : strokeWidth,
 	});
 };

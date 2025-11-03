@@ -13,12 +13,12 @@ export const createPathState = ({
 	x = 0,
 	y = 0,
 	stroke = "black",
-	strokeWidth = "1px",
+	strokeWidth = 1,
 }: {
 	x?: number;
 	y?: number;
 	stroke?: string;
-	strokeWidth?: string;
+	strokeWidth?: number;
 }): PathState => {
 	return {
 		...PathDefaultState,

@@ -24,6 +24,11 @@ export const lineElementToDiagram = (element: SVGLineElement): PathState => {
 		throw new Error("Unsupported SVGLineElement attribute was found.");
 	}
 
+	const strokeWidthAttr = element.getAttribute("stroke-width");
+	const strokeWidth = strokeWidthAttr
+		? parseFloat(strokeWidthAttr.replace("px", ""))
+		: 0;
+
 	return {
 		...PathDefaultState,
 		id: newId(),
@@ -33,7 +38,7 @@ export const lineElementToDiagram = (element: SVGLineElement): PathState => {
 		width: Math.abs(x2 - x1),
 		height: Math.abs(y2 - y1),
 		stroke: element.getAttribute("stroke") || "transparent",
-		strokeWidth: element.getAttribute("stroke-width") || "0",
+		strokeWidth: isNaN(strokeWidth) ? 0 : strokeWidth,
 		items: [
 			{
 				id: newId(),

@@ -41,7 +41,7 @@ export const createInputState = ({
 	keepProportion?: boolean;
 	fill?: string;
 	stroke?: string;
-	strokeWidth?: string;
+	strokeWidth?: number;
 	cornerRadius?: number;
 	text?: string;
 	textType?: TextableType;

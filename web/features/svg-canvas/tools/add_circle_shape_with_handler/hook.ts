@@ -36,7 +36,7 @@ export const useAddCircleShapeWithHandlerTool = (): ((
 					height: args.r * 2,
 					fill: args.fill,
 					stroke: args.stroke || "transparent",
-					strokeWidth: `${args.strokeWidth || 1}px`,
+					strokeWidth: args.strokeWidth ?? 1,
 					text: "",
 					textType: "textarea",
 					connectEnabled: false,

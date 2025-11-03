@@ -24,7 +24,7 @@ export const createRectangleState = ({
 	keepProportion = false,
 	fill = "transparent",
 	stroke = "black",
-	strokeWidth = "1px",
+	strokeWidth = 1,
 	text = "",
 	textType = "textarea",
 	textAlign = "center",
@@ -48,7 +48,7 @@ export const createRectangleState = ({
 	keepProportion?: boolean;
 	fill?: string;
 	stroke?: string;
-	strokeWidth?: string;
+	strokeWidth?: number;
 	text?: string;
 	textType?: TextableType;
 	textAlign?: TextAlign;

@@ -18,6 +18,11 @@ export const circleElementToDiagram = (
 		throw new Error("Unsupported SVGCircleElement attribute was found.");
 	}
 
+	const strokeWidthAttr = element.getAttribute("stroke-width");
+	const strokeWidth = strokeWidthAttr
+		? parseFloat(strokeWidthAttr.replace("px", ""))
+		: 0;
+
 	return createEllipseState({
 		x: cx,
 		y: cy,
@@ -25,6 +30,6 @@ export const circleElementToDiagram = (
 		height: r * 2,
 		fill: element.getAttribute("fill") || "transparent",
 		stroke: element.getAttribute("stroke") || "transparent",
-		strokeWidth: element.getAttribute("stroke-width") || "0",
+		strokeWidth: isNaN(strokeWidth) ? 0 : strokeWidth,
 	});
 };

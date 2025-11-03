@@ -43,7 +43,7 @@ export const useAddMarkdownShapeWithHandlerTool = (): ((
 					cornerRadius: 8, // Rounded corners for a modern look
 					fill: args.fill || "#fef9e7", // Light cream/yellow background
 					stroke: args.stroke || "#f39c12", // Orange border
-					strokeWidth: args.strokeWidth ? `${args.strokeWidth}px` : "2px",
+					strokeWidth: args.strokeWidth ?? 2,
 					text: args.text || "",
 					textType: "markdown", // Use markdown type for rich text editing
 					textAlign: "left",

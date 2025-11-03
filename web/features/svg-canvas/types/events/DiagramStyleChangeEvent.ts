@@ -7,7 +7,7 @@ import type { VerticalAlign } from "../core/VerticalAlign";
 export type DiagramStyle = {
 	cornerRadius?: number;
 	stroke?: string;
-	strokeWidth?: string;
+	strokeWidth?: number;
 	strokeDashType?: StrokeDashType;
 	pathType?: PathType;
 	startArrowHead?: ArrowHeadType;

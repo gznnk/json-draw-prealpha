@@ -10,7 +10,7 @@ import { PathMinimap } from "../../Path";
 const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 	id,
 	stroke = "black",
-	strokeWidth = "1px",
+	strokeWidth = 1,
 	strokeDashType = "solid",
 	items = [],
 	pathType,

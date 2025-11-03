@@ -51,7 +51,7 @@ export const useAddRectangleShapeWithHandlerTool = (): ((
 					cornerRadius: args.rx || 0,
 					fill: args.fill,
 					stroke: args.stroke || "transparent",
-					strokeWidth: `${args.strokeWidth || 1}px`,
+					strokeWidth: args.strokeWidth ?? 1,
 					text: args.text || "",
 					textType: "textarea",
 					textAlign: args.textAlign || "center",

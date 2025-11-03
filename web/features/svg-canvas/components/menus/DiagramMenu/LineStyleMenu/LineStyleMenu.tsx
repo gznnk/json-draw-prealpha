@@ -36,23 +36,18 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 
 	// Get stroke width, path type, and stroke dash type from the first diagram
 	// If the property doesn't exist, it will be undefined
-	const strokeWidthStr = (firstDiagram as { strokeWidth?: string } | undefined)
-		?.strokeWidth;
+	const strokeWidth =
+		(firstDiagram as { strokeWidth?: number } | undefined)?.strokeWidth ?? 2;
 	const pathType = (firstDiagram as { pathType?: PathType } | undefined)
 		?.pathType;
 	const strokeDashType = (
 		firstDiagram as { strokeDashType?: StrokeDashType } | undefined
 	)?.strokeDashType;
 
-	// Convert strokeWidth from string (e.g., "2px") to number (e.g., 2)
-	const strokeWidth = strokeWidthStr
-		? Number.parseInt(strokeWidthStr.replace("px", ""), 10)
-		: 2;
-
 	const handleStrokeWidthChange = (width: number) => {
 		applyStyleChange({
 			items: selectedDiagrams,
-			styleData: { strokeWidth: `${width}px` },
+			styleData: { strokeWidth: width },
 		});
 	};
 

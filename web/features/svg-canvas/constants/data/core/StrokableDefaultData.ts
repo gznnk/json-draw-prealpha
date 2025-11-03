@@ -6,6 +6,6 @@ import type { StrokableData } from "../../../types/data/core/StrokableData";
  */
 export const StrokableDefaultData = {
 	stroke: "#000000",
-	strokeWidth: "1px",
+	strokeWidth: 1,
 	strokeDashType: "solid",
 } as const satisfies StrokableData;

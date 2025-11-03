@@ -42,7 +42,7 @@ const PathComponent: React.FC<PathProps> = ({
 	rotateEnabled,
 	inversionEnabled,
 	stroke = "black",
-	strokeWidth = "1px",
+	strokeWidth = 1,
 	strokeDashType = "solid",
 	isSelected = false,
 	isAncestorSelected = false,
@@ -339,7 +339,7 @@ const PathComponent: React.FC<PathProps> = ({
 				d={d}
 				fill="none"
 				stroke="transparent"
-				strokeWidth={5}
+				strokeWidth={Math.max(5, strokeWidth)}
 				cursor={dragEnabled ? "move" : "pointer"}
 				tabIndex={0}
 				ref={dragSvgRef}
@@ -351,7 +351,7 @@ const PathComponent: React.FC<PathProps> = ({
 					d={createDValue(items)}
 					fill="none"
 					stroke="rgba(24, 144, 255, 0.8)"
-					strokeWidth="1px"
+					strokeWidth={1}
 					strokeDasharray="4,2"
 					pointerEvents="none"
 				/>

@@ -132,7 +132,7 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 						d="M22 22 L2 2 Z"
 						fill="none"
 						stroke="#D0D4E0"
-						strokeWidth="1px"
+						strokeWidth={1}
 					/>
 				</svg>
 			</CanvasMenuItem>

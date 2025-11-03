@@ -6,6 +6,6 @@ import type { StrokeDashType } from "../../core/StrokeDashType";
  */
 export type StrokableData = {
 	stroke: string;
-	strokeWidth: string;
+	strokeWidth: number;
 	strokeDashType: StrokeDashType;
 };
