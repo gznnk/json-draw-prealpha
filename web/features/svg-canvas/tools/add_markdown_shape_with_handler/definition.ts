@@ -20,14 +20,12 @@ export const markdownShapeWithHandlerToolDefinition: ToolDefinition = {
 		{
 			name: "x",
 			type: "number",
-			description:
-				"The X coordinate of the top-left corner of the markdown box.",
+			description: "The X coordinate of the center of the markdown box.",
 		},
 		{
 			name: "y",
 			type: "number",
-			description:
-				"The Y coordinate of the top-left corner of the markdown box.",
+			description: "The Y coordinate of the center of the markdown box.",
 		},
 		{
 			name: "width",

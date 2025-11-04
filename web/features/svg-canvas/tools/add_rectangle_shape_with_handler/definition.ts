@@ -19,12 +19,12 @@ export const rectangleShapeWithHandlerToolDefinition: ToolDefinition = {
 		{
 			name: "x",
 			type: "number",
-			description: "The X coordinate of the top-left corner of the rectangle.",
+			description: "The X coordinate of the center of the rectangle.",
 		},
 		{
 			name: "y",
 			type: "number",
-			description: "The Y coordinate of the top-left corner of the rectangle.",
+			description: "The Y coordinate of the center of the rectangle.",
 		},
 		{
 			name: "width",

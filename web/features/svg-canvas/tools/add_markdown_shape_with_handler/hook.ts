@@ -30,14 +30,10 @@ export const useAddMarkdownShapeWithHandlerTool = (): ((
 				const width = args.width || 300;
 				const height = args.height || 200;
 
-				// Convert top-left coordinates to center coordinates
-				const centerX = args.x + width / 2;
-				const centerY = args.y + height / 2;
-
 				// Create markdown shape with styled appearance
 				const data = createRectangleState({
-					x: centerX,
-					y: centerY,
+					x: args.x,
+					y: args.y,
 					width,
 					height,
 					cornerRadius: 8, // Rounded corners for a modern look
@@ -63,8 +59,8 @@ export const useAddMarkdownShapeWithHandlerTool = (): ((
 					type: "Rectangle",
 					width: data.width,
 					height: data.height,
-					x: args.x,
-					y: args.y,
+					x: data.x,
+					y: data.y,
 				};
 			}
 			return null;
