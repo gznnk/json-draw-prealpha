@@ -1115,42 +1115,6 @@ const TransformativeComponent: React.FC<Props> = ({
 							doKeepProportion ? linearDragFunctionRightBottom : undefined
 						}
 					/>
-					{/* Top center DragPoint */}
-					<DragPoint
-						id={`${id}-topCenter`}
-						x={vertices.topCenterPoint.x}
-						y={vertices.topCenterPoint.y}
-						cursor={cursors.topCenter}
-						onDrag={handleDragTopCenter}
-						dragPositioningFunction={linearDragFunctionTopCenter}
-					/>
-					{/* Left center DragPoint */}
-					<DragPoint
-						id={`${id}-leftCenter`}
-						x={vertices.leftCenterPoint.x}
-						y={vertices.leftCenterPoint.y}
-						cursor={cursors.leftCenter}
-						onDrag={handleDragLeftCenter}
-						dragPositioningFunction={linearDragFunctionLeftCenter}
-					/>
-					{/* Right center DragPoint */}
-					<DragPoint
-						id={`${id}-rightCenter`}
-						x={vertices.rightCenterPoint.x}
-						y={vertices.rightCenterPoint.y}
-						cursor={cursors.rightCenter}
-						onDrag={handleDragRightCenter}
-						dragPositioningFunction={linearDragFunctionRightCenter}
-					/>
-					{/* Bottom center DragPoint */}
-					<DragPoint
-						id={`${id}-bottomCenter`}
-						x={vertices.bottomCenterPoint.x}
-						y={vertices.bottomCenterPoint.y}
-						cursor={cursors.bottomCenter}
-						onDrag={handleDragBottomCenter}
-						dragPositioningFunction={linearDragFunctionBottomCenter}
-					/>
 				</>
 			)}
 			{/* Rotate point. */}
