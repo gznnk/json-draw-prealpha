@@ -9,10 +9,10 @@ import { newId } from "../../../utils/shapes/common/newId";
 import { isConnectableState } from "../../../utils/validation/isConnectableState";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
-import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { createSelectedDiagramPathIndex } from "../../utils/createSelectedDiagramPathIndex";
 import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
 /**
@@ -84,23 +84,14 @@ const setSelectionState = (
 				// Only set isSelected to true for top-level items
 				// This ensures only top-level groups are selected in multi-select mode
 				newItem.isSelected = true;
-				if (isTransformativeState(newItem)) {
-					newItem.showTransformControls = true;
-				}
 			} else {
 				// Child elements are not selected
 				newItem.isSelected = false;
-				if (isTransformativeState(newItem)) {
-					newItem.showTransformControls = false;
-				}
 			}
 		} else {
 			// For single selection mode
 			// Only set isSelected to true if it's a top-level item
 			newItem.isSelected = isTopLevel;
-			if (isTransformativeState(newItem)) {
-				newItem.showTransformControls = isTopLevel;
-			}
 		}
 	}
 
@@ -226,7 +217,6 @@ const processConnectLineForPaste = (
 		startOwnerId: newStartOwnerId,
 		endOwnerId: newEndOwnerId,
 		isSelected: false, // Pasted connection lines are not selected
-		showTransformControls: false, // Hide transform controls for pasted connection lines
 		showOutline: false, // Hide outline for pasted connection lines
 		// Update path points (simply apply offset)
 		items: connectLine.items.map((point, index) => {
@@ -352,7 +342,6 @@ export const usePaste = (props: SvgCanvasSubHooksProps) => {
 								if (isSelectableState(item) && item.isSelected) {
 									return {
 										...item,
-										showTransformControls: false,
 										showOutline: true,
 									};
 								}
@@ -363,11 +352,16 @@ export const usePaste = (props: SvgCanvasSubHooksProps) => {
 						// Update isRootSelected state for all selected items
 						allItems = updateRootSelectedState(allItems);
 
+						// Create path index for selected diagrams
+						const selectedDiagramPathIndex =
+							createSelectedDiagramPathIndex(allItems);
+
 						// Add the pasted items to the canvas
 						return {
 							...prevState,
 							items: allItems,
 							multiSelectGroup,
+							selectedDiagramPathIndex,
 						};
 					});
 				} catch (error) {

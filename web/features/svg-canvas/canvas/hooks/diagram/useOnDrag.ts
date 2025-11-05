@@ -10,7 +10,6 @@ import { collectConnectedConnectLines } from "../../../utils/shapes/connectLine/
 import { updateConnectLinesByIds } from "../../../utils/shapes/connectLine/updateConnectLinesByIds";
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { isOriginableState } from "../../../utils/validation/isOriginableState";
-import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
@@ -125,11 +124,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 						isDragging && dragTriggeredTreeIds.current.has(diagram.id),
 				} as Diagram;
 
-				// Hide transform controls during drag for transformative items
-				if (isTransformativeState(newItem) && isDragging) {
-					newItem.showTransformControls = false;
-				}
-
 				// Update connect points
 				newItem = updateDiagramConnectPoints(newItem);
 
@@ -197,37 +191,6 @@ export const useOnDrag = (props: SvgCanvasSubHooksProps) => {
 
 			// If the drag event is ended
 			if (e.eventPhase === "Ended") {
-				// Restore showTransformControls from initial state for transformative items (recursively)
-				const restoreTransformControls = (diagram: Diagram): Diagram => {
-					let updated = diagram;
-
-					if (isTransformativeState(diagram)) {
-						const initialItem = initialItems.get(diagram.id);
-						if (initialItem && isTransformativeState(initialItem)) {
-							updated = {
-								...diagram,
-								showTransformControls: initialItem.showTransformControls,
-							} as Diagram;
-						}
-					}
-
-					// Recursively restore for children
-					if (isItemableState(updated)) {
-						updated = {
-							...updated,
-							items: updated.items.map(restoreTransformControls),
-						} as Diagram;
-					}
-
-					return updated;
-				};
-
-				newState.items = updateDiagramsByPath(
-					newState.items,
-					pathIndex.current,
-					restoreTransformControls,
-				);
-
 				// Update outline of all groups.
 				newState.items = updateOutlineOfAllItemables(newState.items);
 

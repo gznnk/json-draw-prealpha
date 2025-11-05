@@ -48,7 +48,6 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	isDragging = false,
 	isTransparent,
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	effectsEnabled = false,
 	onDrag,
@@ -56,7 +55,6 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	onDragLeave,
 	onClick,
 	onSelect,
-	onTransform,
 	onConnect,
 	onPreviewConnectLine,
 	onTextChange,
@@ -123,10 +121,8 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
-			showTransformControls={showTransformControls}
 			isTransforming={isTransforming}
 			transform={transform}
-			onTransform={onTransform}
 			onConnect={onConnect}
 			onPreviewConnectLine={onPreviewConnectLine}
 		>

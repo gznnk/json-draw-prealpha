@@ -5,6 +5,7 @@ import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasState } from "../../types/SvgCanvasState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { clearSelectionRecursively } from "../../utils/clearSelectionRecursively";
+import { createSelectedDiagramPathIndex } from "../../utils/createSelectedDiagramPathIndex";
 import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 import { useAddHistory } from "../history/useAddHistory";
 
@@ -43,9 +44,13 @@ export const useAddDiagram = (props: SvgCanvasSubHooksProps) => {
 			// Update isRootSelected state for all selected items
 			newItems = updateRootSelectedState(newItems);
 
+			// Create path index for selected diagrams
+			const selectedDiagramPathIndex = createSelectedDiagramPathIndex(newItems);
+
 			let newState = {
 				...prevState,
 				items: newItems,
+				selectedDiagramPathIndex,
 			} as SvgCanvasState;
 
 			// Add history

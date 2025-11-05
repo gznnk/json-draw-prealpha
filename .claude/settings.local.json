@@ -49,7 +49,8 @@
 			"mcp__serena__write_memory",
 			"Bash(cat:*)",
 			"WebSearch",
-			"Bash(npm run lint:*)"
+			"Bash(npm run lint:*)",
+			"Bash(dir:*)"
 		],
 		"deny": []
 	},

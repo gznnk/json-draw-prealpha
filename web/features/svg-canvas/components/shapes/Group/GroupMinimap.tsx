@@ -20,7 +20,6 @@ const GroupMinimapComponent: React.FC<GroupProps> = ({ items }) => {
 						{...item}
 						isSelected={false}
 						showOutline={false}
-						showTransformControls={false}
 						isTransforming={false}
 						isDragging={false}
 					/>

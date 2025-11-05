@@ -12,7 +12,6 @@ import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel/PositionLabel";
-import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 /**
@@ -24,15 +23,10 @@ const FrameComponent: React.FC<FrameProps> = ({
 	y,
 	width,
 	height,
-	minWidth,
-	minHeight,
 	rotation,
 	scaleX,
 	scaleY,
 	cornerRadius,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	fill = "transparent",
 	stroke = "black",
 	strokeWidth = 1,
@@ -42,7 +36,6 @@ const FrameComponent: React.FC<FrameProps> = ({
 	showConnectPoints = false,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	children,
 	onDrag,
@@ -50,7 +43,6 @@ const FrameComponent: React.FC<FrameProps> = ({
 	onDragLeave,
 	onClick,
 	onSelect,
-	onTransform,
 	onConnect,
 	onPreviewConnectLine,
 	onHoverChange,
@@ -167,27 +159,6 @@ const FrameComponent: React.FC<FrameProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="Frame"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					minWidth={minWidth}
-					minHeight={minHeight}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			<ConnectPoints
 				ownerId={id}
 				ownerFrame={ownerFrame}

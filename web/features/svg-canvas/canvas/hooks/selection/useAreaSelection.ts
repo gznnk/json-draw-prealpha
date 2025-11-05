@@ -15,7 +15,7 @@ import { InteractionState } from "../../types/InteractionState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
-import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
+import { createSelectedDiagramPathIndex } from "../../utils/createSelectedDiagramPathIndex";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
 import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
@@ -216,10 +216,7 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 						return item;
 					}
 					if (item.isSelected) {
-						return {
-							...item,
-							showTransformControls: true,
-						};
+						return item;
 					}
 					return item;
 				});
@@ -231,19 +228,20 @@ export const useAreaSelection = (props: SvgCanvasSubHooksProps) => {
 			items = updateOutlineBySelection(items);
 
 			/**
-			 * Step 5: Remove transform controls from non-transformative items (shared utility)
-			 */
-			items = removeNonTransformativeShowTransformControls(items);
-
-			/**
-			 * Step 6: Update isRootSelected state for all selected items
+			 * Step 5: Update isRootSelected state for all selected items
 			 */
 			items = updateRootSelectedState(items);
+
+			/**
+			 * Step 6: Create path index for selected diagrams for efficient access
+			 */
+			const selectedDiagramPathIndex = createSelectedDiagramPathIndex(items);
 
 			return {
 				...prevState,
 				items,
 				multiSelectGroup,
+				selectedDiagramPathIndex,
 			};
 		});
 	}, []);

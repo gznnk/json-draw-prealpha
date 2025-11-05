@@ -12,6 +12,7 @@ import { addDiagramToParentOrRoot } from "../../utils/addDiagramToParentOrRoot";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { bringConnectLinesForward } from "../../utils/bringConnectLinesForward";
 import { cleanupGroups } from "../../utils/cleanupGroups";
+import { createSelectedDiagramPathIndex } from "../../utils/createSelectedDiagramPathIndex";
 import { findParentCanvasContainingAllDiagrams } from "../../utils/findParentCanvasContainingAllDiagrams";
 import { removeDiagramsById } from "../../utils/removeDiagramsById";
 import { removeItemsFromDiagram } from "../../utils/removeItemsFromDiagram";
@@ -120,12 +121,17 @@ export const useOnGroup = (props: SvgCanvasSubHooksProps) => {
 
 				const outlineUpdatedItems = updateOutlineOfAllItemables(orderedItems);
 
+				// Create path index for selected diagrams (the new group)
+				const selectedDiagramPathIndex =
+					createSelectedDiagramPathIndex(outlineUpdatedItems);
+
 				// Create next state
 				const eventId = newEventId();
 				let nextState = {
 					...prevState,
 					items: outlineUpdatedItems,
 					multiSelectGroup: undefined,
+					selectedDiagramPathIndex,
 				} as SvgCanvasState;
 
 				// Add history

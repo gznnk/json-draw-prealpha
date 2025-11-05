@@ -45,6 +45,7 @@ export const useOnUngroup = (props: SvgCanvasSubHooksProps) => {
 					...prevState,
 					items: newItems,
 					multiSelectGroup: undefined,
+					selectedDiagramPathIndex: new Map(), // Clear path index since selection was cleared
 				} as SvgCanvasState;
 
 				// Add history

@@ -203,7 +203,6 @@ Please generate a complete HTML document that represents or visualizes the diagr
 				keepProportion={false}
 				rotateEnabled={true}
 				inversionEnabled={true}
-				showTransformControls={false}
 				isTransforming={false}
 				onPropagation={onPropagation}
 			>
@@ -226,7 +225,6 @@ Please generate a complete HTML document that represents or visualizes the diagr
 					connectEnabled={false}
 					showOutline={false}
 					isTransforming={false}
-					showTransformControls={false}
 					text={processIdList.length > 0 ? "Generating..." : "Generate HTML"}
 					isTextEditing={false}
 					effectsEnabled

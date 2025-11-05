@@ -5,7 +5,6 @@ import type { TransformativeData } from "../../data/core/TransformativeData";
  * Extends base data with runtime state that should not be persisted.
  */
 export type TransformativeState = TransformativeData & {
-	showTransformControls: boolean;
 	isTransforming: boolean;
 	minWidth?: number;
 	minHeight?: number;

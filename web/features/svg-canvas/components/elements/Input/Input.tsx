@@ -17,7 +17,6 @@ import { convertStrokeDashTypeToArray } from "../../../utils/shapes/common/conve
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { Outline } from "../../core/Outline";
 import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 /**
@@ -29,14 +28,9 @@ const InputComponent: React.FC<InputProps> = ({
 	y,
 	width,
 	height,
-	minWidth,
-	minHeight,
 	scaleX,
 	scaleY,
 	rotation,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	fill = InputDefaultData.fill,
 	stroke = InputDefaultData.stroke,
 	strokeWidth = InputDefaultData.strokeWidth,
@@ -60,14 +54,12 @@ const InputComponent: React.FC<InputProps> = ({
 	connectEnabled = true,
 	connectType = "both",
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
 	onDragLeave,
 	onClick,
 	onSelect,
-	onTransform,
 	onConnect,
 	onPreviewConnectLine,
 	onTextChange,
@@ -261,27 +253,6 @@ const InputComponent: React.FC<InputProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="Input"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					minWidth={minWidth}
-					minHeight={minHeight}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			<ConnectPoints
 				ownerId={id}
 				ownerFrame={ownerFrame}

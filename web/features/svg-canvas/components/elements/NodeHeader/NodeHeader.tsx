@@ -125,7 +125,6 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 				connectEnabled={false}
 				showOutline={false}
 				isTransforming={false}
-				showTransformControls={false}
 				onDrag={onDrag}
 				onSelect={onSelect}
 				onClick={onClick}

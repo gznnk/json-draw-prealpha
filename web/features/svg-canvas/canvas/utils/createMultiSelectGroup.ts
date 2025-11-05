@@ -35,7 +35,6 @@ export const createMultiSelectGroup = (
 		inversionEnabled: true,
 		isSelected: true,
 		showOutline: true,
-		showTransformControls: true,
 		isTransforming: false,
 		itemableType: "group",
 		items: [],

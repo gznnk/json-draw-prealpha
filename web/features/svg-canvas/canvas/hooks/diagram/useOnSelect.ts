@@ -10,8 +10,8 @@ import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { createSelectedDiagramPathIndex } from "../../utils/createSelectedDiagramPathIndex";
 import { getAncestorItemsById } from "../../utils/getAncestorItemsById";
-import { removeNonTransformativeShowTransformControls } from "../../utils/removeNonTransformativeShowTransformControls";
 import { updateOutlineBySelection } from "../../utils/updateOutlineBySelection";
 import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
@@ -215,7 +215,6 @@ export const useOnSelect = (
 						return {
 							...item,
 							isSelected: newSelectionState,
-							showTransformControls: newSelectionState,
 							showOutline: newSelectionState,
 						};
 					}
@@ -223,7 +222,6 @@ export const useOnSelect = (
 					return {
 						...item,
 						isSelected: true,
-						showTransformControls: true, // Show transform controls when selected.
 						showOutline: true, // Show outline when selected.
 					};
 				}
@@ -232,7 +230,6 @@ export const useOnSelect = (
 					// If Ctrl is pressed, keep the current selection state.
 					return {
 						...item,
-						showTransformControls: item.isSelected, // Keep transform controls visibility based on current selection state.
 						showOutline: item.isSelected, // Keep outline visibility based on current selection state.
 					};
 				}
@@ -241,7 +238,6 @@ export const useOnSelect = (
 				return {
 					...item,
 					isSelected: false,
-					showTransformControls: false, // Hide transform controls when not selected.
 					showOutline: false, // Hide outline when not selected.
 				};
 			});
@@ -286,7 +282,6 @@ export const useOnSelect = (
 										return {
 											...child,
 											isSelected: false,
-											showTransformControls: false,
 											showOutline: true, // Keep outline visible for children of selected groups
 										};
 									}
@@ -296,7 +291,6 @@ export const useOnSelect = (
 									...item,
 									items: deselectedItems,
 									isSelected: true,
-									showTransformControls: false,
 									showOutline: true, // Show outline for the group.
 								} as Diagram;
 							}
@@ -304,15 +298,11 @@ export const useOnSelect = (
 							// If no selection change, return with updated items
 							return {
 								...item,
-								showTransformControls: false,
 								items: updatedItems,
 							} as Diagram;
 						}
 
-						return {
-							...item,
-							showTransformControls: false,
-						} as Diagram;
+						return item;
 					};
 
 					return items.map(processItem);
@@ -324,17 +314,17 @@ export const useOnSelect = (
 			// After processing the selection, update the items to show outlines and transform controls based on selection state.
 			items = updateOutlineBySelection(items);
 
-			// If the item is not transformative, remove the showTransformControls property.
-			// Remove showTransformControls from non-transformative items using shared utility
-			items = removeNonTransformativeShowTransformControls(items);
-
 			// Update isRootSelected state for all selected items
 			items = updateRootSelectedState(items);
+
+			// Create path index for selected diagrams for efficient access
+			const selectedDiagramPathIndex = createSelectedDiagramPathIndex(items);
 
 			return {
 				...prevState,
 				items,
 				multiSelectGroup,
+				selectedDiagramPathIndex,
 			};
 		});
 	}, []);

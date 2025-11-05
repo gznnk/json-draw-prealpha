@@ -16,7 +16,6 @@ const NodeHeaderMinimapComponent: React.FC<NodeHeaderProps> = ({
 	fontSize,
 	fontFamily,
 	fontWeight,
-	iconComponent: _IconComponent,
 	iconBackgroundColor,
 }) => {
 	// Constants for layout (simplified for minimap)

@@ -11,7 +11,6 @@ import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
-import { Transformative } from "../../core/Transformative";
 
 /**
  * Image component.
@@ -25,20 +24,14 @@ const ImageComponent: React.FC<ImageProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	isSelected,
 	isAncestorSelected = false,
 	base64Data,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
-	isTransforming = false,
 	onDrag,
 	onClick,
 	onSelect,
-	onTransform,
 }) => {
 	// Reference to the element.
 	const svgRef = useRef<SVGImageElement>({} as SVGImageElement);
@@ -106,25 +99,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="Rectangle"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}

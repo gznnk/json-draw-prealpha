@@ -5,28 +5,22 @@ import type { BaseShapeProps } from "../../../types/props/shapes/BaseShapeProps"
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
-import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../ConnectPoints";
 
 /**
  * BaseShape component that wraps common interactive functionality
- * Provides Textable, Outline, Transformative, ConnectPoints, and PositionLabel
+ * Provides Textable, Outline, ConnectPoints, and PositionLabel
+ * Note: Transformative is now rendered centrally in SvgCanvas
  */
 const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 	id,
-	type,
 	x,
 	y,
 	width,
 	height,
-	minWidth,
-	minHeight,
 	rotation,
 	scaleX,
 	scaleY,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	isSelected,
 	connectPoints,
 	showConnectPoints = false,
@@ -43,10 +37,8 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 	isTextEditEnabled = true,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	transform,
-	onTransform,
 	onConnect,
 	onPreviewConnectLine,
 	children,
@@ -98,27 +90,6 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type={type}
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					minWidth={minWidth}
-					minHeight={minHeight}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			{connectPoints && (
 				<ConnectPoints
 					ownerId={id}

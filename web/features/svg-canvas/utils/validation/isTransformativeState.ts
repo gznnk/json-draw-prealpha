@@ -20,7 +20,7 @@ export const isTransformativeState = (
 		"scaleX" in obj &&
 		"scaleY" in obj &&
 		"keepProportion" in obj &&
-		"showTransformControls" in obj &&
+		"isTransforming" in obj &&
 		typeof (obj as TransformativeState).x === "number" &&
 		typeof (obj as TransformativeState).y === "number" &&
 		typeof (obj as TransformativeState).width === "number" &&
@@ -29,6 +29,6 @@ export const isTransformativeState = (
 		typeof (obj as TransformativeState).scaleX === "number" &&
 		typeof (obj as TransformativeState).scaleY === "number" &&
 		typeof (obj as TransformativeState).keepProportion === "boolean" &&
-		typeof (obj as TransformativeState).showTransformControls === "boolean"
+		typeof (obj as TransformativeState).isTransforming === "boolean"
 	);
 };

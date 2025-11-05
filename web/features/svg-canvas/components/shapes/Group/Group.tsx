@@ -4,13 +4,11 @@ import { DiagramRegistry } from "../../../registry";
 import type { GroupProps } from "../../../types/props/shapes/GroupProps";
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
-import { Transformative } from "../../core/Transformative";
 
 /**
  * Group component.
  */
 const GroupComponent: React.FC<GroupProps> = ({
-	id,
 	x,
 	y,
 	width,
@@ -18,19 +16,13 @@ const GroupComponent: React.FC<GroupProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	isSelected,
 	items,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
-	isTransforming = false,
 	onDrag,
 	onClick,
 	onSelect,
-	onTransform,
 	onDragOver,
 	onDragLeave,
 	onHoverChange,
@@ -58,7 +50,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 			onClick,
 			onSelect,
 			onDrag,
-			onTransform,
 			onDragOver,
 			onDragLeave,
 			onHoverChange,
@@ -85,25 +76,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{!isDragging && (
-				<Transformative
-					id={id}
-					type="Group"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}

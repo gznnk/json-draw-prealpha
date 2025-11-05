@@ -318,11 +318,12 @@ import { CreateDefaultState } from "./CreateDefaultState";
 /**
  * Default state values for MyShape
  */
-export const MyShapeDefaultState: MyShapeState = CreateDefaultState<MyShapeState>({
-	type: "MyShape",
-	options: MyShapeFeatures,
-	baseData: MyShapeDefaultData,
-});
+export const MyShapeDefaultState: MyShapeState =
+	CreateDefaultState<MyShapeState>({
+		type: "MyShape",
+		options: MyShapeFeatures,
+		baseData: MyShapeDefaultData,
+	});
 ```
 
 ### Step 6: Implement Utility Functions
@@ -363,9 +364,8 @@ import { createDataToStateMapper } from "../../core/createDataToStateMapper";
 /**
  * Maps MyShape data to state
  */
-export const mapMyShapeDataToState = createDataToStateMapper<MyShapeState>(
-	MyShapeDefaultState,
-);
+export const mapMyShapeDataToState =
+	createDataToStateMapper<MyShapeState>(MyShapeDefaultState);
 
 export const myShapeDataToState = (data: DiagramData): Diagram =>
 	mapMyShapeDataToState(data);
@@ -589,25 +589,6 @@ const MyShapeComponent: React.FC<MyShapeProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-
-			{/* Transform controls */}
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="MyShape"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 
 			{/* Connect points */}
 			<ConnectPoints

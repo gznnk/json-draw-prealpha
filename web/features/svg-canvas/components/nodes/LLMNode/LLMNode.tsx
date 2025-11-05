@@ -292,7 +292,6 @@ const LLMNodeComponent: React.FC<LLMNodeProps> = (props) => {
 				isAncestorSelected={isAncestorSelected}
 				showOutline={false}
 				isTransforming={false}
-				showTransformControls={false}
 				connectType="end-only"
 				onDrag={handleDrag}
 				onDragOver={onDragOver}

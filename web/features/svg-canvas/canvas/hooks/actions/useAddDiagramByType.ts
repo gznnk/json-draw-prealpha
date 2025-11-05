@@ -6,7 +6,6 @@ import type { DiagramType } from "../../../types/core/DiagramType";
 import type { AddDiagramByTypeEvent } from "../../../types/events/AddDiagramByTypeEvent";
 import type { Diagram } from "../../../types/state/core/Diagram";
 import { isSelectableState } from "../../../utils/validation/isSelectableState";
-import { isTransformativeState } from "../../../utils/validation/isTransformativeState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 
 /**
@@ -71,9 +70,6 @@ export const useAddDiagramByType = (props: SvgCanvasSubHooksProps) => {
 		if (e.isSelected && isSelectableState(data)) {
 			data.isSelected = true;
 			data.showOutline = true;
-			if (isTransformativeState(data)) {
-				data.showTransformControls = true;
-			}
 		}
 
 		if (data) {

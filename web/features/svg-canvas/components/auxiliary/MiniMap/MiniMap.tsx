@@ -232,7 +232,6 @@ const MiniMapComponent: React.FC<MiniMapProps> = ({
 				key: item.id,
 				isSelected: false,
 				showOutline: false,
-				showTransformControls: false,
 				showConnectPoints: false,
 				isTransforming: false,
 				isDragging: false,

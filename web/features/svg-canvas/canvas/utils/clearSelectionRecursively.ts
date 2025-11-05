@@ -17,7 +17,6 @@ export const clearSelectionRecursively = (items: Diagram[]): Diagram[] => {
 				isSelected: false,
 				isRootSelected: false,
 				isAncestorSelected: false,
-				showTransformControls: false,
 				showOutline: false,
 			};
 		}

@@ -14,7 +14,6 @@ import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransf
 import { isValidSvgString } from "../../../utils/validation/isValidSvgString";
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
-import { Transformative } from "../../core/Transformative";
 
 /**
  * Svg component.
@@ -28,9 +27,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	isSelected,
 	isAncestorSelected = false,
 	initialWidth,
@@ -38,12 +34,9 @@ const SvgComponent: React.FC<SvgProps> = ({
 	svgText,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
-	isTransforming = false,
 	onDrag,
 	onClick,
 	onSelect,
-	onTransform,
 }) => {
 	// Reference to the element.
 	const svgRef = useRef<SVGRectElement>({} as SVGRectElement);
@@ -141,25 +134,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{showTransformControls && (
-				<Transformative
-					id={id}
-					type="Svg"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}

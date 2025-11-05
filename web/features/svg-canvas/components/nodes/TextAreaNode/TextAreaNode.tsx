@@ -264,7 +264,6 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 					connectEnabled={false}
 					showOutline={false}
 					isTransforming={false}
-					showTransformControls={false}
 					text="Send"
 					isTextEditing={false}
 					effectsEnabled
@@ -305,7 +304,6 @@ const TextAreaNodeComponent: React.FC<TextAreaNodeProps> = (props) => {
 				rotateEnabled={rotateEnabled}
 				showOutline={false}
 				isTransforming={false}
-				showTransformControls={false}
 				onDrag={handleDrag}
 				onSelect={handleSelect}
 				onClick={handleClick}

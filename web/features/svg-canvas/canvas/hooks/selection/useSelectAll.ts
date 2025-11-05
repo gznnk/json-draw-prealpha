@@ -6,6 +6,7 @@ import { isSelectableState } from "../../../utils/validation/isSelectableState";
 import type { SvgCanvasSubHooksProps } from "../../types/SvgCanvasSubHooksProps";
 import { applyFunctionRecursively } from "../../utils/applyFunctionRecursively";
 import { createMultiSelectGroup } from "../../utils/createMultiSelectGroup";
+import { createSelectedDiagramPathIndex } from "../../utils/createSelectedDiagramPathIndex";
 import { updateRootSelectedState } from "../../utils/updateRootSelectedState";
 
 /**
@@ -74,6 +75,9 @@ export const useSelectAll = (props: SvgCanvasSubHooksProps) => {
 				return prevState;
 			}
 
+			// Create path index for selected diagrams
+			const selectedDiagramPathIndex = createSelectedDiagramPathIndex(items);
+
 			return {
 				...prevState,
 				items,
@@ -81,6 +85,7 @@ export const useSelectAll = (props: SvgCanvasSubHooksProps) => {
 					multiSelectGroupItems,
 					prevState.multiSelectGroup?.keepProportion ?? true,
 				),
+				selectedDiagramPathIndex,
 			};
 		});
 	}, []);

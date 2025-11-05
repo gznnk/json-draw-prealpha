@@ -47,7 +47,6 @@ const createMockGroup = (
 	rotateEnabled: true,
 	inversionEnabled: true,
 	isSelected: false,
-	showTransformControls: false,
 	showOutline: false,
 	isTransforming: false,
 	itemableType: "group",

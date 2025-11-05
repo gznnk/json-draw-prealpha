@@ -5,6 +5,7 @@ import type { SvgCanvasHistory } from "./SvgCanvasHistory";
 import type { SvgCanvasPanZoom } from "./SvgCanvasPanZoom";
 import type { Prettify } from "../../../../shared/utility-types";
 import type { TextEditorState } from "../../components/core/Textable";
+import type { DiagramPathIndex } from "../../types/core/DiagramPath";
 import type { Diagram } from "../../types/state/core/Diagram";
 import type { GroupState } from "../../types/state/shapes/GroupState";
 import type { PathState } from "../../types/state/shapes/PathState";
@@ -17,6 +18,8 @@ export type SvgCanvasState = Prettify<
 		id: string;
 		items: Diagram[];
 		multiSelectGroup?: GroupState;
+		/** Path index for selected diagrams for efficient access */
+		selectedDiagramPathIndex: DiagramPathIndex;
 		history: SvgCanvasHistory[];
 		historyIndex: number;
 		lastHistoryEventId: string;

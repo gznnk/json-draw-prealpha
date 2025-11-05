@@ -41,14 +41,12 @@ const StickyComponent: React.FC<StickyProps> = ({
 	isTextEditing = false,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
 	onDragLeave,
 	onClick,
 	onSelect,
-	onTransform,
 	onTextChange,
 	onHoverChange,
 }) => {
@@ -141,10 +139,8 @@ const StickyComponent: React.FC<StickyProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
-			showTransformControls={showTransformControls}
 			isTransforming={isTransforming}
 			transform={transform}
-			onTransform={onTransform}
 		>
 			{/* Main sticky note with folded corner */}
 			<polygon

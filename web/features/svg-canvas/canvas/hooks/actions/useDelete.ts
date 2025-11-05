@@ -64,6 +64,7 @@ export const useDelete = (props: SvgCanvasSubHooksProps) => {
 				...prevState,
 				items: outlineUpdatedItems,
 				multiSelectGroup: undefined, // Hide the multi-select group because the selected items were deleted.
+				selectedDiagramPathIndex: new Map(), // Clear path index since all selected items were deleted.
 			} as SvgCanvasState;
 
 			const eventId = newEventId();

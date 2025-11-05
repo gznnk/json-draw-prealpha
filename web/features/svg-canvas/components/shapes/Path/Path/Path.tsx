@@ -11,7 +11,6 @@ import { mergeProps } from "../../../../utils/core/mergeProps";
 import { getMarkerUrl } from "../../../../utils/shapes/path/getMarkerUrl";
 import { Outline } from "../../../core/Outline";
 import { PositionLabel } from "../../../core/PositionLabel";
-import { Transformative } from "../../../core/Transformative";
 import { NewVertexList } from "../NewVertexList";
 import { PathPoint } from "../PathPoint";
 import { SegmentList } from "../SegmentList";
@@ -21,7 +20,6 @@ import { useDrag } from "../../../../hooks/useDrag";
 import { useSelect } from "../../../../hooks/useSelect";
 import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { convertStrokeDashTypeToArray } from "../../../../utils/shapes/common/convertStrokeDashTypeToArray";
-import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { createPathDValue } from "../../../../utils/shapes/path/createPathDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
@@ -38,9 +36,6 @@ const PathComponent: React.FC<PathProps> = ({
 	rotation,
 	scaleX,
 	scaleY,
-	keepProportion = false,
-	rotateEnabled,
-	inversionEnabled,
 	stroke = "black",
 	strokeWidth = 1,
 	strokeDashType = "solid",
@@ -48,8 +43,6 @@ const PathComponent: React.FC<PathProps> = ({
 	isAncestorSelected = false,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
-	isTransforming = false,
 	items = [],
 	pathType,
 	dragEnabled = true,
@@ -62,7 +55,6 @@ const PathComponent: React.FC<PathProps> = ({
 	onClick,
 	onDrag,
 	onSelect,
-	onTransform,
 	onDiagramChange,
 }) => {
 	const [draggingPathPointId, setDraggingPathPointId] = useState<string | null>(
@@ -268,19 +260,6 @@ const PathComponent: React.FC<PathProps> = ({
 		[],
 	);
 
-	// Transformative click event handler
-	const handleTransformativeClick = useCallback(
-		(e: DiagramClickEvent) => {
-			if (
-				verticesModeEnabled &&
-				isPointerOver(dragSvgRef, e.clientX, e.clientY)
-			) {
-				setMode("Vertices");
-			}
-		},
-		[verticesModeEnabled],
-	);
-
 	// Generate polyline d attribute value
 	const d = createPathDValue(items, pathType);
 
@@ -306,9 +285,6 @@ const PathComponent: React.FC<PathProps> = ({
 
 	// Display flag for path points
 	const showPathPoints = mode === "Vertices";
-
-	// Display flag for transformative
-	const showTransformative = mode === "Transform";
 
 	// Display flag for dashed guide lines (Bézier mode + Vertices mode)
 	const showDashedGuideLines =
@@ -398,27 +374,6 @@ const PathComponent: React.FC<PathProps> = ({
 						onDrag={handlePathPointDrag}
 					/>
 				))}
-			{/* Transformative for transform mode */}
-			{showTransformative && (
-				<Transformative
-					id={id}
-					type="Path"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-					onClick={handleTransformativeClick}
-				/>
-			)}
 			{/* Position label. */}
 			{showPositionLabel && (
 				<PositionLabel

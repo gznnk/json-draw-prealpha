@@ -487,7 +487,6 @@ const AiComponent: React.FC<AiProps> = (props) => {
 					rotateEnabled={false}
 					showOutline={false}
 					isTransforming={false}
-					showTransformControls={false}
 					onDrag={handleChildDrag}
 					onSelect={handleChildSelect}
 					onClick={handleChildClick}
@@ -513,7 +512,6 @@ const AiComponent: React.FC<AiProps> = (props) => {
 				connectEnabled={false}
 				showOutline={false}
 				isTransforming={false}
-				showTransformControls={false}
 				text="Send"
 				isTextEditing={false}
 				effectsEnabled

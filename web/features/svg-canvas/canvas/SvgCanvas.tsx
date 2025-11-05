@@ -1,3 +1,4 @@
+import type { JSX } from "@emotion/react/jsx-runtime";
 import React, {
 	forwardRef,
 	memo,
@@ -22,6 +23,7 @@ import { InteractionState } from "./types/InteractionState";
 import type { SvgCanvasProps } from "./types/SvgCanvasProps";
 import type { SvgCanvasRef } from "./types/SvgCanvasRef";
 import type { SvgCanvasState } from "./types/SvgCanvasState";
+import { getDiagramByPath } from "./utils/getDiagramByPath";
 import {
 	getNextZoomLevel,
 	getPreviousZoomLevel,
@@ -42,6 +44,7 @@ import {
 } from "../components/auxiliary/RightPanelContainer";
 import { ZoomControls } from "../components/auxiliary/ZoomControls";
 import { TextEditor } from "../components/core/Textable";
+import { Transformative } from "../components/core/Transformative";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
 import { DiagramMenu } from "../components/menus/DiagramMenu";
@@ -55,6 +58,7 @@ import { DiagramRegistry } from "../registry";
 import type { SvgViewport } from "../types/core/SvgViewport";
 import { getSelectedDiagrams } from "../utils/core/getSelectedDiagrams";
 import { newEventId } from "../utils/core/newEventId";
+import { isTransformativeState } from "../utils/validation/isTransformativeState";
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
 
 // TODO: 実行する場所を考える
@@ -83,6 +87,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			interactionState,
 			suppressContextMenu,
 			showDragGhost,
+			selectedDiagramPathIndex,
 			// actions
 			onClick,
 			onConnect,
@@ -163,6 +168,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			interactionState,
 			suppressContextMenu,
 			showDragGhost,
+			selectedDiagramPathIndex,
 			areaSelectionState: selectionState || {
 				startX: 0,
 				startY: 0,
@@ -186,6 +192,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			interactionState,
 			suppressContextMenu,
 			showDragGhost,
+			selectedDiagramPathIndex,
 			areaSelectionState: selectionState || {
 				startX: 0,
 				startY: 0,
@@ -492,7 +499,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			const props = {
 				...item,
 				key: item.id,
-				onTransform,
 				onDiagramChange,
 				onDrag,
 				onDragOver,
@@ -508,6 +514,41 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 
 			return React.createElement(component, props);
 		});
+
+		// Render Transformative for selected items or multiSelectGroup
+		// Only one Transformative is rendered at a time:
+		// - multiSelectGroup takes priority if it exists (multiple items selected)
+		// - Otherwise, render for the single selected item that is transformable
+		let renderedTransformative: JSX.Element | null = null;
+
+		// Multi-select case: render Transformative for the group
+		if (multiSelectGroup && isTransformativeState(multiSelectGroup)) {
+			renderedTransformative = (
+				<Transformative
+					key={`transformative-${MULTI_SELECT_GROUP}`}
+					{...multiSelectGroup}
+					id={MULTI_SELECT_GROUP}
+					type="Group"
+					onTransform={onTransform}
+				/>
+			);
+		} else {
+			// Single-select case: get the selected item using path index for efficient access
+			const paths = Array.from(selectedDiagramPathIndex.values());
+			if (paths.length === 1) {
+				const selectedItem = getDiagramByPath(items, paths[0]);
+				if (selectedItem && isTransformativeState(selectedItem)) {
+					renderedTransformative = (
+						<Transformative
+							key={`transformative-${selectedItem.id}`}
+							{...selectedItem}
+							onTransform={onTransform}
+							onClick={onClick}
+						/>
+					);
+				}
+			}
+		}
 
 		return (
 			<EventBusProvider eventBus={eventBus}>
@@ -546,12 +587,10 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									{renderedItems}
 									{/* Dummy group for multi-select. */}
 									{multiSelectGroup && (
-										<Group
-											{...multiSelectGroup}
-											id={MULTI_SELECT_GROUP}
-											onTransform={onTransform}
-										/>
+										<Group {...multiSelectGroup} id={MULTI_SELECT_GROUP} />
 									)}
+									{/* Render Transformative controls for selected item or multiSelectGroup */}
+									{renderedTransformative}
 									{/* Render preview connect line. */}
 									<PreviewConnectLine pathData={previewConnectLineState} />
 									{/* Render flash connect lines */}

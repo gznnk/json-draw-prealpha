@@ -46,14 +46,12 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	isDragging = false,
 	isTransparent,
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
 	onDragLeave,
 	onClick,
 	onSelect,
-	onTransform,
 	onConnect,
 	onPreviewConnectLine,
 	onTextChange,
@@ -120,10 +118,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
-			showTransformControls={showTransformControls}
 			isTransforming={isTransforming}
 			transform={transform}
-			onTransform={onTransform}
 			onConnect={onConnect}
 			onPreviewConnectLine={onPreviewConnectLine}
 		>

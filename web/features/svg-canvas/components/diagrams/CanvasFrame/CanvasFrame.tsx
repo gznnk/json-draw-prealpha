@@ -49,7 +49,6 @@ import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransf
 import { isItemableState } from "../../../utils/validation/isItemableState";
 import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
-import { Transformative } from "../../core/Transformative";
 import { ConnectPoints } from "../../shapes/ConnectPoints";
 
 /**
@@ -61,14 +60,9 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	y,
 	width,
 	height,
-	minWidth,
-	minHeight,
 	rotation,
 	scaleX,
 	scaleY,
-	keepProportion,
-	rotateEnabled,
-	inversionEnabled,
 	isSelected,
 	isRootSelected,
 	isAncestorSelected,
@@ -80,13 +74,11 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	connectEnabled = true,
 	isDragging = false,
 	showOutline = false,
-	showTransformControls = false,
 	isTransforming = false,
 	isTransparent,
 	onDrag,
 	onClick,
 	onSelect,
-	onTransform,
 	onDragOver,
 	onDragLeave,
 	onDrop,
@@ -426,7 +418,6 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 			onClick,
 			onSelect,
 			onDrag: handleChildDrag,
-			onTransform,
 			onDragOver,
 			onDragLeave,
 			onHoverChange: handleChildHoverChange,
@@ -657,27 +648,6 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 				scaleY={scaleY}
 				showOutline={showOutline}
 			/>
-			{!isDragging && (
-				<Transformative
-					id={id}
-					type="CanvasFrame"
-					x={x}
-					y={y}
-					width={width}
-					height={height}
-					minWidth={minWidth}
-					minHeight={minHeight}
-					rotation={rotation}
-					scaleX={scaleX}
-					scaleY={scaleY}
-					keepProportion={keepProportion}
-					rotateEnabled={rotateEnabled}
-					inversionEnabled={inversionEnabled}
-					showTransformControls={showTransformControls}
-					isTransforming={isTransforming}
-					onTransform={onTransform}
-				/>
-			)}
 			{connectPoints && (
 				<ConnectPoints
 					ownerId={id}

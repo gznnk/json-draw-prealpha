@@ -6,8 +6,8 @@ import type { DiagramType } from "../../../types/core/DiagramType";
 import type { Point } from "../../../types/core/Point";
 import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
+import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
-import type { TransformativeProps } from "../../../types/props/core/TransformativeProps";
 import type { TransformativeState } from "../../../types/state/core/TransformativeState";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { nanToZero } from "../../../utils/math/common/nanToZero";
@@ -30,11 +30,12 @@ import { RotatePoint } from "../RotatePoint";
  * Props for the Transformative component.
  * Combines transformation data, selection state, and transformation event handlers.
  */
-type Props = TransformativeState &
-	TransformativeProps & {
-		id: string;
-		type: DiagramType;
-	};
+type Props = TransformativeState & {
+	id: string;
+	type: DiagramType;
+	onTransform?: (e: DiagramTransformEvent) => void;
+	onClick?: (e: DiagramClickEvent) => void;
+};
 
 /**
  * Component that handles transformation of diagram elements.
@@ -54,7 +55,6 @@ const TransformativeComponent: React.FC<Props> = ({
 	keepProportion,
 	rotateEnabled,
 	inversionEnabled,
-	showTransformControls,
 	onTransform,
 	onClick,
 }) => {
@@ -855,30 +855,24 @@ const TransformativeComponent: React.FC<Props> = ({
 
 	// Monitor shift key state
 	useEffect(() => {
-		let handleKeyDown: (e: KeyboardEvent) => void;
-		let handleKeyUp: (e: KeyboardEvent) => void;
-		if (showTransformControls) {
-			handleKeyDown = (e: KeyboardEvent) => {
-				setShiftKeyDown(e.shiftKey);
-			};
-			handleKeyUp = (e: KeyboardEvent) => {
-				if (e.key === "Shift") {
-					setShiftKeyDown(false);
-				}
-			};
+		const handleKeyDown = (e: KeyboardEvent) => {
+			setShiftKeyDown(e.shiftKey);
+		};
+		const handleKeyUp = (e: KeyboardEvent) => {
+			if (e.key === "Shift") {
+				setShiftKeyDown(false);
+			}
+		};
 
-			window.addEventListener("keydown", handleKeyDown);
-			window.addEventListener("keyup", handleKeyUp);
-		}
+		window.addEventListener("keydown", handleKeyDown);
+		window.addEventListener("keyup", handleKeyUp);
 
 		return () => {
 			// Cleanup
-			if (showTransformControls) {
-				window.removeEventListener("keydown", handleKeyDown);
-				window.removeEventListener("keyup", handleKeyUp);
-			}
+			window.removeEventListener("keydown", handleKeyDown);
+			window.removeEventListener("keyup", handleKeyUp);
 		};
-	}, [showTransformControls]);
+	}, []);
 
 	// Rotation
 	const rotationPoint = efficientAffineTransformation(
@@ -993,11 +987,6 @@ const TransformativeComponent: React.FC<Props> = ({
 		},
 		[id, onClick],
 	);
-
-	// Don't render if the component is not selected.
-	if (!showTransformControls) {
-		return null;
-	}
 
 	// Get the cursor for each drag point based on the rotation angle.
 	const cursors = {

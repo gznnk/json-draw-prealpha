@@ -22,6 +22,7 @@ export const useClearAllSelection = (props: SvgCanvasSubHooksProps) => {
 			...prevState,
 			items: clearSelectionRecursively(prevState.items),
 			multiSelectGroup: undefined,
+			selectedDiagramPathIndex: new Map(),
 		}));
 	}, []);
 };

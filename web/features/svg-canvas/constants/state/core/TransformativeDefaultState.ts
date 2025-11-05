@@ -3,6 +3,5 @@ import { TransformativeDefaultData } from "../../data/core/TransformativeDefault
 
 export const TransformativeDefaultState = {
 	...TransformativeDefaultData,
-	showTransformControls: false,
 	isTransforming: false,
 } as const satisfies TransformativeState;

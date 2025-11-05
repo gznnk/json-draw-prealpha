@@ -23,6 +23,7 @@ export const canvasDataToState = (
 		minY: data.minY,
 		zoom: data.zoom,
 		items: stateItems,
+		selectedDiagramPathIndex: new Map(),
 		history: [
 			{
 				id: data.id,

@@ -67,7 +67,6 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 			strokeWidth={strokeWidth}
 			strokeDashType={strokeDashType}
 			isSelected={isSelected}
-			showTransformControls={false}
 			showOutline={false}
 			isTransforming={false}
 			pathType={pathType}
