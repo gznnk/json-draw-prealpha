@@ -18,7 +18,7 @@ import { PathElement } from "./PathStyled";
 import { useClick } from "../../../../hooks/useClick";
 import { useDrag } from "../../../../hooks/useDrag";
 import { useSelect } from "../../../../hooks/useSelect";
-import { useTransformControlClick } from "../../../../hooks/useTransformControlClick";
+import { useTransformControl } from "../../../../hooks/useTransformControl";
 import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { convertStrokeDashTypeToArray } from "../../../../utils/shapes/common/convertStrokeDashTypeToArray";
 import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
@@ -132,8 +132,8 @@ const PathComponent: React.FC<PathProps> = ({
 		[],
 	);
 
-	// Listen for transform control click events
-	useTransformControlClick({
+	// Listen for transform control click events and manage visibility
+	const { setShowTransformControl } = useTransformControl({
 		id,
 		ref: dragSvgRef,
 		onTransformControlClick: handleTransformControlClick,
@@ -170,6 +170,12 @@ const PathComponent: React.FC<PathProps> = ({
 			setMode("Inactive");
 		}
 	}, [isSelected, transformEnabled]);
+
+	// Control transform control visibility based on mode
+	useEffect(() => {
+		// Show transform controls only when NOT in Vertices mode
+		setShowTransformControl(mode !== "Vertices");
+	}, [mode, setShowTransformControl]);
 
 	// Generate drag properties for path element.
 	const dragProps = useDrag({

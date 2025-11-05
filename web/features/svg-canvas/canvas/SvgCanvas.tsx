@@ -88,6 +88,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			suppressContextMenu,
 			showDragGhost,
 			selectedDiagramPathIndex,
+			hideTransformativeForDiagramIds,
 			// actions
 			onClick,
 			onConnect,
@@ -169,6 +170,7 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			suppressContextMenu,
 			showDragGhost,
 			selectedDiagramPathIndex,
+			hideTransformativeForDiagramIds: new Set(),
 			areaSelectionState: selectionState || {
 				startX: 0,
 				startY: 0,
@@ -193,6 +195,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			suppressContextMenu,
 			showDragGhost,
 			selectedDiagramPathIndex,
+			hideTransformativeForDiagramIds:
+				canvasStateRef.current.hideTransformativeForDiagramIds,
 			areaSelectionState: selectionState || {
 				startX: 0,
 				startY: 0,
@@ -537,7 +541,11 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 			const paths = Array.from(selectedDiagramPathIndex.values());
 			if (paths.length === 1) {
 				const selectedItem = getDiagramByPath(items, paths[0]);
-				if (selectedItem && isTransformativeState(selectedItem)) {
+				if (
+					selectedItem &&
+					isTransformativeState(selectedItem) &&
+					!hideTransformativeForDiagramIds.has(selectedItem.id)
+				) {
 					renderedTransformative = (
 						<Transformative
 							key={`transformative-${selectedItem.id}`}

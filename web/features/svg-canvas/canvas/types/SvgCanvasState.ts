@@ -20,6 +20,8 @@ export type SvgCanvasState = Prettify<
 		multiSelectGroup?: GroupState;
 		/** Path index for selected diagrams for efficient access */
 		selectedDiagramPathIndex: DiagramPathIndex;
+		/** Set of diagram IDs that should hide their transform controls */
+		hideTransformativeForDiagramIds: Set<string>;
 		history: SvgCanvasHistory[];
 		historyIndex: number;
 		lastHistoryEventId: string;
