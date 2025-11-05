@@ -18,8 +18,10 @@ import { PathElement } from "./PathStyled";
 import { useClick } from "../../../../hooks/useClick";
 import { useDrag } from "../../../../hooks/useDrag";
 import { useSelect } from "../../../../hooks/useSelect";
+import { useTransformControlClick } from "../../../../hooks/useTransformControlClick";
 import { calcOrientedFrameFromPoints } from "../../../../utils/math/geometry/calcOrientedFrameFromPoints";
 import { convertStrokeDashTypeToArray } from "../../../../utils/shapes/common/convertStrokeDashTypeToArray";
+import { isPointerOver } from "../../../../utils/shapes/common/isPointerOver";
 import { createDValue } from "../../../../utils/shapes/path/createDValue";
 import { createPathDValue } from "../../../../utils/shapes/path/createPathDValue";
 import { isItemableData } from "../../../../utils/validation/isItemableData";
@@ -113,6 +115,29 @@ const PathComponent: React.FC<PathProps> = ({
 		}
 		onClick?.(e);
 	}, []);
+
+	// Transform control click event handler
+	const handleTransformControlClick = useCallback(
+		(e: { clientX: number; clientY: number }) => {
+			const { verticesModeEnabled } = refBus.current;
+
+			// Switch to Vertices mode when transform control is clicked on the path itself
+			if (
+				verticesModeEnabled &&
+				isPointerOver(dragSvgRef, e.clientX, e.clientY)
+			) {
+				setMode("Vertices");
+			}
+		},
+		[],
+	);
+
+	// Listen for transform control click events
+	useTransformControlClick({
+		id,
+		ref: dragSvgRef,
+		onTransformControlClick: handleTransformControlClick,
+	});
 
 	// Path drag event handler
 	const handlePathDrag = useCallback((e: DiagramDragEvent) => {

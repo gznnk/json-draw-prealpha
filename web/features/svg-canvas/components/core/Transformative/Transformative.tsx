@@ -2,6 +2,8 @@ import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
+import { EVENT_NAME_TRANSFORM_CONTROL_CLICK } from "../../../constants/core/EventNames";
+import { useEventBus } from "../../../context/EventBusContext";
 import type { DiagramType } from "../../../types/core/DiagramType";
 import type { Point } from "../../../types/core/Point";
 import type { DiagramClickEvent } from "../../../types/events/DiagramClickEvent";
@@ -9,6 +11,7 @@ import type { DiagramDragEvent } from "../../../types/events/DiagramDragEvent";
 import type { DiagramTransformEvent } from "../../../types/events/DiagramTransformEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import type { TransformativeState } from "../../../types/state/core/TransformativeState";
+import { newEventId } from "../../../utils/core/newEventId";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { nanToZero } from "../../../utils/math/common/nanToZero";
 import { radiansToDegrees } from "../../../utils/math/common/radiansToDegrees";
@@ -34,7 +37,6 @@ type Props = TransformativeState & {
 	id: string;
 	type: DiagramType;
 	onTransform?: (e: DiagramTransformEvent) => void;
-	onClick?: (e: DiagramClickEvent) => void;
 };
 
 /**
@@ -56,8 +58,9 @@ const TransformativeComponent: React.FC<Props> = ({
 	rotateEnabled,
 	inversionEnabled,
 	onTransform,
-	onClick,
 }) => {
+	const eventBus = useEventBus();
+
 	const [isResizing, setIsResizing] = useState(false);
 	const [isRotating, setIsRotating] = useState(false);
 	const [isShiftKeyDown, setShiftKeyDown] = useState(false);
@@ -974,18 +977,23 @@ const TransformativeComponent: React.FC<Props> = ({
 
 	/**
 	 * Handle click events from drag lines and points.
-	 * Forwards the click event with the correct id to the parent component.
+	 * Emits TransformControlClickEvent via EventBus for decoupled handling.
 	 */
 	const handleClick = useCallback(
 		(e: DiagramClickEvent) => {
-			if (onClick) {
-				onClick({
-					...e,
-					id,
-				});
-			}
+			// Emit event via EventBus for shapes to listen to
+			eventBus.dispatchEvent(
+				new CustomEvent(EVENT_NAME_TRANSFORM_CONTROL_CLICK, {
+					detail: {
+						eventId: newEventId(),
+						id,
+						clientX: e.clientX,
+						clientY: e.clientY,
+					},
+				}),
+			);
 		},
-		[id, onClick],
+		[id, eventBus],
 	);
 
 	// Get the cursor for each drag point based on the rotation angle.

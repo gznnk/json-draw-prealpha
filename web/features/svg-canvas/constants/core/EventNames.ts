@@ -6,6 +6,8 @@
 
 // Diagram interaction events
 export const EVENT_NAME_BROADCAST_DRAG = "BroadcastDrag" as const;
+export const EVENT_NAME_TRANSFORM_CONTROL_CLICK =
+	"TransformControlClick" as const;
 
 // Tool events
 export const ADD_NEW_DIAGRAM_EVENT_NAME = "AddNewDiagram" as const;
@@ -49,6 +51,7 @@ export const EVENT_NAME_CANVAS_ZOOM = "CanvasZoom" as const;
  */
 export type SvgCanvasEventNames =
 	| typeof EVENT_NAME_BROADCAST_DRAG
+	| typeof EVENT_NAME_TRANSFORM_CONTROL_CLICK
 	| typeof EVENT_NAME_FLASH_CONNECT_LINE
 	| typeof EVENT_NAME_CONNECTION
 	| typeof EVENT_NAME_CONNECT_SHAPES

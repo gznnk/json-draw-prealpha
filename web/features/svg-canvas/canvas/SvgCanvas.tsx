@@ -543,7 +543,6 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 							key={`transformative-${selectedItem.id}`}
 							{...selectedItem}
 							onTransform={onTransform}
-							onClick={onClick}
 						/>
 					);
 				}
