@@ -1,7 +1,7 @@
 import type React from "react";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-import { ROTATE_POINT_MARGIN } from "./TransformativeConstants";
+import { ROTATE_POINT_MARGIN } from "./TransformControlConstants";
 import { EVENT_NAME_TRANSFORM_CONTROL_CLICK } from "../../../constants/core/EventNames";
 import { useEventBus } from "../../../context/EventBusContext";
 import type { DiagramType } from "../../../types/core/DiagramType";
@@ -24,10 +24,10 @@ import { calcRadians } from "../../../utils/math/points/calcRadians";
 import { efficientAffineTransformation } from "../../../utils/math/transform/efficientAffineTransformation";
 import { efficientInverseAffineTransformation } from "../../../utils/math/transform/efficientInverseAffineTransformation";
 import { getCursorFromAngle } from "../../../utils/shapes/common/getCursorFromAngle";
-import { BottomLabel } from "../BottomLabel";
-import { DragLine } from "../DragLine";
-import { DragPoint } from "../DragPoint";
-import { RotatePoint } from "../RotatePoint";
+import { BottomLabel } from "../../core/BottomLabel";
+import { DragLine } from "../../core/DragLine";
+import { DragPoint } from "../../core/DragPoint";
+import { RotatePoint } from "../../core/RotatePoint";
 
 /**
  * Props for the Transformative component.
@@ -43,7 +43,7 @@ type Props = TransformativeState & {
  * Component that handles transformation of diagram elements.
  * Provides handles for resizing, rotating, and moving elements on the canvas.
  */
-const TransformativeComponent: React.FC<Props> = ({
+const TransformControlComponent: React.FC<Props> = ({
 	id,
 	x,
 	y,
@@ -1177,4 +1177,4 @@ const TransformativeComponent: React.FC<Props> = ({
 	);
 };
 
-export const Transformative = memo(TransformativeComponent);
+export const TransformControl = memo(TransformControlComponent);

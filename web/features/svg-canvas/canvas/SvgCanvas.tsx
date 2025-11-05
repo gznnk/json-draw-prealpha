@@ -42,9 +42,9 @@ import {
 	BottomPanelContainer,
 	RightPanelContainer,
 } from "../components/auxiliary/RightPanelContainer";
+import { TransformControl } from "../components/auxiliary/TransformControl";
 import { ZoomControls } from "../components/auxiliary/ZoomControls";
 import { TextEditor } from "../components/core/Textable";
-import { Transformative } from "../components/core/Transformative";
 import { CanvasMenu } from "../components/menus/CanvasMenu";
 import { ContextMenu, useContextMenu } from "../components/menus/ContextMenu";
 import { DiagramMenu } from "../components/menus/DiagramMenu";
@@ -524,8 +524,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// Multi-select case: render Transformative for the group
 		if (multiSelectGroup && isTransformativeState(multiSelectGroup)) {
 			renderedTransformative = (
-				<Transformative
-					key={`transformative-${MULTI_SELECT_GROUP}`}
+				<TransformControl
+					key={`transform-control-${MULTI_SELECT_GROUP}`}
 					{...multiSelectGroup}
 					id={MULTI_SELECT_GROUP}
 					type="Group"
@@ -543,8 +543,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 					!selectedItem.hideTransformControl
 				) {
 					renderedTransformative = (
-						<Transformative
-							key={`transformative-${selectedItem.id}`}
+						<TransformControl
+							key={`transform-control-${selectedItem.id}`}
 							{...selectedItem}
 							onTransform={onTransform}
 						/>
