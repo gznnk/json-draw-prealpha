@@ -15,7 +15,6 @@ import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { negativeToZero } from "../../../utils/math/common/negativeToZero";
 import { convertStrokeDashTypeToArray } from "../../../utils/shapes/common/convertStrokeDashTypeToArray";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-import { Outline } from "../../core/Outline";
 import { Textable } from "../../core/Textable";
 import { ConnectPoints } from "../../shapes/ConnectPoints";
 
@@ -53,7 +52,6 @@ const InputComponent: React.FC<InputProps> = ({
 	showConnectPoints = false,
 	connectEnabled = true,
 	connectType = "both",
-	showOutline = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
@@ -243,16 +241,6 @@ const InputComponent: React.FC<InputProps> = ({
 					isTextEditing={isTextEditing}
 				/>
 			)}
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
 			<ConnectPoints
 				ownerId={id}
 				ownerFrame={ownerFrame}

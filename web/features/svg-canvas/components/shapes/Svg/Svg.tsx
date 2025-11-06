@@ -12,7 +12,6 @@ import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { isValidSvgString } from "../../../utils/validation/isValidSvgString";
-import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 
 /**
@@ -33,7 +32,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 	initialHeight,
 	svgText,
 	isDragging = false,
-	showOutline = false,
 	onDrag,
 	onClick,
 	onSelect,
@@ -124,16 +122,6 @@ const SvgComponent: React.FC<SvgProps> = ({
 					{...composedProps}
 				/>
 			</g>
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}

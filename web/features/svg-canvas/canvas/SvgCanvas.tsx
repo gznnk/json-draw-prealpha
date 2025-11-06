@@ -36,6 +36,7 @@ import { GridBackground } from "../components/auxiliary/GridBackground";
 import { GridPattern } from "../components/auxiliary/GridPattern";
 import { MarkerDefs } from "../components/auxiliary/MarkerDefs";
 import { MiniMap } from "../components/auxiliary/MiniMap";
+import { Outline } from "../components/auxiliary/Outline";
 import { PointerCaptureElement } from "../components/auxiliary/PointerCaptureElement";
 import { PreviewConnectLine } from "../components/auxiliary/PreviewConnectLine";
 import {
@@ -56,8 +57,14 @@ import { SvgCanvasStateProvider } from "../context/SvgCanvasStateContext";
 import { SvgViewportProvider } from "../context/SvgViewportContext";
 import { DiagramRegistry } from "../registry";
 import type { SvgViewport } from "../types/core/SvgViewport";
+import {
+	collectOutlinedDiagrams,
+	type OutlineData,
+} from "../utils/core/collectOutlinedDiagrams";
 import { getSelectedDiagrams } from "../utils/core/getSelectedDiagrams";
 import { newEventId } from "../utils/core/newEventId";
+import { isFrame } from "../utils/validation/isFrame";
+import { isSelectableState } from "../utils/validation/isSelectableState";
 import { isTransformativeState } from "../utils/validation/isTransformativeState";
 import { useShortcutKey } from "./hooks/keyboard/useShortcutKey";
 
@@ -520,40 +527,112 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 		// - multiSelectGroup takes priority if it exists (multiple items selected)
 		// - Otherwise, render for the single selected item that is transformable
 		let renderedTransformative: JSX.Element | null = null;
-
-		// Multi-select case: render Transformative for the group
-		if (multiSelectGroup && isTransformativeState(multiSelectGroup)) {
-			renderedTransformative = (
-				<TransformControl
-					key={`transform-control-${MULTI_SELECT_GROUP}`}
-					{...multiSelectGroup}
-					id={MULTI_SELECT_GROUP}
-					type="Group"
-					zoom={zoom}
-					onTransform={onTransform}
-				/>
-			);
-		} else {
-			// Single-select case: get the selected item using path index for efficient access
-			const paths = Array.from(selectedDiagramPathIndex.values());
-			if (paths.length === 1) {
-				const selectedItem = getDiagramByPath(items, paths[0]);
-				if (
-					selectedItem &&
-					isTransformativeState(selectedItem) &&
-					!selectedItem.hideTransformControl
-				) {
-					renderedTransformative = (
-						<TransformControl
-							key={`transform-control-${selectedItem.id}`}
-							{...selectedItem}
-							zoom={zoom}
-							onTransform={onTransform}
-						/>
-					);
+		if (interactionState !== InteractionState.Dragging) {
+			// Multi-select case: render Transformative for the group
+			if (multiSelectGroup && isTransformativeState(multiSelectGroup)) {
+				renderedTransformative = (
+					<TransformControl
+						key={`transform-control-${MULTI_SELECT_GROUP}`}
+						{...multiSelectGroup}
+						id={MULTI_SELECT_GROUP}
+						type="Group"
+						zoom={zoom}
+						onTransform={onTransform}
+					/>
+				);
+			} else {
+				// Single-select case: get the selected item using path index for efficient access
+				const paths = Array.from(selectedDiagramPathIndex.values());
+				if (paths.length === 1) {
+					const selectedItem = getDiagramByPath(items, paths[0]);
+					if (
+						selectedItem &&
+						isTransformativeState(selectedItem) &&
+						!selectedItem.hideTransformControl
+					) {
+						renderedTransformative = (
+							<TransformControl
+								key={`transform-control-${selectedItem.id}`}
+								{...selectedItem}
+								zoom={zoom}
+								onTransform={onTransform}
+							/>
+						);
+					}
 				}
 			}
 		}
+
+		// Optimize outline collection during interactions
+		// During Dragging/Transforming/Changing, only check selected diagrams instead of full tree traversal
+		const isInteracting =
+			interactionState === InteractionState.Dragging ||
+			interactionState === InteractionState.Transforming ||
+			interactionState === InteractionState.Changing;
+
+		let outlinesToRender: OutlineData[] = [];
+
+		if (isInteracting) {
+			// Fast path: only check selected diagrams
+			const paths = Array.from(selectedDiagramPathIndex.values());
+			if (paths.length === 1) {
+				const diagram = getDiagramByPath(items, paths[0]);
+				if (
+					diagram &&
+					isSelectableState(diagram) &&
+					diagram.showOutline &&
+					isFrame(diagram)
+				) {
+					outlinesToRender.push({
+						id: diagram.id,
+						x: diagram.x,
+						y: diagram.y,
+						width: diagram.width,
+						height: diagram.height,
+						rotation: diagram.rotation,
+						scaleX: diagram.scaleX,
+						scaleY: diagram.scaleY,
+					});
+				}
+			}
+		} else {
+			// Normal path: full tree traversal
+			outlinesToRender = collectOutlinedDiagrams(items);
+		}
+
+		// Add multiSelectGroup outline if it exists and has showOutline
+		if (
+			multiSelectGroup &&
+			isSelectableState(multiSelectGroup) &&
+			multiSelectGroup.showOutline &&
+			isFrame(multiSelectGroup)
+		) {
+			outlinesToRender.push({
+				id: MULTI_SELECT_GROUP,
+				x: multiSelectGroup.x,
+				y: multiSelectGroup.y,
+				width: multiSelectGroup.width,
+				height: multiSelectGroup.height,
+				rotation: multiSelectGroup.rotation,
+				scaleX: multiSelectGroup.scaleX,
+				scaleY: multiSelectGroup.scaleY,
+			});
+		}
+
+		// Render all outlines
+		const renderedOutlines = outlinesToRender.map((outline) => (
+			<Outline
+				key={`outline-${outline.id}`}
+				x={outline.x}
+				y={outline.y}
+				width={outline.width}
+				height={outline.height}
+				rotation={outline.rotation}
+				scaleX={outline.scaleX}
+				scaleY={outline.scaleY}
+				showOutline={true}
+			/>
+		));
 
 		return (
 			<EventBusProvider eventBus={eventBus}>
@@ -596,6 +675,8 @@ const SvgCanvasComponent = forwardRef<SvgCanvasRef, SvgCanvasProps>(
 									)}
 									{/* Render Transformative controls for selected item or multiSelectGroup */}
 									{renderedTransformative}
+									{/* Render outlines for all diagrams with showOutline=true */}
+									{renderedOutlines}
 									{/* Render preview connect line. */}
 									<PreviewConnectLine pathData={previewConnectLineState} />
 									{/* Render flash connect lines */}

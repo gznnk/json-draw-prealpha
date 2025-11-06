@@ -47,7 +47,6 @@ import { isToolPayload } from "../../../utils/execution/isToolPayload";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
 import { isItemableState } from "../../../utils/validation/isItemableState";
-import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { ConnectPoints } from "../../shapes/ConnectPoints";
 
@@ -73,7 +72,6 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 	showConnectPoints = false,
 	connectEnabled = true,
 	isDragging = false,
-	showOutline = false,
 	isTransforming = false,
 	isTransparent,
 	onDrag,
@@ -638,16 +636,6 @@ const CanvasFrameComponent: React.FC<CanvasFrameProps> = ({
 					/>
 				)}
 			</svg>
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
 			{connectPoints && (
 				<ConnectPoints
 					ownerId={id}

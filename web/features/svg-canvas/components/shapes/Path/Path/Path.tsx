@@ -9,7 +9,6 @@ import type { PathProps } from "../../../../types/props/shapes/PathProps";
 import type { PathState } from "../../../../types/state/shapes/PathState";
 import { mergeProps } from "../../../../utils/core/mergeProps";
 import { getMarkerUrl } from "../../../../utils/shapes/path/getMarkerUrl";
-import { Outline } from "../../../core/Outline";
 import { PositionLabel } from "../../../core/PositionLabel";
 import { NewVertexList } from "../NewVertexList";
 import { PathPoint } from "../PathPoint";
@@ -44,7 +43,6 @@ const PathComponent: React.FC<PathProps> = ({
 	isSelected = false,
 	isAncestorSelected = false,
 	isDragging = false,
-	showOutline = false,
 	items = [],
 	pathType,
 	dragEnabled = true,
@@ -311,9 +309,6 @@ const PathComponent: React.FC<PathProps> = ({
 	// Display flag for new vertices
 	const showNewVertex = mode === "Vertices" && !draggingPathPointId;
 
-	// Display flag for outline
-	const doShowOutline = showOutline && mode !== "Vertices";
-
 	// Display flag for path points
 	const showPathPoints = mode === "Vertices";
 
@@ -382,17 +377,6 @@ const PathComponent: React.FC<PathProps> = ({
 					onDiagramChange={handleDiagramChangeForVertexAndSegmentDrag}
 				/>
 			)}
-			{/* Outline for the path */}
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={doShowOutline}
-			/>
 			{/* Path points for vertices mode */}
 			{showPathPoints &&
 				linePoints.map((point) => (

@@ -2,7 +2,6 @@ import React, { memo } from "react";
 
 import { DiagramRegistry } from "../../../registry";
 import type { GroupProps } from "../../../types/props/shapes/GroupProps";
-import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 
 /**
@@ -19,7 +18,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 	isSelected,
 	items,
 	isDragging = false,
-	showOutline = false,
 	onDrag,
 	onClick,
 	onSelect,
@@ -66,16 +64,6 @@ const GroupComponent: React.FC<GroupProps> = ({
 	return (
 		<>
 			{children}
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}

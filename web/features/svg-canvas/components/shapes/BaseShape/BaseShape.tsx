@@ -2,15 +2,13 @@ import type React from "react";
 import { memo, useMemo } from "react";
 
 import type { BaseShapeProps } from "../../../types/props/shapes/BaseShapeProps";
-import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 import { Textable } from "../../core/Textable";
 import { ConnectPoints } from "../ConnectPoints";
 
 /**
  * BaseShape component that wraps common interactive functionality
- * Provides Textable, Outline, ConnectPoints, and PositionLabel
- * Note: Transformative is now rendered centrally in SvgCanvas
+ * Provides Textable, ConnectPoints, and PositionLabel
  */
 const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 	id,
@@ -36,7 +34,6 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 	isTextEditing,
 	isTextEditEnabled = true,
 	isDragging = false,
-	showOutline = false,
 	isTransforming = false,
 	transform,
 	onConnect,
@@ -80,16 +77,6 @@ const BaseShapeComponent: React.FC<BaseShapeProps> = ({
 					isTextEditing={isTextEditing}
 				/>
 			)}
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
 			{connectPoints && (
 				<ConnectPoints
 					ownerId={id}

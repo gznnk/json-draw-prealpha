@@ -9,7 +9,6 @@ import type { ImageProps } from "../../../types/props/shapes/ImageProps";
 import { mergeProps } from "../../../utils/core/mergeProps";
 import { degreesToRadians } from "../../../utils/math/common/degreesToRadians";
 import { createSvgTransform } from "../../../utils/shapes/common/createSvgTransform";
-import { Outline } from "../../core/Outline";
 import { PositionLabel } from "../../core/PositionLabel";
 
 /**
@@ -28,7 +27,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 	isAncestorSelected = false,
 	base64Data,
 	isDragging = false,
-	showOutline = false,
 	onDrag,
 	onClick,
 	onSelect,
@@ -89,16 +87,6 @@ const ImageComponent: React.FC<ImageProps> = ({
 					{...composedProps}
 				/>
 			</g>
-			<Outline
-				x={x}
-				y={y}
-				width={width}
-				height={height}
-				rotation={rotation}
-				scaleX={scaleX}
-				scaleY={scaleY}
-				showOutline={showOutline}
-			/>
 			{isSelected && isDragging && (
 				<PositionLabel
 					x={x}
