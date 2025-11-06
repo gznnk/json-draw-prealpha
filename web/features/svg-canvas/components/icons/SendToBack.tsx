@@ -19,8 +19,8 @@ const SendToBackComponent: React.FC<IconProps> = ({
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<title>{title}</title>
-			<polygon points="4,3.5 12,14 20,3.5" fill={fill} />
-			<polygon points="4,12 12,22 20,12" fill={fill} />
+			<polygon points="4,3 12,13 20,3" fill={fill} />
+			<polygon points="4,12 12,21 20,12" fill={fill} />
 		</svg>
 	);
 };

@@ -19,7 +19,7 @@ const SendBackwardComponent: React.FC<IconProps> = ({
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<title>{title}</title>
-			<polygon points="4,6.5 12,18 20,6.5" fill={fill} />
+			<polygon points="4,6 12,17 20,6" fill={fill} />
 		</svg>
 	);
 };

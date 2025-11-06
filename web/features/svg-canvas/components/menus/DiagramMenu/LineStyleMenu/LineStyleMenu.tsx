@@ -10,7 +10,10 @@ import { useStyleChange } from "../../../../hooks/useStyleChange";
 import type { PathType } from "../../../../types/core/PathType";
 import type { StrokeDashType } from "../../../../types/core/StrokeDashType";
 import type { Diagram } from "../../../../types/state/core/Diagram";
+import { DashedLine } from "../../../icons/DashedLine";
+import { DottedLine } from "../../../icons/DottedLine";
 import { LineStyle as LineStyleIcon } from "../../../icons/LineStyle";
+import { SolidLine } from "../../../icons/SolidLine";
 import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuControl } from "../DiagramMenuControl";
 import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
@@ -21,8 +24,6 @@ type LineStyleMenuProps = {
 	onToggle: () => void;
 	selectedDiagrams: Diagram[];
 };
-
-const strokeDashTypes: StrokeDashType[] = ["solid", "dashed", "dotted"];
 
 const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 	isOpen,
@@ -133,32 +134,27 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 
 						{/* Stroke Dash Type */}
 						<LineStyleSection>
-							{strokeDashTypes.map((dashType) => (
-								<LineStyleButton
-									key={dashType}
-									isActive={strokeDashType === dashType}
-									onClick={() => handleStrokeDashChange(dashType)}
-									title={`${dashType} line`}
-								>
-									<svg width="24" height="24" viewBox="0 0 24 24">
-										<line
-											x1="4"
-											y1="12"
-											x2="20"
-											y2="12"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeDasharray={
-												dashType === "dashed"
-													? "4,2"
-													: dashType === "dotted"
-														? "1,2"
-														: undefined
-											}
-										/>
-									</svg>
-								</LineStyleButton>
-							))}
+							<LineStyleButton
+								isActive={strokeDashType === "solid"}
+								onClick={() => handleStrokeDashChange("solid")}
+								title="Solid line"
+							>
+								<SolidLine />
+							</LineStyleButton>
+							<LineStyleButton
+								isActive={strokeDashType === "dashed"}
+								onClick={() => handleStrokeDashChange("dashed")}
+								title="Dashed line"
+							>
+								<DashedLine />
+							</LineStyleButton>
+							<LineStyleButton
+								isActive={strokeDashType === "dotted"}
+								onClick={() => handleStrokeDashChange("dotted")}
+								title="Dotted line"
+							>
+								<DottedLine />
+							</LineStyleButton>
 						</LineStyleSection>
 					</LineStyleMenuWrapper>
 				</DiagramMenuControl>

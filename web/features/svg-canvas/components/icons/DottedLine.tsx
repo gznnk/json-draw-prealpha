@@ -3,16 +3,16 @@ import { memo } from "react";
 import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
- * Bring to front icon component
+ * Dotted line icon component
  *
  * @param props - Props for the icon
  * @param props.width - Icon width
  * @param props.height - Icon height
- * @param props.fill - SVG fill color
+ * @param props.fill - SVG stroke color
  * @param props.title - Accessible title for the icon
- * @returns SVG element for bring to front icon
+ * @returns SVG element for dotted line icon
  */
-const BringToFrontComponent: React.FC<IconProps> = ({
+const DottedLineComponent: React.FC<IconProps> = ({
 	width = 24,
 	height = 24,
 	fill = "#333333",
@@ -26,10 +26,17 @@ const BringToFrontComponent: React.FC<IconProps> = ({
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<title>{title}</title>
-			<polygon points="4,12 12,3 20,12" fill={fill} />
-			<polygon points="4,21 12,11 20,21" fill={fill} />
+			<line
+				x1="1"
+				y1="12"
+				x2="23"
+				y2="12"
+				stroke={fill}
+				strokeWidth="2"
+				strokeDasharray="2,2"
+			/>
 		</svg>
 	);
 };
 
-export const BringToFront = memo(BringToFrontComponent);
+export const DottedLine = memo(DottedLineComponent);

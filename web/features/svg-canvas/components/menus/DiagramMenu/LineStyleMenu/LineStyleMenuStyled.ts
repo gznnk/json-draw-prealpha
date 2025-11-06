@@ -23,13 +23,12 @@ type LineStyleButtonProps = {
 	isActive: boolean;
 };
 
-export const LineStyleButton = styled.button<LineStyleButtonProps>`
+export const LineStyleButton = styled.div<LineStyleButtonProps>`
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 32px;
 	height: 32px;
-	padding: 4px;
 	border: 1px solid ${(props) => (props.isActive ? "#6b7280" : "transparent")};
 	border-radius: 6px;
 	background-color: ${(props) => (props.isActive ? "#f9fafb" : "transparent")};
