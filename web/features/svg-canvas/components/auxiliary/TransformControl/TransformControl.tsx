@@ -290,6 +290,7 @@ const TransformControlComponent: React.FC<Props> = ({
 		rotation,
 		scaleX,
 		scaleY,
+		zoom,
 		onTransform,
 		// Internal variables and functions
 		vertices,
@@ -880,9 +881,11 @@ const TransformControlComponent: React.FC<Props> = ({
 	}, []);
 
 	// Rotation
+	// Adjust rotation point margin based on zoom to maintain consistent visual distance
+	const adjustedRotatePointMargin = ROTATE_POINT_MARGIN / zoom;
 	const rotationPoint = efficientAffineTransformation(
-		width / 2 + ROTATE_POINT_MARGIN,
-		-(height / 2 + ROTATE_POINT_MARGIN),
+		width / 2 + adjustedRotatePointMargin,
+		-(height / 2 + adjustedRotatePointMargin),
 		1,
 		1,
 		radians,
@@ -966,12 +969,15 @@ const TransformControlComponent: React.FC<Props> = ({
 	}, []);
 
 	const dragFunctionRotationPoint = useCallback((rx: number, ry: number) => {
-		const { x, y, width } = refBus.current;
+		const { x, y, width, zoom } = refBus.current;
+
+		// Adjust rotation point margin based on zoom to maintain consistent visual distance
+		const adjustedRotatePointMargin = ROTATE_POINT_MARGIN / zoom;
 
 		return calcClosestCircleIntersection(
 			x,
 			y,
-			width / 2 + ROTATE_POINT_MARGIN,
+			width / 2 + adjustedRotatePointMargin,
 			rx,
 			ry,
 		);
