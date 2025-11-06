@@ -144,7 +144,7 @@ export const useDiagramMenuState = (
 			menuY = minY;
 		}
 
-		return { x: menuX, y: menuY };
+		return { x: Math.round(menuX), y: Math.round(menuY) };
 	}, [
 		menuDimensions,
 		multiSelectGroup,
