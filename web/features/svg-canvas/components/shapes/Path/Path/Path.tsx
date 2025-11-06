@@ -1,9 +1,7 @@
 import type React from "react";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 
-import type { PathMode } from "./PathTypes";
 import type { DiagramChangeEvent } from "../../../../types/events/DiagramChangeEvent";
-import type { DiagramClickEvent } from "../../../../types/events/DiagramClickEvent";
 import type { DiagramDragEvent } from "../../../../types/events/DiagramDragEvent";
 import type { PathProps } from "../../../../types/props/shapes/PathProps";
 import type { PathState } from "../../../../types/state/shapes/PathState";
@@ -43,9 +41,7 @@ const PathComponent: React.FC<PathProps> = ({
 	isDragging = false,
 	items = [],
 	pathType,
-	dragEnabled = true,
-	verticesModeEnabled = true,
-	rightAngleSegmentDrag = false,
+	dragType = "whole",
 	fixBothEnds = false,
 	startArrowHead = "None",
 	endArrowHead = "None",
@@ -57,8 +53,6 @@ const PathComponent: React.FC<PathProps> = ({
 	const [draggingPathPointId, setDraggingPathPointId] = useState<string | null>(
 		null,
 	);
-	const [isSequentialSelection, setIsSequentialSelection] = useState(false);
-	const [mode, setMode] = useState<PathMode>("Inactive");
 
 	const dragSvgRef = useRef<SVGPathElement>({} as SVGPathElement);
 
@@ -76,61 +70,25 @@ const PathComponent: React.FC<PathProps> = ({
 		scaleX,
 		scaleY,
 		isSelected,
-		dragEnabled,
-		verticesModeEnabled,
+		dragType,
 		items,
 		onDrag,
 		onSelect,
 		onClick,
 		onDiagramChange,
-		// Internal variables and functions
-		isSequentialSelection,
-		mode,
 	};
 	const refBus = useRef(refBusVal);
 	refBus.current = refBusVal;
 
-	// Path pointer down event handler
-	const handlePathPointerDown = useCallback(() => {
-		const { isSelected } = refBus.current;
-
-		if (isSelected) {
-			setIsSequentialSelection(true);
-		}
-	}, []);
-
-	// Path click event handler
-	const handlePathClick = useCallback((e: DiagramClickEvent) => {
-		const { isSequentialSelection, verticesModeEnabled, onClick } =
-			refBus.current;
-
-		if (isSequentialSelection && verticesModeEnabled) {
-			setMode("Vertices");
-		}
-		onClick?.(e);
-	}, []);
-
 	// Path drag event handler
 	const handlePathDrag = useCallback((e: DiagramDragEvent) => {
-		const { dragEnabled, onDrag } = refBus.current;
+		const { dragType, onDrag } = refBus.current;
 
-		// Disable dragging by suppressing event when drag is disabled
-		if (!dragEnabled) {
-			return;
+		// Only allow whole path dragging for "whole" type
+		if (dragType === "whole") {
+			onDrag?.(e);
 		}
-
-		onDrag?.(e);
 	}, []);
-
-	// Path selection state control
-	useEffect(() => {
-		if (isSelected) {
-			setMode("Vertices");
-		} else {
-			setIsSequentialSelection(false);
-			setMode("Inactive");
-		}
-	}, [isSelected]);
 
 	// Generate drag properties for path element.
 	const dragProps = useDrag({
@@ -139,7 +97,6 @@ const PathComponent: React.FC<PathProps> = ({
 		x,
 		y,
 		ref: dragSvgRef,
-		onPointerDown: handlePathPointerDown,
 		onDrag: handlePathDrag,
 	});
 
@@ -151,7 +108,7 @@ const PathComponent: React.FC<PathProps> = ({
 		isSelected,
 		isAncestorSelected,
 		ref: dragSvgRef,
-		onClick: handlePathClick,
+		onClick,
 	});
 
 	// Generate select properties for path element.
@@ -248,23 +205,26 @@ const PathComponent: React.FC<PathProps> = ({
 	const linePoints = items.map((item, idx) => ({
 		...item,
 		hidden:
-			mode !== "Vertices" ||
+			!isSelected ||
 			(fixBothEnds && isBothEnds(idx)) ||
 			Boolean(draggingPathPointId && item.id !== draggingPathPointId),
 	}));
 
 	// Display flag for dragging line segments
-	const showSegmentList = mode === "Vertices" && !draggingPathPointId;
+	const showSegmentList =
+		isSelected &&
+		!draggingPathPointId &&
+		(dragType === "segment" || dragType === "segment-right-angle");
 
 	// Display flag for new vertices
-	const showNewVertex = mode === "Vertices" && !draggingPathPointId;
+	const showNewVertex = isSelected && !draggingPathPointId;
 
 	// Display flag for path points
-	const showPathPoints = mode === "Vertices";
+	const showPathPoints = isSelected;
 
-	// Display flag for dashed guide lines (Bézier mode + Vertices mode)
+	// Display flag for dashed guide lines (Bézier mode + selected)
 	const showDashedGuideLines =
-		pathType === "Bezier" && mode === "Vertices" && !draggingPathPointId;
+		pathType === "Bezier" && isSelected && !draggingPathPointId;
 
 	// Flag to show the position label.
 	const showPositionLabel = isSelected && isDragging;
@@ -292,7 +252,7 @@ const PathComponent: React.FC<PathProps> = ({
 				fill="none"
 				stroke="transparent"
 				strokeWidth={Math.max(5, strokeWidth)}
-				cursor={dragEnabled ? "move" : "pointer"}
+				cursor={dragType === "whole" ? "move" : "pointer"}
 				tabIndex={0}
 				ref={dragSvgRef}
 				{...composedProps}
@@ -312,7 +272,7 @@ const PathComponent: React.FC<PathProps> = ({
 			{showSegmentList && (
 				<SegmentList
 					id={id}
-					rightAngleSegmentDrag={rightAngleSegmentDrag}
+					rightAngleSegmentDrag={dragType === "segment-right-angle"}
 					fixBothEnds={fixBothEnds}
 					items={items}
 					onDiagramChange={handleDiagramChangeForVertexAndSegmentDrag}

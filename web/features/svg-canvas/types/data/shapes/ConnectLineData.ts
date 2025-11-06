@@ -8,7 +8,7 @@ import type { PathType } from "../../core/PathType";
  */
 export const ConnectLineFeatures = {
 	frameable: true,
-	transformative: true,
+	transformative: false,
 	itemable: true,
 	strokable: true,
 	cornerRoundable: false,

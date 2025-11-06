@@ -20,8 +20,6 @@ export const STYLE_CHANGE_EVENT_NAME = "StyleChange" as const;
 
 // Diagram update events
 export const DIAGRAM_UPDATE_EVENT_NAME = "DiagramUpdate" as const;
-export const EVENT_NAME_HIDE_TRANSFORM_CONTROL =
-	"HideTransformControl" as const;
 
 // Stack order events
 export const STACK_ORDER_CHANGE_EVENT_NAME = "StackOrderChange" as const;
@@ -54,7 +52,6 @@ export const EVENT_NAME_CANVAS_ZOOM = "CanvasZoom" as const;
 export type SvgCanvasEventNames =
 	| typeof EVENT_NAME_BROADCAST_DRAG
 	| typeof EVENT_NAME_TRANSFORM_CONTROL_CLICK
-	| typeof EVENT_NAME_HIDE_TRANSFORM_CONTROL
 	| typeof EVENT_NAME_FLASH_CONNECT_LINE
 	| typeof EVENT_NAME_CONNECTION
 	| typeof EVENT_NAME_CONNECT_SHAPES

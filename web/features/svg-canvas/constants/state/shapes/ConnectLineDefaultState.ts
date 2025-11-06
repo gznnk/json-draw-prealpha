@@ -7,7 +7,5 @@ export const ConnectLineDefaultState = CreateDefaultState<ConnectLineState>({
 	type: "ConnectLine",
 	options: ConnectLineFeatures,
 	baseData: ConnectLineDefaultData,
-	properties: {
-		transformEnabled: false,
-	},
+	properties: {},
 });
