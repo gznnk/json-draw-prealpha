@@ -15,6 +15,7 @@ export const Pane = styled.div`
 `;
 
 export const Divider = styled.div`
+	position: relative;
 	width: 1px;
 	height: 100%;
 	background-color: #374151;
