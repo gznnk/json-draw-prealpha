@@ -101,18 +101,18 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 								<PolylinePathIcon />
 							</LineStyleButton>
 							<LineStyleButton
-								isActive={pathType === "Curve"}
-								onClick={() => handlePathTypeChange("Curve")}
-								title="Curve path"
-							>
-								<CurvePathIcon />
-							</LineStyleButton>
-							<LineStyleButton
 								isActive={pathType === "Rounded"}
 								onClick={() => handlePathTypeChange("Rounded")}
 								title="Rounded path"
 							>
 								<RoundedPathIcon />
+							</LineStyleButton>
+							<LineStyleButton
+								isActive={pathType === "Curve"}
+								onClick={() => handlePathTypeChange("Curve")}
+								title="Curve path"
+							>
+								<CurvePathIcon />
 							</LineStyleButton>
 						</LineStyleSection>
 
