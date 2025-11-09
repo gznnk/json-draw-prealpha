@@ -46,6 +46,7 @@ import { FontSize } from "../../../icons/FontSize";
 import { AlignmentMenu } from "../AlignmentMenu";
 import { ArrowHeadMenu } from "../ArrowHeadMenu";
 import { BoldMenu } from "../BoldMenu";
+import { BorderStyleMenu } from "../BorderStyleMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
 import { GroupMenu } from "../GroupMenu";
@@ -83,6 +84,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const [isBorderColorPickerOpen, setIsBorderColorPickerOpen] = useState(false);
 	const [isBorderRadiusSelectorOpen, setIsBorderRadiusSelectorOpen] =
 		useState(false);
+	const [isBorderStyleMenuOpen, setIsBorderStyleMenuOpen] = useState(false);
 	const [isLineStyleMenuOpen, setIsLineStyleMenuOpen] = useState(false);
 	const [isFontSizeSelectorOpen, setIsFontSizeSelectorOpen] = useState(false);
 	const [isFontColorPickerOpen, setIsFontColorPickerOpen] = useState(false);
@@ -227,6 +229,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			setIsBgColorPickerOpen(false);
 			setIsBorderColorPickerOpen(false);
 			setIsBorderRadiusSelectorOpen(false);
+			setIsBorderStyleMenuOpen(false);
 			setIsLineStyleMenuOpen(false);
 			setIsFontSizeSelectorOpen(false);
 			setIsFontColorPickerOpen(false);
@@ -318,6 +321,18 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				isOpen={isLineStyleMenuOpen}
 				onToggle={() => setIsLineStyleMenuOpen(!isLineStyleMenuOpen)}
 				selectedDiagrams={selectedItems}
+			/>,
+		);
+	}
+
+	if (menuConfig.borderStyle) {
+		menuItemComponents.push(
+			<BorderStyleMenu
+				key="BorderStyle"
+				isOpen={isBorderStyleMenuOpen}
+				onToggle={() => setIsBorderStyleMenuOpen(!isBorderStyleMenuOpen)}
+				selectedDiagrams={selectedItems}
+				showRadius={menuConfig.borderStyle.radius}
 			/>,
 		);
 	}

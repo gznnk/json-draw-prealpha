@@ -33,7 +33,9 @@ export const createMenuConfig = (
 	// Add strokable features
 	if (features.strokable) {
 		config.borderColor = overrides.borderColor ?? true;
-		config.borderStyle = overrides.borderStyle ?? {};
+		config.borderStyle = overrides.borderStyle ?? {
+			radius: false,
+		};
 		// config.lineStyle = overrides.lineStyle ?? true;
 	}
 

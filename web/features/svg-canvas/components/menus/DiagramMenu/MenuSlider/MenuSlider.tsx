@@ -16,6 +16,8 @@ type MenuSliderProps = {
 	value: number;
 	min?: number;
 	max?: number;
+	/** Label text displayed above the slider */
+	label?: string;
 	/** Called on every value change (real-time updates, no history saving) */
 	onChange: (newValue: number) => void;
 	/** Called when value change is committed (slider mouse up, input blur - triggers history saving) */
@@ -31,6 +33,7 @@ const MenuSliderComponent: React.FC<MenuSliderProps> = ({
 	value,
 	min = 1,
 	max = 100,
+	label = "Value",
 	onChange,
 	onChangeCommit,
 }) => {
@@ -91,7 +94,7 @@ const MenuSliderComponent: React.FC<MenuSliderProps> = ({
 	return (
 		<MenuSliderWrapper>
 			<MenuSliderFooter>
-				<MenuSliderLabel>Thickness</MenuSliderLabel>
+				<MenuSliderLabel>{label}</MenuSliderLabel>
 				<MenuSliderNumberInput
 					type="number"
 					min={min}

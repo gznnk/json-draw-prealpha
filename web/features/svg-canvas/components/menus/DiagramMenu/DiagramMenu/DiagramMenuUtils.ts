@@ -139,19 +139,14 @@ const mergeBorderStyle = (
 		return undefined;
 	}
 
-	const result: { radius?: boolean } = {};
-
-	// Merge radius property: only include if all configs have it set to true
+	// Merge radius property: true if all configs have it set to true, false otherwise
 	const allHaveRadius = configs.every(
 		(config) => config.borderStyle?.radius === true,
 	);
 
-	if (allHaveRadius) {
-		result.radius = true;
-	}
-
-	// Return undefined if no properties were merged
-	return Object.keys(result).length > 0 ? result : undefined;
+	return {
+		radius: allHaveRadius,
+	};
 };
 
 /**
