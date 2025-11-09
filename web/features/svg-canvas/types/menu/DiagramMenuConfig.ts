@@ -15,9 +15,6 @@ export type DiagramMenuConfig = {
 		radius?: boolean;
 	};
 
-	/** Show border radius control */
-	borderRadius?: boolean;
-
 	/** Show arrow head controls */
 	arrowHead?: boolean;
 

@@ -198,12 +198,6 @@ export const getCommonMenuConfig = (diagrams: Diagram[]): DiagramMenuConfig => {
 		result.borderStyle = borderStyle;
 	}
 
-	// Merge borderRadius
-	const borderRadius = mergeBooleanProperty(menuConfigs, "borderRadius");
-	if (borderRadius !== undefined) {
-		result.borderRadius = borderRadius;
-	}
-
 	// Merge arrowHead
 	const arrowHead = mergeBooleanProperty(menuConfigs, "arrowHead");
 	if (arrowHead !== undefined) {

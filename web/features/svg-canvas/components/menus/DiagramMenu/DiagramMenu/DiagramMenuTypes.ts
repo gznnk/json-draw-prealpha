@@ -15,7 +15,6 @@ export type DiagramMenuProps = {
 export type DiagramMenuType =
 	| "BgColor"
 	| "BorderColor"
-	| "BorderRadius"
 	| "LineStyle"
 	| "FontSize"
 	| "FontColor"

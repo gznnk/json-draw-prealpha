@@ -127,7 +127,7 @@ const BorderStyleMenuComponent: React.FC<BorderStyleMenuProps> = ({
 						{/* Stroke Width */}
 						<MenuSlider
 							value={strokeWidth}
-							min={1}
+							min={0}
 							max={100}
 							label="Width"
 							onChange={handleStrokeWidthChange}
@@ -139,7 +139,7 @@ const BorderStyleMenuComponent: React.FC<BorderStyleMenuProps> = ({
 							<MenuSlider
 								value={cornerRadius}
 								min={0}
-								max={50}
+								max={100}
 								label="Radius"
 								onChange={handleCornerRadiusChange}
 								onChangeCommit={handleCornerRadiusCommit}

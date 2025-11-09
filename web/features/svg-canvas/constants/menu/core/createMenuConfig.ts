@@ -36,12 +36,10 @@ export const createMenuConfig = (
 		config.borderStyle = overrides.borderStyle ?? {
 			radius: false,
 		};
-		// config.lineStyle = overrides.lineStyle ?? true;
 	}
 
 	// Add corner roundable features
 	if (features.cornerRoundable) {
-		config.borderRadius = overrides.borderRadius ?? true;
 		// Also add radius to borderStyle if strokable
 		if (features.strokable && config.borderStyle) {
 			config.borderStyle.radius = overrides.borderStyle?.radius ?? true;

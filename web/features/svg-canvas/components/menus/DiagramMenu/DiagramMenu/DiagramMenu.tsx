@@ -1,12 +1,7 @@
 import type React from "react";
 import { memo, useRef, useEffect, useState, useCallback } from "react";
 
-import {
-	MAX_BORDER_RADIUS,
-	MAX_FONT_SIZE,
-	MIN_BORDER_RADIUS,
-	MIN_FONT_SIZE,
-} from "./DiagramMenuConstants";
+import { MAX_FONT_SIZE, MIN_FONT_SIZE } from "./DiagramMenuConstants";
 import {
 	DiagramMenuDiv,
 	DiagramMenuDivider,
@@ -19,7 +14,6 @@ import type {
 	DiagramMenuStateMap,
 } from "./DiagramMenuTypes";
 import {
-	findFirstCornerRoundableRecursive,
 	findFirstFillableRecursive,
 	findFirstPathableRecursive,
 	findFirstStrokableRecursive,
@@ -30,7 +24,6 @@ import { useDiagramMenuState } from "./hooks/useDiagramMenuState";
 import { useDiagramUpdateRecursively } from "../../../../hooks/useDiagramUpdateRecursively";
 import { DiagramRegistry } from "../../../../registry";
 import type { PathType } from "../../../../types/core/PathType";
-import type { CornerRoundableData } from "../../../../types/data/core/CornerRoundableData";
 import type { FillableData } from "../../../../types/data/core/FillableData";
 import type { StrokableData } from "../../../../types/data/core/StrokableData";
 import type { TextableData } from "../../../../types/data/core/TextableData";
@@ -39,7 +32,6 @@ import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams"
 import { newEventId } from "../../../../utils/core/newEventId";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
 import { BgColor } from "../../../icons/BgColor";
-import { BorderRadius } from "../../../icons/BorderRadius";
 import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
@@ -82,8 +74,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	// Diagram menu controls open/close state.
 	const [isBgColorPickerOpen, setIsBgColorPickerOpen] = useState(false);
 	const [isBorderColorPickerOpen, setIsBorderColorPickerOpen] = useState(false);
-	const [isBorderRadiusSelectorOpen, setIsBorderRadiusSelectorOpen] =
-		useState(false);
 	const [isBorderStyleMenuOpen, setIsBorderStyleMenuOpen] = useState(false);
 	const [isLineStyleMenuOpen, setIsLineStyleMenuOpen] = useState(false);
 	const [isFontSizeSelectorOpen, setIsFontSizeSelectorOpen] = useState(false);
@@ -130,7 +120,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			const newControlsStateMap = {
 				BgColor: false,
 				BorderColor: false,
-				BorderRadius: false,
 				LineStyle: false,
 				FontSize: false,
 				FontColor: false,
@@ -145,7 +134,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 
 			setIsBgColorPickerOpen(newControlsStateMap.BgColor);
 			setIsBorderColorPickerOpen(newControlsStateMap.BorderColor);
-			setIsBorderRadiusSelectorOpen(newControlsStateMap.BorderRadius);
 			setIsLineStyleMenuOpen(newControlsStateMap.LineStyle);
 			setIsFontSizeSelectorOpen(newControlsStateMap.FontSize);
 			setIsFontColorPickerOpen(newControlsStateMap.FontColor);
@@ -163,9 +151,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 					break;
 				case "BorderColor":
 					openControl("BorderColor", currentMenuStateMap);
-					break;
-				case "BorderRadius":
-					openControl("BorderRadius", currentMenuStateMap);
 					break;
 				case "LineStyle":
 					openControl("LineStyle", currentMenuStateMap);
@@ -199,16 +184,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		[selectedItems, applyDiagramUpdate],
 	);
 
-	const onBorderRadiusChange = useCallback(
-		(borderRadius: number) => {
-			applyDiagramUpdate({
-				items: selectedItems,
-				data: { cornerRadius: borderRadius },
-			});
-		},
-		[selectedItems, applyDiagramUpdate],
-	);
-
 	const onFontSizeChange = useCallback(
 		(fontSize: number) => {
 			applyDiagramUpdate({ items: selectedItems, data: { fontSize } });
@@ -228,7 +203,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		if (!shouldRender) {
 			setIsBgColorPickerOpen(false);
 			setIsBorderColorPickerOpen(false);
-			setIsBorderRadiusSelectorOpen(false);
 			setIsBorderStyleMenuOpen(false);
 			setIsLineStyleMenuOpen(false);
 			setIsFontSizeSelectorOpen(false);
@@ -247,7 +221,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const menuStateMap = {
 		BgColor: "Hidden",
 		BorderColor: "Hidden",
-		BorderRadius: "Hidden",
 		LineStyle: "Hidden",
 		FontSize: "Hidden",
 		FontColor: "Hidden",
@@ -261,9 +234,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const firstStrokableItem = findFirstStrokableRecursive(selectedItems) as
 		| StrokableData
 		| undefined;
-	const firstCornerRoundableItem = findFirstCornerRoundableRecursive(
-		selectedItems,
-	) as CornerRoundableData | undefined;
 	const firstTextableItem = findFirstTextableRecursive(selectedItems) as
 		| TextableData
 		| undefined;
@@ -280,9 +250,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 	if (firstPathableItem) {
 		menuStateMap.LineStyle = isLineStyleMenuOpen ? "Active" : "Show";
-	}
-	if (firstCornerRoundableItem) {
-		menuStateMap.BorderRadius = isBorderRadiusSelectorOpen ? "Active" : "Show";
 	}
 	if (firstTextableItem) {
 		menuStateMap.FontSize = isFontSizeSelectorOpen ? "Active" : "Show";
@@ -341,7 +308,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const showFillableAndStrokableSection = showSection(
 		"BgColor",
 		"BorderColor",
-		"BorderRadius",
 		"LineStyle",
 	);
 	if (showFillableAndStrokableSection) {
@@ -375,27 +341,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 					<ColorPicker
 						color={firstStrokableItem?.stroke || "transparent"}
 						onColorChange={onBorderColorChange}
-					/>
-				)}
-			</DiagramMenuPositioner>,
-		);
-		menuItemComponents.push(
-			<DiagramMenuPositioner key="BorderRadius">
-				<DiagramMenuItem
-					menuType="BorderRadius"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<BorderRadius title="Border Radius" />
-				</DiagramMenuItem>
-				{menuStateMap.BorderRadius === "Active" && (
-					<NumberStepper
-						value={firstCornerRoundableItem?.cornerRadius || 0}
-						min={MIN_BORDER_RADIUS}
-						max={MAX_BORDER_RADIUS}
-						minusTooltip="Decrease border radius"
-						plusTooltip="Increase border radius"
-						onChange={onBorderRadiusChange}
 					/>
 				)}
 			</DiagramMenuPositioner>,
