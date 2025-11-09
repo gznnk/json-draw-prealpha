@@ -1,5 +1,6 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useEffect } from "react";
 
+import { DIAGRAM_CHANGE_EVENT_NAME } from "../../../constants/core/EventNames";
 import type { DiagramChangeEvent } from "../../../types/events/DiagramChangeEvent";
 import type { EventPhase } from "../../../types/events/EventPhase";
 import { collectDiagramIds } from "../../../utils/core/collectDiagramIds";
@@ -24,14 +25,19 @@ const getIsChangingState = (eventPhase: EventPhase): boolean => {
 
 /**
  * Custom hook to handle diagram change events on the canvas.
+ * Returns a callback function and also listens to DIAGRAM_CHANGE_EVENT_NAME from the event bus.
  */
 export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
+	const { eventBus, setCanvasState, onPanZoomChange } = props;
+
 	// Get the data change handler.
 	const addHistory = useAddHistory(props);
 
 	// Create references bypass to avoid function creation in every render.
 	const refBusVal = {
-		props,
+		eventBus,
+		setCanvasState,
+		onPanZoomChange,
 		addHistory,
 	};
 	const refBus = useRef(refBusVal);
@@ -42,12 +48,10 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 	// Reference to store ConnectLine IDs that need to be updated
 	const connectedConnectLineIds = useRef<Set<string>>(new Set());
 
-	return useCallback((e: DiagramChangeEvent) => {
+	// Handler function that processes diagram change events
+	const handleDiagramChange = useCallback((e: DiagramChangeEvent) => {
 		// Bypass references to avoid function creation in every render.
-		const {
-			props: { setCanvasState, onPanZoomChange },
-			addHistory,
-		} = refBus.current;
+		const { setCanvasState, onPanZoomChange, addHistory } = refBus.current;
 
 		setCanvasState((prevState) => {
 			// Store the current canvas state for connect line updates on change start
@@ -123,4 +127,23 @@ export const useOnDiagramChange = (props: SvgCanvasSubHooksProps) => {
 			return newState;
 		});
 	}, []);
+
+	// Listen to diagram change events from the event bus
+	useEffect(() => {
+		const { eventBus } = refBus.current;
+
+		const handleEvent = (event: Event) => {
+			const customEvent = event as CustomEvent<DiagramChangeEvent>;
+			handleDiagramChange(customEvent.detail);
+		};
+
+		eventBus.addEventListener(DIAGRAM_CHANGE_EVENT_NAME, handleEvent);
+
+		return () => {
+			eventBus.removeEventListener(DIAGRAM_CHANGE_EVENT_NAME, handleEvent);
+		};
+	}, [handleDiagramChange]);
+
+	// Return the callback function for direct usage
+	return handleDiagramChange;
 };
