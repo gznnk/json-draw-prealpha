@@ -13,6 +13,7 @@ export type ApplyDiagramUpdateRecursivelyParams<T = unknown> = {
 	items: Diagram[];
 	data: DiagramUpdateData<T>;
 	eventId?: string;
+	skipHistory?: boolean;
 };
 
 /**
@@ -25,13 +26,14 @@ export const useDiagramUpdateRecursively = () => {
 
 	const applyDiagramUpdateRecursively = useCallback(
 		<T = unknown>(params: ApplyDiagramUpdateRecursivelyParams<T>) => {
-			const { items, data, eventId = newEventId() } = params;
+			const { items, data, eventId = newEventId(), skipHistory } = params;
 
 			for (const item of items) {
 				const event: DiagramUpdateEvent<T> = {
 					eventId,
 					id: item.id,
 					data,
+					skipHistory,
 				};
 
 				// Dispatch the DiagramUpdateEvent to the EventBus
@@ -43,6 +45,7 @@ export const useDiagramUpdateRecursively = () => {
 						items: item.items,
 						data,
 						eventId,
+						skipHistory,
 					});
 				}
 			}

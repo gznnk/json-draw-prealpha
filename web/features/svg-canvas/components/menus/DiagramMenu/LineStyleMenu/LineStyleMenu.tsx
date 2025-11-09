@@ -50,6 +50,16 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 	)?.strokeDashType;
 
 	const handleStrokeWidthChange = (width: number) => {
+		// Real-time update (no history saving)
+		applyDiagramUpdate({
+			items: selectedDiagrams,
+			data: { strokeWidth: width },
+			skipHistory: true,
+		});
+	};
+
+	const handleStrokeWidthCommit = (width: number) => {
+		// Save history on commit
 		applyDiagramUpdate({
 			items: selectedDiagrams,
 			data: { strokeWidth: width },
@@ -83,6 +93,7 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 							min={1}
 							max={100}
 							onChange={handleStrokeWidthChange}
+							onChangeCommit={handleStrokeWidthCommit}
 						/>
 						{/* Path Type */}
 						<LineStyleSection>
