@@ -1,20 +1,24 @@
 import { useCallback } from "react";
 
+import type { EventBus } from "../../../../shared/event-bus/EventBus";
 import type {
 	FunctionCallHandler,
 	FunctionCallInfo,
 } from "../../../../shared/llm-client/types";
-import { useDiagramUpdate } from "../../hooks/useDiagramUpdate";
+import { useDiagramUpdateWithBus } from "../../hooks/useDiagramUpdateWithBus";
 import { newEventId } from "../../utils/core/newEventId";
 
 /**
  * React hook to provide a handler for updating a diagram on the canvas using the event bus.
  * Returns a memoized FunctionCallHandler.
  *
+ * @param eventBus - EventBus instance to use for dispatching events
  * @returns FunctionCallHandler for updating a diagram
  */
-export const useUpdateDiagramTool = (): FunctionCallHandler => {
-	const dispatchDiagramUpdate = useDiagramUpdate();
+export const useUpdateDiagramTool = (
+	eventBus: EventBus,
+): FunctionCallHandler => {
+	const dispatchDiagramUpdate = useDiagramUpdateWithBus(eventBus);
 
 	return useCallback(
 		(functionCall: FunctionCallInfo) => {

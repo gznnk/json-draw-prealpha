@@ -66,7 +66,7 @@ export const useAiChat = () => {
 	const addMarkdownShape = useAddMarkdownShapeTool(eventBus);
 	const getShapesInfo = useGetShapesInfoTool(eventBus);
 	const getSelectedShapes = useGetSelectedShapesTool(eventBus);
-	const updateDiagram = useUpdateDiagramTool();
+	const updateDiagram = useUpdateDiagramTool(eventBus);
 
 	// Memoize tool definitions and handlers
 	const toolsConfig = useMemo(
