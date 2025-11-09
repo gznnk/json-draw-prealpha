@@ -15,47 +15,49 @@ export const MenuSliderWrapper = styled.div`
  */
 export const MenuSliderInput = styled.input`
 	flex: 1;
-	height: 4px;
+	height: 2px;
 	-webkit-appearance: none;
 	appearance: none;
 	background: transparent;
 	outline: none;
 	cursor: pointer;
+	margin-bottom: 8px;
 
 	/* Track styles */
 	&::-webkit-slider-runnable-track {
 		width: 100%;
-		height: 4px;
-		background: linear-gradient(to right, #e5e7eb 0%, #6b7280 100%);
-		border-radius: 2px;
+		height: 2px;
+		background: #333333;
+		border-radius: 1px;
 	}
 
 	&::-moz-range-track {
 		width: 100%;
-		height: 4px;
-		background: linear-gradient(to right, #e5e7eb 0%, #6b7280 100%);
-		border-radius: 2px;
+		height: 2px;
+		background: #333333;
+		border-radius: 1px;
+		border: none;
 	}
 
 	/* Thumb styles */
 	&::-webkit-slider-thumb {
 		-webkit-appearance: none;
 		appearance: none;
-		width: 16px;
-		height: 16px;
+		width: 12px;
+		height: 12px;
 		background-color: #ffffff;
-		border: 2px solid #6b7280;
+		border: 2px solid #333333;
 		border-radius: 50%;
 		cursor: pointer;
 		transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-		margin-top: -6px;
+		margin-top: -5px;
 	}
 
 	&::-moz-range-thumb {
-		width: 16px;
-		height: 16px;
+		width: 12px;
+		height: 12px;
 		background-color: #ffffff;
-		border: 2px solid #6b7280;
+		border: 2px solid #333333;
 		border-radius: 50%;
 		cursor: pointer;
 		transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -63,23 +65,23 @@ export const MenuSliderInput = styled.input`
 
 	/* Hover and active states */
 	&:hover::-webkit-slider-thumb {
-		border-color: #374151;
-		box-shadow: 0 0 0 4px rgba(107, 114, 128, 0.1);
+		border-color: #1a1a1a;
+		box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
 	}
 
 	&:hover::-moz-range-thumb {
-		border-color: #374151;
-		box-shadow: 0 0 0 4px rgba(107, 114, 128, 0.1);
+		border-color: #1a1a1a;
+		box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
 	}
 
 	&:active::-webkit-slider-thumb {
-		transform: scale(1.1);
-		box-shadow: 0 0 0 6px rgba(107, 114, 128, 0.2);
+		transform: scale(1.05);
+		box-shadow: 0 0 0 4px rgba(51, 51, 51, 0.15);
 	}
 
 	&:active::-moz-range-thumb {
-		transform: scale(1.1);
-		box-shadow: 0 0 0 6px rgba(107, 114, 128, 0.2);
+		transform: scale(1.05);
+		box-shadow: 0 0 0 4px rgba(51, 51, 51, 0.15);
 	}
 `;
 
@@ -97,9 +99,9 @@ export const MenuSliderFooter = styled.div`
  * Label for the menu slider.
  */
 export const MenuSliderLabel = styled.label`
-	font-size: 10px;
+	font-size: 12px;
 	font-weight: 600;
-	color: #000000;
+	color: #333333;
 	user-select: none;
 `;
 

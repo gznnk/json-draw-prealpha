@@ -90,14 +90,6 @@ const MenuSliderComponent: React.FC<MenuSliderProps> = ({
 
 	return (
 		<MenuSliderWrapper>
-			<MenuSliderInput
-				type="range"
-				min={min}
-				max={max}
-				value={sliderValue}
-				onChange={handleSliderChange}
-				onMouseUp={handleSliderMouseUp}
-			/>
 			<MenuSliderFooter>
 				<MenuSliderLabel>Thickness</MenuSliderLabel>
 				<MenuSliderNumberInput
@@ -110,6 +102,14 @@ const MenuSliderComponent: React.FC<MenuSliderProps> = ({
 					onBlur={handleNumberInputBlur}
 				/>
 			</MenuSliderFooter>
+			<MenuSliderInput
+				type="range"
+				min={min}
+				max={max}
+				value={sliderValue}
+				onChange={handleSliderChange}
+				onMouseUp={handleSliderMouseUp}
+			/>
 		</MenuSliderWrapper>
 	);
 };
