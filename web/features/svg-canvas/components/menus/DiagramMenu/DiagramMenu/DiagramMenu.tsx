@@ -31,13 +31,13 @@ import type { Diagram } from "../../../../types/state/core/Diagram";
 import { getSelectedDiagrams } from "../../../../utils/core/getSelectedDiagrams";
 import { newEventId } from "../../../../utils/core/newEventId";
 import { isItemableState } from "../../../../utils/validation/isItemableState";
-import { BgColor } from "../../../icons/BgColor";
-import { Edit } from "../../../icons/Edit";
 import { FontColor } from "../../../icons/FontColor";
 import { FontSize } from "../../../icons/FontSize";
 import { AlignmentMenu } from "../AlignmentMenu";
 import { ArrowHeadMenu } from "../ArrowHeadMenu";
+import { BackgroundColorMenu } from "../BackgroundColorMenu";
 import { BoldMenu } from "../BoldMenu";
+import { BorderColorMenu } from "../BorderColorMenu";
 import { BorderStyleMenu } from "../BorderStyleMenu";
 import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
@@ -311,40 +311,28 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		"LineStyle",
 	);
 	if (showFillableAndStrokableSection) {
-		menuItemComponents.push(
-			<DiagramMenuPositioner key="BgColor">
-				<DiagramMenuItem
-					menuType="BgColor"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<BgColor title="Background Color" />
-				</DiagramMenuItem>
-				{menuStateMap.BgColor === "Active" && (
-					<ColorPicker
-						color={firstFillableItem?.fill || "transparent"}
-						onColorChange={onBgColorChange}
-					/>
-				)}
-			</DiagramMenuPositioner>,
-		);
-		menuItemComponents.push(
-			<DiagramMenuPositioner key="BorderColor">
-				<DiagramMenuItem
-					menuType="BorderColor"
-					menuStateMap={menuStateMap}
-					onMenuClick={onMenuClick}
-				>
-					<Edit title="Border Color" />
-				</DiagramMenuItem>
-				{menuStateMap.BorderColor === "Active" && (
-					<ColorPicker
-						color={firstStrokableItem?.stroke || "transparent"}
-						onColorChange={onBorderColorChange}
-					/>
-				)}
-			</DiagramMenuPositioner>,
-		);
+		if (menuStateMap.BgColor !== "Hidden") {
+			menuItemComponents.push(
+				<BackgroundColorMenu
+					key="BgColor"
+					isOpen={isBgColorPickerOpen}
+					onToggle={() => setIsBgColorPickerOpen(!isBgColorPickerOpen)}
+					selectedDiagrams={selectedItems}
+					onColorChange={onBgColorChange}
+				/>,
+			);
+		}
+		if (menuStateMap.BorderColor !== "Hidden") {
+			menuItemComponents.push(
+				<BorderColorMenu
+					key="BorderColor"
+					isOpen={isBorderColorPickerOpen}
+					onToggle={() => setIsBorderColorPickerOpen(!isBorderColorPickerOpen)}
+					selectedDiagrams={selectedItems}
+					onColorChange={onBorderColorChange}
+				/>,
+			);
+		}
 		menuItemComponents.push(
 			<DiagramMenuDivider key="FillableAndStrokableSectionDivider" />,
 		);
