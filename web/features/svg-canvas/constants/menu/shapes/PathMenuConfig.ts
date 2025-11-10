@@ -10,6 +10,7 @@ export const PathMenuConfig: DiagramMenuConfig = {
 	...createMenuConfig(PathFeatures),
 	arrowHead: true,
 	lineStyle: true,
+	lineColor: true,
 	borderColor: false,
 	borderStyle: undefined,
 };

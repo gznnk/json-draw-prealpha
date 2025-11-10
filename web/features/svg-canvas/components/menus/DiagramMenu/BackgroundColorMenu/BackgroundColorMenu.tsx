@@ -1,6 +1,7 @@
 import type React from "react";
 import { memo } from "react";
 
+import { useDiagramUpdateRecursively } from "../../../../hooks/useDiagramUpdateRecursively";
 import type { Diagram } from "../../../../types/state/core/Diagram";
 import { isFillableState } from "../../../../utils/validation/isFillableState";
 import { ColorPicker } from "../ColorPicker";
@@ -11,7 +12,6 @@ type BackgroundColorMenuProps = {
 	isOpen: boolean;
 	onToggle: () => void;
 	selectedDiagrams: Diagram[];
-	onColorChange: (color: string) => void;
 };
 
 /**
@@ -22,14 +22,19 @@ const BackgroundColorMenuComponent: React.FC<BackgroundColorMenuProps> = ({
 	isOpen,
 	onToggle,
 	selectedDiagrams,
-	onColorChange,
 }) => {
+	const applyDiagramUpdate = useDiagramUpdateRecursively();
+
 	// Get the first diagram and check if it's fillable
 	const firstDiagram = selectedDiagrams[0];
 	const fillableDiagram =
 		firstDiagram && isFillableState(firstDiagram) ? firstDiagram : null;
 
 	const currentColor = fillableDiagram?.fill || "transparent";
+
+	const handleColorChange = (color: string) => {
+		applyDiagramUpdate({ items: selectedDiagrams, data: { fill: color } });
+	};
 
 	// Create a filled circle SVG icon with the current color
 	const icon = (
@@ -50,7 +55,7 @@ const BackgroundColorMenuComponent: React.FC<BackgroundColorMenuProps> = ({
 				{icon}
 			</DiagramMenuItemNew>
 			{isOpen && (
-				<ColorPicker color={currentColor} onColorChange={onColorChange} />
+				<ColorPicker color={currentColor} onColorChange={handleColorChange} />
 			)}
 		</DiagramMenuPositioner>
 	);

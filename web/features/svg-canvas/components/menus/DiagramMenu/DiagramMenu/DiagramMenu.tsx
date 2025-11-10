@@ -43,6 +43,7 @@ import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuItem } from "../DiagramMenuItem";
 import { GroupMenu } from "../GroupMenu";
 import { KeepAspectRatioMenu } from "../KeepAspectRatioMenu";
+import { LineColorMenu } from "../LineColorMenu";
 import { LineStyleMenu } from "../LineStyleMenu";
 import { NumberStepper } from "../NumberStepper";
 import { StackOrderMenu } from "../StackOrderMenu";
@@ -74,6 +75,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	// Diagram menu controls open/close state.
 	const [isBgColorPickerOpen, setIsBgColorPickerOpen] = useState(false);
 	const [isBorderColorPickerOpen, setIsBorderColorPickerOpen] = useState(false);
+	const [isLineColorPickerOpen, setIsLineColorPickerOpen] = useState(false);
 	const [isBorderStyleMenuOpen, setIsBorderStyleMenuOpen] = useState(false);
 	const [isLineStyleMenuOpen, setIsLineStyleMenuOpen] = useState(false);
 	const [isFontSizeSelectorOpen, setIsFontSizeSelectorOpen] = useState(false);
@@ -167,23 +169,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 			}
 		};
 
-	const onBgColorChange = useCallback(
-		(bgColor: string) => {
-			applyDiagramUpdate({ items: selectedItems, data: { fill: bgColor } });
-		},
-		[selectedItems, applyDiagramUpdate],
-	);
-
-	const onBorderColorChange = useCallback(
-		(borderColor: string) => {
-			applyDiagramUpdate({
-				items: selectedItems,
-				data: { stroke: borderColor },
-			});
-		},
-		[selectedItems, applyDiagramUpdate],
-	);
-
 	const onFontSizeChange = useCallback(
 		(fontSize: number) => {
 			applyDiagramUpdate({ items: selectedItems, data: { fontSize } });
@@ -203,6 +188,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		if (!shouldRender) {
 			setIsBgColorPickerOpen(false);
 			setIsBorderColorPickerOpen(false);
+			setIsLineColorPickerOpen(false);
 			setIsBorderStyleMenuOpen(false);
 			setIsLineStyleMenuOpen(false);
 			setIsFontSizeSelectorOpen(false);
@@ -277,6 +263,17 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		menuItemComponents.push(<DiagramMenuDivider key="ArrowDivider" />);
 	}
 
+	if (menuConfig.lineColor) {
+		menuItemComponents.push(
+			<LineColorMenu
+				key="LineColor"
+				isOpen={isLineColorPickerOpen}
+				onToggle={() => setIsLineColorPickerOpen(!isLineColorPickerOpen)}
+				selectedDiagrams={selectedItems}
+			/>,
+		);
+	}
+
 	if (menuConfig.lineStyle) {
 		menuItemComponents.push(
 			<LineStyleMenu
@@ -288,6 +285,10 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		);
 	}
 
+	if (menuConfig.lineColor || menuConfig.lineStyle) {
+		menuItemComponents.push(<DiagramMenuDivider key="LineSectionDivider" />);
+	}
+
 	if (menuConfig.backgroundColor) {
 		menuItemComponents.push(
 			<BackgroundColorMenu
@@ -295,7 +296,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				isOpen={isBgColorPickerOpen}
 				onToggle={() => setIsBgColorPickerOpen(!isBgColorPickerOpen)}
 				selectedDiagrams={selectedItems}
-				onColorChange={onBgColorChange}
 			/>,
 		);
 	}
@@ -307,7 +307,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				isOpen={isBorderColorPickerOpen}
 				onToggle={() => setIsBorderColorPickerOpen(!isBorderColorPickerOpen)}
 				selectedDiagrams={selectedItems}
-				onColorChange={onBorderColorChange}
 			/>,
 		);
 	}

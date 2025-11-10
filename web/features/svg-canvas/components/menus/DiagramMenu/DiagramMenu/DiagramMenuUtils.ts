@@ -192,6 +192,12 @@ export const getCommonMenuConfig = (diagrams: Diagram[]): DiagramMenuConfig => {
 		result.borderColor = borderColor;
 	}
 
+	// Merge lineColor
+	const lineColor = mergeBooleanProperty(menuConfigs, "lineColor");
+	if (lineColor !== undefined) {
+		result.lineColor = lineColor;
+	}
+
 	// Merge borderStyle (nested object with special handling)
 	const borderStyle = mergeBorderStyle(menuConfigs);
 	if (borderStyle !== undefined) {

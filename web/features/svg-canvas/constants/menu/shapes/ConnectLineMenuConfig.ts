@@ -11,6 +11,7 @@ export const ConnectLineMenuConfig: DiagramMenuConfig = {
 	aspectRatio: false,
 	arrowHead: true,
 	lineStyle: true,
+	lineColor: true,
 	borderColor: false,
 	borderStyle: undefined,
 };

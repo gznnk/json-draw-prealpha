@@ -8,17 +8,17 @@ import { ColorPicker } from "../ColorPicker";
 import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuItemNew } from "../DiagramMenuItem/DiagramMenuItemNew";
 
-type BorderColorMenuProps = {
+type LineColorMenuProps = {
 	isOpen: boolean;
 	onToggle: () => void;
 	selectedDiagrams: Diagram[];
 };
 
 /**
- * BorderColorMenu component.
- * Displays a hollow circle icon with the current border color and opens a color picker.
+ * LineColorMenu component.
+ * Displays a 45-degree line icon with the current line color and opens a color picker.
  */
-const BorderColorMenuComponent: React.FC<BorderColorMenuProps> = ({
+const LineColorMenuComponent: React.FC<LineColorMenuProps> = ({
 	isOpen,
 	onToggle,
 	selectedDiagrams,
@@ -36,7 +36,7 @@ const BorderColorMenuComponent: React.FC<BorderColorMenuProps> = ({
 		applyDiagramUpdate({ items: selectedDiagrams, data: { stroke: color } });
 	};
 
-	// Create a hollow circle SVG icon with the current color
+	// Create a 45-degree line SVG icon with the current color
 	const icon = (
 		<svg
 			width={24}
@@ -44,14 +44,15 @@ const BorderColorMenuComponent: React.FC<BorderColorMenuProps> = ({
 			viewBox="0 0 24 24"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<title>Border Color</title>
-			<circle
-				cx="12"
-				cy="12"
-				r="8"
-				fill="none"
+			<title>Line Color</title>
+			<line
+				x1="6"
+				y1="18"
+				x2="18"
+				y2="6"
 				stroke={currentColor}
 				strokeWidth="2"
+				strokeLinecap="round"
 			/>
 		</svg>
 	);
@@ -68,4 +69,4 @@ const BorderColorMenuComponent: React.FC<BorderColorMenuProps> = ({
 	);
 };
 
-export const BorderColorMenu = memo(BorderColorMenuComponent);
+export const LineColorMenu = memo(LineColorMenuComponent);

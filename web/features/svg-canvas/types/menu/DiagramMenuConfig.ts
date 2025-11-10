@@ -9,6 +9,9 @@ export type DiagramMenuConfig = {
 	/** Show border color picker */
 	borderColor?: boolean;
 
+	/** Show line color picker */
+	lineColor?: boolean;
+
 	/** Show border style controls with nested options */
 	borderStyle?: {
 		/** Show border radius control within border style menu */
