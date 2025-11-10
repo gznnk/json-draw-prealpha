@@ -11,9 +11,9 @@ import type { StrokeDashType } from "../../../../types/core/StrokeDashType";
 import type { Diagram } from "../../../../types/state/core/Diagram";
 import { isCornerRoundableState } from "../../../../utils/validation/isCornerRoundableState";
 import { isStrokableState } from "../../../../utils/validation/isStrokableState";
+import { DashedCircle } from "../../../icons/DashedCircle";
 import { DashedLine } from "../../../icons/DashedLine";
 import { DottedLine } from "../../../icons/DottedLine";
-import { Edit } from "../../../icons/Edit";
 import { SolidLine } from "../../../icons/SolidLine";
 import { DiagramMenuPositioner } from "../DiagramMenu/DiagramMenuStyled";
 import { DiagramMenuControl } from "../DiagramMenuControl";
@@ -94,7 +94,7 @@ const BorderStyleMenuComponent: React.FC<BorderStyleMenuProps> = ({
 	return (
 		<DiagramMenuPositioner>
 			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
-				<Edit title="Border Style" />
+				<DashedCircle title="Border Style" />
 			</DiagramMenuItemNew>
 			{isOpen && (
 				<DiagramMenuControl>
