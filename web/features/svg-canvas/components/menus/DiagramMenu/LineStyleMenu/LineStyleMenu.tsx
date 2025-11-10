@@ -89,8 +89,9 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 				<DiagramMenuControl>
 					<LineStyleMenuWrapper>
 						<MenuSlider
+							label="Line Width"
 							value={strokeWidth}
-							min={0}
+							min={1}
 							max={100}
 							onChange={handleStrokeWidthChange}
 							onChangeCommit={handleStrokeWidthCommit}

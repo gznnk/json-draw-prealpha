@@ -256,6 +256,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	// This will be used to render the menu items conditionally based on the state map.
 	const menuItemComponents = [];
 
+	// Create a section for arrow head.
 	if (menuConfig.arrowHead) {
 		menuItemComponents.push(
 			<ArrowHeadMenu key="Arrow" selectedDiagrams={selectedItems} />,
@@ -263,6 +264,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		menuItemComponents.push(<DiagramMenuDivider key="ArrowDivider" />);
 	}
 
+	// Create a section for line appearance items.
 	if (menuConfig.lineColor) {
 		menuItemComponents.push(
 			<LineColorMenu
@@ -289,6 +291,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		menuItemComponents.push(<DiagramMenuDivider key="LineSectionDivider" />);
 	}
 
+	// Create a section for shape style items.
 	if (menuConfig.backgroundColor) {
 		menuItemComponents.push(
 			<BackgroundColorMenu
