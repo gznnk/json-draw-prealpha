@@ -3,7 +3,8 @@ import { memo } from "react";
 import type { IconProps } from "../../types/props/icon/IconProps";
 
 /**
- * Curve path icon component - shows a smooth curved line with a single flowing bend
+ * Curve path icon component - shows a smooth curved line with a pronounced bend
+ * that is point-symmetric around the center
  *
  * @param props - Props for the icon
  * @param props.width - Icon width
@@ -26,9 +27,9 @@ const CurvePathIconComponent: React.FC<IconProps> = ({
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<title>{title}</title>
-			{/* Smooth curved path from bottom-left to top-right */}
+			{/* Smooth curved path with central point symmetry */}
 			<path
-				d="M4 18 C8 8 12 16 20 6"
+				d="M4 18 C6 14 10 12 12 12 C14 12 18 10 20 6"
 				stroke={fill}
 				strokeWidth="2"
 				fill="none"
