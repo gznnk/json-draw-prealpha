@@ -79,7 +79,7 @@ const BorderColorMenuComponent: React.FC<BorderColorMenuProps> = ({
 					r="8"
 					fill="none"
 					stroke={currentColor}
-					strokeWidth="4"
+					strokeWidth="3"
 				/>
 			)}
 		</svg>
