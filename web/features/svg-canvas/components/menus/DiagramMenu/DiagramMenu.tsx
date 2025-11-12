@@ -234,16 +234,6 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	// Create the menu click handler with the current state
 	const onMenuClick = createMenuClickHandler(menuStateMap);
 
-	/**
-	 * Check if the menu section should be shown based on the menu types provided.
-	 *
-	 * @param menuTypes - An array of menu types to check.
-	 * @returns {boolean} - Returns true if any of the menu types are not "Hidden", otherwise false.
-	 */
-	const showSection = (...menuTypes: DiagramMenuType[]) => {
-		return menuTypes.some((menuType) => menuStateMap[menuType] !== "Hidden");
-	};
-
 	// Array to hold the menu item components.
 	// This will be used to render the menu items conditionally based on the state map.
 	const menuItemComponents = [];
@@ -329,8 +319,7 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 
 	// Create a section for text appearance items.
-	const showTextAppearanceSection = showSection("FontSize", "FontColor");
-	if (showTextAppearanceSection) {
+	if (menuConfig.fontStyle) {
 		menuItemComponents.push(
 			<DiagramMenuPositioner key="FontSize">
 				<DiagramMenuItem
@@ -363,12 +352,8 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 		menuItemComponents.push(
 			<BoldMenu key="Bold" selectedDiagrams={selectedItems} />,
 		);
-		menuItemComponents.push(
-			<DiagramMenuDivider key="TextAppearanceSectionDivider" />,
-		);
 	}
 
-	// Create a section for alignment items.
 	if (menuConfig.textAlignment) {
 		menuItemComponents.push(
 			<AlignmentMenu
@@ -378,8 +363,11 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 				selectedDiagrams={selectedItems}
 			/>,
 		);
+	}
+
+	if (menuConfig.fontStyle || menuConfig.textAlignment) {
 		menuItemComponents.push(
-			<DiagramMenuDivider key="AlignmentSectionDivider" />,
+			<DiagramMenuDivider key="TextAppearanceSectionDivider" />,
 		);
 	}
 
