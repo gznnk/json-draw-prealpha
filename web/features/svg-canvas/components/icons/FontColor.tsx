@@ -32,13 +32,13 @@ const FontColorComponent: React.FC<IconProps> = ({
 				dominantBaseline="central"
 				textAnchor="middle"
 				fontFamily="Arial, Helvetica, sans-serif"
-				fontSize="19"
+				fontSize="20"
 				fontWeight="500"
 				fill={fill}
 			>
 				A
 			</text>
-			<rect x="4" y="19" width="16" height="2" fill={fill} rx="0.5" />
+			<rect x="4" y="20" width="16" height="2" fill={fill} rx="0.5" />
 		</svg>
 	);
 };
