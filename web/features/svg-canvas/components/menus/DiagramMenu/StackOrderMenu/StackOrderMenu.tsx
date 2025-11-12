@@ -6,6 +6,7 @@ import {
 	StackOrderButton,
 } from "./StackOrderMenuStyled";
 import { useStackOrderChange } from "../../../../hooks/useStackOrderChange";
+import type { StackOrderChangeType } from "../../../../types/events/StackOrderChangeType";
 import type { Diagram } from "../../../../types/state/core/Diagram";
 import { newEventId } from "../../../../utils/core/newEventId";
 import { BringForward } from "../../../icons/BringForward";
@@ -30,14 +31,22 @@ const StackOrderMenuComponent: React.FC<StackOrderMenuProps> = ({
 }) => {
 	const onStackOrderChange = useStackOrderChange();
 
-	// Get the single selected diagram (only show menu when exactly one item is selected)
-	const selectedDiagram =
-		selectedDiagrams.length === 1 ? selectedDiagrams[0] : undefined;
-	const selectedItemId = selectedDiagram?.id;
-
-	if (!selectedItemId) {
+	// Show menu when at least one item is selected
+	if (selectedDiagrams.length === 0) {
 		return null;
 	}
+
+	const handleStackOrderChange = (changeType: StackOrderChangeType) => {
+		const eventId = newEventId();
+		// Apply the same operation to all selected diagrams with the same event ID
+		selectedDiagrams.forEach((diagram) => {
+			onStackOrderChange({
+				eventId,
+				changeType,
+				id: diagram.id,
+			});
+		});
+	};
 
 	return (
 		<DiagramMenuPositioner>
@@ -49,52 +58,28 @@ const StackOrderMenuComponent: React.FC<StackOrderMenuProps> = ({
 					<StackOrderMenuWrapper>
 						<StackOrderButton
 							isActive={false}
-							onClick={() =>
-								onStackOrderChange({
-									eventId: newEventId(),
-									changeType: "bringToFront",
-									id: selectedItemId,
-								})
-							}
+							onClick={() => handleStackOrderChange("bringToFront")}
 							title="Bring to Front"
 						>
 							<BringToFront />
 						</StackOrderButton>
 						<StackOrderButton
 							isActive={false}
-							onClick={() =>
-								onStackOrderChange({
-									eventId: newEventId(),
-									changeType: "bringForward",
-									id: selectedItemId,
-								})
-							}
+							onClick={() => handleStackOrderChange("bringForward")}
 							title="Bring Forward"
 						>
 							<BringForward />
 						</StackOrderButton>
 						<StackOrderButton
 							isActive={false}
-							onClick={() =>
-								onStackOrderChange({
-									eventId: newEventId(),
-									changeType: "sendBackward",
-									id: selectedItemId,
-								})
-							}
+							onClick={() => handleStackOrderChange("sendBackward")}
 							title="Send Backward"
 						>
 							<SendBackward />
 						</StackOrderButton>
 						<StackOrderButton
 							isActive={false}
-							onClick={() =>
-								onStackOrderChange({
-									eventId: newEventId(),
-									changeType: "sendToBack",
-									id: selectedItemId,
-								})
-							}
+							onClick={() => handleStackOrderChange("sendToBack")}
 							title="Send to Back"
 						>
 							<SendToBack />

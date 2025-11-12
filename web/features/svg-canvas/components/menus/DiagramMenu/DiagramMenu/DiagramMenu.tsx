@@ -401,17 +401,20 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	}
 
 	// Create a section for stack order items.
-	menuItemComponents.push(
-		<StackOrderMenu
-			key="StackOrder"
-			isOpen={isStackOrderMenuOpen}
-			onToggle={() => setIsStackOrderMenuOpen(!isStackOrderMenuOpen)}
-			selectedDiagrams={selectedItems}
-		/>,
-	);
-	menuItemComponents.push(
-		<DiagramMenuDivider key="StackOrderSectionDivider" />,
-	);
+	const slouldDisplayStackOrderMenu = selectedItems.length > 0;
+	if (slouldDisplayStackOrderMenu) {
+		menuItemComponents.push(
+			<StackOrderMenu
+				key="StackOrder"
+				isOpen={isStackOrderMenuOpen}
+				onToggle={() => setIsStackOrderMenuOpen(!isStackOrderMenuOpen)}
+				selectedDiagrams={selectedItems}
+			/>,
+		);
+		menuItemComponents.push(
+			<DiagramMenuDivider key="StackOrderSectionDivider" />,
+		);
+	}
 
 	// Create a section for keep aspect ratio items if applicable.
 	const shouldDisplayKeepAspectRatioMenu = Boolean(
