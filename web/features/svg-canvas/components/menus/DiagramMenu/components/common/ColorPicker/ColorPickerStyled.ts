@@ -19,8 +19,7 @@ export const ColorPickerContainer = styled.div`
 
 export const ColorGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(4, 28px);
-	grid-template-rows: repeat(4, 28px);
+	grid-template-columns: repeat(7, 28px);
 	gap: 8px;
 	margin-bottom: 12px;
 `;
@@ -35,7 +34,7 @@ export const ColorSwatch = styled.div<ColorSwatchProps>`
 	height: 28px;
 	box-sizing: border-box;
 	position: relative;
-	border-radius: 6px;
+	border-radius: 50%;
 	border: ${({ selected }) =>
 		selected ? "2px solid #6b7280" : "1px solid #e5e7eb"};
 	background: ${({ color }) =>
@@ -47,7 +46,7 @@ export const ColorSwatch = styled.div<ColorSwatchProps>`
 
 	&:hover {
 		border-color: #6b7280;
-		transform: scale(1.1);
+		transform: scale(1.15);
 		box-shadow: ${BOX_SHADOW};
 	}
 
@@ -60,6 +59,7 @@ type ColorInputProps = {
 	isValid: boolean;
 };
 
+// TODO: Invalid時の制御がおかしい
 export const ColorInput = styled.input<ColorInputProps>`
 	width: 120px;
 	height: 32px;
