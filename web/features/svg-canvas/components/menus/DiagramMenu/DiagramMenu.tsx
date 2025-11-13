@@ -21,7 +21,7 @@ import {
 } from "./DiagramMenuStyled";
 import type { DiagramMenuProps } from "./DiagramMenuTypes";
 import { getCommonMenuConfig } from "./DiagramMenuUtils";
-import { useDiagramMenuState } from "./hooks/useDiagramMenuState";
+import { useDiagramMenuDisplay } from "./hooks/useDiagramMenuDisplay";
 import { DiagramRegistry } from "../../../registry";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
 
@@ -37,17 +37,16 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	const singleSelectedItem =
 		selectedItems.length === 1 ? selectedItems[0] : undefined;
 
-	// Use diagram menu state hook to manage visibility, position, and selection state
-	const { shouldRender, menuPosition, shouldDisplayMenu } = useDiagramMenuState(
-		{
+	// Use diagram menu display hook to manage visibility, position, and selection state
+	const { shouldRender, menuPosition, shouldDisplayMenu } =
+		useDiagramMenuDisplay({
 			canvasProps,
 			containerWidth,
 			containerHeight,
 			menuRef,
 			selectedItems,
 			singleSelectedItem,
-		},
-	);
+		});
 
 	// Diagram menu controls open/close state.
 	const [isBgColorPickerOpen, setIsBgColorPickerOpen] = useState(false);

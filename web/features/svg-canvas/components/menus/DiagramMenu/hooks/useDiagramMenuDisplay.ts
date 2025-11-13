@@ -8,7 +8,7 @@ import type { Diagram } from "../../../../types/state/core/Diagram";
 import { calcRectangleVertices } from "../../../../utils/math/geometry/calcRectangleVertices";
 import { isFrame } from "../../../../utils/validation/isFrame";
 
-export type UseDiagramMenuStateProps = {
+export type UseDiagramMenuDisplayProps = {
 	canvasProps: SvgCanvasProps;
 	containerWidth: number;
 	containerHeight: number;
@@ -17,14 +17,14 @@ export type UseDiagramMenuStateProps = {
 	singleSelectedItem: Diagram | undefined;
 };
 
-export type UseDiagramMenuStateReturn = {
+export type UseDiagramMenuDisplayReturn = {
 	shouldRender: boolean;
 	menuPosition: { x: number; y: number };
 	shouldDisplayMenu: boolean;
 };
 
 /**
- * Hook for managing diagram menu state and position.
+ * Hook for managing diagram menu display and position.
  *
  * This hook manages:
  * - Menu visibility based on selection and interaction state
@@ -36,9 +36,9 @@ export type UseDiagramMenuStateReturn = {
  * if it would overflow the bottom of the viewport. Horizontal positioning is
  * centered on the diagram and adjusted to fit within viewport boundaries.
  */
-export const useDiagramMenuState = (
-	props: UseDiagramMenuStateProps,
-): UseDiagramMenuStateReturn => {
+export const useDiagramMenuDisplay = (
+	props: UseDiagramMenuDisplayProps,
+): UseDiagramMenuDisplayReturn => {
 	const {
 		canvasProps,
 		containerWidth,
