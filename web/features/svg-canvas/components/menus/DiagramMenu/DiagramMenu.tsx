@@ -19,12 +19,18 @@ import {
 	DiagramMenuDivider,
 	DiagramMenuWrapper,
 } from "./DiagramMenuStyled";
-import type { DiagramMenuProps } from "./DiagramMenuTypes";
 import { useDiagramMenuDisplay } from "./hooks/useDiagramMenuDisplay";
 import { useDiagramMenuItemsState } from "./hooks/useDiagramMenuItemsState";
 import { getCommonMenuConfig } from "./utils/getCommonMenuConfig";
+import type { SvgCanvasProps } from "../../../canvas/types/SvgCanvasProps";
 import { DiagramRegistry } from "../../../registry";
 import { getSelectedDiagrams } from "../../../utils/core/getSelectedDiagrams";
+
+type DiagramMenuProps = {
+	canvasProps: SvgCanvasProps;
+	containerWidth: number;
+	containerHeight: number;
+};
 
 const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	canvasProps,
