@@ -12,8 +12,8 @@ import { VerticalAlignBottom } from "../../../../../icons/VerticalAlignBottom";
 import { VerticalAlignMiddle } from "../../../../../icons/VerticalAlignMiddle";
 import { VerticalAlignTop } from "../../../../../icons/VerticalAlignTop";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
 
 type AlignmentMenuProps = {
 	isOpen: boolean;
@@ -49,9 +49,9 @@ const AlignmentMenuComponent: React.FC<AlignmentMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<AlignCenter title="Alignment" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<DiagramMenuControl>
 					<AlignmentMenuWrapper>

@@ -1,1 +1,0 @@
-export { DiagramMenuItem } from "./DiagramMenuItem";

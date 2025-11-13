@@ -7,7 +7,7 @@ import { isFillableState } from "../../../../../../utils/validation/isFillableSt
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
 import { ColorPicker } from "../../common/ColorPicker";
 import { ColorPreview } from "../../common/ColorPreview";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type BackgroundColorMenuProps = {
 	isOpen: boolean;
@@ -39,9 +39,9 @@ const BackgroundColorMenuComponent: React.FC<BackgroundColorMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<ColorPreview color={currentColor} title="Background Color" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<ColorPicker color={currentColor} onColorChange={handleColorChange} />
 			)}

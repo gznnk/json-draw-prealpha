@@ -7,7 +7,7 @@ import { isTransparentColor } from "../../../../../../utils/core/isTransparentCo
 import { isStrokableState } from "../../../../../../utils/validation/isStrokableState";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
 import { ColorPicker } from "../../common/ColorPicker";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type BorderColorMenuProps = {
 	isOpen: boolean;
@@ -87,9 +87,9 @@ const BorderColorMenuComponent: React.FC<BorderColorMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				{icon}
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<ColorPicker color={currentColor} onColorChange={handleColorChange} />
 			)}

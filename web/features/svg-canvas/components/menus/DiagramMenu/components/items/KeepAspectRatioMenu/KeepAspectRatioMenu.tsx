@@ -8,7 +8,7 @@ import type { GroupState } from "../../../../../../types/state/shapes/GroupState
 import { newEventId } from "../../../../../../utils/core/newEventId";
 import { isTransformativeState } from "../../../../../../utils/validation/isTransformativeState";
 import { AspectRatio } from "../../../../../icons/AspectRatio";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type KeepAspectRatioMenuProps = {
 	multiSelectGroup: GroupState | undefined;
@@ -52,9 +52,9 @@ const KeepAspectRatioMenuComponent: React.FC<KeepAspectRatioMenuProps> = ({
 	};
 
 	return (
-		<DiagramMenuItemNew isActive={isActive} onClick={handleClick}>
+		<DiagramMenuButton isActive={isActive} onClick={handleClick}>
 			<AspectRatio width={22} height={22} title="Keep Aspect Ratio" />
-		</DiagramMenuItemNew>
+		</DiagramMenuButton>
 	);
 };
 

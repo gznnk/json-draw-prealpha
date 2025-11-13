@@ -7,7 +7,7 @@ import { isStrokableState } from "../../../../../../utils/validation/isStrokable
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
 import { ColorPicker } from "../../common/ColorPicker";
 import { ColorPreview } from "../../common/ColorPreview";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type LineColorMenuProps = {
 	isOpen: boolean;
@@ -39,9 +39,9 @@ const LineColorMenuComponent: React.FC<LineColorMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<ColorPreview color={currentColor} title="Line Color" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<ColorPicker color={currentColor} onColorChange={handleColorChange} />
 			)}

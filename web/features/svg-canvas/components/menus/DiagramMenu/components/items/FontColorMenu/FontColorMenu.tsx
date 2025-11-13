@@ -7,7 +7,7 @@ import { isTextableState } from "../../../../../../utils/validation/isTextableSt
 import { FontColor } from "../../../../../icons/FontColor";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
 import { ColorPicker } from "../../common/ColorPicker";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type FontColorMenuProps = {
 	isOpen: boolean;
@@ -39,9 +39,9 @@ const FontColorMenuComponent: React.FC<FontColorMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<FontColor title="Font Color" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<ColorPicker color={currentColor} onColorChange={handleColorChange} />
 			)}

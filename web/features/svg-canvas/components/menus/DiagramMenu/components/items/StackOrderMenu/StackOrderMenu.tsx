@@ -15,8 +15,8 @@ import { SendBackward } from "../../../../../icons/SendBackward";
 import { SendToBack } from "../../../../../icons/SendToBack";
 import { StackOrder as StackOrderIcon } from "../../../../../icons/StackOrder";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
 
 type StackOrderMenuProps = {
 	isOpen: boolean;
@@ -50,9 +50,9 @@ const StackOrderMenuComponent: React.FC<StackOrderMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<StackOrderIcon title="Stack Order" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<DiagramMenuControl>
 					<StackOrderMenuWrapper>

@@ -16,8 +16,8 @@ import { DashedLine } from "../../../../../icons/DashedLine";
 import { DottedLine } from "../../../../../icons/DottedLine";
 import { SolidLine } from "../../../../../icons/SolidLine";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
 import { MenuSlider } from "../../common/MenuSlider";
 
 type BorderStyleMenuProps = {
@@ -93,9 +93,9 @@ const BorderStyleMenuComponent: React.FC<BorderStyleMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<DashedCircle title="Border Style" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<DiagramMenuControl>
 					<BorderStyleMenuWrapper>

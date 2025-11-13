@@ -8,8 +8,8 @@ import type { ArrowHeadType } from "../../../../../../types/core/ArrowHeadType";
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
 import { ArrowSwap } from "../../../../../icons/ArrowSwap";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
 
 type ArrowHeadMenuProps = {
 	selectedDiagrams: Diagram[];
@@ -64,7 +64,7 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 		<>
 			{/* Start Arrow Button */}
 			<DiagramMenuPositioner>
-				<DiagramMenuItemNew
+				<DiagramMenuButton
 					isActive={startArrowHeadSelectorOpen}
 					onClick={() => {
 						setStartArrowHeadSelectorOpen(!startArrowHeadSelectorOpen);
@@ -72,7 +72,7 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 					}}
 				>
 					<ArrowHeadIconPreview arrowType={startArrowHead} direction="start" />
-				</DiagramMenuItemNew>
+				</DiagramMenuButton>
 				{startArrowHeadSelectorOpen && (
 					<DiagramMenuControl>
 						<ArrowHeadSelector
@@ -85,13 +85,13 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 			</DiagramMenuPositioner>
 
 			{/* Swap Arrows Button */}
-			<DiagramMenuItemNew onClick={handleSwapArrows}>
+			<DiagramMenuButton onClick={handleSwapArrows}>
 				<ArrowSwap fill="#333333" width={24} height={24} title="Swap arrows" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 
 			{/* End Arrow Button */}
 			<DiagramMenuPositioner>
-				<DiagramMenuItemNew
+				<DiagramMenuButton
 					isActive={endArrowHeadSelectorOpen}
 					onClick={() => {
 						setEndArrowHeadSelectorOpen(!endArrowHeadSelectorOpen);
@@ -99,7 +99,7 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 					}}
 				>
 					<ArrowHeadIconPreview arrowType={endArrowHead} direction="end" />
-				</DiagramMenuItemNew>
+				</DiagramMenuButton>
 				{endArrowHeadSelectorOpen && (
 					<DiagramMenuControl>
 						<ArrowHeadSelector

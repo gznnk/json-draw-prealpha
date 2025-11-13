@@ -8,8 +8,8 @@ import { isTextableState } from "../../../../../../utils/validation/isTextableSt
 import { FontSize } from "../../../../../icons/FontSize";
 import { MAX_FONT_SIZE, MIN_FONT_SIZE } from "../../../DiagramMenuConstants";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
 import { MenuSlider } from "../../common/MenuSlider";
 
 type FontSizeMenuProps = {
@@ -54,9 +54,9 @@ const FontSizeMenuComponent: React.FC<FontSizeMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<FontSize title="Font Size" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<DiagramMenuControl>
 					<FontSizeMenuWrapper>

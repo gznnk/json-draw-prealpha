@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const DiagramMenuItemDiv = styled.div`
+export const DiagramMenuButtonDiv = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;

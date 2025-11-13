@@ -19,8 +19,8 @@ import { RoundedPathIcon } from "../../../../../icons/RoundedPathIcon";
 import { SolidLine } from "../../../../../icons/SolidLine";
 import { StraightPathIcon } from "../../../../../icons/StraightPathIcon";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
 import { MenuSlider } from "../../common/MenuSlider";
 
 type LineStyleMenuProps = {
@@ -82,9 +82,9 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 
 	return (
 		<DiagramMenuPositioner>
-			<DiagramMenuItemNew isActive={isOpen} onClick={onToggle}>
+			<DiagramMenuButton isActive={isOpen} onClick={onToggle}>
 				<LineStyleIcon title="Line Style" />
-			</DiagramMenuItemNew>
+			</DiagramMenuButton>
 			{isOpen && (
 				<DiagramMenuControl>
 					<LineStyleMenuWrapper>

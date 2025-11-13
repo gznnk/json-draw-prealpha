@@ -5,7 +5,7 @@ import { useGroup } from "../../../../../../hooks/useGroup";
 import { useUngroup } from "../../../../../../hooks/useUngroup";
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
 import { Group } from "../../../../../icons/Group";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type GroupMenuProps = {
 	selectedDiagrams: Diagram[];
@@ -32,9 +32,9 @@ const GroupMenuComponent: React.FC<GroupMenuProps> = ({ selectedDiagrams }) => {
 	};
 
 	return (
-		<DiagramMenuItemNew isActive={isActive} onClick={handleClick}>
+		<DiagramMenuButton isActive={isActive} onClick={handleClick}>
 			<Group width={24} height={24} title={isActive ? "Ungroup" : "Group"} />
-		</DiagramMenuItemNew>
+		</DiagramMenuButton>
 	);
 };
 

@@ -5,7 +5,7 @@ import { useDiagramUpdateRecursively } from "../../../../../../hooks/useDiagramU
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
 import { isTextableState } from "../../../../../../utils/validation/isTextableState";
 import { Bold as BoldIcon } from "../../../../../icons/Bold";
-import { DiagramMenuItemNew } from "../../common/DiagramMenuItem/DiagramMenuItemNew";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 type BoldMenuProps = {
 	selectedDiagrams: Diagram[];
@@ -33,13 +33,13 @@ const BoldMenuComponent: React.FC<BoldMenuProps> = ({ selectedDiagrams }) => {
 	};
 
 	return (
-		<DiagramMenuItemNew
+		<DiagramMenuButton
 			isActive={isActive}
 			onClick={handleClick}
 			isHidden={!shouldShow}
 		>
 			<BoldIcon title="Bold" />
-		</DiagramMenuItemNew>
+		</DiagramMenuButton>
 	);
 };
 
