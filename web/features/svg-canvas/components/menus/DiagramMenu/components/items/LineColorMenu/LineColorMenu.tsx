@@ -5,6 +5,7 @@ import { useDiagramUpdateRecursively } from "../../../../../../hooks/useDiagramU
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
 import { isStrokableState } from "../../../../../../utils/validation/isStrokableState";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { ColorPicker } from "../../common/ColorPicker";
 import { ColorPreview } from "../../common/ColorPreview";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
@@ -26,8 +27,8 @@ const LineColorMenuComponent: React.FC<LineColorMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram and check if it's strokeable
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram and check if it's strokeable
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 	const strokeableDiagram =
 		firstDiagram && isStrokableState(firstDiagram) ? firstDiagram : null;
 

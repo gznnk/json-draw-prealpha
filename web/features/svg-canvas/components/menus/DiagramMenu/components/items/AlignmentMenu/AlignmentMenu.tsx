@@ -12,6 +12,7 @@ import { VerticalAlignBottom } from "../../../../../icons/VerticalAlignBottom";
 import { VerticalAlignMiddle } from "../../../../../icons/VerticalAlignMiddle";
 import { VerticalAlignTop } from "../../../../../icons/VerticalAlignTop";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
 
@@ -28,8 +29,8 @@ const AlignmentMenuComponent: React.FC<AlignmentMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram and check if it's textable
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram and check if it's textable
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 	const textableDiagram =
 		firstDiagram && isTextableState(firstDiagram) ? firstDiagram : null;
 

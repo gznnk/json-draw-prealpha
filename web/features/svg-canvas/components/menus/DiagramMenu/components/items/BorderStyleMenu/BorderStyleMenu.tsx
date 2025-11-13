@@ -23,6 +23,7 @@ import {
 	MIN_BORDER_WIDTH,
 } from "../../../DiagramMenuConstants";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
 import { MenuSlider } from "../../common/MenuSlider";
@@ -43,8 +44,8 @@ const BorderStyleMenuComponent: React.FC<BorderStyleMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 
 	// Type-safe extraction of properties using type guards
 	const strokeWidth = isStrokableState(firstDiagram)

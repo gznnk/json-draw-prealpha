@@ -5,6 +5,7 @@ import { useDiagramUpdateRecursively } from "../../../../../../hooks/useDiagramU
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
 import { isFillableState } from "../../../../../../utils/validation/isFillableState";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { ColorPicker } from "../../common/ColorPicker";
 import { ColorPreview } from "../../common/ColorPreview";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
@@ -26,8 +27,8 @@ const BackgroundColorMenuComponent: React.FC<BackgroundColorMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram and check if it's fillable
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram and check if it's fillable
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 	const fillableDiagram =
 		firstDiagram && isFillableState(firstDiagram) ? firstDiagram : null;
 

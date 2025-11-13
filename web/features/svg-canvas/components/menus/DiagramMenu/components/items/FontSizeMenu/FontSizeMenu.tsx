@@ -12,6 +12,7 @@ import {
 	MIN_FONT_SIZE,
 } from "../../../DiagramMenuConstants";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
 import { MenuSlider } from "../../common/MenuSlider";
@@ -33,8 +34,8 @@ const FontSizeMenuComponent: React.FC<FontSizeMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram and check if it's textable
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram and check if it's textable
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 	const fontSize = isTextableState(firstDiagram)
 		? firstDiagram.fontSize
 		: DEFAULT_FONT_SIZE;

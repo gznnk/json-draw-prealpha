@@ -20,6 +20,7 @@ import {
 	MIN_STROKE_WIDTH,
 } from "../../../DiagramMenuConstants";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
 import { MenuSlider } from "../../common/MenuSlider";
@@ -37,8 +38,8 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 
 	// Get stroke width, path type, and stroke dash type from the first diagram
 	// If the property doesn't exist, it will be undefined

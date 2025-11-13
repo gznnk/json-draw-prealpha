@@ -8,6 +8,7 @@ import type { ArrowHeadType } from "../../../../../../types/core/ArrowHeadType";
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
 import { ArrowSwap } from "../../../../../icons/ArrowSwap";
 import { DiagramMenuPositioner } from "../../../DiagramMenuStyled";
+import { getFirstNonGroupDiagram } from "../../../utils/getFirstNonGroupDiagram";
 import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
 
@@ -28,8 +29,8 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
 
-	// Get the first diagram's arrow settings
-	const firstDiagram = selectedDiagrams[0];
+	// Get the first non-Group diagram's arrow settings
+	const firstDiagram = getFirstNonGroupDiagram(selectedDiagrams);
 	const startArrowHead = (
 		firstDiagram as { startArrowHead?: ArrowHeadType } | undefined
 	)?.startArrowHead;
