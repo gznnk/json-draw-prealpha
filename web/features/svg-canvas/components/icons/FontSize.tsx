@@ -32,7 +32,7 @@ const FontSizeComponent: React.FC<IconProps> = ({
 				x="3"
 				y="21"
 				fontFamily="Arial, sans-serif"
-				fontSize="25"
+				fontSize="24"
 				fontWeight="500"
 				fill={fill}
 			>
