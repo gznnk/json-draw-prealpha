@@ -62,12 +62,13 @@ const ColorSelectorComponent: React.FC<ColorSelectorProps> = ({
 	return (
 		<ColorPickerContainer>
 			<ColorGrid>
-				{PRESET_COLORS.map((c) => (
+				{PRESET_COLORS.map((preset) => (
 					<ColorSwatch
-						key={c}
-						color={c}
-						selected={c.toLowerCase() === color.toLowerCase()}
-						onClick={() => handleColorClick(c)}
+						key={preset.value}
+						color={preset.value}
+						selected={preset.value.toLowerCase() === color.toLowerCase()}
+						onClick={() => handleColorClick(preset.value)}
+						title={preset.name}
 					/>
 				))}
 			</ColorGrid>
