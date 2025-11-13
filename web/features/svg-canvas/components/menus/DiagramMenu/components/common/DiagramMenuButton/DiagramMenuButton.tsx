@@ -16,9 +16,6 @@ type DiagramMenuButtonProps = {
 
 	/** Content to render inside the menu button (typically an icon) */
 	children: React.ReactNode;
-
-	/** Whether the menu button should be hidden */
-	isHidden?: boolean;
 };
 
 /**
@@ -29,10 +26,7 @@ const DiagramMenuButtonComponent: React.FC<DiagramMenuButtonProps> = ({
 	isActive = false,
 	onClick,
 	children,
-	isHidden = false,
 }) => {
-	if (isHidden) return null;
-
 	return (
 		<DiagramMenuButtonDiv
 			className={isActive ? "active" : ""}

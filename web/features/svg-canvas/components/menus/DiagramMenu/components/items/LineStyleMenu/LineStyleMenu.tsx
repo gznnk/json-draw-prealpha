@@ -1,11 +1,7 @@
 import type React from "react";
 import { memo } from "react";
 
-import {
-	LineStyleMenuWrapper,
-	LineStyleSection,
-	LineStyleButton,
-} from "./LineStyleMenuStyled";
+import { LineStyleMenuWrapper, LineStyleSection } from "./LineStyleMenuStyled";
 import { useDiagramUpdateRecursively } from "../../../../../../hooks/useDiagramUpdateRecursively";
 import type { PathType } from "../../../../../../types/core/PathType";
 import type { StrokeDashType } from "../../../../../../types/core/StrokeDashType";
@@ -98,59 +94,52 @@ const LineStyleMenuComponent: React.FC<LineStyleMenuProps> = ({
 						/>
 						{/* Path Type */}
 						<LineStyleSection>
-							<LineStyleButton
+							<DiagramMenuButton
 								isActive={pathType === "Straight"}
 								onClick={() => handlePathTypeChange("Straight")}
-								title="Straight path"
 							>
-								<StraightPathIcon />
-							</LineStyleButton>
-							<LineStyleButton
+								<StraightPathIcon title="Straight path" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={pathType === "Polyline"}
 								onClick={() => handlePathTypeChange("Polyline")}
-								title="Polyline path"
 							>
-								<PolylinePathIcon />
-							</LineStyleButton>
-							<LineStyleButton
+								<PolylinePathIcon title="Polyline path" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={pathType === "Rounded"}
 								onClick={() => handlePathTypeChange("Rounded")}
-								title="Rounded path"
 							>
-								<RoundedPathIcon />
-							</LineStyleButton>
-							<LineStyleButton
+								<RoundedPathIcon title="Rounded path" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={pathType === "Curve"}
 								onClick={() => handlePathTypeChange("Curve")}
-								title="Curve path"
 							>
-								<CurvePathIcon />
-							</LineStyleButton>
+								<CurvePathIcon title="Curve path" />
+							</DiagramMenuButton>
 						</LineStyleSection>
 
 						{/* Stroke Dash Type */}
 						<LineStyleSection>
-							<LineStyleButton
+							<DiagramMenuButton
 								isActive={strokeDashType === "solid"}
 								onClick={() => handleStrokeDashChange("solid")}
-								title="Solid line"
 							>
-								<SolidLine />
-							</LineStyleButton>
-							<LineStyleButton
+								<SolidLine title="Solid line" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={strokeDashType === "dashed"}
 								onClick={() => handleStrokeDashChange("dashed")}
-								title="Dashed line"
 							>
-								<DashedLine />
-							</LineStyleButton>
-							<LineStyleButton
+								<DashedLine title="Dashed line" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={strokeDashType === "dotted"}
 								onClick={() => handleStrokeDashChange("dotted")}
-								title="Dotted line"
 							>
-								<DottedLine />
-							</LineStyleButton>
+								<DottedLine title="Dotted line" />
+							</DiagramMenuButton>
 						</LineStyleSection>
 					</LineStyleMenuWrapper>
 				</DiagramMenuControl>

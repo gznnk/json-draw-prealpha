@@ -4,7 +4,6 @@ import { memo } from "react";
 import {
 	BorderStyleMenuWrapper,
 	BorderStyleSection,
-	BorderStyleButton,
 } from "./BorderStyleMenuStyled";
 import { useDiagramUpdateRecursively } from "../../../../../../hooks/useDiagramUpdateRecursively";
 import type { StrokeDashType } from "../../../../../../types/core/StrokeDashType";
@@ -101,27 +100,24 @@ const BorderStyleMenuComponent: React.FC<BorderStyleMenuProps> = ({
 					<BorderStyleMenuWrapper>
 						{/* Stroke Dash Type */}
 						<BorderStyleSection>
-							<BorderStyleButton
+							<DiagramMenuButton
 								isActive={strokeDashType === "solid"}
 								onClick={() => handleStrokeDashChange("solid")}
-								title="Solid line"
 							>
-								<SolidLine />
-							</BorderStyleButton>
-							<BorderStyleButton
+								<SolidLine title="Solid line" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={strokeDashType === "dashed"}
 								onClick={() => handleStrokeDashChange("dashed")}
-								title="Dashed line"
 							>
-								<DashedLine />
-							</BorderStyleButton>
-							<BorderStyleButton
+								<DashedLine title="Dashed line" />
+							</DiagramMenuButton>
+							<DiagramMenuButton
 								isActive={strokeDashType === "dotted"}
 								onClick={() => handleStrokeDashChange("dotted")}
-								title="Dotted line"
 							>
-								<DottedLine />
-							</BorderStyleButton>
+								<DottedLine title="Dotted line" />
+							</DiagramMenuButton>
 						</BorderStyleSection>
 
 						{/* Stroke Width */}

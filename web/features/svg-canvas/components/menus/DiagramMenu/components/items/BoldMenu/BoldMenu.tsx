@@ -19,9 +19,12 @@ const BoldMenuComponent: React.FC<BoldMenuProps> = ({ selectedDiagrams }) => {
 	const textableDiagram =
 		firstDiagram && isTextableState(firstDiagram) ? firstDiagram : null;
 
-	// Determine if the menu should be shown and if it's active
-	const shouldShow = Boolean(textableDiagram);
-	const isActive = Boolean(textableDiagram?.fontWeight === "bold");
+	// Return null if no textable diagram is selected
+	if (!textableDiagram) {
+		return null;
+	}
+
+	const isActive = textableDiagram.fontWeight === "bold";
 
 	const handleClick = () => {
 		applyDiagramUpdate({
@@ -33,11 +36,7 @@ const BoldMenuComponent: React.FC<BoldMenuProps> = ({ selectedDiagrams }) => {
 	};
 
 	return (
-		<DiagramMenuButton
-			isActive={isActive}
-			onClick={handleClick}
-			isHidden={!shouldShow}
-		>
+		<DiagramMenuButton isActive={isActive} onClick={handleClick}>
 			<BoldIcon title="Bold" />
 		</DiagramMenuButton>
 	);

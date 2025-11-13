@@ -1,10 +1,7 @@
 import type React from "react";
 import { memo } from "react";
 
-import {
-	StackOrderMenuWrapper,
-	StackOrderButton,
-} from "./StackOrderMenuStyled";
+import { StackOrderMenuWrapper } from "./StackOrderMenuStyled";
 import { useStackOrderChange } from "../../../../../../hooks/useStackOrderChange";
 import type { StackOrderChangeType } from "../../../../../../types/events/StackOrderChangeType";
 import type { Diagram } from "../../../../../../types/state/core/Diagram";
@@ -56,34 +53,30 @@ const StackOrderMenuComponent: React.FC<StackOrderMenuProps> = ({
 			{isOpen && (
 				<DiagramMenuControl>
 					<StackOrderMenuWrapper>
-						<StackOrderButton
+						<DiagramMenuButton
 							isActive={false}
 							onClick={() => handleStackOrderChange("bringToFront")}
-							title="Bring to Front"
 						>
-							<BringToFront />
-						</StackOrderButton>
-						<StackOrderButton
+							<BringToFront title="Bring to Front" />
+						</DiagramMenuButton>
+						<DiagramMenuButton
 							isActive={false}
 							onClick={() => handleStackOrderChange("bringForward")}
-							title="Bring Forward"
 						>
-							<BringForward />
-						</StackOrderButton>
-						<StackOrderButton
+							<BringForward title="Bring Forward" />
+						</DiagramMenuButton>
+						<DiagramMenuButton
 							isActive={false}
 							onClick={() => handleStackOrderChange("sendBackward")}
-							title="Send Backward"
 						>
-							<SendBackward />
-						</StackOrderButton>
-						<StackOrderButton
+							<SendBackward title="Send Backward" />
+						</DiagramMenuButton>
+						<DiagramMenuButton
 							isActive={false}
 							onClick={() => handleStackOrderChange("sendToBack")}
-							title="Send to Back"
 						>
-							<SendToBack />
-						</StackOrderButton>
+							<SendToBack title="Send to Back" />
+						</DiagramMenuButton>
 					</StackOrderMenuWrapper>
 				</DiagramMenuControl>
 			)}

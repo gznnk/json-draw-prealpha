@@ -2,11 +2,9 @@ import type React from "react";
 import { memo } from "react";
 
 import { ArrowHeadIconPreview } from "./ArrowHeadIconPreview";
-import {
-	ArrowHeadSelectorGrid,
-	ArrowHeadSelectorButton,
-} from "./ArrowHeadMenuStyled";
+import { ArrowHeadSelectorGrid } from "./ArrowHeadMenuStyled";
 import type { ArrowHeadType } from "../../../../../../types/core/ArrowHeadType";
+import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuButton";
 
 const arrowHeadTypes: ArrowHeadType[] = [
 	"None",
@@ -33,14 +31,13 @@ const ArrowHeadSelectorComponent: React.FC<ArrowHeadSelectorProps> = ({
 	return (
 		<ArrowHeadSelectorGrid>
 			{arrowHeadTypes.map((type) => (
-				<ArrowHeadSelectorButton
+				<DiagramMenuButton
 					key={type}
 					isActive={selectedArrowHead === type}
 					onClick={() => onSelect(type)}
-					title={type}
 				>
 					<ArrowHeadIconPreview arrowType={type} direction={direction} />
-				</ArrowHeadSelectorButton>
+				</DiagramMenuButton>
 			))}
 		</ArrowHeadSelectorGrid>
 	);
