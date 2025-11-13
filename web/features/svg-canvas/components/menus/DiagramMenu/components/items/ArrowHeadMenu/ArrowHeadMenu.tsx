@@ -1,5 +1,5 @@
 import type React from "react";
-import { memo, useState } from "react";
+import { memo } from "react";
 
 import { ArrowHeadIconPreview } from "./ArrowHeadIconPreview";
 import { ArrowHeadSelector } from "./ArrowHeadSelector";
@@ -12,18 +12,21 @@ import { DiagramMenuButton } from "../../common/DiagramMenuButton/DiagramMenuBut
 import { DiagramMenuControl } from "../../common/DiagramMenuControl";
 
 type ArrowHeadMenuProps = {
+	isStartOpen: boolean;
+	isEndOpen: boolean;
+	onToggleStart: () => void;
+	onToggleEnd: () => void;
 	selectedDiagrams: Diagram[];
 };
 
 const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
+	isStartOpen,
+	isEndOpen,
+	onToggleStart,
+	onToggleEnd,
 	selectedDiagrams,
 }) => {
 	const applyDiagramUpdate = useDiagramUpdateRecursively();
-
-	const [startArrowHeadSelectorOpen, setStartArrowHeadSelectorOpen] =
-		useState(false);
-	const [endArrowHeadSelectorOpen, setEndArrowHeadSelectorOpen] =
-		useState(false);
 
 	// Get the first diagram's arrow settings
 	const firstDiagram = selectedDiagrams[0];
@@ -39,7 +42,7 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 			items: selectedDiagrams,
 			data: { startArrowHead: arrowType },
 		});
-		setStartArrowHeadSelectorOpen(false);
+		// Don't close the selector when selecting arrow type
 	};
 
 	const handleEndArrowChange = (arrowType: ArrowHeadType) => {
@@ -47,7 +50,7 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 			items: selectedDiagrams,
 			data: { endArrowHead: arrowType },
 		});
-		setEndArrowHeadSelectorOpen(false);
+		// Don't close the selector when selecting arrow type
 	};
 
 	const handleSwapArrows = () => {
@@ -64,16 +67,10 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 		<>
 			{/* Start Arrow Button */}
 			<DiagramMenuPositioner>
-				<DiagramMenuButton
-					isActive={startArrowHeadSelectorOpen}
-					onClick={() => {
-						setStartArrowHeadSelectorOpen(!startArrowHeadSelectorOpen);
-						setEndArrowHeadSelectorOpen(false);
-					}}
-				>
+				<DiagramMenuButton isActive={isStartOpen} onClick={onToggleStart}>
 					<ArrowHeadIconPreview arrowType={startArrowHead} direction="start" />
 				</DiagramMenuButton>
-				{startArrowHeadSelectorOpen && (
+				{isStartOpen && (
 					<DiagramMenuControl>
 						<ArrowHeadSelector
 							selectedArrowHead={startArrowHead}
@@ -91,16 +88,10 @@ const ArrowHeadMenuComponent: React.FC<ArrowHeadMenuProps> = ({
 
 			{/* End Arrow Button */}
 			<DiagramMenuPositioner>
-				<DiagramMenuButton
-					isActive={endArrowHeadSelectorOpen}
-					onClick={() => {
-						setEndArrowHeadSelectorOpen(!endArrowHeadSelectorOpen);
-						setStartArrowHeadSelectorOpen(false);
-					}}
-				>
+				<DiagramMenuButton isActive={isEndOpen} onClick={onToggleEnd}>
 					<ArrowHeadIconPreview arrowType={endArrowHead} direction="end" />
 				</DiagramMenuButton>
-				{endArrowHeadSelectorOpen && (
+				{isEndOpen && (
 					<DiagramMenuControl>
 						<ArrowHeadSelector
 							selectedArrowHead={endArrowHead}

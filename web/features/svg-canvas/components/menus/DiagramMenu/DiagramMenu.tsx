@@ -71,7 +71,14 @@ const DiagramMenuComponent: React.FC<DiagramMenuProps> = ({
 	// Create a section for arrow head.
 	if (menuConfig.arrowHead) {
 		menuItemComponents.push(
-			<ArrowHeadMenu key="Arrow" selectedDiagrams={selectedItems} />,
+			<ArrowHeadMenu
+				key="Arrow"
+				isStartOpen={menuState.isOpen("arrowHeadStart")}
+				isEndOpen={menuState.isOpen("arrowHeadEnd")}
+				onToggleStart={() => menuState.toggle("arrowHeadStart")}
+				onToggleEnd={() => menuState.toggle("arrowHeadEnd")}
+				selectedDiagrams={selectedItems}
+			/>,
 		);
 		menuItemComponents.push(<DiagramMenuDivider key="ArrowDivider" />);
 	}
