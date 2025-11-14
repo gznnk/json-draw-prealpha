@@ -1,4 +1,5 @@
 import { PathDefaultState } from "../../../constants/state/shapes/PathDefaultState";
+import type { Point } from "../../../types/core/Point";
 import type { PathPointData } from "../../../types/data/shapes/PathPointData";
 import type { PathState } from "../../../types/state/shapes/PathState";
 import { newId } from "../../../utils/shapes/common/newId";
@@ -6,7 +7,7 @@ import { newId } from "../../../utils/shapes/common/newId";
 /**
  * Creates path state with the specified properties.
  *
- * @param params - Path parameters including position and styling
+ * @param params - Path parameters including position, styling, and optional points
  * @returns The created path state object
  */
 export const createPathState = ({
@@ -14,12 +15,40 @@ export const createPathState = ({
 	y = 0,
 	stroke = "black",
 	strokeWidth = 1,
+	items,
 }: {
 	x?: number;
 	y?: number;
 	stroke?: string;
 	strokeWidth?: number;
+	items?: Point[];
 }): PathState => {
+	// If items are provided, use them; otherwise create default points
+	const pathPoints: PathPointData[] = items
+		? items.map(
+				(point) =>
+					({
+						id: newId(),
+						type: "PathPoint",
+						x: point.x,
+						y: point.y,
+					}) as PathPointData,
+			)
+		: [
+				{
+					id: newId(),
+					type: "PathPoint",
+					x: x - 50,
+					y: y - 50,
+				} as PathPointData,
+				{
+					id: newId(),
+					type: "PathPoint",
+					x: x + 50,
+					y: y + 50,
+				} as PathPointData,
+			];
+
 	return {
 		...PathDefaultState,
 		id: newId(),
@@ -27,19 +56,6 @@ export const createPathState = ({
 		y,
 		stroke,
 		strokeWidth,
-		items: [
-			{
-				id: newId(),
-				type: "PathPoint",
-				x: x - 50,
-				y: y - 50,
-			} as PathPointData,
-			{
-				id: newId(),
-				type: "PathPoint",
-				x: x + 50,
-				y: y + 50,
-			} as PathPointData,
-		] as PathPointData[],
+		items: pathPoints,
 	};
 };

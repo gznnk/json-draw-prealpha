@@ -79,7 +79,20 @@ export class OpenAIClient implements LLMClient {
 
 						// itemsが指定されている場合は追加
 						if (param.items) {
-							property.items = param.items;
+							const items: Record<string, unknown> = {
+								type: param.items.type,
+							};
+
+							// itemsのtypeがobjectの場合、propertiesとadditionalPropertiesを設定
+							if (param.items.type === "object" && param.items.properties) {
+								items.properties = param.items.properties;
+								// additionalPropertiesは常にfalse
+								items.additionalProperties = false;
+								// propertiesの全てのキーをrequiredに設定
+								items.required = Object.keys(param.items.properties);
+							}
+
+							property.items = items;
 						}
 
 						acc[param.name] = property;
