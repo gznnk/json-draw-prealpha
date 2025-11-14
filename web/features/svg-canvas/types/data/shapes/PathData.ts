@@ -8,7 +8,7 @@ import type { PathType } from "../../core/PathType";
  */
 export const PathFeatures = {
 	frameable: true,
-	transformative: false,
+	transformative: true,
 	itemable: true,
 	strokable: true,
 	cornerRoundable: false,

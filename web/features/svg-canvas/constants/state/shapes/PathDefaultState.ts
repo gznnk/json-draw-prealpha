@@ -9,5 +9,6 @@ export const PathDefaultState = CreateDefaultState<PathState>({
 	baseData: PathDefaultData,
 	properties: {
 		outlineDisabled: true,
+		hideTransformControl: true,
 	},
 });
