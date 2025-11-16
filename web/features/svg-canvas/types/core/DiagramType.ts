@@ -8,6 +8,7 @@ export type DiagramType =
 	| "ConnectPoint"
 	| "Ellipse"
 	| "Group"
+	| "HtmlPreview"
 	| "Image"
 	| "Path"
 	| "PathPoint"

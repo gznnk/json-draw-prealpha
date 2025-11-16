@@ -381,6 +381,40 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 					/>
 				</svg>
 			</CanvasMenuItem>
+			<CanvasMenuItem
+				onClick={() =>
+					onAddDiagramByType?.({
+						eventId: newEventId(),
+						diagramType: "HtmlPreview",
+						isSelected: true,
+					})
+				}
+			>
+				<svg width="20" height="20" viewBox="0 0 24 24">
+					<title>Add HTML Preview</title>
+					<rect
+						x="2"
+						y="2"
+						width="20"
+						height="20"
+						rx="2"
+						ry="2"
+						fill="#f0f0f0"
+						stroke="#4A90E2"
+						strokeWidth="1.5"
+					/>
+					<text
+						x="12"
+						y="14"
+						fontSize="8"
+						fontWeight="bold"
+						textAnchor="middle"
+						fill="#4A90E2"
+					>
+						HTML
+					</text>
+				</svg>
+			</CanvasMenuItem>
 		</CanvasMenuDiv>
 	);
 };
