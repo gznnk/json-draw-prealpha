@@ -39,6 +39,7 @@ export const CanvasMenuCategoryLabel = styled.div`
 	padding: 4px 8px;
 	cursor: pointer;
 	user-select: none;
+	pointer-events: auto;
 
 	&:hover {
 		color: #333;
