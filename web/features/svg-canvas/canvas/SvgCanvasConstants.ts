@@ -11,9 +11,9 @@ export const MULTI_SELECT_GROUP = "MultiSelectGroup";
 /**
  * Minimum zoom level for the canvas.
  */
-export const MIN_ZOOM_LEVEL = 0.1;
+export const MIN_ZOOM_LEVEL = 0.01;
 
 /**
  * Maximum zoom level for the canvas.
  */
-export const MAX_ZOOM_LEVEL = 3.0;
+export const MAX_ZOOM_LEVEL = 4.0;
