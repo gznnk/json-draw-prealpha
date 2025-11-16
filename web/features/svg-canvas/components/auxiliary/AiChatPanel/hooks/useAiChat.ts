@@ -12,6 +12,10 @@ import {
 	useAddCircleShapeTool,
 } from "../../../../tools/add_circle_shape";
 import {
+	htmlPreviewToolDefinition,
+	useAddHtmlPreviewTool,
+} from "../../../../tools/add_html_preview";
+import {
 	markdownShapeToolDefinition,
 	useAddMarkdownShapeTool,
 } from "../../../../tools/add_markdown_shape";
@@ -71,6 +75,7 @@ export const useAiChat = () => {
 	const addTextElement = useAddTextElementTool(eventBus);
 	const addPathShape = useAddPathShapeTool(eventBus);
 	const addSvgShape = useAddSvgShapeTool(eventBus);
+	const addHtmlPreview = useAddHtmlPreviewTool(eventBus);
 	const connectShapes = useConnectShapesTool(eventBus);
 	const groupShapes = useGroupShapesTool(eventBus);
 	const addMarkdownShape = useAddMarkdownShapeTool(eventBus);
@@ -87,6 +92,7 @@ export const useAiChat = () => {
 				textElementToolDefinition,
 				pathShapeToolDefinition,
 				svgShapeToolDefinition,
+				htmlPreviewToolDefinition,
 				connectShapesToolDefinition,
 				groupShapesToolDefinition,
 				markdownShapeToolDefinition,
@@ -100,6 +106,7 @@ export const useAiChat = () => {
 				add_text_element: addTextElement,
 				add_path_shape: addPathShape,
 				add_svg_shape: addSvgShape,
+				add_html_preview: addHtmlPreview,
 				connect_shapes: connectShapes,
 				group_shapes: groupShapes,
 				add_markdown_shape: addMarkdownShape,
@@ -114,6 +121,7 @@ export const useAiChat = () => {
 			addTextElement,
 			addPathShape,
 			addSvgShape,
+			addHtmlPreview,
 			connectShapes,
 			groupShapes,
 			addMarkdownShape,
@@ -136,7 +144,7 @@ export const useAiChat = () => {
 		if (apiKey) {
 			const client = LLMClientFactory.createClient(apiKey, {
 				systemPrompt:
-					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles, circles, paths, and custom SVG shapes), add text elements, add markdown-enabled text boxes, connect shapes with fully customizable styles, group shapes together, retrieve information about existing shapes on the canvas, get detailed information about selected shapes, and update properties of existing diagrams. When users ask you to create or modify canvas elements, use the appropriate tools to help them. Use the add_path_shape tool to create custom lines and paths that can be edited. Use the add_svg_shape tool to add custom SVG graphics defined by SVG markup. Use the connect_shapes tool to connect any shapes with custom arrow heads (FilledTriangle, ConcaveTriangle, OpenArrow, HollowTriangle, FilledDiamond, HollowDiamond, Circle, None), line styles (solid, dashed, dotted), path types (Linear, Bezier, Rounded), and specific anchor positions (topLeftPoint, topCenterPoint, topRightPoint, leftCenterPoint, rightCenterPoint, bottomLeftPoint, bottomCenterPoint, bottomRightPoint). Use the update_diagram tool to modify existing shapes' properties such as position, size, colors, text, and other visual attributes.",
+					"You are a helpful AI assistant with access to canvas manipulation tools. You can add shapes (rectangles, circles, paths, and custom SVG shapes), add text elements, add HTML preview boxes with sanitized HTML content, add markdown-enabled text boxes, connect shapes with fully customizable styles, group shapes together, retrieve information about existing shapes on the canvas, get detailed information about selected shapes, and update properties of existing diagrams. When users ask you to create or modify canvas elements, use the appropriate tools to help them. Use the add_path_shape tool to create custom lines and paths that can be edited. Use the add_svg_shape tool to add custom SVG graphics defined by SVG markup. Use the add_html_preview tool to add HTML content that will be rendered and displayed (with DOMPurify sanitization for security). Use the connect_shapes tool to connect any shapes with custom arrow heads (FilledTriangle, ConcaveTriangle, OpenArrow, HollowTriangle, FilledDiamond, HollowDiamond, Circle, None), line styles (solid, dashed, dotted), path types (Linear, Bezier, Rounded), and specific anchor positions (topLeftPoint, topCenterPoint, topRightPoint, leftCenterPoint, rightCenterPoint, bottomLeftPoint, bottomCenterPoint, bottomRightPoint). Use the update_diagram tool to modify existing shapes' properties such as position, size, colors, text, and other visual attributes.",
 				tools: toolsConfig.tools,
 				functionHandlers: toolsConfig.handlers,
 			});
