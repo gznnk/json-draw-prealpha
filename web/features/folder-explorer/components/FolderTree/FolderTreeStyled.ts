@@ -3,7 +3,9 @@ import styled from "@emotion/styled";
 export const Container = styled.div`
 	width: 100%;
 	height: 100%;
-	overflow: auto;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 	background-color: #1e1e1e;
 	color: #cccccc;
 	font-family: "Consolas", "Monaco", "Courier New", monospace;
@@ -11,8 +13,9 @@ export const Container = styled.div`
 `;
 
 export const TreeContainer = styled.div`
-	height: 100%;
+	flex: 1;
 	width: 100%;
+	overflow: hidden;
 `;
 
 export const NodeContainer = styled.div<{ isSelected: boolean }>`

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useEffect } from "react";
+import { memo, useState, useCallback, useEffect, useRef } from "react";
 import type { ReactElement } from "react";
 import { Tree } from "react-arborist";
 import type { NodeRendererProps } from "react-arborist";
@@ -37,6 +37,22 @@ const FolderTreeComponent = (): ReactElement => {
 	const [treeData, setTreeData] = useState<TreeNode | null>(null);
 	const [isLoadingTree, setIsLoadingTree] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const treeContainerRef = useRef<HTMLDivElement>(null);
+	const [treeHeight, setTreeHeight] = useState(600);
+
+	// Update tree height when container size changes
+	useEffect(() => {
+		const updateHeight = () => {
+			if (treeContainerRef.current) {
+				const height = treeContainerRef.current.clientHeight;
+				setTreeHeight(height);
+			}
+		};
+
+		updateHeight();
+		window.addEventListener("resize", updateHeight);
+		return () => window.removeEventListener("resize", updateHeight);
+	}, [treeData]);
 
 	// Load tree data when a folder is selected
 	useEffect(() => {
@@ -142,12 +158,12 @@ const FolderTreeComponent = (): ReactElement => {
 				!error &&
 				selectedFolderId &&
 				treeData && (
-					<Styled.TreeContainer>
+					<Styled.TreeContainer ref={treeContainerRef}>
 						<Tree
 							data={treeDataArray}
 							openByDefault={false}
 							width="100%"
-							height={600}
+							height={treeHeight}
 							indent={16}
 							rowHeight={24}
 						>
