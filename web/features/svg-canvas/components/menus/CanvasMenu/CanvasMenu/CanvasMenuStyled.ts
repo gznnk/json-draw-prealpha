@@ -3,60 +3,51 @@ import styled from "@emotion/styled";
 import { BOX_SHADOW } from "../../../../constants/styling/core/CommonStyling";
 
 export const CanvasMenuDiv = styled.div`
-	position: absolute;
-	top: 10px;
-	left: 10px;
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 4px;
 	background-color: #ffffff;
 	border: 1px solid #d9d9d9;
-	padding: 8px;
+	padding: 4px;
 	box-shadow: ${BOX_SHADOW};
 	border-radius: 6px;
 	pointer-events: none;
 	user-select: none;
-	z-index: 1000;
-	max-height: calc(100vh - 100px);
-	overflow-y: auto;
 
 	& * {
 		user-select: none;
 	}
 `;
 
-export const CanvasMenuCategoryDiv = styled.div`
+export const CanvasMenuCategoryButton = styled.div<{ isActive?: boolean }>`
+	width: 40px;
+	height: 40px;
 	display: flex;
-	flex-direction: column;
-	gap: 4px;
-`;
-
-export const CanvasMenuCategoryLabel = styled.div`
-	font-size: 11px;
-	font-weight: 600;
-	color: #666;
-	text-transform: uppercase;
-	padding: 4px 8px;
+	align-items: center;
+	justify-content: center;
 	cursor: pointer;
-	user-select: none;
+	border-radius: 4px;
 	pointer-events: auto;
+	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+	color: ${(props) => (props.isActive ? "#1890ff" : "#666")};
+	background-color: ${(props) => (props.isActive ? "#e6f4ff" : "transparent")};
 
 	&:hover {
-		color: #333;
+		background-color: ${(props) => (props.isActive ? "#e6f4ff" : "#f5f5f5")};
+		color: #1890ff;
 	}
 
-	&[data-collapsed="true"]::before {
-		content: "▶ ";
-	}
-
-	&[data-collapsed="false"]::before {
-		content: "▼ ";
+	&:active {
+		transform: scale(0.95);
 	}
 `;
 
-export const CanvasMenuItemsDiv = styled.div`
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
-	gap: 4px;
-	padding: 0 4px;
+export const CanvasMenuPositioner = styled.div`
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	z-index: 1000;
 `;

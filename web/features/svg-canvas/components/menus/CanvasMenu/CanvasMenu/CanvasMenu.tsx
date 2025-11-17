@@ -1,22 +1,19 @@
 import type React from "react";
 import { memo, useState } from "react";
 
-// Import types related to SvgCanvas.
+// Imports related to this component.
+import {
+	CanvasMenuDiv,
+	CanvasMenuCategoryButton,
+	CanvasMenuPositioner,
+} from "./CanvasMenuStyled";
 import {
 	CANVAS_MENU_CATEGORIES,
 	type CanvasMenuItem as MenuItemConfig,
 } from "../../../../constants/menu/canvas/CanvasMenuItems";
 import type { AddDiagramByTypeEvent } from "../../../../types/events/AddDiagramByTypeEvent";
-// Import functions related to SvgCanvas.
 import { newEventId } from "../../../../utils/core/newEventId";
-// Imports related to this component.
-import { CanvasMenuItem } from "../CanvasMenuItem";
-import {
-	CanvasMenuDiv,
-	CanvasMenuCategoryDiv,
-	CanvasMenuCategoryLabel,
-	CanvasMenuItemsDiv,
-} from "./CanvasMenuStyled";
+import { CategoryPanel } from "../CategoryPanel/CategoryPanel";
 
 type CanvasMenuProps = {
 	onAddDiagramByType?: (e: AddDiagramByTypeEvent) => void;
@@ -25,20 +22,10 @@ type CanvasMenuProps = {
 const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 	onAddDiagramByType,
 }) => {
-	const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(
-		new Set(),
-	);
+	const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
 
-	const handleToggleCategory = (categoryId: string) => {
-		setCollapsedCategories((prev) => {
-			const next = new Set(prev);
-			if (next.has(categoryId)) {
-				next.delete(categoryId);
-			} else {
-				next.add(categoryId);
-			}
-			return next;
-		});
+	const handleCategoryClick = (categoryId: string) => {
+		setActiveCategoryId((prev) => (prev === categoryId ? null : categoryId));
 	};
 
 	const handleItemClick = (config: MenuItemConfig) => {
@@ -50,35 +37,32 @@ const CanvasMenuComponent: React.FC<CanvasMenuProps> = ({
 		});
 	};
 
+	const activeCategory = CANVAS_MENU_CATEGORIES.find(
+		(cat) => cat.id === activeCategoryId,
+	);
+
 	return (
-		<CanvasMenuDiv draggable={false}>
-			{CANVAS_MENU_CATEGORIES.map((category) => {
-				const isCollapsed = collapsedCategories.has(category.id);
+		<CanvasMenuPositioner>
+			<CanvasMenuDiv draggable={false}>
+				{CANVAS_MENU_CATEGORIES.map((category) => (
+					<CanvasMenuCategoryButton
+						key={category.id}
+						isActive={category.id === activeCategoryId}
+						onClick={() => handleCategoryClick(category.id)}
+						title={category.label}
+					>
+						{category.icon}
+					</CanvasMenuCategoryButton>
+				))}
+			</CanvasMenuDiv>
 
-				return (
-					<CanvasMenuCategoryDiv key={category.id}>
-						<CanvasMenuCategoryLabel
-							onClick={() => handleToggleCategory(category.id)}
-							data-collapsed={isCollapsed}
-						>
-							{category.label}
-						</CanvasMenuCategoryLabel>
-
-						{!isCollapsed && (
-							<CanvasMenuItemsDiv>
-								{category.items.map((item) => (
-									<CanvasMenuItem
-										key={item.id}
-										config={item}
-										onClick={handleItemClick}
-									/>
-								))}
-							</CanvasMenuItemsDiv>
-						)}
-					</CanvasMenuCategoryDiv>
-				);
-			})}
-		</CanvasMenuDiv>
+			{activeCategory && (
+				<CategoryPanel
+					category={activeCategory}
+					onItemClick={handleItemClick}
+				/>
+			)}
+		</CanvasMenuPositioner>
 	);
 };
 

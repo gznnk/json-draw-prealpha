@@ -52,6 +52,7 @@ export type CanvasMenuItem = {
 export type CanvasMenuCategory = {
 	id: string;
 	label: string;
+	icon: React.ReactNode;
 	items: CanvasMenuItem[];
 };
 
@@ -62,6 +63,19 @@ export const CANVAS_MENU_CATEGORIES: CanvasMenuCategory[] = [
 	{
 		id: "basic-shapes",
 		label: "基本図形",
+		icon: (
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+				<rect
+					x="4"
+					y="4"
+					width="16"
+					height="16"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+			</svg>
+		),
 		items: [
 			{
 				id: "rectangle",
@@ -165,6 +179,29 @@ export const CANVAS_MENU_CATEGORIES: CanvasMenuCategory[] = [
 	{
 		id: "ui-elements",
 		label: "UI要素",
+		icon: (
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+				<rect
+					x="4"
+					y="7"
+					width="16"
+					height="10"
+					rx="2"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<text
+					x="12"
+					y="14"
+					fontSize="8"
+					textAnchor="middle"
+					fill="currentColor"
+				>
+					UI
+				</text>
+			</svg>
+		),
 		items: [
 			{
 				id: "button",
@@ -222,6 +259,50 @@ export const CANVAS_MENU_CATEGORIES: CanvasMenuCategory[] = [
 	{
 		id: "diagrams",
 		label: "図形要素",
+		icon: (
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+				<rect
+					x="3"
+					y="3"
+					width="8"
+					height="8"
+					rx="1"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<rect
+					x="13"
+					y="3"
+					width="8"
+					height="8"
+					rx="1"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<rect
+					x="3"
+					y="13"
+					width="8"
+					height="8"
+					rx="1"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<rect
+					x="13"
+					y="13"
+					width="8"
+					height="8"
+					rx="1"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+			</svg>
+		),
 		items: [
 			{
 				id: "ai",
@@ -381,6 +462,50 @@ export const CANVAS_MENU_CATEGORIES: CanvasMenuCategory[] = [
 	{
 		id: "workflow-nodes",
 		label: "ワークフローノード",
+		icon: (
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+				<circle
+					cx="12"
+					cy="6"
+					r="3"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<circle
+					cx="6"
+					cy="18"
+					r="3"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<circle
+					cx="18"
+					cy="18"
+					r="3"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<line
+					x1="10.5"
+					y1="8"
+					x2="7.5"
+					y2="16"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+				<line
+					x1="13.5"
+					y1="8"
+					x2="16.5"
+					y2="16"
+					stroke="currentColor"
+					strokeWidth="2"
+				/>
+			</svg>
+		),
 		items: [
 			{
 				id: "textarea-node",
