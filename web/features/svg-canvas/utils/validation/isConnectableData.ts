@@ -8,8 +8,8 @@ export const isConnectableData = (data: unknown): data is ConnectableData => {
 	if (!isObject(data)) return false;
 
 	return (
-		"connectPointEnabled" in data &&
-		isBoolean(data.connectPointEnabled) &&
+		"connectEnabled" in data &&
+		isBoolean(data.connectEnabled) &&
 		"connectPoints" in data &&
 		isArray(data.connectPoints) // TODO: Further validation of connectPoints elements can be added here
 	);
