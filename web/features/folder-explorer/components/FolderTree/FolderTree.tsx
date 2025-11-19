@@ -5,19 +5,32 @@ import type { NodeRendererProps } from "react-arborist";
 
 import * as Styled from "./FolderTreeStyled";
 import { useFolderTrees } from "../../../../app/hooks/useFolderTrees";
+import type { FolderNode } from "../../../../app/models/FolderTree";
 import type { TreeNode } from "../../types";
 
 /**
  * Node component for rendering each tree node
  */
-const NodeComponent = ({ node, style }: NodeRendererProps<TreeNode>) => {
+type NodeComponentProps = NodeRendererProps<TreeNode> & {
+	onFileSelect?: (node: FolderNode) => void;
+};
+
+const NodeComponent = ({ node, style, onFileSelect }: NodeComponentProps) => {
 	const icon = node.data.kind === "directory" ? "📁" : "📄";
+
+	const handleClick = () => {
+		if (node.data.kind === "directory") {
+			node.toggle();
+		} else if (onFileSelect) {
+			onFileSelect(node.data);
+		}
+	};
 
 	return (
 		<Styled.NodeContainer
 			style={style}
 			isSelected={node.isSelected}
-			onClick={() => node.toggle()}
+			onClick={handleClick}
 		>
 			<Styled.NodeIcon>{icon}</Styled.NodeIcon>
 			<Styled.NodeLabel>{node.data.name}</Styled.NodeLabel>
@@ -28,9 +41,18 @@ const NodeComponent = ({ node, style }: NodeRendererProps<TreeNode>) => {
 const Node = memo(NodeComponent);
 
 /**
+ * FolderTree component props
+ */
+type FolderTreeProps = {
+	onFileSelect?: (node: FolderNode) => void;
+};
+
+/**
  * FolderTree component displays a file system tree using react-arborist
  */
-const FolderTreeComponent = (): ReactElement => {
+const FolderTreeComponent = ({
+	onFileSelect,
+}: FolderTreeProps): ReactElement => {
 	const { folderTrees, isLoading, openFolder, loadFolderTree, removeFolder } =
 		useFolderTrees();
 	const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
@@ -106,6 +128,14 @@ const FolderTreeComponent = (): ReactElement => {
 	// Convert FolderNode to array for react-arborist
 	const treeDataArray = treeData ? [treeData] : [];
 
+	// Create a wrapper for Node component with onFileSelect
+	const NodeWithCallback = useCallback(
+		(props: NodeRendererProps<TreeNode>) => (
+			<Node {...props} onFileSelect={onFileSelect} />
+		),
+		[onFileSelect],
+	);
+
 	return (
 		<Styled.Container>
 			<Styled.ToolbarContainer>
@@ -167,7 +197,7 @@ const FolderTreeComponent = (): ReactElement => {
 							indent={16}
 							rowHeight={24}
 						>
-							{Node}
+							{NodeWithCallback}
 						</Tree>
 					</Styled.TreeContainer>
 				)}

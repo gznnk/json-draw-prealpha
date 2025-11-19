@@ -5,12 +5,14 @@ import { CanvasView } from "./components/CanvasView";
 import { Page } from "./components/Page";
 import { SplitView } from "./components/SplitView";
 import { CanvasDataProvider, useCanvasData } from "./context/CanvasDataContext";
+import type { FolderNode } from "./models/FolderTree";
 import {
 	ChatSpace,
 	type ChatSpaceMessage,
 	type ChatSpaceThread,
 } from "../features/chat-space";
 import { FolderTree } from "../features/folder-explorer";
+import type { SvgCanvasData } from "../features/svg-canvas/canvas/types/SvgCanvasData";
 
 const ENABLE_CHAT_SPACE_EXPERIMENT = true;
 const ENABLE_FOLDER_EXPLORER = true;
@@ -98,7 +100,7 @@ const INITIAL_MESSAGES: ChatSpaceMessage[] = [
  * Inner App component that uses canvas data context
  */
 const AppContent = (): ReactElement => {
-	const { canvas, updateCanvas } = useCanvasData();
+	const { canvas, updateCanvas, importCanvasData } = useCanvasData();
 	const [threads, setThreads] = useState<ChatSpaceThread[]>(() =>
 		INITIAL_THREADS.map((thread) => ({ ...thread })),
 	);
@@ -107,6 +109,50 @@ const AppContent = (): ReactElement => {
 	);
 	const [activeThreadId, setActiveThreadId] = useState<string | undefined>(
 		() => INITIAL_THREADS[0]?.id,
+	);
+
+	const handleFileSelect = useCallback(
+		async (node: FolderNode) => {
+			// Only handle .json files
+			if (!node.name.endsWith(".json")) {
+				return;
+			}
+
+			try {
+				// Read file using FileSystemFileHandle
+				if (!node.handle || node.handle.kind !== "file") {
+					console.error("Invalid file handle");
+					return;
+				}
+
+				const fileHandle = node.handle as FileSystemFileHandle;
+				const file = await fileHandle.getFile();
+				const text = await file.text();
+
+				// Try to parse as JSON
+				const data = JSON.parse(text);
+
+				// Check if it's SvgCanvasData or SvgCanvas format
+				if (data.content && data.id && data.name) {
+					// It's a full SvgCanvas object
+					await importCanvasData(text);
+				} else if (data.id && Array.isArray(data.items)) {
+					// It's SvgCanvasData - convert to SvgCanvas
+					const canvasData: SvgCanvasData = data;
+					const svgCanvas = {
+						id: canvasData.id,
+						name: node.name.replace(/\.json$/, ""),
+						content: canvasData,
+					};
+					await importCanvasData(JSON.stringify(svgCanvas));
+				} else {
+					console.error("Invalid canvas data format");
+				}
+			} catch (err) {
+				console.error("Failed to load canvas from file:", err);
+			}
+		},
+		[importCanvasData],
 	);
 
 	const handleThreadSelect = useCallback((threadId: string) => {
@@ -173,7 +219,7 @@ const AppContent = (): ReactElement => {
 			<Page>
 				<SplitView
 					initialRatio={[0.2, 0.5, 0.3]}
-					left={<FolderTree />}
+					left={<FolderTree onFileSelect={handleFileSelect} />}
 					center={canvasPane}
 					right={
 						<ChatSpace
