@@ -36,6 +36,8 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 	blinkIconColor = "#06b6d4",
 	isSelected,
 	isAncestorSelected = false,
+	isRootSelected = false,
+	outlineDisabled = false,
 	onDrag,
 	onSelect,
 	onClick,
@@ -121,9 +123,11 @@ const NodeHeaderComponent: React.FC<NodeHeaderProps> = ({
 				isTextEditing={isTextEditing}
 				isSelected={isSelected}
 				isAncestorSelected={isAncestorSelected}
+				isRootSelected={isRootSelected}
 				showConnectPoints={false}
 				connectEnabled={false}
 				showOutline={false}
+				outlineDisabled={outlineDisabled}
 				isTransforming={false}
 				onDrag={onDrag}
 				onSelect={onSelect}

@@ -30,6 +30,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	inversionEnabled,
 	isSelected,
 	isAncestorSelected = false,
+	isRootSelected = false,
 	connectPoints,
 	showConnectPoints = false,
 	connectEnabled = true,
@@ -46,6 +47,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 	isDragging = false,
 	isTransparent,
 	showOutline = false,
+	outlineDisabled = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
@@ -103,6 +105,8 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			rotateEnabled={rotateEnabled}
 			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
+			isAncestorSelected={isAncestorSelected}
+			isRootSelected={isRootSelected}
 			connectPoints={connectPoints}
 			showConnectPoints={showConnectPoints}
 			connectEnabled={connectEnabled}
@@ -118,6 +122,7 @@ const EllipseComponent: React.FC<EllipseProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
+			outlineDisabled={outlineDisabled}
 			isTransforming={isTransforming}
 			transform={transform}
 			onConnect={onConnect}

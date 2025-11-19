@@ -221,9 +221,11 @@ Please generate a complete HTML document that represents or visualizes the diagr
 					strokeDashType="solid"
 					isSelected={false}
 					isAncestorSelected={false}
+					isRootSelected={false}
 					showConnectPoints={false}
 					connectEnabled={false}
 					showOutline={false}
+					outlineDisabled={false}
 					isTransforming={false}
 					text={processIdList.length > 0 ? "Generating..." : "Generate HTML"}
 					isTextEditing={false}

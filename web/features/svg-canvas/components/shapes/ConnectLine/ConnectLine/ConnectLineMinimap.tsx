@@ -12,6 +12,8 @@ const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 	stroke = "black",
 	strokeWidth = 1,
 	strokeDashType = "solid",
+	isAncestorSelected = false,
+	isRootSelected = false,
 	items = [],
 	pathType,
 	startArrowHead,
@@ -39,6 +41,8 @@ const ConnectLineMinimapComponent: React.FC<ConnectLineProps> = ({
 			startArrowHead={startArrowHead}
 			endArrowHead={endArrowHead}
 			isSelected={false}
+			isAncestorSelected={isAncestorSelected}
+			isRootSelected={isRootSelected}
 			showOutline={false}
 			outlineDisabled={true}
 		/>

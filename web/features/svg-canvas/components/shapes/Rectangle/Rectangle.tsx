@@ -33,6 +33,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	strokeDashType,
 	isSelected,
 	isAncestorSelected = false,
+	isRootSelected = false,
 	connectPoints,
 	showConnectPoints = false,
 	connectEnabled = true,
@@ -49,6 +50,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 	isDragging = false,
 	isTransparent,
 	showOutline = false,
+	outlineDisabled = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
@@ -113,6 +115,8 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 			rotateEnabled={rotateEnabled}
 			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
+			isAncestorSelected={isAncestorSelected}
+			isRootSelected={isRootSelected}
 			connectPoints={connectPoints}
 			showConnectPoints={showConnectPoints}
 			connectEnabled={connectEnabled}
@@ -128,6 +132,7 @@ const RectangleComponent: React.FC<RectangleProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
+			outlineDisabled={outlineDisabled}
 			isTransforming={isTransforming}
 			transform={transform}
 			onConnect={onConnect}

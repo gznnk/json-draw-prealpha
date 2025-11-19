@@ -22,6 +22,8 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 	strokeWidth = 1,
 	strokeDashType = "solid",
 	isSelected = false,
+	isAncestorSelected = false,
+	isRootSelected = false,
 	items = [],
 	pathType,
 	startArrowHead,
@@ -68,6 +70,8 @@ const ConnectLineComponent: React.FC<ConnectLineProps> = ({
 			strokeWidth={strokeWidth}
 			strokeDashType={strokeDashType}
 			isSelected={isSelected}
+			isAncestorSelected={isAncestorSelected}
+			isRootSelected={isRootSelected}
 			showOutline={false}
 			outlineDisabled={true}
 			pathType={pathType}

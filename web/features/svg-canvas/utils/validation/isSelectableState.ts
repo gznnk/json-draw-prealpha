@@ -14,31 +14,16 @@ export const isSelectableState = (obj: unknown): obj is SelectableState => {
 	if (!("isSelected" in obj) || !isBoolean(obj.isSelected)) {
 		return false;
 	}
+	if (!("isRootSelected" in obj) || !isBoolean(obj.isRootSelected)) {
+		return false;
+	}
+	if (!("isAncestorSelected" in obj) || !isBoolean(obj.isAncestorSelected)) {
+		return false;
+	}
 	if (!("showOutline" in obj) || !isBoolean(obj.showOutline)) {
 		return false;
 	}
-
-	if (
-		"isRootSelected" in obj &&
-		obj.isRootSelected !== undefined &&
-		!isBoolean(obj.isRootSelected)
-	) {
-		return false;
-	}
-
-	if (
-		"isAncestorSelected" in obj &&
-		obj.isAncestorSelected !== undefined &&
-		!isBoolean(obj.isAncestorSelected)
-	) {
-		return false;
-	}
-
-	if (
-		"outlineDisabled" in obj &&
-		obj.outlineDisabled !== undefined &&
-		!isBoolean(obj.outlineDisabled)
-	) {
+	if (!("outlineDisabled" in obj) || !isBoolean(obj.outlineDisabled)) {
 		return false;
 	}
 

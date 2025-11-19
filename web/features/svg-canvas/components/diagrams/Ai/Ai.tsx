@@ -508,9 +508,11 @@ const AiComponent: React.FC<AiProps> = (props) => {
 				strokeDashType="solid"
 				isSelected={false}
 				isAncestorSelected={false}
+				isRootSelected={false}
 				showConnectPoints={false}
 				connectEnabled={false}
 				showOutline={false}
+				outlineDisabled={false}
 				isTransforming={false}
 				text="Send"
 				isTextEditing={false}

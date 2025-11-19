@@ -80,7 +80,10 @@ export const useOnGroupShapes = (props: SvgCanvasSubHooksProps) => {
 					inversionEnabled: true,
 					itemableType: "group",
 					isSelected: false,
+					isRootSelected: false,
+					isAncestorSelected: false,
 					showOutline: false,
+					outlineDisabled: false,
 					isTransforming: false,
 					items: targetDiagrams,
 				};

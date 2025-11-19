@@ -37,10 +37,12 @@ const StickyComponent: React.FC<StickyProps> = ({
 	verticalAlign,
 	isSelected,
 	isAncestorSelected = false,
+	isRootSelected = false,
 	isTextEditEnabled = true,
 	isTextEditing = false,
 	isDragging = false,
 	showOutline = false,
+	outlineDisabled = false,
 	isTransforming = false,
 	onDrag,
 	onDragOver,
@@ -124,6 +126,8 @@ const StickyComponent: React.FC<StickyProps> = ({
 			rotateEnabled={rotateEnabled}
 			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
+			isAncestorSelected={isAncestorSelected}
+			isRootSelected={isRootSelected}
 			connectPoints={[]}
 			showConnectPoints={false}
 			connectEnabled={false}
@@ -139,6 +143,7 @@ const StickyComponent: React.FC<StickyProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
+			outlineDisabled={outlineDisabled}
 			isTransforming={isTransforming}
 			transform={transform}
 		>

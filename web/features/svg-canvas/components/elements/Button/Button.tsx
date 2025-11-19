@@ -46,8 +46,10 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 	isTextEditing,
 	isTextEditEnabled = true,
 	isDragging = false,
+	isRootSelected = false,
 	isTransparent,
 	showOutline = false,
+	outlineDisabled = false,
 	isTransforming = false,
 	effectsEnabled = false,
 	onDrag,
@@ -106,6 +108,8 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 			rotateEnabled={rotateEnabled}
 			inversionEnabled={inversionEnabled}
 			isSelected={isSelected}
+			isAncestorSelected={isAncestorSelected}
+			isRootSelected={isRootSelected}
 			connectPoints={connectPoints}
 			showConnectPoints={showConnectPoints}
 			connectEnabled={connectEnabled}
@@ -121,6 +125,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 			isTextEditEnabled={isTextEditEnabled}
 			isDragging={isDragging}
 			showOutline={showOutline}
+			outlineDisabled={outlineDisabled}
 			isTransforming={isTransforming}
 			transform={transform}
 			onConnect={onConnect}
