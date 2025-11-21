@@ -5,7 +5,14 @@ import type { ConnectPointData } from "../../types/data/shapes/ConnectPointData"
 import type { ConnectPointProps } from "../../types/props/shapes/ConnectPointProps";
 import type { ConnectPointState } from "../../types/state/shapes/ConnectPointState";
 import { isConnectPointData } from "../../utils/shapes/connectPoint/isConnectPointData";
-import type { DiagramAtlas, DiagramDataValidator } from "../DiagramAtlas";
+import { connectPointDataToState } from "../../utils/shapes/connectPoint/mapConnectPointDataToState";
+import { connectPointStateToData } from "../../utils/shapes/connectPoint/mapConnectPointStateToData";
+import {
+	type DataToStateMapper,
+	type DiagramAtlas,
+	type DiagramDataValidator,
+	type StateToDataMapper,
+} from "../DiagramAtlas";
 import { DummyComponent, dummyImplementation } from "../DiagramAtlas";
 
 /**
@@ -62,7 +69,7 @@ export const ConnectPointAtlas: ConnectPointAtlas = {
 	export: undefined,
 	calcConnectPointPosition: dummyImplementation,
 	transformItems: undefined,
-	dataToState: dummyImplementation,
-	stateToData: dummyImplementation,
+	dataToState: connectPointDataToState as DataToStateMapper,
+	stateToData: connectPointStateToData as StateToDataMapper,
 	validateData: isConnectPointData as DiagramDataValidator,
 };
