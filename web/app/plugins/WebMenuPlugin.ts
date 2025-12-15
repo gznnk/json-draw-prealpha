@@ -17,11 +17,12 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 	async onNew(): Promise<void> {
 		console.log("Web: Creating new file...");
 		this.showNotification("新しいファイルを作成します", "info");
-		
+
 		// Check for unsaved changes
-		const shouldProceed = !this.canvasDataContext?.hasUnsavedChanges || 
+		const shouldProceed =
+			!this.canvasDataContext?.hasUnsavedChanges ||
 			confirm("現在の作業内容が失われます。新しいファイルを作成しますか？");
-		
+
 		if (shouldProceed) {
 			// Canvas data context will handle the new canvas creation
 			console.log("Web: New file created");
@@ -39,14 +40,22 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 			if (fileHandle) {
 				const file = await fileHandle.getFile();
 				const content = await file.text();
-				console.log("Web: File opened:", file.name, "Content length:", content.length);
+				console.log(
+					"Web: File opened:",
+					file.name,
+					"Content length:",
+					content.length,
+				);
 
 				// Import canvas data if context is available
 				if (this.canvasDataContext) {
 					await this.canvasDataContext.importCanvasData(content);
 				}
 
-				this.showNotification(`ファイル "${file.name}" を開きました`, "success");
+				this.showNotification(
+					`ファイル "${file.name}" を開きました`,
+					"success",
+				);
 			}
 		} catch (error) {
 			console.error("Web: Error opening file:", error);
@@ -71,14 +80,9 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 
 	onHelp(): void {
 		console.log("Web: Showing help...");
-		this.showNotification("ヘルプを表示します", "info");
 
-		// Web-specific implementation
-		// Open help in new tab/window or show modal
-		const helpWindow = window.open("/help", "_blank");
-		if (!helpWindow) {
-			this.showInlineHelp();
-		}
+		// Show app name in alert instead of navigating
+		alert("JSON Draw Pre-Alpha");
 	}
 
 	/**
@@ -86,14 +90,20 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 	 */
 	private async showFilePickerDialog(): Promise<FileSystemFileHandle | null> {
 		// Modern browsers with File System Access API
-		if ('showOpenFilePicker' in window) {
+		if ("showOpenFilePicker" in window) {
 			try {
-				const [fileHandle] = await (window as unknown as { showOpenFilePicker: (options: unknown) => Promise<FileSystemFileHandle[]> }).showOpenFilePicker({
+				const [fileHandle] = await (
+					window as unknown as {
+						showOpenFilePicker: (
+							options: unknown,
+						) => Promise<FileSystemFileHandle[]>;
+					}
+				).showOpenFilePicker({
 					types: [
 						{
-							description: 'JSON files',
+							description: "JSON files",
 							accept: {
-								'application/json': ['.json'],
+								"application/json": [".json"],
 							},
 						},
 					],
@@ -107,9 +117,9 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 
 		// Fallback for older browsers - return null as FileSystemFileHandle is not available
 		return new Promise<FileSystemFileHandle | null>((resolve) => {
-			const input = document.createElement('input');
-			input.type = 'file';
-			input.accept = '.json';
+			const input = document.createElement("input");
+			input.type = "file";
+			input.accept = ".json";
 			input.onchange = () => {
 				// In fallback mode, we can't provide FileSystemFileHandle
 				// This would need different handling in the calling code
@@ -131,14 +141,25 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 		const fileName = this.canvasDataContext.getCurrentFileName();
 
 		// Modern browsers with File System Access API
-		if ('showSaveFilePicker' in window) {
-			const fileHandle = await (window as unknown as { showSaveFilePicker: (options: unknown) => Promise<{ createWritable: () => Promise<{ write: (content: string) => Promise<void>; close: () => Promise<void> }> }> }).showSaveFilePicker({
+		if ("showSaveFilePicker" in window) {
+			const fileHandle = await (
+				window as unknown as {
+					showSaveFilePicker: (
+						options: unknown,
+					) => Promise<{
+						createWritable: () => Promise<{
+							write: (content: string) => Promise<void>;
+							close: () => Promise<void>;
+						}>;
+					}>;
+				}
+			).showSaveFilePicker({
 				suggestedName: fileName,
 				types: [
 					{
-						description: 'JSON files',
+						description: "JSON files",
 						accept: {
-							'application/json': ['.json'],
+							"application/json": [".json"],
 						},
 					},
 				],
@@ -150,21 +171,14 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 		}
 
 		// Fallback for older browsers - trigger download
-		const blob = new Blob([content], { type: 'application/json' });
+		const blob = new Blob([content], { type: "application/json" });
 		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
+		const a = document.createElement("a");
 		a.href = url;
 		a.download = fileName;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
-	}
-
-	/**
-	 * Show inline help when popup is blocked
-	 */
-	private showInlineHelp(): void {
-		alert("ヘルプ:\n- ファイル > 新規作成: 新しい図を作成\n- ファイル > 開く: 既存の図を開く\n- ファイル > 保存: 現在の図を保存");
 	}
 }

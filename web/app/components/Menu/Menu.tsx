@@ -58,7 +58,7 @@ const MenuComponent: React.FC<MenuProps> = ({
 		if (menuElement) {
 			const rect = menuElement.getBoundingClientRect();
 			setDropdownPosition({
-				top: rect.bottom - 1, // 1px重複させて隙間をなくす
+				top: rect.bottom, // 1px重複させて隙間をなくす
 				left: rect.left,
 			});
 		}
@@ -68,14 +68,14 @@ const MenuComponent: React.FC<MenuProps> = ({
 
 	const handleItemClick = async (
 		pluginAction: (() => Promise<void>) | (() => void),
-		legacyAction?: () => void
+		legacyAction?: () => void,
 	) => {
 		setActiveDropdown(null);
-		
+
 		try {
 			// Use plugin action first, fall back to legacy if provided
 			await pluginAction();
-			
+
 			// Also call legacy callback if provided (for backward compatibility)
 			legacyAction?.();
 		} catch (error) {
@@ -119,19 +119,27 @@ const MenuComponent: React.FC<MenuProps> = ({
 					>
 						{activeDropdown === "file" && (
 							<>
-								<MenuDropdownItem onClick={() => handleItemClick(onNew, legacyOnNew)}>
+								<MenuDropdownItem
+									onClick={() => handleItemClick(onNew, legacyOnNew)}
+								>
 									新規作成
 								</MenuDropdownItem>
-								<MenuDropdownItem onClick={() => handleItemClick(onOpen, legacyOnOpen)}>
+								<MenuDropdownItem
+									onClick={() => handleItemClick(onOpen, legacyOnOpen)}
+								>
 									開く
 								</MenuDropdownItem>
-								<MenuDropdownItem onClick={() => handleItemClick(onSave, legacyOnSave)}>
+								<MenuDropdownItem
+									onClick={() => handleItemClick(onSave, legacyOnSave)}
+								>
 									保存
 								</MenuDropdownItem>
 							</>
 						)}
 						{activeDropdown === "help" && (
-							<MenuDropdownItem onClick={() => handleItemClick(onHelp, legacyOnHelp)}>
+							<MenuDropdownItem
+								onClick={() => handleItemClick(onHelp, legacyOnHelp)}
+							>
 								ヘルプ
 							</MenuDropdownItem>
 						)}

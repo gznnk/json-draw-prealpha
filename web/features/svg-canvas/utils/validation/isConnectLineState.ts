@@ -28,7 +28,7 @@ export const isConnectLineState = (obj: unknown): obj is ConnectLineState => {
 		"stroke" in obj &&
 		"strokeWidth" in obj &&
 		typeof (obj as ConnectLineState).stroke === "string" &&
-		typeof (obj as ConnectLineState).strokeWidth === "string" &&
+		typeof (obj as ConnectLineState).strokeWidth === "number" &&
 		// ConnectLineData specific properties
 		"pathType" in obj &&
 		"startOwnerId" in obj &&

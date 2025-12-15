@@ -48,7 +48,7 @@ export const MenuDropdown = styled.div`
 	min-width: 120px;
 	z-index: 9999;
 	padding: 4px 0;
-	margin-top: 2px;
+	margin-top: 0px;
 `;
 
 /**
