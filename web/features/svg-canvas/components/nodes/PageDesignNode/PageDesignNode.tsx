@@ -2,10 +2,10 @@ import type React from "react";
 import { memo, useState } from "react";
 
 import { RectangleDefaultState } from "../../../constants/state/shapes/RectangleDefaultState";
+import { useEventBus } from "../../../context/EventBusContext";
 import { useExecutionChain } from "../../../hooks/useExecutionChain";
 import { useWebDesignTool } from "../../../tools/web_design";
 import type { PageDesignNodeProps } from "../../../types/props/nodes/PageDesignNodeProps";
-import type { Diagram } from "../../../types/state/core/Diagram";
 import { isPlainTextPayload } from "../../../utils/execution/isPlainTextPayload";
 import { IconContainer } from "../../core/IconContainer";
 import { PageDesign } from "../../icons/PageDesign";
@@ -16,7 +16,18 @@ import { Rectangle } from "../../shapes/Rectangle";
  */
 const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 	const [isProcessing, setIsProcessing] = useState(false);
-	const webDesignHandler = useWebDesignTool();
+	const eventBus = useEventBus();
+
+	// Create resize canvas frame handler that sends resize result via onExecute
+	// const resizeCanvasFrameHandler = useCallback(
+	// 	(_result: { width: number; height: number }) => {
+	// 		// TODO: Implement resize canvas frame handling
+	// 		// This handler will be called when the web design agent resizes the canvas frame
+	// 	},
+	// 	[],
+	// );
+
+	const webDesignHandler = useWebDesignTool(eventBus);
 
 	useExecutionChain({
 		id: props.id,
@@ -42,61 +53,7 @@ const PageDesignNodeComponent: React.FC<PageDesignNodeProps> = (props) => {
 			});
 
 			try {
-				// Create shape handler that sends each shape immediately via onExecute
-				const shapeHandler = (diagram: Diagram) => {
-					// Send each generated shape immediately via onExecute
-					props.onExecute?.({
-						id: props.id,
-						eventId: e.eventId,
-						eventPhase: "InProgress",
-						payload: {
-							format: "diagram",
-							data: diagram,
-						},
-					});
-				};
-
-				// Create group shapes handler that sends grouping result via onExecute
-				const groupShapesHandler = (result: {
-					shapeIds: string[];
-					groupId: string;
-					name?: string;
-					description?: string;
-				}) => {
-					props.onExecute?.({
-						id: props.id,
-						eventId: e.eventId,
-						eventPhase: "InProgress",
-						// TODO: Define a proper payload format for tool results
-						payload: {
-							format: "tool",
-							data: result,
-						},
-					});
-				};
-
-				// Create resize canvas frame handler that sends resize result via onExecute
-				const resizeCanvasFrameHandler = (result: {
-					width: number;
-					height: number;
-				}) => {
-					props.onExecute?.({
-						id: props.id,
-						eventId: e.eventId,
-						eventPhase: "InProgress",
-						// TODO: Define a proper payload format for tool results
-						payload: {
-							format: "tool",
-							data: result,
-						},
-					});
-				};
-
-				const result = await webDesignHandler(
-					shapeHandler,
-					groupShapesHandler,
-					resizeCanvasFrameHandler,
-				)({
+				const result = await webDesignHandler({
 					name: "web_design",
 					arguments: { design_request: textData },
 					callId: e.eventId,
