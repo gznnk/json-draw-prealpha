@@ -1,8 +1,9 @@
 import type { ReactElement } from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { CanvasView } from "./components/CanvasView";
 import { Page } from "./components/Page";
+import { PreAlphaWarningDialog } from "./components/PreAlphaWarningDialog";
 import { SplitView } from "./components/SplitView";
 import { CanvasDataProvider, useCanvasData } from "./context/CanvasDataContext";
 import type { FolderNode } from "./models/FolderTree";
@@ -16,6 +17,12 @@ import type { SvgCanvasData } from "../features/svg-canvas/canvas/types/SvgCanva
 
 const ENABLE_CHAT_SPACE_EXPERIMENT = false;
 const ENABLE_FOLDER_EXPLORER = false;
+
+// Set to true to show warning on every app start (for testing/development)
+// Set to false to show warning only once (localStorage-based)
+const SHOW_WARNING_ALWAYS = false;
+
+const PRE_ALPHA_WARNING_KEY = "json-draw-prealpha-warning-accepted";
 
 const INITIAL_THREADS: ChatSpaceThread[] = [
 	{
@@ -263,8 +270,53 @@ const AppContent = (): ReactElement => {
  * Defines the main application layout
  */
 const App = (): ReactElement => {
+	const [showWarning, setShowWarning] = useState<boolean>(() => {
+		// If SHOW_WARNING_ALWAYS is true, always show the warning
+		if (SHOW_WARNING_ALWAYS) {
+			return true;
+		}
+
+		// Otherwise, check if user has already accepted the warning
+		try {
+			const accepted = localStorage.getItem(PRE_ALPHA_WARNING_KEY);
+			return accepted !== "true";
+		} catch {
+			// If localStorage is not available, always show the warning
+			return true;
+		}
+	});
+
+	const handleAcceptWarning = useCallback(() => {
+		// Only save to localStorage if not in "always show" mode
+		if (!SHOW_WARNING_ALWAYS) {
+			try {
+				localStorage.setItem(PRE_ALPHA_WARNING_KEY, "true");
+			} catch {
+				// Ignore localStorage errors
+			}
+		}
+		setShowWarning(false);
+	}, []);
+
+	const showWarningDialog = useCallback(() => {
+		setShowWarning(true);
+	}, []);
+
+	// Register global function to show warning dialog (for menu plugin)
+	useEffect(() => {
+		(
+			window as typeof window & { showPreAlphaWarning?: () => void }
+		).showPreAlphaWarning = showWarningDialog;
+
+		return () => {
+			delete (window as typeof window & { showPreAlphaWarning?: () => void })
+				.showPreAlphaWarning;
+		};
+	}, [showWarningDialog]);
+
 	return (
 		<div className="App">
+			{showWarning && <PreAlphaWarningDialog onAccept={handleAcceptWarning} />}
 			<CanvasDataProvider>
 				<AppContent />
 			</CanvasDataProvider>

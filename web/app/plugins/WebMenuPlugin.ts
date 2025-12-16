@@ -81,8 +81,17 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 	onHelp(): void {
 		console.log("Web: Showing help...");
 
-		// Show app name in alert instead of navigating
-		alert("JSON Draw Pre-Alpha");
+		// Show pre-alpha warning dialog if available
+		const showWarning = (
+			window as typeof window & { showPreAlphaWarning?: () => void }
+		).showPreAlphaWarning;
+
+		if (showWarning) {
+			showWarning();
+		} else {
+			// Fallback to alert if warning dialog is not registered
+			alert("JSON Draw Pre-Alpha");
+		}
 	}
 
 	/**
@@ -144,9 +153,7 @@ export class WebMenuPlugin extends BaseMenuPlugin {
 		if ("showSaveFilePicker" in window) {
 			const fileHandle = await (
 				window as unknown as {
-					showSaveFilePicker: (
-						options: unknown,
-					) => Promise<{
+					showSaveFilePicker: (options: unknown) => Promise<{
 						createWritable: () => Promise<{
 							write: (content: string) => Promise<void>;
 							close: () => Promise<void>;
