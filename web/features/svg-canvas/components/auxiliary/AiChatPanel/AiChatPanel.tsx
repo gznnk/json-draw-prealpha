@@ -23,7 +23,7 @@ import { ChatUI } from "../../../../llm-chat-ui";
  */
 const AiChatPanelComponent = () => {
 	// Panel visibility state
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(true);
 
 	// AI chat functionality from custom hook
 	const { messages, isLoading, sendMessage } = useAiChat();
