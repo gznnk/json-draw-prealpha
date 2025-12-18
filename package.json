@@ -3,7 +3,7 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"license": "MIT",
+	"license": "GPL-3.0",
 	"main": "dist-desktop/main.js",
 	"homepage": "https://github.com/gznnk/json-draw-prealpha",
 	"scripts": {
