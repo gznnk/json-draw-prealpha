@@ -39,9 +39,13 @@ export const useAddRectangleShapeWithHandlerTool = (): ((
 				typeof args.height === "number" &&
 				typeof args.fill === "string"
 			) {
+				// Convert top-left coordinates to center coordinates
+				const centerX = args.x + args.width / 2;
+				const centerY = args.y + args.height / 2;
+
 				const data = createRectangleState({
-					x: args.x,
-					y: args.y,
+					x: centerX,
+					y: centerY,
 					width: args.width,
 					height: args.height,
 					cornerRadius: args.rx || 0,

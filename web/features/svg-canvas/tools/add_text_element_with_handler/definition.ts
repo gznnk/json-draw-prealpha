@@ -21,12 +21,14 @@ export const textElementWithHandlerToolDefinition: ToolDefinition = {
 		{
 			name: "x",
 			type: "number",
-			description: "The X coordinate of the center of the text element.",
+			description:
+				"The X coordinate of the top-left corner of the text element.",
 		},
 		{
 			name: "y",
 			type: "number",
-			description: "The Y coordinate of the center of the text element.",
+			description:
+				"The Y coordinate of the top-left corner of the text element.",
 		},
 		{
 			name: "width",
