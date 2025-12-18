@@ -3,7 +3,7 @@ body {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
-	background-color: #f9fafb; /* Tailwind gray-50 */
+	background-color: #ffffff; /* White background */
 }
 
 /* Entire scrollbar */
@@ -31,5 +31,5 @@ body {
 
 /* Bottom-right corner where scrollbars intersect */
 ::-webkit-scrollbar-corner {
-	background-color: #f9fafb; /* Tailwind gray-50 */
+	background-color: #ffffff; /* White background */
 }
