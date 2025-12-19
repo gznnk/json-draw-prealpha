@@ -15,7 +15,7 @@ const Overlay = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 9999;
+	z-index: 10000;
 	backdrop-filter: blur(4px);
 `;
 
@@ -26,6 +26,7 @@ const Dialog = styled.div`
 	padding: 32px;
 	max-width: 600px;
 	width: 90%;
+	box-sizing: border-box;
 	box-shadow:
 		0 20px 25px -5px rgba(0, 0, 0, 0.1),
 		0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -73,6 +74,7 @@ const Button = styled.button`
 	font-weight: 600;
 	cursor: pointer;
 	width: 100%;
+	box-sizing: border-box;
 	transition: all 0.2s ease;
 
 	&:hover {
